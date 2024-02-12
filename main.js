@@ -12,7 +12,6 @@ const {
     inspect
 } = require('util');
 const path = require('path');
-const similarity = require('similarity');
 const {
     exec
 } = require('child_process');
@@ -52,33 +51,28 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (!m.content || m.key.fromMe) return;
 
         // Auto-typing
-        if (ctx._msg.content && ctx._config.cmd instanceof Map) {
+        if (m.content && ctx._config.cmd instanceof Map) {
             const commandList = Array.from(ctx._config.cmd.keys());
 
             const isCommandIncluded = commandList.some(command => ctx._msg.content.includes(command));
 
-            if (isCommandIncluded) {
+            if (isCommandIncluded && (m.content.startsWith('>') || m.content.startsWith('x') || m.content.startsWith('$'))) {
                 ctx.simulateTyping(); // simulateRecording, jika Anda ingin 'sedang merekam suara...'
             }
         }
 
         // Owner-only
         if (ctx._sender.jid.includes(global.owner)) {
-            // Mengeksekusi kode JavaScript yang diawali dengan '>' atau 'x '
+            // Eval
             if (m.content.startsWith('> ') || m.content.startsWith('x ')) {
-                sendStatus(ctx, 'processing');
-
                 const code = m.content.slice(2);
 
                 const result = await eval(m.content.startsWith('x ') ? `(async () => { ${code} })()` : code);
                 await ctx.reply(inspect(result));
-                return sendStatus(ctx, 'success');
             }
 
-            // Mengeksekusi perintah shell yang diawali dengan '$ '
+            // Exec
             if (m.content.startsWith('$ ')) {
-                sendStatus(ctx, 'processing');
-
                 const command = m.content.slice(2);
 
                 const output = await new Promise((resolve, reject) => {
@@ -94,13 +88,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 });
 
                 await ctx.reply(output);
-                return sendStatus(ctx, 'success');
             }
         }
     } catch (error) {
         console.error("Error:", error);
         await ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
-        sendStatus(ctx, 'failure');
     }
 });
 

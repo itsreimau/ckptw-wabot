@@ -1,4 +1,4 @@
-require('../config.js')
+require('../config.js');
 const {
     bold,
     VCardBuilder
@@ -23,8 +23,8 @@ module.exports = {
                 displayName: global.ownername,
                 contacts: [{
                     vcard
-                }],
-            },
-        }).then(() => sendStatus(ctx, 'success'));
-    },
+                }]
+            }
+        })
+    }
 };

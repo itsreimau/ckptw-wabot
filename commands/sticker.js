@@ -7,9 +7,6 @@ const {
     StickerTypes
 } = require('wa-sticker-formatter');
 const {
-    sendStatus
-} = require('../lib/simple.js');
-const {
     bold
 } = require('@mengkodingan/ckptw');
 
@@ -18,10 +15,7 @@ module.exports = {
     aliases: ['stiker', 's'],
     category: 'converter',
     code: async (ctx) => {
-        sendStatus(ctx, 'processing');
-
-        if (ctx.getMessageType() !== MessageType.imageMessage && ctx.getMessageType() !== MessageType.videoMessage) return ctx.reply(`${bold('[ ! ]')} Berikan gambar!`).then(() => sendStatus(ctx, 'noRequest'));
-
+        if (ctx.getMessageType() !== MessageType.imageMessage && ctx.getMessageType() !== MessageType.videoMessage) return ctx.reply(`${bold('[ ! ]')} Berikan gambar!`);
         try {
             const buffer = await ctx.getMediaMessage(ctx.msg, 'buffer');
 
@@ -36,10 +30,10 @@ module.exports = {
 
             const sticker = new Sticker(buffer, stickerOptions);
 
-            await ctx.reply(await sticker.toMessage()).then(() => sendStatus(ctx, 'success'));
+            await ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error('Error', error);
-            ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`).then(() => sendStatus(ctx, 'failure'));
+            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
-    },
+    }
 };
