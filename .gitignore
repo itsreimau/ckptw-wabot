@@ -1,0 +1,11 @@
+# Ignore config.js file
+config.js
+
+# Ignore node_modules directory
+node_modules/
+
+# Ignore package-lock.js file
+package-lock.json
+
+# Ignore state directory
+state/
