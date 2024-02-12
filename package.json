@@ -1,39 +1,39 @@
 {
-  "name": "ckptw-wabot",
-  "version": "2.0.0",
-  "description": "NodeJS WhatsApp Bot with @mengkodingan/ckptw.",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
-  "scripts": {
-    "test": "echo \"What are you doing now?\"",
-    "start": "node ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/itsreimau/ckptw-wabot.git"
-  },
-  "keywords": [
-    "bot"
-  ],
-  "author": "Muhamad Ikbal Maulana | ItsReimau",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/itsreimau/ckptw-wabot/issues"
-  },
-  "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
-  "dependencies": {
-    "@bochilteam/scraper": "^4.0.22-alpha.0",
-    "@mengkodingan/ckptw": "^4.0.0",
-    "api-dylux": "^1.7.2",
-    "axios": "^1.6.7",
-    "cfonts": "^3.2.0",
-    "cheerio": "^1.0.0-rc.12",
-    "lowline": "^0.4.2",
-    "moment-timezone": "^0.5.40",
-    "util": "^0.12.5",
-    "wa-sticker-formatter": "^4.3.2",
-    "yt-search": "^2.10.4"
-  }
+    "name": "ckptw-wabot",
+    "version": "1.0.0",
+    "description": "WhatsApp Bot with @mengkodingan/ckptw.",
+    "main": "index.js",
+    "directories": {
+        "lib": "lib"
+    },
+    "scripts": {
+        "test": "echo \"What are you doing now?\"",
+        "start": "node ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/itsreimau/ckptw-wabot.git"
+    },
+    "keywords": [
+        "bot"
+    ],
+    "author": "Muhamad Ikbal Maulana | ItsReimau",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/itsreimau/ckptw-wabot/issues"
+    },
+    "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
+    "dependencies": {
+        "@bochilteam/scraper": "^4.0.22-alpha.0",
+        "@mengkodingan/ckptw": "^4.0.0",
+        "api-dylux": "^1.7.2",
+        "axios": "^1.6.7",
+        "cfonts": "^3.2.0",
+        "cheerio": "^1.0.0-rc.12",
+        "lowline.ai": "^1.0.18",
+        "moment-timezone": "^0.5.40",
+        "util": "^0.12.5",
+        "wa-sticker-formatter": "^4.3.2",
+        "yt-search": "^2.10.4"
+    }
 }
