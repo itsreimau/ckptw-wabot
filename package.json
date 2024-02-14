@@ -32,8 +32,8 @@
         "cheerio": "^1.0.0-rc.12",
         "lowline.ai": "^1.0.18",
         "moment-timezone": "^0.5.40",
+        "telegraph-uploader": "^2.0.0",
         "util": "^0.12.5",
-        "wa-sticker-formatter": "^4.3.2",
-        "yt-search": "^2.10.4"
+        "wa-sticker-formatter": "^4.3.2"
     }
 }
