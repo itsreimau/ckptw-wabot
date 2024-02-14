@@ -15,9 +15,6 @@ const path = require('path');
 const {
     exec
 } = require('child_process');
-const {
-    sendStatus
-} = require('./lib/simple.js');
 
 console.log('Connecting...');
 
@@ -56,7 +53,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
             const isCommandIncluded = commandList.some(command => ctx._msg.content.includes(command));
 
-            if (isCommandIncluded && (m.content.startsWith('>') || m.content.startsWith('x') || m.content.startsWith('$'))) {
+            if (isCommandIncluded) {
                 ctx.simulateTyping(); // simulateRecording, jika Anda ingin 'sedang merekam suara...'
             }
         }
