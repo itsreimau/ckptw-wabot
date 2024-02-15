@@ -1,13 +1,11 @@
 const {
     bold
 } = require('@mengkodingan/ckptw');
-const {
-    instagram
-} = require('../lib/scraper.js');
+const fg = require('api-dylux');
 
 module.exports = {
-    name: 'igdl',
-    aliases: ['instagram', 'ig'],
+    name: 'ttdl',
+    aliases: ['tiktok', 'tt', 'vt', 'vtdl'],
     category: 'downloader',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -15,13 +13,16 @@ module.exports = {
         if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan URL!`);
 
         try {
-            const igdl = await instagram(input);
+            const ttdl = await fg.tiktok(input);
 
             await ctx.reply({
                 video: {
-                    url: igdl.data[0].url
+                    url: ttdl.hdplay || ttdl.play
                 },
-                caption: `• URL: ${input}`,
+                caption: `• Nama panggilan: ${ttdl.nickname}\n` +
+                    `• ID: ${ttdl.unique_id}\n` +
+                    `• Durasi: ${ttdl.duration}` +
+                    `• Deskripsi: ${ttdl.description}`,
                 gifPlayback: false
             });
         } catch (error) {

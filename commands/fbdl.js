@@ -24,7 +24,7 @@ module.exports = {
                 gifPlayback: false
             });
         } catch (error) {
-            console.error("Error:", error);
+            console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
     }

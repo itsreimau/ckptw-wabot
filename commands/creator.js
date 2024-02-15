@@ -3,9 +3,6 @@ const {
     bold,
     VCardBuilder
 } = require('@mengkodingan/ckptw');
-const {
-    sendStatus
-} = require('../lib/simple.js');
 
 module.exports = {
     name: 'owner',
@@ -25,6 +22,6 @@ module.exports = {
                     vcard
                 }]
             }
-        })
+        });
     }
 };

@@ -3,10 +3,10 @@ const {
 } = require('@mengkodingan/ckptw');
 const {
     _ai
-} = require("lowline.ai");
+} = require('lowline.ai');
 
 _ai.init({
-    apiKey: "REPLACE_THIS_WITH_YOUR_API_KEY" // Dapatkan di: https://www.lowline.ai/
+    apiKey: 'REPLACE_THIS_WITH_YOUR_API_KEY' // Dapatkan di: https://www.lowline.ai/
 });
 
 module.exports = {
@@ -25,7 +25,7 @@ module.exports = {
 
             await ctx.reply(res.result);
         } catch (error) {
-            console.error("Error:", error);
+            console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
     }

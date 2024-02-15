@@ -10,7 +10,7 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan kueri!`);
+        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan URL!`);
 
         try {
             const gimage = await fg.googleImage(input);
@@ -22,7 +22,7 @@ module.exports = {
                 caption: `• Kueri: ${input}`
             });
         } catch (error) {
-            console.error("Error:", error);
+            console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
     }

@@ -15,13 +15,13 @@ module.exports = {
 
             await ctx.reply({
                 video: {
-                    url: 'https://giffiles.alphacoders.com/113/113028.gif'
+                    url: 'https://giffiles.alphacoders.com/113/113028.gif' // Bisa diganti sesuai keinginan anda
                 },
                 caption: text,
-                gifPlayback: true
+                gifPlayback: true // false, jika tidak dalam format GIF
             });
         } catch (error) {
-            console.error("Error:", error);
+            console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
     }

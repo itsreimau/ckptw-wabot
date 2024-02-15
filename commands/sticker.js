@@ -1,39 +1,56 @@
 require('../config.js');
 const {
-    MessageType
-} = require('@mengkodingan/ckptw/lib/Constant');
+    Quoted
+} = require('../lib/simple.js');
+const {
+    bold
+} = require('@mengkodingan/ckptw');
 const {
     Sticker,
     StickerTypes
 } = require('wa-sticker-formatter');
-const {
-    bold
-} = require('@mengkodingan/ckptw');
 
 module.exports = {
     name: 'sticker',
     aliases: ['stiker', 's'],
     category: 'converter',
     code: async (ctx) => {
-        if (ctx.getMessageType() !== MessageType.imageMessage && ctx.getMessageType() !== MessageType.videoMessage) return ctx.reply(`${bold('[ ! ]')} Berikan gambar!`);
-        try {
-            const buffer = await ctx.getMediaMessage(ctx.msg, 'buffer');
+        let mediaMessage = ctx.msg.message.imageMessage || ctx.msg.message.videoMessage;
+        const isq = Quoted(ctx);
 
-            const stickerOptions = {
-                pack: global.packname,
-                author: global.author,
-                type: StickerTypes.FULL,
-                categories: ['🤩', '🎉'],
-                id: ctx.id,
-                quality: 50,
-            };
+        if (isq.isQuoted && (isq.type === 'imageMessage' || isq.type === 'videoMessage')) {
+            mediaMessage = isq.data.viaType;
+        }
 
-            const sticker = new Sticker(buffer, stickerOptions);
+        if (mediaMessage) {
+            if (mediaMessage.url === 'https://web.whatsapp.net') {
+                mediaMessage.url = 'https://mmg.whatsapp.net' + mediaMessage.directPath;
+            }
 
-            await ctx.reply(await sticker.toMessage());
-        } catch (error) {
-            console.error('Error', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            try {
+                const stream = await require('@whiskeysockets/baileys').downloadContentFromMessage(mediaMessage, 'image');
+                let buffer = Buffer.from([]);
+
+                for await (const chunk of stream) {
+                    buffer = Buffer.concat([buffer, chunk]);
+                }
+
+                const s = new Sticker(buffer, {
+                    pack: global.packname,
+                    author: global.author,
+                    type: StickerTypes.FULL,
+                    categories: ['🤩', '🎉'],
+                    id: ctx.id,
+                    quality: 50,
+                });
+
+                await ctx.reply(await s.toMessage());
+            } catch (error) {
+                console.error('Error:', error);
+                return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            }
+        } else {
+            return ctx.reply(`${bold('[ ! ]')} Berikan gambar atau balas gambar!`);
         }
     }
 };

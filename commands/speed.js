@@ -12,7 +12,7 @@ module.exports = {
             const speed = (performance.now() - pOld).toFixed(2);
             ctx.editMessage(res.key, `Merespon dalam ${speed} ms.`);
         } catch (error) {
-            console.error("Error:", error);
+            console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
     }
