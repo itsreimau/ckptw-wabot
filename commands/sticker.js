@@ -36,8 +36,8 @@ module.exports = {
                 }
 
                 const s = new Sticker(buffer, {
-                    pack: global.packname,
-                    author: global.author,
+                    pack: global.sticker.packname,
+                    author: global.sticker.author,
                     type: StickerTypes.FULL,
                     categories: ['🤩', '🎉'],
                     id: ctx.id,

@@ -18,13 +18,15 @@ const {
 
 console.log('Connecting...');
 
-// Deklarasikan variabel global
-global.startTime = null;
+// Deklarasikan variabel global system
+global.system = {
+    startTime: null
+}
 
 // Membuat instance bot baru
 const bot = new Client({
     name: 'Isla (アイラ Aira)',
-    prefix: /([^\w\s])/i,
+    prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
     printQRInTerminal: true,
     readIncommingMsg: true
 });
@@ -32,10 +34,10 @@ const bot = new Client({
 // Penanganan event saat bot siap
 bot.ev.once(Events.ClientReady, (m) => {
     console.log(`Ready at ${m.user.id}`);
-    global.startTime = Date.now();
+    global.system.startTime = Date.now();
 });
 
-// Menangani uncaught exceptions
+// Menangani uncaughtExceptions
 process.on('uncaughtException', (err) => console.error(err));
 
 // Membuat handler perintah dan memuat perintah-perintah
@@ -59,7 +61,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Owner-only
-        if (ctx._sender.jid.includes(global.owner)) {
+        if (ctx._sender.jid.includes(global.owner.number)) {
             // Eval
             if (m.content.startsWith('> ') || m.content.startsWith('x ')) {
                 const code = m.content.slice(2);
@@ -88,7 +90,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             }
         }
     } catch (error) {
-        console.error("Error:", error);
+        console.error('Error:', error);
         await ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
     }
 });

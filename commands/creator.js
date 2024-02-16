@@ -10,9 +10,9 @@ module.exports = {
     category: 'info',
     code: async (ctx) => {
         const vcard = new VCardBuilder()
-            .setFullName(global.ownername)
-            .setOrg(global.organization)
-            .setNumber(global.owner)
+            .setFullName(global.owner.name)
+            .setOrg(global.owner.organization)
+            .setNumber(global.owner.number)
             .build();
 
         await ctx.reply({

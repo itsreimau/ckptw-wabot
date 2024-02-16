@@ -19,8 +19,8 @@ module.exports = {
         try {
             response = await fetch(url)
             if (!response.ok) throw `${response.statusText} (${response.status})`
-        } catch (e) {
-            return ctx.reply('Kesalahan: ' + e)
+        } catch (error) {
+            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`)
         }
         const headers = response.headers
         const status = response.status
@@ -73,7 +73,7 @@ module.exports = {
                     url: url
                 },
                 mimetype: 'application/pdf'
-            })
+            });
         }
 
         // File
@@ -82,20 +82,22 @@ module.exports = {
                 .split(';')[1]
                 .split('=')[1]
                 .slice(1, -1)
-            return ctx.reply({document: {
+            return ctx.reply({
+                document: {
                     url: url
-                }, mimetype: 'application/octet-stream'
-            })
-    }
+                },
+                mimetype: 'application/octet-stream'
+            });
+        }
 
-    // Text
-    console.log("Content-Type:", headers.get('content-type'))
-    return ctx.reply(
-        `Status: ${status}\n` +
-        'Response:\n' +
-        `${data}`
-    )
-}
+        // Text
+        console.log("Content-Type:", headers.get('content-type'))
+        return ctx.reply(
+            `Status: ${status}\n` +
+            'Response:\n' +
+            `${data}`
+        );
+    }
 }
 
 function walkJSON(json, depth, array) {
