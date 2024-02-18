@@ -5,6 +5,12 @@ const {
     bold
 } = require('@mengkodingan/ckptw');
 
+const apiEndpoints = {
+    'tab': '/sstab',
+    'phone': '/ssphone',
+    'web': '/ssweb'
+};
+
 module.exports = {
     name: 'screenshot',
     aliases: ['ss'],
