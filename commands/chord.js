@@ -8,7 +8,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 
 module.exports = {
-    name: 'alkitab',
+    name: 'chord',
     category: 'internet',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -16,12 +16,12 @@ module.exports = {
         if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks!`);
 
         try {
-            const c = await chord(text)
-            ctx.reply(
-                `• Song: ${input}\n` +
-                `• Chord:\n` +
+            const c = await chord(input);
+            return ctx.reply(
+                `• Lagu: ${input}\n` +
+                `• Akord:\n` +
                 `${c.chord}`
-            )
+            );
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
@@ -51,9 +51,9 @@ function chord(query) {
         }).then(anu => {
             let $ = cheerio.load(anu.data.post.content);
             resolve({
-                title: $("img").attr("alt"),
-                chord: $("pre").text().trim()
+                title: $('img').attr('alt'),
+                chord: $('pre').text().trim()
             });
         }).catch(reject);
     });
-}
+};
