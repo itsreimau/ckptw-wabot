@@ -13,8 +13,9 @@ module.exports = {
         try {
             new URL(url)
         } catch {
-            return message.reply(`${bold(' [!]')} URL yang Anda berikan tidak valid!`)
+            return ctx.reply(`${bold(' [!]')} URL yang Anda berikan tidak valid!`)
         }
+
         let response
         try {
             response = await fetch(url)
@@ -22,6 +23,7 @@ module.exports = {
         } catch (error) {
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`)
         }
+
         const headers = response.headers
         const status = response.status
         const data = await response.text()
@@ -29,7 +31,7 @@ module.exports = {
         // JSON Check
         try {
             const json = JSON.parse(data)
-            return message.reply(walkJSON(json))
+            return ctx.reply(walkJSON(json))
         } catch {}
 
         // Image Check
@@ -67,7 +69,6 @@ module.exports = {
 
         // PDF
         if (headers.get('content-type') === 'application/pdf' || url.endsWith('.pdf')) {
-            const filename = url.split('/').at(-1)
             return ctx.reply({
                 document: {
                     url: url
@@ -78,10 +79,6 @@ module.exports = {
 
         // File
         if (headers.get('content-type') === 'application/octet-stream') {
-            const filename = headers.get('content-disposition')
-                .split(';')[1]
-                .split('=')[1]
-                .slice(1, -1)
             return ctx.reply({
                 document: {
                     url: url
@@ -93,8 +90,8 @@ module.exports = {
         // Text
         console.log("Content-Type:", headers.get('content-type'))
         return ctx.reply(
-            `Status: ${status}\n` +
-            'Response:\n' +
+            `• Status: ${status}\n` +
+            '• Respon:\n' +
             `${data}`
         );
     }

@@ -1,8 +1,14 @@
+// Bot
+global.bot = {
+    name: 'Rei Ayanami',
+    prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i
+};
+
 // Owner
 global.owner = {
-    organization: 'Kumaha Aing',
     name: 'ItsReimau',
-    number: '6283838039693'
+    number: '6283838039693',
+    organization: 'Kumaha Aing'
 };
 
 // Sticker

@@ -25,8 +25,8 @@ global.system = {
 
 // Membuat instance bot baru
 const bot = new Client({
-    name: 'Isla (アイラ Aira)',
-    prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
+    name: global.bot.name,
+    prefix: global.bot.prefix,
     printQRInTerminal: true,
     readIncommingMsg: true
 });
@@ -50,14 +50,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (!m.content || m.key.fromMe) return;
 
         // Auto-typing
-        if (m.content && ctx._config.cmd instanceof Map) {
-            const commandList = Array.from(ctx._config.cmd.keys());
-
-            const isCommandIncluded = commandList.some(command => ctx._msg.content.includes(command));
-
-            if (isCommandIncluded) {
-                ctx.simulateTyping(); // simulateRecording, jika Anda ingin 'sedang merekam suara...'
-            }
+        if (ctx._used.command && ctx._used.prefix) {
+            ctx.simulateTyping(); // simulateRecording, jika Anda ingin 'sedang merekam suara...'
         }
 
         // Owner-only

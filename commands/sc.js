@@ -3,9 +3,9 @@ module.exports = {
     aliases: ['script', 'source', 'sourcecode'],
     category: 'info',
     code: async (ctx) => {
-        return ctx.reply(
+        await ctx.reply(
             `Hai ${ctx._sender.pushName}, bot WhatsApp ini menggunakan:\n` +
             `https://github.com/itsreimau/ckptw-wabot`
-        );
+        ); // Jika Anda tidak menghapus ini, terima kasih!
     }
 };

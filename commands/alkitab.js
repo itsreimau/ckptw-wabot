@@ -13,7 +13,7 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks!`);
+        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks pencarian!`);
 
         try {
             const apiUrl = createAPIUrl('https://alkitab.me', '/search', {
@@ -38,11 +38,10 @@ module.exports = {
                 })
             })
 
-            const caption = result.map(v =>
+            ctx.reply(result.map(v =>
                 `• ${v.title}\n` +
                 `• ${v.teks}`
-            ).join('\n────────\n')
-            ctx.reply(caption)
+            ).join('\n────────\n'))
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

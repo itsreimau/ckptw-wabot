@@ -28,10 +28,10 @@ module.exports = {
 
         if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks!`);
 
-        let mediaMessage = ctx.msg.message.imageMessage || ctx.msg.message.videoMessage;
+        let mediaMessage = ctx.msg.message.imageMessage;
         const isq = Quoted(ctx);
 
-        if (isq.isQuoted && (isq.type === 'imageMessage' || isq.type === 'videoMessage')) {
+        if (isq.isQuoted && (isq.type === 'imageMessage')) {
             mediaMessage = isq.data.viaType;
         }
 
@@ -68,7 +68,7 @@ module.exports = {
                 return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
             }
         } else {
-            return ctx.reply(`${bold('[ ! ]')} Berikan gambar atau balas gambar!`);
+            return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa gambar!`);
         }
     }
 };

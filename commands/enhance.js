@@ -54,7 +54,7 @@ module.exports = {
                 return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
             }
         } else {
-            return ctx.reply(`${bold('[ ! ]')} Berikan gambar atau balas gambar!`);
+            return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa gambar!`);
         }
     }
 };

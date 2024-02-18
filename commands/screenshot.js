@@ -19,14 +19,14 @@ module.exports = {
         const input = ctx._args.join(' ');
 
         if (!input) {
-            return ctx.reply(`${bold('[ ! ]')} Masukkan URL!`);
+            return ctx.reply(`${bold('[ ! ]')} Masukkan jenis tampilan dan URL!`);
         }
 
         try {
             const [type, url] = input.split(' ');
 
             if (!Object.keys(apiEndpoints).includes(type)) {
-                return ctx.reply('❌ Pilih jenis tampilan yang benar: tab, phone, atau web.');
+                return ctx.reply(`${bold('[ ! ]')} Pilih jenis tampilan: tab, phone, atau web.`);
             }
 
             const apiUrl = createAPIUrl('vihangayt', `/tools${apiEndpoints[type]}`, {
@@ -37,7 +37,7 @@ module.exports = {
                 image: {
                     url: apiUrl
                 },
-                caption: `• URL: ${input}` +
+                caption: `• URL: ${url}\n` +
                     `• Tampilan: ${type === 'tab' ? 'Tab' : type === 'phone' ? 'Ponsel' : 'Web'}`
             });
         } catch (error) {

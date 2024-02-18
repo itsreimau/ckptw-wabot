@@ -10,7 +10,7 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan URL!`);
+        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks pencarian!`);
 
         try {
             const gimage = await fg.googleImage(input);

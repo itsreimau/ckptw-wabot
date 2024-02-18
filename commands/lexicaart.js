@@ -15,7 +15,7 @@ module.exports = {
         if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan prompt!`);
 
         try {
-            const apiUrl = createAPIUrl('vihangayt', 'tools/lexicaart', {
+            const apiUrl = createAPIUrl('vihangayt', `tools/lexicaart`, {
                 q: input
             });
 

@@ -13,10 +13,11 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks!`);
+        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks judul lagu!`);
 
         try {
             const c = await chord(input);
+
             return ctx.reply(
                 `• Judul: ${c.title.replace('Chords', '').trim()} (${c.url})\n` +
                 `• Artis: ${c.artist.replace('‣', '').trim()} (${c.artistUrl})\n` +
