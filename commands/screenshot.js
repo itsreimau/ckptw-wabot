@@ -1,3 +1,10 @@
+const {
+    createAPIUrl
+} = require('../lib/api.js');
+const {
+    bold
+} = require('@mengkodingan/ckptw');
+
 module.exports = {
     name: 'screenshot',
     aliases: ['ss'],
