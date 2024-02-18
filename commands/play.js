@@ -9,6 +9,7 @@ const yts = require('yt-search');
 
 module.exports = {
     name: 'play',
+    category: 'downloader',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
