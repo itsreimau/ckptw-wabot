@@ -49,10 +49,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Memeriksa pesan
         if (!m.content || m.key.fromMe) return;
 
-        // Auto-typing
-        if (ctx._used.command && ctx._used.prefix) {
-            ctx.simulateTyping(); // simulateRecording, jika Anda ingin 'sedang merekam suara...'
-        }
+        // Auto-typing (Bagaimana cara membuatnya :v)
 
         // Owner-only
         if (ctx._sender.jid.includes(global.owner.number)) {

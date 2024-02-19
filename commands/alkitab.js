@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require('../lib/api.js');
+    alkitab
+} = require('../lib/scraper.js');
 const {
     bold
 } = require('@mengkodingan/ckptw');
@@ -16,27 +16,7 @@ module.exports = {
         if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks pencarian!`);
 
         try {
-            const apiUrl = createAPIUrl('https://alkitab.me', '/search', {
-                q: input
-            })
-            const res = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36"
-                }
-            })
-
-            const $ = cheerio.load(res.data)
-            const result = []
-            $('div.vw').each(function(a, b) {
-                const teks = $(b).find('p').text().trim()
-                const link = $(b).find('a').attr('href')
-                const title = $(b).find('a').text().trim()
-                result.push({
-                    teks,
-                    link,
-                    title
-                })
-            })
+            const result = await alkitab(input);
 
             ctx.reply(result.map(v =>
                 `• ${v.title}\n` +

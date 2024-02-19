@@ -21,7 +21,7 @@ module.exports = {
                 },
                 caption: `• Nama panggilan: ${ttdl.nickname}\n` +
                     `• ID: ${ttdl.unique_id}\n` +
-                    `• Durasi: ${ttdl.duration}` +
+                    `• Durasi: ${ttdl.duration}\n` +
                     `• Deskripsi: ${ttdl.description}`,
                 gifPlayback: false
             });
