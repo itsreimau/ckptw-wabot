@@ -1,6 +1,6 @@
 {
     "name": "ckptw-wabot",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "description": "WhatsApp Bot with @mengkodingan/ckptw.",
     "main": "index.js",
     "directories": {
@@ -31,7 +31,6 @@
         "axios": "^1.6.7",
         "cfonts": "^3.2.0",
         "cheerio": "^1.0.0-rc.12",
-        "discord-afk-js": "^1.5.0",
         "link-preview-js": "^3.0.5",
         "lowline.ai": "^1.0.18",
         "moment-timezone": "^0.5.40",
