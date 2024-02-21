@@ -12,7 +12,7 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan prompt!`);
+        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks prompt!`);
 
         try {
             const apiUrl = createAPIUrl('vihangayt', `tools/lexicaart`, {

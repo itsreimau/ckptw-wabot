@@ -17,7 +17,7 @@ module.exports = {
 
         try {
             const search = await yts(input);
-            const yt = search.all[0];
+            const yt = search.videos[0];
 
             await ctx.reply({
                 image: {

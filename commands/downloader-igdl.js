@@ -1,26 +1,27 @@
 const {
     bold
 } = require('@mengkodingan/ckptw');
-const fg = require('api-dylux');
+const {
+    instagram
+} = require('../lib/scraper.js');
 
 module.exports = {
-    name: 'fbdl',
-    aliases: ['facebook', 'fb'],
+    name: 'igdl',
+    aliases: ['instagram', 'ig'],
     category: 'downloader',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan URL!`);
+        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks URL!`);
 
         try {
-            const fbdl = await fg.fbdl(input);
+            const igdl = await instagram(input);
 
             await ctx.reply({
                 video: {
-                    url: fbdl.videoUrl
+                    url: igdl.data[0].url
                 },
-                caption: `• Judul: ${fbdl.title}\n` +
-                    `• Ukuran: ${fbdl.size}`,
+                caption: `• URL: ${input}`,
                 gifPlayback: false
             });
         } catch (error) {

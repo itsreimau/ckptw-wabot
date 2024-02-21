@@ -6,7 +6,8 @@ const {
     Quoted
 } = require('../lib/simple.js');
 const {
-    bold
+    bold,
+    quote
 } = require('@mengkodingan/ckptw');
 const {
     MessageType
@@ -26,7 +27,7 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks!`);
+        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks atas dan bawah yang dipisahkan dengan ${quote('|')}!`);
 
         let mediaMessage = ctx.msg.message.imageMessage;
         const isq = Quoted(ctx);
