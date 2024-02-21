@@ -27,7 +27,7 @@ module.exports = {
                             `• Jumlah video: ${v.videoCount}`.trim()
                 }
             }).filter(v => v).join('\n────────\n')
-            m.reply(text)
+            ctx.reply(text)
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
