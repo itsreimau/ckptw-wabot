@@ -50,6 +50,20 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (!m.content || m.key.fromMe) return;
 
         // Auto-typing (Bagaimana cara membuatnya :v)
+        if (m.content && (ctx._config.prefix instanceof RegExp || ctx._config.cmd instanceof Map || ctx._config.cmd instanceof RegExp)) {
+            const messagePrefix = m.content.match(ctx._config.prefix);
+            const prefix = messagePrefix ? messagePrefix[0] : "";
+
+            const commandList = (ctx._config.cmd instanceof Map) ? Array.from(ctx._config.cmd.keys()) : null;
+            const regexPattern = (ctx._config.cmd instanceof RegExp) ? ctx._config.cmd : null;
+
+            const isCommandIncluded = (commandList && commandList.some(command => m.content.startsWith(prefix + command))) ||
+                (regexPattern && regexPattern.test(m.content.substring(prefix.length)));
+
+            if (isCommandIncluded) {
+                ctx.simulateTyping(); // atau ctx.simulateRecording() jika Anda ingin 'sedang merekam suara...'
+            }
+        }
 
         // Owner-only
         if (ctx._sender.jid.includes(global.owner.number)) {
