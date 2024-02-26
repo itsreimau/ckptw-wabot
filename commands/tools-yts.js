@@ -17,17 +17,17 @@ module.exports = {
             let text = results.all.map(v => {
                 switch (v.type) {
                     case 'video':
-                        return `*${v.title} (${v.url})*` +
-                            `• Durasi: ${v.timestamp}` +
-                            `• Diunggah: ${v.ago}` +
+                        return `*${v.title} (${v.url})*\n` +
+                            `• Durasi: ${v.timestamp}\n` +
+                            `• Diunggah: ${v.ago}\n` +
                             `• Dilihat: ${v.views}`.trim()
                     case 'channel':
-                        return `*${v.name} (${v.url})*` +
-                            `• Subscriber: ${v.subCountLabel} (${v.subCount})` +
+                        return `*${v.name} (${v.url})*\n` +
+                            `• Subscriber: ${v.subCountLabel} (${v.subCount})\n` +
                             `• Jumlah video: ${v.videoCount}`.trim()
                 }
             }).filter(v => v).join('\n────────\n')
-            m.reply(text)
+            ctx.reply(text)
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
