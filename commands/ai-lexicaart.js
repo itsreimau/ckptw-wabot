@@ -8,7 +8,7 @@ const {
 module.exports = {
     name: 'lexicaart',
     aliases: ['lexica', 'lart'],
-    category: 'tools',
+    category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 

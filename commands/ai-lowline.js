@@ -1,13 +1,17 @@
 const {
-    createAPIUrl
-} = require('../lib/api.js');
-const {
     bold
 } = require('@mengkodingan/ckptw');
+const {
+    _ai
+} = require('lowline.ai');
+
+_ai.init({
+    apiKey: 'REPLACE_THIS_WITH_YOUR_API_KEY' // Dapatkan di: https://www.lowline.ai/
+});
 
 module.exports = {
-    name: 'chatgpt',
-    aliases: ['ai', 'chatai', 'gpt', 'gpt4'],
+    name: 'lowline',
+    aliases: ['lowlineai', 'llai', 'll'],
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -15,14 +19,11 @@ module.exports = {
         if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks biasa!`);
 
         try {
-            const apiUrl = createAPIUrl('ai_tools', '/gpt', {
+            const res = await _ai.generatePlaintext({
                 prompt: input,
-                uid: ctx._sender.jid.replace('@s.whatsapp.net', '')
             });
-            const response = await fetch(apiUrl);
-            const data = await response.json();
 
-            return ctx.reply(data.gpt4);
+            await ctx.reply(res.result);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
