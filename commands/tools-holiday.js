@@ -15,14 +15,11 @@ module.exports = {
             const apiUrl = createAPIUrl('https://api-harilibur.vercel.app', '/api', {
                 month: month
             });
-
             const data = await fetch(apiUrl)
                 .then(res => res.ok ? res.json() : null)
                 .catch(err => null);
 
-            if (!data.length) {
-                return ctx.reply(`${bold('[ ! ]')} Tidak ada hari libur di bulan ini.`);
-            }
+            if (!data.length) return ctx.reply(`${bold('[ ! ]')} Tidak ada hari libur di bulan ini.`);
 
             const display = data.reverse().map((h, i) => {
                 const d = new Date(h.holiday_date);

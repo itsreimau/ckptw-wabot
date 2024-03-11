@@ -12,9 +12,10 @@ module.exports = {
         const input = ctx._args.join(' ');
         const script = input;
 
-        if (!script) {
-            return ctx.reply(`${bold('[ ! ]')} Masukkan kode!`);
-        }
+        if (!script) return ctx.reply(
+            `${bold('[ ! ]')} Masukkan parameter!\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} console.log('Hello World!');`)}`
+        );
 
         const restricted = ['import', 'eval', 'Function', 'global'];
         for (const w of restricted) {

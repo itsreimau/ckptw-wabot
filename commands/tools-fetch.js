@@ -1,5 +1,6 @@
 const {
-    bold
+    bold,
+    monospace
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
@@ -8,34 +9,37 @@ module.exports = {
     code: async (ctx) => {
         const url = ctx._args[0]
 
-        if (!url) return ctx.reply(`${bold('[ ! ]')} Masukkan URL!`)
+        if (!url) return ctx.reply(
+            `${bold('[ ! ]')} Masukkan parameter!\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
+        );
 
         try {
-            new URL(url)
+            new URL(url);
         } catch {
-            return ctx.reply(`${bold(' [!]')} URL yang Anda berikan tidak valid!`)
-        }
+            return ctx.reply(`${bold(' [!]')} URL yang Anda berikan tidak valid!`);
+        };
 
-        let response
+        let response;
         try {
             response = await fetch(url)
             if (!response.ok) throw `${response.statusText} (${response.status})`
         } catch (error) {
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`)
-        }
+            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+        };
 
-        const headers = response.headers
-        const status = response.status
-        const data = await response.text()
+        const headers = response.headers;
+        const status = response.status;
+        const data = await response.text();
 
         // JSON Check
         try {
-            const json = JSON.parse(data)
-            return ctx.reply(walkJSON(json))
-        } catch {}
+            const json = JSON.parse(data);
+            return ctx.reply(walkJSON(json));
+        } catch {};
 
         // Image Check
-        const img = ['image/png', 'image/jpeg']
+        const img = ['image/png', 'image/jpeg'];
         if (img.includes(headers.get('content-type'))) {
             return ctx.reply({
                 image: {
@@ -54,7 +58,7 @@ module.exports = {
                 caption: null,
                 gifPlayback: true
             });
-        }
+        };
 
         // Video Check
         if (headers.get('content-type') === 'video/mp4') {
@@ -65,7 +69,7 @@ module.exports = {
                 caption: null,
                 gifPlayback: false
             });
-        }
+        };
 
         // PDF
         if (headers.get('content-type') === 'application/pdf' || url.endsWith('.pdf')) {
@@ -75,7 +79,7 @@ module.exports = {
                 },
                 mimetype: 'application/pdf'
             });
-        }
+        };
 
         // File
         if (headers.get('content-type') === 'application/octet-stream') {
@@ -85,27 +89,27 @@ module.exports = {
                 },
                 mimetype: 'application/octet-stream'
             });
-        }
+        };
 
         // Text
-        console.log("Content-Type:", headers.get('content-type'))
+        console.log("Content-Type:", headers.get('content-type'));
         return ctx.reply(
             `• Status: ${status}\n` +
             '• Respon:\n' +
             `${data}`
         );
     }
-}
+};
 
 function walkJSON(json, depth, array) {
-    const arr = array || []
-    const d = depth || 0
+    const arr = array || [];
+    const d = depth || 0;
     for (const key in json) {
         arr.push('┊'.repeat(d) + (d > 0 ? ' ' : '') + `*${key}:*`)
         if (typeof json[key] === 'object') walkJSON(json[key], d + 1, arr)
         else {
             arr[arr.length - 1] += ' ' + json[key]
         }
-    }
-    return arr.join('\n')
-}
+    };
+    return arr.join('\n');
+};

@@ -1,4 +1,7 @@
 const {
+    bold
+} = require('@mengkodingan/ckptw');
+const {
     performance
 } = require('perf_hooks');
 

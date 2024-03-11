@@ -49,16 +49,23 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Memeriksa pesan
         if (!m.content || m.key.fromMe) return;
 
-        // Auto-typing (Bagaimana cara membuatnya :v)
+        // Auto-typing
         if (m.content && (ctx._config.prefix instanceof RegExp || ctx._config.cmd instanceof Map || ctx._config.cmd instanceof RegExp)) {
             const messagePrefix = m.content.match(ctx._config.prefix);
             const prefix = messagePrefix ? messagePrefix[0] : "";
 
-            const commandList = (ctx._config.cmd instanceof Map) ? Array.from(ctx._config.cmd.keys()) : null;
-            const regexPattern = (ctx._config.cmd instanceof RegExp) ? ctx._config.cmd : null;
+            const commandMap = ctx._config.cmd instanceof Map ? ctx._config.cmd : new Map();
 
-            const isCommandIncluded = (commandList && commandList.some(command => m.content.startsWith(prefix + command))) ||
-                (regexPattern && regexPattern.test(m.content.substring(prefix.length)));
+            const aliasesList = [];
+            for (const command of Object.values(ctx._config)) {
+                if (command.aliases) {
+                    aliasesList.push(...command.aliases);
+                }
+            }
+
+            const allCommands = [...commandMap.keys(), ...aliasesList];
+
+            const isCommandIncluded = allCommands.some(command => m.content.startsWith(prefix + command));
 
             if (isCommandIncluded) {
                 ctx.simulateTyping(); // atau ctx.simulateRecording() jika Anda ingin 'sedang merekam suara...'

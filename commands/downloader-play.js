@@ -1,5 +1,6 @@
 const {
-    bold
+    bold,
+    monospace
 } = require('@mengkodingan/ckptw');
 const {
     youtubedl,
@@ -13,7 +14,10 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks judul lagu!`);
+        if (!input) return ctx.reply(
+            `${bold('[ ! ]')} Masukkan parameter!\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} hikaru utada - one last kiss`)}`
+        );
 
         try {
             const search = await yts(input);

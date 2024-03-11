@@ -1,5 +1,6 @@
 const {
-    bold
+    bold,
+    monospace
 } = require('@mengkodingan/ckptw');
 const {
     _ai
@@ -16,7 +17,10 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks biasa!`);
+        if (!input) return ctx.reply(
+            `${bold('[ ! ]')} Masukkan parameter!\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
+        );
 
         try {
             const res = await _ai.generatePlaintext({

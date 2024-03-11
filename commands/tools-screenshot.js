@@ -2,7 +2,8 @@ const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
-    bold
+    bold,
+    monospace
 } = require('@mengkodingan/ckptw');
 
 const apiEndpoints = {
@@ -18,16 +19,15 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) {
-            return ctx.reply(`${bold('[ ! ]')} Masukkan teks jenis tampilan dan URL!`);
-        }
+        if (!input) return ctx.reply(
+            `${bold('[ ! ]')} Masukkan parameter!\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
+        );
 
         try {
             const [type, url] = input.split(' ');
 
-            if (!Object.keys(apiEndpoints).includes(type)) {
-                return ctx.reply(`${bold('[ ! ]')} Jenis tampilan yang tersedia: tab, phone, atau web.`);
-            }
+            if (!Object.keys(apiEndpoints).includes(type)) return ctx.reply(`${bold('[ ! ]')} Jenis tampilan yang tersedia: tab, phone, atau web.`);
 
             const apiUrl = createAPIUrl('vihangayt', `/tools${apiEndpoints[type]}`, {
                 url: url

@@ -1,5 +1,6 @@
 const {
-    bold
+    bold,
+    monospace
 } = require('@mengkodingan/ckptw');
 const fg = require('api-dylux');
 
@@ -10,7 +11,10 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks pencarian!`);
+        if (!input) return ctx.reply(
+            `${bold('[ ! ]')} Masukkan parameter!\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} rei ayanami`)}`
+        );
 
         try {
             const gimage = await fg.googleImage(input);
@@ -36,4 +40,4 @@ function getRandomElement(arr) {
     const randomIndex = Math.floor(Math.random() * arr.length);
 
     return arr[randomIndex];
-}
+};

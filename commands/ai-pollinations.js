@@ -7,26 +7,26 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'chatgpt',
-    aliases: ['ai', 'chatai', 'gpt', 'gpt4'],
+    name: 'pollinations',
+    aliases: ['aipoll', 'imgpoll'],
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
         if (!input) return ctx.reply(
             `${bold('[ ! ]')} Masukkan parameter!\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`
         );
 
         try {
-            const apiUrl = createAPIUrl('ai_tools', '/gpt', {
-                prompt: input,
-                uid: ctx._sender.jid.replace('@s.whatsapp.net', '')
-            });
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+            const apiUrl = createAPIUrl('https://image.pollinations.ai', `/prompt/${input}`, {});
 
-            return ctx.reply(data.gpt4);
+            await ctx.reply({
+                image: {
+                    url: apiUrl
+                },
+                caption: `• Prompt: ${input}`
+            });
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

@@ -13,7 +13,6 @@ module.exports = {
 
         try {
             const response = await fetch(apiUrl);
-
             const {
                 data
             } = await response.json();

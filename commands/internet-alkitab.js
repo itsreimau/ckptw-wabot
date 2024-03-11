@@ -2,7 +2,8 @@ const {
     alkitab
 } = require('../lib/scraper.js');
 const {
-    bold
+    bold,
+    monospace
 } = require('@mengkodingan/ckptw');
 const axios = require('axios')
 const cheerio = require('cheerio')
@@ -13,7 +14,10 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks pencarian!`);
+        if (!input) return ctx.reply(
+            `${bold('[ ! ]')} Masukkan parameter!\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kejadian`)}`
+        );
 
         try {
             const result = await alkitab(input);
