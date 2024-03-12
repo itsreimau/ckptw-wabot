@@ -11,22 +11,21 @@ module.exports = {
     aliases: ['aipixart', 'imgpixart'],
     category: 'ai',
     code: async (ctx) => {
-        const input = ctx._args.join(' ');
+        const input = ctx._args;
+        const iStyles = input.shift();
+        const prompt = input.join(' ');
 
         const styleList = [...Array(9).keys()].map((index) => `${index + 1}. ${getStyleText(index + 1)}`).join('\n');
 
         if (!input.includes(' ')) return ctx.reply(
             `${bold('[ ! ]')} Masukkan parameter!\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 7 cat`)}` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 7 cat`)}\n` +
             `Daftar gaya:\n` +
             `${styleList}`
         );
 
         try {
-            const spaceIndex = input.indexOf(' ');
-            const styleInput = input.substring(0, spaceIndex);
-            const prompt = input.substring(spaceIndex + 1).trim();
-            const styles = parseInt(styleInput.trim());
+            const styles = parseInt(iStyles.trim());
 
             if (isNaN(styles) || styles < 1 || styles > 9) return ctx.reply(
                 `${bold('[ ! ]')} Masukkan gaya yang tersedia.\n` +

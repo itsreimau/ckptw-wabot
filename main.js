@@ -50,19 +50,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (!m.content || m.key.fromMe) return;
 
         // Auto-typing
-        if (m.content && (ctx._config.prefix instanceof RegExp || ctx._config.cmd instanceof Map || ctx._config.cmd instanceof RegExp)) {
+        if (m.content) {
             const messagePrefix = m.content.match(ctx._config.prefix);
             const prefix = messagePrefix ? messagePrefix[0] : "";
 
             const commandMap = ctx._config.cmd instanceof Map ? ctx._config.cmd : new Map();
-
-            const aliasesList = [];
-            for (const command of Object.values(ctx._config)) {
-                if (command.aliases) {
-                    aliasesList.push(...command.aliases);
-                }
-            }
-
+            const aliasesList = [].concat(...Object.values(commandMap).map(command => command.aliases || []));
             const allCommands = [...commandMap.keys(), ...aliasesList];
 
             const isCommandIncluded = allCommands.some(command => m.content.startsWith(prefix + command));

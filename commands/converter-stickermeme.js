@@ -6,7 +6,8 @@ const {
     download
 } = require('../lib/simple.js');
 const {
-    bold
+    bold,
+    monospace
 } = require('@mengkodingan/ckptw');
 const {
     MessageType
@@ -26,7 +27,10 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan teks atas dan bawah yang dipisahkan dengan "|"!`);
+        if (!input) return ctx.reply(
+            `${bold('[ ! ]')} Masukkan parameter!\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} rei|ayanami`)}`
+        );
 
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx.msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
@@ -54,7 +58,7 @@ module.exports = {
                 quality: 50,
             });
 
-            await ctx.reply(await sticker.toMessage());
+            return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error('Error', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

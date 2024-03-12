@@ -38,7 +38,7 @@ module.exports = {
                 quality: 50,
             });
 
-            await ctx.reply(await sticker.toMessage());
+            return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error('Error', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

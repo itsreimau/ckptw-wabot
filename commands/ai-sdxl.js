@@ -11,20 +11,21 @@ module.exports = {
     aliases: ['aisdxl', 'imgsdxl'],
     category: 'ai',
     code: async (ctx) => {
-        const input = ctx._args.join(' ');
+        const input = ctx._args;
+        const iStyles = input.shift();
+        const prompt = input.join(' ');
 
         const styleList = [...Array(9).keys()].map((index) => `${index + 1}. ${getStyleText(index + 1)}`).join('\n');
 
-        if (!input) return ctx.reply(
+        if (!input.includes(' ')) return ctx.reply(
             `${bold('[ ! ]')} Masukkan parameter!\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 7 cat`)}` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 7 cat`)}\n` +
             `Daftar gaya:\n` +
             `${styleList}`
         );
 
         try {
-            const [styleInput, prompt] = input.split('|');
-            const styles = parseInt(styleInput);
+            const styles = parseInt(iStyles.trim());
 
             if (isNaN(styles) || styles < 1 || styles > 9) return ctx.reply(
                 `${bold('[ ! ]')} Masukkan gaya yang tersedia.\n` +
@@ -33,7 +34,7 @@ module.exports = {
             );
 
             const apiUrl = createAPIUrl('ai_tools', '/sdxl', {
-                prompt: prompt,
+                prompt: prompt.trim(),
                 styles: styles
             });
 
@@ -41,7 +42,7 @@ module.exports = {
                 image: {
                     url: apiUrl
                 },
-                caption: `• Prompt: ${prompt}\n` +
+                caption: `• Prompt: ${prompt.trim()}\n` +
                     `• Gaya: ${getStyleText(styles)}`
             });
         } catch (error) {
