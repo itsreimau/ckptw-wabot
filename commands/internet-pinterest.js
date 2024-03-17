@@ -19,11 +19,11 @@ module.exports = {
         );
 
         try {
-            const pinterest = await pinterest(input);
+            const result = await pinterest(input);
 
             await ctx.reply({
                 image: {
-                    url: pinterest
+                    url: result
                 },
                 caption: `• Kueri: ${input}`
             });

@@ -3,7 +3,8 @@ const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
-    download
+    download,
+    getImageLink
 } = require('../lib/simple.js');
 const {
     bold,
@@ -12,9 +13,6 @@ const {
 const {
     MessageType
 } = require('@mengkodingan/ckptw/lib/Constant');
-const {
-    uploadByBuffer
-} = require('telegraph-uploader');
 const {
     Sticker,
     StickerTypes
@@ -44,7 +42,7 @@ module.exports = {
             const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
 
             const [top, bottom] = input.split(`|`);
-            const result = await uploadByBuffer(buffer, 'image/png');
+            const result = await getImageLink(buffer);
             const memegen = createAPIUrl('https://api.memegen.link', `/images/custom/${top || ''}/${encodeURIComponent(bottom || '')}.png`, {
                 background: result.link
             });
