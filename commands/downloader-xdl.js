@@ -7,8 +7,8 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'igdl',
-    aliases: ['instagram', 'ig'],
+    name: 'xdl',
+    aliases: ['x', 'twitter', 'twitdl', 'twitterdl'],
     category: 'downloader',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -21,7 +21,7 @@ module.exports = {
         try {
             const apiUrl = createAPIUrl('miwudev', `/api/v1/igdl`, {
                 url: input
-            });
+            }); // Miru mengatakan Instagram API dapat mengunduh video lain seperti TikTok, Twitter, dll.
             const response = await fetch(apiUrl);
             const data = await response.json();
 

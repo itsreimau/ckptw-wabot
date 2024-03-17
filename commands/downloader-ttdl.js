@@ -1,8 +1,10 @@
 const {
+    createAPIUrl
+} = require('../lib/api.js');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
-const fg = require('api-dylux');
 
 module.exports = {
     name: 'ttdl',
@@ -17,16 +19,17 @@ module.exports = {
         );
 
         try {
-            const ttdl = await fg.tiktok(input);
+            const apiUrl = createAPIUrl('miwudev', `/api/v1/igdl`, {
+                url: input
+            }); // Miru mengatakan Instagram API dapat mengunduh video lain seperti TikTok, Twitter, dll.
+            const response = await fetch(apiUrl);
+            const data = await response.json();
 
             await ctx.reply({
                 video: {
-                    url: ttdl.hdplay || ttdl.play
+                    url: data.url
                 },
-                caption: `• Nama panggilan: ${ttdl.nickname}\n` +
-                    `• ID: ${ttdl.unique_id}\n` +
-                    `• Durasi: ${ttdl.duration}\n` +
-                    `• Deskripsi: ${ttdl.description}`,
+                caption: `• URL: ${input}`,
                 gifPlayback: false
             });
         } catch (error) {
