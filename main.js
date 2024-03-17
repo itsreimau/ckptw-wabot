@@ -1,5 +1,8 @@
 require('./config.js');
 const {
+    isCmd
+} = require('../lib/simple.js');
+const {
     bold,
     Client,
     CommandHandler
@@ -50,53 +53,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (!m.content || m.key.fromMe) return;
 
         // Auto-typing
-        if (m.content) {
-            const messagePrefix = m.content.match(ctx._config.prefix);
-            const prefix = messagePrefix ? messagePrefix[0] : "";
-
-            const commandMap = ctx._config.cmd instanceof Map ? ctx._config.cmd : new Map();
-            const aliasesList = [].concat(...Object.values(commandMap).map(command => command.aliases || []));
-            const allCommands = [...commandMap.keys(), ...aliasesList];
-
-            const isCommandIncluded = allCommands.some(command => m.content.startsWith(prefix + command));
-
-            if (isCommandIncluded) {
-                ctx.simulateTyping(); // atau ctx.simulateRecording() jika Anda ingin 'sedang merekam suara...'
-            }
+        if (isCmd(m, ctx)) {
+            ctx.simulateTyping(); // atau ctx.simulateRecording() jika Anda ingin 'sedang merekam suara...'
         }
-
-        // Owner-only
-        if (ctx._sender.jid.includes(global.owner.number)) {
-            // Eval
-            if (m.content.startsWith('> ') || m.content.startsWith('x ')) {
-                const code = m.content.slice(2);
-
-                const result = await eval(m.content.startsWith('x ') ? `(async () => { ${code} })()` : code);
-                await ctx.reply(inspect(result));
-            }
-
-            // Exec
-            if (m.content.startsWith('$ ')) {
-                const command = m.content.slice(2);
-
-                const output = await new Promise((resolve, reject) => {
-                    exec(command, (error, stdout, stderr) => {
-                        if (error) {
-                            reject(new Error(`Error: ${error.message}`));
-                        } else if (stderr) {
-                            reject(new Error(stderr));
-                        } else {
-                            resolve(stdout);
-                        }
-                    });
-                });
-
-                await ctx.reply(output);
-            }
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        await ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
     }
 });
 
