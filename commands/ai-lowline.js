@@ -1,3 +1,4 @@
+require('../config.js');
 const {
     bold,
     monospace
@@ -7,7 +8,7 @@ const {
 } = require('lowline.ai');
 
 _ai.init({
-    apiKey: 'REPLACE_THIS_WITH_YOUR_API_KEY' // Dapatkan di: https://www.lowline.ai/
+    apiKey: global.apiKey.lowline // Dapatkan di: https://www.lowline.ai/
 });
 
 module.exports = {

@@ -4,6 +4,11 @@ global.bot = {
     prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i
 };
 
+// API Key
+global.apiKey = {
+    imgbb: 'REPLACE_THIS_WITH_YOUR_API_KEY',
+    lowline: 'REPLACE_THIS_WITH_YOUR_API_KEY'
+}
 // Owner
 global.owner = {
     name: 'ItsReimau',
