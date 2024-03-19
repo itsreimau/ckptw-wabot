@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require('../lib/api.js');
+    instagram
+} = require('../lib/scraper.js');
 const {
     bold,
     monospace
@@ -19,15 +19,11 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('miwudev', `/api/v1/igdl`, {
-                url: input
-            });
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+            const result = instagram(input)
 
             await ctx.reply({
                 video: {
-                    url: data.url
+                    url: result.url
                 },
                 caption: `• URL: ${input}`,
                 gifPlayback: false

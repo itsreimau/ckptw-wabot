@@ -24,7 +24,7 @@ module.exports = {
 
             ctx.reply(result.map(v =>
                 `• ${v.title}\n` +
-                `• ${v.teks}`
+                `• ${v.text}`
             ).join('\n────────\n'))
         } catch (error) {
             console.error('Error:', error);

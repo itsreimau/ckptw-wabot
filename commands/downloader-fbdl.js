@@ -1,10 +1,8 @@
 const {
-    createAPIUrl
-} = require('../lib/api.js');
-const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const fg = require('api-dylux');
 
 module.exports = {
     name: 'fbdl',
@@ -19,17 +17,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('miwudev', `/api/v1/fbdl`, {
-                url: input
-            });
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+            const fbdl = await fg.fbdl(input);
 
             await ctx.reply({
                 video: {
-                    url: data.hd ? data.hd : data.sd
+                    url: fbdl.videoUrl
                 },
-                caption: `• URL: ${input}`,
+                caption: `• Judul: ${fbdl.title}\n` +
+                    `• Ukuran: ${fbdl.size}`,
                 gifPlayback: false
             });
         } catch (error) {
