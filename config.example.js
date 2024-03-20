@@ -6,9 +6,10 @@ global.bot = {
 
 // API Key
 global.apiKey = {
-    imgbb: 'REPLACE_THIS_WITH_YOUR_API_KEY',
-    lowline: 'REPLACE_THIS_WITH_YOUR_API_KEY'
-}
+    imgbb: 'REPLACE_THIS_WITH_YOUR_API_KEY', // Dapatkan di: https://id.imgbb.com/
+    lowline: 'REPLACE_THIS_WITH_YOUR_API_KEY' // Dapatkan di: https://www.lowline.ai/
+};
+
 // Owner
 global.owner = {
     name: 'ItsReimau',

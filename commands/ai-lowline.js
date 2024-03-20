@@ -7,10 +7,6 @@ const {
     _ai
 } = require('lowline.ai');
 
-_ai.init({
-    apiKey: global.apiKey.lowline // Dapatkan di: https://www.lowline.ai/
-});
-
 module.exports = {
     name: 'lowline',
     aliases: ['lowlineai', 'llai', 'll'],

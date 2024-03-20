@@ -13,12 +13,20 @@ module.exports = {
         try {
             const text = await getMenu(ctx);
 
-            await ctx.reply({
-                video: {
-                    url: 'https://giffiles.alphacoders.com/113/113028.gif' // Bisa diganti sesuai keinginan anda
-                },
-                caption: text,
-                gifPlayback: true // false, jika tidak dalam format GIF
+            return ctx.sendMessage(ctx.id, {
+                text: text,
+                contextInfo: {
+                    externalAdReply: {
+                        title: 'Halo Dunia!',
+                        body: 'Apa kabar?',
+                        thumbnailUrl: 'https://i.pinimg.com/originals/11/c0/ae/11c0aebed4192be78f5049a3c044c450.jpg',
+                        sourceUrl: '',
+                        mediaType: 1,
+                        renderLargerThumbnail: true
+                    }
+                }
+            }, {
+                quoted: ctx._msg
             });
         } catch (error) {
             console.error('Error:', error);
