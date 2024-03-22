@@ -29,7 +29,7 @@ module.exports = {
 
         try {
             const tags = getTagsText(Number(input)).toLowerCase().split(' ').join('-');
-            const result = await waifuim(tags.split(', '));
+            const result = await waifuim(tags);
 
             if (!result) return ctx.reply(global.msg.notFound);
 

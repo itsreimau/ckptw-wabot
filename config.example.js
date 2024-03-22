@@ -25,9 +25,9 @@ global.msg = {
     // Proses perintah
     argument: 'Masukkan argumen!',
     botAdmin: 'Bot bukan admin, tidak bisa menggunakan perintah!',
-    notFound: 'Tidak ada hasil yang ditemukan!'
+    notFound: 'Tidak ada hasil yang ditemukan!',
     urlInvalid: 'URL tidak valid!',
-    wait: 'Tunggu sebentar...',
+    wait: 'Tunggu sebentar...'
 };
 
 // Owner

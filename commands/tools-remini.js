@@ -32,7 +32,7 @@ module.exports = {
 
             const imageLink = await getImageLink(buffer);
             const result = createAPIUrl('https://aemt.me', `/remini`, {
-                url: imageLink
+                url: imageLink,
                 resolusi: 4
             });
 
