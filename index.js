@@ -1,3 +1,4 @@
+require('./config.js');
 const packageJson = require('./package.json');
 const CFonts = require('cfonts');
 

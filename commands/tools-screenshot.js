@@ -1,47 +1,49 @@
+require('../config.js');
 const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
+    download,
+    getImageLink
+} = require('../lib/simple.js');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
-
-const apiEndpoints = {
-    'tab': '/sstab',
-    'phone': '/ssphone',
-    'web': '/ssweb'
-};
+const {
+    MessageType
+} = require('@mengkodingan/ckptw/lib/Constant');
 
 module.exports = {
-    name: 'screenshot',
-    aliases: ['ss'],
+    name: 'remini',
+    aliases: ['hd'],
     category: 'tools',
     code: async (ctx) => {
-        const input = ctx._args.join(' ');
+        const msgType = ctx.getMessageType();
+        const quotedMessage = ctx.msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
-        if (!input) return ctx.reply(
-            `${bold('[ ! ]')} Masukkan parameter!\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
-        );
+        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa gambar, GIF, atau video!`);
 
         try {
-            const [type, url] = input.split(' ');
+            const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
+            const object = type ? quotedMessage[type] : null;
 
-            if (!Object.keys(apiEndpoints).includes(type)) return ctx.reply(`${bold('[ ! ]')} Jenis tampilan yang tersedia: tab, phone, atau web.`);
+            const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
 
-            const apiUrl = createAPIUrl('vihangayt', `/tools${apiEndpoints[type]}`, {
-                url: url
+            const imageLink = await getImageLink(buffer);
+            const result = createAPIUrl('https://aemt.me', `/remini`, {
+                url: imageLink
+                resolusi: 4
             });
 
             await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: result
                 },
-                caption: `• URL: ${url}\n` +
-                    `• Tampilan: ${type === 'tab' ? 'Tab' : type === 'phone' ? 'Ponsel' : 'Web'}`
+                caption: null
             });
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
     }

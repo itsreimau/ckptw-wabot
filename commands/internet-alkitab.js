@@ -22,6 +22,8 @@ module.exports = {
         try {
             const result = await alkitab(input);
 
+            if (!result) return ctx.reply(global.msg.notFound);
+
             ctx.reply(result.map(v =>
                 `• ${v.title}\n` +
                 `• ${v.text}`

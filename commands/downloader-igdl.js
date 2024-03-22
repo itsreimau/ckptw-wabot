@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: 'igdl',
-    aliases: ['instagram', 'ig'],
+    aliases: ['ig', 'instagram'],
     category: 'downloader',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -20,6 +20,8 @@ module.exports = {
 
         try {
             const result = instagram(input)
+
+            if (!result.url) return ctx.reply(global.msg.urlInvalid);
 
             await ctx.reply({
                 video: {

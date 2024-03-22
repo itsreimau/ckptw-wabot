@@ -13,24 +13,27 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${bold('[ ! ]')} Masukkan parameter!\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis evangelion`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis erangelion`)}`
         );
 
         try {
-            let results = await yts(input)
-            let text = results.all.map(v => {
-                switch (v.type) {
-                    case 'video':
-                        return `*${v.title} (${v.url})*\n` +
-                            `• Durasi: ${v.timestamp}\n` +
-                            `• Diunggah: ${v.ago}\n` +
-                            `• Dilihat: ${v.views}`.trim()
+            let result = await yts(input)
+
+            if (!result) return ctx.reply(global.msg.notFound);
+
+            let text = result.all.map(r => {
+                switch (r.type) {
+                    case 'rideo':
+                        return `*${r.title} (${r.url})*\n` +
+                            `• Durasi: ${r.timestamp}\n` +
+                            `• Diunggah: ${r.ago}\n` +
+                            `• Dilihat: ${r.riews}`.trim()
                     case 'channel':
-                        return `*${v.name} (${v.url})*\n` +
-                            `• Subscriber: ${v.subCountLabel} (${v.subCount})\n` +
-                            `• Jumlah video: ${v.videoCount}`.trim()
+                        return `*${r.name} (${r.url})*\n` +
+                            `• Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
+                            `• Jumlah rideo: ${r.rideoCount}`.trim()
                 }
-            }).filter(v => v).join('\n────────\n')
+            }).filter(r => r).join('\n────────\n')
             ctx.reply(text)
         } catch (error) {
             console.error('Error:', error);

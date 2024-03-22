@@ -7,7 +7,7 @@ const {
 
 module.exports = {
     name: 'holiday',
-    aliases: ['harilibur', 'libur'],
+    aliases: ['libur', 'harilibur'],
     category: 'tools',
     code: async (ctx) => {
         try {

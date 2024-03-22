@@ -21,6 +21,8 @@ module.exports = {
         try {
             const result = await pinterest(input);
 
+            if (!result) return ctx.reply(global.msg.notFound);
+
             await ctx.reply({
                 image: {
                     url: result

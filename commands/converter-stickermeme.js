@@ -20,7 +20,7 @@ const {
 
 module.exports = {
     name: 'stickermeme',
-    aliases: ['stikermeme', 'smeme'],
+    aliases: ['smeme', 'stikermeme'],
     category: 'converter',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -42,12 +42,12 @@ module.exports = {
             const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
 
             const [top, bottom] = input.split(`|`);
-            const result = await getImageLink(buffer);
-            const memegen = createAPIUrl('https://api.memegen.link', `/images/custom/${top || ''}/${encodeURIComponent(bottom || '')}.png`, {
-                background: result.link
+            const imageLink = await getImageLink(buffer);
+            const result = createAPIUrl('https://api.memegen.link', `/images/custom/${top || ''}/${encodeURIComponent(bottom || '')}.png`, {
+                background: imageLink
             });
 
-            const sticker = new Sticker(memegen, {
+            const sticker = new Sticker(result, {
                 pack: global.sticker.packname,
                 author: global.sticker.author,
                 type: StickerTypes.FULL,

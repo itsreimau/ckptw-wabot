@@ -17,11 +17,13 @@ module.exports = {
         );
 
         try {
-            const gimage = await fg.googleImage(input);
+            const result = await fg.googleImage(input);
+
+            if (!result) return ctx.reply(global.msg.notFound);
 
             await ctx.reply({
                 image: {
-                    url: getRandomElement(gimage)
+                    url: getRandomElement(result)
                 },
                 caption: `• Kueri: ${input}`
             });

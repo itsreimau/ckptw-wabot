@@ -6,7 +6,7 @@ const fg = require('api-dylux');
 
 module.exports = {
     name: 'ttdl',
-    aliases: ['tiktok', 'tt', 'vt', 'vtdl'],
+    aliases: ['tt', 'vt', 'vtdl', 'tiktok'],
     category: 'downloader',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -17,16 +17,15 @@ module.exports = {
         );
 
         try {
-            const ttdl = await fg.tiktok(input);
+            const result = await fg.tiktok(input);
+
+            if (!result.hdplay || !result.play) return ctx.reply(global.msg.urlInvalid);
 
             await ctx.reply({
                 video: {
-                    url: ttdl.hdplay || ttdl.play
+                    url: result.hdplay || result.play
                 },
-                caption: `• Nama panggilan: ${ttdl.nickname}\n` +
-                    `• ID: ${ttdl.unique_id}\n` +
-                    `• Durasi: ${ttdl.duration}` +
-                    `• Deskripsi: ${ttdl.description}`,
+                caption: `• URL: ${input}`,
                 gifPlayback: false
             });
         } catch (error) {

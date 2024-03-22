@@ -9,7 +9,7 @@ const {
 
 module.exports = {
     name: 'yta',
-    aliases: ['ytmp3', 'ytaudio'],
+    aliases: ['ytaudio', 'ytmp3'],
     category: 'downloader',
     code: async (ctx) => {
         const input = ctx._args.join(' ');

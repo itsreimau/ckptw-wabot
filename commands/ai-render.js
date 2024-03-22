@@ -8,7 +8,6 @@ const {
 
 module.exports = {
     name: 'render',
-    aliases: ['airender', 'imgrender'],
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');

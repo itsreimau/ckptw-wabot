@@ -5,8 +5,6 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
-const axios = require('axios');
-const cheerio = require('cheerio');
 
 module.exports = {
     name: 'chord',
@@ -20,13 +18,15 @@ module.exports = {
         );
 
         try {
-            const c = await chord(input);
+            const result = await chord(input);
+
+            if (!result) return ctx.reply(global.msg.notFound);
 
             return ctx.reply(
-                `• Judul: ${c.title.replace('Chords', '').trim()} (${c.url})\n` +
-                `• Artis: ${c.artist.replace('‣', '').trim()} (${c.artistUrl})\n` +
+                `• Judul: ${result.title.replace('Chords', '').trim()} (${result.url})\n` +
+                `• Artis: ${result.artist.replace('‣', '').trim()} (${result.artistUrl})\n` +
                 `• Akord:\n` +
-                `${c.chord}`
+                `${result.chord}`
             );
         } catch (error) {
             console.error('Error:', error);

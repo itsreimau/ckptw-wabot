@@ -17,7 +17,7 @@ module.exports = {
         try {
             new URL(url);
         } catch {
-            return ctx.reply(`${bold(' [!]')} URL yang Anda berikan tidak valid!`);
+            return ctx.reply(global.msg.urlInvalid);
         };
 
         let response;

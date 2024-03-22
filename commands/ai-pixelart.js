@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: 'pixelart',
-    aliases: ['aipixelart', 'imgpixelart'],
+    aliases: ['pixel'],
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');

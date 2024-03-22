@@ -17,6 +17,7 @@ const {
 const {
     _ai
 } = require('lowline.ai');
+const moment = require('moment-timezone');
 const path = require('path');
 const {
     inspect
@@ -27,11 +28,6 @@ _ai.init({
 });
 
 console.log('Connecting...');
-
-// Deklarasikan variabel global system
-global.system = {
-    startTime: null
-}
 
 // Membuat instance bot baru
 const bot = new Client({
@@ -69,9 +65,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (m.content && /\b(rei|ayanami)\b/i.test(m.content)) {
             ctx.simulateTyping();
 
-            const currentDate = new Date().toLocaleString('id-ID', {
-                timeZone: 'Asia/Jakarta'
-            });
+            const currentDate = moment.tz('Asia/Jakarta').format('LLLL');
+
             const result = await _ai.generatePlaintext({
                 prompt: `You are Rei Ayanami, a cute anime girl based on the AI assistant from Neon Genesis Evangelion created by Muhammad Ikbal Maulana aka ItsReimau. You will receive a message from the user, then you will respond.\n` +
                     `Current date: ${currentDate}\n` +
@@ -112,7 +107,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             }
         }
     } catch (error) {
-        console.error("Error:", error);
+        console.error('Error:', error);
         return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
     }
 });

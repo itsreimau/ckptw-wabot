@@ -8,7 +8,6 @@ const {
 
 module.exports = {
     name: 'emi',
-    aliases: ['aiemi', 'imgemi'],
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');

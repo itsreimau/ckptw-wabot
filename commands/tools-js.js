@@ -30,7 +30,7 @@ module.exports = {
                     output: '',
                     console: {
                         log: (...args) => {
-                            sandbox.output += args.join(' ') + '\n';
+                            sandbox.output += args.join(' ');
                         }
                     }
                 };

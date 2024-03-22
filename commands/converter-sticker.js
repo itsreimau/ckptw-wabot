@@ -15,7 +15,7 @@ const {
 
 module.exports = {
     name: 'sticker',
-    aliases: ['stiker', 's'],
+    aliases: ['s', 'stiker'],
     category: 'converter',
     code: async (ctx) => {
         const msgType = ctx.getMessageType();

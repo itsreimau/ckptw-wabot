@@ -9,7 +9,7 @@ const {
 
 module.exports = {
     name: 'lowline',
-    aliases: ['lowlineai', 'llai', 'll'],
+    aliases: ['ll'],
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');

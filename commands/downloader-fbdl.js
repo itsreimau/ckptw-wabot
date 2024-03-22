@@ -6,7 +6,7 @@ const fg = require('api-dylux');
 
 module.exports = {
     name: 'fbdl',
-    aliases: ['facebook', 'fb'],
+    aliases: ['fb', 'facebook'],
     category: 'downloader',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -17,14 +17,15 @@ module.exports = {
         );
 
         try {
-            const fbdl = await fg.fbdl(input);
+            const result = await fg.fbdl(input);
+
+            if (!result.videoUrl) return ctx.reply(global.msg.urlInvalid);
 
             await ctx.reply({
                 video: {
-                    url: fbdl.videoUrl
+                    url: result.videoUrl
                 },
-                caption: `• Judul: ${fbdl.title}\n` +
-                    `• Ukuran: ${fbdl.size}`,
+                caption: `• URL: ${input}`,
                 gifPlayback: false
             });
         } catch (error) {

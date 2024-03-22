@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: 'pollinations',
-    aliases: ['aipoll', 'imgpoll'],
+    aliases: ['poll'],
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');

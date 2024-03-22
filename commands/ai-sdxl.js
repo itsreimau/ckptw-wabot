@@ -8,7 +8,6 @@ const {
 
 module.exports = {
     name: 'sdxl',
-    aliases: ['aisdxl', 'imgsdxl'],
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -16,7 +15,8 @@ module.exports = {
 
         if (!input) return ctx.reply(`${bold('[ ! ]')} Masukkan parameter!\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 7|cat`)}\n` +
-            `Daftar gaya:\n${styleList}`
+            `Daftar gaya:\n` +
+            `${styleList}`
         );
 
         try {
@@ -41,13 +41,13 @@ module.exports = {
             });
         } catch (error) {
             console.error('Error:', error);
-            return ctx.reply(`${bold('|!|')} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
     }
 };
 
 function getStyleText(styleNumber) {
-    const styleTexts = ['Cinematic', 'Photographic', 'Anime', 'Manga', 'DigitalArt', 'PixelArt', 'FantasyArt', 'Neonpunk', '3DModel'];
+    const styleTexts = ['Cinematic', 'Photographic', 'Anime', 'Manga', 'Digital Art', 'Pixel Art', 'Fantasy Art', 'Neonpunk', '3D Model'];
 
     return styleTexts[styleNumber - 1] || '';
 }

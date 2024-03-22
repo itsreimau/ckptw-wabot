@@ -17,6 +17,8 @@ module.exports = {
                 data
             } = await response.json();
 
+            if (!data) return ctx.reply(global.msg.notFound);
+
             return ctx.reply(data);
         } catch (error) {
             console.error('Error:', error);
