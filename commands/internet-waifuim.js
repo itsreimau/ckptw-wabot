@@ -15,8 +15,8 @@ module.exports = {
         const tagsList = [...Array(9).keys()].map((index) => `${index + 1}. ${getTagsText(index + 1)}`).join('\n');
 
         if (!input) return ctx.reply(
-            `${bold('[ ! ]')} Masukkan parameter!\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 18`)}` +
+            `${global.msg.argument}\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 8`)}\n` +
             `Daftar tag:\n` +
             `${tagsList}`
         );
@@ -28,7 +28,7 @@ module.exports = {
         );
 
         try {
-            const tags = getTagsText(Number(input)).toLowerCase().split(' ').join('-');
+            const tags = getTagsText(input).toLowerCase().split(' ').join('-');
             const result = await waifuim(tags);
 
             if (!result) return ctx.reply(global.msg.notFound);

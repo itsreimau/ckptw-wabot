@@ -10,7 +10,7 @@ module.exports = {
         const url = ctx._args[0]
 
         if (!url) return ctx.reply(
-            `${bold('[ ! ]')} Masukkan parameter!\n` +
+            `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
         );
 

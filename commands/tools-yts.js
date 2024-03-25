@@ -12,7 +12,7 @@ module.exports = {
         const input = ctx._args.join(' ');
 
         if (!input) return ctx.reply(
-            `${bold('[ ! ]')} Masukkan parameter!\n` +
+            `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis erangelion`)}`
         );
 

@@ -14,7 +14,7 @@ module.exports = {
         const styleList = [...Array(9).keys()].map((index) => `${index + 1}. ${getStyleText(index + 1)}`).join('\n');
 
         if (!input) return ctx.reply(
-            `${bold('[ ! ]')} Masukkan parameter!\n` +
+            `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 7|cat`)}\n` +
             `Daftar gaya:\n` +
             `${styleList}`

@@ -17,17 +17,17 @@ global.bot = {
 // MSG (Message / Pesan)
 global.msg = {
     // Akses perintah
-    admin: 'Perintah hanya dapat diakses oleh admin grup!',
-    owner: 'Perintah hanya dapat diakses Owner!',
-    group: 'Perintah hanya dapat diakses dalam grup!',
-    private: 'Perintah hanya dapat mengakses obrolan pribadi!',
+    admin: `${bold('[ ! ]')} Perintah hanya dapat diakses oleh admin grup!`,
+    owner: `${bold('[ ! ]')} Perintah hanya dapat diakses Owner!`,
+    group: `${bold('[ ! ]')} Perintah hanya dapat diakses dalam grup!`,
+    private: `${bold('[ ! ]')} Perintah hanya dapat mengakses obrolan pribadi!`,
 
     // Proses perintah
-    argument: 'Masukkan argumen!',
-    botAdmin: 'Bot bukan admin, tidak bisa menggunakan perintah!',
-    notFound: 'Tidak ada hasil yang ditemukan!',
-    urlInvalid: 'URL tidak valid!',
-    wait: 'Tunggu sebentar...'
+    argument: `${bold('[ ! ]')} Masukkan argumen!`,
+    botAdmin: `${bold('[ ! ]')} Bot bukan admin, tidak bisa menggunakan perintah!`,
+    notFound: `${bold('[ ! ]')} Tidak ada hasil yang ditemukan!`,
+    urlInvalid: `${bold('[ ! ]')} URL tidak valid!`,
+    wait: `${bold('[ ! ]')} Tunggu sebentar...`
 };
 
 // Owner

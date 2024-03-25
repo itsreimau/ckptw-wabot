@@ -8,7 +8,8 @@
     },
     "scripts": {
         "test": "echo \"What are you doing now?\"",
-        "start": "node ."
+        "start": "node .",
+        "start:pm2": "pm2 start"
     },
     "repository": {
         "type": "git",
@@ -35,7 +36,6 @@
         "link-preview-js": "^3.0.5",
         "lowline.ai": "^1.0.18",
         "moment-timezone": "^0.5.40",
-        "similarity": "^1.2.1",
         "util": "^0.12.5",
         "vm": "^0.1.0",
         "wa-sticker-formatter": "^4.3.2",

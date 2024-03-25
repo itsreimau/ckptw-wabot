@@ -13,7 +13,7 @@ module.exports = {
         const script = input;
 
         if (!script) return ctx.reply(
-            `${bold('[ ! ]')} Masukkan parameter!\n` +
+            `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} console.log('Hello World!');`)}`
         );
 
