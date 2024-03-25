@@ -17,7 +17,7 @@ module.exports = {
 
         await ctx.reply({
             contacts: {
-                displayName: global.ownername,
+                displayName: global.owner.name,
                 contacts: [{
                     vcard
                 }]
