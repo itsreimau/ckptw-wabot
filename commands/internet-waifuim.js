@@ -35,7 +35,7 @@ module.exports = {
 
             await ctx.reply({
                 image: {
-                    url: result.url
+                    url: result.images.url
                 },
                 caption: 'Istri kok kartun.'
             });
