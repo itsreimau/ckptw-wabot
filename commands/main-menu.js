@@ -20,7 +20,7 @@ module.exports = {
                         title: 'Halo Dunia!',
                         body: 'Apa kabar?',
                         thumbnailUrl: 'https://i.pinimg.com/originals/11/c0/ae/11c0aebed4192be78f5049a3c044c450.jpg',
-                        sourceUrl: '',
+                        sourceUrl: 'https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs',
                         mediaType: 1,
                         renderLargerThumbnail: true
                     }
