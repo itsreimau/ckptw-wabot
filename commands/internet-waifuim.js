@@ -28,14 +28,15 @@ module.exports = {
         );
 
         try {
-            const tags = getTagsText(input).toLowerCase().split(' ').join('-');
-            const result = await waifuim(tags);
+            const [includedTags, height] = input.split(' ');
+            const tags = includedTags.split('').map(tag => getTagsText(tag)).filter(tag => tag !== '').map(tag => tag.toLowerCase()).map(tag => tag.replace(/\s+/g, '-'));
+            const result = await waifuim(tags, height || 2000);
 
             if (!result) return ctx.reply(global.msg.notFound);
 
             await ctx.reply({
                 image: {
-                    url: result.images.url
+                    url: data.images[0].url
                 },
                 caption: 'Istri kok kartun.'
             });
