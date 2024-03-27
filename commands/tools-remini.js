@@ -31,9 +31,8 @@ module.exports = {
             const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
 
             const imageLink = await getImageLink(buffer);
-            const result = createAPIUrl('https://aemt.me', `/remini`, {
-                url: imageLink,
-                resolusi: 4
+            const result = createAPIUrl('ai_tools', `/remini`, {
+                url: imageLink
             });
 
             await ctx.reply({
