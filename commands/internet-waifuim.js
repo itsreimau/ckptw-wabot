@@ -29,7 +29,7 @@ module.exports = {
 
         try {
             const tags = input.split('').map(tag => getTagsText(tag)).filter(tag => tag !== '').map(tag => tag.toLowerCase()).map(tag => tag.replace(/\s+/g, '-'));
-            const result = await waifuim(tags, height || 2000);
+            const result = await waifuim(tags);
 
             if (!result) return ctx.reply(global.msg.notFound);
 
