@@ -24,13 +24,12 @@ module.exports = {
         if (isNaN(input)) return ctx.reply(
             `${bold('[ ! ]')} Masukkan tag yang tersedia.\n` +
             `Daftar tag:\n` +
-            `${styleList}`
+            `${tagsList}`
         );
 
         try {
-            const [includedTags, height] = input.split(' ');
-            const tags = includedTags.split('').map(tag => getTagsText(tag)).filter(tag => tag !== '').map(tag => tag.toLowerCase()).map(tag => tag.replace(/\s+/g, '-'));
-            const result = await waifuim(tags, height || 2000);
+            const tags = input.split(' ').split('').map(tag => getTagsText(tag)).filter(tag => tag !== '').map(tag => tag.toLowerCase()).map(tag => tag.replace(/\s+/g, '-'));
+            const result = await waifuim(tags);
 
             if (!result) return ctx.reply(global.msg.notFound);
 
