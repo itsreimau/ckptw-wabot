@@ -50,7 +50,7 @@ To add a new plugin, follow these steps:
 1. Create a new JavaScript file in the `plugins` folder with your desired functionality. For example, `ping.js`:
 
    ```javascript
-   // plugins/ping.js
+   // plugins/info-ping.js
 
    module.exports = {
      name: 'ping',
