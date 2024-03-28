@@ -7,8 +7,7 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'metallama',
-    aliases: ['llama'],
+    name: 'gemini',
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
