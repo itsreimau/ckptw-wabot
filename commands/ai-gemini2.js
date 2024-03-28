@@ -13,21 +13,20 @@ const {
 const {
     MessageType
 } = require('@mengkodingan/ckptw/lib/Constant');
-const {
-    Sticker,
-    StickerTypes
-} = require('wa-sticker-formatter');
 
 module.exports = {
-    name: 'stickermeme',
-    aliases: ['smeme', 'stikermeme'],
-    category: 'converter',
+    name: 'gemini2',
+    category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
+        const readmore = '\u200E'.repeat(4001);
+
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} rei|ayanami`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} jelaskan gambar ini.`)}\n` +
+            `${readmore}\n` +
+            'Catatan: AI ini dapat melihat gambar dan menjawab pertanyaan tentang gambar tersebut. Kirim gambar dan tanyakan apa saja!'
         );
 
         const msgType = ctx.getMessageType();
@@ -41,22 +40,15 @@ module.exports = {
 
             const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
 
-            const [top, bottom] = input.split(`|`);
             const imageLink = await getImageLink(buffer);
-            const result = createAPIUrl('https://api.memegen.link', `/images/custom/${top || ''}/${encodeURIComponent(bottom || '')}.png`, {
-                background: imageLink
+            const apiUrl = createAPIUrl('otinxsandip', `/gemini2`, {
+                prompt: input,
+                url: imageLink
             });
+            const response = await fetch(apiUrl);
+            const data = await response.json();
 
-            const sticker = new Sticker(result, {
-                pack: global.sticker.packname,
-                author: global.sticker.author,
-                type: StickerTypes.FULL,
-                categories: ['🤩', '🎉'],
-                id: ctx.id,
-                quality: 50,
-            });
-
-            return ctx.reply(await sticker.toMessage());
+            return ctx.reply(data.answer);
         } catch (error) {
             console.error('Error', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
