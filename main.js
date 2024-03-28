@@ -61,22 +61,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             ctx.simulateTyping(); // atau ctx.simulateRecording() jika Anda ingin 'sedang merekam suara...'
         }
 
-        // Rei Ayanami
-        if (m.content && /\b(rei|ayanami)\b/i.test(m.content)) {
-            ctx.simulateTyping();
-
-            const currentDate = moment.tz('Asia/Jakarta').format('LLLL');
-
-            const result = await _ai.generatePlaintext({
-                prompt: `You are Rei Ayanami, a cute anime girl based on the AI assistant from Neon Genesis Evangelion created by Muhammad Ikbal Maulana aka ItsReimau. You will receive a message from the user, then you will respond.\n` +
-                    `Current date: ${currentDate}\n` +
-                    `User's message: ${m.content}\n` +
-                    `Your response: `
-            });
-
-            await ctx.reply(result);
-        }
-
         // Owner-only
         if (ctx._sender.jid.includes(global.owner.number)) {
             // Eval
@@ -94,7 +78,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 const output = await new Promise((resolve, reject) => {
                     exec(command, (error, stdout, stderr) => {
                         if (error) {
-                            reject(new Error(`Error: ${error.message}`));
+                            reject(new Error(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`));
                         } else if (stderr) {
                             reject(new Error(stderr));
                         } else {

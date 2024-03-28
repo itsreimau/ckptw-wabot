@@ -51,8 +51,7 @@ module.exports = {
             }
 
             const apiUrl = createAPIUrl('otinxsandip', `/gemini`, {
-                prompt: input,
-                url: imageLink
+                prompt: input
             });
             const response = await fetch(apiUrl);
             const data = await response.json();
