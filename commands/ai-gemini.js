@@ -33,28 +33,29 @@ module.exports = {
         );
 
         try {
-            const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
-            const object = type ? quotedMessage[type] : null;
+            let response;
+            let data;
 
-            const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
-
-            if (buffer) {
+            if (msgType === MessageType.conversation) {
+                const apiUrl = createAPIUrl('otinxsandip', `/gemini`, {
+                    prompt: input
+                });
+                response = await fetch(apiUrl);
+                data = await response.json();
+            } else if (quotedMessage && quotedMessage.imageMessage) {
+                const type = ctx._self.getContentType(quotedMessage);
+                const object = type ? quotedMessage[type] : null;
+                const buffer = await download(object, type.slice(0, -7));
                 const imageLink = await getImageLink(buffer);
                 const apiUrl = createAPIUrl('otinxsandip', `/gemini2`, {
                     prompt: input,
                     url: imageLink
                 });
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-
-                return ctx.reply(data.answer);
+                response = await fetch(apiUrl);
+                data = await response.json();
+            } else {
+                return ctx.reply("Maaf, saya hanya bisa menjawab pertanyaan teks atau gambar.");
             }
-
-            const apiUrl = createAPIUrl('otinxsandip', `/gemini`, {
-                prompt: input
-            });
-            const response = await fetch(apiUrl);
-            const data = await response.json();
 
             return ctx.reply(data.answer);
         } catch (error) {
