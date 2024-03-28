@@ -42,10 +42,10 @@ module.exports = {
                 });
                 response = await fetch(apiUrl);
                 data = await response.json();
-            } else if (quotedMessage && quotedMessage.imageMessage) {
-                const type = ctx._self.getContentType(quotedMessage);
+            } else if (msgType === MessageType.imageMessage && quotedMessage && quotedMessage.imageMessage) {
+                const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
                 const object = type ? quotedMessage[type] : null;
-                const buffer = await download(object, type.slice(0, -7));
+                const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
                 const imageLink = await getImageLink(buffer);
                 const apiUrl = createAPIUrl('otinxsandip', `/gemini2`, {
                     prompt: input,
@@ -54,7 +54,7 @@ module.exports = {
                 response = await fetch(apiUrl);
                 data = await response.json();
             } else {
-                return ctx.reply("Maaf, saya hanya bisa menjawab pertanyaan teks atau gambar.");
+                return ctx.reply(`${bold('[ ! ]')} Maaf, saya hanya bisa menjawab pertanyaan teks atau gambar.`);
             }
 
             return ctx.reply(data.answer);
