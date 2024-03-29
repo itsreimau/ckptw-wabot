@@ -63,9 +63,7 @@ module.exports = {
                 body: JSON.stringify(obj)
             });
 
-            if (!response.ok) {
-                throw new Error(`Request failed with status ${response.status}`);
-            }
+            // if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
 
             const data = await response.json();
             const buffer = Buffer.from(data.result.image, 'base64');
