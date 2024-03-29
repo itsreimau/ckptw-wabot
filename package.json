@@ -35,6 +35,7 @@
         "imgbb-uploader": "^1.5.1",
         "link-preview-js": "^3.0.5",
         "lowline.ai": "^1.0.18",
+        "moment-timezone": "^0.5.45",
         "util": "^0.12.5",
         "vm": "^0.1.0",
         "wa-sticker-formatter": "^4.3.2",
