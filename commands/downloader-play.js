@@ -23,17 +23,14 @@ module.exports = {
             const search = await yts(input);
             const yt = search.videos[0];
 
-            await ctx.reply({
-                image: {
-                    url: yt.image
-                },
-                caption: `• Judul: ${yt.title}\n` +
-                    `• Deskripsi: ${yt.description}\n` +
-                    `• Durasi: ${yt.timestamp}\n` +
-                    `• Diunggah: ${yt.ago}\n` +
-                    `• Ditonton: ${yt.views.toLocaleString()}` +
-                    `• URL: ${yt.url}`
-            });
+            await ctx.reply(
+                `• Judul: ${yt.title}\n` +
+                `• Deskripsi: ${yt.description}\n` +
+                `• Durasi: ${yt.timestamp}\n` +
+                `• Diunggah: ${yt.ago}\n` +
+                `• Ditonton: ${yt.views.toLocaleString()}` +
+                `• URL: ${yt.url}`
+            );
 
             let ytdl;
             try {
