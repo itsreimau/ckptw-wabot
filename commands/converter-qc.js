@@ -5,7 +5,6 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
-const axios = require('axios');
 const {
     Sticker,
     StickerTypes
@@ -56,12 +55,19 @@ module.exports = {
                 }]
             };
 
-            const data = await axios.post('https://bot.lyo.su/quote/generate', obj, {
+            const response = await fetch('https://bot.lyo.su/quote/generate', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify(obj)
             });
 
+            if (!response.ok) {
+                throw new Error(`Request failed with status ${response.status}`);
+            }
+
+            const data = await response.json();
             const buffer = Buffer.from(data.result.image, 'base64');
 
             const sticker = new Sticker(buffer, {
