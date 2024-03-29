@@ -2,7 +2,8 @@ const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
-    bold
+    bold,
+    monospace
 } = require('@mengkodingan/ckptw');
 const axios = require('axios');
 const {
