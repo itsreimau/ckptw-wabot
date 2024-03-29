@@ -31,7 +31,8 @@ module.exports = {
                     `• Deskripsi: ${yt.description}\n` +
                     `• Durasi: ${yt.timestamp}\n` +
                     `• Diunggah: ${yt.ago}\n` +
-                    `• Ditonton: ${yt.views.toLocaleString()}`
+                    `• Ditonton: ${yt.views.toLocaleString()}` +
+                    `• URL: ${yt.url}`
             });
 
             let ytdl;

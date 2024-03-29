@@ -5,7 +5,7 @@ const CFonts = require('cfonts');
 console.log('Starting...');
 
 // Menampilkan judul menggunakan CFonts
-CFonts.say('Lightweight\nWhatsApp Bot', {
+CFonts.say(package.description, {
     font: 'chrome',
     align: 'center',
     gradient: ['red', 'magenta']

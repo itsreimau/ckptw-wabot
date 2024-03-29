@@ -11,7 +11,9 @@ global.apiKey = {
 // Bot
 global.bot = {
     name: 'Rei Ayanami',
-    prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i
+    prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
+    thumbnail: 'https://lh3.googleusercontent.com/proxy/xaPie8uv6xyNjqeGrTlubv15dN_9HOZaA_O_sE7eDcnaQX5aewssX4IesQ46wJUfG7b6nprgRUdi1Emq632vLgHhhbJaxsUx8FU_SnAHZRzK7QimDDVoa9d_1T2lQ21KsV-JNlAX83gc9w',
+    groupChat: 'https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs'
 };
 
 // MSG (Message / Pesan)
