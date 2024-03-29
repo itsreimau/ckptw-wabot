@@ -1,7 +1,7 @@
+const package = require('../package.json');
 const {
     getMenu
 } = require('../lib/menu.js');
-const package = require('./package.json');
 const {
     bold
 } = require('@mengkodingan/ckptw');
