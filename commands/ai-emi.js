@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const {
     createAPIUrl
 } = require('../lib/api.js');
@@ -7,6 +5,8 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = {
     name: 'emi',
@@ -31,8 +31,8 @@ module.exports = {
             fs.writeFileSync(filePath, buffer);
 
             await ctx.reply({
-                file: {
-                    path: filePath
+                image: {
+                    url: filePath
                 },
                 caption: `• Prompt: ${input}`
             });

@@ -5,6 +5,8 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = {
     name: 'pixart',
@@ -33,13 +35,21 @@ module.exports = {
                 styles: styles
             });
 
+            const filePath = path.join(__dirname, '..', 'tmp', `IMG-${ctx._msg.messageTimestamp}`);
+
+            const response = await fetch(apiUrl);
+            const buffer = await response.buffer();
+            fs.writeFileSync(filePath, buffer);
+
             await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: filePath
                 },
                 caption: `• Prompt: ${prompt.trim()}\n` +
                     `• Gaya: ${getStyleText(styles)}`
             });
+
+            fs.unlinkSync(filePath);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
