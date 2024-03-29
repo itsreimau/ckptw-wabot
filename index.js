@@ -1,5 +1,5 @@
 require('./config.js');
-const packageJson = require('./package.json');
+const package = require('./package.json');
 const CFonts = require('cfonts');
 
 console.log('Starting...');
@@ -12,8 +12,8 @@ CFonts.say('Lightweight\nWhatsApp Bot', {
 });
 
 // Menampilkan informasi paket
-const authorName = packageJson.author.name || packageJson.author;
-CFonts.say(`'${packageJson.name}' by ${authorName}`, {
+const authorName = package.author.name || package.author;
+CFonts.say(`'${package.name}' by ${authorName}`, {
     font: 'console',
     align: 'center',
     gradient: ['red', 'magenta']

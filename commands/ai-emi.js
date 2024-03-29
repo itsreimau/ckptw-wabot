@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const {
     createAPIUrl
 } = require('../lib/api.js');
@@ -22,12 +24,20 @@ module.exports = {
                 prompt: input
             });
 
+            const filePath = path.join(__dirname, '..', 'tmp', `IMG-${ctx._msg.messageTimestamp}`);
+
+            const response = await fetch(apiUrl);
+            const buffer = await response.buffer();
+            fs.writeFileSync(filePath, buffer);
+
             await ctx.reply({
-                image: {
-                    url: apiUrl
+                file: {
+                    path: filePath
                 },
                 caption: `• Prompt: ${input}`
             });
+
+            fs.unlinkSync(filePath);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
