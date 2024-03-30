@@ -43,7 +43,7 @@ module.exports = {
                     `• Tipe: ${info.type}\n` +
                     `• Episode: ${info.episodes}\n` +
                     `• Durasi: ${info.duration}\n` +
-                    `• Ringkasan:* ${text}\n` +
+                    `• Ringkasan: ${text}\n` +
                     `• URL: ${info.url}`,
                 contextInfo: {
                     externalAdReply: {

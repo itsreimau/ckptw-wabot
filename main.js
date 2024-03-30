@@ -1,6 +1,7 @@
 require('./config.js');
 const {
-    isCmd
+    isCmd,
+    isOwner
 } = require('./lib/simple.js');
 const {
     bold,
@@ -61,7 +62,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Owner-only
-        if (ctx._sender.jid.includes(global.owner.number)) {
+        if (isOwner(ctx)) {
             // Eval
             if (m.content.startsWith('> ') || m.content.startsWith('x ')) {
                 const code = m.content.slice(2);

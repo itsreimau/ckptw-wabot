@@ -24,12 +24,12 @@ module.exports = {
             let text = result.all.map(r => {
                 switch (r.type) {
                     case 'video':
-                        return `*${r.title} (${r.url})*\n` +
+                        return `${bold(`${r.title} (${r.url})`)}\n` +
                             `• Durasi: ${r.timestamp}\n` +
                             `• Diunggah: ${r.ago}\n` +
                             `• Dilihat: ${r.riews}`.trim()
                     case 'channel':
-                        return `*${r.name} (${r.url})*\n` +
+                        return `${bold(`${r.name} (${r.url})`)}\n` +
                             `• Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
                             `• Jumlah rideo: ${r.rideoCount}`.trim()
                 }
