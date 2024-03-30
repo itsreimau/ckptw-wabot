@@ -33,7 +33,7 @@ module.exports = {
             const info = data.data[0];
             const {
                 text
-            } = await translate(data.synopsis, {
+            } = await translate(info.synopsis, {
                 to: 'id'
             });
             return ctx.sendMessage(ctx.id, {
