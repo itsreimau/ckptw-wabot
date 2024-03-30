@@ -27,18 +27,21 @@ module.exports = {
 
             if (!data) return ctx.reply(global.msg.notFound);
 
-            return ctx.reply(data.items.map((repo, index) =>
-                `• ${1 + index}. ${repo.full_name} ${repo.fork ? ' (fork)' : ''}\n` +
-                `• URL: ${repo.html_url}\n` +
-                `• Dibuat pada ${formatDate(repo.created_at)}\n` +
-                `• Pembaruan terakhir pada ${formatDate(repo.updated_at)}\n` +
-                `• Pengamat: ${repo.watchers}\n` +
-                `• Garpu: ${repo.forks}\n` +
-                `• Jumlah pengamat bintang: ${repo.stargazers_count}\n` +
-                `• Isu terbuka: ${repo.open_issues}\n` +
+            const repo = data.items[0];
+            return ctx.reply(
+                `• Nama: ${repo.name}\n` +
+                `• Privasi: ${repo.private}\n` +
+                `• Owner: ${repo.owner.login}\n` +
                 `• Deskripsi: ${repo.description}\n` +
-                `• Klon: ${monospace(`$ git clone ${repo.clone_url}`)}`
-                .trim()).join('\n----\n'))
+                `• Dibuat: ${formatDate(repo.created_at)}\n` +
+                `• Pembaruan: ${formatDate(repo.updated_at)}\n` +
+                `• Ukuran: ${repo.size}\n` +
+                `• Jumlah pengamat bintang: ${repo.stargazers_count}\n` +
+                `• Jumlah pengamat: ${repo.watchers_count}\n` +
+                `• Bahasa: ${repo.language}\n` +
+                `• Garpu: ${repo.forks_count}\n` +
+                `• Isu terbuka: ${repo.open_issues_count}\n`
+            )
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
