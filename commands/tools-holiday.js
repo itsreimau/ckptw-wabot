@@ -28,7 +28,7 @@ module.exports = {
                 const year = d.getFullYear();
                 return `${bold(h.holiday_name)}\n` +
                     `• ${day}, ${d.getDate()} ${mon} ${year}`;
-            }).join('\n────────\n');
+            }).join('\n----\n');
 
             return ctx.reply(display);
         } catch (error) {

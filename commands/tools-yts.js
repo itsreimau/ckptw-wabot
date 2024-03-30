@@ -13,7 +13,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis erangelion`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis evangelion`)}`
         );
 
         try {
@@ -23,7 +23,7 @@ module.exports = {
 
             let text = result.all.map(r => {
                 switch (r.type) {
-                    case 'rideo':
+                    case 'video':
                         return `*${r.title} (${r.url})*\n` +
                             `• Durasi: ${r.timestamp}\n` +
                             `• Diunggah: ${r.ago}\n` +
@@ -33,11 +33,11 @@ module.exports = {
                             `• Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
                             `• Jumlah rideo: ${r.rideoCount}`.trim()
                 }
-            }).filter(r => r).join('\n────────\n')
+            }).filter(r => r).join('\n----\n')
             ctx.reply(text)
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
-    },
+    }
 };

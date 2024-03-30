@@ -5,8 +5,6 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
-const axios = require('axios')
-const cheerio = require('cheerio')
 
 module.exports = {
     name: 'alkitab',
@@ -24,10 +22,10 @@ module.exports = {
 
             if (!result) return ctx.reply(global.msg.notFound);
 
-            ctx.reply(result.map(v =>
+            return ctx.reply(result.map(v =>
                 `• ${v.title}\n` +
                 `• ${v.text}`
-            ).join('\n────────\n'))
+            ).join('\n----\n'))
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

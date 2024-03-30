@@ -59,5 +59,5 @@ module.exports = {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
-    },
+    }
 };

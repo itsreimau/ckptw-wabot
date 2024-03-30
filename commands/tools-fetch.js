@@ -112,4 +112,4 @@ function walkJSON(json, depth, array) {
         }
     };
     return arr.join('\n');
-};
+}

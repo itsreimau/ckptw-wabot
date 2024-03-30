@@ -15,7 +15,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} halo!`)}`
         );
 
         try {
@@ -25,6 +25,8 @@ module.exports = {
             });
             const response = await fetch(apiUrl);
             const data = await response.json();
+
+            if (!data) return ctx.reply(global.msg.notFound);
 
             return ctx.reply(data.answer);
         } catch (error) {

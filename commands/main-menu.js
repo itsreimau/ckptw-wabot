@@ -19,7 +19,7 @@ module.exports = {
                 contextInfo: {
                     externalAdReply: {
                         title: `${package.name}@^${package.version}`,
-                        body: package.description,
+                        body: null,
                         thumbnailUrl: global.bot.thumbnail,
                         sourceUrl: global.bot.groupChat,
                         mediaType: 1,
