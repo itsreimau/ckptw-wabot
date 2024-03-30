@@ -1,3 +1,7 @@
+const {
+    bold
+} = require('@mengkodingan/ckptw');
+
 module.exports = {
     name: 'donate',
     aliases: ['donasi'],
