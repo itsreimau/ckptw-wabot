@@ -12,7 +12,7 @@ const {
 module.exports = {
     name: 'bcgc',
     aliases: ['broadcastgc'],
-    category: 'fun',
+    category: 'owner',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
@@ -24,7 +24,7 @@ module.exports = {
         if (!isOwner(ctx)) return ctx.reply(global.msg.owner);
 
         try {
-            const getGroups = await conn.groupFetchAllParticipating()
+            const getGroups = await ctx._client.groupFetchAllParticipating()
             const groups = Object.entries(getGroups).slice(0).map(entry => entry[1])
             const anu = groups.map(v => v.id)
 
