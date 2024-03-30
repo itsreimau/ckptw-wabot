@@ -1,6 +1,6 @@
 module.exports = {
     name: 'donate',
-    aliases: ['donasi']
+    aliases: ['donasi'],
     category: 'info',
     code: async (ctx) => {
         return ctx.sendMessage(ctx.id, {
