@@ -7,7 +7,7 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'animeinfo',
+    name: 'mangainfo',
     aliases: ['manga'],
     category: 'internet',
     code: async (ctx) => {
@@ -35,7 +35,6 @@ module.exports = {
                 url,
                 volumes,
                 score,
-                images.jpg.image_url
             } = data.data[0]
             return ctx.sendMessage(ctx.id, {
                 text: `Judul: ${title} (${title_japanese})\n` +
@@ -48,7 +47,7 @@ module.exports = {
                     externalAdReply: {
                         title: 'M A N G A I N F O',
                         body: null,
-                        thumbnailUrl: images.jpg.image_url,
+                        thumbnailUrl: data.data[0].images.jpg.image_url,
                         sourceUrl: global.bot.groupChat,
                         mediaType: 1,
                         renderLargerThumbnail: true

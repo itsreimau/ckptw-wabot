@@ -35,7 +35,6 @@ module.exports = {
                 url,
                 rated,
                 score,
-                images.jpg.image_url
             } = data.data[0]
             return ctx.sendMessage(ctx.id, {
                 text: `• Judul: ${title} (${title_english})\n` +
@@ -48,7 +47,7 @@ module.exports = {
                     externalAdReply: {
                         title: 'A N I M E I N F O',
                         body: null,
-                        thumbnailUrl: images.jpg.image_url,
+                        thumbnailUrl: data.data[0].images.jpg.image_url,
                         sourceUrl: global.bot.groupChat,
                         mediaType: 1,
                         renderLargerThumbnail: true
