@@ -22,32 +22,24 @@ module.exports = {
             const apiUrl = await createAPIUrl('https://api.jikan.moe', '/v4/manga', {
                 q: input
             });
-            const response = fetch(apiUrl);
+            const response = await fetch(apiUrl);
             const data = await response.json();
 
             if (!data) return ctx.reply(global.msg.notFound);
 
-            let {
-                title,
-                title_japanese,
-                synopsis,
-                chapters,
-                url,
-                volumes,
-                score,
-            } = data.data[0]
+            const info = data.data[0];
             return ctx.sendMessage(ctx.id, {
-                text: `Judul: ${title} (${title_japanese})\n` +
-                    `Bab: ${chapters}\n` +
-                    `Volume: ${volumes}\n` +
-                    `Skor: ${score}\n` +
-                    `Ringkasan: ${synopsis}\n` +
-                    `URL: ${url}`,
+                text: `Judul: ${info.title} (${info.title_japanese})\n` +
+                    `Bab: ${info.chapters}\n` +
+                    `Volume: ${info.volumes}\n` +
+                    `Skor: ${info.score}\n` +
+                    `Ringkasan: ${info.synopsis}\n` +
+                    `URL: ${info.url}`,
                 contextInfo: {
                     externalAdReply: {
                         title: 'M A N G A I N F O',
                         body: null,
-                        thumbnailUrl: data.data[0].images.jpg.image_url,
+                        thumbnailUrl: info.images.jpg.image_url,
                         sourceUrl: global.bot.groupChat,
                         mediaType: 1,
                         renderLargerThumbnail: true

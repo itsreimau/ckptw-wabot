@@ -22,32 +22,24 @@ module.exports = {
             const apiUrl = await createAPIUrl('https://api.jikan.moe', '/v4/anime', {
                 q: input
             });
-            const response = fetch(apiUrl);
+            const response = await fetch(apiUrl);
             const data = await response.json();
 
             if (!data) return ctx.reply(global.msg.notFound);
 
-            const {
-                title,
-                title_english,
-                synopsis,
-                episodes,
-                url,
-                rated,
-                score,
-            } = data.data[0]
+            const info = data.data[0];
             return ctx.sendMessage(ctx.id, {
-                text: `• Judul: ${title} (${title_english})\n` +
-                    `• Episode: ${episodes}\n` +
-                    `• Peringkat: ${rated}\n` +
-                    `• Skor: ${score}\n` +
-                    `• Ringkasan:* ${synopsis}\n` +
-                    `• URL: ${url}`,
+                text: `• Judul: ${info.title} (${info.title_english})\n` +
+                    `• Episode: ${info.episodes}\n` +
+                    `• Peringkat: ${info.rated}\n` +
+                    `• Skor: ${info.score}\n` +
+                    `• Ringkasan:* ${info.synopsis}\n` +
+                    `• URL: ${info.url}`,
                 contextInfo: {
                     externalAdReply: {
                         title: 'A N I M E I N F O',
                         body: null,
-                        thumbnailUrl: data.data[0].images.jpg.image_url,
+                        thumbnailUrl: info.images.jpg.image_url,
                         sourceUrl: global.bot.groupChat,
                         mediaType: 1,
                         renderLargerThumbnail: true

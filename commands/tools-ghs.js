@@ -22,12 +22,12 @@ module.exports = {
             const apiUrl = await createAPIUrl('https://api.github.com', '/search/repositories', {
                 q: input
             });
-            const response = fetch(apiUrl);
+            const response = await fetch(apiUrl);
             const data = await response.json();
 
             if (!data) return ctx.reply(global.msg.notFound);
 
-            return ctx.reply(json.items.map((repo, index) =>
+            return ctx.reply(data.items.map((repo, index) =>
                 `• ${1 + index}. ${repo.full_name} ${repo.fork ? ' (fork)' : ''}\n` +
                 `• URL: ${repo.html_url}\n` +
                 `• Dibuat pada ${formatDate(repo.created_at)}\n` +
