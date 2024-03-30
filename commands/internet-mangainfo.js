@@ -5,6 +5,9 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const {
+    translate
+} = require('@vitalets/google-translate-api');
 
 module.exports = {
     name: 'mangainfo',
@@ -28,18 +31,25 @@ module.exports = {
             if (!data) return ctx.reply(global.msg.notFound);
 
             const info = data.data[0];
+            const {
+                text
+            } = await translate(data.synopsis, {
+                to: 'id'
+            });
             return ctx.sendMessage(ctx.id, {
-                text: `Judul: ${info.title} (${info.title_japanese})\n` +
-                    `Bab: ${info.chapters}\n` +
-                    `Volume: ${info.volumes}\n` +
-                    `Skor: ${info.score}\n` +
-                    `Ringkasan: ${info.synopsis}\n` +
-                    `URL: ${info.url}`,
+                text: `• Judul: ${info.title}\n` +
+                    `• Judul (Inggris): ${info.title_english}\n` +
+                    `• Judul (Jepang): ${info.title_japanese}\n` +
+                    `• Tipe: ${info.type}\n` +
+                    `• Bab: ${info.chapters}\n` +
+                    `• Volume: ${info.volumes}\n` +
+                    `• Ringkasan: ${text}\n` +
+                    `• URL: ${info.url}`,
                 contextInfo: {
                     externalAdReply: {
                         title: 'M A N G A I N F O',
                         body: null,
-                        thumbnailUrl: info.images.jpg.image_url,
+                        thumbnailUrl: info.images.jpg.large_image_url,
                         sourceUrl: global.bot.groupChat,
                         mediaType: 1,
                         renderLargerThumbnail: true

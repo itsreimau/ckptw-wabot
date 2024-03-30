@@ -13,20 +13,24 @@ module.exports = {
         const input = ctx._args.join(' ');
         const styleList = [...Array(9).keys()].map((index) => `${index + 1}. ${getStyleText(index + 1)}`).join('\n');
 
+        const readmore = '\u200E'.repeat(4001);
+
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 7|cat`)}\n` +
+            `${readmore}\n` +
+            `Catatan: Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar gaya yang tersedia.`
+        );
+
+        if (input === 'list') return ctx.reply(
             `Daftar gaya:\n` +
             `${styleList}`
-        );
+        )
 
         try {
             const [styles, prompt] = input.split('|');
 
-            if (isNaN(styles) || styles < 1 || styles > 9) return ctx.reply(
-                `${bold('[ ! ]')} Masukkan gaya yang tersedia.\n` +
-                `Daftar gaya:\n${styleList}`
-            );
+            if (isNaN(styles) || styles < 1 || styles > 9) return ctx.reply(`Masukkan gaya yang tersedia. Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar gaya yang tersedia.`);
 
             const apiUrl = createAPIUrl('ai_tools', '/pixart', {
                 prompt: prompt.trim(),
