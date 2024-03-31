@@ -7,7 +7,7 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'pixart',
+    name: 'sdxl',
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -17,7 +17,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 7|cat`)}\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 7 cat`)}\n` +
             `${readmore}\n` +
             `Catatan: Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar gaya yang tersedia.`
         );
@@ -28,12 +28,12 @@ module.exports = {
         )
 
         try {
-            const [styles, prompt] = input.split('|');
+            const [styles, ...prompt] = input.split(' ');
 
             if (isNaN(styles) || styles < 1 || styles > 9) return ctx.reply(`Masukkan gaya yang tersedia. Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar gaya yang tersedia.`);
 
-            const apiUrl = createAPIUrl('ai_tools', '/pixart', {
-                prompt: prompt.trim(),
+            const apiUrl = createAPIUrl('ai_tools', '/sdxl', {
+                prompt: prompt.join(' '),
                 styles: styles
             });
 
@@ -41,7 +41,7 @@ module.exports = {
                 image: {
                     url: apiUrl
                 },
-                caption: `• Prompt: ${prompt.trim()}\n` +
+                caption: `• Prompt: ${prompt}\n` +
                     `• Gaya: ${getStyleText(styles)}`
             });
         } catch (error) {

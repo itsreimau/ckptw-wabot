@@ -15,14 +15,14 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} en|halo dunia!`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo dunia!`)}`
         );
 
         try {
-            const [lang, inp] = input.split('|');
+            const [lang, ...inp] = input.split(' ');
             const {
                 text
-            } = await translate(inp, {
+            } = await translate(inp.join(' '), {
                 to: lang
             });
 

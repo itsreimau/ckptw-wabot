@@ -1,15 +1,23 @@
 const {
+    download,
     isAdminOf
 } = require('../lib/simple.js');
 const {
-    bold
+    bold,
+    monospace
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'link',
-    aliases: ['gclink', 'grouplink'],
+    name: 'setdesc',
     category: 'group',
     code: async (ctx) => {
+        const input = ctx._args.join(' ');
+
+        if (!input) return ctx.reply(
+            `${global.msg.argument}\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} fuck you!`)}`
+        );
+
         if (!isAdmin(ctx)) return ctx.reply(global.msg.admin);
 
         if (!isAdminOf(ctx)) return ctx.reply(global.msg.botAdmin);
@@ -17,9 +25,9 @@ module.exports = {
         if (!ctx.isGroup()) return ctx.reply(global.msg.group);
 
         try {
-            const link = await ctx._client.groupInviteCode(ctx.id);
+            await ctx._client.groupUpdateDescription(ctx.id, input);
 
-            return ctx.reply(`https://chat.whatsapp.com/${link}`);
+            return ctx.reply(`${bold('[ ! ]')} Berhasil mengubah deskripsi grup!`);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
