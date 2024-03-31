@@ -8,8 +8,7 @@ const {
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: 'tagall',
-    aliases: ['everyone'],
+    name: 'hidetag',
     category: 'group',
     code: async (ctx) => {
         const input = ctx._args.join(' ');

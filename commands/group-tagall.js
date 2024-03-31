@@ -9,7 +9,6 @@ const {
 
 module.exports = {
     name: 'tagall',
-    aliases: ['everyone'],
     category: 'group',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
