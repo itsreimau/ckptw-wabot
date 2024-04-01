@@ -28,11 +28,14 @@ module.exports = {
             }
             const qualityOptions = Object.keys(ytdl.audio);
 
-            const res = await ctx.reply(
-                `• Judul: ${ytdl.title}\n` +
-                `• URL: ${input}\n` +
-                `• Pilih kualitas:\n` +
-                `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join('\n')}`);
+            const res = await ctx.reply({
+                image: {
+                    url: ytdl.thumbnail
+                },
+                caption: `• Judul: ${ytdl.title}\n` +
+                    `• Pilih kualitas:\n` +
+                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join('\n')}`
+            });
 
             const col = ctx.MessageCollector({
                 time: 600000 // 10 menit

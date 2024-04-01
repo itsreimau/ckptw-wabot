@@ -28,12 +28,14 @@ module.exports = {
             }
             const qualityOptions = Object.keys(ytdl.video);
 
-            const res = await ctx.reply(
-                `• Judul: ${ytdl.title}\n` +
-                `• URL: ${input}\n` +
-                `• Pilih kualitas:\n` +
-                `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join('\n')}`
-            );
+            const res = await ctx.reply({
+                image: {
+                    url: ytdl.thumbnail
+                },
+                caption: `• Judul: ${ytdl.title}\n` +
+                    `• Pilih kualitas:\n` +
+                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join('\n')}`
+            });
 
             const col = ctx.MessageCollector({
                 time: 600000 // 10 menit
@@ -46,7 +48,7 @@ module.exports = {
                 if (!isNaN(selectedNumber) && selectedQualityIndex >= 0 && selectedQualityIndex < qualityOptions.length) {
                     const selectedQuality = qualityOptions[selectedQualityIndex];
                     const downloadFunction = ytdl.video[selectedQuality].download;
-                    ctx.editMessage(res.key, `Mengunduh video... Jika audio tidak terkirim, ukurannya mungkin terlalu besar.`)
+                    ctx.editMessage(res.key, `Mengunduh video... Jika video tidak terkirim, ukurannya mungkin terlalu besar.`)
                     const url = await downloadFunction();
                     ctx.reply({
                         video: {
