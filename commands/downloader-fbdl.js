@@ -35,7 +35,7 @@ module.exports = {
                 result = data.videoUrl;
             }
 
-            if (!result.videoUrl) return ctx.reply(global.msg.urlInvalid);
+            if (!result) return ctx.reply(global.msg.urlInvalid);
 
             await ctx.reply({
                 video: {

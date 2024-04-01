@@ -10,7 +10,7 @@ module.exports = {
         await ctx.reply(
             `❖ ${bold('SC')}\n` +
             `\n` +
-            `• https://github.com/itsreimau/ckptw-wabot\n`
+            `• https://github.com/itsreimau/ckptw-wabot\n` +
             `\n` +
             global.msg.footer
         ); // Jika Anda tidak menghapus ini, terima kasih!

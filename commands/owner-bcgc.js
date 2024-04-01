@@ -69,7 +69,7 @@ module.exports = {
                         }
                     }
                 }, {
-                    quoted: ctx._msg
+                    quoted: fakeQuoted
                 });
             }
 
