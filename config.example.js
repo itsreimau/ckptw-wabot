@@ -1,7 +1,7 @@
 const package = require('./package.json');
 const {
     bold,
-    quoted
+    quote
 } = require('@mengkodingan/ckptw');
 
 // API Key
@@ -28,7 +28,7 @@ global.msg = {
 
     // Antarmuka perintah
     watermark: `${package.name}@^${package.version}`,
-    footer: quoted('Dibuat oleh ItsReimau | Take care of yourself.'),
+    footer: quote('Dibuat oleh ItsReimau | Take care of yourself.'),
 
     // Proses perintah
     argument: `${bold('[ ! ]')} Masukkan argumen!`,
