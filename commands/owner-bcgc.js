@@ -45,7 +45,7 @@ module.exports = {
                             status: 200,
                             surface: 200,
                             message: global.msg.footer,
-                            orderTitle: ctx.sender_.jid,
+                            orderTitle: ctx._sender.jid,
                             sellerJid: '0@s.whatsapp.net'
                         }
                     },

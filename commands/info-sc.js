@@ -1,3 +1,7 @@
+const {
+    bold
+} = require('@mengkodingan/ckptw');
+
 module.exports = {
     name: 'sc',
     aliases: ['script', 'source', 'sourcecode'],
