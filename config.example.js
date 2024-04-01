@@ -1,6 +1,7 @@
 const package = require('./package.json');
 const {
-    bold
+    bold,
+    quoted
 } = require('@mengkodingan/ckptw');
 
 // API Key
