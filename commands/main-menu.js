@@ -18,7 +18,7 @@ module.exports = {
                 text: text,
                 contextInfo: {
                     externalAdReply: {
-                        title: `${package.name}@^${package.version}`,
+                        title: global.msg.watermark,
                         body: null,
                         thumbnailUrl: global.bot.thumbnail,
                         sourceUrl: global.bot.groupChat,

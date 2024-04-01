@@ -5,7 +5,7 @@ const CFonts = require('cfonts');
 console.log('Starting...');
 
 // Menampilkan judul menggunakan CFonts
-CFonts.say(package.description, {
+CFonts.say(package.name, {
     font: 'chrome',
     align: 'center',
     gradient: ['red', 'magenta']
@@ -13,11 +13,13 @@ CFonts.say(package.description, {
 
 // Menampilkan informasi paket
 const authorName = package.author.name || package.author;
-CFonts.say(`'${package.name}' by ${authorName}`, {
-    font: 'console',
-    align: 'center',
-    gradient: ['red', 'magenta']
-});
+CFonts.say(
+    `'${package.description}'\n` +
+    `By ${authorName}`, {
+        font: 'console',
+        align: 'center',
+        gradient: ['red', 'magenta']
+    });
 
 // Mengimpor dan menjalankan modul utama
 require('./main.js');

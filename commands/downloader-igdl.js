@@ -41,7 +41,10 @@ module.exports = {
                 video: {
                     url: result
                 },
-                caption: `• URL: ${input}`,
+                caption: `${bold('IG Downloader')}\n` +
+                    `• URL: ${input}\n` +
+                    `\n` +
+                    global.msg.footer,
                 gifPlayback: false
             });
         } catch (error) {

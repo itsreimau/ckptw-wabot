@@ -24,7 +24,7 @@ module.exports = {
 
         if (input === 'list') return ctx.reply(
             `Daftar gaya:\n` +
-            `${styleList}`
+            styleList
         )
 
         try {
@@ -32,7 +32,7 @@ module.exports = {
 
             if (isNaN(styles) || styles < 1 || styles > 9) return ctx.reply(`Masukkan gaya yang tersedia. Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar gaya yang tersedia.`);
 
-            const apiUrl = createAPIUrl('ai_tools', '/sdxl', {
+            const apiUrl = createAPIUrl('ai_tools', '/pixart', {
                 prompt: prompt.join(' '),
                 styles: styles
             });
@@ -41,8 +41,11 @@ module.exports = {
                 image: {
                     url: apiUrl
                 },
-                caption: `• Prompt: ${prompt}\n` +
-                    `• Gaya: ${getStyleText(styles)}`
+                caption: `${bold('Pixart')}\n` +
+                    `• Prompt: ${prompt.join(' ')}\n` +
+                    `• Gaya: ${getStyleText(styles)}\n` +
+                    `\n` +
+                    global.msg.footer
             });
         } catch (error) {
             console.error('Error:', error);

@@ -27,7 +27,10 @@ module.exports = {
                 image: {
                     url: result
                 },
-                caption: `• Kueri: ${input}`
+                caption: `${bold('Pinterest')}\n` +
+                    `• Kueri: ${input}\n` +
+                    `\n` +
+                    global.msg.footer
             });
         } catch (error) {
             console.error('Error:', error);

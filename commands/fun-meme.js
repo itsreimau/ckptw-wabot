@@ -22,7 +22,10 @@ module.exports = {
                 image: {
                     url: imageUrl
                 },
-                caption: `• Sumber: ${data.data.source}`
+                caption: `${bold('Meme')}\n` +
+                    `• Sumber: ${data.data.source}\n` +
+                    `\n` +
+                    global.msg.footer,
             });
         } catch (error) {
             console.error('Error:', error);

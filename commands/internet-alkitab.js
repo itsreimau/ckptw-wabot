@@ -22,10 +22,15 @@ module.exports = {
 
             if (!result) return ctx.reply(global.msg.notFound);
 
-            return ctx.reply(result.map(v =>
-                `• ${v.title}\n` +
-                `• ${v.text}`
-            ).join('\n----\n'))
+            return ctx.reply(
+                `${bold('Alkitab')}\n` +
+                result.map(r =>
+                    `• ${r.title}\n` +
+                    `• ${r.text}`
+                ).join('\n----\n')
+                `\n` +
+                global.msg.footer
+            )
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

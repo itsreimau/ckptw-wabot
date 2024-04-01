@@ -14,7 +14,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kejadian`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} hikaru utada - one last kiss`)}`
         );
 
         try {
@@ -23,10 +23,13 @@ module.exports = {
             if (!result) return ctx.reply(global.msg.notFound);
 
             return ctx.reply(
+                `${bold('Chord')}\n` +
                 `• Judul: ${result.title.replace('Chords', '').trim()} (${result.url})\n` +
                 `• Artis: ${result.artist.replace('‣', '').trim()} (${result.artistUrl})\n` +
                 `• Akord:\n` +
-                `${result.chord}`
+                `${result.chord}\n` +
+                `\n` +
+                global.msg.footer
             );
         } catch (error) {
             console.error('Error:', error);

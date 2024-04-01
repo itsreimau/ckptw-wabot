@@ -32,9 +32,12 @@ module.exports = {
                 image: {
                     url: ytdl.thumbnail
                 },
-                caption: `• Judul: ${ytdl.title}\n` +
+                caption: `${bold('YT Audio')}\n` +
+                    `• Judul: ${ytdl.title}\n` +
                     `• Pilih kualitas:\n` +
-                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join('\n')}`
+                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join('\n')}\n` +
+                    `\n` +
+                    global.msg.footer
             });
 
             const col = ctx.MessageCollector({

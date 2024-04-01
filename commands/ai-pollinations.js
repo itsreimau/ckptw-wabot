@@ -25,7 +25,10 @@ module.exports = {
                 image: {
                     url: apiUrl
                 },
-                caption: `• Prompt: ${input}`
+                caption: `${bold('Pollinations')}\n` +
+                    `• Prompt: ${input}\n` +
+                    `\n` +
+                    global.msg.footer
             });
         } catch (error) {
             console.error('Error:', error);

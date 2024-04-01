@@ -40,14 +40,17 @@ module.exports = {
                 image: {
                     url: info.images.jpg.large_image_url
                 },
-                caption: `• Judul: ${info.title}\n` +
+                caption: `${bold('Manga Info')}\n` +
+                    `• Judul: ${info.title}\n` +
                     `• Judul (Inggris): ${info.title_english}\n` +
                     `• Judul (Jepang): ${info.title_japanese}\n` +
                     `• Tipe: ${info.type}\n` +
                     `• Bab: ${info.chapters}\n` +
                     `• Volume: ${info.volumes}\n` +
                     `• Ringkasan: ${text}\n` +
-                    `• URL: ${info.url}`
+                    `• URL: ${info.url}\n` +
+                    `\n` +
+                    global.msg.footer
             });
         } catch (error) {
             console.error('Error:', error);

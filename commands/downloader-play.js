@@ -27,11 +27,14 @@ module.exports = {
                 image: {
                     url: yt.image
                 },
-                caption: `• Judul: ${yt.title}\n` +
+                caption: `${bold('Play')}\n` +
+                    `• Judul: ${yt.title}\n` +
                     `• Deskripsi: ${yt.description}\n` +
                     `• Durasi: ${yt.timestamp}\n` +
                     `• Diunggah: ${yt.ago}\n` +
-                    `• Ditonton: ${yt.views.toLocaleString()}`
+                    `• Ditonton: ${yt.views.toLocaleString()}\n` +
+                    `\n` +
+                    global.msg.footer,
             });
 
             let ytdl;

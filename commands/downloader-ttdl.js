@@ -25,7 +25,10 @@ module.exports = {
                 video: {
                     url: result.hdplay || result.play
                 },
-                caption: `• URL: ${input}`,
+                caption: `${bold('TT Downloader')}\n` +
+                    `• URL: ${input}\n` +
+                    `\n` +
+                    global.msg.footer,
                 gifPlayback: false
             });
         } catch (error) {

@@ -27,7 +27,10 @@ module.exports = {
                 image: {
                     url: apiUrl
                 },
-                caption: `• Prompt: ${input}`
+                caption: `${bold('Pixel Art')}\n` +
+                    `• Prompt: ${input}\n` +
+                    `\n` +
+                    global.msg.footer
             });
         } catch (error) {
             console.error('Error:', error);

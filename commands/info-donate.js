@@ -8,13 +8,14 @@ module.exports = {
     category: 'info',
     code: async (ctx) => {
         return ctx.sendMessage(ctx.id, {
-            text: `${bold('Pulsa')}\n` +
+            text: `${bold('Donate')}\n` +
                 '• 083838039693 (DANA)\n' +
                 '----\n' +
-                `${bold('Non Pulsa')}` +
                 '• https://paypal.me/itsreimau (PayPal)\n' +
                 '• https://saweria.co/itsreimau (Saweria)\n' +
-                '• https://trakteer.id/itsreimau (Trakteer)',
+                '• https://trakteer.id/itsreimau (Trakteer)\n' +
+                `\n` +
+                global.msg.footer,
             contextInfo: {
                 externalAdReply: {
                     title: `D O N A T E`,

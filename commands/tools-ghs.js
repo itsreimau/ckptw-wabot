@@ -29,6 +29,7 @@ module.exports = {
 
             const repo = data.items[0];
             return ctx.reply(
+                `${bold('GitHub Search')}\n` +
                 `• Nama: ${repo.name}\n` +
                 `• Privasi: ${repo.private}\n` +
                 `• Owner: ${repo.owner.login}\n` +
@@ -40,7 +41,9 @@ module.exports = {
                 `• Jumlah pengamat: ${repo.watchers_count}\n` +
                 `• Bahasa: ${repo.language}\n` +
                 `• Garpu: ${repo.forks_count}\n` +
-                `• Isu terbuka: ${repo.open_issues_count}\n`
+                `• Isu terbuka: ${repo.open_issues_count}\n` +
+                `\n` +
+                global.msg.footer
             )
         } catch (error) {
             console.error('Error:', error);

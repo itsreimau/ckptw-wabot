@@ -25,7 +25,10 @@ module.exports = {
                 image: {
                     url: getRandomElement(result)
                 },
-                caption: `• Kueri: ${input}`
+                caption: `${bold('Google Image')}\n` +
+                    `• Kueri: ${input}\n` +
+                    `\n` +
+                    global.msg.footer
             });
         } catch (error) {
             console.error('Error:', error);

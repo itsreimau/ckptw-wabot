@@ -17,24 +17,29 @@ module.exports = {
         );
 
         try {
-            let result = await yts(input)
+            const result = await yts(input)
 
             if (!result) return ctx.reply(global.msg.notFound);
 
-            let text = result.all.map(r => {
-                switch (r.type) {
-                    case 'video':
-                        return `${bold(`${r.title} (${r.url})`)}\n` +
-                            `• Durasi: ${r.timestamp}\n` +
-                            `• Diunggah: ${r.ago}\n` +
-                            `• Dilihat: ${r.riews}`.trim()
-                    case 'channel':
-                        return `${bold(`${r.name} (${r.url})`)}\n` +
-                            `• Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
-                            `• Jumlah rideo: ${r.rideoCount}`.trim()
-                }
-            }).filter(r => r).join('\n----\n')
-            ctx.reply(text)
+
+            ctx.reply(
+                `${bold('YT Search')}\n` +
+                result.all.map(r => {
+                    switch (r.type) {
+                        case 'video':
+                            return `${bold(`${r.title} (${r.url})`)}\n` +
+                                `• Durasi: ${r.timestamp}\n` +
+                                `• Diunggah: ${r.ago}\n` +
+                                `• Dilihat: ${r.riews}`.trim()
+                        case 'channel':
+                            return `${bold(`${r.name} (${r.url})`)}\n` +
+                                `• Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
+                                `• Jumlah rideo: ${r.rideoCount}`.trim()
+                    }
+                }).filter(r => r).join('\n----\n') +
+                `\n` +
+                global.msg.footer
+            )
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

@@ -1,3 +1,4 @@
+const package = require('./package.json');
 const {
     bold
 } = require('@mengkodingan/ckptw');
@@ -23,6 +24,10 @@ global.msg = {
     owner: `${bold('[ ! ]')} Perintah hanya dapat diakses Owner!`,
     group: `${bold('[ ! ]')} Perintah hanya dapat diakses dalam grup!`,
     private: `${bold('[ ! ]')} Perintah hanya dapat diakses dalam obrolan pribadi!`,
+
+    // Antarmuka perintah
+    watermark: `${package.name}@^${package.version}`,
+    footer: quoted('Dibuat oleh ItsReimau | Take care of yourself.'),
 
     // Proses perintah
     argument: `${bold('[ ! ]')} Masukkan argumen!`,
