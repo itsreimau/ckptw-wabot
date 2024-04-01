@@ -41,7 +41,8 @@ module.exports = {
                 video: {
                     url: result
                 },
-                caption: `${bold('IG Downloader')}\n` +
+                caption: `❖ ${bold('IG Downloader')}\n` +
+                    `\n` +
                     `• URL: ${input}\n` +
                     `\n` +
                     global.msg.footer,

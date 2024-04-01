@@ -41,7 +41,8 @@ module.exports = {
                 video: {
                     url: result
                 },
-                caption: `${bold('FB Downloader')}\n` +
+                caption: `❖ ${bold('FB Downloader')}\n` +
+                    `\n` +
                     `• URL: ${input}\n` +
                     `\n` +
                     global.msg.footer,

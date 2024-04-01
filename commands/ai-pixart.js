@@ -7,7 +7,7 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'sdxl',
+    name: 'pixart',
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -41,7 +41,8 @@ module.exports = {
                 image: {
                     url: apiUrl
                 },
-                caption: `${bold('Pixart')}\n` +
+                caption: `❖ ${bold('Pixart')}\n` +
+                    `\n` +
                     `• Prompt: ${prompt.join(' ')}\n` +
                     `• Gaya: ${getStyleText(styles)}\n` +
                     `\n` +

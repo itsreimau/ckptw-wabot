@@ -23,7 +23,8 @@ module.exports = {
             if (!result) return ctx.reply(global.msg.notFound);
 
             return ctx.reply(
-                `${bold('Chord')}\n` +
+                `❖ ${bold('Chord')}\n` +
+                `\n` +
                 `• Judul: ${result.title.replace('Chords', '').trim()} (${result.url})\n` +
                 `• Artis: ${result.artist.replace('‣', '').trim()} (${result.artistUrl})\n` +
                 `• Akord:\n` +

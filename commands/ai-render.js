@@ -26,7 +26,8 @@ module.exports = {
                 image: {
                     url: apiUrl
                 },
-                caption: `${bold('Render 3D')}\n` +
+                caption: `❖ ${bold('Render 3D')}\n` +
+                    `\n` +
                     `• Prompt: ${input}\n` +
                     `\n` +
                     global.msg.footer

@@ -27,7 +27,8 @@ module.exports = {
                 image: {
                     url: result
                 },
-                caption: `${bold('Pinterest')}\n` +
+                caption: `❖ ${bold('Pinterest')}\n` +
+                    `\n` +
                     `• Kueri: ${input}\n` +
                     `\n` +
                     global.msg.footer

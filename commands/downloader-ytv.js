@@ -32,7 +32,8 @@ module.exports = {
                 image: {
                     url: ytdl.thumbnail
                 },
-                caption: `${bold('YT Video')}\n` +
+                caption: `❖ ${bold('YT Video')}\n` +
+                    `\n` +
                     `• Judul: ${ytdl.title}\n` +
                     `• Pilih kualitas:\n` +
                     `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join('\n')}\n` +
@@ -57,10 +58,11 @@ module.exports = {
                         video: {
                             url: url
                         },
-                        caption: `${bold('YTV')}\n` +
+                        caption: `❖ ${bold('YTV')}\n` +
+                            `\n` +
                             `• Kualitas: ${selectedQuality}\n` +
                             `\n` +
-                            `${global.msg.footer}`,
+                            global.msg.footer,
                         gifPlayback: false
                     });
                     col.stop();

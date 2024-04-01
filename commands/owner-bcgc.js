@@ -33,11 +33,34 @@ module.exports = {
 
             for (let i of anu) {
                 await delay(500);
+                const fakeQuoted = {
+                    key: {
+                        fromMe: false,
+                        'participant': '0@s.whatsapp.net',
+                        'remoteJid': 'status@broadcast'
+                    },
+                    'message': {
+                        orderMessage: {
+                            itemCount: 99999,
+                            status: 200,
+                            surface: 200,
+                            message: global.msg.footer,
+                            orderTitle: ctx.sender_.jid,
+                            sellerJid: '0@s.whatsapp.net'
+                        }
+                    },
+                    contextInfo: {
+                        'forwardingScore': 999,
+                        'isForwarded': true
+                    },
+                    sendEphemeral: true
+                }
+
                 ctx.sendMessage(i, {
                     text: input,
                     contextInfo: {
                         externalAdReply: {
-                            title: 'B R O A D C A S T',
+                            title: '📣 Broadcast',
                             body: null,
                             thumbnailUrl: global.bot.thumbnail,
                             sourceUrl: global.bot.groupChat,

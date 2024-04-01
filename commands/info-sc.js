@@ -4,8 +4,11 @@ module.exports = {
     category: 'info',
     code: async (ctx) => {
         await ctx.reply(
-            `Hai ${ctx._sender.pushName}, bot WhatsApp ini menggunakan:\n` +
-            `• https://github.com/itsreimau/ckptw-wabot`
+            `❖ ${bold('SC')}\n` +
+            `\n` +
+            `• https://github.com/itsreimau/ckptw-wabot\n`
+            `\n` +
+            global.msg.footer
         ); // Jika Anda tidak menghapus ini, terima kasih!
     }
 };

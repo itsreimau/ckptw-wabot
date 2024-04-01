@@ -25,7 +25,8 @@ module.exports = {
                 video: {
                     url: result.hdplay || result.play
                 },
-                caption: `${bold('TT Downloader')}\n` +
+                caption: `❖ ${bold('TT Downloader')}\n` +
+                    `\n` +
                     `• URL: ${input}\n` +
                     `\n` +
                     global.msg.footer,

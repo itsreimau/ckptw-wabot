@@ -41,11 +41,12 @@ module.exports = {
                 image: {
                     url: apiUrl
                 },
-                caption: `${bold('Stable Diffusion XL')}\n` +
+                caption: `❖ ${bold('Stable Diffusion XL')}\n` +
+                    `\n` +
                     `• Prompt: ${prompt.join(' ')}\n` +
                     `• Gaya: ${getStyleText(styles)}\n` +
                     `\n` +
-                    `${global.msg.footer}`
+                    global.msg.footer
             });
         } catch (error) {
             console.error('Error:', error);

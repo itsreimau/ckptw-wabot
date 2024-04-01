@@ -25,7 +25,8 @@ module.exports = {
                 image: {
                     url: getRandomElement(result)
                 },
-                caption: `${bold('Google Image')}\n` +
+                caption: `❖ ${bold('Google Image')}\n` +
+                    `\n` +
                     `• Kueri: ${input}\n` +
                     `\n` +
                     global.msg.footer

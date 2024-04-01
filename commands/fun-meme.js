@@ -22,7 +22,8 @@ module.exports = {
                 image: {
                     url: imageUrl
                 },
-                caption: `${bold('Meme')}\n` +
+                caption: `❖ ${bold('Meme')}\n` +
+                    `\n` +
                     `• Sumber: ${data.data.source}\n` +
                     `\n` +
                     global.msg.footer,

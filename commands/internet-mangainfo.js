@@ -40,7 +40,8 @@ module.exports = {
                 image: {
                     url: info.images.jpg.large_image_url
                 },
-                caption: `${bold('Manga Info')}\n` +
+                caption: `❖ ${bold('Manga Info')}\n` +
+                    `\n` +
                     `• Judul: ${info.title}\n` +
                     `• Judul (Inggris): ${info.title_english}\n` +
                     `• Judul (Jepang): ${info.title_japanese}\n` +

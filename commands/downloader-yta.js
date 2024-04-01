@@ -32,7 +32,8 @@ module.exports = {
                 image: {
                     url: ytdl.thumbnail
                 },
-                caption: `${bold('YT Audio')}\n` +
+                caption: `❖ ${bold('YT Audio')}\n` +
+                    `\n` +
                     `• Judul: ${ytdl.title}\n` +
                     `• Pilih kualitas:\n` +
                     `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join('\n')}\n` +

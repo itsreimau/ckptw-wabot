@@ -27,7 +27,8 @@ module.exports = {
                 image: {
                     url: apiUrl
                 },
-                caption: `${bold('Pixel Art')}\n` +
+                caption: `❖ ${bold('Pixel Art')}\n` +
+                    `\n` +
                     `• Prompt: ${input}\n` +
                     `\n` +
                     global.msg.footer

@@ -27,7 +27,8 @@ module.exports = {
                 image: {
                     url: yt.image
                 },
-                caption: `${bold('Play')}\n` +
+                caption: `❖ ${bold('Play')}\n` +
+                    `\n` +
                     `• Judul: ${yt.title}\n` +
                     `• Deskripsi: ${yt.description}\n` +
                     `• Durasi: ${yt.timestamp}\n` +

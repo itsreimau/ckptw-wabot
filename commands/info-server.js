@@ -23,7 +23,8 @@ module.exports = {
             const startTime = global.system.startTime;
 
             return ctx.reply(
-                `${bold('Server')}\n` +
+                `❖ ${bold('Server')}\n` +
+                `\n` +
                 `• OS: ${os.type()} (${os.arch()} / ${os.release()})\n` +
                 `• RAM: ${formatSize(process.memoryUsage().rss)} / ${formatSize(os.totalmem())}\n` +
                 Object.entries(data).map(([key, value]) => `• ${ucword(key)}: ${value}\n`).join('') +

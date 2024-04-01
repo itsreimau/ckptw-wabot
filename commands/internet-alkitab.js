@@ -23,7 +23,8 @@ module.exports = {
             if (!result) return ctx.reply(global.msg.notFound);
 
             return ctx.reply(
-                `${bold('Alkitab')}\n` +
+                `❖ ${bold('Alkitab')}\n` +
+                `\n` +
                 result.map(r =>
                     `• ${r.title}\n` +
                     `• ${r.text}`

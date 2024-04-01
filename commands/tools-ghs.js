@@ -29,7 +29,8 @@ module.exports = {
 
             const repo = data.items[0];
             return ctx.reply(
-                `${bold('GitHub Search')}\n` +
+                `❖ ${bold('GitHub Search')}\n` +
+                `\n` +
                 `• Nama: ${repo.name}\n` +
                 `• Privasi: ${repo.private}\n` +
                 `• Owner: ${repo.owner.login}\n` +
