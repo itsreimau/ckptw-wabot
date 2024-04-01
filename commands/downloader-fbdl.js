@@ -1,4 +1,7 @@
 const {
+    createAPIUrl
+} = require('../lib/api.js');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -17,13 +20,26 @@ module.exports = {
         );
 
         try {
-            const result = await fg.fbdl(input);
+            let apiUrl;
+            let result;
+
+            try {
+                apiUrl = createAPIUrl('miwudev', '/api/v1/fbdl', {
+                    url: input
+                });
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                result = data.hd || data.sd;
+            } catch {
+                const data = await fg.fbdl(input);
+                result = data.videoUrl;
+            }
 
             if (!result.videoUrl) return ctx.reply(global.msg.urlInvalid);
 
             await ctx.reply({
                 video: {
-                    url: result.videoUrl
+                    url: result
                 },
                 caption: `• URL: ${input}`,
                 gifPlayback: false

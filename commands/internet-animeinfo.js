@@ -36,27 +36,18 @@ module.exports = {
             } = await translate(info.synopsis, {
                 to: 'id'
             });
-            return ctx.sendMessage(ctx.id, {
-                text: `• Judul: ${info.title}\n` +
+            return ctx.reply({
+                image: {
+                    url: info.images.jpg.large_image_url
+                },
+                caption: `• Judul: ${info.title}\n` +
                     `• Judul (Inggris): ${info.title_english}\n` +
                     `• Judul (Jepang): ${info.title_japanese}\n` +
                     `• Tipe: ${info.type}\n` +
                     `• Episode: ${info.episodes}\n` +
                     `• Durasi: ${info.duration}\n` +
                     `• Ringkasan: ${text}\n` +
-                    `• URL: ${info.url}`,
-                contextInfo: {
-                    externalAdReply: {
-                        title: 'A N I M E I N F O',
-                        body: null,
-                        thumbnailUrl: info.images.jpg.large_image_url,
-                        sourceUrl: global.bot.groupChat,
-                        mediaType: 1,
-                        renderLargerThumbnail: true
-                    }
-                }
-            }, {
-                quoted: ctx._msg
+                    `• URL: ${info.url}`
             });
         } catch (error) {
             console.error('Error:', error);

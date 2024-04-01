@@ -1,10 +1,11 @@
 const {
-    instagram
-} = require('../lib/scraper.js');
+    createAPIUrl
+} = require('../lib/api.js');
 const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const fg = require('api-dylux');
 
 module.exports = {
     name: 'igdl',
@@ -19,13 +20,26 @@ module.exports = {
         );
 
         try {
-            const result = instagram(input)
+            let apiUrl;
+            let result;
 
-            if (!result.url) return ctx.reply(global.msg.urlInvalid);
+            try {
+                apiUrl = createAPIUrl('miwudev', '/api/v1/igdl', {
+                    url: input
+                });
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                result = data.result;
+            } catch {
+                const data = await fg.igdl(input);
+                result = data.url;
+            }
+
+            if (!result) return ctx.reply(global.msg.urlInvalid);
 
             await ctx.reply({
                 video: {
-                    url: result.url
+                    url: result
                 },
                 caption: `• URL: ${input}`,
                 gifPlayback: false

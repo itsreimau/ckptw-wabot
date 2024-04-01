@@ -5,14 +5,14 @@ const {
 // API Key
 global.apiKey = {
     imgbb: 'REPLACE_THIS_WITH_YOUR_API_KEY', // Dapatkan di: https://id.imgbb.com/
-    lowline: 'REPLACE_THIS_WITH_YOUR_API_KEY' // Dapatkan di: https://www.lowline.ai/
+    lowline: 'REPLACE_THIS_WITH_YOUR_API_KEY' // Dapatkan di: https://chat.openai.com/ (Optional)
 };
 
 // Bot
 global.bot = {
     name: 'Rei Ayanami',
     prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
-    thumbnail: 'https://lh3.googleusercontent.com/proxy/xaPie8uv6xyNjqeGrTlubv15dN_9HOZaA_O_sE7eDcnaQX5aewssX4IesQ46wJUfG7b6nprgRUdi1Emq632vLgHhhbJaxsUx8FU_SnAHZRzK7QimDDVoa9d_1T2lQ21KsV-JNlAX83gc9w',
+    thumbnail: 'https://images8.alphacoders.com/130/1305984.jpeg',
     groupChat: 'https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs'
 };
 
@@ -22,7 +22,7 @@ global.msg = {
     admin: `${bold('[ ! ]')} Perintah hanya dapat diakses oleh admin grup!`,
     owner: `${bold('[ ! ]')} Perintah hanya dapat diakses Owner!`,
     group: `${bold('[ ! ]')} Perintah hanya dapat diakses dalam grup!`,
-    private: `${bold('[ ! ]')} Perintah hanya dapat mengakses obrolan pribadi!`,
+    private: `${bold('[ ! ]')} Perintah hanya dapat diakses dalam obrolan pribadi!`,
 
     // Proses perintah
     argument: `${bold('[ ! ]')} Masukkan argumen!`,
@@ -47,5 +47,6 @@ global.sticker = {
 
 // System
 global.system = {
-    startTime: null
+    startTime: null,
+    timeZone: 'Asia/Jakarta'
 };
