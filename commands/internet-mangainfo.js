@@ -2,12 +2,12 @@ const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
+    translate
+} = require('../lib/scraper.js');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
-const {
-    translate
-} = require('@vitalets/google-translate-api');
 
 module.exports = {
     name: 'mangainfo',
@@ -31,11 +31,7 @@ module.exports = {
             if (!data) return ctx.reply(global.msg.notFound);
 
             const info = data.data[0];
-            const {
-                text
-            } = await translate(info.synopsis, {
-                to: 'id'
-            });
+            const synopsisId = await googleTranslate(info.synopsis, 'en', 'id');
             return ctx.reply({
                 image: {
                     url: info.images.jpg.large_image_url
@@ -48,7 +44,7 @@ module.exports = {
                     `• Tipe: ${info.type}\n` +
                     `• Bab: ${info.chapters}\n` +
                     `• Volume: ${info.volumes}\n` +
-                    `• Ringkasan: ${text}\n` +
+                    `• Ringkasan: ${synopsisId}\n` +
                     `• URL: ${info.url}\n` +
                     `\n` +
                     global.msg.footer

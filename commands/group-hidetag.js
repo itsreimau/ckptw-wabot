@@ -32,7 +32,7 @@ module.exports = {
             }
 
             return ctx.reply({
-                text: `${input ? input : '@everyone'}`,
+                text: `${input || '@everyone'}`,
                 mentions: mentions.map((mention) => mention.mention),
             });
         } catch (error) {

@@ -1,5 +1,6 @@
 const {
     download,
+    isAdmin,
     isAdminOf
 } = require('../lib/simple.js');
 const {

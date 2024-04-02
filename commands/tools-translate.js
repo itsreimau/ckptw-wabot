@@ -1,10 +1,10 @@
 const {
+    translate
+} = require('../lib/scraper.js');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
-const {
-    translate
-} = require('@vitalets/google-translate-api');
 
 module.exports = {
     name: 'translate',
@@ -20,13 +20,9 @@ module.exports = {
 
         try {
             const [lang, ...inp] = input.split(' ');
-            const {
-                text
-            } = await translate(inp.join(' '), {
-                to: lang
-            });
+            const result = await googleTranslate(inp.join(' '), 'auto', lang);
 
-            await ctx.reply(text);
+            await ctx.reply(result);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

@@ -1,4 +1,5 @@
 const {
+    isAdmin,
     isAdminOf
 } = require('../lib/simple.js');
 const {

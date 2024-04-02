@@ -1,6 +1,7 @@
 require('../config.js');
 const {
     download,
+    isAdmin,
     isAdminOf
 } = require('../lib/simple.js');
 const {

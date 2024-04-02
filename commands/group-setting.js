@@ -1,5 +1,6 @@
 const {
     download,
+    isAdmin,
     isAdminOf
 } = require('../lib/simple.js');
 const {
@@ -28,11 +29,11 @@ module.exports = {
             const isClose = {
                 'open': false,
                 'close': true
-            } [(input ? input : '')]
+            } [(input || '')]
 
             if (isClose === undefined) return ctx.reply(`${bold('[ ! ]')} Argumen yang tersedia adalah open dan close.`);
 
-            await ctx._client.groupSettingUpdate(ctx.id, isClose)
+            await ctx._client.groupSettingUpdate(ctx.id, isClose);
 
             return ctx.reply(`${bold('[ ! ]')} Berhasil mengubah setelan grup!`);
         } catch (error) {
