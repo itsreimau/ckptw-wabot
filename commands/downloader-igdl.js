@@ -5,7 +5,6 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
-const fg = require('api-dylux');
 
 module.exports = {
     name: 'igdl',
@@ -20,26 +19,17 @@ module.exports = {
         );
 
         try {
-            let apiUrl;
-            let result;
+            const apiUrl = createAPIUrl('miwudev', '/api/v1/igdl', {
+                url: input
+            });
+            const response = await fetch(apiUrl);
+            const data = await response.json();
 
-            try {
-                apiUrl = createAPIUrl('miwudev', '/api/v1/igdl', {
-                    url: input
-                });
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-                result = data.result;
-            } catch {
-                const data = await fg.igdl(input);
-                result = data.url;
-            }
-
-            if (!result) return ctx.reply(global.msg.urlInvalid);
+            if (!data.result) return ctx.reply(global.msg.urlInvalid);
 
             await ctx.reply({
                 video: {
-                    url: result
+                    url: data.result
                 },
                 caption: `❖ ${bold('IG Downloader')}\n` +
                     `\n` +

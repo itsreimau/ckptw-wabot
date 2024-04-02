@@ -1,6 +1,6 @@
 {
     "name": "ckptw-wabot",
-    "version": "8.0.0",
+    "version": "8.5.0",
     "description": "WhatsApp Bot with @mengkodingan/ckptw.",
     "main": "index.js",
     "directories": {
@@ -19,27 +19,28 @@
         "bot"
     ],
     "author": "Muhamad Ikbal Maulana | ItsReimau",
-    "license": "ISC",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/itsreimau/ckptw-wabot/issues"
     },
     "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
     "dependencies": {
-        "@bochilteam/scraper": "^4.0.22-alpha.0",
-        "@mengkodingan/ckptw": "^4.0.0",
+        "@bochilteam/scraper": "^4.2.4",
+        "@mengkodingan/ckptw": "^4.0.5",
         "@vitalets/google-translate-api": "^9.2.0",
         "@whiskeysockets/baileys": "^6.6.0",
         "api-dylux": "^1.7.2",
-        "axios": "^1.6.7",
+        "axios": "^1.6.8",
         "cfonts": "^3.2.0",
         "cheerio": "^1.0.0-rc.12",
         "imgbb-uploader": "^1.5.1",
+        "jimp": "^0.16.13",
         "link-preview-js": "^3.0.5",
         "lowline.ai": "^1.0.18",
         "moment-timezone": "^0.5.45",
         "util": "^0.12.5",
         "vm": "^0.1.0",
-        "wa-sticker-formatter": "^4.3.2",
+        "wa-sticker-formatter": "^4.4.4",
         "yt-search": "^2.10.4"
     }
 }

@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require('../lib/api.js');
-const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -20,26 +17,13 @@ module.exports = {
         );
 
         try {
-            let apiUrl;
-            let result;
+            const result = await fg.fbdl(input);
 
-            try {
-                apiUrl = createAPIUrl('miwudev', '/api/v1/fbdl', {
-                    url: input
-                });
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-                result = data.hd || data.sd;
-            } catch {
-                const data = await fg.fbdl(input);
-                result = data.videoUrl;
-            }
-
-            if (!result) return ctx.reply(global.msg.urlInvalid);
+            if (!result.videoUrl) return ctx.reply(global.msg.urlInvalid);
 
             await ctx.reply({
                 video: {
-                    url: result
+                    url: result.videoUrl
                 },
                 caption: `❖ ${bold('FB Downloader')}\n` +
                     `\n` +
