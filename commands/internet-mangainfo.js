@@ -31,7 +31,7 @@ module.exports = {
             if (!data) return ctx.reply(global.msg.notFound);
 
             const info = data.data[0];
-            const synopsisId = await googleTranslate(info.synopsis, 'en', 'id');
+            const synopsisId = await translate(info.synopsis, 'en', 'id');
             return ctx.reply({
                 image: {
                     url: info.images.jpg.large_image_url

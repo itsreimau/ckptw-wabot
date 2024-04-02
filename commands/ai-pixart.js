@@ -10,25 +10,23 @@ module.exports = {
     name: 'pixart',
     category: 'ai',
     code: async (ctx) => {
-        const input = ctx._args.join(' ');
         const styleList = [...Array(9).keys()].map((index) => `${index + 1}. ${getStyleText(index + 1)}`).join('\n');
-
         const readmore = '\u200E'.repeat(4001);
 
-        if (!input) return ctx.reply(
+        if (!ctx._args.length) return ctx.reply(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 7 cat`)}\n` +
             `${readmore}\n` +
             `Catatan: Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar gaya yang tersedia.`
         );
 
-        if (input === 'list') return ctx.reply(
+        if (ctx.args === 'list') return ctx.reply(
             `Daftar gaya:\n` +
             styleList
         )
 
         try {
-            const [styles, ...prompt] = input.split(' ');
+            const [styles, ...prompt] = ctx._args;
 
             if (isNaN(styles) || styles < 1 || styles > 9) return ctx.reply(`Masukkan gaya yang tersedia. Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar gaya yang tersedia.`);
 

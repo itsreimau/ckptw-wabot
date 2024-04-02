@@ -11,16 +11,14 @@ module.exports = {
     aliases: ['tr'],
     category: 'tools',
     code: async (ctx) => {
-        const input = ctx._args.join(' ');
-
-        if (!input) return ctx.reply(
+        if (!ctx._args.length) return ctx.reply(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo dunia!`)}`
         );
 
         try {
-            const [lang, ...inp] = input.split(' ');
-            const result = await googleTranslate(inp.join(' '), 'auto', lang);
+            const [lang, ...inp] = ctx._args;
+            const result = await translate(inp.join(' '), 'auto', lang);
 
             await ctx.reply(result);
         } catch (error) {
