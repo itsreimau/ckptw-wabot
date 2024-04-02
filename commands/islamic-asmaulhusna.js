@@ -14,7 +14,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 6`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 7`)}`
         );
 
         if (input.toLowerCase() === 'all') {
@@ -50,7 +50,7 @@ module.exports = {
                 `• Nomor: ${index}\n` +
                 `• Latin: ${latin}\n` +
                 `• Arab: ${arab}\n` +
-                `• Arti: ${arti}` +
+                `• Arti: ${arti}\n` +
                 `\n` +
                 global.msg.footer
 
