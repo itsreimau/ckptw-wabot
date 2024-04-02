@@ -3,6 +3,7 @@ const {
 } = require('../lib/api.js');
 const {
     bold,
+    italic,
     monospace
 } = require('@mengkodingan/ckptw');
 
