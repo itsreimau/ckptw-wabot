@@ -17,13 +17,12 @@ module.exports = {
     aliases: ['genderclassification'],
     category: 'tools',
     code: async (ctx) => {
+        const msgType = ctx.getMessageType();
+        const quotedMessage = ctx.msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+
+        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa gambar, GIF, atau video!`);
+
         try {
-            const msgType = ctx.getMessageType();
-            const quotedMessage = ctx.msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
-
-            if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage)
-                return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa gambar, GIF, atau video!`);
-
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
 
@@ -36,11 +35,17 @@ module.exports = {
             const response = await fetch(apiUrl);
             const data = await response.json();
 
+            if (data.data.length === 0) {
+                return ctx.reply(`${bold('[ ! ]')} Tidak dapat melakukan klasifikasi gender karena tidak ada data yang dikembalikan.`);
+            }
+
             const femaleScore = data.data[0].score;
             const maleScore = data.data[1].score;
             const resultText = (femaleScore > maleScore || femaleScore === 1) ?
-                `• Perempuan: ${femaleScore}\n• Pria: ${maleScore}\n` :
-                `• Pria: ${maleScore}\n• Perempuan: ${femaleScore}\n`;
+                `• Perempuan: ${femaleScore}\n` +
+                `• Pria: ${maleScore}\n` :
+                `• Pria: ${maleScore}\n` +
+                `• Perempuan: ${femaleScore}\n`;
 
             return ctx.reply(
                 `❖ ${bold('Gender Classification')}\n` +

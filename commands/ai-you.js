@@ -7,7 +7,7 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'gemini',
+    name: 'you',
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');

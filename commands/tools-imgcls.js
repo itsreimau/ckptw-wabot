@@ -18,13 +18,13 @@ module.exports = {
     aliases: ['imageclassification'],
     category: 'tools',
     code: async (ctx) => {
+        const msgType = ctx.getMessageType();
+        const quotedMessage = ctx.msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+
+        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage)
+            return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa gambar, GIF, atau video!`);
+
         try {
-            const msgType = ctx.getMessageType();
-            const quotedMessage = ctx.msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
-
-            if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage)
-                return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa gambar, GIF, atau video!`);
-
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
 
@@ -41,7 +41,7 @@ module.exports = {
                 .sort((a, b) => b.score - a.score)
                 .map((item) => {
                     const scorePercentage = Math.min(Math.max(item.score * 100, 0), 100);
-                    return `• ${bold(ucword(item.label))}: ${scorePercentage.toFixed(2)}%\n`;
+                    return `• ${ucword(item.label)}: ${scorePercentage.toFixed(2)}%\n`;
                 })
                 .join('');
 
