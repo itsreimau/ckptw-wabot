@@ -37,11 +37,16 @@ module.exports = {
 
             const femaleScore = data.data[0].score;
             const maleScore = data.data[1].score;
+            const scorePercentage = [{
+                female: Math.min(Math.max(femaleScore * 100, 0), 100),
+                male: Math.min(Math.max(maleScore * 100, 0), 100)
+            }]
+
             const resultText = (femaleScore > maleScore || femaleScore === 1) ?
-                `• Perempuan: ${femaleScore}\n` +
-                `• Pria: ${maleScore}\n` :
-                `• Pria: ${maleScore}\n` +
-                `• Perempuan: ${femaleScore}\n`;
+                `• Perempuan: ${scorePercentage.female.toFixed(2)}\n` +
+                `• Pria: ${scorePercentage.male.toFixed(2)}\n` :
+                `• Pria: ${scorePercentage.male.toFixed(2)}\n` +
+                `• Perempuan: ${scorePercentage.female.toFixed(2)}\n`;
 
             return ctx.reply(
                 `❖ ${bold('Gender Classification')}\n` +
