@@ -37,16 +37,10 @@ module.exports = {
             const response = await fetch(apiUrl);
             const data = await response.json();
 
-            const femaleScore = data.data[0].score;
-            const maleScore = data.data[1].score;
-            const resultText = (femaleScore > maleScore || femaleScore === 1) ?
-                `• Perempuan: ${femaleScore}\n• Pria: ${maleScore}\n` :
-                `• Pria: ${maleScore}\n• Perempuan: ${femaleScore}\n`;
-
             const resultText = data.data
                 .sort((a, b) => b.score - a.score)
                 .map((item) => {
-                    const scorePercentage = Math.min(Math.max(item.score * 100, 0), 100); // Memastikan skor dalam rentang 0-100
+                    const scorePercentage = Math.min(Math.max(item.score * 100, 0), 100);
                     return `• ${bold(ucword(item.label))}: ${scorePercentage.toFixed(2)}%\n`;
                 })
                 .join('');
