@@ -35,14 +35,13 @@ module.exports = {
             const response = await fetch(apiUrl);
             const data = await response.json();
 
-            const resultText =
-                const resultText = data.data
-                    .sort((a, b) => b.score - a.score)
-                    .map((item) => {
-                        const scorePercentage = Math.min(Math.max(item.score * 100, 0), 100);
-                        return `• ${ucword(item.label)}: ${scorePercentage.toFixed(2)}%\n`;
-                    })
-                    .join('');
+            const resultText = data.data
+                .sort((a, b) => b.score - a.score)
+                .map((item) => {
+                    const scorePercentage = Math.min(Math.max(item.score * 100, 0), 100);
+                    return `• ${ucword(item.label)}: ${scorePercentage.toFixed(2)}%\n`;
+                })
+                .join('');
 
             return ctx.reply(
                 `❖ ${bold('Gender Classification')}\n` +
