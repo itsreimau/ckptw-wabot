@@ -35,18 +35,14 @@ module.exports = {
             const response = await fetch(apiUrl);
             const data = await response.json();
 
-            const femaleScore = data.data[0].score;
-            const maleScore = data.data[1].score;
-            const scorePercentage = [{
-                female: Math.min(Math.max(femaleScore * 100, 0), 100),
-                male: Math.min(Math.max(maleScore * 100, 0), 100)
-            }]
-
-            const resultText = (femaleScore > maleScore || femaleScore === 1) ?
-                `• Perempuan: ${scorePercentage.female.toFixed(2)}\n` +
-                `• Pria: ${scorePercentage.male.toFixed(2)}\n` :
-                `• Pria: ${scorePercentage.male.toFixed(2)}\n` +
-                `• Perempuan: ${scorePercentage.female.toFixed(2)}\n`;
+            const resultText =
+                const resultText = data.data
+                    .sort((a, b) => b.score - a.score)
+                    .map((item) => {
+                        const scorePercentage = Math.min(Math.max(item.score * 100, 0), 100);
+                        return `• ${ucword(item.label)}: ${scorePercentage.toFixed(2)}%\n`;
+                    })
+                    .join('');
 
             return ctx.reply(
                 `❖ ${bold('Gender Classification')}\n` +
