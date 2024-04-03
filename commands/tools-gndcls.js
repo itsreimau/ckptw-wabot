@@ -29,15 +29,11 @@ module.exports = {
             const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
 
             const imageLink = await getImageLink(buffer);
-            const apiUrl = createAPIUrl('itzpire', `tools/gender-classification`, {
+            const apiUrl = createAPIUrl('itzpire', `/tools/gender-classification`, {
                 url: imageLink
             });
             const response = await fetch(apiUrl);
             const data = await response.json();
-
-            if (data.data.length === 0) {
-                return ctx.reply(`${bold('[ ! ]')} Tidak dapat melakukan klasifikasi gender karena tidak ada data yang dikembalikan.`);
-            }
 
             const femaleScore = data.data[0].score;
             const maleScore = data.data[1].score;
