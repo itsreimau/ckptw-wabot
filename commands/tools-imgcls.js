@@ -45,6 +45,7 @@ module.exports = {
                 })
                 .join('');
 
+
             return ctx.reply(
                 `❖ ${bold('Image Classification')}\n` +
                 `\n` +
