@@ -33,32 +33,11 @@ module.exports = {
 
             for (let i of anu) {
                 await delay(500);
-                const fakeQuoted = {
-                    key: {
-                        fromMe: false,
-                        'participant': '0@s.whatsapp.net',
-                        'remoteJid': 'status@broadcast'
-                    },
-                    'message': {
-                        orderMessage: {
-                            itemCount: 99999,
-                            status: 200,
-                            surface: 200,
-                            message: global.msg.footer,
-                            orderTitle: ctx._sender.jid,
-                            sellerJid: '0@s.whatsapp.net'
-                        }
-                    },
-                    contextInfo: {
-                        'forwardingScore': 999,
-                        'isForwarded': true
-                    },
-                    sendEphemeral: true
-                }
-
                 ctx.sendMessage(i, {
                     text: input,
                     contextInfo: {
+                        forwardingScore: 100,
+                        isForwarded: true,
                         externalAdReply: {
                             title: '📣 Broadcast',
                             body: null,
@@ -68,12 +47,10 @@ module.exports = {
                             renderLargerThumbnail: true
                         }
                     }
-                }, {
-                    quoted: fakeQuoted
                 });
             }
 
-            ctx.reply(`Berhasil mengirimkan siaran ke ${anu.length} obrolan grup.`);
+            return ctx.reply(`Berhasil mengirimkan siaran ke ${anu.length} obrolan grup.`);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
