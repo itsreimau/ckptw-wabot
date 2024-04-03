@@ -3,7 +3,8 @@ const {
 } = require('../lib/api.js');
 const {
     download,
-    getImageLink
+    getImageLink,
+    ucword
 } = require('../lib/simple.js');
 const {
     bold
