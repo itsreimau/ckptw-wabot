@@ -66,7 +66,7 @@ async function fetchData(sura, aya) {
 function formatAya(data) {
     return `${bold('❖ Al-Quran')}\n` +
         `\n` +
-        `• ${data.text.arab}\n` +
+        `${data.text.arab}\n` +
         `• ${italic(`${data.text.transliteration.en}`)}\n` +
         `• ${data.translation.id}\n` +
         `• Surah ${data.surah.name.transliteration.id}: ${data.number.inSurah}\n` +
@@ -76,14 +76,17 @@ function formatAya(data) {
 
 function formatSura(data) {
     const versesText = data.verses.map(verse => {
-        return `${bold(`Ayat ${toArabicNumeral(verse.number.inSurah)}:`)}\n${verse.text.arab} (${verse.text.transliteration.en})\n${italic(verse.translation.id)}`;
-    }).join('\n\n');
+        return `${bold(`Ayat ${toArabicNumeral(verse.number.inSurah)}:`)}\n` +
+            `${verse.text.arab} (${verse.text.transliteration.en})\n` +
+            `${italic(verse.translation.id)}`;
+    }).join('\n');
 
     return `${bold('❖ Al-Quran')}\n` +
         `\n` +
         `• ${bold(`Surah ${data.name.transliteration.id}`)}\n` +
         `• ${data.revelation.id}\n` +
         `${versesText}\n` +
+        `\n` +
         global.msg.footer;
 }
 

@@ -22,13 +22,14 @@ module.exports = {
 
             if (!result) return ctx.reply(global.msg.notFound);
 
+            const resultText = result.map(r =>
+                `• ${r.title}\n` +
+                `• ${r.text}`
+            ).join('\n----\n')
             return ctx.reply(
                 `❖ ${bold('Alkitab')}\n` +
                 `\n` +
-                result.map(r =>
-                    `• ${r.title}\n` +
-                    `• ${r.text}`
-                ).join('\n----\n')
+                resultText +
                 `\n` +
                 global.msg.footer
             )

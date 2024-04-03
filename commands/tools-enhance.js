@@ -15,7 +15,8 @@ const {
 } = require('@mengkodingan/ckptw/lib/Constant');
 
 module.exports = {
-    name: 'remini',
+    name: 'enhance',
+    aliases: ['hd'],
     category: 'tools',
     code: async (ctx) => {
         const msgType = ctx.getMessageType();
@@ -30,13 +31,16 @@ module.exports = {
             const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
 
             const imageLink = await getImageLink(buffer);
-            const result = createAPIUrl('ai_tools', `/remini`, {
-                url: imageLink
+            const apiUrl = createAPIUrl('itzpire', `/tools/enhance`, {
+                url: imageLink,
+                type: 'modelx4'
             });
+            const response = await fetch(apiUrl);
+            const data = await response.json();
 
             await ctx.reply({
                 image: {
-                    url: result
+                    url: data.result.img
                 },
                 caption: null
             });
