@@ -1,4 +1,3 @@
-require('../config.js');
 const {
     bold,
     monospace
@@ -9,7 +8,7 @@ const {
 
 module.exports = {
     name: 'lowline',
-    aliases: ['ll'],
+    aliases: ['ai', 'll', 'gpt', 'chatai'],
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
