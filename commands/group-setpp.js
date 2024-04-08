@@ -1,6 +1,7 @@
 const {
     isAdmin,
-    isAdminOf
+    isAdminOf,
+    isPrivate
 } = require('../handler.js');
 const {
     bold
@@ -22,7 +23,7 @@ module.exports = {
 
         if (isAdminOf(ctx, true)) return ctx.reply(global.msg.botAdmin);
 
-        if (!ctx.isGroup()) return ctx.reply(global.msg.group);
+        if (isPrivate(ctx)) return ctx.reply(global.msg.group);
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
