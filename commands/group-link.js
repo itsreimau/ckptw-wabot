@@ -1,5 +1,5 @@
 const {
-    isAdminOf
+    isNotAdminOf
 } = require('../handler.js');
 const {
     bold
@@ -10,7 +10,7 @@ module.exports = {
     aliases: ['gclink', 'grouplink'],
     category: 'group',
     code: async (ctx) => {
-        if (isAdminOf(ctx, true)) return ctx.reply(global.msg.botAdmin);
+        if (isNotAdminOf(ctx)) return ctx.reply(global.msg.botAdmin);
 
         if (!ctx.isGroup()) return ctx.reply(global.msg.group);
 
