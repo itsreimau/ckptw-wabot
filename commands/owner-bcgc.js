@@ -3,7 +3,7 @@ const {
 } = require('../lib/api.js');
 const {
     isOwner
-} = require('../lib/simple.js');
+} = require('../handler.js');
 const {
     bold,
     monospace
@@ -21,7 +21,7 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} halo!`)}`
         );
 
-        if (!isOwner(ctx)) return ctx.reply(global.msg.owner);
+        if (isOwner(ctx, true)) return ctx.reply(global.msg.owner);
 
         try {
             const delay = time => new Promise(res => setTimeout(res, time));
