@@ -1,9 +1,7 @@
-require('../config.js');
 const {
-    download,
     isAdmin,
     isAdminOf
-} = require('../lib/simple.js');
+} = require('../handler.js');
 const {
     bold
 } = require('@mengkodingan/ckptw');
@@ -20,9 +18,9 @@ module.exports = {
 
         if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa gambar!`);
 
-        if (!isAdmin(ctx)) return ctx.reply(global.msg.admin);
+        if (isAdmin(ctx, true)) return ctx.reply(global.msg.admin);
 
-        if (!isAdminOf(ctx)) return ctx.reply(global.msg.botAdmin);
+        if (isAdminOf(ctx, true)) return ctx.reply(global.msg.botAdmin);
 
         if (!ctx.isGroup()) return ctx.reply(global.msg.group);
 
