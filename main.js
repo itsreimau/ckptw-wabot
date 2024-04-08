@@ -64,7 +64,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Owner-only
-        if (isOwner(ctx, false)) {
+        if (isOwner(ctx)) {
             // Eval
             if (m.content.startsWith('> ') || m.content.startsWith('>> ')) {
                 const code = m.content.slice(2);
