@@ -1,5 +1,6 @@
 const {
-    isNotAdminOf
+    isNotAdminOf,
+    isPrivate
 } = require('../handler.js');
 const {
     bold
@@ -12,7 +13,7 @@ module.exports = {
     code: async (ctx) => {
         if (isNotAdminOf(ctx)) return ctx.reply(global.msg.botAdmin);
 
-        if (!ctx.isGroup()) return ctx.reply(global.msg.group);
+        if (isPrivate(ctx)) return ctx.reply(global.msg.group);
 
         try {
             const link = await ctx._client.groupInviteCode(ctx.id);
