@@ -1,6 +1,7 @@
 const {
     isNotAdmin,
-    isNotAdminOf
+    isNotAdminOf,
+    isPrivate
 } = require('../handler.js');
 const {
     bold
@@ -16,7 +17,7 @@ module.exports = {
 
         if (isNotAdminOf(ctx)) return ctx.reply(global.msg.botAdmin);
 
-        if (!ctx.isGroup()) return ctx.reply(global.msg.group);
+        if (isPrivate()) return ctx.reply(global.msg.group);
 
         try {
             const data = await ctx._client.groupMetadata(ctx.id);
