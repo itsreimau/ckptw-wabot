@@ -1,8 +1,7 @@
 const {
-    download,
     isAdmin,
     isAdminOf
-} = require('../lib/simple.js');
+} = require('../handler.js');
 const {
     bold,
     monospace
@@ -19,9 +18,9 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} fuck you!`)}`
         );
 
-        if (!isAdmin(ctx)) return ctx.reply(global.msg.admin);
+        if (isAdmin(ctx, true)) return ctx.reply(global.msg.admin);
 
-        if (!isAdminOf(ctx)) return ctx.reply(global.msg.botAdmin);
+        if (isAdminOf(ctx, true)) return ctx.reply(global.msg.botAdmin);
 
         if (!ctx.isGroup()) return ctx.reply(global.msg.group);
 
