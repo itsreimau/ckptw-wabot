@@ -1,7 +1,9 @@
 require('./config.js');
 const {
-    isCmd,
     isOwner
+} = require('./handler.js');
+const {
+    isCmd
 } = require('./lib/simple.js');
 const {
     bold,
@@ -62,12 +64,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Owner-only
-        if (isOwner(ctx)) {
+        if (isOwner(ctx, false)) {
             // Eval
-            if (m.content.startsWith('> ') || m.content.startsWith('x ')) {
+            if (m.content.startsWith('> ') || m.content.startsWith('>> ')) {
                 const code = m.content.slice(2);
 
-                const result = await eval(m.content.startsWith('x ') ? `(async () => { ${code} })()` : code);
+                const result = await eval(m.content.startsWith('>> ') ? `(async () => { ${code} })()` : code);
                 await ctx.reply(inspect(result));
             }
 
