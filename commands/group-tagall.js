@@ -1,8 +1,7 @@
 const {
-    download,
     isAdmin,
     isAdminOf
-} = require('../lib/simple.js');
+} = require('../handler.js');
 const {
     bold
 } = require("@mengkodingan/ckptw");
@@ -13,9 +12,9 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!isAdmin(ctx)) return ctx.reply(global.msg.admin);
+        if (isAdmin(ctx, true)) return ctx.reply(global.msg.admin);
 
-        if (!isAdminOf(ctx)) return ctx.reply(global.msg.botAdmin);
+        if (isAdminOf(ctx, true)) return ctx.reply(global.msg.botAdmin);
 
         if (!ctx.isGroup()) return ctx.reply(global.msg.group);
 
