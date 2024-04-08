@@ -8,7 +8,6 @@ const {
 
 module.exports = {
     name: 'chatgpt',
-    aliases: ['ai', 'chatai', 'gpt', 'gpt4'],
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
