@@ -52,7 +52,7 @@ module.exports = {
                 if (!isNaN(selectedNumber) && selectedQualityIndex >= 0 && selectedQualityIndex < qualityOptions.length) {
                     const selectedQuality = qualityOptions[selectedQualityIndex];
                     const downloadFunction = ytdl.audio[selectedQuality].download;
-                    ctx.editMessage(res.key, `Mengunduh audio... Jika audio tidak terkirim, ukurannya mungkin terlalu besar.`)
+                    ctx.react(ctx.id, '🔄', res.key);
                     const url = await downloadFunction();
                     ctx.reply({
                         audio: {
