@@ -1,7 +1,6 @@
 const {
-    isAdmin,
     isAdminOf
-} = require('../lib/simple.js');
+} = require('../handler.js');
 const {
     bold
 } = require('@mengkodingan/ckptw');
@@ -11,9 +10,7 @@ module.exports = {
     aliases: ['gclink', 'grouplink'],
     category: 'group',
     code: async (ctx) => {
-        if (!isAdmin(ctx)) return ctx.reply(global.msg.admin);
-
-        if (!isAdminOf(ctx)) return ctx.reply(global.msg.botAdmin);
+        if (isAdminOf(ctx, true)) return ctx.reply(global.msg.botAdmin);
 
         if (!ctx.isGroup()) return ctx.reply(global.msg.group);
 
