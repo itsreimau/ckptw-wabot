@@ -1,16 +1,31 @@
-exports.isAdmin = async (ctx, negation = false) => {
-    const isAdmin = await checkAdmin(ctx, ctx._sender.jid.split('@')[0]);
-    return negation ? !isAdmin : isAdmin;
-}
-
-exports.isAdminOf = async (ctx, negation = false) => {
-    const isAdminOfGroup = await checkAdmin(ctx, ctx._client.user.id.split(':')[0]);
-    return negation ? !isAdminOfGroup : isAdminOfGroup;
-}
-
-exports.isOwner = (ctx, negation = false) => {
+exports.isOwner = (ctx) => {
     const isOwner = ctx._sender.jid.includes(global.owner.number);
-    return negation ? !isOwner : isOwner;
+    return isOwner;
+}
+
+exports.isNotOwner = (ctx) => {
+    const isOwner = ctx._sender.jid.includes(global.owner.number);
+    return !isOwner;
+}
+
+exports.isAdmin = async (ctx) => {
+    const isAdmin = await checkAdmin(ctx, ctx._sender.jid.split('@')[0]);
+    return isAdmin;
+}
+
+exports.isNotAdmin = async (ctx) => {
+    const isAdmin = await checkAdmin(ctx, ctx._sender.jid.split('@')[0]);
+    return !isAdmin;
+}
+
+exports.isAdminOf = async (ctx) => {
+    const isAdminOfGroup = await checkAdmin(ctx, ctx._client.user.id.split(':')[0]);
+    return isAdminOfGroup;
+}
+
+exports.isNotAdminOf = async (ctx) => {
+    const isAdminOfGroup = await checkAdmin(ctx, ctx._client.user.id.split(':')[0]);
+    return !isAdminOfGroup;
 }
 
 async function checkAdmin(ctx, id) {
