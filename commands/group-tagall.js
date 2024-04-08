@@ -17,7 +17,7 @@ module.exports = {
 
         if (isNotAdminOf(ctx)) return ctx.reply(global.msg.botAdmin);
 
-        if (isPrivate()) return ctx.reply(global.msg.group);
+        if (isPrivate(ctx)) return ctx.reply(global.msg.group);
 
         try {
             const data = await ctx._client.groupMetadata(ctx.id);
