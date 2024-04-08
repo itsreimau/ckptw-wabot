@@ -28,6 +28,14 @@ exports.isNotAdminOf = async (ctx) => {
     return !isAdminOfGroup;
 }
 
+exports.isGroup = (ctx) => {
+    return ctx.isGroup();
+}
+
+exports.isPrivate = (ctx) => {
+    return !ctx.isGroup();
+}
+
 async function checkAdmin(ctx, id) {
     const groupMetadata = await ctx._client.groupMetadata(ctx.id);
 
