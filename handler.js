@@ -1,27 +1,25 @@
 exports.isAdmin = async (ctx, negation = false) => {
-    const isAdmin = await getParticipantStatus(ctx, 'admin');
+    const isAdmin = await checkAdmin(ctx, ctx._sender.jid.split('@')[0]);
     return negation ? !isAdmin : isAdmin;
 }
 
 exports.isAdminOf = async (ctx, negation = false) => {
-    const isAdminOfGroup = await getParticipantStatus(ctx, 'admin', true);
+    const isAdminOfGroup = await checkAdmin(ctx, ctx._client.user.id.split(':')[0]);
     return negation ? !isAdminOfGroup : isAdminOfGroup;
 }
 
 exports.isOwner = (ctx, negation = false) => {
-    const isOwner = global.owner.number === ctx._sender.jid;
+    const isOwner = ctx._sender.jid.includes(global.owner.number);
     return negation ? !isOwner : isOwner;
 }
 
-async function getParticipantStatus(ctx, role, botCheck = false) {
+async function checkAdmin(ctx, id) {
     const groupMetadata = await ctx._client.groupMetadata(ctx.id);
 
     if (groupMetadata) {
         const participants = groupMetadata.participants;
-        const idToCheck = botCheck ? ctx._client.user.id.split(':')[0] : ctx._sender.jid.split('@')[0];
-        const participant = participants.find(participant => participant.id.split('@')[0] === idToCheck);
-
-        return participant && participant.admin === role;
+        const participant = participants.find(participant => participant.id.split('@')[0] === id);
+        return participant && participant.admin === 'admin';
     } else {
         return false;
     }
