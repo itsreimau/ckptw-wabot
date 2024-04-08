@@ -20,7 +20,7 @@ module.exports = {
             `Catatan: Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar gaya yang tersedia.`
         );
 
-        if (ctx.args === 'list') return ctx.reply(
+        if (ctx.args[0] === 'list') return ctx.reply(
             `Daftar gaya:\n` +
             styleList
         )
