@@ -37,4 +37,4 @@ exports.handler = (ctx, {
 
         if (result === 0) ctx.reply(global.msg[opt]);
     }
-}
+};
