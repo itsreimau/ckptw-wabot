@@ -1,16 +1,20 @@
 const {
-    isNotAdmin,
-    isNotAdminOf,
-    isPrivate
+    handler
 } = require('../handler.js');
 const {
     bold
-} = require("@mengkodingan/ckptw");
+} = require('@mengkodingan/ckptw');
 
 module.exports = {
     name: 'hidetag',
     category: 'group',
     code: async (ctx) => {
+        handler(ctx, {
+            admin: true,
+            group: true,
+            owner: true
+        });
+
         const input = ctx._args.join(' ');
 
         if (isNotAdmin(ctx)) return ctx.reply(global.msg.admin);
