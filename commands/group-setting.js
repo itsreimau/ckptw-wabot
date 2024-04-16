@@ -1,7 +1,5 @@
 const {
-    isNotAdmin,
-    isNotAdminOf,
-    isPrivate
+    handler
 } = require('../handler.js');
 const {
     bold,
@@ -12,18 +10,19 @@ module.exports = {
     name: 'group',
     category: 'group',
     code: async (ctx) => {
+        handler(ctx, {
+            admin: true,
+            botAdmin: true,
+            group: true,
+            owner: true
+        });
+
         const input = ctx._args.join(' ');
 
         if (!input) return ctx.reply(
             `${global.msg.argument} Argumen yang tersedia adalah open dan close.\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} close`)}`
         );
-
-        if (isNotAdmin(ctx)) return ctx.reply(global.msg.admin);
-
-        if (isNotAdminOf(ctx)) return ctx.reply(global.msg.botAdmin);
-
-        if (isPrivate(ctx)) return ctx.reply(global.msg.group);
 
         try {
             const isClose = {
