@@ -8,26 +8,33 @@ const smpl = require('./lib/simple.js');
 exports.handler = (ctx, {
     opt
 }) => {
-    let result;
-    switch (opt) {
-        case 'admin':
-            result = smpl.isAdmin(ctx);
-            break;
-        case 'botAdmin':
-            result = smpl.isAdminOf(ctx);
-            break;
-        case 'group':
-            result = smpl.isGroup(ctx);
-            break;
-        case 'owner':
-            result = smpl.isOwner(ctx);
-            break;
-        case 'private':
-            result = smpl.isPrivate(ctx);
-            break;
-        default:
-            throw new Error('Invalid option provided');
-    }
+    let isAdmin = smpl.isAdmin(ctx);
+    let isOwner = smpl.isOwner(ctx);
 
-    if (result === 0) ctx.reply(global.msg[opt]);
+    if (isAdmin && isOwner) {
+        if (opt === 'admin') ctx.reply(global.msg[opt]);
+    } else {
+        let result;
+        switch (opt) {
+            case 'admin':
+                result = isAdmin;
+                break;
+            case 'botAdmin':
+                result = smpl.isAdminOf(ctx);
+                break;
+            case 'group':
+                result = smpl.isGroup(ctx);
+                break;
+            case 'owner':
+                result = isOwner;
+                break;
+            case 'private':
+                result = smpl.isPrivate(ctx);
+                break;
+            default:
+                throw new Error('Invalid option provided');
+        }
+
+        if (result === 0) ctx.reply(global.msg[opt]);
+    }
 }
