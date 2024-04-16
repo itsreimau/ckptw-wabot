@@ -12,8 +12,7 @@ module.exports = {
     code: async (ctx) => {
         handler(ctx, {
             botAdmin: true,
-            group: true,
-            owner: true
+            group: true
         });
 
         try {
