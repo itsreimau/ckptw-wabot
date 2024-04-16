@@ -1,7 +1,5 @@
 const {
-    isAdmin,
-    isAdminOf,
-    isPrivate
+    handler
 } = require('../handler.js');
 const {
     bold
@@ -14,16 +12,17 @@ module.exports = {
     name: 'setpp',
     category: 'group',
     code: async (ctx) => {
+        handler(ctx, {
+            admin: true,
+            botAdmin: true,
+            group: true,
+            owner: true
+        });
+
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx.msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
         if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa gambar!`);
-
-        if (isAdmin(ctx, true)) return ctx.reply(global.msg.admin);
-
-        if (isAdminOf(ctx, true)) return ctx.reply(global.msg.botAdmin);
-
-        if (isPrivate(ctx)) return ctx.reply(global.msg.group);
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
