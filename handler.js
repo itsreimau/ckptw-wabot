@@ -22,6 +22,9 @@ exports.handler = (ctx, {
         case 'owner':
             result = smpl.isOwner(ctx);
             break;
+        case 'private':
+            result = smpl.isPrivate(ctx);
+            break;
         default:
             throw new Error('Invalid option provided');
     }
