@@ -1,10 +1,5 @@
 require('./config.js');
-const {
-    isOwner
-} = require('./handler.js');
-const {
-    isCmd
-} = require('./lib/simple.js');
+const smpl = require('./lib/simple.js');
 const {
     bold,
     Client,
@@ -59,7 +54,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (!m.content || m.key.fromMe) return;
 
         // Auto-typing
-        if (isCmd(m, ctx)) {
+        if (smpl.isCmd(m, ctx)) {
             ctx.simulateTyping(); // atau ctx.simulateRecording() jika Anda ingin 'sedang merekam suara...'
         }
 
