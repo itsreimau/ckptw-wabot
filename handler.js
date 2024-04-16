@@ -11,8 +11,8 @@ exports.handler = (ctx, {
     let isAdmin = smpl.isAdmin(ctx);
     let isOwner = smpl.isOwner(ctx);
 
-    if (isAdmin && isOwner) {
-        if (opt === 'admin') ctx.reply(global.msg[opt]);
+    if (isAdmin === 0 && isOwner === 0) {
+        ctx.reply(global.msg[opt]);
     } else {
         let result;
         switch (opt) {
