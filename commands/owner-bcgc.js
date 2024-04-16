@@ -2,7 +2,7 @@ const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
-    isNotOwner
+    handler
 } = require('../handler.js');
 const {
     bold,
@@ -14,14 +14,16 @@ module.exports = {
     aliases: ['broadcastgc'],
     category: 'owner',
     code: async (ctx) => {
+        handler(ctx, {
+            owner: true
+        });
+
         const input = ctx._args.join(' ');
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} halo!`)}`
         );
-
-        if (isNotOwner(ctx, true)) return ctx.reply(global.msg.owner);
 
         try {
             const delay = time => new Promise(res => setTimeout(res, time));
@@ -36,7 +38,7 @@ module.exports = {
                 ctx.sendMessage(i, {
                     text: input,
                     contextInfo: {
-                        forwardingScore: 100,
+                        forwardingScore: 1000,
                         isForwarded: true,
                         externalAdReply: {
                             title: '📣 Broadcast',
