@@ -9,11 +9,14 @@ module.exports = {
     name: 'tagall',
     category: 'group',
     code: async (ctx) => {
-        handler(ctx, {
+        const handlerMsg = handler(ctx, {
             admin: true,
+            botAdmin: true,
             group: true,
             owner: true
         });
+
+        if (handlerMsg) return ctx.reply(handlerMsg);
 
         const input = ctx._args.join(' ');
 
