@@ -1,4 +1,4 @@
-const {
+qdconst {
     handler
 } = require('../handler.js');
 const {
@@ -10,10 +10,12 @@ module.exports = {
     aliases: ['gclink', 'grouplink'],
     category: 'group',
     code: async (ctx) => {
-        handler(ctx, {
+        const handlerMsg = handler(ctx, {
             botAdmin: true,
             group: true
         });
+
+        if (handlerMsg) return ctx.reply(handlerMsg);
 
         try {
             const link = await ctx._client.groupInviteCode(ctx.id);
