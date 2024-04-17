@@ -9,13 +9,13 @@ module.exports = {
     name: 'hidetag',
     category: 'group',
     code: async (ctx) => {
-        handler(ctx, {
+        const handlerMsg = handler(ctx, {
             admin: true,
             group: true,
             owner: true
-        }).then((msg) => {
-            if (msg) return ctx.reply(msg)
         });
+
+        if (handlerMsg) return ctx.reply(errorMsg);
 
         const input = ctx._args.join(' ');
 
