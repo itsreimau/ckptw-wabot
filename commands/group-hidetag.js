@@ -13,6 +13,8 @@ module.exports = {
             admin: true,
             group: true,
             owner: true
+        }).then((msg) => {
+            if (msg) return ctx.reply(msg)
         });
 
         const input = ctx._args.join(' ');
