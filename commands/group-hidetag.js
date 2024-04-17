@@ -15,7 +15,7 @@ module.exports = {
             owner: true
         });
 
-        if (handlerMsg) return ctx.reply(errorMsg);
+        if (handlerMsg) return ctx.reply(handlerMsg);
 
         const input = ctx._args.join(' ');
 
