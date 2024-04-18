@@ -44,7 +44,7 @@ module.exports = {
                     `• Tipe: ${info.type}\n` +
                     `• Episode: ${info.episodes}\n` +
                     `• Durasi: ${info.duration}\n` +
-                    `• Ringkasan: ${synopsisIdtranslation}\n` +
+                    `• Ringkasan: ${synopsisId.translation}\n` +
                     `• URL: ${info.url}\n` +
                     `\n` +
                     global.msg.footer
