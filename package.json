@@ -1,6 +1,6 @@
 {
     "name": "ckptw-wabot",
-    "version": "9.2.7",
+    "version": "1.18.4",
     "description": "WhatsApp Bot with @mengkodingan/ckptw.",
     "main": "index.js",
     "directories": {
@@ -27,10 +27,10 @@
     "dependencies": {
         "@bochilteam/scraper": "^4.2.4",
         "@mengkodingan/ckptw": "^4.0.5",
-        "@vitalets/google-translate-api": "^9.2.0",
         "@whiskeysockets/baileys": "^6.6.0",
         "api-dylux": "^1.7.2",
         "axios": "^1.6.8",
+        "bing-translate-api": "^4.0.1",
         "cfonts": "^3.2.0",
         "cheerio": "^1.0.0-rc.12",
         "imgbb-uploader": "^1.5.1",

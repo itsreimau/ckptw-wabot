@@ -30,7 +30,7 @@ module.exports = {
                     const mon = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][d.getMonth()];
                     const year = d.getFullYear();
                     return `${bold(h.holiday_name)}\n• ${day}, ${d.getDate()} ${mon} ${year}`;
-                }).join('\n----\n') +
+                }).join('\n-----\n') +
                 `\n` +
                 `\n` +
                 `${global.msg.footer}`

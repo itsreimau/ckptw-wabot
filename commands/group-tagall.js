@@ -35,7 +35,7 @@ module.exports = {
 
             return ctx.reply({
                 text: `${input || 'Hai!'}\n` +
-                    `----\n` +
+                    `-----\n` +
                     `${mentionText}`,
                 mentions: mentions.map((mention) => mention.mention),
             });

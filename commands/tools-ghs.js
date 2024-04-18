@@ -32,17 +32,11 @@ module.exports = {
                 `❖ ${bold('GitHub Search')}\n` +
                 `\n` +
                 `• Nama: ${repo.name}\n` +
-                `• Privasi: ${repo.private}\n` +
-                `• Owner: ${repo.owner.login}\n` +
                 `• Deskripsi: ${repo.description}\n` +
+                `• Owner: ${repo.owner.login}\n` +
                 `• Dibuat: ${formatDate(repo.created_at)}\n` +
-                `• Pembaruan: ${formatDate(repo.updated_at)}\n` +
-                `• Ukuran: ${repo.size}\n` +
-                `• Jumlah pengamat bintang: ${repo.stargazers_count}\n` +
-                `• Jumlah pengamat: ${repo.watchers_count}\n` +
                 `• Bahasa: ${repo.language}\n` +
-                `• Garpu: ${repo.forks_count}\n` +
-                `• Isu terbuka: ${repo.open_issues_count}\n` +
+                `• Lisensi: ${repo.license.name}\n` +
                 `\n` +
                 global.msg.footer
             )
@@ -53,8 +47,8 @@ module.exports = {
     }
 };
 
-function formatDate(n, locale = 'id') {
-    const dt = new Date(n)
+function formatDate(date, locale = 'id') {
+    const dt = new Date(date);
     return dt.toLocaleDateString(locale, {
         weekday: 'long',
         day: 'numeric',
@@ -63,5 +57,5 @@ function formatDate(n, locale = 'id') {
         hour: 'numeric',
         minute: 'numeric',
         second: 'numeric'
-    })
+    });
 }

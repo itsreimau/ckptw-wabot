@@ -23,7 +23,7 @@ module.exports = {
                 `• Latin: ${v.latin}\n` +
                 `• Arab: ${v.arab}\n` +
                 `• Arti: ${v.arti}`
-            ).join('\n----\n');
+            ).join('\n-----\n');
             return ctx.reply(
                 `❖ ${bold('Asmaul Husna')}\n` +
                 `\n` +

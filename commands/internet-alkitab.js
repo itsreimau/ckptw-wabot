@@ -8,6 +8,7 @@ const {
 
 module.exports = {
     name: 'alkitab',
+    aliases: ['injil'],
     category: 'internet',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -25,7 +26,7 @@ module.exports = {
             const resultText = result.map(r =>
                 `• ${r.title}\n` +
                 `• ${r.text}`
-            ).join('\n----\n')
+            ).join('\n-----\n')
             return ctx.reply(
                 `❖ ${bold('Alkitab')}\n` +
                 `\n` +

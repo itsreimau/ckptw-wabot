@@ -1,10 +1,10 @@
 const {
-    translate
-} = require('../lib/scraper.js');
-const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const {
+    translate
+} = require('bing-translate-api');
 
 module.exports = {
     name: 'translate',
@@ -18,9 +18,9 @@ module.exports = {
 
         try {
             const [lang, ...inp] = ctx._args;
-            const result = await translate(inp.join(' '), 'auto', lang);
+            const result = await translate(inp.join(' '), null, lang);
 
-            await ctx.reply(result);
+            await ctx.reply(result.translation);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

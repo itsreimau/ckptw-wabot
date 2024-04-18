@@ -2,12 +2,12 @@ const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
-    translate
-} = require('../lib/scraper.js');
-const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const {
+    translate
+} = require('bing-translate-api');
 
 module.exports = {
     name: 'mangainfo',
@@ -44,7 +44,7 @@ module.exports = {
                     `• Tipe: ${info.type}\n` +
                     `• Bab: ${info.chapters}\n` +
                     `• Volume: ${info.volumes}\n` +
-                    `• Ringkasan: ${synopsisId}\n` +
+                    `• Ringkasan: ${synopsisId.translation}\n` +
                     `• URL: ${info.url}\n` +
                     `\n` +
                     global.msg.footer
