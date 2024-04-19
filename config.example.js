@@ -29,6 +29,7 @@ global.msg = {
     // Antarmuka perintah
     watermark: `${package.name}@^${package.version}`,
     footer: quote('Dibuat oleh ItsReimau | Take care of yourself.'),
+    readmore: '\u200E'.repeat(4001),
 
     // Proses perintah
     argument: `${bold('[ ! ]')} Masukkan argumen!`,
