@@ -14,13 +14,13 @@ module.exports = {
         const input = ctx._args.join(' ');
 
         let prompt;
-        const quotedMessageConversation = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage?.conversation;
+        const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
-        if (quotedMessageConversation && input) {
-            prompt = `Previous message: ${quotedMessageConversation}\n` +
+        if (quotedMessage && input) {
+            prompt = `Previous message: ${quotedMessage.conversation || quotedMessage.caption}\n` +
                 `Message: ${input}`;
-        } else if (quotedMessageConversation) {
-            prompt = quotedMessageConversation;
+        } else if (quotedMessage) {
+            prompt = quotedMessage;
         } else if (input) {
             prompt = input;
         } else {
