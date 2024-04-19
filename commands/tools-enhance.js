@@ -20,7 +20,7 @@ module.exports = {
     category: 'tools',
     code: async (ctx) => {
         const msgType = ctx.getMessageType();
-        const quotedMessage = ctx.msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
         if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa gambar`);
 

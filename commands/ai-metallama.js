@@ -13,14 +13,26 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        if (!input) return ctx.reply(
-            `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
-        );
+        let prompt;
+        const quotedMessageText = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage?.text;
+
+        if (quotedMessageText && input) {
+            prompt = `Previous message: ${quotedMessageText}\n` +
+                `Message: ${input}`;
+        } else if (quotedMessageText) {
+            prompt = quotedMessageText;
+        } else if (input) {
+            prompt = input;
+        } else {
+            return ctx.reply(
+                `${global.msg.argument}\n` +
+                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
+            );
+        }
 
         try {
             const apiUrl = createAPIUrl('otinxsandip', '/metallama', {
-                prompt: input
+                prompt: prompt
             });
             const response = await fetch(apiUrl);
             const data = await response.json();

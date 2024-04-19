@@ -22,7 +22,7 @@ module.exports = {
         if (handlerMsg) return ctx.reply(handlerMsg);
 
         const msgType = ctx.getMessageType();
-        const quotedMessage = ctx.msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
         if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa gambar!`);
 

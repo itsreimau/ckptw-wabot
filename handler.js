@@ -19,11 +19,11 @@ exports.handler = (ctx, options) => {
 
     if (options.admin && options.owner && isAdmin === 0) return global.msg.admin;
 
-    if (options.owner && isOwner === 0 && !options.botAdmin) return global.msg.owner;
+    if (options.owner && isOwner === 0) return global.msg.owner;
 
     if (options.admin && isAdmin === 0) return global.msg.admin;
 
-    if (options.botAdmin && isAdminOf === 0 && !options.owner) return global.msg.botAdmin;
+    if (options.botAdmin && isAdminOf === 0) return global.msg.botAdmin;
 
     return null;
 }
