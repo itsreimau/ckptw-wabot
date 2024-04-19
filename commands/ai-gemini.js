@@ -30,6 +30,7 @@ module.exports = {
         }
 
         try {
+            ctx.reply(prompt);
             const apiUrl = createAPIUrl('otinxsandip', '/gemini', {
                 prompt: prompt
             });
