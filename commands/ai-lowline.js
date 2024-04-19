@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: 'lowline',
-    aliases: ['ai', 'll', 'gpt', 'chatai'],
+    aliases: ['ll'],
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');

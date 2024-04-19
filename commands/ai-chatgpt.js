@@ -8,6 +8,7 @@ const {
 
 module.exports = {
     name: 'chatgpt',
+    aliases: ['ai', 'chatai', 'gpt', 'gpt2'],
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -18,14 +19,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('ai_tools', '/gpt', {
+            const apiUrl = createAPIUrl('otinxsandip', '/gpt2', {
                 prompt: input,
                 uid: ctx._sender.jid.replace('@s.whatsapp.net', '')
             });
             const response = await fetch(apiUrl);
             const data = await response.json();
 
-            return ctx.reply(data.gpt4);
+            return ctx.reply(data);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

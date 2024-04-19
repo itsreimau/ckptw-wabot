@@ -3,9 +3,6 @@ const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
-    getImageLink
-} = require('../lib/simple.js');
-const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -26,12 +23,18 @@ module.exports = {
 
         try {
             const [emoji1, emoji2] = ctx._args;
-            const apiUrl = createAPIUrl('itzpire', `/maker/emojimix`, {
-                emoji1: emoji1,
-                emoji2: emoji2
+            const apiUrl = createAPIUrl('https://tenor.googleapis.com', `/v2/featured`, {
+                key: 'AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ',
+                contentfilter: 'high',
+                media_filter: 'png_transparent',
+                component: 'proactive',
+                collection: 'emoji_kitchen_v5',
+                q: `${emoji1}_${emoji2}`
             });
+            const response = await fetch(apiUrl);
+            const data = await response.json();
 
-            const sticker = new Sticker(apiUrl, {
+            const sticker = new Sticker(data.results[0].url, {
                 pack: global.sticker.packname,
                 author: global.sticker.author,
                 type: StickerTypes.FULL,
