@@ -13,7 +13,7 @@ module.exports = {
         const input = ctx._args.join(' ');
 
         let prompt;
-        const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        const quotedMessage = await ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
         if (quotedMessage && input) {
             prompt = `Previous message: ${quotedMessage.conversation || quotedMessage.caption}\n` +
