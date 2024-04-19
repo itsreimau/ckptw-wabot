@@ -20,12 +20,10 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        const readmore = '\u200E'.repeat(4001);
-
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} jelaskan gambar ini.`)}\n` +
-            `${readmore}\n` +
+            `${global.msg.readmore}\n` +
             'Catatan: AI ini dapat melihat gambar dan menjawab pertanyaan tentang gambar tersebut. Kirim gambar dan tanyakan apa saja!'
         );
 

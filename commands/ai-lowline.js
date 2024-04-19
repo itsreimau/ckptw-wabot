@@ -16,23 +16,14 @@ module.exports = {
         let prompt;
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
-        if (quotedMessage && input) {
-            prompt = `Previous message: ${quotedMessage.conversation || quotedMessage.caption}\n` +
-                `Message: ${input}`;
-        } else if (quotedMessage) {
-            prompt = quotedMessage;
-        } else if (input) {
-            prompt = input;
-        } else {
-            return ctx.reply(
-                `${global.msg.argument}\n` +
-                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
-            );
-        }
+        if (!input) return ctx.reply(
+            `${global.msg.argument}\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
+        );
 
         try {
             const res = await _ai.generatePlaintext({
-                prompt: prompt,
+                prompt: input,
             });
 
             await ctx.reply(res.result);

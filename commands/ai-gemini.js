@@ -12,27 +12,14 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        let prompt;
-        const quotedMessage = await ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
-
-        if (quotedMessage && input) {
-            prompt = `Previous message: ${quotedMessage.conversation || quotedMessage.caption}\n` +
-                `Message: ${input}`;
-        } else if (quotedMessage) {
-            prompt = quotedMessage;
-        } else if (input) {
-            prompt = input;
-        } else {
-            return ctx.reply(
-                `${global.msg.argument}\n` +
-                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
-            );
-        }
+        if (!input) return ctx.reply(
+            `${global.msg.argument}\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
+        );
 
         try {
-            ctx.reply(prompt);
             const apiUrl = createAPIUrl('otinxsandip', '/gemini', {
-                prompt: prompt
+                prompt: input
             });
             const response = await fetch(apiUrl);
             const data = await response.json();
