@@ -18,7 +18,7 @@ module.exports = {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
 
-            const buffer = (type === 'stickerMessage') ? await download(object, type.slice(0, -7));
+            const buffer = (type === 'stickerMessage') ? await download(object, 'sticker') : null;
 
             return ctx.reply({
                 video: buffer,
