@@ -18,7 +18,7 @@ module.exports = {
             group: true
         });
 
-        if (handlerObj.status) return ctx.reply(handlerObj.msg);
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;

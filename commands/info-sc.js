@@ -16,16 +16,16 @@ module.exports = {
 
         if (!data) return ctx.reply(global.msg.notFound);
 
-        const repo = data.items[0];
         return ctx.reply(
             `❖ ${bold('SC')}\n` +
             `\n` +
-            `➤ Nama: ${repo.name}\n` +
-            `➤ Deskripsi: ${repo.description}\n` +
-            `➤ Owner: ${repo.owner.login}\n` +
-            `➤ Dibuat: ${formatDate(repo.created_at)}\n` +
-            `➤ Bahasa: ${repo.language}\n` +
-            `➤ Lisensi: ${repo.license.name}\n` +
+            `➤ Nama: ${data.name}\n` +
+            `➤ URL: ${data.html_url}\n` +
+            `➤ Deskripsi: ${data.description}\n` +
+            `➤ Owner: ${data.owner.login}\n` +
+            `➤ Dibuat: ${formatDate(data.created_at)}\n` +
+            `➤ Bahasa: ${data.language}\n` +
+            `➤ Lisensi: ${data.license.name}\n` +
             `\n` +
             global.msg.footer
         )

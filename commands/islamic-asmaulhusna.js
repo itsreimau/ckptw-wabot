@@ -1,6 +1,6 @@
 const {
     asmaulhusna
-} = require('../data/asmaulhusna.json');
+} = require('../assets/json/asmaulhusna.json');
 const {
     bold,
     monospace
@@ -59,4 +59,4 @@ module.exports = {
             return ctx.reply(global.msg.notFound);
         }
     }
-}
+};

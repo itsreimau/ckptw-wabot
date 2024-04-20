@@ -14,7 +14,7 @@ module.exports = {
             group: true
         });
 
-        if (handlerObj.status) return ctx.reply(handlerObj.msg);
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         const input = ctx._args.join(' ');
 

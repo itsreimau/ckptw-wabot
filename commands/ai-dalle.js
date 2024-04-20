@@ -24,7 +24,7 @@ module.exports = {
             });
             const response = await fetch(apiUrl);
 
-            if (response.status === 400) new Error(global.msg.notFound);
+            if (response.status === 400) throw new Error(global.msg.notFound);
 
             await ctx.reply({
                 image: {

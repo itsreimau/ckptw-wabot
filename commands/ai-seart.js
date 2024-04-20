@@ -20,7 +20,7 @@ module.exports = {
         try {
             const result = await seaart(input);
 
-            if (!result) new Error(global.msg.notFound);
+            if (!result) throw new Error(global.msg.notFound);
 
             await ctx.reply({
                 image: {

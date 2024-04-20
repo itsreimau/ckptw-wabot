@@ -15,7 +15,7 @@ module.exports = {
             group: true
         });
 
-        if (handlerObj.status) return ctx.reply(handlerObj.msg);
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         try {
             const link = await ctx._client.groupInviteCode(ctx.id);
