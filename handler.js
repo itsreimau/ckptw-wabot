@@ -6,26 +6,26 @@ const smpl = require('./lib/simple.js');
  * @param {Object} options The given options.
  * @returns {Object} Object containing status and message if applicable, otherwise null.
  */
-exports.handler = (ctx, options) => {
+exports.handler = async (ctx, options) => {
     const checkOptions = {
         admin: {
-            function: () => smpl.isAdmin(ctx) === 0,
+            function: async () => await smpl.isAdmin(ctx) === 0,
             msg: global.msg.admin
         },
         botAdmin: {
-            function: () => smpl.isAdminOf(ctx) === 0,
+            function: async () => await smpl.isAdminOf(ctx) === 0,
             msg: global.msg.botAdmin
         },
         group: {
-            function: () => smpl.isGroup(ctx) === 0,
+            function: async () => await smpl.isGroup(ctx) === 0,
             msg: global.msg.group
         },
         owner: {
-            function: () => smpl.isOwner(ctx) === 0,
+            function: async () => await smpl.isOwner(ctx) === 0,
             msg: global.msg.owner
         },
         private: {
-            function: () => smpl.isPrivate(ctx) === 0,
+            function: async () => await smpl.isPrivate(ctx) === 0,
             msg: global.msg.private
         }
     };
@@ -35,7 +35,7 @@ exports.handler = (ctx, options) => {
 
     for (const option of Object.keys(options)) {
         const checkOption = checkOptions[option];
-        if (checkOption.function()) {
+        if (await checkOption.function()) {
             status = true;
             message = checkOption.msg;
             break;

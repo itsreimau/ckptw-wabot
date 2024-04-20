@@ -22,6 +22,7 @@ global.bot = {
 global.msg = {
     // Akses perintah
     admin: `${bold('[ ! ]')} Perintah hanya dapat diakses oleh admin grup!`,
+    botAdmin: `${bold('[ ! ]')} Bot bukan admin, tidak bisa menggunakan perintah!`,
     owner: `${bold('[ ! ]')} Perintah hanya dapat diakses Owner!`,
     group: `${bold('[ ! ]')} Perintah hanya dapat diakses dalam grup!`,
     private: `${bold('[ ! ]')} Perintah hanya dapat diakses dalam obrolan pribadi!`,
@@ -33,10 +34,11 @@ global.msg = {
 
     // Proses perintah
     argument: `${bold('[ ! ]')} Masukkan argumen!`,
-    botAdmin: `${bold('[ ! ]')} Bot bukan admin, tidak bisa menggunakan perintah!`,
-    notFound: `${bold('[ ! ]')} Tidak ada hasil yang ditemukan!`,
-    urlInvalid: `${bold('[ ! ]')} URL tidak valid!`,
-    wait: `${bold('[ ! ]')} Tunggu sebentar...`
+    wait: `${bold('[ ! ]')} Tunggu sebentar...`,
+
+    // Proses perintah (Kesalahan)
+    notFound: `Tidak ada yang ditemukan!`,
+    urlInvalid: `URL tidak valid!`
 };
 
 // Owner
