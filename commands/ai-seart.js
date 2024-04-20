@@ -1,14 +1,13 @@
 const {
-    createAPIUrl
-} = require('../lib/api.js');
+    seaart
+} = require('../lib/scraper.js');
 const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'pollinations',
-    aliases: ['poll'],
+    name: 'seaart',
     category: 'ai',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -19,16 +18,19 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('https://image.pollinations.ai', `/prompt/${input}`, {});
-            const response = await fetch(apiUrl);
+            const result = await seaart(input);
 
-            if (response.status === 400) new Error(global.msg.notFound);
+            if (!result) new Error(global.msg.notFound);
 
             await ctx.reply({
-                image: response.buffer(),
-                caption: `❖ ${bold('Pollinations')}\n` +
+                image: {
+                    url: result.banner.url
+                },
+                caption: `❖ ${bold('SeaArt')}\n` +
                     `\n` +
-                    `• Prompt: ${input}\n` +
+                    `• Prompt: ${result.prompt}\n` +
+                    `• Model ID: ${result.model_id}\n` +
+                    `• Author: ${result.author.name}\n` +
                     `\n` +
                     global.msg.footer
             });

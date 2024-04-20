@@ -1,8 +1,5 @@
 require('../config.js');
 const {
-    createAPIUrl
-} = require('../lib/api.js');
-const {
     download,
     getImageLink
 } = require('../lib/simple.js');
@@ -13,20 +10,12 @@ const {
 const {
     MessageType
 } = require('@mengkodingan/ckptw/lib/Constant');
+const jimp = require('jimp');
 
 module.exports = {
-    name: 'gemini2',
+    name: 'blur',
     category: 'ai',
     code: async (ctx) => {
-        const input = ctx._args.join(' ');
-
-        if (!input) return ctx.reply(
-            `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} jelaskan gambar ini.`)}\n` +
-            `${global.msg.readmore}\n` +
-            'Catatan: AI ini dapat melihat gambar dan menjawab pertanyaan tentang gambar tersebut. Kirim gambar dan tanyakan apa saja!'
-        );
-
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
@@ -38,18 +27,17 @@ module.exports = {
 
             const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
 
-            const imageLink = await getImageLink(buffer);
-            const apiUrl = createAPIUrl('sandipbaruwal', `/gemini2`, {
-                prompt: input,
-                url: imageLink
+            let level = ctx._args[0] || '5';
+            let img = await jimp.read(buffer);
+            img.blur(isNaN(level) ? 5 : parseInt(level));
+            img.getBuffer(jimp.MIME_JPEG, async (err, buffer) => {
+                if (err) throw new Error('Tidak dapat mengaburkan gambar!');
+
+                await ctx.reply({
+                    image: buffer,
+                    caption: null
+                });
             });
-            const response = await fetch(apiUrl);
-
-            if (response.status === 400) new Error(global.msg.notFound);
-
-            const data = await response.json();
-
-            return ctx.reply(data.answer);
         } catch (error) {
             console.error('Error', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

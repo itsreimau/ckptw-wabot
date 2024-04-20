@@ -12,20 +12,19 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        let prompt;
-        const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
-
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
         );
 
         try {
-            const apiUrl = createAPIUrl('otinxsandip', '/mistral', {
+            const apiUrl = createAPIUrl('sandipbaruwal', '/mistral', {
                 prompt: input
             });
             const response = await fetch(apiUrl);
             const data = await response.json();
+
+            if (response.status === 400) new Error(global.msg.notFound);
 
             return ctx.reply(data.answer);
         } catch (error) {

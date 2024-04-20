@@ -19,12 +19,15 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('otinxsandip', '/gpt2', {
+            const apiUrl = createAPIUrl('sandipbaruwal', '/gpt2', {
                 prompt: input,
                 uid: ctx._sender.jid.replace('@s.whatsapp.net', '')
             });
             const response = await fetch(apiUrl);
-            const data = await response.json();
+
+            if (response.status === 400) new Error(global.msg.notFound);
+
+            const data = await response.text();
 
             return ctx.reply(data);
         } catch (error) {

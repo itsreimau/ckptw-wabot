@@ -18,10 +18,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('otinxsandip', '/gemini', {
+            const apiUrl = createAPIUrl('sandipbaruwal', '/gemini', {
                 prompt: input
             });
             const response = await fetch(apiUrl);
+
+            if (response.status === 400) new Error(global.msg.notFound);
+
             const data = await response.json();
 
             return ctx.reply(data.answer);

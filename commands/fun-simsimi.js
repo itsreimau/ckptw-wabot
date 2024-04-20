@@ -19,11 +19,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('otinxsandip', '/sim', {
+            const apiUrl = createAPIUrl('sandipbaruwal', '/sim', {
                 chat: input,
                 lang: 'id'
             });
             const response = await fetch(apiUrl);
+
+            if (response.status === 500) new Error(global.msg.notFound);
+
             const data = await response.json();
 
             if (!data) return ctx.reply(global.msg.notFound);

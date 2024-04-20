@@ -13,9 +13,6 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
-        let prompt;
-        const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
-
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
