@@ -1,4 +1,7 @@
 const {
+    createAPIUrl
+} = require('../lib/api.js');
+const {
     bold
 } = require('@mengkodingan/ckptw');
 
@@ -28,3 +31,16 @@ module.exports = {
         )
     }
 };
+
+function formatDate(date, locale = 'id') {
+    const dt = new Date(date);
+    return dt.toLocaleDateString(locale, {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric'
+    });
+}
