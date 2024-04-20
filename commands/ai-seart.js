@@ -28,9 +28,9 @@ module.exports = {
                 },
                 caption: `❖ ${bold('SeaArt')}\n` +
                     `\n` +
-                    `• Prompt: ${result.prompt}\n` +
-                    `• Model ID: ${result.model_id}\n` +
-                    `• Author: ${result.author.name}\n` +
+                    `➤ Prompt: ${result.prompt}\n` +
+                    `➤ Model ID: ${result.model_id}\n` +
+                    `➤ Author: ${result.author.name}\n` +
                     `\n` +
                     global.msg.footer
             });

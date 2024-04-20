@@ -1,4 +1,3 @@
-require('../config.js');
 const {
     createAPIUrl
 } = require('../lib/api.js');
@@ -14,7 +13,7 @@ const {
 module.exports = {
     name: 'emix',
     aliases: ['emix'],
-    category: 'converter',
+    category: 'maker',
     code: async (ctx) => {
         if (!ctx._args.length) return ctx.reply(
             `${global.msg.argument}\n` +

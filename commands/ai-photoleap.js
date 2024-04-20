@@ -34,7 +34,7 @@ module.exports = {
                 },
                 caption: `❖ ${bold('Photoleap')}\n` +
                     `\n` +
-                    `• Prompt: ${input}\n` +
+                    `➤ Prompt: ${input}\n` +
                     `\n` +
                     global.msg.footer
             });

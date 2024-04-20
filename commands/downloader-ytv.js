@@ -37,8 +37,8 @@ module.exports = {
                 },
                 caption: `❖ ${bold('YT Video')}\n` +
                     `\n` +
-                    `• Judul: ${ytdl.title}\n` +
-                    `• Pilih kualitas:\n` +
+                    `➤ Judul: ${ytdl.title}\n` +
+                    `➤ Pilih kualitas:\n` +
                     `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join('\n')}\n` +
                     `\n` +
                     global.msg.footer
@@ -63,7 +63,7 @@ module.exports = {
                         },
                         caption: `❖ ${bold('YTV')}\n` +
                             `\n` +
-                            `• Kualitas: ${selectedQuality}\n` +
+                            `➤ Kualitas: ${selectedQuality}\n` +
                             `\n` +
                             global.msg.footer,
                         gifPlayback: false

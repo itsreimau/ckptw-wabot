@@ -27,7 +27,7 @@ module.exports = {
                 },
                 caption: `❖ ${bold('Google Image')}\n` +
                     `\n` +
-                    `• Kueri: ${input}\n` +
+                    `➤ Kueri: ${input}\n` +
                     `\n` +
                     global.msg.footer
             });

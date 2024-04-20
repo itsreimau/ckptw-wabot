@@ -1,4 +1,3 @@
-require('../config.js');
 const {
     download
 } = require('../lib/simple.js');

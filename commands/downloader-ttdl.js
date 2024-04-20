@@ -30,7 +30,7 @@ module.exports = {
                 },
                 caption: `❖ ${bold('TT Downloader')}\n` +
                     `\n` +
-                    `• URL: ${input}\n` +
+                    `➤ URL: ${input}\n` +
                     `\n` +
                     global.msg.footer,
                 gifPlayback: false

@@ -26,13 +26,13 @@ module.exports = {
                     case 'video':
                         const views = String(r.views).padStart(10, ' ')
                         return `${bold(`${r.title} (${r.url})`)}\n` +
-                            `• Durasi: ${r.timestamp}\n` +
-                            `• Diunggah: ${r.ago}\n` +
-                            `• Dilihat: ${views}`
+                            `➤ Durasi: ${r.timestamp}\n` +
+                            `➤ Diunggah: ${r.ago}\n` +
+                            `➤ Dilihat: ${views}`
                     case 'channel':
                         return `${bold(`${r.name} (${r.url})`)}\n` +
-                            `• Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
-                            `• Jumlah rideo: ${r.rideoCount}`
+                            `➤ Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
+                            `➤ Jumlah rideo: ${r.rideoCount}`
                 }
             }).filter(r => r).join('\n-----\n')
             return ctx.reply(

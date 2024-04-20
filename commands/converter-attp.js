@@ -1,4 +1,3 @@
-require('../config.js');
 const {
     createAPIUrl
 } = require('../lib/api.js');

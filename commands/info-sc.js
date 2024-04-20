@@ -1,4 +1,3 @@
-require('./config.js');
 const {
     bold
 } = require('@mengkodingan/ckptw');
@@ -18,12 +17,12 @@ module.exports = {
         return ctx.reply(
             `❖ ${bold('SC')}\n` +
             `\n` +
-            `• Nama: ${repo.name}\n` +
-            `• Deskripsi: ${repo.description}\n` +
-            `• Owner: ${repo.owner.login}\n` +
-            `• Dibuat: ${formatDate(repo.created_at)}\n` +
-            `• Bahasa: ${repo.language}\n` +
-            `• Lisensi: ${repo.license.name}\n` +
+            `➤ Nama: ${repo.name}\n` +
+            `➤ Deskripsi: ${repo.description}\n` +
+            `➤ Owner: ${repo.owner.login}\n` +
+            `➤ Dibuat: ${formatDate(repo.created_at)}\n` +
+            `➤ Bahasa: ${repo.language}\n` +
+            `➤ Lisensi: ${repo.license.name}\n` +
             `\n` +
             global.msg.footer
         )

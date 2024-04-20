@@ -29,7 +29,7 @@ module.exports = {
                 },
                 caption: `❖ ${bold('Pinterest')}\n` +
                     `\n` +
-                    `• Kueri: ${input}\n` +
+                    `➤ Kueri: ${input}\n` +
                     `\n` +
                     global.msg.footer
             });

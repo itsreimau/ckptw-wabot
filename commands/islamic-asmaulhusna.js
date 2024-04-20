@@ -19,10 +19,10 @@ module.exports = {
 
         if (input.toLowerCase() === 'all') {
             const data = asmaulhusna.map((v) =>
-                `• Nomor: ${v.urutan}\n` +
-                `• Latin: ${v.latin}\n` +
-                `• Arab: ${v.arab}\n` +
-                `• Arti: ${v.arti}`
+                `➤ Nomor: ${v.urutan}\n` +
+                `➤ Latin: ${v.latin}\n` +
+                `➤ Arab: ${v.arab}\n` +
+                `➤ Arti: ${v.arti}`
             ).join('\n-----\n');
             return ctx.reply(
                 `❖ ${bold('Asmaul Husna')}\n` +
@@ -47,10 +47,10 @@ module.exports = {
             return ctx.reply(
                 `❖ ${bold('Asmaul Husna')}\n` +
                 `\n` +
-                `• Nomor: ${index}\n` +
-                `• Latin: ${latin}\n` +
-                `• Arab: ${arab}\n` +
-                `• Arti: ${arti}\n` +
+                `➤ Nomor: ${index}\n` +
+                `➤ Latin: ${latin}\n` +
+                `➤ Arab: ${arab}\n` +
+                `➤ Arti: ${arti}\n` +
                 `\n` +
                 global.msg.footer
 

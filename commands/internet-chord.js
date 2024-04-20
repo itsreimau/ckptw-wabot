@@ -25,9 +25,9 @@ module.exports = {
             return ctx.reply(
                 `❖ ${bold('Chord')}\n` +
                 `\n` +
-                `• Judul: ${result.title.replace('Chords', '').trim()} (${result.url})\n` +
-                `• Artis: ${result.artist.replace('‣', '').trim()} (${result.artistUrl})\n` +
-                `• Akord:\n` +
+                `➤ Judul: ${result.title.replace('Chords', '').trim()} (${result.url})\n` +
+                `➤ Artis: ${result.artist.replace('‣', '').trim()} (${result.artistUrl})\n` +
+                `➤ Akord:\n` +
                 `${result.chord}\n` +
                 `\n` +
                 global.msg.footer

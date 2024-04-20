@@ -38,14 +38,14 @@ module.exports = {
                 },
                 caption: `❖ ${bold('Anime Info')}\n` +
                     `\n` +
-                    `• Judul: ${info.title}\n` +
-                    `• Judul (Inggris): ${info.title_english}\n` +
-                    `• Judul (Jepang): ${info.title_japanese}\n` +
-                    `• Tipe: ${info.type}\n` +
-                    `• Episode: ${info.episodes}\n` +
-                    `• Durasi: ${info.duration}\n` +
-                    `• Ringkasan: ${synopsisId.translation}\n` +
-                    `• URL: ${info.url}\n` +
+                    `➤ Judul: ${info.title}\n` +
+                    `➤ Judul (Inggris): ${info.title_english}\n` +
+                    `➤ Judul (Jepang): ${info.title_japanese}\n` +
+                    `➤ Tipe: ${info.type}\n` +
+                    `➤ Episode: ${info.episodes}\n` +
+                    `➤ Durasi: ${info.duration}\n` +
+                    `➤ Ringkasan: ${synopsisId.translation}\n` +
+                    `➤ URL: ${info.url}\n` +
                     `\n` +
                     global.msg.footer
             });
