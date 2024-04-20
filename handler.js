@@ -7,20 +7,19 @@ const smpl = require('./lib/simple.js');
  * @returns {string|null} Message if applicable, otherwise null.
  */
 exports.handler = (ctx, options) => {
-    const isPrivate = smpl.isPrivate(ctx);
-    if (options.private && isPrivate === 0) return global.msg.private;
+    const checkFunctions = {
+        private: () => smpl.isPrivate(ctx) === 0,
+        group: () => smpl.isGroup(ctx) === 0,
+        owner: () => smpl.isOwner(ctx) === 0,
+        admin: () => smpl.isAdmin(ctx) === 0,
+        botAdmin: () => smpl.isAdminOf(ctx) === 0
+    };
 
-    const isGroup = smpl.isGroup(ctx);
-    if (options.group && isGroup === 0) return global.msg.group;
-
-    const isOwner = smpl.isOwner(ctx);
-    if (options.owner && isOwner === 0) return global.msg.owner;
-
-    const isAdmin = smpl.isAdmin(ctx);
-    if (options.admin && isAdmin === 0) return global.msg.admin;
-
-    const isAdminOf = smpl.isAdminOf(ctx);
-    if (options.botAdmin && isAdminOf === 0) return global.msg.botAdmin;
+    for (const option of Object.keys(options)) {
+        if (checkFunctions[option] && checkFunctions[option]()) {
+            return global.msg[option];
+        }
+    }
 
     return null;
 }
