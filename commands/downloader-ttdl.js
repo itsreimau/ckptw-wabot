@@ -16,10 +16,13 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
         );
 
+        const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+        if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
+
         try {
             const result = await fg.tiktok(input);
 
-            if (!result.hdplay || !result.play) return ctx.reply(global.msg.urlInvalid);
+            if (!result.hdplay || !result.play) return ctx.reply(global.msg.notFound);
 
             await ctx.reply({
                 video: {

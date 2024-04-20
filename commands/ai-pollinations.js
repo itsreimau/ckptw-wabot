@@ -25,7 +25,9 @@ module.exports = {
             if (response.status === 400) new Error(global.msg.notFound);
 
             await ctx.reply({
-                image: response.buffer(),
+                image: {
+                    url: apiUrl
+                },
                 caption: `❖ ${bold('Pollinations')}\n` +
                     `\n` +
                     `• Prompt: ${input}\n` +
