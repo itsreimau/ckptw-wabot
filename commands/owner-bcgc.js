@@ -14,11 +14,11 @@ module.exports = {
     aliases: ['broadcastgc'],
     category: 'owner',
     code: async (ctx) => {
-        const handlerMsg = handler(ctx, {
+        const handlerObj = handler(ctx, {
             owner: true
         });
 
-        if (handlerMsg) return ctx.reply(handlerMsg);
+        if (handlerObj.status) return ctx.reply(handlerObj.msg);
 
         const input = ctx._args.join(' ');
 

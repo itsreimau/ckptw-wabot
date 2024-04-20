@@ -9,12 +9,12 @@ module.exports = {
     name: 'hidetag',
     category: 'group',
     code: async (ctx) => {
-        const handlerMsg = handler(ctx, {
+        const handlerObj = handler(ctx, {
             admin: true,
             group: true
         });
 
-        if (handlerMsg) return ctx.reply(handlerMsg);
+        if (handlerObj.status) return ctx.reply(handlerObj.msg);
 
         const input = ctx._args.join(' ');
 
