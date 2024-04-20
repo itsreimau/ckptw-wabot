@@ -11,8 +11,7 @@ module.exports = {
     code: async (ctx) => {
         const handlerMsg = handler(ctx, {
             admin: true,
-            group: true,
-            owner: true
+            group: true
         });
 
         if (handlerMsg) return ctx.reply(handlerMsg);

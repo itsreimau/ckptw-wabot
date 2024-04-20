@@ -13,8 +13,7 @@ module.exports = {
         const handlerMsg = handler(ctx, {
             admin: true,
             botAdmin: true,
-            group: true,
-            owner: true
+            group: true
         });
 
         if (handlerMsg) return ctx.reply(handlerMsg);
@@ -28,11 +27,11 @@ module.exports = {
 
         try {
             const isClose = {
-                'open': false,
-                'close': true
-            } [(input || '')]
+                'open': 'not_announcement',
+                'close': 'announcement'
+            } [input];
 
-            if (isClose === undefined) return ctx.reply(`${bold('[ ! ]')} Argumen yang tersedia adalah open dan close.`);
+            if (!isClose) return ctx.reply(`${bold('[ ! ]')} Argumen yang tersedia adalah open dan close.`);
 
             await ctx._client.groupSettingUpdate(ctx.id, isClose);
 

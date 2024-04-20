@@ -13,8 +13,7 @@ module.exports = {
         const handlerMsg = handler(ctx, {
             admin: true,
             botAdmin: true,
-            group: true,
-            owner: true
+            group: true
         });
 
         if (handlerMsg) return ctx.reply(handlerMsg);
