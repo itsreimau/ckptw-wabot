@@ -35,7 +35,7 @@ module.exports = {
 
             if (await isAdmin(ctx, member.split('@')[0]) === 0) throw new Error('Anggota ini adalah anggota biasa.');
 
-            await ctx.conn.groupParticipantsUpdate(ctx.id, [member], 'demote');
+            await ctx._client.groupParticipantsUpdate(ctx.id, [member], 'demote');
 
             return ctx.reply(`${bold('[ ! ]')} Berhasil diturunkan dari admin menjadi anggota biasa!`);
         } catch (error) {
