@@ -4,6 +4,9 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw');
+const {
+    exec
+} = require('child_process');
 
 module.exports = {
     name: '$',
