@@ -28,7 +28,7 @@ module.exports = {
 
             const data = await response.json();
 
-            await ctx.reply({
+            return await ctx.reply({
                 image: {
                     url: data.result_url
                 },

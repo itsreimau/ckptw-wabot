@@ -14,7 +14,7 @@ module.exports = {
     aliases: ['broadcastgc'],
     category: 'owner',
     code: async (ctx) => {
-        const handlerObj = handler(ctx, {
+        const handlerObj = await handler(ctx, {
             owner: true
         });
 

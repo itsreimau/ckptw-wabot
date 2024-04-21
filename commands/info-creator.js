@@ -14,7 +14,7 @@ module.exports = {
             .setNumber(global.owner.number)
             .build();
 
-        await ctx.reply({
+        return await ctx.reply({
             contacts: {
                 displayName: global.owner.name,
                 contacts: [{

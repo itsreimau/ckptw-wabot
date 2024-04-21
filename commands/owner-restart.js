@@ -20,7 +20,7 @@ module.exports = {
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         try {
-            await ctx.reply(global.msg.wait);
+            return await ctx.reply(global.msg.wait);
 
             exec(`pm2 restart rei-ayanami -- "if (Date.now()-${Date.now()}<60_000) ctx.sendMessage('${ctx.room}', { text: '${bold('[ ! ]')} Berhasil memulai ulang bot.' })"`); // PM2
         } catch (error) {

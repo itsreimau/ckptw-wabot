@@ -21,6 +21,9 @@ module.exports = {
 
         try {
             const search = await yts(input);
+
+            if (!search) throw new Error(global.msg.notFound);
+
             const yt = search.videos[0];
 
             await ctx.reply({
@@ -46,10 +49,11 @@ module.exports = {
             }
 
             const audio = Object.values(ytdl.audio)[0];
-
             const audiodl = await audio.download();
 
-            await ctx.reply({
+            if (!audiodl) throw new Error(global.msg.notFound);
+
+            return await ctx.reply({
                 audio: {
                     url: audiodl
                 },

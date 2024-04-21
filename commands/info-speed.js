@@ -13,7 +13,7 @@ module.exports = {
             const pOld = performance.now();
             const res = await ctx.reply('Menguji kecepatan...');
             const speed = (performance.now() - pOld).toFixed(2);
-            ctx.editMessage(res.key, `Merespon dalam ${speed} ms.`);
+            return ctx.editMessage(res.key, `Merespon dalam ${speed} ms.`);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

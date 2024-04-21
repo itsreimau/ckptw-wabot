@@ -9,7 +9,7 @@ module.exports = {
     name: 'hidetag',
     category: 'group',
     code: async (ctx) => {
-        const handlerObj = handler(ctx, {
+        const handlerObj = await handler(ctx, {
             admin: true,
             group: true
         });

@@ -10,7 +10,7 @@ module.exports = {
     aliases: ['gclink', 'grouplink'],
     category: 'group',
     code: async (ctx) => {
-        const handlerObj = handler(ctx, {
+        const handlerObj = await handler(ctx, {
             botAdmin: true,
             group: true
         });

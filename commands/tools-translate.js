@@ -20,7 +20,7 @@ module.exports = {
             const [lang, ...inp] = ctx._args;
             const result = await translate(inp.join(' '), null, lang);
 
-            await ctx.reply(result.translation);
+            return await ctx.reply(result.translation);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

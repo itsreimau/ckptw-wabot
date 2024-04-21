@@ -23,7 +23,7 @@ module.exports = {
                 prompt: input,
             });
 
-            await ctx.reply(res.result);
+            return await ctx.reply(res.result);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

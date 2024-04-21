@@ -32,7 +32,7 @@ module.exports = {
             img.getBuffer(jimp.MIME_JPEG, async (err, buffer) => {
                 if (err) throw new Error('Tidak dapat mengaburkan gambar!');
 
-                await ctx.reply({
+                return await ctx.reply({
                     image: buffer,
                     caption: null
                 });

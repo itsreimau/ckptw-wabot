@@ -57,7 +57,7 @@ module.exports = {
                     const downloadFunction = ytdl.audio[selectedQuality].download;
                     ctx.react(ctx.id, '🔄', res.key);
                     const url = await downloadFunction();
-                    ctx.reply({
+                    return await ctx.reply({
                         audio: {
                             url: url
                         },

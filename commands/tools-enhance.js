@@ -37,7 +37,7 @@ module.exports = {
             const response = await fetch(apiUrl);
             const data = await response.json();
 
-            await ctx.reply({
+            return await ctx.reply({
                 image: {
                     url: data.result.img
                 },

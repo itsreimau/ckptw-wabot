@@ -10,7 +10,7 @@ module.exports = {
     name: 'setdesc',
     category: 'group',
     code: async (ctx) => {
-        const handlerObj = handler(ctx, {
+        const handlerObj = await handler(ctx, {
             admin: true,
             botAdmin: true,
             group: true

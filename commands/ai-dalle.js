@@ -26,7 +26,7 @@ module.exports = {
 
             if (response.status === 400) throw new Error(global.msg.notFound);
 
-            await ctx.reply({
+            return await ctx.reply({
                 image: {
                     url: apiUrl
                 },

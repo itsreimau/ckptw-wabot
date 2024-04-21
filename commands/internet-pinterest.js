@@ -23,7 +23,7 @@ module.exports = {
 
             if (!result) return ctx.reply(global.msg.notFound);
 
-            await ctx.reply({
+            return await ctx.reply({
                 image: {
                     url: result
                 },
