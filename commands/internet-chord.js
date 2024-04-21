@@ -20,14 +20,14 @@ module.exports = {
         try {
             const result = await chord(input);
 
-            if (!result) return ctx.reply(global.msg.notFound);
+            if (!result) throw new Error(global.msg.notFound);
 
             return ctx.reply(
                 `❖ ${bold('Chord')}\n` +
                 `\n` +
                 `➤ Judul: ${result.title.replace('Chords', '').trim()} (${result.url})\n` +
                 `➤ Artis: ${result.artist.replace('‣', '').trim()} (${result.artistUrl})\n` +
-                `➤ Akord:\n` +
+                '-----\n' +
                 `${result.chord}\n` +
                 `\n` +
                 global.msg.footer

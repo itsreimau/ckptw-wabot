@@ -14,7 +14,7 @@ module.exports = {
         const response = await fetch(apiUrl);
         const data = await response.json();
 
-        if (!data) return ctx.reply(global.msg.notFound);
+        if (!data) throw new Error(global.msg.notFound);
 
         return ctx.reply(
             `❖ ${bold('SC')}\n` +

@@ -1,23 +1,24 @@
 const {
+    flaticon
+} = require('../lib/scraper.js');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
-const fg = require('api-dylux');
 
 module.exports = {
-    name: 'googleimage',
-    aliases: ['gimage'],
+    name: 'flaticon',
     category: 'internet',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} rei ayanami`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`
         );
 
         try {
-            const result = await fg.googleImage(input);
+            const result = await flaticon(input);
 
             if (!result) throw new Error(global.msg.notFound);
 
@@ -25,7 +26,7 @@ module.exports = {
                 image: {
                     url: getRandomElement(result)
                 },
-                caption: `❖ ${bold('Google Image')}\n` +
+                caption: `❖ ${bold('Flaticon')}\n` +
                     `\n` +
                     `➤ Kueri: ${input}\n` +
                     `\n` +

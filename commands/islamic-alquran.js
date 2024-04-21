@@ -32,14 +32,14 @@ module.exports = {
 
             const data = await fetchData(suraNumber, ayaNumber);
             if (!data) {
-                return ctx.reply(global.msg.notFound);
+                throw new Error(global.msg.notFound);
             }
 
             return ctx.reply(formatAya(data));
         } else {
             const data = await fetchData(suraNumber);
             if (!data) {
-                return ctx.reply(global.msg.notFound);
+                throw new Error(global.msg.notFound);
             }
 
             return ctx.reply(formatSura(data));

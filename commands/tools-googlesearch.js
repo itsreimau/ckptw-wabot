@@ -1,5 +1,5 @@
 const {
-    alkitab
+    googlesearch
 } = require('../lib/scraper.js');
 const {
     bold,
@@ -7,28 +7,29 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'alkitab',
-    aliases: ['injil'],
-    category: 'internet',
+    name: 'googlesearch',
+    aliases: ['google'],
+    category: 'tools',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kejadian`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
         );
 
         try {
-            const result = await alkitab(input);
+            const result = await googlesearch(input);
 
             if (!result) throw new Error(global.msg.notFound);
 
             const resultText = result.map(r =>
-                `➤ ${r.title}\n` +
-                `➤ ${r.text}`
+                `➤ Judul: ${r.title}\n` +
+                `➤ Deskripsi: ${r.snippet}` +
+                `➤ URL: ${r.url}`
             ).join('\n-----\n');
             return ctx.reply(
-                `❖ ${bold('Alkitab')}\n` +
+                `❖ ${bold('Google Search')}\n` +
                 `\n` +
                 resultText +
                 `\n` +

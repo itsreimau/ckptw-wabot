@@ -35,7 +35,7 @@ module.exports = {
 
             if (await isAdmin(ctx, member.split('@')[0]) === 1) throw new Error('Anggota ini adalah admin grup.');
 
-            await ctx._client.groupParticipantsUpdate(ctx.id, [member], 'remove');
+            await ctx._client.groupParticipantsUpdate(ctx.id, member, 'remove');
 
             return ctx.reply(`${bold('[ ! ]')} Berhasil dikeluarkan!`);
         } catch (error) {

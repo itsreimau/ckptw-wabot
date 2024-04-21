@@ -28,7 +28,7 @@ module.exports = {
             const response = await fetch(apiUrl);
             const data = await response.json();
 
-            if (!data) return ctx.reply(global.msg.notFound);
+            if (!data) throw new Error(global.msg.notFound);
 
             const info = data.data[0];
             const synopsisId = await translate(info.synopsis, 'en', 'id');

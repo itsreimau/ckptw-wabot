@@ -1,5 +1,5 @@
 const {
-    hander
+    handler
 } = require('../handler.js');
 const {
     bold,

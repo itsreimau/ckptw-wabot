@@ -56,7 +56,7 @@ module.exports = {
 
             );
         } else {
-            return ctx.reply(global.msg.notFound);
+            throw new Error(global.msg.notFound);
         }
     }
 };

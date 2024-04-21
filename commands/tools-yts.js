@@ -19,7 +19,7 @@ module.exports = {
         try {
             const result = await yts(input)
 
-            if (!result) return ctx.reply(global.msg.notFound);
+            if (!result) throw new Error(global.msg.notFound);
 
             const resultText = result.all.map(r => {
                 switch (r.type) {
@@ -34,14 +34,14 @@ module.exports = {
                             `➤ Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
                             `➤ Jumlah rideo: ${r.rideoCount}`
                 }
-            }).filter(r => r).join('\n-----\n')
+            }).filter(r => r).join('\n-----\n');
             return ctx.reply(
                 `${bold('❖ YT Search')}\n` +
                 `\n` +
                 `${resultText}\n` +
                 `\n` +
                 global.msg.footer
-            )
+            );
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

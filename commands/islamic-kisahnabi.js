@@ -18,7 +18,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('https://raw.githubusercontent.com', `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input}.json`, {});
+            const apiUrl = createAPIUrl('https://raw.githubusercontent.com', `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${toLowerCase(input)}.json`, {});
             const response = await fetch(apiUrl);
 
             if (response.status === 404) throw new Error(global.msg.notFound);
@@ -33,7 +33,7 @@ module.exports = {
                 `➤ Tempat kelahiran: ${data.tmp}\n` +
                 `➤ Usia: ${data.usia}\n` +
                 '-----\n' +
-                `${data.description}\n` +
+                `${data.description.trim()}\n` +
                 `\n` +
                 global.msg.footer
             );

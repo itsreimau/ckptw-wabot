@@ -16,7 +16,7 @@ module.exports = {
             const data = await response.json();
             const imageUrl = data.data.url;
 
-            if (!imageUrl) return ctx.reply(global.msg.notFound);
+            if (!imageUrl) throw new Error(global.msg.notFound);
 
             return ctx.reply({
                 image: {
