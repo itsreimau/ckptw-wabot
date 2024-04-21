@@ -1,15 +1,15 @@
 const {
-    smpl
+    isOwner
 } = require('../lib/simple.js');
 const {
     bold
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: />{1,2}/i,
+    name: '$',
     type: 'hears',
     code: async (ctx) => {
-        if (smpl.isOwner(ctx) === 0) return;
+        if (isOwner(ctx) === 0) return;
 
         const command = m.content.slice(2);
 

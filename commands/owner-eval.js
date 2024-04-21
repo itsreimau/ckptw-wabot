@@ -1,5 +1,5 @@
 const {
-    smpl
+    isOwner
 } = require('../lib/simple.js');
 const {
     bold
@@ -9,7 +9,7 @@ module.exports = {
     name: />{1,2}/i,
     type: 'hears',
     code: async (ctx) => {
-        if (smpl.isOwner(ctx) === 0) return;
+        if (isOwner(ctx) === 0) return;
 
         const code = m.content.slice(2);
 
