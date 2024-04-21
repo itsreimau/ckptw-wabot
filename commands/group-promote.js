@@ -33,7 +33,7 @@ module.exports = {
         try {
             if (await isAdmin(ctx, member.split('@')[0]) === 1) throw new Error('Anggota ini adalah admin grup.');
 
-            await ctx._client.groupParticipantsUpdate(ctx.id, member, 'demote');
+            await ctx._client.groupParticipantsUpdate(ctx.id, [member], 'demote');
 
             return ctx.reply(`${bold('[ ! ]')} Berhasil ditingkatkan dari anggota biasa menjadi admin!`);
         } catch (error) {
