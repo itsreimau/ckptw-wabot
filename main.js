@@ -61,26 +61,24 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             ctx.simulateTyping(); // atau ctx.simulateRecording() jika Anda ingin 'sedang merekam suara...'
         }
 
-        if (smpl.isGroup(ctx) === 1) {
-            // AFK
-            const getMentionData = afk.get(m.message.extendedTextMessage.contextInfo.mentionedJid);
-            if (getMentioned) {
-                const [timestamp, reason] = getMentionData;
-                const timeago = moment(timestamp).fromNow();
-                ctx.reply({
-                    text: `${ctx._sender.jid.split('@')[0]} AFK sekarang, Alasan: ${reason} ${timeago}`,
-                    mentions: ctx.getMentioned()
-                });
-            }
+        // AFK
+        const getMentionData = afk.get(m.message?.extendedTextMessage?.contextInfo?.mentionedJid);
+        if (getMentioned) {
+            const [timestamp, reason] = getMentionData;
+            const timeago = moment(timestamp).fromNow();
+            ctx.reply({
+                text: `${ctx._sender.jid.split('@')[0]} AFK sekarang, Alasan: ${reason} ${timeago}`,
+                mentions: ctx.getMentioned()
+            });
+        }
 
-            const getMessageData = afk.get(m.key.participant);
-            if (getMessageData) {
-                afk.delete(ctx._sender.jid);
-                ctx.reply({
-                    text: `${ctx._sender.jid.split('@')[0]}, mengeluarkan Anda dari AFK.`,
-                    mentions: ctx.getMentioned()
-                });
-            }
+        const getMessageData = afk.get(m.key.participant);
+        if (getMessageData) {
+            afk.delete(ctx._sender.jid);
+            ctx.reply({
+                text: `${ctx._sender.jid.split('@')[0]}, mengeluarkan Anda dari AFK.`,
+                mentions: ctx.getMentioned()
+            });
         }
 
         // Owner-only

@@ -17,7 +17,7 @@ module.exports = {
 
             return ctx.reply({
                 text: `${ctx._sender.jid.split('@')[0]} sekarang afk!\n` +
-                    `Alasan: ${reason}`,
+                    `Alasan: ${input || 'Tanpa alasan'}`,
                 mentions: ctx.getMentioned()
             });
         } catch (error) {
