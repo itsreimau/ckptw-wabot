@@ -62,11 +62,16 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // AFK
-        const getMentionData = afk.get(m.message?.extendedTextMessage?.contextInfo?.mentionedJid);
-        if (getMentionData) {
-            const [timestamp, reason] = getMentionData;
-            const timeago = moment(timestamp).fromNow();
-            ctx.reply(`Dia AFK ${alasan ? 'dengan alasan' + alasan : 'tanpa alasan'} selama ${timeago}`);
+        const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+        if (mentionJids && mentionJids.length > 0) {
+            mentionJids.forEach(mentionJid => {
+                const getMentionData = afk.get(mentionJid);
+                if (getMentionData) {
+                    const [timestamp, reason] = getMentionData;
+                    const timeago = moment(timestamp).fromNow();
+                    ctx.reply(`Dia AFK ${reason ? 'dengan alasan ' + reason : 'tanpa alasan'} selama ${timeago}`);
+                }
+            });
         }
 
         const getMessageData = afk.get(m.key.participant);
