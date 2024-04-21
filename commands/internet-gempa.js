@@ -11,8 +11,7 @@ module.exports = {
     aliases: ['gempabumi'],
     category: 'internet',
     code: async (ctx) => {
-        const bmkgUrl = 'https://data.bmkg.go.id/DataMKG/TEWS/';
-        const apiUrl = await createAPIUrl(bmkgUrl, 'autogempa.json', {});
+        const apiUrl = await createAPIUrl('https://data.bmkg.go.id', '/DataMKG/TEWS/autogempa.json', {});
 
         try {
             const response = await fetch(apiUrl);
@@ -22,7 +21,7 @@ module.exports = {
 
             return await ctx.reply({
                 image: {
-                    url: bmkgUrl + data.Shakemap
+                    url: `https://data.bmkg.go.id/DataMKG/TEWS/${data.Shakemap}`
                 },
                 caption: `❖ ${bold('Gempa Bumi')}\n` +
                     `\n` +
