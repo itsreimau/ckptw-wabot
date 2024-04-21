@@ -1,3 +1,4 @@
+const economyConfig = require('./economy.config.js');
 const smpl = require('./lib/simple.js');
 const {
     bold,
@@ -14,22 +15,15 @@ const {
 const {
     afk
 } = require('discord-afk-js');
-const {
-    _ai
-} = require('lowline.ai');
 const moment = require('moment-timezone');
 const path = require('path');
 const {
     inspect
 } = require('util');
 
-_ai.init({
-    apiKey: global.apiKey.lowline
-});
-
 console.log('Connecting...');
 
-// Membuat instance bot baru
+// Create a new bot instance.
 const bot = new Client({
     name: global.bot.name,
     prefix: global.bot.prefix,
@@ -37,31 +31,31 @@ const bot = new Client({
     readIncommingMsg: true
 });
 
-// Penanganan event saat bot siap
+// Event handling when the bot is ready.
 bot.ev.once(Events.ClientReady, (m) => {
     console.log(`Ready at ${m.user.id}`);
     global.system.startTime = Date.now();
 });
 
-// Menangani uncaughtExceptions
+// Handle uncaughtExceptions.
 process.on('uncaughtException', (err) => console.error(err));
 
-// Membuat handler perintah dan memuat perintah-perintah
+// Create command handlers and load commands.
 const cmd = new CommandHandler(bot, path.resolve(__dirname, 'commands'));
 cmd.load();
 
-// Penanganan event saat pesan muncul
+// Event handling when the message appears.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     try {
-        // Memeriksa pesan
+        // Checking messages.
         if (!m.content || m.key.fromMe) return;
 
-        // Auto-typing
+        // Auto-typing.
         if (smpl.isCmd(m, ctx)) {
-            ctx.simulateTyping(); // atau ctx.simulateRecording() jika Anda ingin 'sedang merekam suara...'
+            ctx.simulateTyping(); // ctx.simulateRecording();
         }
 
-        // AFK
+        // AFK.
         const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         if (mentionJids && mentionJids.length > 0) {
             mentionJids.forEach(mentionJid => {
@@ -82,9 +76,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             ctx.reply(`Anda mengakhiri AFK${reason ? ` setelah ${reason}` : ''} selama ${timeago}.`);
         }
 
-        // Owner-only
+        // Owner-only.
         if (smpl.isOwner(ctx) === 1) {
-            // Eval
+            // Eval.
             if (m.content.startsWith('> ') || m.content.startsWith('>> ')) {
                 const code = m.content.slice(2);
 
@@ -92,7 +86,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 await ctx.reply(inspect(result));
             }
 
-            // Exec
+            // Exec.
             if (m.content.startsWith('$ ')) {
                 const command = m.content.slice(2);
 
@@ -117,5 +111,5 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 });
 
-// Menjalankan bot
+// Launching bot.
 bot.launch().catch((error) => console.error('Error:', error));

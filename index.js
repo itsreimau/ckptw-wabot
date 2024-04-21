@@ -4,14 +4,14 @@ const CFonts = require('cfonts');
 
 console.log('Starting...');
 
-// Menampilkan judul menggunakan CFonts
+// Display title using CFonts.
 CFonts.say(package.name, {
     font: 'chrome',
     align: 'center',
     gradient: ['red', 'magenta']
 });
 
-// Menampilkan informasi paket
+// Displays package information
 const authorName = package.author.name || package.author;
 CFonts.say(
     `'${package.description}'\n` +
@@ -21,5 +21,5 @@ CFonts.say(
         gradient: ['red', 'magenta']
     });
 
-// Mengimpor dan menjalankan modul utama
+// Import and run the main module
 require('./main.js');
