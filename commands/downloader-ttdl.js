@@ -20,13 +20,14 @@ module.exports = {
             const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
             if (!urlRegex.test(input)) throw new Error(global.msg.urlInvalid);
 
-            const result = await fg.tiktok(input);
+            const data = await fg.tiktok(input);
+            const result = data.result;
 
-            if (!result.hdplay || !result.play) throw new Error(global.msg.notFound);
+            if (!result.play) throw new Error(global.msg.notFound);
 
             return await ctx.reply({
                 video: {
-                    url: result.hdplay || result.play
+                    url: result.play
                 },
                 caption: `❖ ${bold('TT Downloader')}\n` +
                     `\n` +

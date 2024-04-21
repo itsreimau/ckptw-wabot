@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require('../lib/api.js');
-const {
     handler
 } = require('../handler.js');
 const {
