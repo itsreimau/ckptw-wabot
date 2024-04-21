@@ -21,7 +21,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const mentionedJids = ctx._msg.message.extendedTextMessage.contextInfo.mentionedJid;
+        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const member = mentionedJids.length > 0 ? mentionedJids[0] : null;
 
         if (!member) return ctx.reply({
