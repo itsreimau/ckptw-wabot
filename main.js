@@ -76,7 +76,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         const getMessageData = afk.get(m.key.participant);
         if (getMessageData) {
-            const [timestamp, reason] = getMentionData;
+            const [timestamp, reason] = getMessageData;
             const timeago = moment(timestamp).fromNow();
             afk.delete(ctx._sender.jid);
             ctx.reply(`Anda mengakhiri AFK${reason ? ` setelah ${reason}` : ''} selama ${timeago}.`);
