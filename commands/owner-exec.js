@@ -11,7 +11,7 @@ module.exports = {
     code: async (ctx) => {
         if (isOwner(ctx) === 0) return;
 
-        const command = m.content.slice(2);
+        const command = ctx_msg.content.slice(2);
 
         try {
             const output = await new Promise((resolve, reject) => {

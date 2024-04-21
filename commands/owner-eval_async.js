@@ -6,15 +6,15 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: '>',
+    name: '>>',
     type: 'hears',
     code: async (ctx) => {
         if (isOwner(ctx) === 0) return;
 
-        const code = ctx_msg.content.slice(2);
+        const code = ctx_msg.content.slice(3);
 
         try {
-            const result = await eval(code);
+            const result = await eval(`(async () => { ${code} })()`);
 
             return await ctx.reply(inspect(result));
         } catch (error) {
