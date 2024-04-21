@@ -11,7 +11,7 @@ module.exports = {
     code: async (ctx) => {
         if (isOwner(ctx) === 0) return;
 
-        const code = ctx_msg.content.slice(2);
+        const code = ctx._msg.content.slice(2);
 
         try {
             const result = await eval(code);
