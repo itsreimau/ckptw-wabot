@@ -33,13 +33,13 @@ module.exports = {
             const response = await fetch(apiUrl);
             const data = await response.json();
 
-            if (!data) throw new Error(global.msg.notFound);
+            if (data.cod === '404') throw new Error(global.msg.notFound);
 
             const weatherId = await translate(data.weather[0].description, 'en', 'id');
             return ctx.reply(`❖ ${bold('Weather')}\n` +
                 `\n` +
                 `➤ Tempat: ${data.name} (${data.sys.country})\n` +
-                `➤ Cuaca: ${ucword(weatherId)}\n` +
+                `➤ Cuaca: ${ucword(weatherId.translation)}\n` +
                 `➤ Kelembapan: ${data.main.humidity} %\n` +
                 `➤ Angin: ${data.wind.speed} km/jam\n` +
                 `➤ Suhu saat ini: ${data.main.temp} °C\n` +

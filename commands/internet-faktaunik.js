@@ -25,7 +25,7 @@ module.exports = {
             if (!data) throw new Error(global.msg.notFound);
 
             const result = await translate(data.text, 'en', 'id');
-            return ctx.reply(result);
+            return ctx.reply(result.translation);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
