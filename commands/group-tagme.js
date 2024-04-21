@@ -17,7 +17,7 @@ module.exports = {
 
         try {
             return ctx.reply({
-                text: `@ctx._sender.jid.split('@')[0])`,
+                text: `@${ctx._sender.jid.split('@')[0]}`,
                 mentions: [ctx._sender.jid]
             });
         } catch (error) {
