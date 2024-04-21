@@ -58,7 +58,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Owner-only
-        /* if (smpl.isOwner(ctx) === 1) {
+        if (smpl.isOwner(ctx) === 1) {
             // Eval
             if (m.content.startsWith('> ') || m.content.startsWith('>> ')) {
                 const code = m.content.slice(2);
@@ -85,7 +85,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                 await ctx.reply(output);
             }
-        } */
+        }
     } catch (error) {
         console.error('Error:', error);
         return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

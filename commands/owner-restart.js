@@ -22,7 +22,7 @@ module.exports = {
         try {
             return await ctx.reply(global.msg.wait);
 
-            exec(`pm2 restart ${global.bot.pm2Name}`); // PM2
+            exec(`pm2 restart rei-ayanami`); // PM2
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

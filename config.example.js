@@ -13,7 +13,6 @@ global.apiKey = {
 // Bot
 global.bot = {
     name: 'Rei Ayanami',
-    pm2Name: 'rei-ayanami',
     prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
     thumbnail: 'https://camo.githubusercontent.com/a71a3d7b6e8cee0a85fe87e32cfd860a034603b97bbb8fb98d2a12828d6a3005/68747470733a2f2f696d61676573332e616c706861636f646572732e636f6d2f3636322f7468756d622d3335302d3636323231392e706e67',
     groupChat: 'https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs'
