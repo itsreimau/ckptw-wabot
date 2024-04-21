@@ -1,4 +1,3 @@
-const economyConfig = require('./economy.config.js');
 const smpl = require('./lib/simple.js');
 const {
     bold,
