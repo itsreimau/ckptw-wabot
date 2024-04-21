@@ -66,19 +66,15 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (getMentionData) {
             const [timestamp, reason] = getMentionData;
             const timeago = moment(timestamp).fromNow();
-            ctx.reply({
-                text: `${ctx._sender.jid.split('@')[0]} AFK sekarang, Alasan: ${reason} ${timeago}`,
-                mentions: ctx.getMentioned()
-            });
+            ctx.reply(`Dia AFK ${alasan ? 'dengan alasan' + alasan : 'tanpa alasan'} selama ${timeago}`);
         }
 
         const getMessageData = afk.get(m.key.participant);
         if (getMessageData) {
+            const [timestamp, reason] = getMentionData;
+            const timeago = moment(timestamp).fromNow();
             afk.delete(ctx._sender.jid);
-            ctx.reply({
-                text: `${ctx._sender.jid.split('@')[0]}, mengeluarkan Anda dari AFK.`,
-                mentions: ctx.getMentioned()
-            });
+            ctx.reply(`Anda mengakhiri AFK${reason ? ` setelah ${reason}` : ''} selama ${timeago}.`);
         }
 
         // Owner-only
