@@ -14,6 +14,9 @@ const {
 const {
     afk
 } = require('discord-afk-js');
+const {
+    Database
+} = require('esosdb');
 const moment = require('moment-timezone');
 const path = require('path');
 const {
@@ -29,6 +32,18 @@ const bot = new Client({
     printQRInTerminal: true,
     readIncommingMsg: true
 });
+
+// Create a new database instance.
+const groupDB = new Database({
+    path: './database/group.json',
+    space: 2
+});
+const userDB = new Database({
+    path: './database/user.json',
+    space: 2
+});
+global.db.group = groupDB;
+global.db.user = userDB;
 
 // Event handling when the bot is ready.
 bot.ev.once(Events.ClientReady, (m) => {
@@ -74,6 +89,15 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             afk.delete(ctx._sender.jid);
             ctx.reply(`Anda mengakhiri AFK${reason ? ` setelah ${reason}` : ''} selama ${timeago}.`);
         }
+
+        // Database.
+        if (smpl.isGroup(ctx) === 1) {
+            const getGroupDB global.db.group.get(m.key.remoteJid);
+            if (!getGroupDB) global.db.group.set(m.key.remoteJid, {});
+        }
+
+        const getUserDB global.db.user.get(smpl.isGroup === 1 ? m.key.participant : m.key.remoteJid);
+        if (!getUserDB) global.db.user.set(smpl.isGroup === 1 ? m.key.participant : m.key.remoteJid, {});
 
         // Owner-only.
         if (smpl.isOwner(ctx) === 1) {

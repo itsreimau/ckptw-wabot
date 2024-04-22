@@ -23,7 +23,7 @@ module.exports = {
             if (!result) throw new Error(global.msg.notFound);
 
             const resultText = result.map(r =>
-                `➤ Nama: ${r.cryptoName}\n` +
+                `➤ ${r.cryptoName}\n` +
                 `➤ Harga: ${r.priceChange}`
             ).join('\n-----\n');
             return ctx.reply(
