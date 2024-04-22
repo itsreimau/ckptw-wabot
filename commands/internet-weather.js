@@ -31,10 +31,10 @@ module.exports = {
                 appid: '060a6bcfa19809c2cd4d97a212b19273'
             });
             const response = await fetch(apiUrl);
+
+            if (!response.status === 200) throw new Error(global.msg.notFound);
+
             const data = await response.json();
-
-            if (data.cod === '404') throw new Error(global.msg.notFound);
-
             const weatherId = await translate(data.weather[0].description, 'en', 'id');
             return ctx.reply(`❖ ${bold('Weather')}\n` +
                 `\n` +

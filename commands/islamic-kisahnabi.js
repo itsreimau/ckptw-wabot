@@ -18,10 +18,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('https://raw.githubusercontent.com', `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${toLowerCase(input)}.json`, {});
+            const apiUrl = createAPIUrl('https://raw.githubusercontent.com', `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
             const response = await fetch(apiUrl);
 
-            if (response.status === 404) throw new Error(global.msg.notFound);
+            if (!response.status === 200) throw new Error(global.msg.notFound);
 
             const data = await response.json();
 
