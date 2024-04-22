@@ -21,7 +21,7 @@ module.exports = {
             const apiUrl = createAPIUrl('https://raw.githubusercontent.com', `/ZeroChanBot/Api-Freee/master/data/AsmaulHusna.json`, {});
             const response = await fetch(apiUrl);
 
-            if (!response.status === 200) throw new Error(global.msg.notFound);
+            if (!response.ok) throw new Error(global.msg.notFound);
 
             const data = await response.json();
             const asmaulhusna = data.result;
@@ -36,17 +36,17 @@ module.exports = {
 
                 return ctx.reply(
                     `❖ ${bold('Asmaul Husna')}\n` +
-                    `\n` +
+                    '\n' +
                     `Daftar semua Asmaul Husna:\n` +
                     `${resultText}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer
                 );
             }
 
             const index = parseInt(input);
 
-            if (isNaN(index) || index < 1 || index > 99) throw new Error('Nomor Asmaul Husna tidak ralid. Harap masukkan nomor antara 1 dan 99 atau ketik "all" untuk melihat semua Asmaul Husna.');
+            if (isNaN(index) || index < 1 || index > 99) throw new Error('Nomor Asmaul Husna tidak valid. Harap masukkan nomor antara 1 dan 99 atau ketik "all" untuk melihat semua Asmaul Husna.');
 
             const selectedName = asmaulhusna.find((r) => r.number === index);
 
@@ -59,12 +59,12 @@ module.exports = {
 
                 return ctx.reply(
                     `❖ ${bold('Asmaul Husna')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ Nomor: ${index}\n` +
                     `➤ Latin: ${latin}\n` +
                     `➤ Arab: ${arab}\n` +
                     `➤ Arti: ${translate_id}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer
                 );
             }

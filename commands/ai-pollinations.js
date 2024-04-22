@@ -22,16 +22,16 @@ module.exports = {
             const apiUrl = createAPIUrl('https://image.pollinations.ai', `/prompt/${input}`, {});
             const response = await fetch(apiUrl);
 
-            if (!response.status === 200) throw new Error(global.msg.notFound);
+            if (!response.ok) throw new Error(global.msg.notFound);
 
             return await ctx.reply({
                 image: {
                     url: apiUrl
                 },
                 caption: `❖ ${bold('Pollinations')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ Prompt: ${input}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer
             });
         } catch (error) {

@@ -29,9 +29,9 @@ module.exports = {
                     url: result.videoUrl
                 },
                 caption: `❖ ${bold('FB Downloader')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ URL: ${input}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer,
                 gifPlayback: false
             });

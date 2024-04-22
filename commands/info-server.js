@@ -24,13 +24,13 @@ module.exports = {
 
             return ctx.reply(
                 `❖ ${bold('Server')}\n` +
-                `\n` +
+                '\n' +
                 `➤ OS: ${os.type()} (${os.arch()} / ${os.release()})\n` +
                 `➤ RAM: ${formatSize(process.memoryUsage().rss)} / ${formatSize(os.totalmem())}\n` +
                 Object.entries(data).map(([key, value]) => `➤ ${ucword(key)}: ${value}\n`).join('') +
                 `➤ Waktu aktif: ${convertMsToDuration(Date.now() - startTime) || 'kurang dari satu detik.'}\n` +
                 `➤ Prosesor: ${os.cpus()[0].model}\n` +
-                `\n` +
+                '\n' +
                 global.msg.footer,
 
             );

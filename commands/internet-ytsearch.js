@@ -36,9 +36,9 @@ module.exports = {
             }).filter(r => r).join('\n-----\n');
             return ctx.reply(
                 `${bold('❖ YT Search')}\n` +
-                `\n` +
+                '\n' +
                 `${resultText}\n` +
-                `\n` +
+                '\n' +
                 global.msg.footer
             );
         } catch (error) {

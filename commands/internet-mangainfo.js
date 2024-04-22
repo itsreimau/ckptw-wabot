@@ -27,7 +27,7 @@ module.exports = {
             });
             const response = await fetch(apiUrl);
 
-            if (!response.status === 200) throw new Error(global.msg.notFound);
+            if (!response.ok) throw new Error(global.msg.notFound);
 
             const data = await response.json();
             const info = data.data[0];
@@ -38,7 +38,7 @@ module.exports = {
                     url: info.images.jpg.large_image_url
                 },
                 caption: `❖ ${bold('Manga Info')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ Judul: ${info.title}\n` +
                     `➤ Judul (Inggris): ${info.title_english}\n` +
                     `➤ Judul (Jepang): ${info.title_japanese}\n` +
@@ -47,7 +47,7 @@ module.exports = {
                     `➤ Volume: ${info.volumes}\n` +
                     `➤ Ringkasan: ${synopsisId.translation}\n` +
                     `➤ URL: ${info.url}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer
             });
         } catch (error) {

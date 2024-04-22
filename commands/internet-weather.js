@@ -32,12 +32,12 @@ module.exports = {
             });
             const response = await fetch(apiUrl);
 
-            if (!response.status === 200) throw new Error(global.msg.notFound);
+            if (!response.ok) throw new Error(global.msg.notFound);
 
             const data = await response.json();
             const weatherId = await translate(data.weather[0].description, 'en', 'id');
             return ctx.reply(`❖ ${bold('Weather')}\n` +
-                `\n` +
+                '\n' +
                 `➤ Tempat: ${data.name} (${data.sys.country})\n` +
                 `➤ Cuaca: ${ucword(weatherId.translation)}\n` +
                 `➤ Kelembapan: ${data.main.humidity} %\n` +
@@ -45,7 +45,7 @@ module.exports = {
                 `➤ Suhu saat ini: ${data.main.temp} °C\n` +
                 `➤ Suhu tertinggi: ${data.main.temp_max} °C\n` +
                 `➤ Suhu terendah: ${data.main.temp_min} °C\n` +
-                `\n` +
+                '\n' +
                 global.msg.footer
             );
         } catch (error) {

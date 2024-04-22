@@ -24,21 +24,21 @@ module.exports = {
             });
             const response = await fetch(apiUrl);
 
-            if (!response.status === 200) throw new Error(global.msg.notFound);
+            if (!response.ok) throw new Error(global.msg.notFound);
 
             const data = await response.json();
             const repo = data.items[0];
 
             return ctx.reply(
                 `❖ ${bold('GitHub Search')}\n` +
-                `\n` +
+                '\n' +
                 `➤ Nama: ${repo.name}\n` +
                 `➤ Deskripsi: ${repo.description}\n` +
                 `➤ Owner: ${repo.owner.login}\n` +
                 `➤ Dibuat: ${formatDate(repo.created_at)}\n` +
                 `➤ Bahasa: ${repo.language}\n` +
                 `➤ Lisensi: ${repo.license.name}\n` +
-                `\n` +
+                '\n' +
                 global.msg.footer
             )
         } catch (error) {

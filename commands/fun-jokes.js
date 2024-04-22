@@ -14,7 +14,7 @@ module.exports = {
         try {
             const response = await fetch(apiUrl);
 
-            if (!response.status === 200) throw new Error(global.msg.notFound);
+            if (!response.ok) throw new Error(global.msg.notFound);
 
             const {
                 data

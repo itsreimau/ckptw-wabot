@@ -16,7 +16,7 @@ module.exports = {
         try {
             const response = await fetch(apiUrl);
 
-            if (!response.status === 200) throw new Error(global.msg.notFound);
+            if (!response.ok) throw new Error(global.msg.notFound);
 
             const data = await response.json();
             const gempa = data.Infogempa.gempa;
@@ -26,7 +26,7 @@ module.exports = {
                     url: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`
                 },
                 caption: `❖ ${bold('Gempa Bumi')}\n` +
-                    `\n` +
+                    '\n' +
                     `${gempa.Wilayah}\n` +
                     '-----\n' +
                     `➤ Tanggal: ${gempa.Tanggal}\n` +
@@ -35,7 +35,7 @@ module.exports = {
                     `➤ Kedalaman: ${gempa.Kedalaman}\n` +
                     `➤ Koordinat: ${gempa.Coordinates}\n` +
                     `➤ Dirasakan: ${gempa.Dirasakan}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer
             });
         } catch (error) {

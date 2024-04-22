@@ -27,11 +27,11 @@ module.exports = {
                     url: result.banner.url
                 },
                 caption: `❖ ${bold('SeaArt')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ Prompt: ${result.prompt}\n` +
                     `➤ Model ID: ${result.model_id}\n` +
                     `➤ Author: ${result.author.name}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer
             });
         } catch (error) {

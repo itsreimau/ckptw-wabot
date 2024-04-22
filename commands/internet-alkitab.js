@@ -25,13 +25,13 @@ module.exports = {
 
             const resultText = result.map(r =>
                 `➤ ${r.title}\n` +
-                `➤ ${r.text}\n`
+                `➤ ${r.text}`
             ).join('\n-----\n');
             return ctx.reply(
                 `❖ ${bold('Alkitab')}\n` +
-                `\n` +
-                resultText +
-                `\n` +
+                '\n' +
+                `${resultText}\n` +
+                '\n' +
                 global.msg.footer
             );
         } catch (error) {

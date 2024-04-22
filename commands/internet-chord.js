@@ -24,12 +24,12 @@ module.exports = {
 
             return ctx.reply(
                 `❖ ${bold('Chord')}\n` +
-                `\n` +
+                '\n' +
                 `➤ Judul: ${result.title.replace('Chords', '').trim()} (${result.url})\n` +
                 `➤ Artis: ${result.artist.replace('‣', '').trim()} (${result.artistUrl})\n` +
                 '-----\n' +
                 `${result.chord}\n` +
-                `\n` +
+                '\n' +
                 global.msg.footer
             );
         } catch (error) {

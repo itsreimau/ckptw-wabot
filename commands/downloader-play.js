@@ -31,13 +31,13 @@ module.exports = {
                     url: yt.image
                 },
                 caption: `❖ ${bold('Play')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ Judul: ${yt.title}\n` +
                     `➤ Deskripsi: ${yt.description}\n` +
                     `➤ Durasi: ${yt.timestamp}\n` +
                     `➤ Diunggah: ${yt.ago}\n` +
                     `➤ Ditonton: ${yt.views.toLocaleString()}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer,
             });
 

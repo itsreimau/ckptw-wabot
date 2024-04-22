@@ -26,13 +26,13 @@ module.exports = {
             const resultText = result.map(r =>
                 `➤ Judul: ${r.title}\n` +
                 `➤ Deskripsi: ${r.snippet}\n` +
-                `➤ URL: ${r.url}\n`
+                `➤ URL: ${r.url}`
             ).join('\n-----\n');
             return ctx.reply(
                 `❖ ${bold('Google Search')}\n` +
-                `\n` +
-                resultText +
-                `\n` +
+                '\n' +
+                `${resultText}\n` +
+                '\n' +
                 global.msg.footer
             );
         } catch (error) {

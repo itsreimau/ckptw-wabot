@@ -23,7 +23,7 @@ module.exports = {
 
             return ctx.reply(
                 `${bold('❖ Holiday')}\n` +
-                `\n` +
+                '\n' +
                 data.reverse().map((h, i) => {
                     const d = new Date(h.holiday_date);
                     const day = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][d.getDay()];
@@ -31,8 +31,8 @@ module.exports = {
                     const year = d.getFullYear();
                     return `${bold(h.holiday_name)}\n➤ ${day}, ${d.getDate()} ${mon} ${year}`;
                 }).join('\n-----\n') +
-                `\n` +
-                `\n` +
+                '\n' +
+                '\n' +
                 `${global.msg.footer}`
             );
         } catch (error) {

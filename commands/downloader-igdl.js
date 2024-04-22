@@ -35,9 +35,9 @@ module.exports = {
                     url: data.result
                 },
                 caption: `❖ ${bold('IG Downloader')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ URL: ${input}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer,
                 gifPlayback: false
             });

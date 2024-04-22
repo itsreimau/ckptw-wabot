@@ -28,9 +28,9 @@ module.exports = {
             ).join('\n-----\n');
             return ctx.reply(
                 `❖ ${bold('Crypto')}\n` +
-                `\n` +
+                '\n' +
                 resultText +
-                `\n` +
+                '\n' +
                 global.msg.footer
             );
         } catch (error) {

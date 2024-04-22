@@ -30,9 +30,9 @@ module.exports = {
                     url: result.play
                 },
                 caption: `❖ ${bold('TT Downloader')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ URL: ${input}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer,
                 gifPlayback: false
             });

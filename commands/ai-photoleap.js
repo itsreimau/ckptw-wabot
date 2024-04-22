@@ -24,7 +24,7 @@ module.exports = {
             });
             const response = await fetch(apiUrl);
 
-            if (!response.status === 200) throw new Error(global.msg.notFound);
+            if (!response.ok) throw new Error(global.msg.notFound);
 
             const data = await response.json();
 
@@ -33,9 +33,9 @@ module.exports = {
                     url: data.result_url
                 },
                 caption: `❖ ${bold('Photoleap')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ Prompt: ${input}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer
             });
         } catch (error) {

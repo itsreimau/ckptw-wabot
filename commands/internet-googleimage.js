@@ -26,9 +26,9 @@ module.exports = {
                     url: getRandomElement(result)
                 },
                 caption: `❖ ${bold('Google Image')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ Kueri: ${input}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer
             });
         } catch (error) {

@@ -21,20 +21,20 @@ module.exports = {
             const apiUrl = createAPIUrl('https://raw.githubusercontent.com', `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
             const response = await fetch(apiUrl);
 
-            if (!response.status === 200) throw new Error(global.msg.notFound);
+            if (!response.ok) throw new Error(global.msg.notFound);
 
             const data = await response.json();
 
             return ctx.reply(
                 `❖ ${bold('Kisah Nabi')}\n` +
-                `\n` +
+                '\n' +
                 `➤ Nama: ${data.name}\n` +
                 `➤ Tahun kelahiran: ${data.thn_kelahiran}\n` +
                 `➤ Tempat kelahiran: ${data.tmp}\n` +
                 `➤ Usia: ${data.usia}\n` +
                 '-----\n' +
                 `${data.description.trim()}\n` +
-                `\n` +
+                '\n' +
                 global.msg.footer
             );
         } catch (error) {

@@ -23,9 +23,9 @@ module.exports = {
                     url: imageUrl
                 },
                 caption: `❖ ${bold('Meme')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ Sumber: ${data.data.source}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer,
             });
         } catch (error) {

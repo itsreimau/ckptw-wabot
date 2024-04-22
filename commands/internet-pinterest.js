@@ -28,9 +28,9 @@ module.exports = {
                     url: result
                 },
                 caption: `❖ ${bold('Pinterest')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ Kueri: ${input}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer
             });
         } catch (error) {

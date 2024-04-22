@@ -27,9 +27,9 @@ module.exports = {
                     url: getRandomElement(result)
                 },
                 caption: `❖ ${bold('Flaticon')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ Kueri: ${input}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer
             });
         } catch (error) {

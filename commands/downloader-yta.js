@@ -36,11 +36,11 @@ module.exports = {
                     url: ytdl.thumbnail
                 },
                 caption: `❖ ${bold('YT Audio')}\n` +
-                    `\n` +
+                    '\n' +
                     `➤ Judul: ${ytdl.title}\n` +
                     `➤ Pilih kualitas:\n` +
                     `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join('\n')}\n` +
-                    `\n` +
+                    '\n' +
                     global.msg.footer
             });
 
