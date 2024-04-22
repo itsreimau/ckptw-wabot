@@ -24,7 +24,7 @@ module.exports = {
 
             const resultText = result.map(r =>
                 `➤ Nama: ${r.cryptoName}\n` +
-                `➤ Harga: ${r.priceChange}`
+                `➤ Harga: ${r.priceChange}\n`
             ).join('\n-----\n');
             return ctx.reply(
                 `❖ ${bold('Crypto')}\n` +

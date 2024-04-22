@@ -25,7 +25,7 @@ module.exports = {
 
             const resultText = result.map(r =>
                 `➤ ${r.title}\n` +
-                `➤ ${r.text}`
+                `➤ ${r.text}\n`
             ).join('\n-----\n');
             return ctx.reply(
                 `❖ ${bold('Alkitab')}\n` +

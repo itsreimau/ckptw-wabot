@@ -28,7 +28,7 @@ module.exports = {
             const delay = time => new Promise(res => setTimeout(res, time));
             const getGroups = await ctx._client.groupFetchAllParticipating();
             const groups = Object.entries(getGroups).slice(0).map(entry => entry[1]);
-            const anu = groups.map(v => v.id);
+            const anu = groups.map(a => a.id);
 
             ctx.reply(`Mengirim siaran ke ${anu.length} obrolan grup, perkiraan waktu penyelesaian adalah ${anu.length * 0,5} detik.`);
 

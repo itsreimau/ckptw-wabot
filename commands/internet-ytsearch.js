@@ -24,11 +24,10 @@ module.exports = {
             const resultText = result.all.map(r => {
                 switch (r.type) {
                     case 'video':
-                        const views = String(r.views).padStart(10, ' ')
                         return `${bold(`${r.title} (${r.url})`)}\n` +
                             `➤ Durasi: ${r.timestamp}\n` +
                             `➤ Diunggah: ${r.ago}\n` +
-                            `➤ Dilihat: ${views}`
+                            `➤ Dilihat: ${r.views}`
                     case 'channel':
                         return `${bold(`${r.name} (${r.url})`)}\n` +
                             `➤ Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
