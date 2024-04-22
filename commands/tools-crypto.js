@@ -14,7 +14,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kejadian`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} bitcoin`)}`
         );
 
         try {
