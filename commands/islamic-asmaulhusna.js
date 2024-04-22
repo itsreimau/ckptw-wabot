@@ -66,7 +66,6 @@ module.exports = {
                     `➤ Arti: ${translate_id}\n` +
                     `\n` +
                     global.msg.footer
-
                 );
             }
         } catch (error) {
