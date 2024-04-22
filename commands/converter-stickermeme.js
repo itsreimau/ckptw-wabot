@@ -26,7 +26,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} rei|ayanami`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} get in the fucking robot|shinji!`)}`
         );
 
         const msgType = ctx.getMessageType();
@@ -42,7 +42,7 @@ module.exports = {
 
             const [top, bottom] = input.split(`|`);
             const imageLink = await getImageLink(buffer);
-            const result = createAPIUrl('https://api.memegen.link', `/images/custom/${bottom ? top : ''}/${bottom || top}.png`, {
+            const result = createAPIUrl('https://api.memegen.link', `/images/custom/${top || null}/${bottom || null}.png`, {
                 background: imageLink
             });
 

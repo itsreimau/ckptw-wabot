@@ -14,17 +14,16 @@ module.exports = {
     aliases: ['fakta'],
     category: 'internet',
     code: async (ctx) => {
-        const apiUrl = await createAPIUrl('https://uselessfacts.jsph.pl', '/api/v2/facts/random', {
-            q: input
-        });
+        const apiUrl = await createAPIUrl('https://uselessfacts.jsph.pl', '/api/v2/facts/random', {});
 
         try {
             const response = await fetch(apiUrl);
+
+            if (!response.status === 200) throw new Error(global.msg.notFound);
+
             const data = await response.json();
-
-            if (!data) throw new Error(global.msg.notFound);
-
             const result = await translate(data.text, 'en', 'id');
+
             return ctx.reply(result.translation);
         } catch (error) {
             console.error('Error:', error);

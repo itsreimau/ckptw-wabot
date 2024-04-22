@@ -15,24 +15,26 @@ module.exports = {
 
         try {
             const response = await fetch(apiUrl);
-            const data = await response.json();
 
-            if (!data) throw new Error(global.msg.notFound);
+            if (!response.status === 200) throw new Error(global.msg.notFound);
+
+            const data = await response.json();
+            const gempa = data.Infogempa.gempa;
 
             return await ctx.reply({
                 image: {
-                    url: `https://data.bmkg.go.id/DataMKG/TEWS/${data.Shakemap}`
+                    url: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`
                 },
                 caption: `❖ ${bold('Gempa Bumi')}\n` +
                     `\n` +
-                    `${data.Wilayah}\n` +
+                    `${gempa.Wilayah}\n` +
                     '-----\n' +
-                    `➤ Tanggal: ${data.Tanggal}\n` +
-                    `➤ Potensi: ${data.Potensi}\n` +
-                    `➤ Magnitude: ${data.Magnitude}\n` +
-                    `➤ Kedalaman: ${data.Kedalaman}\n` +
-                    `➤ Koordinat: ${data.Coordinates}\n` +
-                    `➤ Dirasakan: ${data.Dirasakan}\n` +
+                    `➤ Tanggal: ${gempa.Tanggal}\n` +
+                    `➤ Potensi: ${gempa.Potensi}\n` +
+                    `➤ Magnitude: ${gempa.Magnitude}\n` +
+                    `➤ Kedalaman: ${gempa.Kedalaman}\n` +
+                    `➤ Koordinat: ${gempa.Coordinates}\n` +
+                    `➤ Dirasakan: ${gempa.Dirasakan}\n` +
                     `\n` +
                     global.msg.footer
             });

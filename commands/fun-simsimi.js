@@ -25,11 +25,9 @@ module.exports = {
             });
             const response = await fetch(apiUrl);
 
-            if (response.status === 500) throw new Error(global.msg.notFound);
+            if (!response.status === 200) throw new Error(global.msg.notFound);
 
             const data = await response.json();
-
-            if (!data) throw new Error(global.msg.notFound);
 
             return ctx.reply(data.answer);
         } catch (error) {

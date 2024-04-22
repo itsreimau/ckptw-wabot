@@ -26,12 +26,13 @@ module.exports = {
                 q: input
             });
             const response = await fetch(apiUrl);
+
+            if (!response.status === 200) throw new Error(global.msg.notFound);
+
             const data = await response.json();
-
-            if (!data) throw new Error(global.msg.notFound);
-
             const info = data.data[0];
             const synopsisId = await translate(info.synopsis, 'en', 'id');
+
             return ctx.reply({
                 image: {
                     url: info.images.jpg.large_image_url

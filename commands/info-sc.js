@@ -12,9 +12,10 @@ module.exports = {
     code: async (ctx) => {
         const apiUrl = await createAPIUrl('https://api.github.com', '/repos/itsreimau/ckptw-wabot', {});
         const response = await fetch(apiUrl);
-        const data = await response.json();
 
-        if (!data) throw new Error(global.msg.notFound);
+        if (!response.status === 200) throw new Error(global.msg.notFound);
+
+        const data = await response.json();
 
         return ctx.reply(
             `❖ ${bold('SC')}\n` +

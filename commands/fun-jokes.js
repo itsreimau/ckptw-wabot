@@ -13,11 +13,12 @@ module.exports = {
 
         try {
             const response = await fetch(apiUrl);
+
+            if (!response.status === 200) throw new Error(global.msg.notFound);
+
             const {
                 data
             } = await response.json();
-
-            if (!data) throw new Error(global.msg.notFound);
 
             return ctx.reply(data);
         } catch (error) {

@@ -23,11 +23,12 @@ module.exports = {
                 q: input
             });
             const response = await fetch(apiUrl);
+
+            if (!response.status === 200) throw new Error(global.msg.notFound);
+
             const data = await response.json();
-
-            if (!data) throw new Error(global.msg.notFound);
-
             const repo = data.items[0];
+
             return ctx.reply(
                 `❖ ${bold('GitHub Search')}\n` +
                 `\n` +

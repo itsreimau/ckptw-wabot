@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require('../lib/api.js');
+    ghdl
+} = require('../lib/scraper.js');
 const {
     bold,
     monospace
@@ -16,7 +16,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://github.com/itsreimau/ckptw-wabot`)}`
         );
 
         try {
@@ -25,15 +25,14 @@ module.exports = {
 
             const [_, user, repo] = input.match(urlRegex) || [];
             const repoName = repo.replace(/.git$/, '');
-            const apiUrl = createAPIUrl('https://api.github.com', `/repos/${user}/${repoName}/zipball`, {});
-            const response = await fetch(apiUrl, {
-                method: 'HEAD'
-            });
-            const file = response.headers.get('content-disposition').match(/attachment; filename=(.*)/)[1];
-            const mimeType = mime.lookup(file);
+            const result = await ghdl(user, repoName);
+
+            if (!result) throw new Error(global.msg.notFound);
+
+            const mimeType = mime.lookup(result);
 
             return ctx.reply({
-                document: file,
+                document: result,
                 mimetype: mimeType
             });
         } catch (error) {
