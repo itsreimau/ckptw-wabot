@@ -5,9 +5,9 @@ const {
 const yts = require('yt-search');
 
 module.exports = {
-    name: 'yts',
-    aliases: ['ytsearch'],
-    category: 'tools',
+    name: 'ytsearch',
+    aliases: ['yts'],
+    category: 'internet',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 

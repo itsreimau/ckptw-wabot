@@ -1,5 +1,5 @@
 const {
-    googlesearch
+    crypto
 } = require('../lib/scraper.js');
 const {
     bold,
@@ -7,29 +7,27 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'googlesearch',
-    aliases: ['google'],
+    name: 'crypto',
     category: 'tools',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kejadian`)}`
         );
 
         try {
-            const result = await googlesearch(input);
+            const result = await crypto(input);
 
             if (!result) throw new Error(global.msg.notFound);
 
             const resultText = result.map(r =>
-                `➤ Judul: ${r.title}\n` +
-                `➤ Deskripsi: ${r.snippet}` +
-                `➤ URL: ${r.url}`
+                `➤ Nama: ${r.cryptoName}\n` +
+                `➤ Harga: ${r.priceChange}`
             ).join('\n-----\n');
             return ctx.reply(
-                `❖ ${bold('Google Search')}\n` +
+                `❖ ${bold('Crypto')}\n` +
                 `\n` +
                 resultText +
                 `\n` +

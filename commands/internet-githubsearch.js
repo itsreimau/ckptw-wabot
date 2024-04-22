@@ -7,9 +7,9 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'ghs',
-    aliases: ['githubsearch'],
-    category: 'tools',
+    name: 'githubsearch',
+    aliases: ['ghs'],
+    category: 'internet',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
 
