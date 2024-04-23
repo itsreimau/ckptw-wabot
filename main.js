@@ -61,7 +61,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 if (getMentionData) {
                     const [timestamp, reason] = getMentionData;
                     const timeago = smpl.convertMsToDuration(Date.now() - timestamp);
-                    ctx.reply({
+                    await ctx.reply({
                         text: `Dia AFK dengan alasan ${reason} selama ${timeago || 'kurang dari satu detik.'}.`,
                         mentions: ctx.getMentioned()
                     });
@@ -74,7 +74,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const [timestamp, reason] = getMessageData;
             const timeago = smpl.convertMsToDuration(Date.now() - timestamp);
             afk.delete(ctx._sender.jid);
-            ctx.reply({
+            await ctx.reply({
                 text: `Anda mengakhiri AFK setelah ${reason} selama ${timeago}.`,
                 mentions: ctx.getMentioned()
             });

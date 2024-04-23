@@ -17,7 +17,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.botAdmin
         },
         group: {
-            function: async () => await smpl.isGroup(ctx) === 0,
+            function: async () => await ctx.isGroup(),
             msg: global.msg.group
         },
         owner: {
@@ -25,7 +25,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.owner
         },
         private: {
-            function: async () => await smpl.isPrivate(ctx) === 0,
+            function: async () => await !ctx.isGroup(),
             msg: global.msg.private
         }
     };

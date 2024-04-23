@@ -16,7 +16,7 @@ module.exports = {
             afk.set(ctx._sender.jid, [Date.now(), input || 'tanpa alasan']);
 
             return ctx.reply({
-                text: `Anda sekarang akan AFK dengan alasan ${input}.`,
+                text: `Anda sekarang akan AFK dengan alasan ${input || 'tanpa alasan'}.`,
                 mentions: ctx.getMentioned()
             });
         } catch (error) {

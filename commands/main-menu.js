@@ -26,6 +26,7 @@ module.exports = {
                         renderLargerThumbnail: true
                     }
                 }
+                mentions: ctx.getMentioned(),
             }, {
                 quoted: ctx._msg
             });
