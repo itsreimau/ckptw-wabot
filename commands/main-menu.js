@@ -25,7 +25,7 @@ module.exports = {
                         mediaType: 1,
                         renderLargerThumbnail: true
                     }
-                }
+                },
                 mentions: ctx.getMentioned(),
             }, {
                 quoted: ctx._msg
