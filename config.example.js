@@ -4,13 +4,13 @@ const {
     quote
 } = require('@mengkodingan/ckptw');
 
-// API Key
+// API Key.
 global.apiKey = {
-    imgbb: 'REPLACE_THIS_WITH_YOUR_API_KEY', // Dapatkan di: https://id.imgbb.com/
-    lowline: 'REPLACE_THIS_WITH_YOUR_API_KEY' // Dapatkan di: https://chat.openai.com/ (Optional)
+    imgbb: 'REPLACE_THIS_WITH_YOUR_API_KEY', // Get it at: https://id.imgbb.com/
+    lowline: 'REPLACE_THIS_WITH_YOUR_API_KEY' // Get it at: https://chat.openai.com/ (Optional)
 };
 
-// Bot
+// Bot.
 global.bot = {
     name: 'Rei Ayanami',
     prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
@@ -18,43 +18,43 @@ global.bot = {
     groupChat: 'https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs'
 };
 
-// MSG (Message / Pesan)
+// MSG (Message).
 global.msg = {
-    // Akses perintah
+    // Command access.
     admin: `${bold('[ ! ]')} Perintah hanya dapat diakses oleh admin grup!`,
     botAdmin: `${bold('[ ! ]')} Bot bukan admin, tidak bisa menggunakan perintah!`,
     owner: `${bold('[ ! ]')} Perintah hanya dapat diakses Owner!`,
     group: `${bold('[ ! ]')} Perintah hanya dapat diakses dalam grup!`,
     private: `${bold('[ ! ]')} Perintah hanya dapat diakses dalam obrolan pribadi!`,
 
-    // Antarmuka perintah
+    // Command interface.
     watermark: `${package.name}@^${package.version}`,
     footer: quote('Dibuat oleh ItsReimau | Take care of yourself.'),
     readmore: '\u200E'.repeat(4001),
 
-    // Proses perintah
+    // Command process.
     argument: `${bold('[ ! ]')} Masukkan argumen!`,
     wait: `${bold('[ ! ]')} Tunggu sebentar...`,
 
-    // Proses perintah (Kesalahan)
+    // Command process (Error).
     notFound: `Tidak ada yang ditemukan!`,
     urlInvalid: `URL tidak valid!`
 };
 
-// Owner
+// Owner.
 global.owner = {
     name: 'ItsReimau',
     number: '6283838039693',
     organization: 'Kumaha Aing'
 };
 
-// Sticker
+// Sticker.
 global.sticker = {
     packname: 'Take care of yourself.',
     author: '@rei-ayanami'
 };
 
-// System
+// System.
 global.system = {
     startTime: null,
     timeZone: 'Asia/Jakarta'

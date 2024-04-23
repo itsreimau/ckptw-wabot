@@ -14,7 +14,6 @@ const {
 const {
     afk
 } = require('discord-afk-js');
-const moment = require('moment-timezone');
 const path = require('path');
 const {
     inspect
@@ -61,8 +60,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 const getMentionData = afk.get(mentionJid);
                 if (getMentionData) {
                     const [timestamp, reason] = getMentionData;
-                    const timeago = moment(timestamp).fromNow();
-                    ctx.reply(`Dia AFK ${reason ? 'dengan alasan ' + reason : 'tanpa alasan'} selama ${timeago}`);
+                    const timeago = smpl.convertMsToDuration(Date.now() - timestamp);
+                    ctx.reply({
+                        text: `Dia AFK dengan alasan ${reason} selama ${timeago || 'kurang dari satu detik.'}.`,
+                        mentions: ctx.getMentioned()
+                    });
                 }
             });
         }
@@ -70,9 +72,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const getMessageData = afk.get(m.key.participant);
         if (getMessageData) {
             const [timestamp, reason] = getMessageData;
-            const timeago = moment(timestamp).fromNow();
+            const timeago = smpl.convertMsToDuration(Date.now() - timestamp);
             afk.delete(ctx._sender.jid);
-            ctx.reply(`Anda mengakhiri AFK${reason ? ` setelah ${reason}` : ''} selama ${timeago}.`);
+            ctx.reply({
+                text: `Anda mengakhiri AFK setelah ${reason} selama ${timeago}.`,
+                mentions: ctx.getMentioned()
+            });
         }
 
         // Owner-only.

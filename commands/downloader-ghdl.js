@@ -5,7 +5,6 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
-const mime = require('mime-types');
 
 module.exports = {
     name: 'ghdl',
@@ -29,11 +28,9 @@ module.exports = {
 
             if (!result) throw new Error(global.msg.notFound);
 
-            const mimeType = mime.lookup(result);
-
             return ctx.reply({
                 document: result,
-                mimetype: mimeType
+                mimetype: 'application/zip'
             });
         } catch (error) {
             console.error('Error:', error);

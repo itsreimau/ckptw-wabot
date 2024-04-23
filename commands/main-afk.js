@@ -13,9 +13,12 @@ module.exports = {
         const input = ctx._args.join(' ');
 
         try {
-            afk.set(ctx._sender.jid, [Date.now(), input || 'Tanpa alasan']);
+            afk.set(ctx._sender.jid, [Date.now(), input || 'tanpa alasan']);
 
-            return ctx.reply(`${ctx._sender.pushName} saat ini akan AFK: ${input || 'Tanpa alasan'}`);
+            return ctx.reply({
+                text: `Anda sekarang akan AFK dengan alasan ${input}.`,
+                mentions: ctx.getMentioned()
+            });
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

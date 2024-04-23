@@ -11,7 +11,7 @@ CFonts.say(package.name, {
     gradient: ['red', 'magenta']
 });
 
-// Displays package information
+// Displays package information.
 const authorName = package.author.name || package.author;
 CFonts.say(
     `'${package.description}'\n` +
@@ -21,5 +21,5 @@ CFonts.say(
         gradient: ['red', 'magenta']
     });
 
-// Import and run the main module
+// Import and run the main module.
 require('./main.js');

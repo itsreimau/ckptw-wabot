@@ -1,5 +1,5 @@
 const {
-    convertMsToDuration
+     m.k 
 } = require('../lib/simple.js');
 
 module.exports = {

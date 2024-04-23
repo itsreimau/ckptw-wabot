@@ -42,7 +42,7 @@ module.exports = {
 
             const [top, bottom] = input.split(`|`);
             const imageLink = await getImageLink(buffer);
-            const result = createAPIUrl('https://api.memegen.link', `/images/custom/${top || null}/${bottom || null}.png`, {
+            const result = createAPIUrl('https://api.memegen.link', `/images/custom/${top || ''}/${bottom || ''}.png`, {
                 background: imageLink
             });
 
