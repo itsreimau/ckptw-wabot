@@ -56,7 +56,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // AFK.
         const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         if (mentionJids && mentionJids.length > 0) {
-            mentionJids.forEach(mentionJid => {
+            mentionJids.forEach(async (mentionJid) => {
                 const getMentionData = afk.get(mentionJid);
                 if (getMentionData) {
                     const [timestamp, reason] = getMentionData;
