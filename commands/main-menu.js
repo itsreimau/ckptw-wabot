@@ -26,12 +26,7 @@ module.exports = {
                         mediaType: 1,
                         renderLargerThumbnail: true
                     }
-<<<<<<< HEAD
                 }
-=======
-                },
-                mentions: ctx.getMentioned(),
->>>>>>> 0be58346537e6d55efa20f3e73319d24d8ab57e0
             }, {
                 quoted: ctx._msg
             });
