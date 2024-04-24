@@ -50,36 +50,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             ctx.simulateTyping(); // ctx.simulateRecording();
         }
 
-<<<<<<< HEAD
-=======
-        // AFK.
-        const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-        if (mentionJids && mentionJids.length > 0) {
-            mentionJids.forEach(async (mentionJid) => {
-                const getMentionData = afk.get(mentionJid);
-                if (getMentionData) {
-                    const [timestamp, reason] = getMentionData;
-                    const timeago = smpl.convertMsToDuration(Date.now() - timestamp);
-                    await ctx.reply({
-                        text: `Dia AFK dengan alasan ${reason} selama ${timeago || 'kurang dari satu detik.'}.`,
-                        mentions: ctx.getMentioned()
-                    });
-                }
-            });
-        }
-
-        const getMessageData = afk.get(m.key.participant);
-        if (getMessageData) {
-            const [timestamp, reason] = getMessageData;
-            const timeago = smpl.convertMsToDuration(Date.now() - timestamp);
-            afk.delete(ctx._sender.jid);
-            await ctx.reply({
-                text: `Anda mengakhiri AFK setelah ${reason} selama ${timeago}.`,
-                mentions: ctx.getMentioned()
-            });
-        }
-
->>>>>>> 0be58346537e6d55efa20f3e73319d24d8ab57e0
         // Owner-only.
         if (smpl.isOwner(ctx) === 1) {
             // Eval.
