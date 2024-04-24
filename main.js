@@ -1,6 +1,3 @@
-const {
-    db
-} = require('./lib/database.js');
 const smpl = require('./lib/simple.js');
 const {
     bold,
@@ -15,6 +12,7 @@ const {
     exec
 } = require('child_process');
 const path = require('path');
+const SimplDB = require('simpl.db');
 const {
     inspect
 } = require('util');
@@ -28,6 +26,10 @@ const bot = new Client({
     printQRInTerminal: true,
     readIncommingMsg: true
 });
+
+// Create a new database instance.
+const db = new SimplDB();
+global.db = db;
 
 // Event handling when the bot is ready.
 bot.ev.once(Events.ClientReady, (m) => {
