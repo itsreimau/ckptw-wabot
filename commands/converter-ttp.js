@@ -28,7 +28,6 @@ module.exports = {
             const apiUrl = createAPIUrl('itzpire', `/maker/ttp`, {
                 text: input
             });
-
             const sticker = new Sticker(apiUrl, {
                 pack: global.sticker.packname,
                 author: global.sticker.author,

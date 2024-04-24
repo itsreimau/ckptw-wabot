@@ -6,13 +6,12 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'tovid',
-    aliases: ['tovideo'],
+    name: 'togif',
     category: 'converter',
     code: async (ctx) => {
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
-        if (!quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa stiker!`);
+        if (!quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa stiker, atau video!`);
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
@@ -21,7 +20,8 @@ module.exports = {
 
             return ctx.reply({
                 video: buffer,
-                caption: null
+                caption: null,
+                gifPlayback: true
             });
         } catch (error) {
             console.error('Error', error);

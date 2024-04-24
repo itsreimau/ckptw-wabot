@@ -1,9 +1,5 @@
 const {
-    createAPIUrl
-} = require('../lib/api.js');
-const {
-    download,
-    getImageLink
+    download
 } = require('../lib/simple.js');
 const {
     bold,
@@ -18,8 +14,8 @@ const {
 } = require('wa-sticker-formatter');
 
 module.exports = {
-    name: 'stickermeme',
-    aliases: ['smeme', 'stikermeme'],
+    name: 'stickerwm',
+    aliases: ['swm', 'stikerwm'],
     category: 'converter',
     code: async (ctx) => {
         const input = ctx._args.join(' ');
@@ -37,15 +33,11 @@ module.exports = {
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
-            const [top, bottom] = input.split(`|`);
-            const imageLink = await getImageLink(buffer);
-            const result = createAPIUrl('https://api.memegen.link', `/images/custom/${top || ''}/${bottom || ''}.png`, {
-                background: imageLink
-            });
+            const buffer = (type === 'stickerMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
+            const [packname, author] = input.split(`|`);
             const sticker = new Sticker(result, {
-                pack: global.sticker.packname,
-                author: global.sticker.author,
+                pack: packname || global.sticker.packname,
+                author: author || global.sticker.author,
                 type: StickerTypes.FULL,
                 categories: ['🤩', '🎉'],
                 id: ctx.id,

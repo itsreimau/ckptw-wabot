@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require('../lib/api.js');
+    inferenceengine
+} = require('../lib/scraper.js');
 const {
     download,
     getImageLink
@@ -15,7 +15,7 @@ const {
 
 module.exports = {
     name: 'enhance',
-    aliases: ['hd'],
+    aliases: ['enhancer', 'unblur'],
     category: 'tools',
     code: async (ctx) => {
         const msgType = ctx.getMessageType();
@@ -26,21 +26,11 @@ module.exports = {
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-
             const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
-
-            const imageLink = await getImageLink(buffer);
-            const apiUrl = createAPIUrl('itzpire', `/tools/enhance`, {
-                url: imageLink,
-                type: 'modelx4'
-            });
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+            const result = await inferenceengine(buffer, 'enhance');
 
             return await ctx.reply({
-                image: {
-                    url: data.result.img
-                },
+                image: result
                 caption: null
             });
         } catch (error) {

@@ -3,7 +3,7 @@ const {
 } = require('../handler.js');
 const {
     bold
-} = require("@mengkodingan/ckptw");
+} = require('@mengkodingan/ckptw');
 
 module.exports = {
     name: 'tagall',

@@ -11,9 +11,6 @@ const {
 const {
     exec
 } = require('child_process');
-const {
-    afk
-} = require('discord-afk-js');
 const path = require('path');
 const {
     inspect
@@ -53,6 +50,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             ctx.simulateTyping(); // ctx.simulateRecording();
         }
 
+<<<<<<< HEAD
+=======
         // AFK.
         const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         if (mentionJids && mentionJids.length > 0) {
@@ -80,6 +79,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             });
         }
 
+>>>>>>> 0be58346537e6d55efa20f3e73319d24d8ab57e0
         // Owner-only.
         if (smpl.isOwner(ctx) === 1) {
             // Eval.

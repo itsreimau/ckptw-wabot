@@ -17,7 +17,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.botAdmin
         },
         group: {
-            function: async () => await ctx.isGroup(),
+            function: async () => await !ctx.isGroup(),
             msg: global.msg.group
         },
         owner: {
@@ -25,7 +25,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.owner
         },
         private: {
-            function: async () => await !ctx.isGroup(),
+            function: async () => await ctx.isGroup(),
             msg: global.msg.private
         }
     };

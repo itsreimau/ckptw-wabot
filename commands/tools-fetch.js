@@ -92,7 +92,7 @@ module.exports = {
         };
 
         // Text
-        console.log("Content-Type:", headers.get('content-type'));
+        console.log('Content-Type:', headers.get('content-type'));
         return ctx.reply(
             `➤ Status: ${status}\n` +
             '➤ Respon:\n' +

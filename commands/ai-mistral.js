@@ -22,9 +22,10 @@ module.exports = {
                 prompt: input
             });
             const response = await fetch(apiUrl);
-            const data = await response.json();
 
             if (!response.ok) throw new Error(global.msg.notFound);
+
+            const data = await response.json();
 
             return ctx.reply(data.answer);
         } catch (error) {
