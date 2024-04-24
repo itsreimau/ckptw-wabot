@@ -30,7 +30,7 @@ module.exports = {
             const result = await inferenceengine(buffer, 'dehaze');
 
             return await ctx.reply({
-                image: result
+                image: result,
                 caption: null
             });
         } catch (error) {
