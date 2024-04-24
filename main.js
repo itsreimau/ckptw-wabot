@@ -1,3 +1,6 @@
+const {
+    db
+} = require('./lib/database.js');
 const smpl = require('./lib/simple.js');
 const {
     bold,
@@ -48,6 +51,16 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Auto-typing.
         if (smpl.isCmd(m, ctx)) {
             ctx.simulateTyping(); // ctx.simulateRecording();
+        }
+
+        // Auto-DB.
+        if (!db.data.users[ctx._sender.jid]) {
+            db.data.users[ctx._sender.jid] = {
+                name: ctx._sender.pushName,
+                number: ctx._sender.jid.split('@')[0],
+                numberId: ctx._sender.jid,
+                level: 0
+            };
         }
 
         // Owner-only.

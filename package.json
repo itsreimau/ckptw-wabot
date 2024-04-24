@@ -38,6 +38,7 @@
         "jimp": "^0.16.13",
         "jsdom": "^24.0.0",
         "link-preview-js": "^3.0.5",
+        "lowdb": "^7.0.1",
         "lowline.ai": "^1.0.18",
         "moment-timezone": "^0.5.45",
         "util": "^0.12.5",
