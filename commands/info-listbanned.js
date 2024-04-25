@@ -16,19 +16,24 @@ module.exports = {
                 if (users[userId].isBanned === true) bannedUsers.push(userId);
             }
 
-            let resultText;
+            let resultText = '';
+            let userMentions = [];
 
             bannedUsers.forEach(userId => {
                 resultText += `➤ @${userId}\n`;
             });
 
+            bannedUsers.forEach(userId => {
+                userMentions.push(`${userId}@s.whatsapp.net`);
+            });
+
             return ctx.reply({
                 text: `❖ ${bold('List Banned')}\n` +
                     '\n' +
-                    `${resultText || 'Tidak ada.'}` +
+                    `${resultText}` +
                     '\n' +
                     global.msg.footer,
-                mentions: ctx.getMentioned()
+                mentions: userMentions
             });
         } catch (error) {
             console.error('Error:', error);
