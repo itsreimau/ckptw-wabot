@@ -7,7 +7,7 @@ module.exports = {
     category: 'info',
     code: async (ctx) => {
         try {
-            const databaseJSON = global.db.toJSON();
+            const databaseJSON = JSON.stringify(global.db);
             const parsedDB = JSON.parse(databaseJSON);
             const users = parsedDB.user;
             const bannedUsers = [];
