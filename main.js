@@ -51,8 +51,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (!m.content || m.key.fromMe) return;
 
         // Auto-DB
-        if (!db.get(ctx._sender.jid.split('@')[0])) {
-            db.set(ctx._sender.jid.split('@')[0], {
+        if (!db.get(`user.${ctx._sender.jid.split('@')[0])}`) {
+            db.set(user.${ctx._sender.jid.split('@')[0])}, {
                 isBanned: false
             });
         }
