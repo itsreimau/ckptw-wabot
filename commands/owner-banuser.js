@@ -17,9 +17,11 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
+        const input = ctx._args.join(' ');
+
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const inputUser = `${input}@s.whatsapp.net`;
-        const user = mentionedJids[0] || (ctx._args[0] ? (ctx._args.join('').replace(/[@ .+-]/g, '').replace(/^\+/, '').replace(/-/g, '') + '@s.whatsapp.net') : null);
+        const user = mentionedJids[0] || inputUser || null;
 
         if (!user) return ctx.reply({
             text: `${global.msg.argument}\n` +
