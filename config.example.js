@@ -22,6 +22,7 @@ global.bot = {
 global.msg = {
     // Command access.
     admin: `${bold('[ ! ]')} Perintah hanya dapat diakses oleh admin grup!`,
+    banned: `${bold('[ ! ]')} Tidak dapat memproses karena Anda telah dibanned!`,
     botAdmin: `${bold('[ ! ]')} Bot bukan admin, tidak bisa menggunakan perintah!`,
     owner: `${bold('[ ! ]')} Perintah hanya dapat diakses Owner!`,
     group: `${bold('[ ! ]')} Perintah hanya dapat diakses dalam grup!`,
