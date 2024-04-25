@@ -50,16 +50,15 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Checking messages.
         if (!m.content || m.key.fromMe) return;
 
-        // Auto-DB
-        if (!db.get(`user.${ctx._sender.jid.split('@')[0]}`)) {
-            db.set(`user.${ctx._sender.jid.split('@')[0]}`, {
-                isBanned: false
-            });
-        }
-
-        // Auto-typing.
+        // Auto-typing & Auto-DB.
         if (smpl.isCmd(m, ctx)) {
             ctx.simulateTyping(); // ctx.simulateRecording();
+
+            if (!db.get(`user.${ctx._sender.jid.split('@')[0]}`)) {
+                db.set(`user.${ctx._sender.jid.split('@')[0]}`, {
+                    isBanned: false
+                });
+            }
         }
 
         // Owner-only.
