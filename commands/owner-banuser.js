@@ -34,7 +34,7 @@ module.exports = {
 
             if (!global.db.get(user)) throw new Error('Pengguna tidak ada di database!');
 
-            await global.db.set(`${user}.isBanned`, true);
+            await global.db.set(`${user.split('@')[0]}.isBanned`, true);
 
             ctx.sendMessage(user, {
                 text: 'Anda telah dibanned oleh Owner!'
