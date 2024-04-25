@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
@@ -15,6 +18,12 @@ module.exports = {
     name: 'server',
     category: 'info',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         const apiUrl = createAPIUrl('http://ip-api.com', '/json', {});
 
         try {

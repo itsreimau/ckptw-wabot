@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     download
 } = require('../lib/simple.js');
 const {
@@ -17,6 +20,12 @@ module.exports = {
     aliases: ['s', 'stiker'],
     category: 'converter',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 

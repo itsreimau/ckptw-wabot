@@ -1,7 +1,17 @@
+const {
+    handler
+} = require('../handler.js');
+
 module.exports = {
     name: 'base64',
     category: 'tools',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         const input = ctx._args.join(' ');
 
         if (!input) return ctx.reply(

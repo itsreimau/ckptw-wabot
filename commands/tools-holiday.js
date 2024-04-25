@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
@@ -10,6 +13,12 @@ module.exports = {
     aliases: ['libur', 'harilibur'],
     category: 'tools',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         try {
             const month = new Date().getMonth() + 1;
             const apiUrl = createAPIUrl('https://api-harilibur.vercel.app', '/api', {

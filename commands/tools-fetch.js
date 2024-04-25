@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -7,6 +10,12 @@ module.exports = {
     name: 'fetch',
     category: 'tools',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         const url = ctx._args[0]
 
         if (!url) return ctx.reply(

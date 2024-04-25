@@ -12,6 +12,10 @@ exports.handler = async (ctx, options) => {
             function: async () => await smpl.isAdmin(ctx) === 0,
             msg: global.msg.admin
         },
+        banned: {
+            function: async () => await global.db.get(`${ctx._sender.jid}.isBanned`),
+            msg: global.msg.banned
+        },
         botAdmin: {
             function: async () => await smpl.isAdminOf(ctx) === 0,
             msg: global.msg.botAdmin

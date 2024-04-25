@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     download
 } = require('../lib/simple.js');
 const {
@@ -10,6 +13,12 @@ module.exports = {
     aliases: ['toimage'],
     category: 'converter',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
         if (!quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa sticker!`);

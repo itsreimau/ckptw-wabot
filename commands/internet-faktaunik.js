@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
@@ -14,6 +17,12 @@ module.exports = {
     aliases: ['fakta'],
     category: 'internet',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         const apiUrl = await createAPIUrl('https://uselessfacts.jsph.pl', '/api/v2/facts/random', {});
 
         try {

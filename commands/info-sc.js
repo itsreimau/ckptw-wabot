@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
@@ -10,6 +13,12 @@ module.exports = {
     aliases: ['script', 'source', 'sourcecode'],
     category: 'info',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         const apiUrl = await createAPIUrl('https://api.github.com', '/repos/itsreimau/ckptw-wabot', {});
         const response = await fetch(apiUrl);
 

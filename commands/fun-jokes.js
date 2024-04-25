@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
@@ -9,6 +12,12 @@ module.exports = {
     name: 'jokes',
     category: 'fun',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         const apiUrl = createAPIUrl('https://candaan-api.vercel.app', '/api/text/random', {});
 
         try {

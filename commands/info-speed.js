@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     bold
 } = require('@mengkodingan/ckptw');
 const {
@@ -9,6 +12,12 @@ module.exports = {
     name: 'speed',
     category: 'info',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         try {
             const pOld = performance.now();
             const res = await ctx.reply('Menguji kecepatan...');

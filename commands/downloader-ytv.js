@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -12,6 +15,12 @@ module.exports = {
     aliases: ['ytmp4', 'ytvideo'],
     category: 'downloader',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         const input = ctx._args.join(' ');
 
         if (!input) return ctx.reply(

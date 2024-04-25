@@ -16,7 +16,6 @@ module.exports = {
 
             return ctx.sendMessage(ctx.id, {
                 text: text,
-                mention: ctx.getMentioned(),
                 contextInfo: {
                     externalAdReply: {
                         title: global.msg.watermark,

@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
@@ -17,6 +20,12 @@ module.exports = {
     aliases: ['cuaca'],
     category: 'internet',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         const input = ctx._args.join(' ');
 
         if (!input) return ctx.reply(

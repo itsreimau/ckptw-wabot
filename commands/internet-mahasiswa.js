@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
@@ -10,6 +13,12 @@ module.exports = {
     name: 'mahasiswa',
     category: 'internet',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         const input = ctx._args.join(' ');
 
         if (!input) return ctx.reply(
@@ -18,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await createAPIUrl('https://api-frontend.kemdikbud.go.id', `/hit_mhs/${text}`, {});
+            const apiUrl = await createAPIUrl('https://api-frontend.kemdikbud.go.id', `/hit_mhs/${input}`, {});
             const response = await fetch(apiUrl);
 
             if (!response.ok) throw new Error(global.msg.notFound);
@@ -32,7 +41,7 @@ module.exports = {
                 const website = await createAPIUrl('https://pddikti.kemdikbud.go.id', `${websiteLink}`, {});
                 resultText += `➤ Nama: ${nama}\n` +
                     `➤ Data ditemukan di situs web: ${website}\n` +
-                    `-----\n`;
+                    '-----\n';
             });
 
             return ctx.reply(

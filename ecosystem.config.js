@@ -3,6 +3,6 @@ module.exports = {
         name: "rei-ayanami",
         script: "./index.js",
         watch: true,
-        ignore_watch: ["node_modules", "state"]
+        ignore_watch: ["database.json", "node_modules", "state"]
     }]
 };

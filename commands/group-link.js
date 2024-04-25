@@ -11,7 +11,8 @@ module.exports = {
     category: 'group',
     code: async (ctx) => {
         const handlerObj = await handler(ctx, {
-            botAdmin: true,
+            botadmin: true,
+            banned: true,
             group: true
         });
 

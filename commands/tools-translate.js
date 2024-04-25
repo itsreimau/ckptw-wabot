@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -11,6 +14,12 @@ module.exports = {
     aliases: ['tr'],
     category: 'tools',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         if (!ctx._args.length) return ctx.reply(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo dunia!`)}`

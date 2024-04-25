@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     bold
 } = require('@mengkodingan/ckptw');
 
@@ -7,6 +10,12 @@ module.exports = {
     aliases: ['donasi'],
     category: 'info',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         return ctx.reply(
             `❖ ${bold('Donate')}\n` +
             '\n' +

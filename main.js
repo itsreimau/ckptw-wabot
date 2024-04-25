@@ -50,6 +50,13 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Checking messages.
         if (!m.content || m.key.fromMe) return;
 
+        // Auto-DB
+        if (!db.get(ctx._sender.jid)) {
+            db.set(ctx._sender.jid, {
+                isBanned: false
+            });
+        }
+
         // Auto-typing.
         if (smpl.isCmd(m, ctx)) {
             ctx.simulateTyping(); // ctx.simulateRecording();

@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     createAPIUrl
 } = require('../lib/api.js');
 const {
@@ -11,6 +14,12 @@ module.exports = {
     aliases: ['gempabumi'],
     category: 'internet',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         const apiUrl = await createAPIUrl('https://data.bmkg.go.id', '/DataMKG/TEWS/autogempa.json', {});
 
         try {
