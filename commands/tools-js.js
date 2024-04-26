@@ -39,10 +39,10 @@ module.exports = {
             const output = await new Promise((resolve) => {
                 const childProcess = spawn('node', ['-e', script]);
 
-                let responseData = '';
+                let result = '';
 
                 childProcess.stdout.on('data', (data) => {
-                    responseData += data.toString();
+                    result += data.toString();
                 });
 
                 childProcess.stderr.on('data', (data) => {
@@ -53,7 +53,7 @@ module.exports = {
                     if (code !== 0) {
                         throw new Error(`Keluar dari proses dengan kode: ${code}`);
                     } else {
-                        resolve(monospace(responseData));
+                        resolve(result);
                     }
                 });
 
@@ -63,10 +63,10 @@ module.exports = {
                 }, 10000);
             });
 
-            ctx.reply(output);
+            ctx.reply(result.trim());
         } catch (error) {
             console.error('Error:', error);
-            return ctx.reply(error.message);
+            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
     }
 };
