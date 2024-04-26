@@ -42,7 +42,6 @@
         "moment-timezone": "^0.5.45",
         "simpl.db": "^2.13.0",
         "util": "^0.12.5",
-        "vm": "^0.1.0",
         "wa-sticker-formatter": "^4.4.4",
         "yt-search": "^2.10.4"
     }

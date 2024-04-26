@@ -15,7 +15,7 @@ module.exports = {
         const handlerObj = await handler(ctx, {
             admin: true,
             banned: true,
-            botadmin: true,
+            botAdmin: true,
             group: true
         });
 

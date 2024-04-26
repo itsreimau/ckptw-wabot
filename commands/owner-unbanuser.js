@@ -9,7 +9,7 @@ const {
 module.exports = {
     name: 'unban',
     aliases: ['unbanuser'],
-    category: 'group',
+    category: 'owner',
     code: async (ctx) => {
         const handlerObj = await handler(ctx, {
             owner: true

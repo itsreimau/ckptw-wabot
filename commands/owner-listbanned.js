@@ -4,6 +4,7 @@ const {
 
 module.exports = {
     name: 'listbanned',
+    aliases: ['listban'],
     category: 'info',
     code: async (ctx) => {
         try {

@@ -5,7 +5,9 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
-const vm = require('vm');
+const {
+    exec
+} = require('child_process');
 
 module.exports = {
     name: 'js',
@@ -16,12 +18,12 @@ module.exports = {
             banned: true
         });
 
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (handlerObj.status) throw new Error(handlerObj.message);
 
         const input = ctx._args.join(' ');
         const script = input;
 
-        if (!script) return ctx.reply(
+        if (!script) throw new Error(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} console.log('Hello World!');`)}`
         );
@@ -34,39 +36,17 @@ module.exports = {
         }
 
         try {
-            const output = await new Promise((resolve) => {
-                const sandbox = {
-                    output: '',
-                    console: {
-                        log: (...args) => {
-                            sandbox.output += args.join(' ');
-                        }
-                    }
-                };
+            exec(script, {
+                timeout: 10000
+            }, (error, stdout, stderr) => {
+                if (error) throw error;
+                if (stderr) throw new Error(stderr);
 
-                const timeoutId = setTimeout(() => {
-                    resolve(`${bold('[ ! ]')} Kode mencapai batas waktu keluaran.`);
-                    sandbox.output = '';
-                    clearTimeout(timeoutId);
-                }, 10000);
-
-                try {
-                    vm.runInNewContext(script, sandbox);
-                    resolve(monospace(sandbox.output));
-                } catch (error) {
-                    resolve(
-                        `${bold('[ ! ]')} Terjadi kesalahan: ${error.message}\n` +
-                        `${monospace(error.stack || '')}`
-                    );
-                } finally {
-                    clearTimeout(timeoutId);
-                }
+                ctx.reply(monospace(stdout));
             });
-
-            ctx.reply(output);
         } catch (error) {
             console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            throw new Error(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
     }
 };
