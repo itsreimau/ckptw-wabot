@@ -1,12 +1,21 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     bold
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
     name: 'listbanned',
     aliases: ['listban'],
-    category: 'info',
+    category: 'owner',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            owner: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         try {
             const databaseJSON = JSON.stringify(global.db);
             const parsedDB = JSON.parse(databaseJSON);
