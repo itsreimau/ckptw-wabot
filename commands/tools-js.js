@@ -63,7 +63,7 @@ module.exports = {
                 }, 10000);
             });
 
-            ctx.reply(result.trim());
+            ctx.reply(output.trim());
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
