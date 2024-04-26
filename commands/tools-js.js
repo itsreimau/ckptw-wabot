@@ -29,7 +29,7 @@ module.exports = {
         );
 
         try {
-            const restricted = ['import', 'eval', 'Function', 'global'];
+            const restricted = ['require', 'eval', 'Function', 'global'];
             for (const w of restricted) {
                 if (script.includes(w)) {
                     throw new Error(`Penggunaan ${w} tidak diperbolehkan dalam kode.`);
