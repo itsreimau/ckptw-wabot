@@ -86,8 +86,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (getMessageDataMenfess) {
             const {
                 from
-            } = getMessageData;
-            const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
+            } = getMessageDataMenfess;
             await ctx.sendMessage(`${from}@s.whatsapp.net`, {
                 text: `💌 Hai, saya ${global.bot.name}, Dia (${ctx._sender.jid.split('@')[0]}) menjawab pesan menfess yang Anda kirimkan.\n` +
                     '-----\n' +
@@ -103,7 +102,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Owner-only.
     if (smpl.isOwner(ctx) === 1) {
         // Eval.
-        if (m.content.startsWith('> ') || m.content.startsWith('>> ')) {
+        if (m.content && m.content.startsWith && (m.content.startsWith('> ') || m.content.startsWith('>> '))) {
             const code = m.content.slice(2);
 
             const result = await eval(m.content.startsWith('>> ') ? `(async () => { ${code} })()` : code);
@@ -111,7 +110,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Exec.
-        if (m.content.startsWith('$ ')) {
+        if (m.content && m.content.startsWith && m.content.startsWith('$ ')) {
             const command = m.content.slice(2);
 
             const output = await new Promise((resolve, reject) => {
