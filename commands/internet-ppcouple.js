@@ -2,10 +2,12 @@ const {
     handler
 } = require('../handler.js');
 const {
+    createAPIUrl
+} = require('../lib/api.js');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
-const fg = require('api-dylux');
 
 module.exports = {
     name: 'ppcouple',
@@ -17,13 +19,6 @@ module.exports = {
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
-
-        const input = ctx._args.join(' ');
-
-        if (!input) return ctx.reply(
-            `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} rei ayanami`)}`
-        );
 
         try {
             const apiUrl = createAPIUrl('sandipbaruwal', '/dp', {});
