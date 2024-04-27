@@ -10,14 +10,14 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'demote',
-    category: 'group',
+    name: 'odemote',
+    category: 'owner',
     code: async (ctx) => {
         const handlerObj = await handler(ctx, {
-            admin: true,
             banned: true,
             botAdmin: true,
-            group: true
+            group: true,
+            owner: true
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);

@@ -20,25 +20,59 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const [abbr, chapter] = ctx._args;
 
-        if (!input) return ctx.reply(
-            `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kejadian`)}`
+        if (!ctx._args.length) return ctx.reply(
+            `${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar buku.\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kej 1`)}`
         );
 
+        if (ctx._args[0] === 'list') {
+            const apiUrl = await createAPIUrl('https://beeble.vercel.app', '/passage/list', {});
+            const response = await fetch(apiUrl);
+
+            if (!response.ok) throw new Error(global.msg.notFound);
+
+            const {
+                data
+            } = await response.json();
+
+            const resultText = data.map(d =>
+                `➤ Nama: ${d.book} (${data.abbr})\n` +
+                `➤ Bab: ${d.chapter}`
+            ).join('\n-----\n');
+            return ctx.reply(
+                `❖ ${bold('Daftar Buku')}\n` +
+                '\n' +
+                `${resultText}\n` +
+                '\n' +
+                global.msg.footer
+            );
+        }
+
         try {
-            const result = await alkitab(input);
+            const apiUrl = await createAPIUrl('https://beeble.vercel.app', `/api/v1/passage/${abbr}/${chapter}`, {
+                ver: 'tb'
+            });
+            const response = await fetch(apiUrl);
 
-            if (!result) throw new Error(global.msg.notFound);
+            if (!response.ok) throw new Error(global.msg.notFound);
 
-            const resultText = result.map(r =>
-                `➤ ${r.title}\n` +
-                `➤ ${r.text}`
+            const {
+                data
+            } = await response.json();
+
+            const resultText = data.verse.map(v =>
+                `➤ Ayat: ${v.verse}\n` +
+                `➤ ${v.content}`
             ).join('\n-----\n');
             return ctx.reply(
                 `❖ ${bold('Alkitab')}\n` +
                 '\n' +
+                `➤ Nama: ${data.book.name}\n` +
+                `➤ Bab: ${data.book.chapter}\n` +
+                `➤ Judul: ${data.verse[0].content}\n` +
+                '-----\n' +
                 `${resultText}\n` +
                 '\n' +
                 global.msg.footer

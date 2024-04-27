@@ -10,14 +10,14 @@ const {
 } = require('@mengkodingan/ckptw');
 
 module.exports = {
-    name: 'demote',
-    category: 'group',
+    name: 'okick',
+    category: 'owner',
     code: async (ctx) => {
         const handlerObj = await handler(ctx, {
-            admin: true,
             banned: true,
             botAdmin: true,
-            group: true
+            group: true,
+            owner: true
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
@@ -34,11 +34,11 @@ module.exports = {
         try {
             if (member === ctx._sender.jid) throw new Error('Tidak dapat digunakan pada diri Anda sendiri.');
 
-            if (await isAdmin(ctx, member.split('@')[0]) === 0) throw new Error('Anggota ini adalah anggota biasa.');
+            if (await isAdmin(ctx, member.split('@')[0]) === 1) throw new Error('Anggota ini adalah admin grup.');
 
-            await ctx._client.groupParticipantsUpdate(ctx.id, [member], 'demote');
+            await ctx._client.groupParticipantsUpdate(ctx.id, [member], 'remove');
 
-            return ctx.reply(`${bold('[ ! ]')} Berhasil diturunkan dari admin menjadi anggota biasa!`);
+            return ctx.reply(`${bold('[ ! ]')} Berhasil dikeluarkan!`);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

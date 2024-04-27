@@ -2,6 +2,9 @@ const {
     handler
 } = require('../handler.js');
 const {
+    download
+} = require('../lib/simple.js');
+const {
     bold
 } = require('@mengkodingan/ckptw');
 const {

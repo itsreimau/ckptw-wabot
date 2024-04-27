@@ -53,12 +53,27 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Auto-typing & Auto-DB.
         if (smpl.isCmd(m, ctx)) {
             ctx.simulateTyping(); // ctx.simulateRecording();
+        }
 
-            if (!db.get(`user.${ctx._sender.jid.split('@')[0]}`)) {
-                db.set(`user.${ctx._sender.jid.split('@')[0]}`, {
-                    isBanned: false
-                });
-            }
+        // AFK.
+        const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+        if (mentionJids && mentionJids.length > 0) {
+            mentionJids.forEach(mentionJid => {
+                const getMentionData = db.get(`user.${ctx._sender.jid.split('@')[0]}.afk`);
+                if (getMentionData) {
+                    const [timeStamp, reason] = getMentionData;
+                    const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
+                    ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || 'kurang dari satu detik.'}.`);
+                }
+            });
+        }
+
+        const getMessageData = db.get(`user.${ctx._sender.jid.split('@')[0]}.afk`);
+        if (getMessageData) {
+            const [timeStamp, reason] = getMessageData;
+            const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
+            afk.ctx(`user.${ctx._sender.jid.split('@')[0]}.afk`);
+            ctx.reply(`Anda mengakhiri AFK setelah ${reason} selama ${timeAgo}.`);
         }
 
         // Owner-only.
