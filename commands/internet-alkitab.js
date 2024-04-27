@@ -23,31 +23,30 @@ module.exports = {
         const [abbr, chapter] = ctx._args;
 
         if (!ctx._args.length) return ctx.reply(
-            `${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar buku.\n` +
+            `${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kej 1`)}`
         );
 
         if (ctx._args[0] === 'list') {
-            const apiUrl = await createAPIUrl('https://beeble.vercel.app', '/passage/list', {});
-            const response = await fetch(apiUrl);
+            try {
+                const apiUrl = await createAPIUrl('https://beeble.vercel.app', '/passage/list', {});
+                const response = await fetch(apiUrl);
 
-            if (!response.ok) throw new Error(global.msg.notFound);
+                if (!response.ok) throw new Error(global.msg.notFound);
 
-            const {
-                data
-            } = await response.json();
+                const {
+                    data
+                } = await response.json();
 
-            const resultText = data.map(d =>
-                `➤ Nama: ${d.name} (${d.abbr})\n` +
-                `➤ Bab: ${d.chapter}`
-            ).join('\n-----\n');
-            return ctx.reply(
-                `❖ ${bold('Daftar')}\n` +
-                '\n' +
-                `${resultText}\n` +
-                '\n' +
-                global.msg.footer
-            );
+                const resultText = data
+                    .map(d => `➤ Nama: ${d.name} (${d.abbr})\n➤ Bab: ${d.chapter}`)
+                    .join('\n-----\n');
+
+                return ctx.reply(`❖ ${bold('Daftar')}\n\n${resultText}\n\n${global.msg.footer}`);
+            } catch (error) {
+                console.error('Error fetching list:', error);
+                return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan saat mengambil daftar: ${error.message}`);
+            }
         }
 
         try {
@@ -62,7 +61,7 @@ module.exports = {
                 data
             } = await response.json();
 
-            const resultText = data.verses.map(v =>
+            const resultText = data.verses.slice(1).map(v =>
                 `➤ Ayat: ${v.verse}\n` +
                 `➤ ${v.content}`
             ).join('\n-----\n');

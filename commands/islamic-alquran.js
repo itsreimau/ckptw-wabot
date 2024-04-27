@@ -22,7 +22,7 @@ module.exports = {
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         if (!ctx._args.length) return ctx.reply(
-            `${global.msg.argument}\n` +
+            `${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 21 35`)}`
         );
 
