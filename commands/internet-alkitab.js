@@ -1,3 +1,14 @@
+const {
+    handler
+} = require('../handler.js');
+const {
+    createAPIUrl
+} = require('../lib/api.js');
+const {
+    bold,
+    monospace
+} = require('@mengkodingan/ckptw');
+
 module.exports = {
     name: 'alkitab',
     aliases: ['injil'],
