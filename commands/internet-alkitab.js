@@ -27,32 +27,30 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kej 1`)}`
         );
 
+        if (ctx._args[0] === 'list') {
+            const apiUrl = await createAPIUrl('https://beeble.vercel.app', '/passage/list', {});
+            const response = await fetch(apiUrl);
+
+            if (!response.ok) throw new Error(global.msg.notFound);
+
+            const {
+                data
+            } = await response.json();
+
+            const resultText = data.map(d =>
+                `➤ Nama: ${d.name} (${d.abbr})\n` +
+                `➤ Bab: ${d.chapter}`
+            ).join('\n-----\n');
+            return ctx.reply(
+                `❖ ${bold('Daftar')}\n` +
+                '\n' +
+                `${resultText}\n` +
+                '\n' +
+                global.msg.footer
+            );
+        }
+
         try {
-
-            if (ctx._args[0] === 'list') {
-                const apiUrl = await createAPIUrl('https://beeble.vercel.app', '/passage/list', {});
-                const response = await fetch(apiUrl);
-
-                if (!response.ok) throw new Error(global.msg.notFound);
-
-                const {
-                    data
-                } = await response.json();
-
-                const resultText = data.map(d =>
-                    `➤ Nama: ${d.name} (${d.abbr})\n` +
-                    `➤ Bab: ${d.chapter}`
-                ).join('\n-----\n');
-                return ctx.reply(
-                    `❖ ${bold('Daftar')}\n` +
-                    '\n' +
-                    `${resultText}\n` +
-                    '\n' +
-                    global.msg.footer
-                );
-            }
-
-
             const apiUrl = await createAPIUrl('https://beeble.vercel.app', `/api/v1/passage/${abbr}/${chapter}`, {
                 ver: 'tb'
             });
