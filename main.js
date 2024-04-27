@@ -61,7 +61,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             mentionJids.forEach(mentionJid => {
                 const getMentionDataAFK = db.get(`user.${mentionJid.split('@')[0]}.afk`);
                 if (getMentionDataAFK) {
-                    const [timeStamp, reason] = getMentionData;
+                    const [timeStamp, reason] = getMentionDataAFK;
                     const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
                     ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || 'kurang dari satu detik.'}.`);
                 }
