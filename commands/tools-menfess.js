@@ -1,4 +1,7 @@
 const {
+    handler
+} = require('../handler.js');
+const {
     bold,
     monospace,
     quote
@@ -9,6 +12,13 @@ module.exports = {
     aliases: ['confess'],
     category: 'tools',
     code: async (ctx) => {
+        const handlerObj = await handler(ctx, {
+            banned: true,
+            private: true
+        });
+
+        if (handlerObj.status) return ctx.reply(handlerObj.message);
+
         const input = ctx._args.join(' ');
 
         if (!input) return ctx.reply(
