@@ -115,7 +115,7 @@ exports.formatSize = (bytes) => {
  */
 exports.isCmd = (m, ctx) => {
     const prefixRegex = new RegExp(ctx._config.prefix, 'i');
-    const content = m.content.trim();
+    const content = m.content && m.content.trim();
 
     if (!prefixRegex.test(content)) return false;
 
