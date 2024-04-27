@@ -3,7 +3,7 @@ const {
 } = require('../handler.js');
 const {
     isAdmin
-} = require('../lib/simple.js');
+} = require('../tools/simple.js');
 const {
     bold,
     monospace

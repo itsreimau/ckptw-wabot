@@ -4,7 +4,7 @@ const {
 const {
     download,
     getImageLink
-} = require('../lib/simple.js');
+} = require('../tools/simple.js');
 const {
     bold,
     monospace

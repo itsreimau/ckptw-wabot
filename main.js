@@ -1,4 +1,4 @@
-const smpl = require('./lib/simple.js');
+const smpl = require('./tools/simple.js');
 const {
     bold,
     Client,
@@ -59,7 +59,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         if (mentionJids && mentionJids.length > 0) {
             mentionJids.forEach(mentionJid => {
-                const getMentionData = db.get(`user.${ctx._sender.jid.split('@')[0]}.afk`);
+                const getMentionDataAFK = db.get(`user.${mentionJid.split('@')[0]}.afk`);
                 if (getMentionData) {
                     const [timeStamp, reason] = getMentionData;
                     const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
@@ -68,12 +68,31 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             });
         }
 
-        const getMessageData = db.get(`user.${ctx._sender.jid.split('@')[0]}.afk`);
+        const getMessageDataAFK = db.get(`user.${ctx._sender.jid.split('@')[0]}.afk`);
         if (getMessageData) {
             const [timeStamp, reason] = getMessageData;
             const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
-            afk.ctx(`user.${ctx._sender.jid.split('@')[0]}.afk`);
-            ctx.reply(`Anda mengakhiri AFK setelah ${reason} selama ${timeAgo}.`);
+            ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`);
+            db.delete(`user.${senderJid}.afk`);
+        }
+
+        // Private
+        if (!ctx.isGroup) {
+            // Menfess
+            const getMessageDataMenfess = db.get(`menfess.${ctx._sender.jid.split('@')[0]}`);
+            if (getMessageData) {
+                const [from] = getMessageData;
+                const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
+                await ctx.sendMessage(`${from}@s.whatsapp.net`, {
+                    text: `💌 Hai, saya ${global.bot.name}, Dia (${ctx._sender.jid.split('@')[0]}) menjawab pesan menfess yang Anda kirimkan.\n` +
+                        '-----\n' +
+                        `${m.content}\n` +
+                        '-----\n' +
+                        'Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n'
+                });
+                db.delete(`menfess.${from}`);
+                return ctx.reply('Pesan berhasil terkirim!');
+            }
         }
 
         // Owner-only.

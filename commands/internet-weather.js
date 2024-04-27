@@ -3,10 +3,10 @@ const {
 } = require('../handler.js');
 const {
     createAPIUrl
-} = require('../lib/api.js');
+} = require('../tools/api.js');
 const {
     ucword
-} = require('../lib/simple.js');
+} = require('../tools/simple.js');
 const {
     bold,
     monospace

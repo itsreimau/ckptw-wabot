@@ -3,11 +3,13 @@ const {
 } = require('../handler.js');
 const {
     createAPIUrl
-} = require('../lib/api.js');
+} = require('../tools/api.js');
 const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = {
     name: 'alkitab',
@@ -28,25 +30,15 @@ module.exports = {
         );
 
         if (ctx._args[0] === 'list') {
-            try {
-                const apiUrl = await createAPIUrl('https://beeble.vercel.app', '/passage/list', {});
-                const response = await fetch(apiUrl);
+            const listText = fs.readFileSync(path.resolve(__dirname, '../assets/txt/list-alkitab.txt'), 'utf8');
 
-                if (!response.ok) throw new Error(global.msg.notFound);
-
-                const {
-                    data
-                } = await response.json();
-
-                const resultText = data
-                    .map(d => `➤ Nama: ${d.name} (${d.abbr})\n➤ Bab: ${d.chapter}`)
-                    .join('\n-----\n');
-
-                return ctx.reply(`❖ ${bold('Daftar')}\n\n${resultText}\n\n${global.msg.footer}`);
-            } catch (error) {
-                console.error('Error fetching list:', error);
-                return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan saat mengambil daftar: ${error.message}`);
-            }
+            return ctx.reply(
+                `❖ ${bold('Daftar')}\n` +
+                '\n' +
+                `${listText}\n` +
+                '\n' +
+                global.msg.footer
+            );
         }
 
         try {

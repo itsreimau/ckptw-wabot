@@ -3,7 +3,7 @@ const {
 } = require('../handler.js');
 const {
     crypto
-} = require('../lib/scraper.js');
+} = require('../tools/scraper.js');
 const {
     bold,
     monospace

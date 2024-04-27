@@ -3,7 +3,7 @@ const {
 } = require('../handler.js');
 const {
     convertMsToDuration
-} = require('../lib/simple.js');
+} = require('../tools/simple.js');
 
 module.exports = {
     name: 'uptime',

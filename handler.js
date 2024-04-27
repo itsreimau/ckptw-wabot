@@ -1,4 +1,4 @@
-const smpl = require('./lib/simple.js');
+const smpl = require('./tools/simple.js');
 
 /**
  * Handles requests based on the given options.

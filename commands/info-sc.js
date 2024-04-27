@@ -3,7 +3,7 @@ const {
 } = require('../handler.js');
 const {
     createAPIUrl
-} = require('../lib/api.js');
+} = require('../tools/api.js');
 const {
     bold
 } = require('@mengkodingan/ckptw');

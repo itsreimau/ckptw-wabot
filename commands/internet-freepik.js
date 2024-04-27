@@ -3,7 +3,7 @@ const {
 } = require('../handler.js');
 const {
     freepik
-} = require('../lib/scraper.js');
+} = require('../tools/scraper.js');
 const {
     bold,
     monospace

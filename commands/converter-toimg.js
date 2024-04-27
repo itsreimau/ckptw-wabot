@@ -3,7 +3,7 @@ const {
 } = require('../handler.js');
 const {
     download
-} = require('../lib/simple.js');
+} = require('../tools/simple.js');
 const {
     bold
 } = require('@mengkodingan/ckptw');

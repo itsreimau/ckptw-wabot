@@ -1,7 +1,7 @@
 const package = require('../package.json');
 const {
     getMenu
-} = require('../lib/menu.js');
+} = require('../tools/menu.js');
 const {
     bold
 } = require('@mengkodingan/ckptw');
