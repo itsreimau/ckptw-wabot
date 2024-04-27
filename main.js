@@ -48,7 +48,7 @@ cmd.load();
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     try {
         // Checking messages.
-        if (!m.content || m.key.fromMe) return;
+        // if (!m.content || m.key.fromMe) return;
 
         // Auto-typing & Auto-DB.
         if (smpl.isCmd(m, ctx)) {
