@@ -46,9 +46,11 @@ cmd.load();
 
 // Event handling when the message appears.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
+    console.log(m); // For debug.
+
     try {
         // Checking messages.
-        // if (!m.content || m.key.fromMe) return;
+        if (!m.content || m.key.fromMe) return;
 
         // Auto-typing & Auto-DB.
         if (smpl.isCmd(m, ctx)) {
