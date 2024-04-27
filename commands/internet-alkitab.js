@@ -2,8 +2,8 @@ const {
     handler
 } = require('../handler.js');
 const {
-    alkitab
-} = require('../lib/scraper.js');
+    createAPIUrl
+} = require('../lib/api.js');
 const {
     bold,
     monospace
