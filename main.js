@@ -48,95 +48,90 @@ cmd.load();
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     console.log(m); // For debug.
 
-    try {
-        // Checking messages.
-        if (!m.content || m.key.fromMe) return;
+    // Checking messages.
+    // if (!m.content || m.key.fromMe) return;
 
-        // Auto-typing & Auto-DB.
-        if (smpl.isCmd(m, ctx)) {
-            ctx.simulateTyping(); // ctx.simulateRecording();
-        }
+    // Auto-typing & Auto-DB.
+    if (smpl.isCmd(m, ctx)) {
+        ctx.simulateTyping(); // ctx.simulateRecording();
+    }
 
-        // AFK.
-        const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-        if (mentionJids && mentionJids.length > 0) {
-            mentionJids.forEach(mentionJid => {
-                const getMentionDataAFK = db.get(`user.${mentionJid.split('@')[0]}.afk`);
-                if (getMentionDataAFK) {
-                    const {
-                        timeStamp,
-                        reason
-                    } = getMentionDataAFK;
-                    const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
-                    ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || 'kurang dari satu detik.'}.`);
-                }
-            });
-        }
-
-        const getMessageDataAFK = db.get(`user.${ctx._sender.jid.split('@')[0]}.afk`);
-        if (getMessageDataAFK) {
-            const {
-                timeStamp,
-                reason
-            } = getMessageDataAFK;
-            const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
-            ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`);
-            db.delete(`user.${ctx._sender.jid.split('@')[0]}.afk`);
-        }
-
-        // Private
-        if (!ctx.isGroup) {
-            // Menfess
-            const getMessageDataMenfess = db.get(`menfess.${ctx._sender.jid.split('@')[0]}`);
-            if (getMessageDataMenfess) {
+    // AFK.
+    const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+    if (mentionJids && mentionJids.length > 0) {
+        mentionJids.forEach(mentionJid => {
+            const getMentionDataAFK = db.get(`user.${mentionJid.split('@')[0]}.afk`);
+            if (getMentionDataAFK) {
                 const {
-                    from
-                } = getMessageData;
+                    timeStamp,
+                    reason
+                } = getMentionDataAFK;
                 const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
-                await ctx.sendMessage(`${from}@s.whatsapp.net`, {
-                    text: `💌 Hai, saya ${global.bot.name}, Dia (${ctx._sender.jid.split('@')[0]}) menjawab pesan menfess yang Anda kirimkan.\n` +
-                        '-----\n' +
-                        `${m.content}\n` +
-                        '-----\n' +
-                        'Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n'
-                });
-                db.delete(`menfess.${from}`);
-                return ctx.reply('Pesan berhasil terkirim!');
+                ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || 'kurang dari satu detik.'}.`);
             }
+        });
+    }
+
+    const getMessageDataAFK = db.get(`user.${ctx._sender.jid.split('@')[0]}.afk`);
+    if (getMessageDataAFK) {
+        const {
+            timeStamp,
+            reason
+        } = getMessageDataAFK;
+        const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
+        ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`);
+        db.delete(`user.${ctx._sender.jid.split('@')[0]}.afk`);
+    }
+
+    // Private
+    if (!ctx.isGroup) {
+        // Menfess
+        const getMessageDataMenfess = db.get(`menfess.${ctx._sender.jid.split('@')[0]}`);
+        if (getMessageDataMenfess) {
+            const {
+                from
+            } = getMessageData;
+            const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
+            await ctx.sendMessage(`${from}@s.whatsapp.net`, {
+                text: `💌 Hai, saya ${global.bot.name}, Dia (${ctx._sender.jid.split('@')[0]}) menjawab pesan menfess yang Anda kirimkan.\n` +
+                    '-----\n' +
+                    `${m.content}\n` +
+                    '-----\n' +
+                    'Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n'
+            });
+            db.delete(`menfess.${from}`);
+            return ctx.reply('Pesan berhasil terkirim!');
+        }
+    }
+
+    // Owner-only.
+    if (smpl.isOwner(ctx) === 1) {
+        // Eval.
+        if (m.content.startsWith('> ') || m.content.startsWith('>> ')) {
+            const code = m.content.slice(2);
+
+            const result = await eval(m.content.startsWith('>> ') ? `(async () => { ${code} })()` : code);
+            await ctx.reply(inspect(result));
         }
 
-        // Owner-only.
-        if (smpl.isOwner(ctx) === 1) {
-            // Eval.
-            if (m.content.startsWith('> ') || m.content.startsWith('>> ')) {
-                const code = m.content.slice(2);
+        // Exec.
+        if (m.content.startsWith('$ ')) {
+            const command = m.content.slice(2);
 
-                const result = await eval(m.content.startsWith('>> ') ? `(async () => { ${code} })()` : code);
-                await ctx.reply(inspect(result));
-            }
-
-            // Exec.
-            if (m.content.startsWith('$ ')) {
-                const command = m.content.slice(2);
-
-                const output = await new Promise((resolve, reject) => {
-                    exec(command, (error, stdout, stderr) => {
-                        if (error) {
-                            reject(new Error(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`));
-                        } else if (stderr) {
-                            reject(new Error(stderr));
-                        } else {
-                            resolve(stdout);
-                        }
-                    });
+            const output = await new Promise((resolve, reject) => {
+                exec(command, (error, stdout, stderr) => {
+                    if (error) {
+                        reject(new Error(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`));
+                    } else if (stderr) {
+                        reject(new Error(stderr));
+                    } else {
+                        resolve(stdout);
+                    }
                 });
+            });
 
-                await ctx.reply(output);
-            }
+            await ctx.reply(output);
         }
-    } catch (error) {
-        console.error('Error:', error);
-        return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
     }
 });
 
