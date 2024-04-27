@@ -1,14 +1,3 @@
-const {
-    handler
-} = require('../handler.js');
-const {
-    createAPIUrl
-} = require('../lib/api.js');
-const {
-    bold,
-    monospace
-} = require('@mengkodingan/ckptw');
-
 module.exports = {
     name: 'alkitab',
     aliases: ['injil'],
@@ -27,30 +16,32 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kej 1`)}`
         );
 
-        if (ctx._args[0] === 'list') {
-            const apiUrl = await createAPIUrl('https://beeble.vercel.app', '/passage/list', {});
-            const response = await fetch(apiUrl);
-
-            if (!response.ok) throw new Error(global.msg.notFound);
-
-            const {
-                data
-            } = await response.json();
-
-            const resultText = data.map(d =>
-                `➤ Nama: ${d.book} (${data.abbr})\n` +
-                `➤ Bab: ${d.chapter}`
-            ).join('\n-----\n');
-            return ctx.reply(
-                `❖ ${bold('Daftar Buku')}\n` +
-                '\n' +
-                `${resultText}\n` +
-                '\n' +
-                global.msg.footer
-            );
-        }
-
         try {
+
+            if (ctx._args[0] === 'list') {
+                const apiUrl = await createAPIUrl('https://beeble.vercel.app', '/passage/list', {});
+                const response = await fetch(apiUrl);
+
+                if (!response.ok) throw new Error(global.msg.notFound);
+
+                const {
+                    data
+                } = await response.json();
+
+                const resultText = data.map(d =>
+                    `➤ Nama: ${d.name} (${d.abbr})\n` +
+                    `➤ Bab: ${d.chapter}`
+                ).join('\n-----\n');
+                return ctx.reply(
+                    `❖ ${bold('Daftar')}\n` +
+                    '\n' +
+                    `${resultText}\n` +
+                    '\n' +
+                    global.msg.footer
+                );
+            }
+
+
             const apiUrl = await createAPIUrl('https://beeble.vercel.app', `/api/v1/passage/${abbr}/${chapter}`, {
                 ver: 'tb'
             });
@@ -62,7 +53,7 @@ module.exports = {
                 data
             } = await response.json();
 
-            const resultText = data.verse.map(v =>
+            const resultText = data.verses.map(v =>
                 `➤ Ayat: ${v.verse}\n` +
                 `➤ ${v.content}`
             ).join('\n-----\n');
@@ -71,7 +62,7 @@ module.exports = {
                 '\n' +
                 `➤ Nama: ${data.book.name}\n` +
                 `➤ Bab: ${data.book.chapter}\n` +
-                `➤ Judul: ${data.verse[0].content}\n` +
+                `➤ Judul: ${data.verses[0].content}\n` +
                 '-----\n' +
                 `${resultText}\n` +
                 '\n' +
