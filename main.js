@@ -79,7 +79,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             } = getMessageDataAFK;
             const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
             ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`);
-            db.delete(`user.${senderJid}.afk`);
+            db.delete(`user.${ctx._sender.jid.split('@')[0]}.afk`);
         }
 
         // Private
