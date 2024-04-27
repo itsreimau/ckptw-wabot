@@ -60,7 +60,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (mentionJids && mentionJids.length > 0) {
             mentionJids.forEach(mentionJid => {
                 const getMentionDataAFK = db.get(`user.${mentionJid.split('@')[0]}.afk`);
-                if (getMentionData) {
+                if (getMentionDataAFK) {
                     const [timeStamp, reason] = getMentionData;
                     const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
                     ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || 'kurang dari satu detik.'}.`);
@@ -69,8 +69,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         const getMessageDataAFK = db.get(`user.${ctx._sender.jid.split('@')[0]}.afk`);
-        if (getMessageData) {
-            const [timeStamp, reason] = getMessageData;
+        if (getMessageDataAFK) {
+            const [timeStamp, reason] = getMessageDataAFK;
             const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
             ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`);
             db.delete(`user.${senderJid}.afk`);
@@ -80,7 +80,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (!ctx.isGroup) {
             // Menfess
             const getMessageDataMenfess = db.get(`menfess.${ctx._sender.jid.split('@')[0]}`);
-            if (getMessageData) {
+            if (getMessageDataMenfess) {
                 const [from] = getMessageData;
                 const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
                 await ctx.sendMessage(`${from}@s.whatsapp.net`, {
