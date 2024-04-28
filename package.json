@@ -40,6 +40,7 @@
         "link-preview-js": "^3.0.5",
         "lowline.ai": "^1.0.18",
         "moment-timezone": "^0.5.45",
+        "sharp": "^0.30.5",
         "simpl.db": "^2.13.0",
         "util": "^0.12.5",
         "wa-sticker-formatter": "^4.4.4",
