@@ -5,6 +5,12 @@ const {
     createAPIUrl
 } = require('../tools/api.js');
 const {
+    instagramdl,
+    instagramdlv2,
+    instagramdlv3,
+    instagramdlv4
+} = require('@bochilteam/scraper');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -31,17 +37,32 @@ module.exports = {
             const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
             if (!urlRegex.test(input)) throw new Error(global.msg.urlInvalid);
 
-            const apiUrl = createAPIUrl('miwudev', '/api/v1/igdl', {
-                url: input
-            });
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+            let result;
 
-            if (!data.result) throw new Error(global.msg.notFound);
+            const apiPromises = [
+                fetch(createAPIUrl('miwudev', '/api/v1/igdl', {
+                    url: input
+                })).then(response => response.json()),
+                instagramdl(input),
+                instagramdlv2(input),
+                instagramdlv3(input),
+                instagramdlv4(input)
+            ];
+
+            const results = await Promise.allSettled(apiPromises);
+
+            for (const res of results) {
+                if (res.status === 'fulfilled') {
+                    result = res.value.result || res.value.url;
+                    break;
+                }
+            }
+
+            if (!result) throw new Error(global.msg.notFound);
 
             return await ctx.reply({
                 video: {
-                    url: data.result
+                    url: result
                 },
                 caption: `❖ ${bold('IG Downloader')}\n` +
                     '\n' +

@@ -2,8 +2,8 @@ const {
     handler
 } = require('../handler.js');
 const {
-    ghdl
-} = require('../tools/scraper.js');
+    mediafiredl
+} = require('@bochilteam/scraper');
 const {
     bold,
     monospace
@@ -11,8 +11,8 @@ const {
 const mime = require('mime-types');
 
 module.exports = {
-    name: 'ghdl',
-    aliases: ['github', 'gitclone'],
+    name: 'mfdl',
+    aliases: ['mf', 'mediafire', 'mediafiredl'],
     category: 'downloader',
     code: async (ctx) => {
         const handlerObj = await handler(ctx, {
@@ -32,15 +32,13 @@ module.exports = {
             const urlRegex = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i;
             if (!urlRegex.test(input)) throw new Error(global.msg.urlInvalid);
 
-            const [_, user, repo] = input.match(urlRegex) || [];
-            const repoName = repo.replace(/.git$/, '');
-            const result = await ghdl(user, repoName);
+            const result = await mediafiredl(input);
 
-            if (!result) throw new Error(global.msg.notFound);
+            if (!result.url || !result.url2) throw new Error(global.msg.notFound);
 
             return ctx.reply({
-                document: result,
-                mimetype: mime.contentType('zip')
+                document: result.url || result.url2,
+                mimetype: mime.contentType(result.ext.toLowerCase())
             });
         } catch (error) {
             console.error('Error:', error);

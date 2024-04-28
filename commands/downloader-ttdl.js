@@ -2,6 +2,10 @@ const {
     handler
 } = require('../handler.js');
 const {
+    tiktokdl,
+    tiktokdlv2
+} = require('@bochilteam/scraper');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -29,14 +33,30 @@ module.exports = {
             const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
             if (!urlRegex.test(input)) throw new Error(global.msg.urlInvalid);
 
-            const data = await fg.tiktok(input);
-            const result = data.result;
+            let result;
 
-            if (!result.play) throw new Error(global.msg.notFound);
+            const promises = [
+                fg.tiktok(input),
+                tiktokdl(input),
+                tiktokdlv2(input)
+            ];
+
+            for (const promise of promises) {
+                const {
+                    status,
+                    value
+                } = await promise;
+                if (status === 'fulfilled') {
+                    result = value.play || video.no_watermark_raw || video.no_watermark || video.no_watermark_hd || video.with_watermark;
+                    break;
+                }
+            }
+
+            if (!result) throw new Error(global.msg.notFound);
 
             return await ctx.reply({
                 video: {
-                    url: result.play
+                    url: result
                 },
                 caption: `❖ ${bold('TT Downloader')}\n` +
                     '\n' +

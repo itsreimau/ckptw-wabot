@@ -2,6 +2,10 @@ const {
     handler
 } = require('../handler.js');
 const {
+    facebookdl,
+    facebookdlv2
+} = require('@bochilteam/scraper');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -29,13 +33,30 @@ module.exports = {
             const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
             if (!urlRegex.test(input)) throw new Error(global.msg.urlInvalid);
 
-            const result = await fg.fbdl(input);
+            let result;
 
-            if (!result.videoUrl) throw new Error(global.msg.notFound);
+            const promises = [
+                fg.fbdl(input),
+                facebookdl(input),
+                facebookdlv2(input)
+            ];
+
+            for (const promise of promises) {
+                const {
+                    status,
+                    value
+                } = await promise;
+                if (status === 'fulfilled') {
+                    result = value.videoUrl || value.url;
+                    break;
+                }
+            }
+
+            if (!result) throw new Error(global.msg.notFound);
 
             return await ctx.reply({
                 video: {
-                    url: result.videoUrl
+                    url: result
                 },
                 caption: `❖ ${bold('FB Downloader')}\n` +
                     '\n' +
