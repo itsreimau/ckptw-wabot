@@ -7,14 +7,11 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw');
-const fs = require('fs');
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
-const path = require('path');
+const ffmpeg = require('fluent-ffmpeg');
 
 module.exports = {
-    name: 'tovid',
-    aliases: ['tomp4', 'tovideo'],
+    name: 'toaud',
+    aliases: ['tomp3', 'toaudio'],
     category: 'converter',
     code: async (ctx) => {
         const handlerObj = await handler(ctx, {
@@ -32,17 +29,17 @@ module.exports = {
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'stickerMessage') ? await download(object, type.slice(0, -7)) : null;
 
-            const inputPath = path.resolve(__dirname, '../tmp/input.webp');
-            const outputPath = path.resolve(__dirname, '../tmp/output.mp4');
-
-            fs.writeFileSync(inputPath, buffer);
-
-            await exec(`ffmpeg -i ${inputPath} ${outputPath}`);
-
-            const vidBuffer = fs.readFileSync(outputPath);
-
-            fs.unlinkSync(inputPath);
-            fs.unlinkSync(outputPath);
+            const gifBuffer = await new Promise((resolve, reject) => {
+                ffmpeg()
+                    .input(buffer)
+                    .outputOptions('-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2')
+                    .outputOptions('-r', '10')
+                    .videoCodec('libx264')
+                    .format('mp4')
+                    .on('end', resolve)
+                    .on('error', reject)
+                    .pipe();
+            });
 
             return ctx.reply({
                 video: vidBuffer,

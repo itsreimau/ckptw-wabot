@@ -7,10 +7,7 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw');
-const fs = require('fs');
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
-const path = require('path');
+const ffmpeg = require('fluent-ffmpeg');
 
 module.exports = {
     name: 'togif',
@@ -22,26 +19,27 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
+        const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
-        if (!quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa stiker, atau video!`);
+        if (msgType !== MessageType.stickerMessage && msgType !== MessageType.videoMessage && !quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa stiker, atau video!`);
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'stickerMessage') ? await download(object, type.slice(0, -7)) : null;
 
-            const inputPath = path.resolve(__dirname, '../tmp/input.gif');
-            const outputPath = path.resolve(__dirname, '../tmp/output.gif');
-
-            fs.writeFileSync(inputPath, buffer);
-
-            await exec(`ffmpeg -i ${inputPath} -vf "fps=10,scale=320:-1:flags=lanczos" -c:v gif ${outputPath}`);
-
-            const gifBuffer = fs.readFileSync(outputPath);
-
-            fs.unlinkSync(inputPath);
-            fs.unlinkSync(outputPath);
+            const gifBuffer = await new Promise((resolve, reject) => {
+                ffmpeg()
+                    .input(buffer)
+                    .outputOptions('-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2')
+                    .outputOptions('-r', '10')
+                    .videoCodec('libx264')
+                    .format('mp4')
+                    .on('end', resolve)
+                    .on('error', reject)
+                    .pipe();
+            });
 
             return ctx.reply({
                 video: gifBuffer,

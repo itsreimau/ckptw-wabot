@@ -7,10 +7,7 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw');
-const fs = require('fs');
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
-const path = require('path');
+const ffmpeg = require('fluent-ffmpeg');
 
 module.exports = {
     name: 'toimg',
@@ -32,17 +29,17 @@ module.exports = {
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'stickerMessage') ? await download(object, type.slice(0, -7)) : null;
 
-            const inputPath = path.resolve(__dirname, '../tmp/input.webp');
-            const outputPath = path.resolve(__dirname, '../tmp/output.png');
-
-            fs.writeFileSync(inputPath, buffer);
-
-            await exec(`ffmpeg -i ${inputPath} ${outputPath}`);
-
-            const imgBuffer = fs.readFileSync(outputPath);
-
-            fs.unlinkSync(inputPath);
-            fs.unlinkSync(outputPath);
+            const imgBuffer = await new Promise((resolve, reject) => {
+                ffmpeg()
+                    .input(buffer)
+                    .outputOptions('-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2')
+                    .outputOptions('-frames:v', '1')
+                    .outputFormat('image2')
+                    .outputOptions('-f', 'image2pipe')
+                    .pipe()
+                    .on('end', resolve)
+                    .on('error', reject);
+            });
 
             return ctx.reply({
                 image: imgBuffer,

@@ -7,10 +7,7 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw');
-const fs = require('fs');
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
-const path = require('path');
+const ffmpeg = require('fluent-ffmpeg');
 
 module.exports = {
     name: 'toaud',
@@ -23,27 +20,30 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
+        const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
-        if (!quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa stiker!`);
+        if (msgType !== MessageType.videoMessage && !quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa video!`);
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'videoMessage') ? await download(object, type.slice(0, -7)) : null;
-            const inputPath = path.resolve(__dirname, '../tmp/input.mp4');
-            const outputPath = path.resolve(__dirname, '../tmp/output.mp3');
 
-            fs.writeFileSync(inputPath, buffer);
-            await exec(`ffmpeg -i ${inputPath} -vn -acodec libmp3lame -q:a 4 ${outputPath}`);
-
-            const audBuffer = fs.readFileSync(outputPath);
-
-            fs.unlinkSync(inputPath);
-            fs.unlinkSync(outputPath);
+            const audBuffer = await new Promise((resolve, reject) => {
+                ffmpeg()
+                    .input(buffer)
+                    .noVideo()
+                    .audioCodec('libmp3lame')
+                    .audioQuality(4)
+                    .format('mp3')
+                    .on('end', resolve)
+                    .on('error', reject)
+                    .pipe();
+            });
 
             return ctx.reply({
-                video: audBuffer,
+                audio: audBuffer,
                 caption: null
             });
         } catch (error) {
