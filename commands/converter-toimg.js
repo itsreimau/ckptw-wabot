@@ -7,7 +7,10 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw');
-const sharp = require('sharp');
+const fs = require('fs');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+const path = require('path');
 
 module.exports = {
     name: 'toimg',
@@ -28,7 +31,18 @@ module.exports = {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'stickerMessage') ? await download(object, type.slice(0, -7)) : null;
-            const imgBuffer = await sharp(buffer).png().toBuffer();
+
+            const inputPath = path.resolve(__dirname, '../tmp/input.webp');
+            const outputPath = path.resolve(__dirname, '../tmp/output.png');
+
+            fs.writeFileSync(inputPath, buffer);
+
+            await exec(`ffmpeg -i ${inputPath} ${outputPath}`);
+
+            const imgBuffer = fs.readFileSync(outputPath);
+
+            fs.unlinkSync(inputPath);
+            fs.unlinkSync(outputPath);
 
             return ctx.reply({
                 image: imgBuffer,

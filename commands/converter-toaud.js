@@ -7,7 +7,10 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw');
-const sharp = require('sharp');
+const fs = require('fs');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+const path = require('path');
 
 module.exports = {
     name: 'toaud',
@@ -28,7 +31,16 @@ module.exports = {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'videoMessage') ? await download(object, type.slice(0, -7)) : null;
-            const audBuffer = await sharp(buffer).mp3().toBuffer();;
+            const inputPath = path.resolve(__dirname, '../tmp/input.mp4');
+            const outputPath = path.resolve(__dirname, '../tmp/output.mp3');
+
+            fs.writeFileSync(inputPath, buffer);
+            await exec(`ffmpeg -i ${inputPath} -vn -acodec libmp3lame -q:a 4 ${outputPath}`);
+
+            const audBuffer = fs.readFileSync(outputPath);
+
+            fs.unlinkSync(inputPath);
+            fs.unlinkSync(outputPath);
 
             return ctx.reply({
                 video: audBuffer,

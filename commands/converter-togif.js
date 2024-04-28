@@ -7,7 +7,10 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw');
-const sharp = require('sharp');
+const fs = require('fs');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+const path = require('path');
 
 module.exports = {
     name: 'togif',
@@ -27,9 +30,18 @@ module.exports = {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'stickerMessage') ? await download(object, type.slice(0, -7)) : null;
-            const gifBuffer = buffer;
 
-            if (quotedMessage.isAnimated) vidBuffer = await sharp(buffer).gif().toBuffer();
+            const inputPath = path.resolve(__dirname, '../tmp/input.gif');
+            const outputPath = path.resolve(__dirname, '../tmp/output.gif');
+
+            fs.writeFileSync(inputPath, buffer);
+
+            await exec(`ffmpeg -i ${inputPath} -vf "fps=10,scale=320:-1:flags=lanczos" -c:v gif ${outputPath}`);
+
+            const gifBuffer = fs.readFileSync(outputPath);
+
+            fs.unlinkSync(inputPath);
+            fs.unlinkSync(outputPath);
 
             return ctx.reply({
                 video: gifBuffer,
