@@ -1,4 +1,4 @@
-bconst {
+const {
     handler
 } = require('../handler.js');
 const {
