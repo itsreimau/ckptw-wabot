@@ -7,13 +7,15 @@ const smpl = require('./tools/simple.js');
  * @returns {Object} Object containing status and message if applicable, otherwise null.
  */
 exports.handler = async (ctx, options) => {
+    const senderNumber = ctx._sender.jid.split('@')[0];
+
     const checkOptions = {
         admin: {
             function: async () => await smpl.isAdmin(ctx) === 0,
             msg: global.msg.admin
         },
         banned: {
-            function: async () => await global.db.get(`user.${ctx._sender.jid.split('@')[0]}.isBanned`),
+            function: async () => await global.db.get(`user.${senderNumber}.isBanned`),
             msg: global.msg.banned
         },
         botAdmin: {
@@ -25,7 +27,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.group
         },
         owner: {
-            function: async () => await smpl.isOwner(ctx) === 0,
+            function: async () => await smpl.isOwner(senderNumber) === 0,
             msg: global.msg.owner
         },
         private: {

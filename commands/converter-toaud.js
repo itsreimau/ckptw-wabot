@@ -10,8 +10,8 @@ const {
 const sharp = require('sharp');
 
 module.exports = {
-    name: 'tovid',
-    aliases: ['tomp4', 'tovideo'],
+    name: 'toaud',
+    aliases: ['tomp3', 'toaudio'],
     category: 'converter',
     code: async (ctx) => {
         const handlerObj = await handler(ctx, {
@@ -27,13 +27,11 @@ module.exports = {
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = (type === 'stickerMessage') ? await download(object, type.slice(0, -7)) : null;
-            const vidBuffer = buffer;
-
-            if (quotedMessage.isAnimated) vidBuffer = await sharp(buffer).mp4().toBuffer();
+            const buffer = (type === 'videoMessage') ? await download(object, type.slice(0, -7)) : null;
+            const audBuffer = await sharp(buffer).mp3().toBuffer();;
 
             return ctx.reply({
-                video: vidBuffer,
+                video: audBuffer,
                 caption: null
             });
         } catch (error) {

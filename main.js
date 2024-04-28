@@ -46,61 +46,43 @@ cmd.load();
 
 // Event handling when the message appears.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
-    // Checking messages.
-    if ( /*!m.content || */ m.key.fromMe) return;
+    const senderNumber = ctx._sender.jid.split('@')[0];
+    const senderJid = ctx._sender.jid;
 
-    // Auto-typing & Auto-DB.
-    if (smpl.isCmd(m, ctx)) ctx.simulateTyping(); // ctx.simulateRecording();
+    // All chat types.
+    if (m.key.fromMe) return; // Checking messages.
+
+    if (smpl.isCmd(m, ctx)) ctx.simulateTyping(); // Auto-typing,
 
     // AFK.
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         mentionJids.forEach(mentionJid => {
-            const getMentionDataAFK = db.get(`user.${mentionJid.split('@')[0]}.afk`);
-            if (getMentionDataAFK) {
+            const getAFKMention = db.get(`user.${mentionJid.split('@')[0]}.afk`);
+            if (getAFKMention) {
                 const {
                     timeStamp,
                     reason
-                } = getMentionDataAFK;
+                } = getAFKMention;
                 const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
                 ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || 'kurang dari satu detik.'}.`);
             }
         });
     }
 
-    const getMessageDataAFK = db.get(`user.${ctx._sender.jid.split('@')[0]}.afk`);
-    if (getMessageDataAFK) {
+    const getAFKMessage = db.get(`user.${senderNumber}.afk`);
+    if (getAFKMessage) {
         const {
             timeStamp,
             reason
-        } = getMessageDataAFK;
+        } = getAFKMessage;
         const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
         ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`);
-        db.delete(`user.${ctx._sender.jid.split('@')[0]}.afk`);
-    }
-
-    // Private
-    if (!ctx.isGroup) {
-        // Menfess
-        const getMessageDataMenfess = db.get(`menfess.${ctx._sender.jid.split('@')[0]}`);
-        if (getMessageDataMenfess) {
-            const {
-                from
-            } = getMessageDataMenfess;
-            await ctx.sendMessage(`${from}@s.whatsapp.net`, {
-                text: `💌 Hai, saya ${global.bot.name}, Dia (${ctx._sender.jid.split('@')[0]}) menjawab pesan menfess yang Anda kirimkan.\n` +
-                    '-----\n' +
-                    `${m.content}\n` +
-                    '-----\n' +
-                    'Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n'
-            });
-            db.delete(`menfess.${from}`);
-            return ctx.reply('Pesan berhasil terkirim!');
-        }
+        db.delete(`user.${senderNumber}.afk`);
     }
 
     // Owner-only.
-    if (smpl.isOwner(ctx) === 1) {
+    if (smpl.isOwner(senderNumber) === 1) {
         // Eval.
         if (m.content && m.content.startsWith && (m.content.startsWith('> ') || m.content.startsWith('>> '))) {
             const code = m.content.slice(2);
@@ -126,6 +108,31 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             });
 
             await ctx.reply(output);
+        }
+    }
+
+    // Group
+    if (ctx.isGroup) {
+        // What can be done here?
+    }
+
+    // Private
+    if (!ctx.isGroup) {
+        // Menfess
+        const getMessageDataMenfess = db.get(`menfess.${senderNumber}`);
+        if (getMessageDataMenfess) {
+            const {
+                from
+            } = getMessageDataMenfess;
+            await ctx.sendMessage(`${from}@s.whatsapp.net`, {
+                text: `💌 Hai, saya ${global.bot.name}, Dia (${sender}) menjawab pesan menfess yang Anda kirimkan.\n` +
+                    '-----\n' +
+                    `${m.content}\n` +
+                    '-----\n' +
+                    'Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n'
+            });
+            db.delete(`menfess.${senderNumber}`);
+            return ctx.reply('Pesan berhasil terkirim!');
         }
     }
 });

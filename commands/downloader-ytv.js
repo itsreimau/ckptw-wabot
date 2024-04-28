@@ -54,7 +54,7 @@ module.exports = {
             });
 
             const col = ctx.MessageCollector({
-                time: 600000 // 10 menit
+                time: 60000 // 1 menit
             });
 
             col.on('collect', async (m) => {
@@ -66,7 +66,7 @@ module.exports = {
                     const downloadFunction = ytdl.video[selectedQuality].download;
                     ctx.react(ctx.id, '🔄', res.key);
                     const url = await downloadFunction();
-                    return await ctx.reply({
+                    await ctx.reply({
                         video: {
                             url: url
                         },
@@ -77,7 +77,7 @@ module.exports = {
                             global.msg.footer,
                         gifPlayback: false
                     });
-                    col.stop();
+                    return col.stop();
                 }
             });
 

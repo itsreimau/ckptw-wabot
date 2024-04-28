@@ -7,6 +7,7 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw');
+const sharp = require('sharp');
 
 module.exports = {
     name: 'toimg',
@@ -27,9 +28,10 @@ module.exports = {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'stickerMessage') ? await download(object, type.slice(0, -7)) : null;
+            const imgBuffer = await sharp(buffer).png().toBuffer();
 
             return ctx.reply({
-                image: buffer,
+                image: imgBuffer,
                 caption: null
             });
         } catch (error) {

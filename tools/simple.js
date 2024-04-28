@@ -153,8 +153,8 @@ exports.isAdminOf = async (ctx) => {
  * @param {object} ctx - The context object.
  * @returns {number} Returns 1 if the user is the owner, otherwise returns 0.
  */
-exports.isOwner = (ctx) => {
-    const isOwner = ctx._sender.jid.includes(global.owner.number);
+exports.isOwner = (number) => {
+    const isOwner = number.includes(global.owner.number);
     return isOwner ? 1 : 0;
 }
 

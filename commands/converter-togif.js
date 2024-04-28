@@ -7,6 +7,7 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw');
+const sharp = require('sharp');
 
 module.exports = {
     name: 'togif',
@@ -26,9 +27,12 @@ module.exports = {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'stickerMessage') ? await download(object, type.slice(0, -7)) : null;
+            const gifBuffer = buffer;
+
+            if (quotedMessage.isAnimated) vidBuffer = await sharp(buffer).gif().toBuffer();
 
             return ctx.reply({
-                video: buffer,
+                video: gifBuffer,
                 caption: null,
                 gifPlayback: true
             });
