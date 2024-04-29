@@ -1,4 +1,3 @@
-require('../config.js');
 const {
     downloadContentFromMessage
 } = require('@whiskeysockets/baileys');
@@ -107,6 +106,19 @@ exports.formatSize = (bytes) => {
     return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
 }
 
+/*
+ * Function to get a random element from an array.
+ * @param {Array} arr - The input array.
+ * @returns {*} Returns a random element from the array. If the array is empty, returns undefined.
+ */
+exports.getRandomElement = (arr) => {
+    if (arr.length === 0) return undefined;
+
+    const randomIndex = Math.floor(Math.random() * arr.length);
+
+    return arr[randomIndex];
+}
+
 /**
  * Function to check if a message is a command.
  * @param {object} m - The message object.
@@ -131,10 +143,11 @@ exports.isCmd = (m, ctx) => {
 /**
  * Function to check if the user is an admin.
  * @param {object} ctx - The context object.
+ * @param {number} number - The user number.
  * @returns {number} Returns 1 if the user is an admin, otherwise returns 0.
  */
-exports.isAdmin = async (ctx, jid) => {
-    const isAdmin = await checkAdmin(ctx, jid || ctx._sender.jid.split('@')[0]);
+exports.isAdmin = async (ctx, number) => {
+    const isAdmin = await checkAdmin(ctx, number || ctx._sender.jid.split('@')[0]);
     return isAdmin ? 1 : 0;
 }
 
@@ -150,7 +163,7 @@ exports.isAdminOf = async (ctx) => {
 
 /**
  * Function to check if the user is the owner.
- * @param {object} ctx - The context object.
+ * @param {number} number - The user number.
  * @returns {number} Returns 1 if the user is the owner, otherwise returns 0.
  */
 exports.isOwner = (number) => {

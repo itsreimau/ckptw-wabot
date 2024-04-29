@@ -2,6 +2,9 @@ const {
     handler
 } = require('../handler.js');
 const {
+    getRandomElement
+} = require('../tools/simple.js');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -46,11 +49,3 @@ module.exports = {
         }
     }
 };
-
-function getRandomElement(arr) {
-    if (arr.length === 0) return undefined;
-
-    const randomIndex = Math.floor(Math.random() * arr.length);
-
-    return arr[randomIndex];
-}

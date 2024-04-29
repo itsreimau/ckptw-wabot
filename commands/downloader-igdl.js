@@ -6,9 +6,6 @@ const {
 } = require('../tools/api.js');
 const {
     instagramdl,
-    instagramdlv2,
-    instagramdlv3,
-    instagramdlv4
 } = require('@bochilteam/scraper');
 const {
     bold,
@@ -43,10 +40,7 @@ module.exports = {
                 fetch(createAPIUrl('miwudev', '/api/v1/igdl', {
                     url: input
                 })).then(response => response.json()),
-                instagramdl(input),
-                instagramdlv2(input),
-                instagramdlv3(input),
-                instagramdlv4(input)
+                instagramdl(input)
             ];
 
             const results = await Promise.allSettled(apiPromises);

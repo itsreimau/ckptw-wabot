@@ -3,8 +3,12 @@ const {
     getMenu
 } = require('../tools/menu.js');
 const {
+    getRandomElement
+} = require('../tools/simple.js');
+const {
     bold
 } = require('@mengkodingan/ckptw');
+const fg = require('api-dylux');
 
 module.exports = {
     name: 'menu',
@@ -13,6 +17,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const text = await getMenu(ctx);
+            const thumbnail = await fg.googleImage('rei ayanami wallpaper');
 
             return ctx.sendMessage(ctx.id, {
                 text: text,
@@ -20,7 +25,7 @@ module.exports = {
                     externalAdReply: {
                         title: global.msg.watermark,
                         body: null,
-                        thumbnailUrl: global.bot.thumbnail,
+                        thumbnailUrl: getRandomElement(thumbnail) || global.bot.thumbnail,
                         sourceUrl: global.bot.groupChat,
                         mediaType: 1,
                         renderLargerThumbnail: true

@@ -4,6 +4,10 @@ const {
 const {
     wikipedia
 } = require('@bochilteam/scraper');
+const {
+    bold,
+    monospace
+} = require('@mengkodingan/ckptw');
 
 module.exports = {
     name: 'wikipedia',

@@ -11,7 +11,7 @@ const {
 
 module.exports = {
     name: 'dalle',
-    aliases: ['dall'],
+    aliases: ['dall', 'aiimg'],
     category: 'ai',
     code: async (ctx) => {
         const handlerObj = await handler(ctx, {

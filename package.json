@@ -31,7 +31,6 @@
         "api-dylux": "^1.7.2",
         "axios": "^1.6.8",
         "bing-translate-api": "^4.0.1",
-        "canvas": "^2.11.2",
         "cfonts": "^3.2.0",
         "cheerio": "^1.0.0-rc.12",
         "fluent-ffmpeg": "^2.1.2",
