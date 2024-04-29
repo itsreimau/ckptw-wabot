@@ -28,6 +28,7 @@
         "@bochilteam/scraper": "^4.2.4",
         "@mengkodingan/ckptw": "^4.0.5",
         "@whiskeysockets/baileys": "^6.6.0",
+        "@xaviabot/fb-downloader": "^1.0.14",
         "api-dylux": "^1.7.2",
         "axios": "^1.6.8",
         "bing-translate-api": "^4.0.1",

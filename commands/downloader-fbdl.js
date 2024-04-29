@@ -9,6 +9,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const getFBInfo = require('@xaviabot/fb-downloader');
 const fg = require('api-dylux');
 
 module.exports = {
@@ -36,6 +37,7 @@ module.exports = {
             let result;
 
             const promises = [
+                getFBInfo(input),
                 fg.fbdl(input),
                 facebookdl(input),
                 facebookdlv2(input)
@@ -47,7 +49,7 @@ module.exports = {
                     value
                 } = await promise;
                 if (status === 'fulfilled') {
-                    result = value.videoUrl || value.url;
+                    result = value.hd || value.sd || value.videoUrl || value.url;
                     break;
                 }
             }

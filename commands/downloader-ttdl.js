@@ -2,8 +2,7 @@ const {
     handler
 } = require('../handler.js');
 const {
-    tiktokdl,
-    tiktokdlv2
+    tiktokdl
 } = require('@bochilteam/scraper');
 const {
     bold,
@@ -37,8 +36,7 @@ module.exports = {
 
             const promises = [
                 fg.tiktok(input),
-                tiktokdl(input),
-                tiktokdlv2(input)
+                tiktokdl(input)
             ];
 
             for (const promise of promises) {
