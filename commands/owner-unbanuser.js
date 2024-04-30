@@ -32,8 +32,6 @@ module.exports = {
         try {
             if (user === ctx._sender.jid) throw new Error('Tidak dapat digunakan pada diri Anda sendiri.');
 
-            if (!global.db.get(`user.${user.split('@')[0]}`)) throw new Error('Pengguna tidak ada di database!');
-
             await global.db.set(`user.${user.split('@')[0]}.isBanned`, false);
 
             ctx.sendMessage(user, {

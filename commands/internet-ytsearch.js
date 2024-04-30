@@ -40,7 +40,7 @@ module.exports = {
                     case 'channel':
                         return `${bold(`${r.name} (${r.url})`)}\n` +
                             `➤ Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
-                            `➤ Jumlah rideo: ${r.rideoCount}`
+                            `➤ Jumlah video: ${r.videoCount}`
                 }
             }).filter(r => r).join('\n-----\n');
             return ctx.reply(

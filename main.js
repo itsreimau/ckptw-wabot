@@ -118,7 +118,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Private
     if (!ctx.isGroup) {
-        // Menfess
+        /* Menfess
         const getMessageDataMenfess = db.get(`menfess.${senderNumber}`);
         if (getMessageDataMenfess) {
             const {
@@ -133,7 +133,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             });
             db.delete(`menfess.${senderNumber}`);
             return ctx.reply('Pesan berhasil terkirim!');
-        }
+        } */
     }
 });
 

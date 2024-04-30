@@ -35,7 +35,7 @@ module.exports = {
                     '-----\n' +
                     `${text.join(' ')}\n` +
                     '-----\n' +
-                    'Pesan pertama yang Anda kirim akan dikirim ke pengirim pesan ini.'
+                    global.msg.footer
             });
 
             global.db.set(`menfess.${numberFormatted}`, {
