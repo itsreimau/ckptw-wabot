@@ -20,7 +20,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const text = await getMenu(ctx);
-            const msg = generateWAMessageFromContent(ctx.id, {
+           /* const msg = generateWAMessageFromContent(ctx.id, {
                 viewOnceMessage: {
                     message: {
                         "messageContextInfo": {
@@ -60,7 +60,8 @@ module.exports = {
 
             return await ctx._client.relayMessage(msg.key.remoteJid, msg.message, {
                 messageId: msg.key.id
-            });
+            }); */
+            return ctx.reply(menu);
         } catch (error) {
             console.error('Error:', error);
             ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
