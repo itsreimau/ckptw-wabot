@@ -48,7 +48,7 @@ module.exports = {
                                         "name": "quick_reply",
                                         "buttonParamsJson": {
                                             "display_text": "👤 Owner",
-                                            "id": `${ctx._used.command}owner`
+                                            "id": "/owner"
                                         }
                                     }
                                 ],
