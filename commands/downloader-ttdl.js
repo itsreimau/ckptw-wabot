@@ -49,7 +49,7 @@ module.exports = {
 
             for (const res of results) {
                 if (res.status === 'fulfilled') {
-                    result = value.play || video.no_watermark_raw || video.no_watermark || video.no_watermark_hd || video.with_watermark;
+                    result = res.value.play || video.no_watermark_raw || video.no_watermark || video.no_watermark_hd || video.with_watermark;
                     break;
                 }
             }

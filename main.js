@@ -117,14 +117,23 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
     }
 
-    // Group
+    // Group.
     if (ctx.isGroup) {
-        // What can be done here?
+        if (db.get(`group.${groupNumber}.antilink`)) {
+            const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+            if (m.content && m.message.extendedTextMessage.inviteLinkGroupTypeV2 && (urlRegex.test(m.content) || m.message.extendedTextMessage.inviteLinkGroupTypeV2 === 1)) {
+                ctx.deleteMessage(m.key);
+                /* If you want automatic kick, use this.
+                await ctx._client.groupParticipantsUpdate(ctx.id, [senderNumber], 'remove'); */
+
+                return ctx.reply('Jangan kirim tautan!');
+            }
+        }
     }
 
-    // Private
+    // Private.
     if (!ctx.isGroup) {
-        // Menfess
+        // Menfess.
         const getMessageDataMenfess = db.get(`menfess.${senderNumber}`);
 
         if (getMessageDataMenfess) {

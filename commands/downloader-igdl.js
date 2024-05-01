@@ -47,7 +47,7 @@ module.exports = {
 
             for (const res of results) {
                 if (res.status === 'fulfilled') {
-                    result = res.value.result || res.value.url;
+                    result = res.res.value.result || res.res.value.url;
                     break;
                 }
             }

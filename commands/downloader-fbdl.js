@@ -47,7 +47,7 @@ module.exports = {
 
             for (const res of results) {
                 if (res.status === 'fulfilled') {
-                    result = value.hd || value.sd || value.videoUrl || value.url;
+                    result = res.value.hd || res.value.sd || res.value.videoUrl || res.value.url;
                     break;
                 }
             }
