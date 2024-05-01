@@ -3,16 +3,12 @@ const {
     getMenu
 } = require('../tools/menu.js');
 const {
-    getRandomElement
-} = require('../tools/simple.js');
-const {
     bold
 } = require('@mengkodingan/ckptw');
 const {
     generateWAMessageFromContent,
     proto
 } = require('@whiskeysockets/baileys');
-const fg = require('api-dylux');
 
 module.exports = {
     name: 'menu',
@@ -21,11 +17,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const text = await getMenu(ctx);
-            const thumbnail = await fg.googleImage('rei ayanami wallpaper');
             const msg = generateWAMessageFromContent(ctx.id, {
-                image: {
-                    url: getRandomElement(thumbnail) || global.bot.thumbnail
-                },
                 viewOnceMessage: {
                     message: {
                         messageContextInfo: {
