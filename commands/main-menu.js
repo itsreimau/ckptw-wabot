@@ -61,7 +61,7 @@ module.exports = {
             return await ctx._client.relayMessage(msg.key.remoteJid, msg.message, {
                 messageId: msg.key.id
             }); */
-            return ctx.reply(menu);
+            return ctx.reply(text);
         } catch (error) {
             console.error('Error:', error);
             ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
