@@ -36,14 +36,14 @@ module.exports = {
 
             let result;
 
-            const apiPromises = [
+            const promises = [
                 fetch(createAPIUrl('miwudev', '/api/v1/igdl', {
                     url: input
                 })).then(response => response.json()),
                 instagramdl(input)
             ];
 
-            const results = await Promise.allSettled(apiPromises);
+            const results = await Promise.allSettled(promises);
 
             for (const res of results) {
                 if (res.status === 'fulfilled') {

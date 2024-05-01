@@ -43,12 +43,10 @@ module.exports = {
                 facebookdlv2(input)
             ];
 
-            for (const promise of promises) {
-                const {
-                    status,
-                    value
-                } = await promise;
-                if (status === 'fulfilled') {
+            const results = await Promise.allSettled(promises);
+
+            for (const res of results) {
+                if (res.status === 'fulfilled') {
                     result = value.hd || value.sd || value.videoUrl || value.url;
                     break;
                 }

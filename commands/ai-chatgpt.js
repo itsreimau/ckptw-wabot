@@ -30,7 +30,7 @@ module.exports = {
         try {
             const apiUrl = createAPIUrl('sandipbaruwal', '/gpt2', {
                 prompt: input,
-                uid: ctx._sender.jid.replace('@s.whatsapp.net', '')
+                uid: ctx._sender.jid.split('@')[0]
             });
             const response = await fetch(apiUrl);
 

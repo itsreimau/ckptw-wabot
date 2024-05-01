@@ -2,6 +2,9 @@ const {
     handler
 } = require('../handler.js');
 const {
+    createAPIUrl
+} = require('../tools/api.js');
+const {
     tiktokdl
 } = require('@bochilteam/scraper');
 const {
@@ -12,7 +15,7 @@ const fg = require('api-dylux');
 
 module.exports = {
     name: 'ttdl',
-    aliases: ['tt', 'vt', 'vtdl', 'tiktok'],
+    aliases: ['tt', 'vt', 'vtdl', 'tiktok', 'ttnowm', 'tiktokdl', 'tiktoknowm'],
     category: 'downloader',
     code: async (ctx) => {
         const handlerObj = await handler(ctx, {
@@ -35,16 +38,17 @@ module.exports = {
             let result;
 
             const promises = [
+                fetch(createAPIUrl('miwudev', '/api/v1/igdl', {
+                    url: input
+                })).then(response => response.json()), // Bug :v
                 fg.tiktok(input),
                 tiktokdl(input)
             ];
 
-            for (const promise of promises) {
-                const {
-                    status,
-                    value
-                } = await promise;
-                if (status === 'fulfilled') {
+            const results = await Promise.allSettled(promises);
+
+            for (const res of results) {
+                if (res.status === 'fulfilled') {
                     result = value.play || video.no_watermark_raw || video.no_watermark || video.no_watermark_hd || video.with_watermark;
                     break;
                 }

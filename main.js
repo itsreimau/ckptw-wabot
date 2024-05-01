@@ -87,8 +87,14 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (m.content && m.content.startsWith && (m.content.startsWith('> ') || m.content.startsWith('>> '))) {
             const code = m.content.slice(2);
 
-            const result = await eval(m.content.startsWith('>> ') ? `(async () => { ${code} })()` : code);
-            await ctx.reply(inspect(result));
+            try {
+                const result = await eval(m.content.startsWith('>> ') ? `(async () => { ${code} })()` : code);
+
+                return await ctx.reply(inspect(result));
+            } catch (error) {
+                console.error('Error:', error);
+                return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            }
         }
 
         // Exec.
@@ -107,7 +113,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 });
             });
 
-            await ctx.reply(output);
+            return await ctx.reply(output);
         }
     }
 
@@ -118,22 +124,117 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Private
     if (!ctx.isGroup) {
-        /* Menfess
+        // Menfess
         const getMessageDataMenfess = db.get(`menfess.${senderNumber}`);
+
         if (getMessageDataMenfess) {
             const {
                 from
             } = getMessageDataMenfess;
-            await ctx.sendMessage(`${from}@s.whatsapp.net`, {
-                text: `💌 Hai, saya ${global.bot.name}, Dia (${sender}) menjawab pesan menfess yang Anda kirimkan.\n` +
-                    '-----\n' +
-                    `${m.content}\n` +
-                    '-----\n' +
-                    'Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n'
+
+            try {
+                await ctx.sendMessage(`${from}@s.whatsapp.net`, {
+                    text: `💌 Hai, saya ${global.bot.name}, Dia (${senderNumber}) menjawab pesan menfess yang Anda kirimkan.\n` +
+                        '-----\n' +
+                        `${m.content}\n` +
+                        '-----\n' +
+                        'Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n'
+                });
+                db.delete(`menfess.${senderNumber}`);
+                return ctx.reply('Pesan berhasil terkirim!');
+            } catch (error) {
+                console.error('Error:', error);
+                return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            }
+        }
+    }
+});
+
+bot.ev.once(Events.UserJoin, async (m) => {
+    const {
+        id,
+        participants
+    } = m;
+
+    try {
+        const metadata = await bot.core.groupMetadata(id);
+
+        // Participants.
+        for (const jid of participants) {
+            // Get profile picture user.
+            let profile;
+            try {
+                profile = await bot.core.profilePictureUrl(jid, 'image');
+            } catch {
+                const thumbnail = await fg.googleImage('rei ayanami wallpaper');
+                profile = smpl.getRandomElement(thumbnail);
+            }
+
+            if (!db.get(`group.${id.split('@')[0]}.welcome`)) return;
+            bot.core.sendMessage(id, {
+                text: `Selamat datang @${jid.split('@')[0]} di grup ${metadata.subject}!`,
+                contextInfo: {
+                    mentionedJid: [jid],
+                    externalAdReply: {
+                        title: `ADD`,
+                        mediaType: 1,
+                        previewType: 0,
+                        renderLargerThumbnail: true,
+                        thumbnailUrl: profile,
+                        sourceUrl: global.bot.groupChat
+                    }
+                }
             });
-            db.delete(`menfess.${senderNumber}`);
-            return ctx.reply('Pesan berhasil terkirim!');
-        } */
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        return bot.core.sendMessage(id, {
+            text: `${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`
+        });
+    }
+});
+
+bot.ev.once(Events.UserLeave, async (m) => {
+    const {
+        id,
+        participants
+    } = m;
+
+    try {
+        const metadata = await bot.core.groupMetadata(id);
+
+        // Participants.
+        for (const jid of participants) {
+            // Get profile picture user.
+            let profile;
+            try {
+                profile = await bot.core.profilePictureUrl(jid, 'image');
+            } catch {
+                const thumbnail = await fg.googleImage('rei ayanami wallpaper');
+                profile = smpl.getRandomElement(thumbnail);
+            }
+
+            if (!db.get(`group.${id.split('@')[0]}.welcome`)) return;
+            bot.core.sendMessage(id, {
+                text: `@${jid.split('@')[0]} keluar dari grup ${metadata.subject}.`,
+                contextInfo: {
+                    mentionedJid: [jid],
+                    externalAdReply: {
+                        title: `REMOVE`,
+                        mediaType: 1,
+                        previewType: 0,
+                        renderLargerThumbnail: true,
+                        thumbnailUrl: profile,
+                        sourceUrl: global.bot.groupChat
+                    }
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        return bot.core.sendMessage(id, {
+            text: `${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`
+        });
     }
 });
 

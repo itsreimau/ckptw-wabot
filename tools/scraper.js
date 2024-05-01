@@ -62,8 +62,8 @@ exports.crypto = async (search) => {
     });
 
     try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
+        const response = await axios.get(apiUrl);
+        const data = response.data;
         const result = [];
 
         data.forEach(crypto => {
@@ -96,8 +96,8 @@ exports.flaticon = async (query) => {
     const apiUrl = createAPIUrl('https://www.flaticon.com', `/free-icons/${query}`, {});
 
     try {
-        const res = await fetch(apiUrl)
-        const html = await res.text()
+        const res = await axios.get(apiUrl);
+        const html = res.data;
         const dom = new JSDOM(html)
         var collection = dom.window.document.querySelectorAll('.icon--item');
         let img = []
@@ -126,8 +126,8 @@ exports.freepik = async (query) => {
     });
 
     try {
-        const res = await fetch(apiUrl)
-        const html = await res.text()
+        const res = await axios.get(apiUrl);
+        const html = res.data;
         const dom = new JSDOM(html)
         var collection = dom.window.document.getElementsByTagName('img');
         let img = []
@@ -143,7 +143,6 @@ exports.freepik = async (query) => {
         return null;
     }
 }
-
 
 /**
  * Download a GitHub repository in ZIP format.
@@ -202,8 +201,8 @@ exports.googlesearch = async (text) => {
         });
 
         try {
-            const search = await fetch(apiUrl);
-            const searchData = await search.json();
+            const response = await axios.get(apiUrl);
+            const searchData = response.data;
             if (searchData.organic_results.length > 0) searchResults = searchData.organic_results.map((v, index) => {
                 return {
                     index: index + 1,
