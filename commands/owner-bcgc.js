@@ -40,7 +40,7 @@ module.exports = {
                         forwardingScore: 1000,
                         isForwarded: true,
                         externalAdReply: {
-                            title: '📣 Broadcast',
+                            title: 'B R O A D C A S T',
                             body: null,
                             thumbnailUrl: global.bot.thumbnail,
                             sourceUrl: global.bot.groupChat,
