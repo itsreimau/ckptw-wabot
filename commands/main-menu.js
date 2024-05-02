@@ -1,3 +1,4 @@
+const package = require('../package.json');
 const {
     getMenu
 } = require('../tools/menu.js');
@@ -7,10 +8,6 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw');
-const {
-    generateWAMessageFromContent,
-    proto
-} = require('@whiskeysockets/baileys');
 const fg = require('api-dylux');
 
 module.exports = {
@@ -20,51 +17,26 @@ module.exports = {
     code: async (ctx) => {
         try {
             const text = await getMenu(ctx);
-           /* const msg = generateWAMessageFromContent(ctx.id, {
-                viewOnceMessage: {
-                    message: {
-                        "messageContextInfo": {
-                            "deviceListMetadata": {},
-                            "deviceListMetadataVersion": 2
-                        },
-                        interactiveMessage: proto.Message.InteractiveMessage.create({
-                            body: proto.Message.InteractiveMessage.Body.create({
-                                text: global.owner.name
-                            }),
-                            footer: proto.Message.InteractiveMessage.Footer.create({
-                                text: global.bot.name
-                            }),
-                            header: proto.Message.InteractiveMessage.Header.create({
-                                title: text,
-                                subtitle: global.msg.watermark,
-                                hasMediaAttachment: false
-                            }),
-                            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                                buttons: [{
-                                        "name": "cta_url",
-                                        "buttonParamsJson": "{\"display_text\":\"🌐 WhatsApp\",\"url\":\"https://whatsapp.com/channel/0029VaG9VfPKWEKk1rxTQD20\",\"merchant_url\":\"https://www.google.com\"}"
-                                    },
-                                    {
-                                        "name": "quick_reply",
-                                        "buttonParamsJson": {
-                                            "display_text": "👤 Owner",
-                                            "id": "/owner"
-                                        }
-                                    }
-                                ],
-                            })
-                        })
+            const thumbnail = await fg.googleImage('rei ayanami wallpaper');
+
+            return ctx.sendMessage(ctx.id, {
+                text: text,
+                contextInfo: {
+                    externalAdReply: {
+                        title: global.msg.watermark,
+                        body: null,
+                        thumbnailUrl: getRandomElement(thumbnail) || global.bot.thumbnail,
+                        sourceUrl: global.bot.groupChat,
+                        mediaType: 1,
+                        renderLargerThumbnail: true
                     }
                 }
-            }, {})
-
-            return await ctx._client.relayMessage(msg.key.remoteJid, msg.message, {
-                messageId: msg.key.id
-            }); */
-            return ctx.reply(text);
+            }, {
+                quoted: ctx._msg
+            });
         } catch (error) {
             console.error('Error:', error);
-            ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

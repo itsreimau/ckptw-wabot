@@ -48,6 +48,8 @@ cmd.load();
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const senderNumber = ctx._sender.jid.split('@')[0];
     const senderJid = ctx._sender.jid;
+    const groupNumber = m.key.remoteJid.split('@')[0];
+    const groupJid = m.key.remoteJid;
 
     // All chat types.
     if (m.key.fromMe) return; // Checking messages.

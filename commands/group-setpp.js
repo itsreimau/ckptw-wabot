@@ -13,6 +13,7 @@ const {
 
 module.exports = {
     name: 'setpp',
+    aliases: ['seticon', 'setprofile'],
     category: 'group',
     code: async (ctx) => {
         const handlerObj = await handler(ctx, {

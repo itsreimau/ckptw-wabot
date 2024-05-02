@@ -40,7 +40,7 @@ module.exports = {
             }
             const qualityOptions = Object.keys(ytdl.video);
 
-            const res = await ctx.reply({
+            await ctx.reply({
                 image: {
                     url: ytdl.thumbnail
                 },
@@ -64,7 +64,7 @@ module.exports = {
                 if (!isNaN(selectedNumber) && selectedQualityIndex >= 0 && selectedQualityIndex < qualityOptions.length) {
                     const selectedQuality = qualityOptions[selectedQualityIndex];
                     const downloadFunction = ytdl.video[selectedQuality].download;
-                    ctx.react(ctx.id, '🔄', res.key);
+                    ctx.react(ctx.id, '🔄', m.key);
                     const url = await downloadFunction();
                     await ctx.reply({
                         video: {

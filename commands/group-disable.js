@@ -26,13 +26,25 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} welcome`)}`
         );
 
+        if (ctx._args[0] === 'list') {
+            const listText = fs.readFileSync(path.resolve(__dirname, '../assets/txt/list-enable_disable.txt'), 'utf8');
+
+            return ctx.reply(
+                `❖ ${bold('Daftar')}\n` +
+                '\n' +
+                `${listText}\n` +
+                '\n' +
+                global.msg.footer
+            );
+        }
+
         try {
-            if (input === 'antilink') {
+            if (input.toLowerCase() === 'antilink') {
                 await global.db.set(`group.${ctx.id.split('@')[0]}.antilink`, false);
                 return ctx.reply(`${bold('[ ! ]')} Berhasil dinonaktifkan!`);
             }
 
-            if (input === 'welcome') {
+            if (input.toLowerCase() === 'welcome') {
                 await global.db.set(`group.${ctx.id.split('@')[0]}.welcome`, false);
                 return ctx.reply(`${bold('[ ! ]')} Berhasil dinonaktifkan!`);
             }

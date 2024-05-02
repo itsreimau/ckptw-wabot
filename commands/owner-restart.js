@@ -20,7 +20,7 @@ module.exports = {
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         try {
-            return await ctx.reply(global.msg.wait);
+            await ctx.reply(global.msg.wait);
 
             exec(`pm2 restart rei-ayanami`); // PM2
         } catch (error) {
