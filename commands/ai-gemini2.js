@@ -5,8 +5,7 @@ const {
     createAPIUrl
 } = require('../tools/api.js');
 const {
-    download,
-    getImageLink
+    download
 } = require('../tools/simple.js');
 const {
     bold,
@@ -15,6 +14,9 @@ const {
 const {
     MessageType
 } = require('@mengkodingan/ckptw/lib/Constant');
+const {
+    uploadByBuffer
+} = require('telegraph-uploader')
 
 module.exports = {
     name: 'gemini2',
@@ -44,10 +46,10 @@ module.exports = {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
-            const imageLink = await getImageLink(buffer);
+            const uplRes = await uploadByBuffer(buffer);
             const apiUrl = createAPIUrl('sandipbaruwal', `/gemini2`, {
                 prompt: input,
-                url: imageLink
+                url: uplRes.link
             });
             const response = await fetch(apiUrl);
 

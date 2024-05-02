@@ -5,6 +5,8 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = {
     name: 'disable',

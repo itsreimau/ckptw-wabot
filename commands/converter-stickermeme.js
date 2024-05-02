@@ -5,8 +5,7 @@ const {
     createAPIUrl
 } = require('../tools/api.js');
 const {
-    download,
-    getImageLink
+    download
 } = require('../tools/simple.js');
 const {
     bold,
@@ -19,6 +18,9 @@ const {
     Sticker,
     StickerTypes
 } = require('wa-sticker-formatter');
+const {
+    uploadByBuffer
+} = require('telegraph-uploader')
 
 module.exports = {
     name: 'stickermeme',
@@ -48,9 +50,9 @@ module.exports = {
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
             const [top, bottom] = input.split(`|`);
-            const imageLink = await getImageLink(buffer);
+            const uplRes = await uploadByBuffer(buffer);
             const result = createAPIUrl('https://api.memegen.link', `/images/custom/${top || ''}/${bottom || ''}.png`, {
-                background: imageLink
+                background: uplRes.link
             });
             const sticker = new Sticker(result, {
                 pack: global.sticker.packname,

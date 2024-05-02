@@ -5,9 +5,6 @@ const {
     createAPIUrl
 } = require('../tools/api.js');
 const {
-    getImageLink
-} = require('../tools/simple.js');
-const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');

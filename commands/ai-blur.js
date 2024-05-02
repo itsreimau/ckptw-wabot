@@ -2,8 +2,7 @@ const {
     handler
 } = require('../handler.js');
 const {
-    download,
-    getImageLink
+    download
 } = require('../tools/simple.js');
 const {
     bold,

@@ -8,48 +8,55 @@ const smpl = require('./tools/simple.js');
  */
 exports.handler = async (ctx, options) => {
     const senderNumber = ctx._sender.jid.split('@')[0];
+    const msg = global.msg;
 
     const checkOptions = {
         admin: {
             function: async () => await smpl.isAdmin(ctx) === 0,
-            msg: global.msg.admin
+            msg: msg.admin
         },
         banned: {
             function: async () => await global.db.get(`user.${senderNumber}.isBanned`),
-            msg: global.msg.banned
+            msg: msg.banned
         },
         botAdmin: {
             function: async () => await smpl.isAdminOf(ctx) === 0,
-            msg: global.msg.botAdmin
+            msg: msg.botAdmin
         },
         group: {
             function: async () => !ctx.isGroup(),
-            msg: global.msg.group
+            msg: msg.group
         },
         owner: {
             function: async () => await smpl.isOwner(senderNumber) === 0,
-            msg: global.msg.owner
+            msg: msg.owner
         },
         private: {
             function: async () => ctx.isGroup(),
-            msg: global.msg.private
+            msg: msg.private
         }
     };
 
-    let status = false;
-    let message = null;
-
-    for (const option of Object.keys(options)) {
-        const checkOption = checkOptions[option];
-        if (await checkOption.function()) {
-            status = true;
-            message = checkOption.msg;
-            break;
+    try {
+        for (const option of Object.keys(options)) {
+            const checkOption = checkOptions[option];
+            if (await checkOption.function()) {
+                return {
+                    status: true,
+                    message: checkOption.msg
+                };
+            }
         }
+    } catch (error) {
+        console.error('Error', error);
+        return {
+            status: false,
+            message: 'An error occurred while processing the request.'
+        };
     }
 
     return {
-        status,
-        message
+        status: false,
+        message: null
     };
 }

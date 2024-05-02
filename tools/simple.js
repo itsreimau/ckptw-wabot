@@ -1,7 +1,9 @@
 const {
     downloadContentFromMessage
 } = require('@whiskeysockets/baileys');
-const uploadToImgbb = require('imgbb-uploader');
+const axios = require('axios');
+const cheerio = require('cheerio');
+const FormData = require('form-data');
 
 /**
  * Function to check if the user is an admin in the group.
@@ -14,29 +16,6 @@ async function checkAdmin(ctx, id) {
     const formattedId = `${id}@s.whatsapp.net`;
 
     return group.participants.filter(v => (v.admin === 'superadmin' || v.admin === 'admin') && v.id == formattedId).length ? true : false;
-}
-
-let lastDate = new Date();
-let counter = 1;
-
-/**
- * Function to generate a unique file name with a counter.
- * @returns {string} Returns the generated file name.
- */
-function generateFileName() {
-    let currentDate = new Date();
-
-    if (currentDate.getDate() !== lastDate.getDate()) {
-        counter = 1;
-        lastDate = currentDate;
-    }
-
-    let year = currentDate.getFullYear();
-    let month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-    let day = currentDate.getDate().toString().padStart(2, '0');
-    let index = counter.toString().padStart(3, '0');
-    counter++;
-    return `FILE-${year}${month}${day}-${index}`;
 }
 
 /**
@@ -57,22 +36,6 @@ exports.convertMsToDuration = (ms) => {
     if (seconds > 0) durationString += seconds + ' detik';
 
     return durationString;
-}
-
-/**
- * Function to upload an image buffer and return the image link.
- * @param {Buffer} buffer - The image buffer to upload.
- * @returns {Promise<string>} Returns a promise that resolves to the image link.
- */
-exports.getImageLink = async (buffer) => {
-    const options = {
-        apiKey: global.apiKey.imgbb,
-        name: generateFileName(),
-        expiration: 3600,
-        base64string: await buffer.toString('base64')
-    };
-
-    return uploadToImgbb(options).then(result => result.url);
 }
 
 /**
@@ -178,4 +141,53 @@ exports.isOwner = (number) => {
  */
 exports.ucword = (str) => {
     return str.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
+}
+
+/**
+ * Converts a string to title case.
+ * @param {string} str - The string to convert.
+ * @returns {string} The title cased string.
+ */
+exports.webp2mp4File = (source) => {
+    return new Promise((resolve, reject) => {
+        const form = new FormData();
+        let isUrl = typeof source === 'string' && /https?:\/\//.test(source);
+        form.append('new-image-url', isUrl ? source : "");
+        form.append('new-image', isUrl ? "" : source, Date.now() + "-image.webp");
+
+        axios({
+            method: 'post',
+            url: 'https://s6.ezgif.com/webp-to-mp4',
+            data: form,
+            headers: {
+                'Content-Type': `multipart/form-data; boundary=${form._boundary}`
+            }
+        }).then(({
+            data
+        }) => {
+            const bodyFormThen = new FormData();
+            const $ = cheerio.load(data);
+            const file = $('input[name="file"]').attr('value');
+            const token = $('input[name="token"]').attr('value');
+            const convert = $('input[name="file"]').attr('value');
+
+            bodyFormThen.append('file', file);
+            bodyFormThen.append('convert', "Convert WebP to MP4!");
+
+            axios({
+                method: 'post',
+                url: 'https://ezgif.com/webp-to-mp4/' + file,
+                data: bodyFormThen,
+                headers: {
+                    'Content-Type': `multipart/form-data; boundary=${bodyFormThen._boundary}`
+                }
+            }).then(({
+                data
+            }) => {
+                const $ = cheerio.load(data);
+                const result = 'https:' + $('div#output > p.outfile > video > source').attr('src');
+                resolve(result);
+            }).catch(reject);
+        }).catch(reject);
+    });
 }

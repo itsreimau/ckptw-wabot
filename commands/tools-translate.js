@@ -26,7 +26,14 @@ module.exports = {
         );
 
         try {
-            const [lang, ...inp] = ctx._args;
+            let lang = 'id';
+            let inp = ctx._args;
+
+            if (ctx._args.length > 2) {
+                lang = ctx._args[0];
+                inp = ctx._args.slice(1);
+            }
+
             const result = await translate(inp.join(' '), null, lang);
 
             return await ctx.reply(result.translation);

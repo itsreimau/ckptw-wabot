@@ -34,7 +34,8 @@ module.exports = {
         try {
             const fetchPromise = fetchWithTimeout(url);
             response = await fetchPromise;
-            if (!response.ok) ctx.reply(`${response.statusText} (${response.status})`);
+
+            if (!response.ok) return ctx.reply(`${response.statusText} (${response.status})`);
         } catch (error) {
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }

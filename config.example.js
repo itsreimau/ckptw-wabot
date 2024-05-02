@@ -6,7 +6,6 @@ const {
 
 // API Key.
 global.apiKey = {
-    imgbb: 'REPLACE_THIS_WITH_YOUR_API_KEY', // Get it at: https://id.imgbb.com/
     lowline: 'REPLACE_THIS_WITH_YOUR_API_KEY' // Get it at: https://chat.openai.com/ (Optional)
 };
 

@@ -34,9 +34,7 @@
         "bing-translate-api": "^4.0.1",
         "cfonts": "^3.2.0",
         "cheerio": "^1.0.0-rc.12",
-        "fluent-ffmpeg": "^2.1.2",
         "form-data": "^4.0.0",
-        "imgbb-uploader": "^1.5.1",
         "jimp": "^0.16.13",
         "jsdom": "^24.0.0",
         "link-preview-js": "^3.0.5",
@@ -44,6 +42,7 @@
         "mime-types": "^2.1.35",
         "moment-timezone": "^0.5.45",
         "simpl.db": "^2.13.0",
+        "telegraph-uploader": "^2.0.0",
         "util": "^0.12.5",
         "wa-sticker-formatter": "^4.4.4",
         "yt-search": "^2.10.4"
