@@ -14,13 +14,14 @@ const {
 const {
     MessageType
 } = require('@mengkodingan/ckptw/lib/Constant');
+const mime = require('mime-types');
+const {
+    uploadByBuffer
+} = require('telegraph-uploader')
 const {
     Sticker,
     StickerTypes
 } = require('wa-sticker-formatter');
-const {
-    uploadByBuffer
-} = require('telegraph-uploader')
 
 module.exports = {
     name: 'stickermeme',
@@ -50,7 +51,7 @@ module.exports = {
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
             const [top, bottom] = input.split(`|`);
-            const uplRes = await uploadByBuffer(buffer);
+            const uplRes = await uploadByBuffer(buffer, mime.contentType('png'));
             const result = createAPIUrl('https://api.memegen.link', `/images/custom/${top || ''}/${bottom || ''}.png`, {
                 background: uplRes.link
             });

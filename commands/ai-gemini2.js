@@ -14,6 +14,7 @@ const {
 const {
     MessageType
 } = require('@mengkodingan/ckptw/lib/Constant');
+const mime = require('mime-types');
 const {
     uploadByBuffer
 } = require('telegraph-uploader')
@@ -46,7 +47,7 @@ module.exports = {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
-            const uplRes = await uploadByBuffer(buffer);
+            const uplRes = await uploadByBuffer(buffer, mime.contentType('png'));
             const apiUrl = createAPIUrl('sandipbaruwal', `/gemini2`, {
                 prompt: input,
                 url: uplRes.link
