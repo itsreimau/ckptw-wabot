@@ -32,7 +32,11 @@ module.exports = {
 
             if (quoted.isAnimated) {
                 let media = await webp2mp4File(await buffer);
-                await ctx.reply(video: media, caption: null, gifPlayback: false);
+                return ctx.reply({
+                    video: media,
+                    caption: null,
+                    gifPlayback: false
+                });
             }
 
             return ctx.reply({
