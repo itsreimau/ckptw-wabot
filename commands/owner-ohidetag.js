@@ -7,6 +7,7 @@ const {
 
 module.exports = {
     name: 'ohidetag',
+    aliases: ['oht'],
     category: 'owner',
     code: async (ctx) => {
         const handlerObj = await handler(ctx, {

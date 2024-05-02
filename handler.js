@@ -23,7 +23,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.botAdmin
         },
         group: {
-            function: !ctx.isGroup(),
+            function: async () => !ctx.isGroup(),
             msg: global.msg.group
         },
         owner: {
@@ -31,7 +31,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.owner
         },
         private: {
-            function: ctx.isGroup(),
+            function: async () => ctx.isGroup(),
             msg: global.msg.private
         }
     };
@@ -41,7 +41,7 @@ exports.handler = async (ctx, options) => {
 
     for (const option of Object.keys(options)) {
         const checkOption = checkOptions[option];
-        if (checkOption.function()) {
+        if (await checkOption.function()) {
             status = true;
             message = checkOption.msg;
             break;
