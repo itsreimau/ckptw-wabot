@@ -7,7 +7,7 @@ const {
 
 module.exports = {
     name: 'hidetag',
-    aliases ['ht'],
+    aliases: ['ht'],
     category: 'group',
     code: async (ctx) => {
         const handlerObj = await handler(ctx, {
