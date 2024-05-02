@@ -30,7 +30,7 @@ module.exports = {
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'stickerMessage') ? await download(object, type.slice(0, -7)) : null;
 
-            if (quoted.isAnimated) {
+            if (quotedMessage.isAnimated) {
                 let media = await webp2mp4File(await buffer);
                 return ctx.reply({
                     video: media,
