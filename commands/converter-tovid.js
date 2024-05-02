@@ -2,16 +2,16 @@ const {
     handler
 } = require('../handler.js');
 const {
-    download
+    download,
+    webp2mp4File
 } = require('../tools/simple.js');
 const {
     bold
 } = require('@mengkodingan/ckptw');
-const mime = require('mime-types');
 
 module.exports = {
-    name: 'toimg',
-    aliases: ['toimage'],
+    name: 'tovid',
+    aliases: ['tovideo'],
     category: 'converter',
     code: async (ctx) => {
         const handlerObj = await handler(ctx, {
@@ -28,11 +28,12 @@ module.exports = {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'stickerMessage') ? await download(object, type.slice(0, -7)) : null;
+            const media = await webp2mp4File(await buffer);
 
             return ctx.reply({
-                image: buffer,
+                video: media,
                 caption: null,
-                mimetype: mime.contentType('png')
+                gifPlayback: false
             });
         } catch (error) {
             console.error('Error', error);
