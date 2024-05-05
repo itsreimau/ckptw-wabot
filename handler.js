@@ -31,7 +31,7 @@ exports.handler = async (ctx, options) => {
                 msg: msg.botAdmin
             },
             group: {
-                function: () => isGroup,
+                function: () => isPrivate,
                 msg: msg.group
             },
             owner: {
@@ -39,7 +39,7 @@ exports.handler = async (ctx, options) => {
                 msg: msg.owner
             },
             private: {
-                function: () => isPrivate,
+                function: () => isGroup,
                 msg: msg.private
             }
         };
