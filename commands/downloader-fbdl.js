@@ -43,7 +43,7 @@ module.exports = {
             const results = await Promise.allSettled(promises);
 
             for (const res of results) {
-                if (res.status === 'fulfilled') {
+                if (res.status === 'fulfilled' && res.value) {
                     result = res.value.hd || res.value.sd || res.value.videoUrl || res.value.url;
                     break;
                 }

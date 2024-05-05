@@ -26,11 +26,11 @@ module.exports = {
 
         try {
             const senderJid = ctx._sender.jid;
-            const groupJid = ctx.isGroup ? ctx._msg.key.remoteJid : null;
-            const groupMetadata = ctx.isGroup ? await ctx._client.groupMetadata(groupJid) : null;
+            const groupJid = ctx.isGroup() ? ctx._msg.key.remoteJid : null;
+            const groupMetadata = ctx.isGroup() ? await ctx._client.groupMetadata(groupJid) : null;
             const groupParticipant = groupMetadata ? groupMetadata.participants : null;
             const groupAdmin = groupParticipant ? groupParticipant.filter(p => p.admin !== null).map(p => p.id) : [];
-            const isAdmin = ctx.isGroup ? groupAdmin.includes(senderJid) : false;
+            const isAdmin = ctx.isGroup() ? groupAdmin.includes(senderJid) : false;
 
             if (member === ctx._sender.jid) throw new Error('Tidak dapat digunakan pada diri Anda sendiri.');
 

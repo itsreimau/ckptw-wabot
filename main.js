@@ -55,10 +55,10 @@ global.handler = handler;
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const senderNumber = ctx._sender.jid.split('@')[0];
     const senderJid = ctx._sender.jid;
-    const groupNumber = ctx.isGroup ? m.key.remoteJid.split('@')[0] : null;
-    const groupJid = ctx.isGroup ? m.key.remoteJid : null;
+    const groupNumber = ctx.isGroup() ? m.key.remoteJid.split('@')[0] : null;
+    const groupJid = ctx.isGroup() ? m.key.remoteJid : null;
     const isOwner = global.owner.number === senderNumber || global.owner.co.includes(senderNumber);
-    const isGroup = ctx.isGroup;
+    const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
 
     // All chat types.

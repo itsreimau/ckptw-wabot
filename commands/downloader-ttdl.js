@@ -45,7 +45,7 @@ module.exports = {
             const results = await Promise.allSettled(promises);
 
             for (const res of results) {
-                if (res.status === 'fulfilled') {
+                if (res.status === 'fulfilled' && res.value) {
                     result = res.value.play || res.value.video.no_watermark_raw || res.value.video.no_watermark || res.value.video.no_watermark_hd || res.value.video.with_watermark;
                     break;
                 }
