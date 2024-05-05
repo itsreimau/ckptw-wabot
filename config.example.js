@@ -41,11 +41,12 @@ global.msg = {
     urlInvalid: `URL tidak valid!`
 };
 
-// Owner.
+// Owner & CoOwner.
 global.owner = {
     name: 'ItsReimau',
     number: '6283838039693',
-    organization: 'Kumaha Aing'
+    organization: 'Kumaha Aing',
+    co: ['6285176804719', '6282191385540']
 };
 
 // Sticker.

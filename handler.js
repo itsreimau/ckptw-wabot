@@ -1,11 +1,3 @@
-const smpl = require('./tools/simple.js');
-
-/**
- * Handles requests based on the given options.
- * @param {Object} ctx The context of the request.
- * @param {Object} options The given options.
- * @returns {Object} Object containing status and message if applicable, otherwise null.
- */
 exports.handler = async (ctx, options) => {
     try {
         const botNumber = ctx._client.user.id.split(':')[0];
@@ -16,13 +8,13 @@ exports.handler = async (ctx, options) => {
         const groupJid = ctx.isGroup ? ctx._msg.key.remoteJid : null;
         const groupMetadata = ctx.isGroup ? await ctx._client.groupMetadata(groupJid) : null;
         const groupParticipant = groupMetadata ? groupMetadata.participants : null;
-        const groupAdmin = groupParticipant ? groupParticipant.filter(p => p.admin !== null).map(p => p.id) : [];
+        const groupAdmin = groupParticipant ? groupParticipant.filter(p => p.isAdmin).map(p => p.jid) : [];
         const groupOwner = groupMetadata ? groupMetadata.owner : null;
         const isAdmin = ctx.isGroup ? groupAdmin.includes(senderJid) : false;
         const isBotAdmin = ctx.isGroup ? groupAdmin.includes(botJid) : false;
-        const isOwner = global.owner.number === senderNumber;
-        const isGroup = ctx._msg.key.remoteJid.endsWith('@g.us');
-        const isPrivate = ctx._msg.key.remoteJid.endsWith('@s.whatsapp.net');
+        const isOwner = global.owner.number === senderNumber || global.owner.co.includes(senderNumber);
+        const isGroup = ctx.isGroup;
+        const isPrivate = !isGroup;
         const msg = global.msg;
 
         const checkOptions = {
@@ -39,7 +31,7 @@ exports.handler = async (ctx, options) => {
                 msg: msg.botAdmin
             },
             group: {
-                function: () => isPrivate,
+                function: () => isGroup,
                 msg: msg.group
             },
             owner: {
@@ -47,14 +39,14 @@ exports.handler = async (ctx, options) => {
                 msg: msg.owner
             },
             private: {
-                function: () => isGroup,
+                function: () => isPrivate,
                 msg: msg.private
             }
         };
 
         for (const option of Object.keys(options)) {
             const checkOption = checkOptions[option];
-            if (await checkOption.function()) {
+            if (checkOption && await checkOption.function()) {
                 return {
                     status: true,
                     message: checkOption.msg
