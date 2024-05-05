@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     download
 } = require('../tools/simple.js');
 const {
@@ -16,7 +13,7 @@ module.exports = {
     aliases: ['seticon', 'setprofile'],
     category: 'group',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             admin: true,
             banned: true,
             botAdmin: true,

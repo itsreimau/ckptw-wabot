@@ -1,12 +1,8 @@
-const {
-    handler
-} = require('../handler.js');
-
 module.exports = {
     name: 'base64',
     category: 'tools',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 

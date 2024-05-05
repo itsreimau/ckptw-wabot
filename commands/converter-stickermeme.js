@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     createAPIUrl
 } = require('../tools/api.js');
 const {
@@ -28,7 +25,7 @@ module.exports = {
     aliases: ['smeme', 'stikermeme'],
     category: 'converter',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 

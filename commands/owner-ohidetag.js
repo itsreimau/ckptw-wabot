@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     bold
 } = require('@mengkodingan/ckptw');
 
@@ -10,7 +7,7 @@ module.exports = {
     aliases: ['oht'],
     category: 'owner',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true,
             group: true,
             owner: true
@@ -27,7 +24,6 @@ module.exports = {
             for (let i = 0; i < len; i++) {
                 const serialized = data.participants[i].id.split('@')[0];
                 mentions.push({
-                    tag: `@${serialized}`,
                     mention: `${serialized}@s.whatsapp.net`
                 });
             }

@@ -1,10 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
-    isAdmin
-} = require('../tools/simple.js');
-const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -13,7 +7,7 @@ module.exports = {
     name: 'opromote',
     category: 'owner',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true,
             botAdmin: true,
             group: true,
@@ -32,9 +26,15 @@ module.exports = {
         });
 
         try {
-            if (await isAdmin(ctx, member.split('@')[0]) === 1) throw new Error('Anggota ini adalah admin grup.');
+            const senderJid = ctx._sender.jid;
+            const groupMetadata = ctx.isGroup ? await ctx._client.groupMetadata(groupJid) : null;
+            const groupParticipant = groupMetadata ? groupMetadata.participants : null;
+            const groupAdmin = groupParticipant ? groupParticipant.filter(p => p.admin !== null).map(p => p.id) : [];
+            const isAdmin = ctx.isGroup ? groupAdmin.includes(senderJid) : false;
 
-            await ctx._client.groupParticipantsUpdate(ctx.id, [member], 'promote');
+            if (isAdmin) throw new Error('Anggota ini adalah admin grup.');
+
+            await ctx._client.groupParticipantUpdate(ctx.id, [member], 'promote');
 
             return ctx.reply(`${bold('[ ! ]')} Berhasil ditingkatkan dari anggota biasa menjadi admin!`);
         } catch (error) {

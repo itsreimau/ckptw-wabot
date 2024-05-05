@@ -1,3 +1,6 @@
+const {
+    handler
+} = require('./handler.js');
 const smpl = require('./tools/simple.js');
 const {
     bold,
@@ -45,8 +48,12 @@ process.on('uncaughtException', (err) => console.error(err));
 const cmd = new CommandHandler(bot, path.resolve(__dirname, 'commands'));
 cmd.load();
 
+// Create a handlers.
+global.handler = handler;
+
 // Event handling when the message appears.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
+    const isOwner = number.includes(global.owner.number);
     const senderNumber = ctx._sender.jid.split('@')[0];
     const senderJid = ctx._sender.jid;
     const groupNumber = m.key.remoteJid.split('@')[0];
@@ -55,7 +62,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // All chat types.
     if (m.key.fromMe) return; // Checking messages.
 
-    if (smpl.isCmd(m, ctx)) ctx.simulateTyping(); // Auto-typing,
+    if (smpl.isCmd(m, ctx)) ctx.simulateTyping(); // Auto-typing.
 
     // AFK.
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
@@ -85,7 +92,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // Owner-only.
-    if (smpl.isOwner(senderNumber) === 1) {
+    if (isOwner) {
         // Eval.
         if (m.content && m.content.startsWith && (m.content.startsWith('> ') || m.content.startsWith('>> '))) {
             const code = m.content.slice(2);

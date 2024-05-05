@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     createAPIUrl
 } = require('../tools/api.js');
 const {
@@ -18,7 +15,7 @@ module.exports = {
     aliases: ['tt', 'vt', 'vtdl', 'tiktok', 'ttnowm', 'tiktokdl', 'tiktoknowm'],
     category: 'downloader',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 

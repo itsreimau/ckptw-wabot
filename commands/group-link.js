@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     bold
 } = require('@mengkodingan/ckptw');
 
@@ -10,7 +7,7 @@ module.exports = {
     aliases: ['gclink', 'grouplink'],
     category: 'group',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             botAdmin: true,
             banned: true,
             group: true

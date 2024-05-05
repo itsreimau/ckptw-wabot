@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     convertMsToDuration
 } = require('../tools/simple.js');
 
@@ -9,7 +6,7 @@ module.exports = {
     name: 'uptime',
     category: 'info',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 

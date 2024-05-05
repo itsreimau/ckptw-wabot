@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     bold
 } = require('@mengkodingan/ckptw');
 
@@ -9,7 +6,7 @@ module.exports = {
     name: 'otagall',
     category: 'owner',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true,
             group: true,
             owner: true

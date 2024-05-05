@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     ghdl
 } = require('../tools/scraper.js');
 const {
@@ -15,7 +12,7 @@ module.exports = {
     aliases: ['github', 'gitclone'],
     category: 'downloader',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 

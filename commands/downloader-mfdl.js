@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     mediafiredl
 } = require('@bochilteam/scraper');
 const {
@@ -15,7 +12,7 @@ module.exports = {
     aliases: ['mf', 'mediafire', 'mediafiredl'],
     category: 'downloader',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 

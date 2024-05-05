@@ -6,19 +6,6 @@ const cheerio = require('cheerio');
 const FormData = require('form-data');
 
 /**
- * Function to check if the user is an admin in the group.
- * @param {object} ctx - The context object.
- * @param {string} id - The ID of the user.
- * @returns {number} Returns 1 if the user is an admin, otherwise returns 0.
- */
-async function checkAdmin(ctx, id) {
-    const group = await ctx._client.groupMetadata(ctx.id);
-    const formattedId = `${id}@s.whatsapp.net`;
-
-    return group.participants.filter(v => (v.admin === 'superadmin' || v.admin === 'admin') && v.id == formattedId).length ? true : false;
-}
-
-/**
  * Function to convert milliseconds to human-readable duration.
  * @param {number} ms - The time duration in milliseconds.
  * @returns {string} Returns the human-readable duration string.
@@ -104,90 +91,10 @@ exports.isCmd = (m, ctx) => {
 }
 
 /**
- * Function to check if the user is an admin.
- * @param {object} ctx - The context object.
- * @param {number} number - The user number.
- * @returns {number} Returns 1 if the user is an admin, otherwise returns 0.
- */
-exports.isAdmin = async (ctx, number) => {
-    const isAdmin = await checkAdmin(ctx, number || ctx._sender.jid.split('@')[0]);
-    return isAdmin ? 1 : 0;
-}
-
-/**
- * Function to check if the bot is an admin of the group.
- * @param {object} ctx - The context object.
- * @returns {number} Returns 1 if the bot is an admin of the group, otherwise returns 0.
- */
-exports.isAdminOf = async (ctx) => {
-    const isAdminOfGroup = await checkAdmin(ctx, ctx._client.user.id.split(':')[0]);
-    return isAdminOfGroup ? 1 : 0;
-}
-
-/**
- * Function to check if the user is the owner.
- * @param {number} number - The user number.
- * @returns {number} Returns 1 if the user is the owner, otherwise returns 0.
- */
-exports.isOwner = (number) => {
-    const isOwner = number.includes(global.owner.number);
-    return isOwner ? 1 : 0;
-}
-
-/**
  * Function to convert a string to title case.
  * @param {string} str - The string to convert.
  * @returns {string} Returns the title cased string.
  */
 exports.ucword = (str) => {
     return str.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
-}
-
-/**
- * Converts a string to title case.
- * @param {string} str - The string to convert.
- * @returns {string} The title cased string.
- */
-exports.webp2mp4File = (source) => {
-    return new Promise((resolve, reject) => {
-        const form = new FormData();
-        let isUrl = typeof source === 'string' && /https?:\/\//.test(source);
-        form.append('new-image-url', isUrl ? source : "");
-        form.append('new-image', isUrl ? "" : source, Date.now() + "-image.webp");
-
-        axios({
-            method: 'post',
-            url: 'https://s6.ezgif.com/webp-to-mp4',
-            data: form,
-            headers: {
-                'Content-Type': `multipart/form-data; boundary=${form._boundary}`
-            }
-        }).then(({
-            data
-        }) => {
-            const bodyFormThen = new FormData();
-            const $ = cheerio.load(data);
-            const file = $('input[name="file"]').attr('value');
-            const token = $('input[name="token"]').attr('value');
-            const convert = $('input[name="file"]').attr('value');
-
-            bodyFormThen.append('file', file);
-            bodyFormThen.append('convert', "Convert WebP to MP4!");
-
-            axios({
-                method: 'post',
-                url: 'https://ezgif.com/webp-to-mp4/' + file,
-                data: bodyFormThen,
-                headers: {
-                    'Content-Type': `multipart/form-data; boundary=${bodyFormThen._boundary}`
-                }
-            }).then(({
-                data
-            }) => {
-                const $ = cheerio.load(data);
-                const result = 'https:' + $('div#output > p.outfile > video > source').attr('src');
-                resolve(result);
-            }).catch(reject);
-        }).catch(reject);
-    });
 }

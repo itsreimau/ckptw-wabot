@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     chord
 } = require('@bochilteam/scraper');
 const {
@@ -13,7 +10,7 @@ module.exports = {
     name: 'chord',
     category: 'internet',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 

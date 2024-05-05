@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     getRandomElement
 } = require('../tools/simple.js');
 const {
@@ -15,7 +12,7 @@ module.exports = {
     aliases: ['gimage'],
     category: 'internet',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 

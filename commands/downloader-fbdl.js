@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     facebookdl,
     facebookdlv2
 } = require('@bochilteam/scraper');
@@ -17,7 +14,7 @@ module.exports = {
     aliases: ['fb', 'facebook'],
     category: 'downloader',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 

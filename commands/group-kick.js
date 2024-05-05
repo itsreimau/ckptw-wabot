@@ -1,10 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
-    isAdmin
-} = require('../tools/simple.js');
-const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -13,7 +7,7 @@ module.exports = {
     name: 'kick',
     category: 'group',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             admin: true,
             banned: true,
             botAdmin: true,
@@ -32,11 +26,17 @@ module.exports = {
         });
 
         try {
+            const senderJid = ctx._sender.jid;
+            const groupMetadata = ctx.isGroup ? await ctx._client.groupMetadata(groupJid) : null;
+            const groupParticipant = groupMetadata ? groupMetadata.participants : null;
+            const groupAdmin = groupParticipant ? groupParticipant.filter(p => p.admin !== null).map(p => p.id) : [];
+            const isAdmin = ctx.isGroup ? groupAdmin.includes(senderJid) : false;
+
             if (member === ctx._sender.jid) throw new Error('Tidak dapat digunakan pada diri Anda sendiri.');
 
-            if (await isAdmin(ctx, member.split('@')[0]) === 1) throw new Error('Anggota ini adalah admin grup.');
+            if (isAdmin) throw new Error('Anggota ini adalah admin grup.');
 
-            await ctx._client.groupParticipantsUpdate(ctx.id, [member], 'remove');
+            await ctx._client.groupParticipantUpdate(ctx.id, [member], 'remove');
 
             return ctx.reply(`${bold('[ ! ]')} Berhasil dikeluarkan!`);
         } catch (error) {

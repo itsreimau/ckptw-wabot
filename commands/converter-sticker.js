@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     download
 } = require('../tools/simple.js');
 const {
@@ -20,7 +17,7 @@ module.exports = {
     aliases: ['s', 'stiker'],
     category: 'converter',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 

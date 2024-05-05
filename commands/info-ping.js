@@ -1,12 +1,8 @@
-const {
-    handler
-} = require('../handler.js');
-
 module.exports = {
     name: 'ping',
     category: 'info',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 

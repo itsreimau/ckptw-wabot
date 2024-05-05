@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     download
 } = require('../tools/simple.js');
 const {
@@ -17,7 +14,7 @@ module.exports = {
     name: 'blur',
     category: 'ai',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 

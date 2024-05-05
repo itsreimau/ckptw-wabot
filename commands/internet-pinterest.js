@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     pinterest
 } = require('../tools/scraper.js');
 const {
@@ -14,7 +11,7 @@ module.exports = {
     aliases: ['pin', 'pint'],
     category: 'internet',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 

@@ -1,7 +1,4 @@
 const {
-    handler
-} = require('../handler.js');
-const {
     freepik
 } = require('../tools/scraper.js');
 const {
@@ -16,7 +13,7 @@ module.exports = {
     name: 'freepik',
     category: 'internet',
     code: async (ctx) => {
-        const handlerObj = await handler(ctx, {
+        const handlerObj = await global.handler(ctx, {
             banned: true
         });
 
