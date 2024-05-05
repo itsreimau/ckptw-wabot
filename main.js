@@ -53,11 +53,11 @@ global.handler = handler;
 
 // Event handling when the message appears.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
-    const isOwner = number.includes(global.owner.number);
     const senderNumber = ctx._sender.jid.split('@')[0];
     const senderJid = ctx._sender.jid;
-    const groupNumber = m.key.remoteJid.split('@')[0];
-    const groupJid = m.key.remoteJid;
+    const groupNumber = ctx.isGroup ? m.key.remoteJid.split('@')[0] : null;
+    const groupJid = ctx.isGroup ? m.key.remoteJid : null;
+    const isOwner = global.owner.number === senderNumber;
 
     // All chat types.
     if (m.key.fromMe) return; // Checking messages.
