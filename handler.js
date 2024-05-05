@@ -8,7 +8,8 @@ const smpl = require('./tools/simple.js');
  */
 exports.handler = async (ctx, options) => {
     try {
-        const botNumber = await ctx._client.decodeJid(ctx._client.user.id);
+        const botNumber = ctx._client.user.id.split(':')[0];
+        const botJid = `${botNumber}@s.whatsapp.net`
         const senderNumber = ctx._sender.jid.split('@')[0];
         const senderJid = ctx._sender.jid;
         const groupNumber = ctx.isGroup ? m.key.remoteJid.split('@')[0] : null;
