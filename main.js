@@ -58,6 +58,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const groupNumber = ctx.isGroup ? m.key.remoteJid.split('@')[0] : null;
     const groupJid = ctx.isGroup ? m.key.remoteJid : null;
     const isOwner = global.owner.number === senderNumber;
+    const isGroup = ctx._msg.key.remoteJid.endsWith('@g.us');
+    const isPrivate = ctx._msg.key.remoteJid.endsWith('@s.whatsapp.net');
 
     // All chat types.
     if (m.key.fromMe) return; // Checking messages.
@@ -128,7 +130,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // Group.
-    if (ctx.isGroup) {
+    if (isGroup) {
         if (db.get(`group.${groupNumber}.antilink`)) {
             const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
 
@@ -144,7 +146,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
 
     // Private.
-    if (!ctx.isGroup) {
+    if (isPrivate) {
         // Menfess.
         const getMessageDataMenfess = db.get(`menfess.${senderNumber}`);
 

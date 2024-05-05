@@ -21,6 +21,8 @@ exports.handler = async (ctx, options) => {
         const isAdmin = ctx.isGroup ? groupAdmin.includes(senderJid) : false;
         const isBotAdmin = ctx.isGroup ? groupAdmin.includes(botJid) : false;
         const isOwner = global.owner.number === senderNumber;
+        const isGroup = ctx._msg.key.remoteJid.endsWith('@g.us');
+        const isPrivate = ctx._msg.key.remoteJid.endsWith('@s.whatsapp.net');
         const msg = global.msg;
 
         const checkOptions = {
@@ -37,7 +39,7 @@ exports.handler = async (ctx, options) => {
                 msg: msg.botAdmin
             },
             group: {
-                function: () => !ctx.isGroup(),
+                function: () => isPrivate,
                 msg: msg.group
             },
             owner: {
@@ -45,7 +47,7 @@ exports.handler = async (ctx, options) => {
                 msg: msg.owner
             },
             private: {
-                function: () => ctx.isGroup(),
+                function: () => isGroup,
                 msg: msg.private
             }
         };
