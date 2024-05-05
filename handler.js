@@ -12,8 +12,8 @@ exports.handler = async (ctx, options) => {
         const botJid = `${botNumber}@s.whatsapp.net`
         const senderNumber = ctx._sender.jid.split('@')[0];
         const senderJid = ctx._sender.jid;
-        const groupNumber = ctx.isGroup ? m.key.remoteJid.split('@')[0] : null;
-        const groupJid = ctx.isGroup ? m.key.remoteJid : null;
+        const groupNumber = ctx.isGroup ? ctx._msg.key.remoteJid.split('@')[0] : null;
+        const groupJid = ctx.isGroup ? ctx._msg.key.remoteJid : null;
         const groupMetadata = ctx.isGroup ? await ctx._client.groupMetadata(groupJid) : null;
         const groupParticipant = groupMetadata ? groupMetadata.participants : null;
         const groupAdmin = groupParticipants ? groupParticipant.filter(p => p.admin !== null).map(p => p.id) : [];

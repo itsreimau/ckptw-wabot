@@ -36,7 +36,7 @@ module.exports = {
 
             if (isAdmin) throw new Error('Anggota ini adalah admin grup.');
 
-            await ctx._client.groupParticipantUpdate(ctx.id, [member], 'add');
+            await ctx._client.groupParticipantsUpdate(ctx.id, [member], 'add');
 
             return ctx.reply(`${bold('[ ! ]')} Berhasil dikeluarkan!`);
         } catch (error) {
