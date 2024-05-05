@@ -16,7 +16,7 @@ exports.handler = async (ctx, options) => {
         const groupJid = ctx.isGroup ? ctx._msg.key.remoteJid : null;
         const groupMetadata = ctx.isGroup ? await ctx._client.groupMetadata(groupJid) : null;
         const groupParticipant = groupMetadata ? groupMetadata.participants : null;
-        const groupAdmin = groupParticipants ? groupParticipant.filter(p => p.admin !== null).map(p => p.id) : [];
+        const groupAdmin = groupParticipant ? groupParticipant.filter(p => p.admin !== null).map(p => p.id) : [];
         const groupOwner = groupMetadata ? groupMetadata.owner : null;
         const isAdmin = ctx.isGroup ? groupAdmin.includes(senderJid) : false;
         const isBotAdmin = ctx.isGroup ? groupAdmin.includes(botNumber) : false;
