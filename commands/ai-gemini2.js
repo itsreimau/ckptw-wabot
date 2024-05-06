@@ -14,7 +14,7 @@ const {
 const mime = require('mime-types');
 const {
     uploadByBuffer
-} = require('telegraph-uploader')
+} = require('telegraph-uploader');
 
 module.exports = {
     name: 'gemini2',

@@ -14,7 +14,7 @@ const {
 const mime = require('mime-types');
 const {
     uploadByBuffer
-} = require('telegraph-uploader')
+} = require('telegraph-uploader');
 const {
     Sticker,
     StickerTypes
