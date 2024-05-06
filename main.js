@@ -113,32 +113,39 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (m.content && m.content.startsWith && m.content.startsWith('$ ')) {
             const command = m.content.slice(2);
 
-            const output = await new Promise((resolve, reject) => {
-                exec(command, (error, stdout, stderr) => {
-                    if (error) {
-                        reject(new Error(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`));
-                    } else if (stderr) {
-                        reject(new Error(stderr));
-                    } else {
-                        resolve(stdout);
-                    }
+            try {
+                const output = await new Promise((resolve, reject) => {
+                    exec(command, (error, stdout, stderr) => {
+                        if (error) {
+                            reject(new Error(error.message));
+                        } else if (stderr) {
+                            reject(new Error(stderr));
+                        } else {
+                            resolve(stdout);
+                        }
+                    });
                 });
-            });
 
-            return await ctx.reply(output);
+                return await ctx.reply(output);
+            } catch (error) {
+                console.error('Error:', error);
+                return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            }
         }
-    }
 
-    // Group.
-    if (isGroup) {
-        if (db.fetch(`group.${groupNumber}.antilink`)) {
-            const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
-            if (m.content && urlRegex.test(m.content)) {
-                ctx.deleteMessage(m.key);
-                /* If you want automatic kick, use this.
-                await ctx._client.groupParticipantsUpdate(ctx.id, [senderNumber], 'remove'); */
+        // Group.
+        if (isGroup) {
+            if (db.fetch(`group.${groupNumber}.antilink`)) {
+                const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+                if (m.content && urlRegex.test(m.content)) {
+                    if (await smpl.isAdmin(ctx) === 1) return;
 
-                return ctx.reply(`${bold('[ ! ]')} Jangan kirim tautan!`);
+                    ctx.deleteMessage(m.key);
+                    /* If you want automatic kick, use this.
+                    await ctx._client.groupParticipantsUpdate(ctx.id, [senderNumber], 'remove'); */
+
+                    return ctx.reply(`${bold('[ ! ]')} Jangan kirim tautan!`);
+                }
             }
         }
     }
