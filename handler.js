@@ -7,70 +7,49 @@ const smpl = require('./tools/simple.js');
  * @returns {Object} Object containing status and message if applicable, otherwise null.
  */
 exports.handler = async (ctx, options) => {
-    try {
-        const botNumber = ctx._client.user.id.split(':')[0];
-        const botJid = `${botNumber}@s.whatsapp.net`
-        const senderNumber = ctx._sender.jid.split('@')[0];
-        const senderJid = ctx._sender.jid;
-        const groupNumber = ctx.isGroup() ? ctx._msg.key.remoteJid.split('@')[0] : null;
-        const groupJid = ctx.isGroup() ? ctx._msg.key.remoteJid : null;
-        const groupMetadata = ctx.isGroup() ? await ctx._client.groupMetadata(groupJid) : null;
-        const groupParticipant = groupMetadata ? groupMetadata.participants : null;
-        const groupAdmin = groupParticipant ? groupParticipant.filter(p => p.isAdmin).map(p => p.jid) : [];
-        const groupOwner = groupMetadata ? groupMetadata.owner : null;
-        const isAdmin = ctx.isGroup() ? groupAdmin.includes(senderJid) : false;
-        const isBotAdmin = ctx.isGroup() ? groupAdmin.includes(botJid) : false;
-        const isOwner = global.owner.number === senderNumber || global.owner.co.includes(senderNumber);
-        const isGroup = ctx.isGroup();
-        const isPrivate = !isGroup;
-        const msg = global.msg;
+    const senderNumber = ctx._sender.jid.split('@')[0];
 
-        const checkOptions = {
-            admin: {
-                function: async () => !isAdmin,
-                msg: msg.admin
-            },
-            banned: {
-                function: async () => await global.db.get(`user.${senderNumber}.isBanned`),
-                msg: msg.banned
-            },
-            botAdmin: {
-                function: async () => !isBotAdmin,
-                msg: msg.botAdmin
-            },
-            group: {
-                function: async () => isPrivate,
-                msg: msg.group
-            },
-            owner: {
-                function: async () => !isOwner,
-                msg: msg.owner
-            },
-            private: {
-                function: async () => isGroup,
-                msg: msg.private
-            }
-        };
-
-        for (const option of Object.keys(options)) {
-            const checkOption = checkOptions[option];
-            if (checkOption && await checkOption.function()) {
-                return {
-                    status: true,
-                    message: checkOption.msg
-                };
-            }
+    const checkOptions = {
+        admin: {
+            function: async () => await smpl.isAdmin(ctx) === 0,
+            msg: global.msg.admin
+        },
+        banned: {
+            function: async () => await global.db.get(`user.${senderNumber}.isBanned`),
+            msg: global.msg.banned
+        },
+        botAdmin: {
+            function: async () => await smpl.isAdminOf(ctx) === 0,
+            msg: global.msg.botAdmin
+        },
+        group: {
+            function: async () => await !ctx.isGroup(),
+            msg: global.msg.group
+        },
+        owner: {
+            function: async () => await smpl.isOwner(senderNumber) === 0,
+            msg: global.msg.owner
+        },
+        private: {
+            function: async () => await ctx.isGroup(),
+            msg: global.msg.private
         }
-    } catch (error) {
-        console.error('Error:', error);
-        return {
-            status: false,
-            message: 'An error occurred while processing the request.'
-        };
+    };
+
+    let status = false;
+    let message = null;
+
+    for (const option of Object.keys(options)) {
+        const checkOption = checkOptions[option];
+        if (await checkOption.function()) {
+            status = true;
+            message = checkOption.msg;
+            break;
+        }
     }
 
     return {
-        status: false,
-        message: null
+        status,
+        message
     };
-};
+}

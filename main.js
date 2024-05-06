@@ -94,7 +94,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // Owner-only.
-    if (isOwner) {
+    if (smpl.isOwner(senderNumber) === 1) {
         // Eval.
         if (m.content && m.content.startsWith && (m.content.startsWith('> ') || m.content.startsWith('>> '))) {
             const code = m.content.slice(2);
@@ -131,19 +131,19 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Group.
     if (isGroup) {
-        if (db.get(`group.${groupNumber}.antilink`)) {
-            const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+        groupDb = db.get(`group.${groupNumber}.antilink`);
 
-            if (m.message && m.message.extendedTextMessage && (m.message.extendedTextMessage.inviteLinkGroupTypeV2 || urlRegex.test(m.content))) {
+        if (groupDb.antilink) {
+            const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+            if (m.content && m.message.extendedTextMessage.inviteLinkGroupTypeV2 && (urlRegex.test(m.content) || m.message.extendedTextMessage.inviteLinkGroupTypeV2 === 1)) {
                 ctx.deleteMessage(m.key);
                 /* If you want automatic kick, use this.
                 await ctx._client.groupParticipantsUpdate(ctx.id, [senderNumber], 'remove'); */
 
-                return ctx.reply('Jangan kirim tautan!');
+                return ctx.reply(`${bold('[ ! ]')} Jangan kirim tautan!`);
             }
         }
     }
-
 
     // Private.
     if (isPrivate) {

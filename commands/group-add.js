@@ -1,4 +1,7 @@
 const {
+    isAdmin
+} = require('../tools/simple.js');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -17,7 +20,8 @@ module.exports = {
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         const input = ctx._args.join(' ');
-        const member = input.replace(/[^\d]/g, '');
+        const inrplc = input.replace(/[^\d]/g, '');
+        const member = `${inrplc}@s.whatsapp.net`;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -25,16 +29,9 @@ module.exports = {
         );
 
         try {
-            const senderJid = ctx._sender.jid;
-            const groupJid = ctx.isGroup() ? ctx._msg.key.remoteJid : null;
-            const groupMetadata = ctx.isGroup() ? await ctx._client.groupMetadata(groupJid) : null;
-            const groupParticipant = groupMetadata ? groupMetadata.participants : null;
-            const groupAdmin = groupParticipant ? groupParticipant.filter(p => p.admin !== null).map(p => p.id) : [];
-            const isAdmin = ctx.isGroup() ? groupAdmin.includes(senderJid) : false;
-
             if (member === ctx._sender.jid) throw new Error('Tidak dapat digunakan pada diri Anda sendiri.');
 
-            if (isAdmin) throw new Error('Anggota ini adalah admin grup.');
+            if (await await isAdmin(ctx, member) === 1(ctx, member) === 1) throw new Error('Anggota ini adalah admin grup.');
 
             await ctx._client.groupParticipantsUpdate(ctx.id, [member], 'add');
 

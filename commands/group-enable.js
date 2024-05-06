@@ -26,7 +26,7 @@ module.exports = {
         );
 
         if (ctx._args[0] === 'list') {
-            const listText = fs.readFileSync(path.resolve(__dirname, '../assets/txt/list-enable_disable.txt'), 'utf8');
+            const listText = fs.readFileSync(path.resolve(__dirname, '../assets/txt/list-disable_enable.txt'), 'utf8');
 
             return ctx.reply(
                 `❖ ${bold('Daftar')}\n` +
@@ -38,13 +38,15 @@ module.exports = {
         }
 
         try {
-            if (input.toLowerCase() === 'antilink') {
-                await global.db.set(`group.${ctx.id.split('@')[0]}.antilink`, true);
+            const groupNumber = ctx.isGroup() ? ctx._msg.key.remoteJid.split('@')[0] : null;
+
+            if (input === 'antilink') {
+                await global.db.set(`group.${groupNumber}.antilink`, true);
                 return ctx.reply(`${bold('[ ! ]')} Berhasil diaktifkan!`);
             }
 
-            if (input.toLowerCase() === 'welcome') {
-                await global.db.set(`group.${ctx.id.split('@')[0]}.welcome`, true);
+            if (input === 'welcome') {
+                await global.db.set(`group.${groupNumber}.welcome`, true);
                 return ctx.reply(`${bold('[ ! ]')} Berhasil diaktifkan!`);
             }
         } catch (error) {

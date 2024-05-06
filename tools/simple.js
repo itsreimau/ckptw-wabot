@@ -1,9 +1,19 @@
 const {
     downloadContentFromMessage
 } = require('@whiskeysockets/baileys');
-const axios = require('axios');
-const cheerio = require('cheerio');
-const FormData = require('form-data');
+
+/**
+ * Function to check if the user is an admin in the group.
+ * @param {object} ctx - The context object.
+ * @param {string} id - The ID of the user.
+ * @returns {number} Returns 1 if the user is an admin, otherwise returns 0.
+ */
+async function checkAdmin(ctx, id) {
+    const group = await ctx._client.groupMetadata(ctx.id);
+    const formattedId = `${id}@s.whatsapp.net`;
+
+    return group.participants.filter(v => (v.admin === 'superadmin' || v.admin === 'admin') && v.id == formattedId).length ? true : false;
+}
 
 /**
  * Function to convert milliseconds to human-readable duration.
@@ -88,6 +98,37 @@ exports.isCmd = (m, ctx) => {
     }
 
     return false;
+}
+
+/**
+ * Function to check if the user is an admin.
+ * @param {object} ctx - The context object.
+ * @param {number} number - The user number.
+ * @returns {number} Returns 1 if the user is an admin, otherwise returns 0.
+ */
+exports.isAdmin = async (ctx, number) => {
+    const isAdmin = await checkAdmin(ctx, number || ctx._sender.jid.split('@')[0]);
+    return isAdmin ? 1 : 0;
+}
+
+/**
+ * Function to check if the bot is an admin of the group.
+ * @param {object} ctx - The context object.
+ * @returns {number} Returns 1 if the bot is an admin of the group, otherwise returns 0.
+ */
+exports.isAdminOf = async (ctx) => {
+    const isAdminOfGroup = await checkAdmin(ctx, ctx._client.user.id.split(':')[0]);
+    return isAdminOfGroup ? 1 : 0;
+}
+
+/**
+ * Function to check if the user is the owner.
+ * @param {number} number - The user number.
+ * @returns {number} Returns 1 if the user is the owner, otherwise returns 0.
+ */
+exports.isOwner = (number) => {
+    const isOwner = number.includes(global.owner.number);
+    return isOwner ? 1 : 0;
 }
 
 /**
