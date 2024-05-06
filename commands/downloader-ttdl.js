@@ -2,9 +2,6 @@ const {
     createAPIUrl
 } = require('../tools/api.js');
 const {
-    tiktokdl
-} = require('@bochilteam/scraper');
-const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
@@ -38,15 +35,14 @@ module.exports = {
                 fetch(createAPIUrl('miwudev', '/api/v1/igdl', {
                     url: input
                 })).then(response => response.json()), // Bug :v
-                fg.tiktok(input),
-                tiktokdl(input)
+                fg.tiktok(input)
             ];
 
             const results = await Promise.allSettled(promises);
 
             for (const res of results) {
                 if (res.status === 'fulfilled' && res.value) {
-                    result = res.value.play || res.value.video.no_watermark_raw || res.value.video.no_watermark || res.value.video.no_watermark_hd || res.value.video.with_watermark;
+                    result = res.value.play || res.value.url;
                     break;
                 }
             }

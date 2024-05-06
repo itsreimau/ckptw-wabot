@@ -70,7 +70,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         mentionJids.forEach(mentionJid => {
-            const getAFKMention = db.get(`user.${mentionJid.split('@')[0]}.afk`);
+            const getAFKMention = db.fetch(`user.${mentionJid.split('@')[0]}.afk`);
             if (getAFKMention) {
                 const {
                     timeStamp,
@@ -82,7 +82,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         });
     }
 
-    const getAFKMessage = db.get(`user.${senderNumber}.afk`);
+    const getAFKMessage = db.fetch(`user.${senderNumber}.afk`);
     if (getAFKMessage) {
         const {
             timeStamp,
@@ -131,11 +131,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Group.
     if (isGroup) {
-        const groupDb = db.get(`group.${groupNumber}`);
-
-        if (groupDb.antilink) {
+        if (db.fetch(`group.${groupNumber}.antilink`)) {
             const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
-            if (m.content && m.message.extendedTextMessage.inviteLinkGroupTypeV2 && (urlRegex.test(m.content) || m.message.extendedTextMessage.inviteLinkGroupTypeV2 === 1)) {
+            if (m.content && urlRegex.test(m.content)) {
                 ctx.deleteMessage(m.key);
                 /* If you want automatic kick, use this.
                 await ctx._client.groupParticipantsUpdate(ctx.id, [senderNumber], 'remove'); */
@@ -148,7 +146,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Private.
     if (isPrivate) {
         // Menfess.
-        const getMessageDataMenfess = db.get(`menfess.${senderNumber}`);
+        const getMessageDataMenfess = db.fetch(`menfess.${senderNumber}`);
 
         if (getMessageDataMenfess) {
             const {
@@ -193,7 +191,7 @@ bot.ev.once(Events.UserJoin, async (m) => {
                 profile = smpl.getRandomElement(thumbnail);
             }
 
-            if (!db.get(`group.${id.split('@')[0]}.welcome`)) return;
+            if (!db.fetch(`group.${id.split('@')[0]}.welcome`)) return;
             bot.core.sendMessage(id, {
                 text: `Selamat datang @${jid.split('@')[0]} di grup ${metadata.subject}!`,
                 contextInfo: {
@@ -237,7 +235,7 @@ bot.ev.once(Events.UserLeave, async (m) => {
                 profile = smpl.getRandomElement(thumbnail);
             }
 
-            if (!db.get(`group.${id.split('@')[0]}.welcome`)) return;
+            if (!db.fetch(`group.${id.split('@')[0]}.welcome`)) return;
             bot.core.sendMessage(id, {
                 text: `@${jid.split('@')[0]} keluar dari grup ${metadata.subject}.`,
                 contextInfo: {

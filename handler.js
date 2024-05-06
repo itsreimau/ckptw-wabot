@@ -15,7 +15,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.admin
         },
         banned: {
-            function: async () => await global.db.get(`user.${senderNumber}.isBanned`),
+            function: async () => await global.db.fetch(`user.${senderNumber}.isBanned`),
             msg: global.msg.banned
         },
         botAdmin: {
