@@ -127,7 +127,7 @@ exports.isAdminOf = async (ctx) => {
  * @returns {number} Returns 1 if the user is the owner, otherwise returns 0.
  */
 exports.isOwner = (number) => {
-    const isOwner = number.includes(global.owner.number);
+    const isOwner = global.owner.number === senderNumber || global.owner.co.includes(senderNumber);
     return isOwner ? 1 : 0;
 }
 
