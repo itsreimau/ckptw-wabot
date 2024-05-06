@@ -1,3 +1,11 @@
+const smpl = require('./tools/simple.js');
+
+/**
+ * Handles requests based on the given options.
+ * @param {Object} ctx The context of the request.
+ * @param {Object} options The given options.
+ * @returns {Object} Object containing status and message if applicable, otherwise null.
+ */
 exports.handler = async (ctx, options) => {
     try {
         const botNumber = ctx._client.user.id.split(':')[0];
@@ -19,7 +27,7 @@ exports.handler = async (ctx, options) => {
 
         const checkOptions = {
             admin: {
-                function: () => !isAdmin,
+                function: async () => !isAdmin,
                 msg: msg.admin
             },
             banned: {
@@ -27,19 +35,19 @@ exports.handler = async (ctx, options) => {
                 msg: msg.banned
             },
             botAdmin: {
-                function: () => !isBotAdmin,
+                function: async () => !isBotAdmin,
                 msg: msg.botAdmin
             },
             group: {
-                function: () => isPrivate,
+                function: async () => isPrivate,
                 msg: msg.group
             },
             owner: {
-                function: () => !isOwner,
+                function: async () => !isOwner,
                 msg: msg.owner
             },
             private: {
-                function: () => isGroup,
+                function: async () => isGroup,
                 msg: msg.private
             }
         };
