@@ -69,17 +69,20 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         mentionJids.forEach(mentionJid => {
-            if (await db.fetch(`user.${mentionJid.split('@')[0]}.afk`)) {
-                const timeStamp = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
+            const getAFKMention = db.fetch(`user.${mentionJid.split('@')[0]}.afk`);
+            if (getAFKMention) {
+                const getAFKMessage = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
                 const reason = await db.fetch(`user.${senderNumber}.afk.reason`);
+                const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
                 const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
                 ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || 'kurang dari satu detik.'}.`);
             }
         });
     }
 
-    if (await db.fetch(`user.${senderNumber}.afk`)) {
-        const timeStamp = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
+    const getAFKMessage = await db.fetch(`user.${senderNumber}.afk`);
+    if (getAFKMessage) {
+        const getAFKMessage = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
         const reason = await db.fetch(`user.${senderNumber}.afk.reason`);
         const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
         ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`);
@@ -147,10 +150,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (isPrivate) {
         // Menfess.
         const getMessageDataMenfess = await db.fetch(`menfess.${senderNumber}`);
-
         if (getMessageDataMenfess) {
             const from = await db.fetch(`menfess.${senderNumber}.from`)
-
             try {
                 await ctx.sendMessage(`${from}@s.whatsapp.net`, {
                     text: `💌 Hai, saya ${global.bot.name}, Dia (${senderNumber}) menjawab pesan menfess yang Anda kirimkan.\n` +
@@ -180,8 +181,8 @@ bot.ev.once(Events.UserJoin, async (m) => {
 
         // Participants.
         for (const jid of participants) {
-            if (await !db.fetch(`group.${id.split('@')[0]}.welcome`)) return;
-
+            const getWelcome = await db.fetch(`group.${id.split('@')[0]}.welcome`)
+            if (!getWelcome) return;
 
             // Get profile picture user.
             let profile;
@@ -227,7 +228,8 @@ bot.ev.once(Events.UserLeave, async (m) => {
 
         // Participants.
         for (const jid of participants) {
-            if (await !db.fetch(`group.${id.split('@')[0]}.welcome`)) return;
+            const getWelcome = await db.fetch(`group.${id.split('@')[0]}.welcome`)
+            if (!getWelcome) return;
 
             // Get profile picture user.
             let profile;
