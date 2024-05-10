@@ -74,7 +74,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 const getAFKMessage = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
                 const reason = await db.fetch(`user.${senderNumber}.afk.reason`);
                 const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
-                const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
                 ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || 'kurang dari satu detik.'}.`);
             }
         });
