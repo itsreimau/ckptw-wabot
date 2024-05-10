@@ -68,7 +68,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // AFK.
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
-        mentionJids.forEach(mentionJid => {
+        mentionJids.forEach(async (mentionJid) => {
             const getAFKMention = db.fetch(`user.${mentionJid.split('@')[0]}.afk`);
             if (getAFKMention) {
                 const getAFKMessage = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
