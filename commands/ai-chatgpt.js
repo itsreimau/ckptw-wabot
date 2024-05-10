@@ -25,9 +25,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('sandipbaruwal', '/gpt2', {
-                prompt: input,
-                uid: ctx._sender.jid.split('@')[0]
+            const apiUrl = createAPIUrl('joshweb', '/new/gpt-4_adv', {
+                prompt: input
             });
             const response = await fetch(apiUrl);
 

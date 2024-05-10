@@ -5,6 +5,9 @@ const APIs = {
     itzpire: {
         baseURL: 'https://itzpire.site'
     },
+    joshweb: {
+        baseURL: 'https://joshweb.click'
+    },
     miwudev: {
         baseURL: 'https://openapi.miwudev.my.id'
     },
