@@ -8,6 +8,7 @@ const {
 } = require('@mengkodingan/ckptw');
 const getFBInfo = require('@xaviabot/fb-downloader');
 const fg = require('api-dylux');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'fbdl',
@@ -55,6 +56,7 @@ module.exports = {
                 video: {
                     url: result
                 },
+                mimetype: mime.contentType('mp4')
                 caption: `❖ ${bold('FB Downloader')}\n` +
                     '\n' +
                     `➤ URL: ${input}\n` +

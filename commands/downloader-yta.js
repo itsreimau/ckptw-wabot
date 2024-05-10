@@ -6,6 +6,7 @@ const {
     youtubedl,
     youtubedlv2
 } = require('@bochilteam/scraper');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'yta',
@@ -47,7 +48,8 @@ module.exports = {
                     `➤ Pilih kualitas:\n` +
                     `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join('\n')}\n` +
                     '\n' +
-                    global.msg.footer
+                    global.msg.footer,
+                mimetype: mime.contentType('png')
             });
 
             const col = ctx.MessageCollector({
@@ -67,8 +69,8 @@ module.exports = {
                         audio: {
                             url: url
                         },
-                        mimetype: 'audio/mp4',
-                        ptt: false
+                        mimetype: mime.contentType('mp3'),
+                        ptt: false,
                     });
                     return col.stop();
                 }

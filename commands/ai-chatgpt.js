@@ -32,9 +32,9 @@ module.exports = {
 
             if (!response.ok) throw new Error(global.msg.notFound);
 
-            const data = await response.text();
+            const data = await response.json();
 
-            return ctx.reply(data);
+            return ctx.reply(data.result.reply);
         } catch (error) {
             console.error('Error:', error);
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);

@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'dalle',
@@ -36,6 +37,7 @@ module.exports = {
                 image: {
                     url: apiUrl
                 },
+                mimetype: mime.contentType('png'),
                 caption: `❖ ${bold('DALL·E')}\n` +
                     '\n' +
                     `➤ Prompt: ${input}\n` +

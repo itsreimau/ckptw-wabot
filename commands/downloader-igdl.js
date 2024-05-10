@@ -8,6 +8,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'igdl',
@@ -60,7 +61,8 @@ module.exports = {
                     `➤ URL: ${input}\n` +
                     '\n' +
                     global.msg.footer,
-                gifPlayback: false
+                gifPlayback: false,
+                mimetype: mime.contentType('mp4')
             });
         } catch (error) {
             console.error('Error:', error);

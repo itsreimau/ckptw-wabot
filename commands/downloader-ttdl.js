@@ -6,6 +6,7 @@ const {
     monospace
 } = require('@mengkodingan/ckptw');
 const fg = require('api-dylux');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'ttdl',
@@ -58,7 +59,8 @@ module.exports = {
                     `➤ URL: ${input}\n` +
                     '\n' +
                     global.msg.footer,
-                gifPlayback: false
+                gifPlayback: false,
+                mimetype: mime.contentType('mp4')
             });
         } catch (error) {
             console.error('Error:', error);
