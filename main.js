@@ -57,7 +57,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const senderJid = ctx._sender.jid;
     const groupNumber = ctx.isGroup() ? m.key.remoteJid.split('@')[0] : null;
     const groupJid = ctx.isGroup() ? m.key.remoteJid : null;
-    const isOwner = global.owner.number === senderNumber || global.owner.co.includes(senderNumber);
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
 
@@ -70,24 +69,18 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         mentionJids.forEach(mentionJid => {
-            const getAFKMention = db.fetch(`user.${mentionJid.split('@')[0]}.afk`);
-            if (getAFKMention) {
-                const {
-                    timeStamp,
-                    reason
-                } = getAFKMention;
+            if (await db.fetch(`user.${mentionJid.split('@')[0]}.afk`)) {
+                const timeStamp = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
+                const reason = await db.fetch(`user.${senderNumber}.afk.reason`);
                 const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
                 ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || 'kurang dari satu detik.'}.`);
             }
         });
     }
 
-    const getAFKMessage = db.fetch(`user.${senderNumber}.afk`);
-    if (getAFKMessage) {
-        const {
-            timeStamp,
-            reason
-        } = getAFKMessage;
+    if (await db.fetch(`user.${senderNumber}.afk`)) {
+        const timeStamp = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
+        const reason = await db.fetch(`user.${senderNumber}.afk.reason`);
         const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
         ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`);
         db.delete(`user.${senderNumber}.afk`);
@@ -135,7 +128,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Group.
         if (isGroup) {
-            if (db.fetch(`group.${groupNumber}.antilink`)) {
+            if (await db.fetch(`group.${groupNumber}.antilink`)) {
                 const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
                 if (m.content && urlRegex.test(m.content)) {
                     if (await smpl.isAdmin(ctx) === 1) return;
@@ -153,12 +146,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Private.
     if (isPrivate) {
         // Menfess.
-        const getMessageDataMenfess = db.fetch(`menfess.${senderNumber}`);
+        const getMessageDataMenfess = await db.fetch(`menfess.${senderNumber}`);
 
         if (getMessageDataMenfess) {
-            const {
-                from
-            } = getMessageDataMenfess;
+            const from = await db.fetch(`menfess.${senderNumber}.from`)
 
             try {
                 await ctx.sendMessage(`${from}@s.whatsapp.net`, {
@@ -189,6 +180,9 @@ bot.ev.once(Events.UserJoin, async (m) => {
 
         // Participants.
         for (const jid of participants) {
+            if (await !db.fetch(`group.${id.split('@')[0]}.welcome`)) return;
+
+
             // Get profile picture user.
             let profile;
             try {
@@ -198,7 +192,7 @@ bot.ev.once(Events.UserJoin, async (m) => {
                 profile = smpl.getRandomElement(thumbnail);
             }
 
-            if (!db.fetch(`group.${id.split('@')[0]}.welcome`)) return;
+            // Send message.
             bot.core.sendMessage(id, {
                 text: `Selamat datang @${jid.split('@')[0]} di grup ${metadata.subject}!`,
                 contextInfo: {
@@ -233,6 +227,8 @@ bot.ev.once(Events.UserLeave, async (m) => {
 
         // Participants.
         for (const jid of participants) {
+            if (await !db.fetch(`group.${id.split('@')[0]}.welcome`)) return;
+
             // Get profile picture user.
             let profile;
             try {
@@ -242,7 +238,7 @@ bot.ev.once(Events.UserLeave, async (m) => {
                 profile = smpl.getRandomElement(thumbnail);
             }
 
-            if (!db.fetch(`group.${id.split('@')[0]}.welcome`)) return;
+            // Send message.
             bot.core.sendMessage(id, {
                 text: `@${jid.split('@')[0]} keluar dari grup ${metadata.subject}.`,
                 contextInfo: {
