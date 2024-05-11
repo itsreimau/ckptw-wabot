@@ -300,7 +300,7 @@ exports.pinterest = async (query) => {
  * @param {buffer|string} source The source image as a buffer or a URL string.
  * @returns {string} The URL of the converted MP4 video.
  */
-exports.webp2mp4 = (source) => {
+exports.webp2mp4 = async (source) => {
     let form = new FormData()
     let isUrl = typeof source === 'string' && /https?:\/\//.test(source)
     const blob = !isUrl && new Blob([source.toArrayBuffer()])
@@ -339,7 +339,7 @@ exports.webp2mp4 = (source) => {
  * @param {buffer|string} source The source image as a buffer or a URL string.
  * @returns {string} The URL of the converted PNG image.
  */
-exports.webp2png = (source) => {
+exports.webp2png = async (source) => {
     let form = new FormData()
     let isUrl = typeof source === 'string' && /https?:\/\//.test(source)
     const blob = !isUrl && new Blob([source.toArrayBuffer()])
