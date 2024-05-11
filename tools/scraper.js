@@ -6,10 +6,7 @@ const {
 } = require('@bochilteam/scraper');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const {
-    FormData,
-    Blob
-} = require('form-data');
+const FormData = require('form-data');
 const jsdom = require('jsdom');
 const {
     JSDOM
@@ -18,7 +15,7 @@ const {
 /**
  * Search for Bible verses on Alkitab.me.
  * @param {string} q The search query.
- * @returns {Array<Object>||null} An array of objects containing search results with text, link, and title.
+ * @returns {Array<Object>|null} An array of objects containing search results with text, link, and title.
  */
 exports.alkitab = async (q) => {
     const apiUrl = createAPIUrl('https://alkitab.me', '/search', {
@@ -151,7 +148,7 @@ exports.freepik = async (query) => {
  * Download a GitHub repository in ZIP format.
  * @param {string} owner The username of the repository owner.
  * @param {string} repo The name of the repository.
- * @returns {Promise<Buffer>||null} A buffer containing the ZIP data of the repository.
+ * @returns {Promise<Buffer>|null} A buffer containing the ZIP data of the repository.
  */
 exports.github = async (owner, repo) => {
     const apiUrl = createAPIUrl('https://api.github.com', `/repos/${owner}/${repo}/zipball/master`, {});

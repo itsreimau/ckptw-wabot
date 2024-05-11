@@ -185,7 +185,7 @@ bot.ev.once(Events.UserJoin, async (m) => {
         // Participants.
         for (const jid of participants) {
             const fetchWelcome = await db.fetch(`group.${id.split('@')[0]}.welcome`)
-            if (!getWelcome) return;
+            if (!fetchWelcome) return;
 
             // Get profile picture user.
             let profile;
@@ -232,7 +232,7 @@ bot.ev.once(Events.UserLeave, async (m) => {
         // Participants.
         for (const jid of participants) {
             const fetchWelcome = await db.fetch(`group.${id.split('@')[0]}.welcome`)
-            if (!getWelcome) return;
+            if (!fetchWelcome) return;
 
             // Get profile picture user.
             let profile;
