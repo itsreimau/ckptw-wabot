@@ -59,7 +59,7 @@ module.exports = {
                 image: {
                     url: url
                 },
-                mimetype: mime.contentType('png')
+                mimetype: mime.contentType('png'),
                 caption: null
             });
         } else if (contentType === 'image/gif') {
