@@ -8,6 +8,7 @@ const {
 const {
     translate
 } = require('bing-translate-api');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'animeinfo',
@@ -37,12 +38,13 @@ module.exports = {
 
             const data = await response.json();
             const info = data.data[0];
-            const synopsisId = await translate(info.synopsis, 'en', 'id');
+            const synopsisId = info.synopsis ? await translate(info.synopsis, 'en', 'id') : null;
 
             return ctx.reply({
                 image: {
                     url: info.images.jpg.large_image_url
                 },
+                mimetype: mime.contentType('png'),
                 caption: `❖ ${bold('Anime Info')}\n` +
                     '\n' +
                     `➤ Judul: ${info.title}\n` +

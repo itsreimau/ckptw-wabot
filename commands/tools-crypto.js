@@ -1,5 +1,5 @@
 const {
-    crypto
+    coingecko
 } = require('../tools/scraper.js');
 const {
     bold,
@@ -8,6 +8,7 @@ const {
 
 module.exports = {
     name: 'crypto',
+    aliases: ['coingecko'],
     category: 'tools',
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -24,7 +25,7 @@ module.exports = {
         );
 
         try {
-            const result = await crypto(input);
+            const result = await coingecko(input);
 
             if (!result) throw new Error(global.msg.notFound);
 

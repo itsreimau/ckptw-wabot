@@ -6,7 +6,10 @@ const {
 } = require('@bochilteam/scraper');
 const axios = require('axios');
 const cheerio = require('cheerio');
-const FormData = require('form-data');
+const {
+    FormData,
+    Blob
+} = require('form-data');
 const jsdom = require('jsdom');
 const {
     JSDOM
@@ -56,7 +59,7 @@ exports.alkitab = async (q) => {
  * @param {string} search The search query.
  * @returns {Array<Object>|null} An array of objects containing cryptocurrency names and their price changes, or null if an error occurs.
  */
-exports.crypto = async (search) => {
+exports.coingecko = async (search) => {
     const apiUrl = createAPIUrl('https://api.coingecko.com', '/api/v3/coins/markets', {
         vs_currency: 'usd'
     });
@@ -150,7 +153,7 @@ exports.freepik = async (query) => {
  * @param {string} repo The name of the repository.
  * @returns {Promise<Buffer>||null} A buffer containing the ZIP data of the repository.
  */
-exports.ghdl = async (owner, repo) => {
+exports.github = async (owner, repo) => {
     const apiUrl = createAPIUrl('https://api.github.com', `/repos/${owner}/${repo}/zipball/master`, {});
 
     try {
@@ -259,7 +262,7 @@ exports.seaart = async (keyword) => {
 
 /**
  * Search for images on Pinterest based on query.
- * @param {string} query The query to search for images.
+ * @param {string} The query to search for images.
  * @returns {string|null} A random image URL from the search results, or null if no image found.
  */
 exports.pinterest = async (query) => {
@@ -290,4 +293,79 @@ exports.pinterest = async (query) => {
         console.error('Error:', error);
         return null;
     }
+}
+
+/**
+ * Convert WebP image to MP4 video using ezgif.com.
+ * @param {buffer|string} source The source image as a buffer or a URL string.
+ * @returns {string} The URL of the converted MP4 video.
+ */
+exports.webp2mp4 = (source) => {
+    let form = new FormData()
+    let isUrl = typeof source === 'string' && /https?:\/\//.test(source)
+    const blob = !isUrl && new Blob([source.toArrayBuffer()])
+    form.append('new-image-url', isUrl ? blob : '')
+    form.append('new-image', isUrl ? '' : blob, 'image.webp')
+    let res = await fetch('https://ezgif.com/webp-to-mp4', {
+        method: 'POST',
+        body: form,
+    })
+    let html = await res.text()
+    let {
+        document
+    } = new JSDOM(html).window
+    let form2 = new FormData()
+    let obj = {}
+    for (let input of document.querySelectorAll('form input[name]')) {
+        obj[input.name] = input.value
+        form2.append(input.name, input.value)
+    }
+    let res2 = await fetch('https://ezgif.com/webp-to-mp4/' + obj.file, {
+        method: 'POST',
+        body: form2,
+    })
+    let html2 = await res2.text()
+    let {
+        document: document2
+    } = new JSDOM(html2).window
+    return new URL(
+        document2.querySelector('div#output > p.outfile > video > source').src,
+        res2.url
+    ).toString()
+}
+
+/**
+ * Convert WebP image to PNG image using ezgif.com.
+ * @param {buffer|string} source The source image as a buffer or a URL string.
+ * @returns {string} The URL of the converted PNG image.
+ */
+exports.webp2png = (source) => {
+    let form = new FormData()
+    let isUrl = typeof source === 'string' && /https?:\/\//.test(source)
+    const blob = !isUrl && new Blob([source.toArrayBuffer()])
+    form.append('new-image-url', isUrl ? blob : '')
+    form.append('new-image', isUrl ? '' : blob, 'image.webp')
+    let res = await fetch('https://ezgif.com/webp-to-png', {
+        method: 'POST',
+        body: form,
+    })
+    let html = await res.text()
+    let {
+        document
+    } = new JSDOM(html).window
+    let form2 = new FormData()
+    let obj = {}
+    for (let input of document.querySelectorAll('form input[name]')) {
+        obj[input.name] = input.value
+        form2.append(input.name, input.value)
+    }
+    let res2 = await fetch('https://ezgif.com/webp-to-png/' + obj.file, {
+        method: 'POST',
+        body: form2,
+    })
+    let html2 = await res2.text()
+    let {
+        document: document2
+    } = new JSDOM(html2).window
+    return new URL(document2.querySelector('div#output > p.outfile > img').src, res2.url).toString()
 }

@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'gempa',
@@ -31,6 +32,7 @@ module.exports = {
                 image: {
                     url: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`
                 },
+                mimetype: mime.contentType('png'),
                 caption: `❖ ${bold('Gempa Bumi')}\n` +
                     '\n' +
                     `${gempa.Wilayah}\n` +

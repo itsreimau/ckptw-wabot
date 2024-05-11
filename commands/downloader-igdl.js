@@ -56,13 +56,13 @@ module.exports = {
                 video: {
                     url: result
                 },
+                mimetype: mime.contentType('mp4'),
                 caption: `❖ ${bold('IG Downloader')}\n` +
                     '\n' +
                     `➤ URL: ${input}\n` +
                     '\n' +
                     global.msg.footer,
-                gifPlayback: false,
-                mimetype: mime.contentType('mp4')
+                gifPlayback: false
             });
         } catch (error) {
             console.error('Error:', error);

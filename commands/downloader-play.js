@@ -36,6 +36,7 @@ module.exports = {
                 image: {
                     url: yt.image
                 },
+                mimetype: mime.contentType('png'),
                 caption: `❖ ${bold('Play')}\n` +
                     '\n' +
                     `➤ Judul: ${yt.title}\n` +
@@ -63,7 +64,7 @@ module.exports = {
                 audio: {
                     url: audiodl
                 },
-                mimetype: 'audio/mp4',
+                mimetype: mime.contentType('mp3'),
                 ptt: false
             });
         } catch (error) {

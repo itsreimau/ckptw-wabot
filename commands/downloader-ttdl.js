@@ -33,9 +33,6 @@ module.exports = {
             let result;
 
             const promises = [
-                fetch(createAPIUrl('miwudev', '/api/v1/igdl', {
-                    url: input
-                })).then(response => response.json()), // Bug :v
                 fg.tiktok(input)
             ];
 
@@ -43,7 +40,7 @@ module.exports = {
 
             for (const res of results) {
                 if (res.status === 'fulfilled' && res.value) {
-                    result = res.value.play || res.value.url;
+                    result = res.value.hdplay || res.value.play;
                     break;
                 }
             }
@@ -54,13 +51,13 @@ module.exports = {
                 video: {
                     url: result
                 },
+                mimetype: mime.contentType('mp4'),
                 caption: `❖ ${bold('TT Downloader')}\n` +
                     '\n' +
                     `➤ URL: ${input}\n` +
                     '\n' +
                     global.msg.footer,
-                gifPlayback: false,
-                mimetype: mime.contentType('mp4')
+                gifPlayback: false
             });
         } catch (error) {
             console.error('Error:', error);

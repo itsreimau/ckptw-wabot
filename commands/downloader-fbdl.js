@@ -56,7 +56,7 @@ module.exports = {
                 video: {
                     url: result
                 },
-                mimetype: mime.contentType('mp4')
+                mimetype: mime.contentType('mp4'),
                 caption: `❖ ${bold('FB Downloader')}\n` +
                     '\n' +
                     `➤ URL: ${input}\n` +

@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'photoleap',
@@ -38,6 +39,7 @@ module.exports = {
                 image: {
                     url: data.result_url
                 },
+                mimetype: mime.contentType('png'),
                 caption: `❖ ${bold('Photoleap')}\n` +
                     '\n' +
                     `➤ Prompt: ${input}\n` +

@@ -6,6 +6,7 @@ const {
     monospace
 } = require('@mengkodingan/ckptw');
 const fg = require('api-dylux');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'googleimage',
@@ -34,6 +35,7 @@ module.exports = {
                 image: {
                     url: getRandomElement(result)
                 },
+                mimetype: mime.contentType('png'),
                 caption: `❖ ${bold('Google Image')}\n` +
                     '\n' +
                     `➤ Kueri: ${input}\n` +

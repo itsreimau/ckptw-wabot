@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'seaart',
@@ -32,6 +33,7 @@ module.exports = {
                 image: {
                     url: result.banner.url
                 },
+                mimetype: mime.contentType('png'),
                 caption: `❖ ${bold('SeaArt')}\n` +
                     '\n' +
                     `➤ Prompt: ${result.prompt}\n` +

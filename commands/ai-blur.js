@@ -9,6 +9,7 @@ const {
     MessageType
 } = require('@mengkodingan/ckptw/lib/Constant');
 const jimp = require('jimp');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'blur',
@@ -37,6 +38,7 @@ module.exports = {
 
                 return await ctx.reply({
                     image: buffer,
+                    mimetype: mime.contentType('jpeg'),
                     caption: null
                 });
             });

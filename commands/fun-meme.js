@@ -4,6 +4,7 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw')
+const mime = require('mime-types');
 
 module.exports = {
     name: 'meme',
@@ -28,6 +29,7 @@ module.exports = {
                 image: {
                     url: imageUrl
                 },
+                mimetype: mime.contentType('png'),
                 caption: `❖ ${bold('Meme')}\n` +
                     '\n' +
                     `➤ Sumber: ${data.data.source}\n` +

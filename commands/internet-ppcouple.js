@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'ppcouple',
@@ -29,13 +30,15 @@ module.exports = {
                 image: {
                     url: data.male
                 },
-                caption: 'Ini adalah foto profil untuk pria.'
+                mimetype: mime.contentType('png'),
+                caption: null
             });
             return await ctx.reply({
                 image: {
                     url: data.female
                 },
-                caption: 'Ini adalah foto profil untuk wanita.'
+                mimetype: mime.contentType('png'),
+                caption: null
             });
         } catch (error) {
             console.error('Error:', error);

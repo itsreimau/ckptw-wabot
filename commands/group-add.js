@@ -31,7 +31,7 @@ module.exports = {
         try {
             if (member === ctx._sender.jid) throw new Error('Tidak dapat digunakan pada diri Anda sendiri.');
 
-            if (await await isAdmin(ctx, member) === 1(ctx, member) === 1) throw new Error('Anggota ini adalah admin grup.');
+            if (await isAdmin(ctx, member) === 1) throw new Error('Anggota ini adalah admin grup.');
 
             await ctx._client.groupParticipantsUpdate(ctx.id, [member], 'add');
 

@@ -1,5 +1,5 @@
 const {
-    ghdl
+    github
 } = require('../tools/scraper.js');
 const {
     bold,
@@ -31,7 +31,7 @@ module.exports = {
 
             const [_, user, repo] = input.match(urlRegex) || [];
             const repoName = repo.replace(/.git$/, '');
-            const result = await ghdl(user, repoName);
+            const result = await github(user, repoName);
 
             if (!result) throw new Error(global.msg.notFound);
 

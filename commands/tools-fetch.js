@@ -59,6 +59,7 @@ module.exports = {
                 image: {
                     url: url
                 },
+                mimetype: mime.contentType('png')
                 caption: null
             });
         } else if (contentType === 'image/gif') {
@@ -66,6 +67,7 @@ module.exports = {
                 video: {
                     url: url
                 },
+                mimetype: mime.contentType('gif'),
                 caption: null,
                 gifPlayback: true
             });
@@ -74,6 +76,7 @@ module.exports = {
                 video: {
                     url: url
                 },
+                mimetype: mime.contentType('mp4'),
                 caption: null,
                 gifPlayback: false
             });

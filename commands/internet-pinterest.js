@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'pinterest',
@@ -33,6 +34,7 @@ module.exports = {
                 image: {
                     url: result
                 },
+                mimetype: mime.contentType('png'),
                 caption: `❖ ${bold('Pinterest')}\n` +
                     '\n' +
                     `➤ Kueri: ${input}\n` +

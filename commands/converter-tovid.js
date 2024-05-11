@@ -1,5 +1,5 @@
 const {
-    webp2png
+    webp2mp4
 } = require('../tools/scraper.js');
 const {
     download
@@ -10,8 +10,8 @@ const {
 const mime = require('mime-types');
 
 module.exports = {
-    name: 'toimg',
-    aliases: ['topng', 'toimage'],
+    name: 'tovid',
+    aliases: ['tomp4', 'togif'],
     category: 'converter',
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -28,14 +28,15 @@ module.exports = {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = (type === 'stickerMessage') ? await download(object, type.slice(0, -7)) : null;
-            const img = await webp2png(buffer);
+            const vid = await webp2mp4(buffer);
 
             return ctx.reply({
-                image: {
-                    url: img
+                video: {
+                    url: vid
                 },
-                mimetype: mime.contentType('png'),
-                caption: null
+                mimetype: (ctx._used.command === 'togif') ? mime.contentType('gif') : mime.contentType('mp4'),
+                caption: null,
+                gifPlayback: (ctx._used.command === 'togif') ? true : false
             });
         } catch (error) {
             console.error('Error', error);

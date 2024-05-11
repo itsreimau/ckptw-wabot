@@ -8,6 +8,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'flaticon',
@@ -35,6 +36,7 @@ module.exports = {
                 image: {
                     url: getRandomElement(result)
                 },
+                mimetype: mime.contentType('png'),
                 caption: `❖ ${bold('Flaticon')}\n` +
                     '\n' +
                     `➤ Kueri: ${input}\n` +

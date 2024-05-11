@@ -6,6 +6,7 @@ const {
     youtubedl,
     youtubedlv2
 } = require('@bochilteam/scraper');
+const mime = require('mime-types');
 
 module.exports = {
     name: 'ytv',
@@ -41,6 +42,7 @@ module.exports = {
                 image: {
                     url: ytdl.thumbnail
                 },
+                mimetype: mime.contentType('png'),
                 caption: `❖ ${bold('YT Video')}\n` +
                     '\n' +
                     `➤ Judul: ${ytdl.title}\n` +
@@ -67,6 +69,7 @@ module.exports = {
                         video: {
                             url: url
                         },
+                        mimetype: mime.contentType('mp4'),
                         caption: `❖ ${bold('YTV')}\n` +
                             '\n' +
                             `➤ Kualitas: ${selectedQuality}\n` +
