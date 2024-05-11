@@ -70,7 +70,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (mentionJids && mentionJids.length > 0) {
         mentionJids.forEach(async (mentionJid) => {
             const fetchAFKMention = db.fetch(`user.${mentionJid.split('@')[0]}.afk`);
-            if (getAFKMention) {
+            if (fetchAFKMention) {
                 const reason = await db.fetch(`user.${senderNumber}.afk.reason`);
                 const timeStamp = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
                 const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
@@ -81,7 +81,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     const fetchAFKMessage = await db.fetch(`user.${senderNumber}.afk`);
-    if (getAFKMessage) {
+    if (fetchAFKMessage) {
         const reason = await db.fetch(`user.${senderNumber}.afk.reason`);
         const timeStamp = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
         const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
@@ -133,7 +133,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Group.
         if (isGroup) {
             const fetchAntilink = await db.fetch(`group.${groupNumber}.antilink`);
-            if (getAntilink) {
+            if (fetchAntilink) {
                 const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
                 if (m.content && urlRegex.test(m.content)) {
                     if (await smpl.isAdmin(ctx) === 1) return;
@@ -152,7 +152,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (isPrivate) {
         // Menfess.
         const fetchMessageDataMenfess = await db.fetch(`menfess.${senderNumber}`);
-        if (getMessageDataMenfess) {
+        if (fetchMessageDataMenfess) {
             const from = await db.fetch(`menfess.${senderNumber}.from`)
             try {
                 await ctx.sendMessage(`${from}@s.whatsapp.net`, {
