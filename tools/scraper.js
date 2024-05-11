@@ -299,43 +299,35 @@ exports.pinterest = async (query) => {
  */
 exports.webp2mp4 = async (source) => {
     let form = new FormData();
-    let isUrl = typeof source === 'string' && /^https?:\/\//.test(source);
+    let isUrl = typeof source === 'string' && /https?:\/\//.test(source);
+    const blob = !isUrl && Buffer.isBuffer(source) ? source : Buffer.from(source);
+    form.append('new-image-url', isUrl ? blob : '');
+    form.append('new-image', isUrl ? '' : blob, 'image.webp');
 
-    if (!isUrl && typeof source !== 'string') source = Buffer.from(source);
-
-    form.append('new-image-url', isUrl ? source : '');
-    form.append('new-image', isUrl ? '' : source, 'image.webp');
-
-    let res = await fetch('https://ezgif.com/webp-to-mp4', {
-        method: 'POST',
-        body: form,
+    let res = await axios.post('https://ezgif.com/webp-to-mp4', form, {
+        headers: form.getHeaders(),
     });
-
-    let html = await res.text();
+    let html = res.data;
     let {
         document
     } = new JSDOM(html).window;
     let form2 = new FormData();
     let obj = {};
-
     for (let input of document.querySelectorAll('form input[name]')) {
         obj[input.name] = input.value;
         form2.append(input.name, input.value);
     }
 
-    let res2 = await fetch('https://ezgif.com/webp-to-mp4/' + obj.file, {
-        method: 'POST',
-        body: form2,
+    let res2 = await axios.post('https://ezgif.com/webp-to-mp4/' + obj.file, form2, {
+        headers: form2.getHeaders(),
     });
-
-    let html2 = await res2.text();
+    let html2 = res2.data;
     let {
         document: document2
     } = new JSDOM(html2).window;
-
     return new URL(
         document2.querySelector('div#output > p.outfile > video > source').src,
-        res2.url
+        res2.request.res.responseUrl
     ).toString();
 }
 
@@ -346,42 +338,31 @@ exports.webp2mp4 = async (source) => {
  */
 exports.webp2png = async (source) => {
     let form = new FormData();
-    let isUrl = typeof source === 'string' && /^https?:\/\//.test(source);
+    let isUrl = typeof source === 'string' && /https?:\/\//.test(source);
+    const blob = !isUrl && Buffer.isBuffer(source) ? source : Buffer.from(source);
+    form.append('new-image-url', isUrl ? blob : '');
+    form.append('new-image', isUrl ? '' : blob, 'image.webp');
 
-    if (!isUrl && typeof source !== 'string') source = Buffer.from(source);
-
-    form.append('new-image-url', isUrl ? source : '');
-    form.append('new-image', isUrl ? '' : source, 'image.webp');
-
-    let res = await fetch('https://ezgif.com/webp-to-png', {
-        method: 'POST',
-        body: form,
+    let res = await axios.post('https://ezgif.com/webp-to-png', form, {
+        headers: form.getHeaders(),
     });
-
-    let html = await res.text();
+    let html = res.data;
     let {
         document
     } = new JSDOM(html).window;
     let form2 = new FormData();
     let obj = {};
-
     for (let input of document.querySelectorAll('form input[name]')) {
         obj[input.name] = input.value;
         form2.append(input.name, input.value);
     }
 
-    let res2 = await fetch('https://ezgif.com/webp-to-png/' + obj.file, {
-        method: 'POST',
-        body: form2,
+    let res2 = await axios.post('https://ezgif.com/webp-to-png/' + obj.file, form2, {
+        headers: form2.getHeaders(),
     });
-
-    let html2 = await res2.text();
+    let html2 = res2.data;
     let {
         document: document2
     } = new JSDOM(html2).window;
-
-    return new URL(
-        document2.querySelector('div#output > p.outfile > img').src,
-        res2.url
-    ).toString();
+    return new URL(document2.querySelector('div#output > p.outfile > img').src, res2.request.res.responseUrl).toString();
 }
