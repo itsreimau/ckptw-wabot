@@ -1,7 +1,11 @@
 const {
+    getRandomElement
+} = require('../tools/simple.js');
+const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const fg = require('api-dylux');
 
 module.exports = {
     name: 'bcgc',
@@ -31,7 +35,9 @@ module.exports = {
 
             for (let i of anu) {
                 await delay(500);
-                ctx.sendMessage(i, {
+                const thumbnail = await fg.googleImage('rei ayanami wallpaper');
+
+                await ctx.sendMessage(i, {
                     text: input,
                     contextInfo: {
                         forwardingScore: 1000,
@@ -39,7 +45,7 @@ module.exports = {
                         externalAdReply: {
                             title: 'B R O A D C A S T',
                             body: null,
-                            thumbnailUrl: global.bot.thumbnail,
+                            thumbnailUrl: getRandomElement(thumbnail) || global.bot.thumbnail,
                             sourceUrl: global.bot.groupChat,
                             mediaType: 1,
                             renderLargerThumbnail: true

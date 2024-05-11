@@ -197,7 +197,7 @@ bot.ev.once(Events.UserJoin, async (m) => {
             }
 
             // Send message.
-            return await bot.core.sendMessage(id, {
+            await bot.core.sendMessage(id, {
                 text: `Selamat datang @${jid.split('@')[0]} di grup ${metadata.subject}!`,
                 contextInfo: {
                     mentionedJid: [jid],
@@ -244,7 +244,7 @@ bot.ev.once(Events.UserLeave, async (m) => {
             }
 
             // Send message.
-            return await bot.core.sendMessage(id, {
+            await bot.core.sendMessage(id, {
                 text: `@${jid.split('@')[0]} keluar dari grup ${metadata.subject}.`,
                 contextInfo: {
                     mentionedJid: [jid],
