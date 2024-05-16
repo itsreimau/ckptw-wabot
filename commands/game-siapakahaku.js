@@ -58,16 +58,15 @@ module.exports = {
                 return col.stop();
             } else if (m.content.toLowerCase() === 'who') {
                 const clue = fetchAnswer.replace(/[bcdfghjklmnpqrstvwxyz]/g, '_');
-                await ctx.reply(clue);
+                ctx.reply(clue);
             } else if (m.content.toLowerCase().endsWith(fetchAnswer.split(' ')[1])) {
-                await ctx.reply('Sedikit lagi!');
+                ctx.reply('Sedikit lagi!');
             }
         });
 
-        col.on('end', async () => {
-            const fetchStatus = await global.db.fetch(`game.siapakahaku.${roomNumber}.status`);
+        col.on('end', async (collector, r) => {
             if (fetchStatus) {
-                await ctx.reply(
+                ctx.reply(
                     `${bold('[ ! ]')} Waktunya habis!\n` +
                     `Jawabannya adalah ${fetchAnswer}`
                 );
