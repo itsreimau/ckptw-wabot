@@ -29,10 +29,11 @@ module.exports = {
             if (numberFormatted === ctx._sender.jid.split('@')[0]) throw new Error('Tidak dapat digunakan pada diri Anda sendiri.');
 
             await ctx.sendMessage(`${numberFormatted}@s.whatsapp.net`, {
-                text: `💌 Hai, saya ${global.bot.name}, seseorang mengirimi Anda pesan melalui menfess ini!\n` +
-                    '-----\n' +
+                text: `❖ ${bold('Menfess')}\n` +
+                    `Hai, saya ${global.bot.name}, seseorang mengirimi Anda pesan melalui menfess ini!\n` +
+                    '\n' +
                     `${text.join(' ')}\n` +
-                    '-----\n' +
+                    '\n' +
                     global.msg.footer
             });
 

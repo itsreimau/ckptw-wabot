@@ -28,7 +28,8 @@ const bot = new Client({
     name: global.bot.name,
     prefix: global.bot.prefix,
     printQRInTerminal: true,
-    readIncommingMsg: true
+    readIncommingMsg: true,
+    selfReply: true
 });
 
 // Create a new database instance.
@@ -156,7 +157,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const from = await db.fetch(`menfess.${senderNumber}.from`)
             try {
                 await ctx.sendMessage(`${from}@s.whatsapp.net`, {
-                    text: `💌 Hai, saya ${global.bot.name}, Dia (${senderNumber}) menjawab pesan menfess yang Anda kirimkan.\n` +
+                    text: `❖ ${bold('Menfess')}\n` +
+                        `Hai, saya ${global.bot.name}, Dia (${senderNumber}) menjawab pesan menfess yang Anda kirimkan.\n` +
                         '-----\n' +
                         `${m.content}\n` +
                         '-----\n' +
@@ -182,7 +184,6 @@ bot.ev.once(Events.UserJoin, async (m) => {
     try {
         const fetchWelcome = await db.fetch(`group.${id.split('@')[0]}.welcome`)
         if (fetchWelcome) {
-
             const metadata = await bot.core.groupMetadata(id);
 
             // Participants.

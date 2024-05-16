@@ -18,6 +18,7 @@ exports.getMenu = (ctx) => {
     const tags = {
         'main': 'Main',
         'ai': 'AI',
+        'game': 'Game',
         'converter': 'Converter',
         'downloader': 'Downloader',
         'fun': 'Fun',
