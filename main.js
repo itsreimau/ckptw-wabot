@@ -180,37 +180,39 @@ bot.ev.once(Events.UserJoin, async (m) => {
     } = m;
 
     try {
-        const metadata = await bot.core.groupMetadata(id);
+        const fetchWelcome = await db.fetch(`group.${id.split('@')[0]}.welcome`)
+        if (fetchWelcome) {
 
-        // Participants.
-        for (const jid of participants) {
-            const fetchWelcome = await db.fetch(`group.${id.split('@')[0]}.welcome`)
-            if (!fetchWelcome) return;
+            const metadata = await bot.core.groupMetadata(id);
 
-            // Get profile picture user.
-            let profile;
-            try {
-                profile = await bot.core.profilePictureUrl(jid, 'image');
-            } catch {
-                const thumbnail = await fg.googleImage('rei ayanami wallpaper');
-                profile = smpl.getRandomElement(thumbnail);
-            }
+            // Participants.
+            for (const jid of participants) {
 
-            // Send message.
-            await bot.core.sendMessage(id, {
-                text: `Selamat datang @${jid.split('@')[0]} di grup ${metadata.subject}!`,
-                contextInfo: {
-                    mentionedJid: [jid],
-                    externalAdReply: {
-                        title: `ADD`,
-                        mediaType: 1,
-                        previewType: 0,
-                        renderLargerThumbnail: true,
-                        thumbnailUrl: profile,
-                        sourceUrl: global.bot.groupChat
-                    }
+
+                // Get profile picture user.
+                let profile;
+                try {
+                    profile = await bot.core.profilePictureUrl(jid, 'image');
+                } catch {
+                    profile = 'https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu';
                 }
-            });
+
+                // Send message.
+                await bot.core.sendMessage(id, {
+                    text: `Selamat datang @${jid.split('@')[0]} di grup ${metadata.subject}!`,
+                    contextInfo: {
+                        mentionedJid: [jid],
+                        externalAdReply: {
+                            title: 'JOIN',
+                            mediaType: 1,
+                            previewType: 0,
+                            renderLargerThumbnail: true,
+                            thumbnailUrl: profile,
+                            sourceUrl: global.bot.groupChat
+                        }
+                    }
+                });
+            }
         }
     } catch (error) {
         console.error('Error:', error);
@@ -227,37 +229,37 @@ bot.ev.once(Events.UserLeave, async (m) => {
     } = m;
 
     try {
-        const metadata = await bot.core.groupMetadata(id);
+        const fetchWelcome = await db.fetch(`group.${id.split('@')[0]}.welcome`)
+        if (fetchWelcome) {
+            const metadata = await bot.core.groupMetadata(id);
 
-        // Participants.
-        for (const jid of participants) {
-            const fetchWelcome = await db.fetch(`group.${id.split('@')[0]}.welcome`)
-            if (!fetchWelcome) return;
+            // Participants.
+            for (const jid of participants) {
 
-            // Get profile picture user.
-            let profile;
-            try {
-                profile = await bot.core.profilePictureUrl(jid, 'image');
-            } catch {
-                const thumbnail = await fg.googleImage('rei ayanami wallpaper');
-                profile = smpl.getRandomElement(thumbnail);
-            }
-
-            // Send message.
-            await bot.core.sendMessage(id, {
-                text: `@${jid.split('@')[0]} keluar dari grup ${metadata.subject}.`,
-                contextInfo: {
-                    mentionedJid: [jid],
-                    externalAdReply: {
-                        title: `REMOVE`,
-                        mediaType: 1,
-                        previewType: 0,
-                        renderLargerThumbnail: true,
-                        thumbnailUrl: profile,
-                        sourceUrl: global.bot.groupChat
-                    }
+                // Get profile picture user.
+                let profile;
+                try {
+                    profile = await bot.core.profilePictureUrl(jid, 'image');
+                } catch {
+                    profile = 'https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu';
                 }
-            });
+
+                // Send message.
+                await bot.core.sendMessage(id, {
+                    text: `@${jid.split('@')[0]} keluar dari grup ${metadata.subject}.`,
+                    contextInfo: {
+                        mentionedJid: [jid],
+                        externalAdReply: {
+                            title: 'LEAVE',
+                            mediaType: 1,
+                            previewType: 0,
+                            renderLargerThumbnail: true,
+                            thumbnailUrl: profile,
+                            sourceUrl: global.bot.groupChat
+                        }
+                    }
+                });
+            }
         }
     } catch (error) {
         console.error('Error:', error);

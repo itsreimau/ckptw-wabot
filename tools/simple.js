@@ -116,9 +116,9 @@ exports.isAdmin = async (ctx, number) => {
  * @param {object} ctx - The context object.
  * @returns {number} Returns 1 if the bot is an admin of the group, otherwise returns 0.
  */
-exports.isAdminOf = async (ctx) => {
-    const isAdminOfGroup = await checkAdmin(ctx, ctx._client.user.id.split(':')[0]);
-    return isAdminOfGroup ? 1 : 0;
+exports.isBotAdmin = async (ctx) => {
+    const isBotAdmin = await checkAdmin(ctx, ctx._client.user.id.split(':')[0]);
+    return isBotAdmin ? 1 : 0;
 }
 
 /**

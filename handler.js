@@ -11,7 +11,7 @@ exports.handler = async (ctx, options) => {
 
     const checkOptions = {
         admin: {
-            function: async () => await smpl.isAdmin(ctx) === 0,
+            function: async () => await ctx.isGroup() ? await smpl.isAdmin(ctx) === 0 : null,
             msg: global.msg.admin
         },
         banned: {
@@ -19,7 +19,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.banned
         },
         botAdmin: {
-            function: async () => await smpl.isAdminOf(ctx) === 0,
+            function: async () => await ctx.isGroup() ? await smpl.isBotAdmin(ctx) === 0 : null,
             msg: global.msg.botAdmin
         },
         group: {
