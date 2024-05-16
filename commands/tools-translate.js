@@ -12,7 +12,8 @@ module.exports = {
     category: 'tools',
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
-            banned: true
+            banned: true,
+            coin: 1
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);

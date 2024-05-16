@@ -13,7 +13,7 @@ global.apiKey = {
 global.bot = {
     name: 'Rei Ayanami',
     prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
-    thumbnail: 'https://camo.githubusercontent.com/a71a3d7b6e8cee0a85fe87e32cfd860a034603b97bbb8fb98d2a12828d6a3005/68747470733a2f2f696d61676573332e616c706861636f646572732e636f6d2f3636322f7468756d622d3335302d3636323231392e706e67',
+    thumbnail: 'https://userstyles.org/style_screenshots/261795_after.jpeg?r=1715414479',
     groupChat: 'https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs'
 };
 
@@ -23,8 +23,9 @@ global.msg = {
     admin: `${bold('[ ! ]')} Perintah hanya dapat diakses oleh admin grup!`,
     banned: `${bold('[ ! ]')} Tidak dapat memproses karena Anda telah dibanned!`,
     botAdmin: `${bold('[ ! ]')} Bot bukan admin, tidak bisa menggunakan perintah!`,
-    owner: `${bold('[ ! ]')} Perintah hanya dapat diakses Owner!`,
+    coin: `${bold('[ ! ]')} Anda tidak punya cukup koin!`,
     group: `${bold('[ ! ]')} Perintah hanya dapat diakses dalam grup!`,
+    owner: `${bold('[ ! ]')} Perintah hanya dapat diakses Owner!`,
     private: `${bold('[ ! ]')} Perintah hanya dapat diakses dalam obrolan pribadi!`,
 
     // Command interface.

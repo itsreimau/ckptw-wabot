@@ -11,6 +11,7 @@ module.exports = {
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
+            coin: 1,
             private: true
         });
 

@@ -22,6 +22,18 @@ exports.handler = async (ctx, options) => {
             function: async () => await ctx.isGroup() ? await smpl.isBotAdmin(ctx) === 0 : null,
             msg: global.msg.botAdmin
         },
+        coin: {
+            function: async () => {
+                const userCoin = await global.db.fetch(`user.${senderNumber}.coin`);
+                if (userCoin === undefined) await global.db.add(`user.${senderNumber}.coin`, 10);
+
+                if (userCoin < options.coin) return true;
+
+                await global.db.subtract(`user.${senderNumber}.coin`, options.coin);
+                return false;
+            },
+            msg: global.msg.coin
+        },
         group: {
             function: async () => await !ctx.isGroup(),
             msg: global.msg.group
