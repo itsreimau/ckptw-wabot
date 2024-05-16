@@ -1,5 +1,5 @@
 const {
-    siapakahaku
+    asahotak
 } = require('@bochilteam/scraper');
 const {
     bold
@@ -8,20 +8,20 @@ const {
 const session = new Map();
 
 module.exports = {
-    name: 'siapakahaku',
-    aliases: ['whoami'],
+    name: 'asahotak',
+    aliases: ['brainteaser'],
     category: 'game',
     code: async (ctx) => {
         if (session.has(ctx.id)) return ctx.reply('Sesi permainan sedang berjalan!');
 
-        const data = await siapakahaku();
+        const data = await asahotak();
         const coin = 3;
         const timeout = 120000;
 
         session.set(ctx.id, true);
 
         ctx.reply(
-            `❖ ${bold('Siapakah Aku')}\n` +
+            `❖ ${bold('Asah Otak')}\n` +
             '\n' +
             `➤ Soal: ${data.soal}\n` +
             `➤ Bonus: ${coin} Koin\n` +
