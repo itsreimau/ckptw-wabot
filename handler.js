@@ -24,14 +24,14 @@ exports.handler = async (ctx, options) => {
         },
         coin: {
             function: async () => {
-                const userCoin = await global.db.fetch(`user.${senderNumber}.coin`);
-                if (userCoin === undefined) await global.db.add(`user.${senderNumber}.coin`, 10);
+                const fetchCoin = await global.db.fetch(`user.${senderNumber}.coin`);
+                if (fetchCoin === undefined) await global.db.add(`user.${senderNumber}.coin`, 10);
 
                 if (!ctx._args.length) return false;
 
                 if (await smpl.isOwner(senderNumber) === 1) return false;
 
-                if (userCoin < options.coin) return true;
+                if (fetchCoin < options.coin) return true;
 
                 await global.db.subtract(`user.${senderNumber}.coin`, options.coin);
                 return false;
