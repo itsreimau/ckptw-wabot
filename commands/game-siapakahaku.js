@@ -45,7 +45,7 @@ module.exports = {
         );
 
         const col = ctx.MessageCollector({
-            time: 120000
+            time: fetchTimeout
         });
 
         col.on('collect', async (m) => {
