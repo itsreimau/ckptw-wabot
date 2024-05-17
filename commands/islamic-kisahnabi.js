@@ -29,7 +29,8 @@ module.exports = {
             const apiUrl = createAPIUrl('https://raw.githubusercontent.com', `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
             const response = await axios.get(apiUrl);
 
-            if (response.status !== 200) throw new Error(global.msg.notFound);
+            const isResponseOk = (status) => status >= 200 && status < 300;
+            if (!isResponseOk(response.status)) throw new Error(global.msg.notFound);
 
             const data = await response.data;
 
