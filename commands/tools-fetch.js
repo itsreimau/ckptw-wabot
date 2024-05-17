@@ -2,10 +2,12 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 const mime = require('mime-types');
 
 module.exports = {
     name: 'fetch',
+    aliases: ['get'],
     category: 'tools',
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -33,7 +35,7 @@ module.exports = {
             const fetchPromise = fetchWithTimeout(url);
             response = await fetchPromise;
 
-            if (!response.ok) return ctx.reply(`${response.statusText} (${response.status})`);
+            if (response.status !== 200) return ctx.reply(`${response.statusText} (${response.status})`);
         } catch (error) {
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
         }
@@ -42,7 +44,7 @@ module.exports = {
         const status = response.status;
         let data;
         try {
-            data = await response.text();
+            data = response.data;
         } catch (error) {
             return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: Gagal mendapatkan data respons.`);
         }
@@ -54,7 +56,7 @@ module.exports = {
         } catch {}
 
         // Image, GIF, video, PDF, file, text check.
-        const contentType = headers.get('content-type');
+        const contentType = headers['content-type'];
         if (contentType && contentType.startsWith('image/')) {
             return ctx.reply({
                 image: {
@@ -111,11 +113,16 @@ async function fetchWithTimeout(url, options = {
 }) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), options.timeout);
-    const response = await fetch(url, {
-        signal: controller.signal
-    });
-    clearTimeout(timeoutId);
-    return response;
+    try {
+        const response = await axios.get(url, {
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        return response;
+    } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+    }
 }
 
 function walkJSON(json, depth, array) {
@@ -123,7 +130,7 @@ function walkJSON(json, depth, array) {
     const d = depth || 0;
     for (const key in json) {
         arr.push('┊'.repeat(d) + (d > 0 ? ' ' : '') + `*${key}:*`);
-        if (typeof json[key] === 'object') walkJSON(json[key], d + 1, arr);
+        if (typeof json[key] === 'object' && json[key] !== null) walkJSON(json[key], d + 1, arr);
         else {
             arr[arr.length - 1] += ' ' + json[key];
         }

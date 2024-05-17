@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
@@ -43,13 +44,13 @@ module.exports = {
             const apiUrl = await createAPIUrl('https://beeble.vercel.app', `/api/v1/passage/${abbr}/${chapter}`, {
                 ver: 'tb'
             });
-            const response = await fetch(apiUrl);
+            const response = await axios.get(apiUrl);
 
-            if (!response.ok) throw new Error(global.msg.notFound);
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
             const {
                 data
-            } = await response.json();
+            } = await response.data;
 
             const resultText = data.verses.slice(1).map(v =>
                 `➤ Ayat: ${v.verse}\n` +

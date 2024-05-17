@@ -6,6 +6,7 @@ const {
     monospace
 } = require('@mengkodingan/ckptw');
 const axios = require('axios');
+const axios = require('axios');
 const {
     Sticker,
     StickerTypes

@@ -8,6 +8,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 const {
     translate
 } = require('bing-translate-api');
@@ -37,11 +38,11 @@ module.exports = {
                 units: 'metric',
                 appid: '060a6bcfa19809c2cd4d97a212b19273'
             });
-            const response = await fetch(apiUrl);
+            const response = await axios.get(apiUrl);
 
-            if (!response.ok) throw new Error(global.msg.notFound);
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const data = await response.json();
+            const data = await response.data;
             const weatherId = await translate(data.weather[0].description, 'en', 'id');
             return ctx.reply(`❖ ${bold('Weather')}\n` +
                 '\n' +

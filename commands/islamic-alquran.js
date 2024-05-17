@@ -6,6 +6,7 @@ const {
     italic,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
 
@@ -72,9 +73,9 @@ async function fetchData(sura, aya) {
     const apiUrl = createAPIUrl('https://api.quran.gading.dev', `/surah/${sura}/${aya || ''}`);
 
     try {
-        const response = await fetch(apiUrl);
+        const response = await axios.get(apiUrl);
         if (response.ok) {
-            const json = await response.json();
+            const json = await response.data;
             return json.data;
         } else {
             return null;

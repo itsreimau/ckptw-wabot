@@ -9,6 +9,7 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 const os = require('os');
 
 module.exports = {
@@ -24,8 +25,8 @@ module.exports = {
         const apiUrl = createAPIUrl('http://ip-api.com', '/json', {});
 
         try {
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+            const response = await axios.get(apiUrl);
+            const data = await response.data;
             const startTime = global.system.startTime;
 
             return ctx.reply(

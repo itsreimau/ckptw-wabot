@@ -36,10 +36,11 @@ module.exports = {
                 caption: `❖ ${bold('Profile')}\n` +
                     '\n' +
                     `➤ Nama: ${ctx._sender.pushName}\n` +
-                    `➤ JID: @${ctx._sender.jid}\n` +
+                    `➤ JID: @${senderNumber}\n` +
                     `➤ Koin: ${fetchCoin}\n` +
                     '\n' +
-                    global.msg.footer
+                    global.msg.footer,
+                mentions: ctx.getMentioned()
             });
         } catch (error) {
             console.error('Error:', error);

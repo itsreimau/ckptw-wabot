@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 
 module.exports = {
     name: 'cekhadits',
@@ -28,11 +29,11 @@ module.exports = {
             const apiUrl = createAPIUrl('http://dorar.net', '/dorar_api.json', {
                 skey: input
             });
-            const response = await fetch(apiUrl);
+            const response = await axios.get(apiUrl);
 
-            if (!response.ok) throw new Error(global.msg.notFound);
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const data = await response.json();
+            const data = await response.data;
             let ahadith = data.ahadith.result;
             ahadith = ahadith.replace(/<a[^>]*>المزيد<\/a>/g, '');
             const formattedAhadith = ahadith.replace(/<[^>]*>/g, '').trim();

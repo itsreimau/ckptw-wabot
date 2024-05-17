@@ -3,7 +3,8 @@ const {
 } = require('../tools/api.js');
 const {
     bold
-} = require('@mengkodingan/ckptw')
+} = require('@mengkodingan/ckptw');
+const axios = require('axios');
 const mime = require('mime-types');
 
 module.exports = {
@@ -20,8 +21,8 @@ module.exports = {
         const apiUrl = createAPIUrl('https://candaan-api.vercel.app', '/api/image/random', {});
 
         try {
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+            const response = await axios.get(apiUrl);
+            const data = await response.data;
             const imageUrl = data.data.url;
 
             if (!imageUrl) throw new Error(global.msg.notFound);

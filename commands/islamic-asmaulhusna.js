@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 
 module.exports = {
     name: 'asmaulhusna',
@@ -26,11 +27,11 @@ module.exports = {
 
         try {
             const apiUrl = createAPIUrl('https://raw.githubusercontent.com', `/ZeroChanBot/Api-Freee/master/data/AsmaulHusna.json`, {});
-            const response = await fetch(apiUrl);
+            const response = await axios.get(apiUrl);
 
-            if (!response.ok) throw new Error(global.msg.notFound);
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const data = await response.json();
+            const data = await response.data;
             const asmaulhusna = data.result;
 
             if (input.toLowerCase() === 'all') {

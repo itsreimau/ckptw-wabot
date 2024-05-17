@@ -8,6 +8,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 const mime = require('mime-types');
 
 module.exports = {
@@ -38,7 +39,7 @@ module.exports = {
             const promises = [
                 fetch(createAPIUrl('miwudev', '/api/v1/igdl', {
                     url: input
-                })).then(response => response.json()),
+                })).then(response => response.data),
                 instagramdl(input)
             ];
 

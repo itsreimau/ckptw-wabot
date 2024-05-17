@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 const mime = require('mime-types');
 
 module.exports = {
@@ -30,9 +31,9 @@ module.exports = {
             const apiUrl = createAPIUrl('aemt', `/dalle`, {
                 text: input
             });
-            const response = await fetch(apiUrl);
+            const response = await axios.get(apiUrl);
 
-            if (!response.ok) throw new Error(global.msg.notFound);
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
             return await ctx.reply({
                 image: {

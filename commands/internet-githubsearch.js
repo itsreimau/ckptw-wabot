@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 
 module.exports = {
     name: 'githubsearch',
@@ -29,11 +30,11 @@ module.exports = {
             const apiUrl = await createAPIUrl('https://api.github.com', '/search/repositories', {
                 q: input
             });
-            const response = await fetch(apiUrl);
+            const response = await axios.get(apiUrl);
 
-            if (!response.ok) throw new Error(global.msg.notFound);
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const data = await response.json();
+            const data = await response.data;
             const repo = data.items[0];
 
             return ctx.reply(

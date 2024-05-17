@@ -77,7 +77,7 @@ module.exports = {
                 }
             });
 
-            col.on('end', (collector, r) => {
+            col.on('end', async (collector, r) => {
                 // Tidak ada respon ketika kolektor berakhir
             });
         } catch (error) {

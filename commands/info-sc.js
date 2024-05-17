@@ -4,6 +4,7 @@ const {
 const {
     bold
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 
 module.exports = {
     name: 'sc',
@@ -17,11 +18,11 @@ module.exports = {
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         const apiUrl = await createAPIUrl('https://api.github.com', '/repos/itsreimau/ckptw-wabot', {});
-        const response = await fetch(apiUrl);
+        const response = await axios.get(apiUrl);
 
-        if (!response.ok) throw new Error(global.msg.notFound);
+        if (response.status !== 200) throw new Error(global.msg.notFound);
 
-        const data = await response.json();
+        const data = await response.data;
 
         return ctx.reply(
             `❖ ${bold('SC')}\n` +

@@ -34,7 +34,7 @@ module.exports = {
             time: timeout
         });
 
-        col.on('collect', (m) => {
+        col.on('collect', async (m) => {
             if (m.content.toLowerCase().trim() === data.jawaban.toLowerCase().trim()) {
                 await session.delete(ctx.id);
                 await global.db.add(`user.${senderNumber}.coin`, coin);

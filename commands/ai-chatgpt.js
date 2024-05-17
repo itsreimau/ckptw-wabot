@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 
 module.exports = {
     name: 'chatgpt',
@@ -29,11 +30,11 @@ module.exports = {
             const apiUrl = createAPIUrl('joshweb', '/new/gpt-4_adv', {
                 prompt: input
             });
-            const response = await fetch(apiUrl);
+            const response = await axios.get(apiUrl);
 
-            if (!response.ok) throw new Error(global.msg.notFound);
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const data = await response.json();
+            const data = response.data;
 
             return ctx.reply(data.result.reply);
         } catch (error) {

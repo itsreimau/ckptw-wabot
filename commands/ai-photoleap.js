@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 const mime = require('mime-types');
 
 module.exports = {
@@ -30,11 +31,11 @@ module.exports = {
             const apiUrl = createAPIUrl('https://tti.photoleapapp.com', `/api/v1/generate`, {
                 prompt: input
             });
-            const response = await fetch(apiUrl);
+            const response = await axios.get(apiUrl);
 
-            if (!response.ok) throw new Error(global.msg.notFound);
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const data = await response.json();
+            const data = await response.data;
 
             return await ctx.reply({
                 image: {

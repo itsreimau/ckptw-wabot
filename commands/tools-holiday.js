@@ -22,8 +22,8 @@ module.exports = {
             const apiUrl = createAPIUrl('https://api-harilibur.vercel.app', '/api', {
                 month: month
             });
-            const data = await fetch(apiUrl)
-                .then(res => res.ok ? res.json() : null)
+            const data = await axios.get(apiUrl)
+                .then(res => res.status == 200 ? res.data : null)
                 .catch(err => null);
 
             if (!data.length) return ctx.reply(`${bold('[ ! ]')} Tidak ada hari libur di bulan ini.`);

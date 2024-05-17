@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 
 module.exports = {
     name: 'mistral',
@@ -28,11 +29,11 @@ module.exports = {
             const apiUrl = createAPIUrl('sandipbaruwal', '/mistral', {
                 prompt: input
             });
-            const response = await fetch(apiUrl);
+            const response = await axios.get(apiUrl);
 
-            if (!response.ok) throw new Error(global.msg.notFound);
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const data = await response.json();
+            const data = await response.data;
 
             return ctx.reply(data.answer);
         } catch (error) {

@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 const {
     translate
 } = require('bing-translate-api');
@@ -24,11 +25,11 @@ module.exports = {
         const apiUrl = await createAPIUrl('https://uselessfacts.jsph.pl', '/api/v2/facts/random', {});
 
         try {
-            const response = await fetch(apiUrl);
+            const response = await axios.get(apiUrl);
 
-            if (!response.ok) throw new Error(global.msg.notFound);
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const data = await response.json();
+            const data = await response.data;
             const result = await translate(data.text, 'en', 'id');
 
             return ctx.reply(result.translation);

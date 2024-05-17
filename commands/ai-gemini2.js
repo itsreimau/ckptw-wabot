@@ -8,6 +8,7 @@ const {
     bold,
     monospace
 } = require('@mengkodingan/ckptw');
+const axios = require('axios');
 const {
     MessageType
 } = require('@mengkodingan/ckptw/lib/Constant');
@@ -50,11 +51,11 @@ module.exports = {
                 prompt: input,
                 url: uplRes.link
             });
-            const response = await fetch(apiUrl);
+            const response = await axios.get(apiUrl);
 
-            if (!response.ok) throw new Error(global.msg.notFound);
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const data = await response.json();
+            const data = await response.data;
 
             return ctx.reply(data.answer);
         } catch (error) {
