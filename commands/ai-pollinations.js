@@ -31,8 +31,7 @@ module.exports = {
             const apiUrl = createAPIUrl('https://image.pollinations.ai', `/prompt/${input}`, {});
             const response = await axios.get(apiUrl);
 
-            const isResponseOk = (status) => status >= 200 && status < 300;
-            if (!isResponseOk(response.status)) throw new Error(global.msg.notFound);
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
             return await ctx.reply({
                 image: {
