@@ -11,15 +11,16 @@ module.exports = {
     name: 'susunkata',
     category: 'game',
     code: async (ctx) => {
-        if (session.has(ctx.id)) return ctx.reply('Sesi permainan sedang berjalan!');
+        if (await session.has(ctx.id)) return ctx.reply('Sesi permainan sedang berjalan!');
 
         const data = await susunkata();
         const coin = 3;
         const timeout = 120000;
+        const senderNumber = ctx._sender.jid.split('@')[0];
 
-        session.set(ctx.id, true);
+        await session.set(ctx.id, true);
 
-        ctx.reply(
+        await ctx.reply(
             `❖ ${bold('Susun Kata')}\n` +
             '\n' +
             `➤ Soal: ${data.soal}\n` +
@@ -36,24 +37,24 @@ module.exports = {
         });
 
         col.on('collect', async (m) => {
-            if (m.content.toLowerCase().trim() === data.jawaban.toLowerCase().trim()) {
+            if (m.content.toLowerCase() === data.jawaban.toLowerCase()) {
                 await session.delete(ctx.id);
                 await global.db.add(`user.${senderNumber}.coin`, coin);
-                ctx.reply(
+                await ctx.reply(
                     `${bold('[ ! ]')} Benar!\n` +
                     `+${coin} Koin`
                 );
                 return col.stop();
             } else if (m.content.toLowerCase() === 'hint') {
-                let clue = data.jawaban.replace(/[AIUEOaiueo]/g, '_');
-                ctx.reply(clue);
+                const clue = data.jawaban.replace(/[AIUEOaiueo]/g, '_');
+                await ctx.reply(clue);
             } else if (m.content.toLowerCase().endsWith(data.jawaban.split(' ')[1])) {
-                ctx.reply('Sedikit lagi!');
+                await ctx.reply('Sedikit lagi!');
             }
         });
 
         col.on('end', async (collector, r) => {
-            if (session.has(ctx.id)) {
+            if (await session.has(ctx.id)) {
                 await session.delete(ctx.id);
 
                 return ctx.reply(

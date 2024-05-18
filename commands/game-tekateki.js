@@ -1,5 +1,5 @@
 const {
-    tebakgambar
+    tekateki
 } = require('@bochilteam/scraper');
 const {
     bold
@@ -8,32 +8,29 @@ const {
 const session = new Map();
 
 module.exports = {
-    name: 'tebakgambar',
-    aliases: ['guessimage', 'whatimage'],
+    name: 'tekateki',
+    aliases: ['puzzles'],
     category: 'game',
     code: async (ctx) => {
         if (await session.has(ctx.id)) return ctx.reply('Sesi permainan sedang berjalan!');
 
-        const data = await tebakgambar();
+        const data = await tekateki();
         const coin = 3;
         const timeout = 120000;
         const senderNumber = ctx._sender.jid.split('@')[0];
 
         await session.set(ctx.id, true);
 
-        await ctx.reply({
-            image: {
-                url: data.img
-            },
-            caption: `❖ ${bold('Tebak Gambar')}\n` +
-                '\n' +
-                `➤ Deskripsi: ${data.soal}\n` +
-                `➤ Bonus: ${coin} Koin\n` +
-                `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
-                'Ketik "hint" untuk bantuan.\n' +
-                '\n' +
-                global.msg.footer
-        });
+        await ctx.reply(
+            `❖ ${bold('Teka Teki')}\n` +
+            '\n' +
+            `➤ Soal: ${data.soal}\n` +
+            `➤ Bonus: ${coin} Koin\n` +
+            `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
+            'Ketik "hint" untuk bantuan.\n' +
+            '\n' +
+            global.msg.footer
+        );
 
         const col = ctx.MessageCollector({
             time: timeout

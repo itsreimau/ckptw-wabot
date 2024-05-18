@@ -18,7 +18,7 @@ module.exports = {
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         try {
-            const senderJid = ctx._sender.jid.split('@')[0];
+            const senderJid = ctx._sender.jid;
             const senderNumber = ctx._sender.jid.split('@')[0];
             let profile;
             try {
@@ -40,7 +40,7 @@ module.exports = {
                     `➤ Koin: ${fetchCoin}\n` +
                     '\n' +
                     global.msg.footer,
-                mentions: ctx.getMentioned()
+                mention: ctx.getMentioned()
             });
         } catch (error) {
             console.error('Error:', error);
