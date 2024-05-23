@@ -1,50 +1,52 @@
 const {
     createAPIUrl
-} = require('../tools/api.js');
+} = require("../tools/api.js");
 const {
     bold
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: 'holiday',
-    aliases: ['libur', 'harilibur'],
-    category: 'tools',
+    name: "holiday",
+    aliases: ["libur", "harilibur"],
+    category: "tools",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         try {
             const month = new Date().getMonth() + 1;
-            const apiUrl = createAPIUrl('https://api-harilibur.vercel.app', '/api', {
+            const apiUrl = createAPIUrl("https://api-harilibur.vercel.app", "/api", {
                 month: month
             });
-            const data = await axios.get(apiUrl)
-                .then(res => res.status == 200 ? res.data : null)
-                .catch(err => null);
+            const data = await axios
+                .get(apiUrl)
+                .then((res) => (res.status == 200 ? res.data : null))
+                .catch((err) => null);
 
-            if (!data.length) return ctx.reply(`${bold('[ ! ]')} Tidak ada hari libur di bulan ini.`);
+            if (!data.length) return ctx.reply(`${bold("[ ! ]")} Tidak ada hari libur di bulan ini.`);
 
             return ctx.reply(
-                `${bold('❖ Holiday')}\n` +
-                '\n' +
+                `${bold("❖ Holiday")}\n` +
+                "\n" +
                 data.reverse().map((h, i) => {
                     const d = new Date(h.holiday_date);
-                    const day = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'][d.getDay()];
-                    const mon = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'][d.getMonth()];
+                    const day = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"][d.getDay()];
+                    const mon = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"][d.getMonth()];
                     const year = d.getFullYear();
-                    return `${bold(h.holiday_name)}\n➤ ${day}, ${d.getDate()} ${mon} ${year}`;
-                }).join('\n-----\n') +
-                '\n' +
-                '\n' +
+                    return `${bold(h.holiday_name)}\n` +
+                        `➤ ${day}, ${d.getDate()} ${mon} ${year}`;
+                }).join("\n-----\n") +
+                "\n" +
+                "\n" +
                 `${global.msg.footer}`
             );
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

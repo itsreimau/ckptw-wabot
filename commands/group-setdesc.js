@@ -1,11 +1,11 @@
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: 'setdesc',
-    category: 'group',
+    name: "setdesc",
+    category: "group",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             admin: true,
@@ -16,7 +16,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -26,10 +26,10 @@ module.exports = {
         try {
             await ctx._client.groupUpdateDescription(ctx.id, input);
 
-            return ctx.reply(`${bold('[ ! ]')} Berhasil mengubah deskripsi grup!`);
+            return ctx.reply(`${bold("[ ! ]")} Berhasil mengubah deskripsi grup!`);
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

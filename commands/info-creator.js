@@ -1,18 +1,14 @@
 const {
     bold,
     VCardBuilder
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: 'owner',
-    aliases: ['creator', 'developer'],
-    category: 'info',
+    name: "owner",
+    aliases: ["creator", "developer"],
+    category: "info",
     code: async (ctx) => {
-        const vcard = new VCardBuilder()
-            .setFullName(global.owner.name)
-            .setOrg(global.owner.organization)
-            .setNumber(global.owner.number)
-            .build();
+        const vcard = new VCardBuilder().setFullName(global.owner.name).setOrg(global.owner.organization).setNumber(global.owner.number).build();
 
         return await ctx.reply({
             contacts: {

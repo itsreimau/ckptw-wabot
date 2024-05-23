@@ -1,23 +1,23 @@
 const {
     chord
-} = require('@bochilteam/scraper');
+} = require("@bochilteam/scraper");
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: 'chord',
-    category: 'internet',
+    name: "chord",
+    category: "internet",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -30,18 +30,18 @@ module.exports = {
             if (!result) throw new Error(global.msg.notFound);
 
             return ctx.reply(
-                `❖ ${bold('Chord')}\n` +
-                '\n' +
-                `➤ Judul: ${result.title.replace('Chords', '').trim()} (${result.url})\n` +
-                `➤ Artis: ${result.artist.replace('‣', '').trim()} (${result.artistUrl})\n` +
-                '-----\n' +
+                `❖ ${bold("Chord")}\n` +
+                "\n" +
+                `➤ Judul: ${result.title.replace("Chords", "").trim()} (${result.url})\n` +
+                `➤ Artis: ${result.artist.replace("‣", "").trim()} (${result.artistUrl})\n` +
+                "-----\n" +
                 `${result.chord}\n` +
-                '\n' +
+                "\n" +
                 global.msg.footer
             );
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

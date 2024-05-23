@@ -1,29 +1,29 @@
 const {
     createAPIUrl
-} = require('../tools/api.js');
+} = require("../tools/api.js");
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
-const axios = require('axios');
+} = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const {
     translate
-} = require('bing-translate-api');
-const mime = require('mime-types');
+} = require("bing-translate-api");
+const mime = require("mime-types");
 
 module.exports = {
-    name: 'mangainfo',
-    aliases: ['manga'],
-    category: 'internet',
+    name: "mangainfo",
+    aliases: ["manga"],
+    category: "internet",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -31,7 +31,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await createAPIUrl('https://api.jikan.moe', '/v4/manga', {
+            const apiUrl = await createAPIUrl("https://api.jikan.moe", "/v4/manga", {
                 q: input
             });
             const response = await axios.get(apiUrl);
@@ -40,15 +40,15 @@ module.exports = {
 
             const data = await response.data;
             const info = data.data[0];
-            const synopsisId = info.synopsis ? await translate(info.synopsis, 'en', 'id') : null;
+            const synopsisId = info.synopsis ? await translate(info.synopsis, "en", "id") : null;
 
             return ctx.reply({
                 image: {
-                    url: info.images.jpg.large_image_url
+                    url: info.images.jpg.large_image_url,
                 },
-                mimetype: mime.contentType('png'),
-                caption: `❖ ${bold('Manga Info')}\n` +
-                    '\n' +
+                mimetype: mime.contentType("png"),
+                caption: `❖ ${bold("Manga Info")}\n` +
+                    "\n" +
                     `➤ Judul: ${info.title}\n` +
                     `➤ Judul (Inggris): ${info.title_english}\n` +
                     `➤ Judul (Jepang): ${info.title_japanese}\n` +
@@ -57,12 +57,12 @@ module.exports = {
                     `➤ Volume: ${info.volumes}\n` +
                     `➤ Ringkasan: ${synopsisId.translation}\n` +
                     `➤ URL: ${info.url}\n` +
-                    '\n' +
+                    "\n" +
                     global.msg.footer
             });
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

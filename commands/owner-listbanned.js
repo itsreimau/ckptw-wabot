@@ -1,11 +1,11 @@
 const {
     bold
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: 'listbanned',
-    aliases: ['listban'],
-    category: 'owner',
+    name: "listbanned",
+    aliases: ["listban"],
+    category: "owner",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             owner: true
@@ -23,28 +23,28 @@ module.exports = {
                 if (users[userId].isBanned === true) bannedUsers.push(userId);
             }
 
-            let resultText = '';
+            let resultText = "";
             let userMentions = [];
 
-            bannedUsers.forEach(userId => {
+            bannedUsers.forEach((userId) => {
                 resultText += `➤ @${userId}\n`;
             });
 
-            bannedUsers.forEach(userId => {
+            bannedUsers.forEach((userId) => {
                 userMentions.push(`${userId}@s.whatsapp.net`);
             });
 
             return ctx.reply({
-                text: `❖ ${bold('List Banned')}\n` +
-                    '\n' +
+                text: `❖ ${bold("List Banned")}\n` +
+                    "\n" +
                     `${resultText}` +
-                    '\n' +
+                    "\n" +
                     global.msg.footer,
                 mentions: userMentions
             });
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

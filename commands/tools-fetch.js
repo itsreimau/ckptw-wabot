@@ -1,18 +1,18 @@
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
-const axios = require('axios');
-const mime = require('mime-types');
+} = require("@mengkodingan/ckptw");
+const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: 'fetch',
-    aliases: ['get'],
-    category: 'tools',
+    name: "fetch",
+    aliases: ["get"],
+    category: "tools",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
@@ -37,7 +37,7 @@ module.exports = {
 
             if (response.status !== 200) return ctx.reply(`${response.statusText} (${response.status})`);
         } catch (error) {
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
 
         const headers = response.headers;
@@ -46,7 +46,7 @@ module.exports = {
         try {
             data = response.data;
         } catch (error) {
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: Gagal mendapatkan data respons.`);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: Gagal mendapatkan data respons.`);
         }
 
         // JSON check.
@@ -56,61 +56,60 @@ module.exports = {
         } catch {}
 
         // Image, GIF, video, PDF, file, text check.
-        const contentType = headers['content-type'];
-        if (contentType && contentType.startsWith('image/')) {
+        const contentType = headers["content-type"];
+        if (contentType && contentType.startsWith("image/")) {
             return ctx.reply({
                 image: {
-                    url: url
+                    url: url,
                 },
-                mimetype: mime.contentType('png'),
+                mimetype: mime.contentType("png"),
                 caption: null
             });
-        } else if (contentType === 'image/gif') {
+        } else if (contentType === "image/gif") {
             return ctx.reply({
                 video: {
-                    url: url
+                    url: url,
                 },
-                mimetype: mime.contentType('gif'),
+                mimetype: mime.contentType("gif"),
                 caption: null,
                 gifPlayback: true
             });
-        } else if (contentType === 'video/mp4') {
+        } else if (contentType === "video/mp4") {
             return ctx.reply({
                 video: {
-                    url: url
+                    url: url,
                 },
-                mimetype: mime.contentType('mp4'),
+                mimetype: mime.contentType("mp4"),
                 caption: null,
                 gifPlayback: false
             });
-        } else if (contentType === 'application/pdf' || url.endsWith('.pdf')) {
+        } else if (contentType === "application/pdf" || url.endsWith(".pdf")) {
             return ctx.reply({
                 document: {
-                    url: url
+                    url: url,
                 },
-                mimetype: mime.contentType('pdf')
+                mimetype: mime.contentType("pdf")
             });
-        } else if (contentType === 'application/octet-stream') {
+        } else if (contentType === "application/octet-stream") {
             return ctx.reply({
                 document: {
-                    url: url
+                    url: url,
                 },
-                mimetype: mime.contentType('bin')
+                mimetype: mime.contentType("bin")
             });
         } else {
-            console.log('Content-Type:', contentType);
-            return ctx.reply(
-                `➤ Status: ${status}\n` +
-                '➤ Respon:\n' +
-                `${data}`
-            );
+            console.log("Content-Type:", contentType);
+            return ctx.reply(`➤ Status: ${status}\n` + "➤ Respon:\n" + `${data}`);
         }
     }
 };
 
-async function fetchWithTimeout(url, options = {
-    timeout: 10000
-}) {
+async function fetchWithTimeout(
+    url,
+    options = {
+        timeout: 10000,
+    }
+) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), options.timeout);
     try {
@@ -129,11 +128,11 @@ function walkJSON(json, depth, array) {
     const arr = array || [];
     const d = depth || 0;
     for (const key in json) {
-        arr.push('┊'.repeat(d) + (d > 0 ? ' ' : '') + `*${key}:*`);
-        if (typeof json[key] === 'object' && json[key] !== null) walkJSON(json[key], d + 1, arr);
+        arr.push("┊".repeat(d) + (d > 0 ? " " : "") + `*${key}:*`);
+        if (typeof json[key] === "object" && json[key] !== null) walkJSON(json[key], d + 1, arr);
         else {
-            arr[arr.length - 1] += ' ' + json[key];
+            arr[arr.length - 1] += " " + json[key];
         }
     }
-    return arr.join('\n');
+    return arr.join("\n");
 }

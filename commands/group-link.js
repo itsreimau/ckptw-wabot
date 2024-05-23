@@ -1,11 +1,11 @@
 const {
     bold
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: 'link',
-    aliases: ['gclink', 'grouplink'],
-    category: 'group',
+    name: "link",
+    aliases: ["gclink", "grouplink"],
+    category: "group",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             botAdmin: true,
@@ -20,8 +20,8 @@ module.exports = {
 
             return ctx.reply(`https://chat.whatsapp.com/${link}`);
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

@@ -1,24 +1,24 @@
 const {
     createAPIUrl
-} = require('../tools/api.js');
+} = require("../tools/api.js");
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
-const axios = require('axios');
+} = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 module.exports = {
-    name: 'asmaulhusna',
-    category: 'islamic',
+    name: "asmaulhusna",
+    category: "islamic",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -26,7 +26,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('https://raw.githubusercontent.com', `/ZeroChanBot/Api-Freee/master/data/AsmaulHusna.json`, {});
+            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ZeroChanBot/Api-Freee/master/data/AsmaulHusna.json`, {});
             const response = await axios.get(apiUrl);
 
             if (response.status !== 200) throw new Error(global.msg.notFound);
@@ -34,20 +34,19 @@ module.exports = {
             const data = await response.data;
             const asmaulhusna = data.result;
 
-            if (input.toLowerCase() === 'all') {
-                const resultText = asmaulhusna.map((r) =>
-                    `➤ Nomor: ${r.number}\n` +
+            if (input.toLowerCase() === "all") {
+                const resultText = asmaulhusna.map((r) => `➤ Nomor: ${r.number}\n` +
                     `➤ Latin: ${r.latin}\n` +
                     `➤ Arab: ${r.arab}\n` +
                     `➤ Arti: ${r.translate_id}`
-                ).join('\n-----\n');
+                ).join("\n-----\n");
 
                 return ctx.reply(
-                    `❖ ${bold('Asmaul Husna')}\n` +
-                    '\n' +
+                    `❖ ${bold("Asmaul Husna")}\n` +
+                    "\n" +
                     `Daftar semua Asmaul Husna:\n` +
                     `${resultText}\n` +
-                    '\n' +
+                    "\n" +
                     global.msg.footer
                 );
             }
@@ -66,19 +65,19 @@ module.exports = {
                 } = selectedName;
 
                 return ctx.reply(
-                    `❖ ${bold('Asmaul Husna')}\n` +
-                    '\n' +
+                    `❖ ${bold("Asmaul Husna")}\n` +
+                    "\n" +
                     `➤ Nomor: ${index}\n` +
                     `➤ Latin: ${latin}\n` +
                     `➤ Arab: ${arab}\n` +
                     `➤ Arti: ${translate_id}\n` +
-                    '\n' +
+                    "\n" +
                     global.msg.footer
                 );
             }
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

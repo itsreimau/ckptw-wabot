@@ -1,24 +1,24 @@
 const {
     createAPIUrl
-} = require('../tools/api.js');
+} = require("../tools/api.js");
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
-const axios = require('axios');
+} = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 module.exports = {
-    name: 'kisahnabi',
-    category: 'islamic',
+    name: "kisahnabi",
+    category: "islamic",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -26,7 +26,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('https://raw.githubusercontent.com', `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
+            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
             const response = await axios.get(apiUrl);
 
             if (response.status !== 200) throw new Error(global.msg.notFound);
@@ -34,20 +34,20 @@ module.exports = {
             const data = await response.data;
 
             return ctx.reply(
-                `❖ ${bold('Kisah Nabi')}\n` +
-                '\n' +
+                `❖ ${bold("Kisah Nabi")}\n` +
+                "\n" +
                 `➤ Nama: ${data.name}\n` +
                 `➤ Tahun kelahiran: ${data.thn_kelahiran}\n` +
                 `➤ Tempat kelahiran: ${data.tmp}\n` +
                 `➤ Usia: ${data.usia}\n` +
-                '-----\n' +
+                "-----\n" +
                 `${data.description.trim()}\n` +
-                '\n' +
+                "\n" +
                 global.msg.footer
             );
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

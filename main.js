@@ -1,274 +1,310 @@
+// Required modules and dependencies
 const {
     handler
-} = require('./handler.js');
-const smpl = require('./tools/simple.js');
+} = require("./handler.js");
+const smpl = require("./tools/simple.js");
 const {
     bold,
     Client,
     CommandHandler
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 const {
     Events,
     MessageType
-} = require('@mengkodingan/ckptw/lib/Constant');
-const fg = require('api-dylux');
+} = require("@mengkodingan/ckptw/lib/Constant");
+const {
+    PHONENUMBER_MCC
+} = require("@whiskeysockets/baileys");
+const fg = require("api-dylux");
 const {
     exec
-} = require('child_process');
-const path = require('path');
-const SimplDB = require('simpl.db');
+} = require("child_process");
+const path = require("path");
+const readline = require("readline");
+const SimplDB = require("simpl.db");
 const {
     inspect
-} = require('util');
+} = require("util");
 
-console.log('Connecting...');
-
-// Create a new bot instance.
-const bot = new Client({
-    name: global.bot.name,
-    prefix: global.bot.prefix,
-    printQRInTerminal: true,
-    readIncommingMsg: true,
-    selfReply: true
+// Setup readline interface for user input
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
 });
+const question = (text) => new Promise((resolve) => rl.question(text, resolve));
 
-// Create a new database instance.
-const db = new SimplDB();
-global.db = db;
+async function connectBot() {
+    // Connection message
+    console.log("Connecting...");
 
-// Event handling when the bot is ready.
-bot.ev.once(Events.ClientReady, (m) => {
-    console.log(`Ready at ${m.user.id}`);
-    global.system.startTime = Date.now();
-});
+    try {
+        // Create a new bot instance
+        const bot = new Client({
+            name: global.bot.name,
+            prefix: global.bot.prefix,
+            printQRInTerminal: !global.system.usePairingCode,
+            readIncommingMsg: true,
+            selfReply: true,
+        });
 
-// Handle uncaughtExceptions.
-process.on('uncaughtException', (err) => console.error(err));
+        if (global.system.usePairingCode && !bot.core.authState.creds.registered) {
+            let phoneNumber;
+            phoneNumber = await question("Enter a phone number: ")
+            phoneNumber = phoneNumber.replace(/[^0-9]/g, "")
 
-// Create command handlers and load commands.
-const cmd = new CommandHandler(bot, path.resolve(__dirname, 'commands'));
-cmd.load();
+            // Check phone number
+            if (
+                !Object.keys(PHONENUMBER_MCC).some((v) => phoneNumber.startsWith(v))
+            ) {
+                console.log("Enter the phone number according to the country code, for example: +628xxxxxxxx")
+                phoneNumber = await question("Enter a phone number: ")
+                phoneNumber = phoneNumber.replace(/[^0-9]/g, "")
+                rl.close();
+            }
 
-// Create a handlers.
-global.handler = handler;
+            setTimeout(async () => {
+                let code = await bot.core.requestPairingCode(phoneNumber)
+                code = code.match(/.{1,4}/g).join("-") || code;
+                console.log(`Your pairing code: ${code}`)
+            }, 3000)
+        }
 
-// Event handling when the message appears.
-bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
-    const senderNumber = ctx._sender.jid.split('@')[0];
-    const senderJid = ctx._sender.jid;
-    const groupNumber = ctx.isGroup() ? m.key.remoteJid.split('@')[0] : null;
-    const groupJid = ctx.isGroup() ? m.key.remoteJid : null;
-    const isGroup = ctx.isGroup();
-    const isPrivate = !isGroup;
+        // Create a new database instance
+        const db = new SimplDB();
+        global.db = db;
 
-    // All chat types.
-    if (m.key.fromMe) return; // Checking messages.
+        // Event handling when the bot is ready
+        bot.ev.once(Events.ClientReady, (m) => {
+            console.log(`Ready at ${m.user.id}`);
+            global.system.startTime = Date.now();
+        });
 
-    if (smpl.isCmd(m, ctx)) ctx.simulateTyping(); // Auto-typing.
+        // Handle uncaught exceptions
+        process.on("uncaughtException", (err) => console.error(err));
 
-    // AFK.
-    const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-    if (mentionJids && mentionJids.length > 0) {
-        mentionJids.forEach(async (mentionJid) => {
-            const fetchAFKMention = db.fetch(`user.${mentionJid.split('@')[0]}.afk`);
-            if (fetchAFKMention) {
+        // Create command handlers and load commands
+        const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
+        cmd.load();
+
+        // Assign global handler
+        global.handler = handler;
+
+        // Event handling when a message appears
+        bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
+            const senderNumber = ctx._sender.jid.split("@")[0];
+            const senderJid = ctx._sender.jid;
+            const groupNumber = ctx.isGroup() ? m.key.remoteJid.split("@")[0] : null;
+            const groupJid = ctx.isGroup() ? m.key.remoteJid : null;
+            const isGroup = ctx.isGroup();
+            const isPrivate = !isGroup;
+
+            // Ignore messages sent by the bot itself
+            if (m.key.fromMe) return;
+
+            // Auto-typing simulation for commands
+            if (smpl.isCmd(m, ctx)) ctx.simulateTyping();
+
+            // AFK handling: Mentioned users
+            const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+            if (mentionJids && mentionJids.length > 0) {
+                mentionJids.forEach(async (mentionJid) => {
+                    const fetchAFKMention = db.fetch(`user.${mentionJid.split("@")[0]}.afk`);
+                    if (fetchAFKMention) {
+                        const reason = await db.fetch(`user.${senderNumber}.afk.reason`);
+                        const timeStamp = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
+                        const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
+
+                        ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`);
+                    }
+                });
+            }
+
+            // AFK handling: Returning from AFK
+            const fetchAFKMessage = await db.fetch(`user.${senderNumber}.afk`);
+            if (fetchAFKMessage) {
                 const reason = await db.fetch(`user.${senderNumber}.afk.reason`);
                 const timeStamp = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
                 const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
+                await db.delete(`user.${senderNumber}.afk`);
 
-                ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || 'kurang dari satu detik.'}.`);
+                return ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`);
             }
-        });
-    }
 
-    const fetchAFKMessage = await db.fetch(`user.${senderNumber}.afk`);
-    if (fetchAFKMessage) {
-        const reason = await db.fetch(`user.${senderNumber}.afk.reason`);
-        const timeStamp = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
-        const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
-        await db.delete(`user.${senderNumber}.afk`);
+            // Owner-only commands
+            if (smpl.isOwner(senderNumber) === 1) {
+                // Eval command: Execute JavaScript code
+                if (m.content && m.content.startsWith && (m.content.startsWith("> ") || m.content.startsWith(">> "))) {
+                    const code = m.content.slice(2);
 
-        return ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`);
-    }
+                    try {
+                        const result = await eval(m.content.startsWith(">> ") ? `(async () => { ${code} })()` : code);
 
-    // Owner-only.
-    if (smpl.isOwner(senderNumber) === 1) {
-        // Eval.
-        if (m.content && m.content.startsWith && (m.content.startsWith('> ') || m.content.startsWith('>> '))) {
-            const code = m.content.slice(2);
-
-            try {
-                const result = await eval(m.content.startsWith('>> ') ? `(async () => { ${code} })()` : code);
-
-                return await ctx.reply(inspect(result));
-            } catch (error) {
-                console.error('Error:', error);
-                return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
-            }
-        }
-
-        // Exec.
-        if (m.content && m.content.startsWith && m.content.startsWith('$ ')) {
-            const command = m.content.slice(2);
-
-            try {
-                const output = await new Promise((resolve, reject) => {
-                    exec(command, (error, stdout, stderr) => {
-                        if (error) {
-                            reject(new Error(error.message));
-                        } else if (stderr) {
-                            reject(new Error(stderr));
-                        } else {
-                            resolve(stdout);
-                        }
-                    });
-                });
-
-                return await ctx.reply(output);
-            } catch (error) {
-                console.error('Error:', error);
-                return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
-            }
-        }
-
-        // Group.
-        if (isGroup) {
-            const fetchAntilink = await db.fetch(`group.${groupNumber}.antilink`);
-            if (fetchAntilink) {
-                const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
-                if (m.content && urlRegex.test(m.content)) {
-                    if (await smpl.isAdmin(ctx) === 1) return;
-
-                    await ctx.deleteMessage(m.key);
-                    /* If you want automatic kick, use this.
-                    await ctx._client.groupParticipantsUpdate(ctx.id, [senderNumber], 'remove'); */
-
-                    return ctx.reply(`${bold('[ ! ]')} Jangan kirim tautan!`);
-                }
-            }
-        }
-    }
-
-    // Private.
-    if (isPrivate) {
-        // Menfess.
-        const fetchMessageDataMenfess = await db.fetch(`menfess.${senderNumber}`);
-        if (fetchMessageDataMenfess) {
-            const from = await db.fetch(`menfess.${senderNumber}.from`)
-            try {
-                await ctx.sendMessage(`${from}@s.whatsapp.net`, {
-                    text: `❖ ${bold('Menfess')}\n` +
-                        `Hai, saya ${global.bot.name}, Dia (${senderNumber}) menjawab pesan menfess yang Anda kirimkan.\n` +
-                        '-----\n' +
-                        `${m.content}\n` +
-                        '-----\n' +
-                        'Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n'
-                });
-                await db.delete(`menfess.${senderNumber}`);
-
-                return ctx.reply('Pesan berhasil terkirim!');
-            } catch (error) {
-                console.error('Error:', error);
-                return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
-            }
-        }
-    }
-});
-
-bot.ev.once(Events.UserJoin, async (m) => {
-    const {
-        id,
-        participants
-    } = m;
-
-    try {
-        const fetchWelcome = await db.fetch(`group.${id.split('@')[0]}.welcome`)
-        if (fetchWelcome) {
-            const metadata = await bot.core.groupMetadata(id);
-
-            // Participants.
-            for (const jid of participants) {
-
-
-                // Get profile picture user.
-                let profile;
-                try {
-                    profile = await bot.core.profilePictureUrl(jid, 'image');
-                } catch {
-                    profile = 'https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu';
+                        return await ctx.reply(inspect(result));
+                    } catch (error) {
+                        console.error("Error:", error);
+                        return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+                    }
                 }
 
-                // Send message.
-                await bot.core.sendMessage(id, {
-                    text: `Selamat datang @${jid.split('@')[0]} di grup ${metadata.subject}!`,
-                    contextInfo: {
-                        mentionedJid: [jid],
-                        externalAdReply: {
-                            title: 'JOIN',
-                            mediaType: 1,
-                            previewType: 0,
-                            renderLargerThumbnail: true,
-                            thumbnailUrl: profile,
-                            sourceUrl: global.bot.groupChat
+                // Exec command: Execute shell commands
+                if (m.content && m.content.startsWith && m.content.startsWith("$ ")) {
+                    const command = m.content.slice(2);
+
+                    try {
+                        const output = await new Promise((resolve, reject) => {
+                            exec(command, (error, stdout, stderr) => {
+                                if (error) {
+                                    reject(new Error(error.message));
+                                } else if (stderr) {
+                                    reject(new Error(stderr));
+                                } else {
+                                    resolve(stdout);
+                                }
+                            });
+                        });
+
+                        return await ctx.reply(output);
+                    } catch (error) {
+                        console.error("Error:", error);
+                        return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+                    }
+                }
+
+                // Group-specific actions
+                if (isGroup) {
+                    const fetchAntilink = await db.fetch(`group.${groupNumber}.antilink`);
+                    if (fetchAntilink) {
+                        const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+                        if (m.content && urlRegex.test(m.content)) {
+                            if ((await smpl.isAdmin(ctx)) === 1) return;
+
+                            await ctx.deleteMessage(m.key);
+
+                            return ctx.reply(`${bold("[ ! ]")} Jangan kirim tautan!`);
                         }
                     }
-                });
-            }
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        return bot.core.sendMessage(id, {
-            text: `${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`
-        });
-    }
-});
-
-bot.ev.once(Events.UserLeave, async (m) => {
-    const {
-        id,
-        participants
-    } = m;
-
-    try {
-        const fetchWelcome = await db.fetch(`group.${id.split('@')[0]}.welcome`)
-        if (fetchWelcome) {
-            const metadata = await bot.core.groupMetadata(id);
-
-            // Participants.
-            for (const jid of participants) {
-
-                // Get profile picture user.
-                let profile;
-                try {
-                    profile = await bot.core.profilePictureUrl(jid, 'image');
-                } catch {
-                    profile = 'https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu';
                 }
+            }
 
-                // Send message.
-                await bot.core.sendMessage(id, {
-                    text: `@${jid.split('@')[0]} keluar dari grup ${metadata.subject}.`,
-                    contextInfo: {
-                        mentionedJid: [jid],
-                        externalAdReply: {
-                            title: 'LEAVE',
-                            mediaType: 1,
-                            previewType: 0,
-                            renderLargerThumbnail: true,
-                            thumbnailUrl: profile,
-                            sourceUrl: global.bot.groupChat
-                        }
+            // Private messages: Menfess handling
+            if (isPrivate) {
+                const fetchMessageDataMenfess = await db.fetch(`menfess.${senderNumber}`);
+                if (fetchMessageDataMenfess) {
+                    const from = await db.fetch(`menfess.${senderNumber}.from`);
+                    try {
+                        await ctx.sendMessage(`${from}@s.whatsapp.net`, {
+                            text: `❖ ${bold("Menfess")}\n` +
+                                `Hai, saya ${global.bot.name}, Dia (${senderNumber}) menjawab pesan menfess yang Anda kirimkan.\n` +
+                                "-----\n" +
+                                `${m.content}\n` +
+                                "-----\n" +
+                                "Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n",
+                        });
+                        await db.delete(`menfess.${senderNumber}`);
+
+                        return ctx.reply("Pesan berhasil terkirim!");
+                    } catch (error) {
+                        console.error("Error:", error);
+                        return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
                     }
+                }
+            }
+        });
+
+        // Event handling when a user joins a group
+        bot.ev.once(Events.UserJoin, async (m) => {
+            const {
+                id,
+                participants
+            } = m;
+
+            try {
+                const fetchWelcome = await db.fetch(`group.${id.split("@")[0]}.welcome`);
+                if (fetchWelcome) {
+                    const metadata = await bot.core.groupMetadata(id);
+
+                    for (const jid of participants) {
+                        let profile;
+                        try {
+                            profile = await bot.core.profilePictureUrl(jid, "image");
+                        } catch {
+                            profile = "https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu";
+                        }
+
+                        await bot.core.sendMessage(id, {
+                            text: `Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`,
+                            contextInfo: {
+                                mentionedJid: [jid],
+                                externalAdReply: {
+                                    title: "JOIN",
+                                    mediaType: 1,
+                                    previewType: 0,
+                                    renderLargerThumbnail: true,
+                                    thumbnailUrl: profile,
+                                    sourceUrl: global.bot.groupChat,
+                                },
+                            },
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                return bot.core.sendMessage(id, {
+                    text: `${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`,
                 });
             }
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        return bot.core.sendMessage(id, {
-            text: `${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`
         });
-    }
-});
 
-// Launching bot.
-bot.launch().catch((error) => console.error('Error:', error));
+        // Event handling when a user leaves a group
+        bot.ev.once(Events.UserLeave, async (m) => {
+            const {
+                id,
+                participants
+            } = m;
+
+            try {
+                const fetchWelcome = await db.fetch(`group.${id.split("@")[0]}.welcome`);
+                if (fetchWelcome) {
+                    const metadata = await bot.core.groupMetadata(id);
+
+                    for (const jid of participants) {
+                        let profile;
+                        try {
+                            profile = await bot.core.profilePictureUrl(jid, "image");
+                        } catch {
+                            profile = "https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu";
+                        }
+
+                        await bot.core.sendMessage(id, {
+                            text: `@${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`,
+                            contextInfo: {
+                                mentionedJid: [jid],
+                                externalAdReply: {
+                                    title: "LEAVE",
+                                    mediaType: 1,
+                                    previewType: 0,
+                                    renderLargerThumbnail: true,
+                                    thumbnailUrl: profile,
+                                    sourceUrl: global.bot.groupChat,
+                                },
+                            },
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                return bot.core.sendMessage(id, {
+                    text: `${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`,
+                });
+            }
+        });
+
+        // Launch the bot
+        bot.launch().catch((error) => console.error("Error:", error));
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+// Connect the bot
+connectBot();

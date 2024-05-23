@@ -1,14 +1,14 @@
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 const {
     exec
-} = require('child_process');
+} = require("child_process");
 
 module.exports = {
-    name: 'restart',
-    category: 'owner',
+    name: "restart",
+    category: "owner",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             owner: true
@@ -21,8 +21,8 @@ module.exports = {
 
             exec(`pm2 restart rei-ayanami`); // PM2
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

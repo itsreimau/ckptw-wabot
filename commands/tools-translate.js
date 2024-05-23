@@ -1,19 +1,19 @@
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 const {
     translate
-} = require('bing-translate-api');
+} = require("bing-translate-api");
 
 module.exports = {
-    name: 'translate',
-    aliases: ['tr'],
-    category: 'tools',
+    name: "translate",
+    aliases: ["tr"],
+    category: "tools",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
@@ -24,7 +24,7 @@ module.exports = {
         );
 
         try {
-            let lang = 'id';
+            let lang = "id";
             let inp = ctx._args;
 
             if (ctx._args.length > 2) {
@@ -32,12 +32,12 @@ module.exports = {
                 inp = ctx._args.slice(1);
             }
 
-            const result = await translate(inp.join(' '), null, lang);
+            const result = await translate(inp.join(" "), null, lang);
 
             return await ctx.reply(result.translation);
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

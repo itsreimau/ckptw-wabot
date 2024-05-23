@@ -1,26 +1,26 @@
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 const {
     youtubedl,
     youtubedlv2
-} = require('@bochilteam/scraper');
-const yts = require('yt-search');
-const mime = require('mime-types');
+} = require("@bochilteam/scraper");
+const yts = require("yt-search");
+const mime = require("mime-types");
 
 module.exports = {
-    name: 'play',
-    category: 'downloader',
+    name: "play",
+    category: "downloader",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -36,18 +36,18 @@ module.exports = {
 
             await ctx.reply({
                 image: {
-                    url: yt.image
+                    url: yt.image,
                 },
-                mimetype: mime.contentType('png'),
-                caption: `❖ ${bold('Play')}\n` +
-                    '\n' +
+                mimetype: mime.contentType("png"),
+                caption: `❖ ${bold("Play")}\n` +
+                    "\n" +
                     `➤ Judul: ${yt.title}\n` +
                     `➤ Deskripsi: ${yt.description}\n` +
                     `➤ Durasi: ${yt.timestamp}\n` +
                     `➤ Diunggah: ${yt.ago}\n` +
                     `➤ Ditonton: ${yt.views.toLocaleString()}\n` +
-                    '\n' +
-                    global.msg.footer,
+                    "\n" +
+                    global.msg.footer
             });
 
             let ytdl;
@@ -64,14 +64,14 @@ module.exports = {
 
             return await ctx.reply({
                 audio: {
-                    url: audiodl
+                    url: audiodl,
                 },
-                mimetype: mime.contentType('mp3'),
+                mimetype: mime.contentType("mp3"),
                 ptt: false
             });
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

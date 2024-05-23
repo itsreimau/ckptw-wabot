@@ -1,10 +1,10 @@
 const {
     bold
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: 'tagme',
-    category: 'group',
+    name: "tagme",
+    category: "group",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             group: true
@@ -14,12 +14,12 @@ module.exports = {
 
         try {
             return ctx.reply({
-                text: `@${ctx._sender.jid.split('@')[0]}`,
+                text: `@${ctx._sender.jid.split("@")[0]}`,
                 mentions: [ctx._sender.jid]
             });
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

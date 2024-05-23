@@ -1,52 +1,49 @@
 const {
     createAPIUrl
-} = require('../tools/api.js');
+} = require("../tools/api.js");
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
-const axios = require('axios');
-const mime = require('mime-types');
+} = require("@mengkodingan/ckptw");
+const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: 'pollinations',
-    aliases: ['poll'],
-    category: 'ai',
+    name: "pollinations",
+    aliases: ["poll"],
+    category: "ai",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
-        if (!input) return ctx.reply(
-            `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`
-        );
+        if (!input) return ctx.reply(`${global.msg.argument}\n` + `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`);
 
         try {
-            const apiUrl = createAPIUrl('https://image.pollinations.ai', `/prompt/${input}`, {});
+            const apiUrl = createAPIUrl("https://image.pollinations.ai", `/prompt/${input}`, {});
             const response = await axios.get(apiUrl);
 
             if (response.status !== 200) throw new Error(global.msg.notFound);
 
             return await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: apiUrl,
                 },
-                mimetype: mime.contentType('png'),
-                caption: `❖ ${bold('Pollinations')}\n` +
-                    '\n' +
+                mimetype: mime.contentType("png"),
+                caption: `❖ ${bold("Pollinations")}\n` +
+                    "\n" +
                     `➤ Prompt: ${input}\n` +
-                    '\n' +
+                    "\n" +
                     global.msg.footer
             });
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

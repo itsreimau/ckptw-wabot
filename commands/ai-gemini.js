@@ -1,24 +1,24 @@
 const {
     createAPIUrl
-} = require('../tools/api.js');
+} = require("../tools/api.js");
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
-const axios = require('axios');
+} = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 module.exports = {
-    name: 'gemini',
-    category: 'ai',
+    name: "gemini",
+    category: "ai",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -26,7 +26,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('sandipbaruwal', '/gemini', {
+            const apiUrl = createAPIUrl("sandipbaruwal", "/gemini", {
                 prompt: input
             });
             const response = await axios.get(apiUrl);
@@ -37,8 +37,8 @@ module.exports = {
 
             return ctx.reply(data.answer);
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

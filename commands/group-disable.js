@@ -1,14 +1,14 @@
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
-const fs = require('fs');
-const path = require('path');
+} = require("@mengkodingan/ckptw");
+const fs = require("fs");
+const path = require("path");
 
 module.exports = {
-    name: 'disable',
-    aliases: ['off', 'disable'],
-    category: 'owner',
+    name: "disable",
+    aliases: ["off", "disable"],
+    category: "owner",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             admin: true,
@@ -18,40 +18,40 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} welcome`)}`
         );
 
-        if (ctx._args[0] === 'list') {
-            const listText = fs.readFileSync(path.resolve(__dirname, '../assets/txt/list-disable_enable.txt'), 'utf8');
+        if (ctx._args[0] === "list") {
+            const listText = fs.readFileSync(path.resolve(__dirname, "../assets/txt/list-disable_enable.txt"), "utf8");
 
             return ctx.reply(
-                `❖ ${bold('Daftar')}\n` +
-                '\n' +
+                `❖ ${bold("Daftar")}\n` +
+                "\n" +
                 `${listText}\n` +
-                '\n' +
+                "\n" +
                 global.msg.footer
             );
         }
 
         try {
-            const groupNumber = ctx.isGroup() ? ctx._msg.key.remoteJid.split('@')[0] : null;
+            const groupNumber = ctx.isGroup() ? ctx._msg.key.remoteJid.split("@")[0] : null;
 
-            if (input === 'antilink') {
+            if (input === "antilink") {
                 await global.db.set(`group.${groupNumber}.antilink`, false);
-                return ctx.reply(`${bold('[ ! ]')} Berhasil dinonaktifkan!`);
+                return ctx.reply(`${bold("[ ! ]")} Berhasil dinonaktifkan!`);
             }
 
-            if (input === 'welcome') {
+            if (input === "welcome") {
                 await global.db.set(`group.${groupNumber}.welcome`, false);
-                return ctx.reply(`${bold('[ ! ]')} Berhasil dinonaktifkan!`);
+                return ctx.reply(`${bold("[ ! ]")} Berhasil dinonaktifkan!`);
             }
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

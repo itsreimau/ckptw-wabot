@@ -1,24 +1,24 @@
 const {
     createAPIUrl
-} = require('../tools/api.js');
+} = require("../tools/api.js");
 const {
     bold
-} = require('@mengkodingan/ckptw');
-const axios = require('axios');
-const mime = require('mime-types');
+} = require("@mengkodingan/ckptw");
+const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: 'meme',
-    category: 'fun',
+    name: "meme",
+    category: "fun",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const apiUrl = createAPIUrl('https://candaan-api.vercel.app', '/api/image/random', {});
+        const apiUrl = createAPIUrl("https://candaan-api.vercel.app", "/api/image/random", {});
 
         try {
             const response = await axios.get(apiUrl);
@@ -29,18 +29,18 @@ module.exports = {
 
             return ctx.reply({
                 image: {
-                    url: imageUrl
+                    url: imageUrl,
                 },
-                mimetype: mime.contentType('png'),
-                caption: `❖ ${bold('Meme')}\n` +
-                    '\n' +
+                mimetype: mime.contentType("png"),
+                caption: `❖ ${bold("Meme")}\n` +
+                    "\n" +
                     `➤ Sumber: ${data.data.source}\n` +
-                    '\n' +
-                    global.msg.footer,
+                    "\n" +
+                    global.msg.footer
             });
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

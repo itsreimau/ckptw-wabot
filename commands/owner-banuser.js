@@ -1,12 +1,12 @@
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: 'ban',
-    aliases: ['banuser'],
-    category: 'owner',
+    name: "ban",
+    aliases: ["banuser"],
+    category: "owner",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             owner: true
@@ -14,7 +14,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid || [];
         const inputUser = `${input}@s.whatsapp.net`;
@@ -22,22 +22,22 @@ module.exports = {
 
         if (!user) return ctx.reply({
             text: `${global.msg.argument}\n` +
-                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${ctx._client.user.id.split(':')[0]}`)}`,
+                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${ctx._client.user.id.split(":")[0]}`)}`,
             mentions: ctx.getMentioned()
         });
 
         try {
-            if (user === ctx._sender.jid) throw new Error('Tidak dapat digunakan pada diri Anda sendiri.');
+            if (user === ctx._sender.jid) throw new Error("Tidak dapat digunakan pada diri Anda sendiri.");
 
-            await global.db.set(`user.${user.split('@')[0]}.isBanned`, true);
+            await global.db.set(`user.${user.split("@")[0]}.isBanned`, true);
 
             ctx.sendMessage(user, {
-                text: 'Anda telah dibanned oleh Owner!'
+                text: "Anda telah dibanned oleh Owner!"
             });
-            ctx.reply(`${bold('[ ! ]')} Berhasil dibanned!`);
+            ctx.reply(`${bold("[ ! ]")} Berhasil dibanned!`);
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

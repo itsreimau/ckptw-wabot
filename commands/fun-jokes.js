@@ -1,23 +1,23 @@
 const {
     createAPIUrl
-} = require('../tools/api.js');
+} = require("../tools/api.js");
 const {
     bold
-} = require('@mengkodingan/ckptw');
-const axios = require('axios');
+} = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 module.exports = {
-    name: 'jokes',
-    category: 'fun',
+    name: "jokes",
+    category: "fun",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const apiUrl = createAPIUrl('https://candaan-api.vercel.app', '/api/text/random', {});
+        const apiUrl = createAPIUrl("https://candaan-api.vercel.app", "/api/text/random", {});
 
         try {
             const response = await axios.get(apiUrl);
@@ -30,8 +30,8 @@ module.exports = {
 
             return ctx.reply(data);
         } catch (error) {
-            console.error('Error:', error);
-            return message.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return message.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

@@ -1,14 +1,14 @@
 const {
     isAdmin
-} = require('../tools/simple.js');
+} = require("../tools/simple.js");
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: 'demote',
-    category: 'group',
+    name: "demote",
+    category: "group",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             admin: true,
@@ -22,23 +22,24 @@ module.exports = {
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const member = mentionedJids[0] || null;
 
-        if (!member.length) return ctx.reply({
-            text: `${global.msg.argument}\n` +
-                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${ctx._client.member.id.split(':')[0]}`)}`,
-            mentions: ctx.getMentioned()
-        });
+        if (!member.length)
+            return ctx.reply({
+                text: `${global.msg.argument}\n` +
+                    `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${ctx._client.member.id.split(":")[0]}`)}`,
+                mentions: ctx.getMentioned()
+            });
 
         try {
-            if (member === ctx._sender.jid) throw new Error('Tidak dapat digunakan pada diri Anda sendiri.');
+            if (member === ctx._sender.jid) throw new Error("Tidak dapat digunakan pada diri Anda sendiri.");
 
-            if (await isAdmin(ctx, member) === 1) throw new Error('Anggota ini adalah anggota biasa.');
+            if ((await isAdmin(ctx, member)) === 1) throw new Error("Anggota ini adalah anggota biasa.");
 
-            await ctx._client.groupParticipantsUpdate(ctx.id, [member], 'demote');
+            await ctx._client.groupParticipantsUpdate(ctx.id, [member], "demote");
 
-            return ctx.reply(`${bold('[ ! ]')} Berhasil diturunkan dari admin menjadi anggota biasa!`);
+            return ctx.reply(`${bold("[ ! ]")} Berhasil diturunkan dari admin menjadi anggota biasa!`);
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

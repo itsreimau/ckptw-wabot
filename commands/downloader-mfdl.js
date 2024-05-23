@@ -1,25 +1,25 @@
 const {
     mediafiredl
-} = require('@bochilteam/scraper');
+} = require("@bochilteam/scraper");
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
-const mime = require('mime-types');
+} = require("@mengkodingan/ckptw");
+const mime = require("mime-types");
 
 module.exports = {
-    name: 'mfdl',
-    aliases: ['mf', 'mediafire', 'mediafiredl'],
-    category: 'downloader',
+    name: "mfdl",
+    aliases: ["mf", "mediafire", "mediafiredl"],
+    category: "downloader",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -39,8 +39,8 @@ module.exports = {
                 mimetype: mime.contentType(result.ext.toLowerCase())
             });
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

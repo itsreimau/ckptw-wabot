@@ -1,26 +1,26 @@
 const {
     createAPIUrl
-} = require('../tools/api.js');
+} = require("../tools/api.js");
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
-const axios = require('axios');
-const mime = require('mime-types');
+} = require("@mengkodingan/ckptw");
+const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: 'dalle',
-    aliases: ['dall', 'aiimg'],
-    category: 'ai',
+    name: "dalle",
+    aliases: ["dall", "aiimg"],
+    category: "ai",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -28,7 +28,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl('aemt', `/dalle`, {
+            const apiUrl = createAPIUrl("aemt", `/dalle`, {
                 text: input
             });
             const response = await axios.get(apiUrl);
@@ -37,18 +37,18 @@ module.exports = {
 
             return await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: apiUrl,
                 },
-                mimetype: mime.contentType('png'),
-                caption: `❖ ${bold('DALL·E')}\n` +
-                    '\n' +
+                mimetype: mime.contentType("png"),
+                caption: `❖ ${bold("DALL·E")}\n` +
+                    "\n" +
                     `➤ Prompt: ${input}\n` +
-                    '\n' +
+                    "\n" +
                     global.msg.footer
             });
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

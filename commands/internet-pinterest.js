@@ -1,25 +1,25 @@
 const {
     pinterest
-} = require('../tools/scraper.js');
+} = require("../tools/scraper.js");
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
-const mime = require('mime-types');
+} = require("@mengkodingan/ckptw");
+const mime = require("mime-types");
 
 module.exports = {
-    name: 'pinterest',
-    aliases: ['pin', 'pint'],
-    category: 'internet',
+    name: "pinterest",
+    aliases: ["pin", "pint"],
+    category: "internet",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -33,18 +33,18 @@ module.exports = {
 
             return await ctx.reply({
                 image: {
-                    url: result
+                    url: result,
                 },
-                mimetype: mime.contentType('png'),
-                caption: `❖ ${bold('Pinterest')}\n` +
-                    '\n' +
+                mimetype: mime.contentType("png"),
+                caption: `❖ ${bold("Pinterest")}\n` +
+                    "\n" +
                     `➤ Kueri: ${input}\n` +
-                    '\n' +
+                    "\n" +
                     global.msg.footer
             });
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

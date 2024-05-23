@@ -1,6 +1,6 @@
 const {
     downloadContentFromMessage
-} = require('@whiskeysockets/baileys');
+} = require("@whiskeysockets/baileys");
 
 /**
  * Function to check if the user is an admin in the group.
@@ -12,7 +12,7 @@ async function checkAdmin(ctx, id) {
     const group = await ctx._client.groupMetadata(ctx.id);
     const formattedId = `${id}@s.whatsapp.net`;
 
-    return group.participants.filter(v => (v.admin === 'superadmin' || v.admin === 'admin') && v.id == formattedId).length ? true : false;
+    return group.participants.filter((v) => (v.admin === "superadmin" || v.admin === "admin") && v.id == formattedId).length ? true : false;
 }
 
 /**
@@ -24,16 +24,16 @@ exports.convertMsToDuration = (ms) => {
     const seconds = Math.floor((ms / 1000) % 60);
     const minutes = Math.floor((ms / (1000 * 60)) % 60);
     const hours = Math.floor(ms / (1000 * 60 * 60));
-    let durationString = '';
+    let durationString = "";
 
-    if (hours > 0) durationString += hours + ' jam ';
+    if (hours > 0) durationString += hours + " jam ";
 
-    if (minutes > 0) durationString += minutes + ' menit ';
+    if (minutes > 0) durationString += minutes + " menit ";
 
-    if (seconds > 0) durationString += seconds + ' detik';
+    if (seconds > 0) durationString += seconds + " detik";
 
     return durationString;
-}
+};
 
 /**
  * Function to download content from a message.
@@ -50,7 +50,7 @@ exports.download = async (object, type) => {
     }
 
     return buffer;
-}
+};
 
 /**
  * Function to format file size into human-readable format.
@@ -58,13 +58,13 @@ exports.download = async (object, type) => {
  * @returns {string} Returns the human-readable file size string.
  */
 exports.formatSize = (bytes) => {
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
 
-    if (bytes === 0) return '0 Byte';
+    if (bytes === 0) return "0 Byte";
 
     const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-    return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
-}
+    return Math.round(bytes / Math.pow(1024, i), 2) + " " + sizes[i];
+};
 
 /*
  * Function to get a random element from an array.
@@ -77,7 +77,7 @@ exports.getRandomElement = (arr) => {
     const randomIndex = Math.floor(Math.random() * arr.length);
 
     return arr[randomIndex];
-}
+};
 
 /**
  * Function to check if a message is a command.
@@ -86,7 +86,7 @@ exports.getRandomElement = (arr) => {
  * @returns {boolean} Returns true if the message is a command, otherwise false.
  */
 exports.isCmd = (m, ctx) => {
-    const prefixRegex = new RegExp(ctx._config.prefix, 'i');
+    const prefixRegex = new RegExp(ctx._config.prefix, "i");
     const content = m.content && m.content.trim();
 
     if (!prefixRegex.test(content)) return false;
@@ -98,7 +98,7 @@ exports.isCmd = (m, ctx) => {
     }
 
     return false;
-}
+};
 
 /**
  * Function to check if the user is an admin.
@@ -107,9 +107,9 @@ exports.isCmd = (m, ctx) => {
  * @returns {number} Returns 1 if the user is an admin, otherwise returns 0.
  */
 exports.isAdmin = async (ctx, number) => {
-    const isAdmin = await checkAdmin(ctx, number || ctx._sender.jid.split('@')[0]);
+    const isAdmin = await checkAdmin(ctx, number || ctx._sender.jid.split("@")[0]);
     return isAdmin ? 1 : 0;
-}
+};
 
 /**
  * Function to check if the bot is an admin of the group.
@@ -117,9 +117,9 @@ exports.isAdmin = async (ctx, number) => {
  * @returns {number} Returns 1 if the bot is an admin of the group, otherwise returns 0.
  */
 exports.isBotAdmin = async (ctx) => {
-    const isBotAdmin = await checkAdmin(ctx, ctx._client.user.id.split(':')[0]);
+    const isBotAdmin = await checkAdmin(ctx, ctx._client.user.id.split(":")[0]);
     return isBotAdmin ? 1 : 0;
-}
+};
 
 /**
  * Function to check if the user is the owner.
@@ -129,7 +129,7 @@ exports.isBotAdmin = async (ctx) => {
 exports.isOwner = (number) => {
     const isOwner = global.owner.number === number || global.owner.co.includes(number);
     return isOwner ? 1 : 0;
-}
+};
 
 /**
  * Function to convert a string to title case.
@@ -137,5 +137,5 @@ exports.isOwner = (number) => {
  * @returns {string} Returns the title cased string.
  */
 exports.ucword = (str) => {
-    return str.toLowerCase().replace(/\b(\w)/g, s => s.toUpperCase());
-}
+    return str.toLowerCase().replace(/\b(\w)/g, (s) => s.toUpperCase());
+};

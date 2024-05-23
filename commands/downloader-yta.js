@@ -1,26 +1,26 @@
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 const {
     youtubedl,
     youtubedlv2
-} = require('@bochilteam/scraper');
-const mime = require('mime-types');
+} = require("@bochilteam/scraper");
+const mime = require("mime-types");
 
 module.exports = {
-    name: 'yta',
-    aliases: ['ytaudio', 'ytmp3'],
-    category: 'downloader',
+    name: "yta",
+    aliases: ["ytaudio", "ytmp3"],
+    category: "downloader",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -41,48 +41,48 @@ module.exports = {
 
             await ctx.reply({
                 image: {
-                    url: ytdl.thumbnail
+                    url: ytdl.thumbnail,
                 },
-                mimetype: mime.contentType('png'),
-                caption: `❖ ${bold('YT Audio')}\n` +
-                    '\n' +
+                mimetype: mime.contentType("png"),
+                caption: `❖ ${bold("YT Audio")}\n` +
+                    "\n" +
                     `➤ Judul: ${ytdl.title}\n` +
                     `➤ Pilih kualitas:\n` +
-                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join('\n')}\n` +
-                    '\n' +
+                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
+                    "\n" +
                     global.msg.footer
             });
 
             const col = ctx.MessageCollector({
-                time: 60000 // 1 menit
+                time: 60000, // 1 menit
             });
 
-            col.on('collect', async (m) => {
+            col.on("collect", async (m) => {
                 const selectedNumber = parseInt(m.content.trim());
                 const selectedQualityIndex = selectedNumber - 1;
 
                 if (!isNaN(selectedNumber) && selectedQualityIndex >= 0 && selectedQualityIndex < qualityOptions.length) {
                     const selectedQuality = qualityOptions[selectedQualityIndex];
                     const downloadFunction = ytdl.audio[selectedQuality].download;
-                    ctx.react(ctx.id, '🔄', m.key);
+                    ctx.react(ctx.id, "🔄", m.key);
                     const url = await downloadFunction();
                     await ctx.reply({
                         audio: {
-                            url: url
+                            url: url,
                         },
-                        mimetype: mime.contentType('mp3'),
+                        mimetype: mime.contentType("mp3"),
                         ptt: false,
                     });
                     return col.stop();
                 }
             });
 
-            col.on('end', async (collector, r) => {
+            col.on("end", async (collector, r) => {
                 // Tidak ada respon ketika kolektor berakhir
             });
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

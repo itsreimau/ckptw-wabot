@@ -1,17 +1,17 @@
 const {
     download
-} = require('../tools/simple.js');
+} = require("../tools/simple.js");
 const {
     bold
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 const {
     MessageType
-} = require('@mengkodingan/ckptw/lib/Constant');
+} = require("@mengkodingan/ckptw/lib/Constant");
 
 module.exports = {
-    name: 'setpp',
-    aliases: ['seticon', 'setprofile'],
-    category: 'group',
+    name: "setpp",
+    aliases: ["seticon", "setprofile"],
+    category: "group",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             admin: true,
@@ -25,18 +25,18 @@ module.exports = {
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
-        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(`${bold('[ ! ]')} Berikan atau balas media berupa gambar!`);
+        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(`${bold("[ ! ]")} Berikan atau balas media berupa gambar!`);
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = (type === 'imageMessage') ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, 'buffer');
+            const buffer = type === "imageMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             await ctx._client.updateProfilePicture(ctx.id, buffer);
 
-            return ctx.reply(`${bold('[ ! ]')} Berhasil mengubah gambar profil foto grup!`);
+            return ctx.reply(`${bold("[ ! ]")} Berhasil mengubah gambar profil foto grup!`);
         } catch (error) {
-            console.error('Error', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

@@ -1,25 +1,25 @@
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
-const axios = require('axios');
+} = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const {
     _ai
-} = require('lowline.ai');
+} = require("lowline.ai");
 
 module.exports = {
-    name: 'lowline',
-    aliases: ['ll'],
-    category: 'ai',
+    name: "lowline",
+    aliases: ["ll"],
+    category: "ai",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -28,13 +28,13 @@ module.exports = {
 
         try {
             const res = await _ai.generatePlaintext({
-                prompt: input,
+                prompt: input
             });
 
             return await ctx.reply(res.result);
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

@@ -1,23 +1,23 @@
 const {
     createAPIUrl
-} = require('../tools/api.js');
+} = require("../tools/api.js");
 const {
     bold
-} = require('@mengkodingan/ckptw');
-const axios = require('axios');
+} = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 module.exports = {
-    name: 'sc',
-    aliases: ['script', 'source', 'sourcecode'],
-    category: 'info',
+    name: "sc",
+    aliases: ["script", "source", "sourcecode"],
+    category: "info",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
-            banned: true,
+            banned: true
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const apiUrl = await createAPIUrl('https://api.github.com', '/repos/itsreimau/ckptw-wabot', {});
+        const apiUrl = await createAPIUrl("https://api.github.com", "/repos/itsreimau/ckptw-wabot", {});
         const response = await axios.get(apiUrl);
 
         if (response.status !== 200) throw new Error(global.msg.notFound);
@@ -25,8 +25,8 @@ module.exports = {
         const data = await response.data;
 
         return ctx.reply(
-            `❖ ${bold('SC')}\n` +
-            '\n' +
+            `❖ ${bold("SC")}\n` +
+            "\n" +
             `➤ Nama: ${data.name}\n` +
             `➤ URL: ${data.html_url}\n` +
             `➤ Deskripsi: ${data.description}\n` +
@@ -34,21 +34,21 @@ module.exports = {
             `➤ Dibuat: ${formatDate(data.created_at)}\n` +
             `➤ Bahasa: ${data.language}\n` +
             `➤ Lisensi: ${data.license.name}\n` +
-            '\n' +
+            "\n" +
             global.msg.footer
-        )
+        );
     }
 };
 
-function formatDate(date, locale = 'id') {
+function formatDate(date, locale = "id") {
     const dt = new Date(date);
     return dt.toLocaleDateString(locale, {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric'
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
     });
 }

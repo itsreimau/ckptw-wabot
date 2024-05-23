@@ -1,25 +1,25 @@
 const {
     github
-} = require('../tools/scraper.js');
+} = require("../tools/scraper.js");
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
-const mime = require('mime-types');
+} = require("@mengkodingan/ckptw");
+const mime = require("mime-types");
 
 module.exports = {
-    name: 'ghdl',
-    aliases: ['github', 'gitclone'],
-    category: 'downloader',
+    name: "ghdl",
+    aliases: ["github", "gitclone"],
+    category: "downloader",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -31,18 +31,18 @@ module.exports = {
             if (!urlRegex.test(input)) throw new Error(global.msg.urlInvalid);
 
             const [_, user, repo] = input.match(urlRegex) || [];
-            const repoName = repo.replace(/.git$/, '');
+            const repoName = repo.replace(/.git$/, "");
             const result = await github(user, repoName);
 
             if (!result) throw new Error(global.msg.notFound);
 
             return ctx.reply({
                 document: result,
-                mimetype: mime.contentType('zip')
+                mimetype: mime.contentType("zip")
             });
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

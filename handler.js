@@ -1,4 +1,4 @@
-const smpl = require('./tools/simple.js');
+const smpl = require("./tools/simple.js");
 
 /**
  * Handles requests based on the given options.
@@ -7,20 +7,20 @@ const smpl = require('./tools/simple.js');
  * @returns {Object} Object containing status and message if applicable, otherwise null.
  */
 exports.handler = async (ctx, options) => {
-    const senderNumber = ctx._sender.jid.split('@')[0];
+    const senderNumber = ctx._sender.jid.split("@")[0];
 
     const checkOptions = {
         admin: {
-            function: async () => await ctx.isGroup() ? await smpl.isAdmin(ctx) === 0 : null,
-            msg: global.msg.admin
+            function: async () => ((await ctx.isGroup()) ? (await smpl.isAdmin(ctx)) === 0 : null),
+            msg: global.msg.admin,
         },
         banned: {
             function: async () => await global.db.fetch(`user.${senderNumber}.isBanned`),
-            msg: global.msg.banned
+            msg: global.msg.banned,
         },
         botAdmin: {
-            function: async () => await ctx.isGroup() ? await smpl.isBotAdmin(ctx) === 0 : null,
-            msg: global.msg.botAdmin
+            function: async () => ((await ctx.isGroup()) ? (await smpl.isBotAdmin(ctx)) === 0 : null),
+            msg: global.msg.botAdmin,
         },
         coin: {
             function: async () => {
@@ -29,27 +29,27 @@ exports.handler = async (ctx, options) => {
 
                 if (!ctx._args.length) return false;
 
-                if (await smpl.isOwner(senderNumber) === 1) return false;
+                if ((await smpl.isOwner(senderNumber)) === 1) return false;
 
                 if (fetchCoin < options.coin) return true;
 
                 await global.db.subtract(`user.${senderNumber}.coin`, options.coin);
                 return false;
             },
-            msg: global.msg.coin
+            msg: global.msg.coin,
         },
         group: {
             function: async () => await !ctx.isGroup(),
-            msg: global.msg.group
+            msg: global.msg.group,
         },
         owner: {
-            function: async () => await smpl.isOwner(senderNumber) === 0,
-            msg: global.msg.owner
+            function: async () => (await smpl.isOwner(senderNumber)) === 0,
+            msg: global.msg.owner,
         },
         private: {
             function: async () => await ctx.isGroup(),
-            msg: global.msg.private
-        }
+            msg: global.msg.private,
+        },
     };
 
     let status = false;
@@ -66,6 +66,6 @@ exports.handler = async (ctx, options) => {
 
     return {
         status,
-        message
+        message,
     };
-}
+};

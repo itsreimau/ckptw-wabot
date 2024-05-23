@@ -1,34 +1,33 @@
-\
 const {
     caklontong
-} = require('@bochilteam/scraper');
+} = require("@bochilteam/scraper");
 const {
     bold
-} = require('@mengkodingan/ckptw');
+} = require("@mengkodingan/ckptw");
 
 const session = new Map();
 
 module.exports = {
-    name: 'caklontong',
-    category: 'game',
+    name: "caklontong",
+    category: "game",
     code: async (ctx) => {
-        if (await session.has(ctx.id)) return ctx.reply('Sesi permainan sedang berjalan!');
+        if (await session.has(ctx.id)) return ctx.reply("Sesi permainan sedang berjalan!");
 
         const data = await caklontong();
         const coin = 3;
         const timeout = 120000;
-        const senderNumber = ctx._sender.jid.split('@')[0];
+        const senderNumber = ctx._sender.jid.split("@")[0];
 
         await session.set(ctx.id, true);
 
         await ctx.reply(
-            `❖ ${bold('Cak Lontong')}\n` +
-            '\n' +
+            `❖ ${bold("Cak Lontong")}\n` +
+            "\n" +
             `➤ Soal: ${data.soal}\n` +
             `➤ Bonus: ${coin} Koin\n` +
             `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
             'Ketik "hint" untuk bantuan.\n' +
-            '\n' +
+            "\n" +
             global.msg.footer
         );
 
@@ -36,24 +35,21 @@ module.exports = {
             time: timeout
         });
 
-        col.on('collect', async (m) => {
+        col.on("collect", async (m) => {
             if (m.content.toLowerCase() === data.jawaban.toLowerCase()) {
                 await session.delete(ctx.id);
                 await global.db.add(`user.${senderNumber}.coin`, coin);
-                await ctx.reply(
-                    `${bold('[ ! ]')} Benar!\n` +
-                    `+${coin} Koin`
-                );
+                await ctx.reply(`${bold("[ ! ]")} Benar!\n` + `+${coin} Koin`);
                 return col.stop();
-            } else if (m.content.toLowerCase() === 'hint') {
-                const clue = data.jawaban.replace(/[AIUEOaiueo]/g, '_');
+            } else if (m.content.toLowerCase() === "hint") {
+                const clue = data.jawaban.replace(/[AIUEOaiueo]/g, "_");
                 await ctx.reply(clue);
-            } else if (m.content.toLowerCase().endsWith(data.jawaban.split(' ')[1])) {
-                ctx.reply('Sedikit lagi!');
+            } else if (m.content.toLowerCase().endsWith(data.jawaban.split(" ")[1])) {
+                ctx.reply("Sedikit lagi!");
             }
         });
 
-        col.on('end', async (collector, r) => {
+        col.on("end", async (collector, r) => {
             if (await session.has(ctx.id)) {
                 await session.delete(ctx.id);
 

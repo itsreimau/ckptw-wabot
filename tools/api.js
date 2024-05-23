@@ -1,19 +1,19 @@
 const APIs = {
     aemt: {
-        baseURL: 'https://aemt.me'
+        baseURL: "https://aemt.me",
     },
     itzpire: {
-        baseURL: 'https://itzpire.site'
+        baseURL: "https://itzpire.site",
     },
     joshweb: {
-        baseURL: 'https://joshweb.click'
+        baseURL: "https://joshweb.click",
     },
     miwudev: {
-        baseURL: 'https://openapi.miwudev.my.id'
+        baseURL: "https://openapi.miwudev.my.id",
     },
     sandipbaruwal: {
-        baseURL: 'https://sandipbaruwal.onrender.com'
-    }
+        baseURL: "https://sandipbaruwal.onrender.com",
+    },
 };
 
 /**
@@ -40,7 +40,7 @@ exports.createAPIUrl = (apiNameOrURL, endpoint, params = {}, apiKeyParamName) =>
 
     const queryParams = new URLSearchParams(params);
 
-    if (apiKeyParamName && api && 'APIKey' in api) {
+    if (apiKeyParamName && api && "APIKey" in api) {
         queryParams.set(apiKeyParamName, api.APIKey);
     }
 
@@ -48,4 +48,4 @@ exports.createAPIUrl = (apiNameOrURL, endpoint, params = {}, apiKeyParamName) =>
     apiUrl.search = queryParams.toString();
 
     return apiUrl.toString();
-}
+};

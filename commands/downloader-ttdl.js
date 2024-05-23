@@ -1,26 +1,26 @@
 const {
     createAPIUrl
-} = require('../tools/api.js');
+} = require("../tools/api.js");
 const {
     bold,
     monospace
-} = require('@mengkodingan/ckptw');
-const fg = require('api-dylux');
-const mime = require('mime-types');
+} = require("@mengkodingan/ckptw");
+const fg = require("api-dylux");
+const mime = require("mime-types");
 
 module.exports = {
-    name: 'ttdl',
-    aliases: ['tt', 'vt', 'vtdl', 'tiktok', 'ttnowm', 'tiktokdl', 'tiktoknowm'],
-    category: 'downloader',
+    name: "ttdl",
+    aliases: ["tt", "vt", "vtdl", "tiktok", "ttnowm", "tiktokdl", "tiktoknowm"],
+    category: "downloader",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
-            coin: 1
+            coin: 3
         });
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(' ');
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -33,14 +33,12 @@ module.exports = {
 
             let result;
 
-            const promises = [
-                fg.tiktok(input)
-            ];
+            const promises = [fg.tiktok(input)];
 
             const results = await Promise.allSettled(promises);
 
             for (const res of results) {
-                if (res.status === 'fulfilled' && res.value) {
+                if (res.status === "fulfilled" && res.value) {
                     result = res.value.hdplay || res.value.play;
                     break;
                 }
@@ -50,19 +48,19 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    url: result
+                    url: result,
                 },
-                mimetype: mime.contentType('mp4'),
-                caption: `❖ ${bold('TT Downloader')}\n` +
-                    '\n' +
+                mimetype: mime.contentType("mp4"),
+                caption: `❖ ${bold("TT Downloader")}\n` +
+                    "\n" +
                     `➤ URL: ${input}\n` +
-                    '\n' +
+                    "\n" +
                     global.msg.footer,
                 gifPlayback: false
             });
         } catch (error) {
-            console.error('Error:', error);
-            return ctx.reply(`${bold('[ ! ]')} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };
