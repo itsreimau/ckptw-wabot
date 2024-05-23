@@ -21,7 +21,7 @@ module.exports = {
         const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
-            `${global.msg.argument}\n` +
+            `${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} welcome`)}`
         );
 

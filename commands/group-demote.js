@@ -19,18 +19,19 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
+        const senderNumber = senderNumber;
+        const senderJid = ctx._sender.jid;
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const member = mentionedJids[0] || null;
 
-        if (!member.length)
-            return ctx.reply({
-                text: `${global.msg.argument}\n` +
-                    `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${ctx._client.member.id.split(":")[0]}`)}`,
-                mentions: ctx.getMentioned()
-            });
+        if (!member.length) return ctx.reply({
+            text: `${global.msg.argument}\n` +
+                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`,
+            mentions: [senderJid]
+        });
 
         try {
-            if (member === ctx._sender.jid) throw new Error("Tidak dapat digunakan pada diri Anda sendiri.");
+            if (member === senderJid) throw new Error("Tidak dapat digunakan pada diri Anda sendiri.");
 
             if ((await isAdmin(ctx, member)) === 1) throw new Error("Anggota ini adalah anggota biasa.");
 

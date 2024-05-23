@@ -29,7 +29,7 @@ module.exports = {
         );
 
         try {
-            if (member === ctx._sender.jid) throw new Error("Tidak dapat digunakan pada diri Anda sendiri.");
+            if (member === senderJid) throw new Error("Tidak dapat digunakan pada diri Anda sendiri.");
 
             if ((await isAdmin(ctx, member)) === 1) throw new Error("Anggota ini adalah admin grup.");
 

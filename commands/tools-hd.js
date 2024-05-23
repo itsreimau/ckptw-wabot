@@ -42,7 +42,10 @@ module.exports = {
             const apiUrl = createAPIUrl("ngodingaja", "/api/hd", {
                 url: uplRes.link
             });
-            const response = await axios.get(apiUrl);
+
+            const response = await axios.get(apiUrl, {
+                timeout: 60000 // 60 seconds timeout
+            });
 
             if (response.status !== 200) throw new Error(global.msg.notFound);
 

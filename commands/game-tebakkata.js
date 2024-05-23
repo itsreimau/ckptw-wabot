@@ -40,7 +40,10 @@ module.exports = {
             if (m.content.toLowerCase() === data.jawaban.toLowerCase()) {
                 await session.delete(ctx.id);
                 await global.db.add(`user.${senderNumber}.coin`, coin);
-                await ctx.reply(`${bold("[ ! ]")} Benar!\n` + `+${coin} Koin`);
+                await ctx.reply(
+                    `${bold("[ ! ]")} Benar!\n` +
+                    `+${coin} Koin`
+                );
                 return col.stop();
             } else if (m.content.toLowerCase() === "hint") {
                 const clue = data.jawaban.replace(/[AIUEOaiueo]/g, "_");

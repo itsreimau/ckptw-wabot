@@ -2,6 +2,9 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
+    isOwner
+} = require("../tools/simple.js");
+const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
@@ -18,6 +21,7 @@ module.exports = {
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         try {
+            const senderPushName = ctx._sender.pushName;
             const senderJid = ctx._sender.jid;
             const senderNumber = ctx._sender.jid.split("@")[0];
             let profile;
@@ -27,6 +31,7 @@ module.exports = {
                 profile = "https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu";
             }
             const fetchCoin = await global.db.fetch(`user.${senderNumber}.coin`);
+            const coin = fetchCoin || '-';
 
             return await ctx.reply({
                 image: {
@@ -35,12 +40,12 @@ module.exports = {
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Profile")}\n` +
                     "\n" +
-                    `➲ Nama: ${ctx._sender.pushName}\n` +
+                    `➲ Nama: ${senderPushName}\n` +
                     `➲ JID: @${senderNumber}\n` +
-                    `➲ Koin: ${fetchCoin}\n` +
+                    `➲ Koin: ${await isOwner(ctx, member) === 1 ? 'Tidak terbatas' : coin}\n` +
                     "\n" +
                     global.msg.footer,
-                mention: ctx.getMentioned()
+                mentions: [senderJid]
             });
         } catch (error) {
             console.error("Error:", error);

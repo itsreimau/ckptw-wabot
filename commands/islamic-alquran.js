@@ -22,11 +22,10 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        if (!ctx._args.length)
-            return ctx.reply(
-                `${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
-                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 21 35`)}`
-            );
+        if (!ctx._args.length) return ctx.reply(
+            `${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 21 35`)}`
+        );
 
         if (ctx._args[0] === "list") {
             const listText = fs.readFileSync(path.resolve(__dirname, "../assets/txt/list-alquran.txt"), "utf8");
