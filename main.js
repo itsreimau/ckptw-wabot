@@ -47,7 +47,7 @@ async function connectBot() {
             selfReply: true,
         });
 
-        if (global.system.usePairingCode && !bot.core.authState.creds) {
+        if (global.system.usePairingCode) {
             let phoneNumber;
             phoneNumber = await question("Enter a phone number: ")
             phoneNumber = phoneNumber.replace(/[^0-9]/g, "")
