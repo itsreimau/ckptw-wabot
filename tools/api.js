@@ -5,15 +5,15 @@ const APIs = {
     itzpire: {
         baseURL: "https://itzpire.site",
     },
-    joshweb: {
-        baseURL: "https://joshweb.click",
-    },
     miwudev: {
         baseURL: "https://openapi.miwudev.my.id",
     },
+    nyx: {
+        baseURL: "https://api.nyx.my.id",
+    },
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com",
-    },
+    }
 };
 
 /**

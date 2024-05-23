@@ -35,7 +35,14 @@ module.exports = {
             const apiUrl = createAPIUrl("https://quote.btch.bz", "/generate", {
                 text: input
             });
-            let profilePicture = await ctx._client.profilePictureUrl(ctx._sender.jid, "image").catch((_) => "https://i.ibb.co/3Fh9V6p/avatar-contact.png");
+
+            let profilePicture;
+            try {
+                profilePicture = await ctx._client.profilePictureUrl(ctx._sender.jid, "image");
+            } catch (_) {
+                profilePicture = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
+            }
+
             const object = {
                 type: "quote",
                 format: "png",
@@ -54,14 +61,16 @@ module.exports = {
                         },
                     },
                     text: input,
-                    replyMessage: {},
-                }, ],
+                    replyMessage: {}
+                }]
             };
+
             const json = await axios.post(apiUrl, object, {
                 headers: {
                     "Content-Type": "application/json",
                 }
             });
+
             const buffer = Buffer.from(json.data.result.image, "base64");
             const sticker = new Sticker(buffer, {
                 pack: global.sticker.packname,
@@ -74,12 +83,16 @@ module.exports = {
 
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
-            console.error("Error", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+
+            let errorMessage;
+            if (error.code === 'EPROTO') {
+                errorMessage = "Terjadi kesalahan pada protokol SSL/TLS.";
+            } else {
+                errorMessage = error.message;
+            }
+
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${errorMessage}`);
         }
     }
 };
-
-function from(data, encoding) {
-    return new Buffer(data, encoding);
-}

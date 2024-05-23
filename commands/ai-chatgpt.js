@@ -27,8 +27,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("joshweb", "/new/gpt-4_adv", {
-                prompt: input
+            const apiUrl = createAPIUrl("nyx", "/ai/gpt4", {
+                text: input
             });
             const response = await axios.get(apiUrl);
 
@@ -36,7 +36,7 @@ module.exports = {
 
             const data = response.data;
 
-            return ctx.reply(data.result.reply);
+            return ctx.reply(data.result);
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
