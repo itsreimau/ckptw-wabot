@@ -22,7 +22,6 @@ module.exports = {
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         const input = ctx._args.join(" ");
-
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
@@ -34,26 +33,28 @@ module.exports = {
             const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
             if (!urlRegex.test(input)) throw new Error(global.msg.urlInvalid);
 
-            let result;
-
             const promises = [
                 axios.get(createAPIUrl("nyx", "/dl/tiktok", {
                     url: input
-                })).then((response) => response.data),
+                })).then(response => response.data),
                 axios.get(createAPIUrl("ngodingaja", "/api/tiktok", {
                     url: input
-                })).then((response) => response.data),
+                })).then(response => response.data),
                 fg.tiktok(input)
             ];
 
             const results = await Promise.allSettled(promises);
 
+            let result;
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
-                    if (ctx._used.command === mp3cmd) result = res.value.result.musik || res.value.hasil.musik
+                    if (mp3cmd.includes(ctx._used.command)) {
+                        result = res.value.result?.musik || res.value.hasil?.musik;
+                    } else {
+                        result = res.value.result?.video_hd || res.value.result?.video2 || res.value.result?.video1 || res.value.hasil?.tanpawm || res.value.hdplay || res.value.play;
+                    }
 
-                    result = res.value.result.video_hd || res.value.result.video2 || res.value.result.video1 || res.value.hasil.tanpawm || res.value.hdplay || res.value.play;
-                    break;
+                    if (result) break;
                 }
             }
 
@@ -61,9 +62,9 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    url: result,
+                    url: result
                 },
-                mimetype: ctx._used.command === mp3cmd ? mime.contentType("mp3") : mime.contentType("mp4"),
+                mimetype: mime.contentType(mp3cmd.includes(ctx._used.command) ? "mp3" : "mp4"),
                 caption: `❖ ${bold("TT Downloader")}\n` +
                     "\n" +
                     `➲ URL: ${input}\n` +
