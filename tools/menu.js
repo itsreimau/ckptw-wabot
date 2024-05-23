@@ -41,11 +41,11 @@ exports.getMenu = (ctx) => {
     let text =
         `Hai ${ctx._sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
         "\n" +
-        `╭ ➤ Waktu aktif: ${convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}\n` +
-        `│ ➤ Tanggal: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}\n` +
-        `│ ➤ Waktu: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}\n` +
-        `│ ➤ Versi: ${package.version}\n` +
-        `╰ ➤ Prefix: ${ctx._used.prefix}\n` +
+        `╭ ➲ Waktu aktif: ${convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}\n` +
+        `│ ➲ Tanggal: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}\n` +
+        `│ ➲ Waktu: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}\n` +
+        `│ ➲ Versi: ${package.version}\n` +
+        `╰ ➲ Prefix: ${ctx._used.prefix}\n` +
         "\n" +
         `${quote("Jangan lupa berdonasi agar bot tetap online!")}\n` +
         `${global.msg.readmore}\n`;
@@ -62,9 +62,9 @@ exports.getMenu = (ctx) => {
             text += `╭─「 ${bold(tags[category])} 」\n`;
 
             if (category === "main") {
-                text += `│ ➤ ${categoryCommands.map((cmd) => `${ctx._used.prefix || "/"}${cmd.name}${cmd.aliases ? `\n│ ➤ ${cmd.aliases.map((alias) => `${ctx._used.prefix || "/"}${alias}`).join("\n│ ➤ ")}` : ""}`).join("\n│ ➤ ")}\n`;
+                text += `│ ➲ ${categoryCommands.map((cmd) => `${ctx._used.prefix || "/"}${cmd.name}${cmd.aliases ? `\n│ ➲ ${cmd.aliases.map((alias) => `${ctx._used.prefix || "/"}${alias}`).join("\n│ ➲ ")}` : ""}`).join("\n│ ➲ ")}\n`;
             } else {
-                text += `│ ➤ ${categoryCommands.map((cmd) => `${ctx._used.prefix || "/"}${cmd.name}`).join("\n│ ➤ ")}\n`;
+                text += `│ ➲ ${categoryCommands.map((cmd) => `${ctx._used.prefix || "/"}${cmd.name}`).join("\n│ ➲ ")}\n`;
             }
 
             text +=

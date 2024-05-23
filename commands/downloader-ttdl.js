@@ -53,7 +53,7 @@ module.exports = {
                 mimetype: mime.contentType("mp4"),
                 caption: `❖ ${bold("TT Downloader")}\n` +
                     "\n" +
-                    `➤ URL: ${input}\n` +
+                    `➲ URL: ${input}\n` +
                     "\n" +
                     global.msg.footer,
                 gifPlayback: false

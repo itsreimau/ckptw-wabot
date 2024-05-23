@@ -36,10 +36,10 @@ module.exports = {
             return ctx.reply(
                 `❖ ${bold("Kisah Nabi")}\n` +
                 "\n" +
-                `➤ Nama: ${data.name}\n` +
-                `➤ Tahun kelahiran: ${data.thn_kelahiran}\n` +
-                `➤ Tempat kelahiran: ${data.tmp}\n` +
-                `➤ Usia: ${data.usia}\n` +
+                `➲ Nama: ${data.name}\n` +
+                `➲ Tahun kelahiran: ${data.thn_kelahiran}\n` +
+                `➲ Tempat kelahiran: ${data.tmp}\n` +
+                `➲ Usia: ${data.usia}\n` +
                 "-----\n" +
                 `${data.description.trim()}\n` +
                 "\n" +

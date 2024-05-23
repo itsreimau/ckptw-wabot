@@ -13,6 +13,7 @@ global.apiKey = {
 global.bot = {
     name: "Rei Ayanami",
     prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
+    phoneNumber: "628xxxxxxxxxx", // Ignore if you use QR code for authentication
     thumbnail: "https://userstyles.org/style_screenshots/261795_after.jpeg?r=1715414479",
     groupChat: "https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs"
 };

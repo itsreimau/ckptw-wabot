@@ -34,7 +34,7 @@ module.exports = {
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Meme")}\n` +
                     "\n" +
-                    `➤ Sumber: ${data.data.source}\n` +
+                    `➲ Sumber: ${data.data.source}\n` +
                     "\n" +
                     global.msg.footer
             });

@@ -27,13 +27,13 @@ module.exports = {
         return ctx.reply(
             `❖ ${bold("SC")}\n` +
             "\n" +
-            `➤ Nama: ${data.name}\n` +
-            `➤ URL: ${data.html_url}\n` +
-            `➤ Deskripsi: ${data.description}\n` +
-            `➤ Owner: ${data.owner.login}\n` +
-            `➤ Dibuat: ${formatDate(data.created_at)}\n` +
-            `➤ Bahasa: ${data.language}\n` +
-            `➤ Lisensi: ${data.license.name}\n` +
+            `➲ Nama: ${data.name}\n` +
+            `➲ URL: ${data.html_url}\n` +
+            `➲ Deskripsi: ${data.description}\n` +
+            `➲ Owner: ${data.owner.login}\n` +
+            `➲ Dibuat: ${formatDate(data.created_at)}\n` +
+            `➲ Bahasa: ${data.language}\n` +
+            `➲ Lisensi: ${data.license.name}\n` +
             "\n" +
             global.msg.footer
         );

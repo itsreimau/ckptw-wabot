@@ -37,7 +37,7 @@ module.exports = {
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Pollinations")}\n` +
                     "\n" +
-                    `➤ Prompt: ${input}\n` +
+                    `➲ Prompt: ${input}\n` +
                     "\n" +
                     global.msg.footer
             });

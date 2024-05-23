@@ -35,9 +35,9 @@ module.exports = {
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Profile")}\n` +
                     "\n" +
-                    `➤ Nama: ${ctx._sender.pushName}\n` +
-                    `➤ JID: @${senderNumber}\n` +
-                    `➤ Koin: ${fetchCoin}\n` +
+                    `➲ Nama: ${ctx._sender.pushName}\n` +
+                    `➲ JID: @${senderNumber}\n` +
+                    `➲ Koin: ${fetchCoin}\n` +
                     "\n" +
                     global.msg.footer,
                 mention: ctx.getMentioned()

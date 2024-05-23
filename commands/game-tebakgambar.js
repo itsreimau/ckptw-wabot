@@ -27,8 +27,8 @@ module.exports = {
             },
             caption: `❖ ${bold("Tebak Gambar")}\n` +
                 "\n" +
-                `➤ Deskripsi: ${data.soal}\n` +
-                `➤ Bonus: ${coin} Koin\n` +
+                `➲ Deskripsi: ${data.soal}\n` +
+                `➲ Bonus: ${coin} Koin\n` +
                 `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
                 'Ketik "hint" untuk bantuan.\n' +
                 "\n" +

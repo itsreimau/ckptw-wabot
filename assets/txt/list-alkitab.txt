@@ -1,197 +1,197 @@
-➤ Buku: Kejadian (Kej)
-➤ Bab: 50
+➲ Buku: Kejadian (Kej)
+➲ Bab: 50
 -----
-➤ Buku: Keluaran (Kel)
-➤ Bab: 40
+➲ Buku: Keluaran (Kel)
+➲ Bab: 40
 -----
-➤ Buku: Imamat (Ima)
-➤ Bab: 27
+➲ Buku: Imamat (Ima)
+➲ Bab: 27
 -----
-➤ Buku: Bilangan (Bil)
-➤ Bab: 36
+➲ Buku: Bilangan (Bil)
+➲ Bab: 36
 -----
-➤ Buku: Ulangan (Ula)
-➤ Bab: 34
+➲ Buku: Ulangan (Ula)
+➲ Bab: 34
 -----
-➤ Buku: Yosua (Yos)
-➤ Bab: 24
+➲ Buku: Yosua (Yos)
+➲ Bab: 24
 -----
-➤ Buku: Hakim-hakim (Hak)
-➤ Bab: 21
+➲ Buku: Hakim-hakim (Hak)
+➲ Bab: 21
 -----
-➤ Buku: Rut (Rut)
-➤ Bab: 4
+➲ Buku: Rut (Rut)
+➲ Bab: 4
 -----
-➤ Buku: 1 Samuel (1 Sam)
-➤ Bab: 31
+➲ Buku: 1 Samuel (1 Sam)
+➲ Bab: 31
 -----
-➤ Buku: 2 Samuel (2 Sam)
-➤ Bab: 24
+➲ Buku: 2 Samuel (2 Sam)
+➲ Bab: 24
 -----
-➤ Buku: 1 Raja-Raja (1 Raj)
-➤ Bab: 22
+➲ Buku: 1 Raja-Raja (1 Raj)
+➲ Bab: 22
 -----
-➤ Buku: 2 Raja-Raja (2 Raj)
-➤ Bab: 25
+➲ Buku: 2 Raja-Raja (2 Raj)
+➲ Bab: 25
 -----
-➤ Buku: 1 Tawarikh (1 Taw)
-➤ Bab: 29
+➲ Buku: 1 Tawarikh (1 Taw)
+➲ Bab: 29
 -----
-➤ Buku: 2 Tawarikh (2 Taw)
-➤ Bab: 36
+➲ Buku: 2 Tawarikh (2 Taw)
+➲ Bab: 36
 -----
-➤ Buku: Ezra (Ezr)
-➤ Bab: 10
+➲ Buku: Ezra (Ezr)
+➲ Bab: 10
 -----
-➤ Buku: Nehemia (Neh)
-➤ Bab: 13
+➲ Buku: Nehemia (Neh)
+➲ Bab: 13
 -----
-➤ Buku: Ester (Est)
-➤ Bab: 10
+➲ Buku: Ester (Est)
+➲ Bab: 10
 -----
-➤ Buku: Ayub (Ayb)
-➤ Bab: 42
+➲ Buku: Ayub (Ayb)
+➲ Bab: 42
 -----
-➤ Buku: Mazmur (Maz)
-➤ Bab: 150
+➲ Buku: Mazmur (Maz)
+➲ Bab: 150
 -----
-➤ Buku: Amsal (Ams)
-➤ Bab: 31
+➲ Buku: Amsal (Ams)
+➲ Bab: 31
 -----
-➤ Buku: Pengkhotbah (Pkh)
-➤ Bab: 12
+➲ Buku: Pengkhotbah (Pkh)
+➲ Bab: 12
 -----
-➤ Buku: Kidung Agung (Kid)
-➤ Bab: 8
+➲ Buku: Kidung Agung (Kid)
+➲ Bab: 8
 -----
-➤ Buku: Yesaya (Yes)
-➤ Bab: 66
+➲ Buku: Yesaya (Yes)
+➲ Bab: 66
 -----
-➤ Buku: Yeremia (Yer)
-➤ Bab: 52
+➲ Buku: Yeremia (Yer)
+➲ Bab: 52
 -----
-➤ Buku: Ratapan (Rat)
-➤ Bab: 5
+➲ Buku: Ratapan (Rat)
+➲ Bab: 5
 -----
-➤ Buku: Yehezkiel (Yeh)
-➤ Bab: 48
+➲ Buku: Yehezkiel (Yeh)
+➲ Bab: 48
 -----
-➤ Buku: Daniel (Dan)
-➤ Bab: 12
+➲ Buku: Daniel (Dan)
+➲ Bab: 12
 -----
-➤ Buku: Hosea (Hos)
-➤ Bab: 14
+➲ Buku: Hosea (Hos)
+➲ Bab: 14
 -----
-➤ Buku: Yoel (Yoe)
-➤ Bab: 3
+➲ Buku: Yoel (Yoe)
+➲ Bab: 3
 -----
-➤ Buku: Amos (Amo)
-➤ Bab: 9
+➲ Buku: Amos (Amo)
+➲ Bab: 9
 -----
-➤ Buku: Obaja (Oba)
-➤ Bab: 1
+➲ Buku: Obaja (Oba)
+➲ Bab: 1
 -----
-➤ Buku: Yunus (Yun)
-➤ Bab: 4
+➲ Buku: Yunus (Yun)
+➲ Bab: 4
 -----
-➤ Buku: Mikha (Mik)
-➤ Bab: 7
+➲ Buku: Mikha (Mik)
+➲ Bab: 7
 -----
-➤ Buku: Nahum (Nah)
-➤ Bab: 3
+➲ Buku: Nahum (Nah)
+➲ Bab: 3
 -----
-➤ Buku: Habakuk (Hab)
-➤ Bab: 3
+➲ Buku: Habakuk (Hab)
+➲ Bab: 3
 -----
-➤ Buku: Zefanya (Zef)
-➤ Bab: 3
+➲ Buku: Zefanya (Zef)
+➲ Bab: 3
 -----
-➤ Buku: Hagai (Hag)
-➤ Bab: 2
+➲ Buku: Hagai (Hag)
+➲ Bab: 2
 -----
-➤ Buku: Zakharia (Zak)
-➤ Bab: 14
+➲ Buku: Zakharia (Zak)
+➲ Bab: 14
 -----
-➤ Buku: Maleakhi (Mal)
-➤ Bab: 4
+➲ Buku: Maleakhi (Mal)
+➲ Bab: 4
 -----
-➤ Buku: Matius (Mat)
-➤ Bab: 28
+➲ Buku: Matius (Mat)
+➲ Bab: 28
 -----
-➤ Buku: Markus (Mar)
-➤ Bab: 16
+➲ Buku: Markus (Mar)
+➲ Bab: 16
 -----
-➤ Buku: Lukas (Luk)
-➤ Bab: 24
+➲ Buku: Lukas (Luk)
+➲ Bab: 24
 -----
-➤ Buku: Yohanes (Yoh)
-➤ Bab: 21
+➲ Buku: Yohanes (Yoh)
+➲ Bab: 21
 -----
-➤ Buku: Kisah Para Rasul (Kis)
-➤ Bab: 28
+➲ Buku: Kisah Para Rasul (Kis)
+➲ Bab: 28
 -----
-➤ Buku: Roma (Rom)
-➤ Bab: 16
+➲ Buku: Roma (Rom)
+➲ Bab: 16
 -----
-➤ Buku: 1 Korintus (1 Kor)
-➤ Bab: 16
+➲ Buku: 1 Korintus (1 Kor)
+➲ Bab: 16
 -----
-➤ Buku: 2 Korintus (2 Kor)
-➤ Bab: 13
+➲ Buku: 2 Korintus (2 Kor)
+➲ Bab: 13
 -----
-➤ Buku: Galatia (Gal)
-➤ Bab: 6
+➲ Buku: Galatia (Gal)
+➲ Bab: 6
 -----
-➤ Buku: Efesus (Efe)
-➤ Bab: 6
+➲ Buku: Efesus (Efe)
+➲ Bab: 6
 -----
-➤ Buku: Filipi (Flp)
-➤ Bab: 4
+➲ Buku: Filipi (Flp)
+➲ Bab: 4
 -----
-➤ Buku: Kolose (Kol)
-➤ Bab: 4
+➲ Buku: Kolose (Kol)
+➲ Bab: 4
 -----
-➤ Buku: 1 Tesalonika (1 Tes)
-➤ Bab: 5
+➲ Buku: 1 Tesalonika (1 Tes)
+➲ Bab: 5
 -----
-➤ Buku: 2 Tesalonika (2 Tes)
-➤ Bab: 3
+➲ Buku: 2 Tesalonika (2 Tes)
+➲ Bab: 3
 -----
-➤ Buku: 1 Timotius (1 Tim)
-➤ Bab: 6
+➲ Buku: 1 Timotius (1 Tim)
+➲ Bab: 6
 -----
-➤ Buku: 2 Timotius (2 Tim)
-➤ Bab: 4
+➲ Buku: 2 Timotius (2 Tim)
+➲ Bab: 4
 -----
-➤ Buku: Titus (Tit)
-➤ Bab: 3
+➲ Buku: Titus (Tit)
+➲ Bab: 3
 -----
-➤ Buku: Filemon (Flm)
-➤ Bab: 1
+➲ Buku: Filemon (Flm)
+➲ Bab: 1
 -----
-➤ Buku: Ibrani (Ibr)
-➤ Bab: 13
+➲ Buku: Ibrani (Ibr)
+➲ Bab: 13
 -----
-➤ Buku: Yakobus (Yak)
-➤ Bab: 5
+➲ Buku: Yakobus (Yak)
+➲ Bab: 5
 -----
-➤ Buku: 1 Petrus (1 Pet)
-➤ Bab: 5
+➲ Buku: 1 Petrus (1 Pet)
+➲ Bab: 5
 -----
-➤ Buku: 2 Petrus (2 Pet)
-➤ Bab: 3
+➲ Buku: 2 Petrus (2 Pet)
+➲ Bab: 3
 -----
-➤ Buku: 1 Yohanes (1 Yoh)
-➤ Bab: 5
+➲ Buku: 1 Yohanes (1 Yoh)
+➲ Bab: 5
 -----
-➤ Buku: 2 Yohanes (2 Yoh)
-➤ Bab: 1
+➲ Buku: 2 Yohanes (2 Yoh)
+➲ Bab: 1
 -----
-➤ Buku: 3 Yohanes (3 Yoh)
-➤ Bab: 1
+➲ Buku: 3 Yohanes (3 Yoh)
+➲ Bab: 1
 -----
-➤ Buku: Yudas (Yud)
-➤ Bab: 1
+➲ Buku: Yudas (Yud)
+➲ Bab: 1
 -----
-➤ Buku: Wahyu (Wah)
-➤ Bab: 22
+➲ Buku: Wahyu (Wah)
+➲ Bab: 22

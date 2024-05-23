@@ -12,26 +12,15 @@ const {
     Events,
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const {
-    PHONENUMBER_MCC
-} = require("@whiskeysockets/baileys");
 const fg = require("api-dylux");
 const {
     exec
 } = require("child_process");
 const path = require("path");
-const readline = require("readline");
 const SimplDB = require("simpl.db");
 const {
     inspect
 } = require("util");
-
-// Setup readline interface for user input
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
-const question = (text) => new Promise((resolve) => rl.question(text, resolve));
 
 async function connectBot() {
     // Connection message
@@ -40,35 +29,21 @@ async function connectBot() {
     try {
         // Create a new bot instance
         const bot = new Client({
+            // Bot
             name: global.bot.name,
             prefix: global.bot.prefix,
+
+            // QR
             printQRInTerminal: !global.system.usePairingCode,
-            readIncommingMsg: true,
+
+            // Pairing Code
+            phoneNumber: global.bot.phoneNumber,
             usePairingCode: global.system.usePairingCode,
-            selfReply: true,
+
+            // General
+            readIncommingMsg: true,
+            selfReply: true
         });
-
-        if (global.system.usePairingCode) {
-            let phoneNumber;
-            phoneNumber = await question("Enter a phone number: ")
-            phoneNumber = phoneNumber.replace(/[^0-9]/g, "")
-
-            // Check phone number
-            if (
-                !Object.keys(PHONENUMBER_MCC).some((v) => phoneNumber.startsWith(v))
-            ) {
-                console.log("Enter the phone number according to the country code, for example: +628xxxxxxxx")
-                phoneNumber = await question("Enter a phone number: ")
-                phoneNumber = phoneNumber.replace(/[^0-9]/g, "")
-                rl.close();
-            }
-
-            setTimeout(async () => {
-                let code = await bot.core.requestPairingCode(phoneNumber)
-                code = code.match(/.{1,4}/g).join("-") || code;
-                console.log(`Your pairing code: ${code}`)
-            }, 3000)
-        }
 
         // Create a new database instance
         const db = new SimplDB();

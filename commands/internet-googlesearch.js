@@ -28,9 +28,9 @@ module.exports = {
             if (!result) throw new Error(global.msg.notFound);
 
             const resultText = result.map((r) =>
-                `➤ Judul: ${r.title}\n` +
-                `➤ Deskripsi: ${r.snippet}\n` +
-                `➤ URL: ${r.url}`
+                `➲ Judul: ${r.title}\n` +
+                `➲ Deskripsi: ${r.snippet}\n` +
+                `➲ URL: ${r.url}`
             ).join("\n-----\n");
             return ctx.reply(
                 `❖ ${bold("Google Search")}\n` +

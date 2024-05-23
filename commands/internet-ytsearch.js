@@ -33,13 +33,13 @@ module.exports = {
                     switch (r.type) {
                         case "video":
                             return `${bold(`${r.title} (${r.url})`)}\n` +
-                                `➤ Durasi: ${r.timestamp}\n` +
-                                `➤ Diunggah: ${r.ago}\n` +
-                                `➤ Dilihat: ${r.views}`;
+                                `➲ Durasi: ${r.timestamp}\n` +
+                                `➲ Diunggah: ${r.ago}\n` +
+                                `➲ Dilihat: ${r.views}`;
                         case "channel":
                             return `${bold(`${r.name} (${r.url})`)}\n` +
-                                `➤ Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
-                                `➤ Jumlah video: ${r.videoCount}`;
+                                `➲ Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
+                                `➲ Jumlah video: ${r.videoCount}`;
                     }
                 }).filter((r) => r).join("\n-----\n");
             return ctx.reply(

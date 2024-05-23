@@ -31,8 +31,8 @@ module.exports = {
             if (!result) throw new Error(global.msg.notFound);
 
             const resultText = result.map((r) =>
-                `➤ ${r.cryptoName}\n` +
-                `➤ Harga: ${r.priceChange}`
+                `➲ ${r.cryptoName}\n` +
+                `➲ Harga: ${r.priceChange}`
             ).join("\n-----\n");
             return ctx.reply(
                 `❖ ${bold("Crypto")}\n` +

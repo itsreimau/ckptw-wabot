@@ -24,8 +24,8 @@ module.exports = {
         await ctx.reply(
             `❖ ${bold("Tebak Kata")}\n` +
             "\n" +
-            `➤ Soal: ${data.soal}\n` +
-            `➤ Bonus: ${coin} Koin\n` +
+            `➲ Soal: ${data.soal}\n` +
+            `➲ Bonus: ${coin} Koin\n` +
             `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
             'Ketik "hint" untuk bantuan.\n' +
             "\n" +

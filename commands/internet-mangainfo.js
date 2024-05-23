@@ -49,14 +49,14 @@ module.exports = {
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Manga Info")}\n` +
                     "\n" +
-                    `➤ Judul: ${info.title}\n` +
-                    `➤ Judul (Inggris): ${info.title_english}\n` +
-                    `➤ Judul (Jepang): ${info.title_japanese}\n` +
-                    `➤ Tipe: ${info.type}\n` +
-                    `➤ Bab: ${info.chapters}\n` +
-                    `➤ Volume: ${info.volumes}\n` +
-                    `➤ Ringkasan: ${synopsisId.translation}\n` +
-                    `➤ URL: ${info.url}\n` +
+                    `➲ Judul: ${info.title}\n` +
+                    `➲ Judul (Inggris): ${info.title_english}\n` +
+                    `➲ Judul (Jepang): ${info.title_japanese}\n` +
+                    `➲ Tipe: ${info.type}\n` +
+                    `➲ Bab: ${info.chapters}\n` +
+                    `➲ Volume: ${info.volumes}\n` +
+                    `➲ Ringkasan: ${synopsisId.translation}\n` +
+                    `➲ URL: ${info.url}\n` +
                     "\n" +
                     global.msg.footer
             });

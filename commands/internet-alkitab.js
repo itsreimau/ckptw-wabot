@@ -46,12 +46,12 @@ module.exports = {
                 data
             } = await response.data;
 
-            const resultText = data.verses.map((v) => `➤ Ayat: ${v.verse}\n` + `➤ ${v.content}`).join("\n-----\n");
+            const resultText = data.verses.map((v) => `➲ Ayat: ${v.verse}\n` + `➲ ${v.content}`).join("\n-----\n");
             return ctx.reply(
                 `❖ ${bold("Alkitab")}\n` +
                 "\n" +
-                `➤ Nama: ${data.book.name}\n` +
-                `➤ Bab: ${data.book.chapter}\n` +
+                `➲ Nama: ${data.book.name}\n` +
+                `➲ Bab: ${data.book.chapter}\n` +
                 "-----\n" +
                 `${resultText}\n` +
                 "\n" +

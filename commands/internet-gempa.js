@@ -39,12 +39,12 @@ module.exports = {
                     "\n" +
                     `${gempa.Wilayah}\n` +
                     "-----\n" +
-                    `➤ Tanggal: ${gempa.Tanggal}\n` +
-                    `➤ Potensi: ${gempa.Potensi}\n` +
-                    `➤ Magnitude: ${gempa.Magnitude}\n` +
-                    `➤ Kedalaman: ${gempa.Kedalaman}\n` +
-                    `➤ Koordinat: ${gempa.Coordinates}\n` +
-                    `➤ Dirasakan: ${gempa.Dirasakan}\n` +
+                    `➲ Tanggal: ${gempa.Tanggal}\n` +
+                    `➲ Potensi: ${gempa.Potensi}\n` +
+                    `➲ Magnitude: ${gempa.Magnitude}\n` +
+                    `➲ Kedalaman: ${gempa.Kedalaman}\n` +
+                    `➲ Koordinat: ${gempa.Coordinates}\n` +
+                    `➲ Dirasakan: ${gempa.Dirasakan}\n` +
                     "\n" +
                     global.msg.footer
             });

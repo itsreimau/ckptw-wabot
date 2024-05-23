@@ -41,11 +41,11 @@ module.exports = {
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Play")}\n` +
                     "\n" +
-                    `➤ Judul: ${yt.title}\n` +
-                    `➤ Deskripsi: ${yt.description}\n` +
-                    `➤ Durasi: ${yt.timestamp}\n` +
-                    `➤ Diunggah: ${yt.ago}\n` +
-                    `➤ Ditonton: ${yt.views.toLocaleString()}\n` +
+                    `➲ Judul: ${yt.title}\n` +
+                    `➲ Deskripsi: ${yt.description}\n` +
+                    `➲ Durasi: ${yt.timestamp}\n` +
+                    `➲ Diunggah: ${yt.ago}\n` +
+                    `➲ Ditonton: ${yt.views.toLocaleString()}\n` +
                     "\n" +
                     global.msg.footer
             });

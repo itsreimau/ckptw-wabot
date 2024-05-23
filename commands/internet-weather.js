@@ -47,13 +47,13 @@ module.exports = {
             return ctx.reply(
                 `❖ ${bold("Weather")}\n` +
                 "\n" +
-                `➤ Tempat: ${data.name} (${data.sys.country})\n` +
-                `➤ Cuaca: ${ucword(weatherId.translation)}\n` +
-                `➤ Kelembapan: ${data.main.humidity} %\n` +
-                `➤ Angin: ${data.wind.speed} km/jam\n` +
-                `➤ Suhu saat ini: ${data.main.temp} °C\n` +
-                `➤ Suhu tertinggi: ${data.main.temp_max} °C\n` +
-                `➤ Suhu terendah: ${data.main.temp_min} °C\n` +
+                `➲ Tempat: ${data.name} (${data.sys.country})\n` +
+                `➲ Cuaca: ${ucword(weatherId.translation)}\n` +
+                `➲ Kelembapan: ${data.main.humidity} %\n` +
+                `➲ Angin: ${data.wind.speed} km/jam\n` +
+                `➲ Suhu saat ini: ${data.main.temp} °C\n` +
+                `➲ Suhu tertinggi: ${data.main.temp_max} °C\n` +
+                `➲ Suhu terendah: ${data.main.temp_min} °C\n` +
                 "\n" +
                 global.msg.footer
             );

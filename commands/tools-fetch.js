@@ -99,7 +99,7 @@ module.exports = {
             });
         } else {
             console.log("Content-Type:", contentType);
-            return ctx.reply(`➤ Status: ${status}\n` + "➤ Respon:\n" + `${data}`);
+            return ctx.reply(`➲ Status: ${status}\n` + "➲ Respon:\n" + `${data}`);
         }
     }
 };

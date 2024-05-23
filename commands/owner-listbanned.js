@@ -27,7 +27,7 @@ module.exports = {
             let userMentions = [];
 
             bannedUsers.forEach((userId) => {
-                resultText += `➤ @${userId}\n`;
+                resultText += `➲ @${userId}\n`;
             });
 
             bannedUsers.forEach((userId) => {
