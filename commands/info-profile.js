@@ -42,7 +42,7 @@ module.exports = {
                     "\n" +
                     `➲ Nama: ${senderPushName}\n` +
                     `➲ JID: @${senderNumber}\n` +
-                    `➲ Koin: ${await isOwner(ctx, member) === 1 ? 'Tidak terbatas' : coin}\n` +
+                    `➲ Koin: ${await isOwner(senderNumber) === 1 ? 'Tidak terbatas' : coin}\n` +
                     "\n" +
                     global.msg.footer,
                 mentions: [senderJid]
