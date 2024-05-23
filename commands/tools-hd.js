@@ -44,7 +44,7 @@ module.exports = {
             });
 
             const response = await axios.get(apiUrl, {
-                timeout: 60000 // 60 seconds timeout
+                timeout: 30000 // 30 seconds timeout
             });
 
             if (response.status !== 200) throw new Error(global.msg.notFound);
