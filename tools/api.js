@@ -11,6 +11,9 @@ const APIs = {
     nyx: {
         baseURL: "https://api.nyx.my.id",
     },
+    ngodingaja: {
+        baseURL: "https://api.ngodingaja.my.id/"
+    },
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com",
     }

@@ -5,12 +5,13 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const fg = require("api-dylux");
 const mime = require("mime-types");
 
 module.exports = {
     name: "ttdl",
-    aliases: ["tt", "vt", "vtdl", "tiktok", "ttnowm", "tiktokdl", "tiktoknowm"],
+    aliases: ["tiktokdl", "tiktokmp3", "tiktoknowm", "tt", "tta", "ttaudio", "ttmp3", "ttmusic", "ttmusik", "vt", "vta", "vtaudio", "vtdltiktok", "vtmp3", "vtmusic", "vtmusik", "vtnowm"],
     category: "downloader",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -28,18 +29,30 @@ module.exports = {
         );
 
         try {
+            const mp3cmd = ["tiktokmp3", "tta", "ttaudio", "ttmp3", "ttmusic", "ttmusik", "vta", "vtaudio", "vtmp3", "vtmusic", "vtmusik"];
+
             const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
             if (!urlRegex.test(input)) throw new Error(global.msg.urlInvalid);
 
             let result;
 
-            const promises = [fg.tiktok(input)];
+            const promises = [
+                axios.get(createAPIUrl("nyx", "/dl/tiktok", {
+                    url: input
+                })).then((response) => response.data),
+                axios.get(createAPIUrl("ngodingaja", "/api/tiktok", {
+                    url: input
+                })).then((response) => response.data),
+                fg.tiktok(input)
+            ];
 
             const results = await Promise.allSettled(promises);
 
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
-                    result = res.value.hdplay || res.value.play;
+                    if (ctx._used.command === mp3cmd) result = res.value.result.musik || res.value.hasil.musik
+
+                    result = res.value.result.video_hd || res.value.result.video2 || res.value.result.video1 || res.value.hasil.tanpawm || res.value.hdplay || res.value.play;
                     break;
                 }
             }
@@ -50,7 +63,7 @@ module.exports = {
                 video: {
                     url: result,
                 },
-                mimetype: mime.contentType("mp4"),
+                mimetype: ctx._used.command === mp3cmd ? mime.contentType("mp3") : mime.contentType("mp4"),
                 caption: `❖ ${bold("TT Downloader")}\n` +
                     "\n" +
                     `➲ URL: ${input}\n` +

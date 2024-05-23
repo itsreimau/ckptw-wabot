@@ -1,4 +1,7 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     facebookdl,
     facebookdlv2
 } = require("@bochilteam/scraper");
@@ -7,6 +10,7 @@ const {
     monospace
 } = require("@mengkodingan/ckptw");
 const getFBInfo = require("@xaviabot/fb-downloader");
+const axios = require("axios");
 const fg = require("api-dylux");
 const mime = require("mime-types");
 
@@ -35,13 +39,24 @@ module.exports = {
 
             let result;
 
-            const promises = [getFBInfo(input), fg.fbdl(input), facebookdl(input), facebookdlv2(input)];
+            const promises = [
+                axios.get(createAPIUrl("nyx", "/dl/fb", {
+                    url: input
+                })).then((response) => response.data),
+                axios.get(createAPIUrl("ngodingaja", "/api/fb", {
+                    url: input
+                })).then((response) => response.data),
+                getFBInfo(input),
+                fg.fbdl(input),
+                facebookdl(input),
+                facebookdlv2(input)
+            ];
 
             const results = await Promise.allSettled(promises);
 
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
-                    result = res.value.hd || res.value.sd || res.value.videoUrl || res.value.url;
+                    result = res.value.result.HD || res.value.result.SD || res.value.hasil.url || res.value.hd || res.value.sd || res.value.videoUrl || res.value.url;
                     break;
                 }
             }
@@ -56,7 +71,8 @@ module.exports = {
                 caption: `❖ ${bold("FB Downloader")}\n` +
                     "\n" +
                     `➲ URL: ${input}\n` +
-                    "\n" + global.msg.footer,
+                    "\n" +
+                    global.msg.footer,
                 gifPlayback: false
             });
         } catch (error) {

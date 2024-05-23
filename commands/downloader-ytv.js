@@ -71,7 +71,11 @@ module.exports = {
                             url: url,
                         },
                         mimetype: mime.contentType("mp4"),
-                        caption: `❖ ${bold("YTV")}\n` + "\n" + `➲ Kualitas: ${selectedQuality}\n` + "\n" + global.msg.footer,
+                        caption: `❖ ${bold("YTV")}\n` +
+                            "\n" +
+                            `➲ Kualitas: ${selectedQuality}\n` +
+                            "\n" +
+                            global.msg.footer,
                         gifPlayback: false,
                     });
                     return col.stop();

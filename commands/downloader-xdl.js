@@ -12,8 +12,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "igdl",
-    aliases: ["ig", "instagram"],
+    name: "xdl",
+    aliases: ["twit", "twitdl", "twitdl", "twitterdl"],
     category: "downloader",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -37,23 +37,19 @@ module.exports = {
             let result;
 
             const promises = [
-                axios.get(createAPIUrl("miwudev", "/api/v1/igdl", {
+                axios.get(createAPIUrl("nyx", "/dl/twitter", {
                     url: input
                 })).then((response) => response.data),
-                axios.get(createAPIUrl("nyx", "/dl/ig", {
+                axios.get(createAPIUrl("ngodingaja", "/api/twitter", {
                     url: input
                 })).then((response) => response.data),
-                axios.get(createAPIUrl("ngodingaja", "/api/ig", {
-                    url: input
-                })).then((response) => response.data),
-                instagramdl(input),
             ];
 
             const results = await Promise.allSettled(promises);
 
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
-                    result = res.value.result[0].url || res.value.hasil.download_link || res.value.result || res.value.url;
+                    result = res.value.result.media[0].videos[0].url || res.value.hasil.HD || res.value.hasil.SD;
                     break;
                 }
             }

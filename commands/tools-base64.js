@@ -1,3 +1,8 @@
+const {
+    bold,
+    monospace
+} = require("@mengkodingan/ckptw");
+
 module.exports = {
     name: "base64",
     category: "tools",

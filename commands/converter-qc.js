@@ -13,6 +13,7 @@ const {
 
 module.exports = {
     name: "qc",
+    aliases: ["bubblechat"],
     category: "converter",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -32,10 +33,6 @@ module.exports = {
         try {
             if (input.length > 10000) throw new Error("Maksimal 50 kata!");
 
-            const apiUrl = createAPIUrl("https://quote.btch.bz", "/generate", {
-                text: input
-            });
-
             let profilePicture;
             try {
                 profilePicture = await ctx._client.profilePictureUrl(ctx._sender.jid, "image");
@@ -43,36 +40,13 @@ module.exports = {
                 profilePicture = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
 
-            const object = {
-                type: "quote",
-                format: "png",
-                backgroundColor: "#000000",
-                width: 512,
-                height: 768,
-                scale: 2,
-                messages: [{
-                    entities: [],
-                    avatar: true,
-                    from: {
-                        id: 1,
-                        name: ctx._sender.pushName,
-                        photo: {
-                            url: profilePicture,
-                        },
-                    },
-                    text: input,
-                    replyMessage: {}
-                }]
-            };
-
-            const json = await axios.post(apiUrl, object, {
-                headers: {
-                    "Content-Type": "application/json",
-                }
+            const apiUrl = createAPIUrl("ngodingaja", "/api/bubblechat", {
+                text: input,
+                url: profilePicture,
+                nama: ctx._sender.pushName
             });
 
-            const buffer = Buffer.from(json.data.result.image, "base64");
-            const sticker = new Sticker(buffer, {
+            const sticker = new Sticker(apiUrl, {
                 pack: global.sticker.packname,
                 author: global.sticker.author,
                 type: StickerTypes.FULL,
@@ -84,14 +58,6 @@ module.exports = {
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error("Error:", error);
-
-            let errorMessage;
-            if (error.code === 'EPROTO') {
-                errorMessage = "Terjadi kesalahan pada protokol SSL/TLS.";
-            } else {
-                errorMessage = error.message;
-            }
-
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${errorMessage}`);
         }
     }
