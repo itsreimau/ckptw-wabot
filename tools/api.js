@@ -12,7 +12,7 @@ const APIs = {
         baseURL: "https://api.nyx.my.id",
     },
     ngodingaja: {
-        baseURL: "https://api.ngodingaja.my.id/"
+        baseURL: "https://api.ngodingaja.my.id"
     },
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com",

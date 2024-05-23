@@ -37,26 +37,23 @@ module.exports = {
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ?
-                await download(object, type.slice(0, -7)) :
-                await ctx.getMediaMessage(ctx._msg, "buffer");
-
+            const buffer = type === "imageMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
             const apiUrl = createAPIUrl("ngodingaja", "/api/hd", {
-                url: uplRes
+                url: uplRes.link
             });
 
             const response = await axios.get(apiUrl, {
                 timeout: 60000 // 60 seconds timeout
             });
 
-            if (response.status !== 200 || !response.data.hasil) throw new Error(global.msg.notFound);
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const data = response.data;
+            const data = await response.data;
 
             return await ctx.reply({
                 image: {
-                    url: data.hasil
+                    url: data.hasil,
                 },
                 mimetype: mime.contentType("png"),
                 caption: null
