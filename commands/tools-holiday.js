@@ -4,6 +4,7 @@ const {
 const {
     bold
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 module.exports = {
     name: "holiday",
@@ -22,10 +23,7 @@ module.exports = {
             const apiUrl = createAPIUrl("https://api-harilibur.vercel.app", "/api", {
                 month: month
             });
-            const data = await axios
-                .get(apiUrl)
-                .then((res) => (res.status == 200 ? res.data : null))
-                .catch((err) => null);
+            const data = await axios.get(apiUrl).then((res) => (res.status == 200 ? res.data : null)).catch((err) => null);
 
             if (!data.length) return ctx.reply(`${bold("[ ! ]")} Tidak ada hari libur di bulan ini.`);
 

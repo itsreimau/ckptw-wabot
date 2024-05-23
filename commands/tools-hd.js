@@ -11,6 +11,7 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
+const axios = require("axios");
 const mime = require("mime-types");
 const {
     uploadByBuffer
