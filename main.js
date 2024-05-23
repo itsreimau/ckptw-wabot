@@ -44,6 +44,7 @@ async function connectBot() {
             prefix: global.bot.prefix,
             printQRInTerminal: !global.system.usePairingCode,
             readIncommingMsg: true,
+            usePairingCode: global.system.usePairingCode,
             selfReply: true,
         });
 
