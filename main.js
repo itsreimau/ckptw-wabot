@@ -27,19 +27,11 @@ console.log("Connecting...");
 
 // Create a new bot instance
 const bot = new Client({
-    // Bot
-    name: global.bot.name,
     prefix: global.bot.prefix,
-
-    // QR
-    printQRInTerminal: !global.system.usePairingCode,
-
-    // Pairing Code
-    phoneNumber: global.bot.phoneNumber,
-    usePairingCode: global.system.usePairingCode,
-
-    // General
     readIncommingMsg: true,
+    printQRInTerminal: !global.system.usePairingCode,
+    phoneNumber: phoneNumber,
+    usePairingCode: global.system.usePairingCode,
     selfReply: true
 });
 
@@ -52,9 +44,6 @@ bot.ev.once(Events.ClientReady, (m) => {
     console.log(`Ready at ${m.user.id}`);
     global.system.startTime = Date.now();
 });
-
-// Handle uncaught exceptions
-process.on("uncaughtException", (err) => console.error(err));
 
 // Create command handlers and load commands
 const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
