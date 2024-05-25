@@ -30,7 +30,7 @@ const bot = new Client({
     prefix: global.bot.prefix,
     readIncommingMsg: true,
     printQRInTerminal: !global.system.usePairingCode,
-    phoneNumber: phoneNumber,
+    phoneNumber: global.bot.phoneNumber,
     usePairingCode: global.system.usePairingCode,
     selfReply: true
 });
