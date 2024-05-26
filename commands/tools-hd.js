@@ -39,13 +39,11 @@ module.exports = {
             const object = type ? quotedMessage[type] : null;
             const buffer = type === "imageMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = createAPIUrl("ngodingaja", "/api/hd", {
+            const apiUrl = createAPIUrl("nyx", "/tools/hd", {
                 url: uplRes.link
             });
 
-            const response = await axios.get(apiUrl, {
-                timeout: 30000 // 30 seconds timeout
-            });
+            const response = await axios.get(apiUrl);
 
             if (response.status !== 200) throw new Error(global.msg.notFound);
 
@@ -53,7 +51,7 @@ module.exports = {
 
             return await ctx.reply({
                 image: {
-                    url: data.hasil,
+                    url: apiUrl,
                 },
                 mimetype: mime.contentType("png"),
                 caption: null
