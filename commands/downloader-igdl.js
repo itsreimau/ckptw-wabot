@@ -39,22 +39,47 @@ module.exports = {
             const promises = [
                 axios.get(createAPIUrl("miwudev", "/api/v1/igdl", {
                     url: input
-                })).then((response) => response.data),
+                })).then((response) => ({
+                    source: 'miwudev',
+                    data: response.data
+                })),
                 axios.get(createAPIUrl("nyx", "/dl/ig", {
                     url: input
-                })).then((response) => response.data),
+                })).then((response) => ({
+                    source: 'nyx',
+                    data: response.data
+                })),
                 axios.get(createAPIUrl("ngodingaja", "/api/ig", {
                     url: input
-                })).then((response) => response.data),
-                instagramdl(input),
+                })).then((response) => ({
+                    source: 'ngodingaja',
+                    data: response.data
+                })),
+                instagramdl(input).then((data) => ({
+                    source: 'instagramdl',
+                    data
+                })),
             ];
 
             const results = await Promise.allSettled(promises);
 
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
-                    result = res.value.result[0].url || res.value.hasil.download_link || res.value.result || res.value.url;
-                    break;
+                    switch (res.value.source) {
+                        case 'miwudev':
+                            result = res.value.data.url;
+                            break;
+                        case 'nyx':
+                            result = res.value.data.result[0].url;
+                            break;
+                        case 'ngodingaja':
+                            result = res.value.data.hasil.download_link;
+                            break;
+                        case 'instagramdl':
+                            result = res.value.data.result;
+                            break;
+                    }
+                    if (result) break;
                 }
             }
 

@@ -36,11 +36,20 @@ module.exports = {
             const promises = [
                 axios.get(createAPIUrl("nyx", "/dl/tiktok", {
                     url: input
-                })).then(response => response.data),
+                })).then(response => ({
+                    source: 'nyx',
+                    data: response.data
+                })),
                 axios.get(createAPIUrl("ngodingaja", "/api/tiktok", {
                     url: input
-                })).then(response => response.data),
-                fg.tiktok(input)
+                })).then(response => ({
+                    source: 'ngodingaja',
+                    data: response.data
+                })),
+                fg.tiktok(input).then(data => ({
+                    source: 'fg',
+                    data
+                }))
             ];
 
             const results = await Promise.allSettled(promises);
@@ -48,12 +57,17 @@ module.exports = {
             let result;
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
-                    if (mp3cmd.includes(ctx._used.command)) {
-                        result = res.value.result?.musik || res.value.hasil?.musik;
-                    } else {
-                        result = res.value.result?.video_hd || res.value.result?.video2 || res.value.result?.video1 || res.value.hasil?.tanpawm || res.value.hdplay || res.value.play;
+                    switch (res.value.source) {
+                        case 'nyx':
+                            result = mp3cmd.includes(ctx._used.command) ? res.value.data.result?.musik : res.value.data.result?.video_hd;
+                            break;
+                        case 'ngodingaja':
+                            result = mp3cmd.includes(ctx._used.command) ? res.value.data.hasil?.musik : res.value.data.result?.video2 || res.value.data.result?.video1 || res.value.data.hasil?.tanpawm;
+                            break;
+                        case 'fg':
+                            result = mp3cmd.includes(ctx._used.command) ? res.value.data.play : res.value.data.hdplay;
+                            break;
                     }
-
                     if (result) break;
                 }
             }

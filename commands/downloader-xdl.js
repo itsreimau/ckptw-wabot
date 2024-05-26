@@ -2,9 +2,6 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    instagramdl
-} = require("@bochilteam/scraper");
-const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
@@ -39,18 +36,31 @@ module.exports = {
             const promises = [
                 axios.get(createAPIUrl("nyx", "/dl/twitter", {
                     url: input
-                })).then((response) => response.data),
+                })).then((response) => ({
+                    source: 'nyx',
+                    data: response.data
+                })),
                 axios.get(createAPIUrl("ngodingaja", "/api/twitter", {
                     url: input
-                })).then((response) => response.data),
+                })).then((response) => ({
+                    source: 'ngodingaja',
+                    data: response.data
+                })),
             ];
 
             const results = await Promise.allSettled(promises);
 
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
-                    result = res.value.result.media[0].videos[0].url || res.value.hasil.HD || res.value.hasil.SD;
-                    break;
+                    switch (res.value.source) {
+                        case 'nyx':
+                            result = res.value.data.result.media[0].videos[0].url;
+                            break;
+                        case 'ngodingaja':
+                            result = res.value.data.hasil.HD || res.value.data.hasil.SD;
+                            break;
+                    }
+                    if (result) break;
                 }
             }
 
@@ -61,7 +71,7 @@ module.exports = {
                     url: result,
                 },
                 mimetype: mime.contentType("mp4"),
-                caption: `❖ ${bold("IG Downloader")}\n` +
+                caption: `❖ ${bold("Twitter Downloader")}\n` +
                     "\n" +
                     `➲ URL: ${input}\n` +
                     "\n" +
