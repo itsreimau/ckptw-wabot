@@ -27,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("nyx", "/ai/gpt4", {
+            const apiUrl = createAPIUrl("nyx", "/ai/gpt", {
                 text: input
             });
             const response = await axios.get(apiUrl);

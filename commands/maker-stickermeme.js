@@ -23,7 +23,7 @@ const {
 module.exports = {
     name: "stickermeme",
     aliases: ["smeme", "stikermeme"],
-    category: "converter",
+    category: "maker",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,

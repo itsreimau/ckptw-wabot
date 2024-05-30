@@ -8,9 +8,9 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "translate",
-    aliases: ["tr"],
-    category: "tools",
+    name: "bard",
+    aliases: ["bardai"],
+    category: "ai",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
@@ -19,31 +19,24 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        if (!ctx._args.length) return ctx.reply(
+        const input = ctx._args.join(" ");
+
+        if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo dunia!`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
         );
 
         try {
-            let lang = "id";
-            let inp = ctx._args;
-
-            if (ctx._args.length > 2) {
-                lang = ctx._args[0];
-                inp = ctx._args.slice(1);
-            }
-
-            const apiUrl = createAPIUrl("nyx", "/tools/translate", {
-                text: inp.join(" "),
-                to: lang
+            const apiUrl = createAPIUrl("nyx", "/ai/bard", {
+                text: input
             });
             const response = await axios.get(apiUrl);
 
             if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const data = await response.data;
+            const data = response.data;
 
-            return await ctx.reply(data.result);
+            return ctx.reply(data.result);
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);

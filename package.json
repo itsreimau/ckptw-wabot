@@ -1,6 +1,6 @@
 {
     "name": "ckptw-wabot",
-    "version": "1.21.0",
+    "version": "1.22.0",
     "description": "WhatsApp Bot with @mengkodingan/ckptw.",
     "main": "index.js",
     "directories": {
@@ -26,17 +26,17 @@
     "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
     "dependencies": {
         "@bochilteam/scraper": "^4.2.4",
-        "@mengkodingan/ckptw": "^4.1.0",
-        "@whiskeysockets/baileys": "^6.6.0",
+        "@mengkodingan/ckptw": "^4.1.1",
+        "@whiskeysockets/baileys": "^6.7.2",
         "@xaviabot/fb-downloader": "^1.0.14",
-        "api-dylux": "^1.7.2",
-        "axios": "^1.6.8",
-        "bing-translate-api": "^4.0.1",
+        "api-dylux": "^1.8.4",
+        "axios": "^1.7.2",
+        "bing-translate-api": "^4.0.2",
         "cfonts": "^3.2.0",
         "cheerio": "^1.0.0-rc.12",
         "form-data": "^4.0.0",
         "jimp": "^0.16.13",
-        "jsdom": "^24.0.0",
+        "jsdom": "^24.1.0",
         "link-preview-js": "^3.0.5",
         "lowline.ai": "^1.0.18",
         "mime-types": "^2.1.35",
@@ -45,6 +45,6 @@
         "telegraph-uploader": "^2.0.0",
         "util": "^0.12.5",
         "wa-sticker-formatter": "^4.4.4",
-        "yt-search": "^2.10.4"
+        "yt-search": "^2.11.0"
     }
 }

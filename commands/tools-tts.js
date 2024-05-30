@@ -8,8 +8,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "translate",
-    aliases: ["tr"],
+    name: "tts",
     category: "tools",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -33,7 +32,7 @@ module.exports = {
                 inp = ctx._args.slice(1);
             }
 
-            const apiUrl = createAPIUrl("nyx", "/tools/translate", {
+            const apiUrl = createAPIUrl("nyx", "/tools/tts", {
                 text: inp.join(" "),
                 to: lang
             });
@@ -43,7 +42,14 @@ module.exports = {
 
             const data = await response.data;
 
-            return await ctx.reply(data.result);
+            return await ctx.reply({
+                audio: {
+                    url: data.result,
+                },
+                mimetype: mime.contentType("mp3"),
+                ptt: false,
+            });
+
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);

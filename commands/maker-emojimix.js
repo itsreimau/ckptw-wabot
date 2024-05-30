@@ -12,7 +12,7 @@ const {
 } = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "emix",
+    name: "emojimix",
     aliases: ["emix"],
     category: "maker",
     code: async (ctx) => {

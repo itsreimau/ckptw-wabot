@@ -6,15 +6,10 @@ const {
     monospace
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const {
-    Sticker,
-    StickerTypes
-} = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "qc",
-    aliases: ["bubblechat"],
-    category: "converter",
+    name: "triggered",
+    category: "maker",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
@@ -23,16 +18,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.join(" ");
-
-        if (!input) return ctx.reply(
-            `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} get in the fucking robot, shinji!`)}`
-        );
-
         try {
-            if (input.length > 10000) throw new Error("Maksimal 50 kata!");
-
             let profilePicture;
             try {
                 profilePicture = await ctx._client.profilePictureUrl(ctx._sender.jid, "image");
@@ -40,11 +26,13 @@ module.exports = {
                 profilePicture = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
 
-            const apiUrl = createAPIUrl("ngodingaja", "/api/bubblechat", {
-                text: input,
-                url: profilePicture,
-                nama: ctx._sender.pushName
+            const apiUrl = createAPIUrl("ngodingaja", "/api/triggered", {
+                url: profilePicture
             });
+
+            const response = await axios.get(apiUrl);
+
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
             const sticker = new Sticker(apiUrl, {
                 pack: global.sticker.packname,
@@ -57,8 +45,8 @@ module.exports = {
 
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
-            console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${errorMessage}`);
+            console.error("Error", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };
