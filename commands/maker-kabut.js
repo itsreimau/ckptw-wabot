@@ -45,17 +45,13 @@ module.exports = {
                 url: uplRes.link
             });
 
-
-            const sticker = new Sticker(result, {
-                pack: global.sticker.packname,
-                author: global.sticker.author,
-                type: StickerTypes.FULL,
-                categories: ["🤩", "🎉"],
-                id: ctx.id,
-                quality: 50
+            return await ctx.reply({
+                image: {
+                    url: result,
+                },
+                mimetype: mime.contentType("png"),
+                caption: null
             });
-
-            return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error("Error", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);

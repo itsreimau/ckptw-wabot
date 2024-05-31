@@ -24,8 +24,8 @@ module.exports = {
         await ctx.reply(
             `❖ ${bold("Tebak Kimia")}\n` +
             "\n" +
-            `➲ Lambang: ${data.lambang}\n` +
-            `➲ Bonus: ${coin} Koin\n` +
+            `➲ Lambang: ${data.lambang}` +
+            global.system.useCoin ? `\n➲ Bonus: ${coin} Koin\n` : "\n" +
             `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
             'Ketik "hint" untuk bantuan.\n' +
             "\n" +
@@ -37,18 +37,18 @@ module.exports = {
         });
 
         col.on("collect", async (m) => {
-            if (m.content.toLowerCase() === data.jawaban.toLowerCase()) {
+            if (m.content.toLowerCase() === data.unsur.toLowerCase()) {
                 await session.delete(ctx.id);
-                await global.db.add(`user.${senderNumber}.coin`, coin);
+                if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
                 await ctx.reply(
                     `${bold("[ ! ]")} Benar!\n` +
-                    `+${coin} Koin`
+                    global.system.useCoin ? `\n+${coin} Koin` : ""
                 );
                 return col.stop();
             } else if (m.content.toLowerCase() === "hint") {
-                const clue = data.jawaban.replace(/[AIUEOaiueo]/g, "_");
+                const clue = data.unsur.replace(/[AIUEOaiueo]/g, "_");
                 await ctx.reply(clue);
-            } else if (m.content.toLowerCase().endsWith(data.jawaban.split(" ")[1])) {
+            } else if (m.content.toLowerCase().endsWith(data.unsur.split(" ")[1])) {
                 await ctx.reply("Sedikit lagi!");
             }
         });
@@ -59,7 +59,7 @@ module.exports = {
 
                 return ctx.reply(
                     `Waktu habis!\n` +
-                    `Jawabannya adalah ${data.jawaban}.`
+                    `Jawabannya adalah ${data.unsur}.`
                 );
             }
         });

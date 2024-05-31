@@ -42,7 +42,7 @@ module.exports = {
                 caption: `❖ ${bold("Play")}\n` +
                     "\n" +
                     `➲ Judul: ${yt.title}\n` +
-                    `➲ Deskripsi: ${yt.description}\n` +
+                    `➲ Artis: ${yt.auhor.name}\n` +
                     `➲ Durasi: ${yt.timestamp}\n` +
                     `➲ Diunggah: ${yt.ago}\n` +
                     `➲ Ditonton: ${yt.views.toLocaleString()}\n` +

@@ -27,8 +27,8 @@ module.exports = {
             },
             caption: `❖ ${bold("Tebak Gambar")}\n` +
                 "\n" +
-                `➲ Deskripsi: ${data.soal}\n` +
-                `➲ Bonus: ${coin} Koin\n` +
+                `➲ Deskripsi: ${data.dekripsi}` +
+                global.system.useCoin ? `\n➲ Bonus: ${coin} Koin\n` : "\n" +
                 `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
                 'Ketik "hint" untuk bantuan.\n' +
                 "\n" +
@@ -42,10 +42,10 @@ module.exports = {
         col.on("collect", async (m) => {
             if (m.content.toLowerCase() === data.jawaban.toLowerCase()) {
                 await session.delete(ctx.id);
-                await global.db.add(`user.${senderNumber}.coin`, coin);
+                if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
                 await ctx.reply(
                     `${bold("[ ! ]")} Benar!\n` +
-                    `+${coin} Koin`
+                    global.system.useCoin ? `\n+${coin} Koin` : ""
                 );
                 return col.stop();
             } else if (m.content.toLowerCase() === "hint") {

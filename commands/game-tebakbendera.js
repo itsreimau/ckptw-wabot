@@ -21,33 +21,37 @@ module.exports = {
 
         await session.set(ctx.id, true);
 
-        await ctx.reply(
-            `❖ ${bold("Tebak Bendera")}\n` +
-            "\n" +
-            `➲ Bonus: ${coin} Koin\n` +
-            `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
-            'Ketik "hint" untuk bantuan.\n' +
-            "\n" +
-            global.msg.footer
-        );
+        await ctx.reply({
+            image: {
+                url: data.img,
+            },
+            caption: `❖ ${bold("Tebak Bendera")}\n` +
+                "\n" +
+                global.system.useCoin ? `➲ Bonus: ${coin} Koin\n` : "" +
+                `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
+                'Ketik "hint" untuk bantuan.\n' +
+                "\n" +
+                global.msg.footer
+        });
+
 
         const col = ctx.MessageCollector({
             time: timeout
         });
 
         col.on("collect", async (m) => {
-            if (m.content.toLowerCase() === data.jawaban.toLowerCase()) {
+            if (m.content.toLowerCase() === data.name.toLowerCase()) {
                 await session.delete(ctx.id);
-                await global.db.add(`user.${senderNumber}.coin`, coin);
+                if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
                 await ctx.reply(
-                    `${bold("[ ! ]")} Benar!\n` +
-                    `+${coin} Koin`
+                    `${bold("[ ! ]")} Benar!` +
+                    global.system.useCoin ? `\n+${coin} Koin` : ""
                 );
                 return col.stop();
             } else if (m.content.toLowerCase() === "hint") {
-                const clue = data.jawaban.replace(/[AIUEOaiueo]/g, "_");
+                const clue = data.name.replace(/[AIUEOaiueo]/g, "_");
                 await ctx.reply(clue);
-            } else if (m.content.toLowerCase().endsWith(data.jawaban.split(" ")[1])) {
+            } else if (m.content.toLowerCase().endsWith(data.name.split(" ")[1])) {
                 await ctx.reply("Sedikit lagi!");
             }
         });
@@ -58,7 +62,7 @@ module.exports = {
 
                 return ctx.reply(
                     `Waktu habis!\n` +
-                    `Jawabannya adalah ${data.jawaban}.`
+                    `Jawabannya adalah ${data.name}.`
                 );
             }
         });

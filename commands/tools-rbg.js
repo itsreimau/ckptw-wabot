@@ -49,7 +49,13 @@ module.exports = {
 
             const data = await response.data;
 
-            return await ctx.reply(data.result);
+            return await ctx.reply({
+                image: {
+                    url: data.result,
+                },
+                mimetype: mime.contentType("png"),
+                caption: null
+            });
         } catch (error) {
             console.error("Error", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
