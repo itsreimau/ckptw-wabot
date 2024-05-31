@@ -54,7 +54,7 @@ module.exports = {
                             thumbnailUrl: data.hasil.gambar,
                             sourceUrl: global.bot.groupChat,
                             mediaType: 1,
-                            renderLargerThumbnail: false,
+                            renderLargerThumbnail: true,
                         },
                     },
                 }, {

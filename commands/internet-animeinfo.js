@@ -63,7 +63,7 @@ module.exports = {
                             thumbnailUrl: info.images.jpg.large_image_url,
                             sourceUrl: global.bot.groupChat,
                             mediaType: 1,
-                            renderLargerThumbnail: false,
+                            renderLargerThumbnail: true,
                         },
                     },
                 }, {

@@ -51,7 +51,7 @@ module.exports = {
                             thumbnailUrl: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`,
                             sourceUrl: global.bot.groupChat,
                             mediaType: 1,
-                            renderLargerThumbnail: false,
+                            renderLargerThumbnail: true,
                         },
                     },
                 }, {

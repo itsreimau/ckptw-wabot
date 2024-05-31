@@ -50,7 +50,7 @@ module.exports = {
                             thumbnailUrl: yt.image,
                             sourceUrl: global.bot.groupChat,
                             mediaType: 1,
-                            renderLargerThumbnail: false,
+                            renderLargerThumbnail: true,
                         },
                     },
                 }, {

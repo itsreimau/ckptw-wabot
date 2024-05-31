@@ -51,7 +51,7 @@ module.exports = {
                             thumbnailUrl: profile,
                             sourceUrl: global.bot.groupChat,
                             mediaType: 1,
-                            renderLargerThumbnail: false,
+                            renderLargerThumbnail: true,
                         },
                     },
                 }, {
