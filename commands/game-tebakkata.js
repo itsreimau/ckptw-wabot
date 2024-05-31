@@ -25,7 +25,7 @@ module.exports = {
             `❖ ${bold("Tebak Kata")}\n` +
             "\n" +
             `➲ Soal: ${data.soal}` +
-            global.system.useCoin ? `\n➲ Bonus: ${coin} Koin\n` : "\n" +
+            (global.system.useCoin ? `\n➲ Bonus: ${coin} Koin\n` : "\n") +
             `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
             'Ketik "hint" untuk bantuan.\n' +
             "\n" +
@@ -42,7 +42,7 @@ module.exports = {
                 if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
                 await ctx.reply(
                     `${bold("[ ! ]")} Benar!\n` +
-                    global.system.useCoin ? `\n+${coin} Koin` : ""
+                    (global.system.useCoin ? `\n+${coin} Koin` : "")
                 );
                 return col.stop();
             } else if (m.content.toLowerCase() === "hint") {

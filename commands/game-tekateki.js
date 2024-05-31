@@ -24,7 +24,7 @@ module.exports = {
             `❖ ${bold("Cak Lontong")}\n` +
             "\n" +
             `➲ Soal: ${data.soal}` +
-            global.system.useCoin ? `\n➲ Bonus: ${coin} Koin\n` : "\n" +
+            (global.system.useCoin ? `\n➲ Bonus: ${coin} Koin\n` : "\n") +
             `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
             'Ketik "hint" untuk bantuan.\n' +
             "\n" +
@@ -42,7 +42,7 @@ module.exports = {
                 await ctx.reply(
                     `${bold("[ ! ]")} Benar!\n` +
                     `${data.description}` +
-                    global.system.useCoin ? `\n+${coin} Koin` : "".toString()
+                    (global.system.useCoin ? `\n+${coin} Koin` : "")
                 );
                 return col.stop();
             } else if (m.content.toLowerCase() === "hint") {
