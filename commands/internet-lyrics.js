@@ -9,8 +9,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "lyric",
-    aliases: ["lirik", "lyrics"],
+    name: "lyrics",
+    aliases: ["lirik", "lyric"],
     category: "internet",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -37,20 +37,30 @@ module.exports = {
 
             const data = await response.data;
 
-            return ctx.reply({
-                image: {
-                    url: data.hasil.gambar,
-                },
-                mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Anime Info")}\n` +
-                    "\n" +
-                    `➲ Judul: ${data.hasil.judul}\n` +
-                    `➲ Artis: ${data.hasil.artis}\n` +
-                    "-----\n" +
-                    `${data.hasil.lirik}\n` +
-                    "\n" +
-                    global.msg.footer
-            });
+            return ctx.sendMessage(
+                ctx.id, {
+                    text: `❖ ${bold("Lyrics")}\n` +
+                        "\n" +
+                        `➲ Judul: ${data.hasil.judul}\n` +
+                        `➲ Artis: ${data.hasil.artis}\n` +
+                        "-----\n" +
+                        `${data.hasil.lirik}\n` +
+                        "\n" +
+                        global.msg.footer,
+                    contextInfo: {
+                        externalAdReply: {
+                            title: "L Y R I C S",
+                            body: null,
+                            thumbnailUrl: data.hasil.gambar,
+                            sourceUrl: global.bot.groupChat,
+                            mediaType: 1,
+                            renderLargerThumbnail: false,
+                        },
+                    },
+                }, {
+                    quoted: ctx._msg,
+                }
+            );
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);

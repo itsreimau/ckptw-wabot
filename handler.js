@@ -37,6 +37,9 @@ exports.handler = async (ctx, options) => {
                     const isOwner = await smpl.isOwner(senderNumber);
                     if (isOwner === 1) return false;
 
+                    const isPremium = await global.db.fetch(`user.${senderNumber}.isPremium`);
+                    if (isPremium === 1) return false;
+
                     const requiredCoins = options.coin || 0;
 
                     if (fetchCoin < requiredCoins) return true;

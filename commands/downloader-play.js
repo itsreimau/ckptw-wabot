@@ -34,21 +34,29 @@ module.exports = {
 
             const yt = search.videos[0];
 
-            await ctx.reply({
-                image: {
-                    url: yt.image,
-                },
-                mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Play")}\n` +
-                    "\n" +
-                    `➲ Judul: ${yt.title}\n` +
-                    `➲ Artis: ${yt.auhor.name}\n` +
-                    `➲ Durasi: ${yt.timestamp}\n` +
-                    `➲ Diunggah: ${yt.ago}\n` +
-                    `➲ Ditonton: ${yt.views.toLocaleString()}\n` +
-                    "\n" +
-                    global.msg.footer
-            });
+            await ctx.sendMessage(
+                ctx.id, {
+                    text: `❖ ${bold("Play")}\n` +
+                        "\n" +
+                        `➲ Judul: ${yt.title}\n` +
+                        `➲ Artis: ${yt.author.name}\n` +
+                        `➲ Durasi: ${yt.timestamp}\n` +
+                        "\n" +
+                        global.msg.footer,
+                    contextInfo: {
+                        externalAdReply: {
+                            title: "P L A Y",
+                            body: null,
+                            thumbnailUrl: yt.image,
+                            sourceUrl: global.bot.groupChat,
+                            mediaType: 1,
+                            renderLargerThumbnail: false,
+                        },
+                    },
+                }, {
+                    quoted: ctx._msg,
+                }
+            );
 
             let ytdl;
             try {

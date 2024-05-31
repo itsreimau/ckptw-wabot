@@ -33,20 +33,31 @@ module.exports = {
             const fetchCoin = await global.db.fetch(`user.${senderNumber}.coin`);
             const coin = fetchCoin || '-';
 
-            return await ctx.reply({
-                image: {
-                    url: profile,
-                },
-                mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Profile")}\n` +
-                    "\n" +
-                    `➲ Nama: ${senderPushName}\n` +
-                    `➲ JID: @${senderNumber}\n` +
-                    `➲ Koin: ${await isOwner(senderNumber) === 1 ? 'Tidak terbatas' : coin}\n` +
-                    "\n" +
-                    global.msg.footer,
-                mentions: [senderJid]
-            });
+            return await ctx.sendMessage(
+                ctx.id, {
+                    text: `❖ ${bold("Profile")}\n` +
+                        "\n" +
+                        `➲ Nama: ${senderPushName}\n` +
+                        `➲ JID: @${senderNumber}\n` +
+                        `➲ Premium: ${await isOwner(senderNumber) === 1 || await global.db.fetch(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak"}\n` +
+                        `➲ Koin: ${await isOwner(senderNumber) === 1 || await global.db.fetch(`user.${senderNumber}.isPremium`) ? "Tidak terbatas" : coin}\n` +
+                        "\n" +
+                        global.msg.footer,
+                    mentions: [senderJid]
+                    contextInfo: {
+                        externalAdReply: {
+                            title: "P R O F I L E",
+                            body: null,
+                            thumbnailUrl: profile,
+                            sourceUrl: global.bot.groupChat,
+                            mediaType: 1,
+                            renderLargerThumbnail: false,
+                        },
+                    },
+                }, {
+                    quoted: ctx._msg,
+                }
+            );
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);

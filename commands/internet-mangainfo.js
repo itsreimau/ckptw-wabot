@@ -42,24 +42,34 @@ module.exports = {
             const info = data.data[0];
             const synopsisId = info.synopsis ? await translate(info.synopsis, "en", "id") : null;
 
-            return ctx.reply({
-                image: {
-                    url: info.images.jpg.large_image_url,
-                },
-                mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Manga Info")}\n` +
-                    "\n" +
-                    `➲ Judul: ${info.title}\n` +
-                    `➲ Judul (Inggris): ${info.title_english}\n` +
-                    `➲ Judul (Jepang): ${info.title_japanese}\n` +
-                    `➲ Tipe: ${info.type}\n` +
-                    `➲ Bab: ${info.chapters}\n` +
-                    `➲ Volume: ${info.volumes}\n` +
-                    `➲ Ringkasan: ${synopsisId.translation}\n` +
-                    `➲ URL: ${info.url}\n` +
-                    "\n" +
-                    global.msg.footer
-            });
+            return ctx.sendMessage(
+                ctx.id, {
+                    text: `❖ ${bold("Manga Info")}\n` +
+                        "\n" +
+                        `➲ Judul: ${info.title}\n` +
+                        `➲ Judul (Inggris): ${info.title_english}\n` +
+                        `➲ Judul (Jepang): ${info.title_japanese}\n` +
+                        `➲ Tipe: ${info.type}\n` +
+                        `➲ Bab: ${info.chapters}\n` +
+                        `➲ Volume: ${info.volumes}\n` +
+                        `➲ Ringkasan: ${synopsisId.translation}\n` +
+                        `➲ URL: ${info.url}\n` +
+                        "\n" +
+                        global.msg.footer,
+                    contextInfo: {
+                        externalAdReply: {
+                            title: "M A N G A I N F O",
+                            body: null,
+                            thumbnailUrl: info.images.jpg.large_image_url,
+                            sourceUrl: global.bot.groupChat,
+                            mediaType: 1,
+                            renderLargerThumbnail: false,
+                        },
+                    },
+                }, {
+                    quoted: ctx._msg,
+                }
+            );
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);

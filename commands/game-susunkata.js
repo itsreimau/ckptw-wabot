@@ -24,8 +24,8 @@ module.exports = {
             `❖ ${bold("Susun Kata")}\n` +
             "\n" +
             `➲ Soal: ${data.soal}\n` +
-            `➲ Tipe: ${data.tipe}\n` +
-            (global.system.useCoin ? `\n➲ Bonus: ${coin} Koin\n` : "") +
+            `➲ Tipe: ${data.tipe}` +
+            (global.system.useCoin ? `\n➲ Bonus: ${coin} Koin\n` : "\n") +
             `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
             'Ketik "hint" untuk bantuan.\n' +
             "\n" +

@@ -41,7 +41,7 @@ module.exports = {
                 await session.delete(ctx.id);
                 if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
                 await ctx.reply(
-                    `${bold("[ ! ]")} Benar!\n` +
+                    `${bold("[ ! ]")} Benar!` +
                     (global.system.useCoin ? `\n+${coin} Koin` : "")
                 );
                 return col.stop();

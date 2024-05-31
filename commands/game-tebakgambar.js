@@ -27,7 +27,7 @@ module.exports = {
             },
             caption: `❖ ${bold("Tebak Gambar")}\n` +
                 "\n" +
-                `➲ Deskripsi: ${data.dekripsi}` +
+                `➲ Deskripsi: ${data.deskripsi}` +
                 (global.system.useCoin ? `\n➲ Bonus: ${coin} Koin\n` : "\n") +
                 `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
                 'Ketik "hint" untuk bantuan.\n' +
@@ -44,7 +44,7 @@ module.exports = {
                 await session.delete(ctx.id);
                 if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
                 await ctx.reply(
-                    `${bold("[ ! ]")} Benar!\n` +
+                    `${bold("[ ! ]")} Benar!` +
                     (global.system.useCoin ? `\n+${coin} Koin` : "")
                 );
                 return col.stop();
