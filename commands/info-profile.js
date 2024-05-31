@@ -43,7 +43,7 @@ module.exports = {
                         `➲ Koin: ${await isOwner(ctx, senderNumber) === 1 || await global.db.fetch(`user.${senderNumber}.isPremium`) ? "Tidak terbatas" : coin}\n` +
                         "\n" +
                         global.msg.footer,
-                    mentions: [senderJid]
+                    mentions: [senderJid],
                     contextInfo: {
                         externalAdReply: {
                             title: "P R O F I L E",
