@@ -126,8 +126,8 @@ exports.isBotAdmin = async (ctx) => {
  * @param {number} number - The user number.
  * @returns {number} Returns 1 if the user is the owner, otherwise returns 0.
  */
-exports.isOwner = (number) => {
-    const isOwner = global.owner.number === number || global.owner.co.includes(number);
+exports.isOwner = (ctx, number) => {
+    const isOwner = ctx._client.user.id.split(":")[0] == number || global.owner.number === number || global.owner.co.includes(number);
     return isOwner ? 1 : 0;
 };
 

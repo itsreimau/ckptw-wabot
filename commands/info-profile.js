@@ -39,8 +39,8 @@ module.exports = {
                         "\n" +
                         `➲ Nama: ${senderPushName}\n` +
                         `➲ JID: @${senderNumber}\n` +
-                        `➲ Premium: ${await isOwner(senderNumber) === 1 || await global.db.fetch(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak"}\n` +
-                        `➲ Koin: ${await isOwner(senderNumber) === 1 || await global.db.fetch(`user.${senderNumber}.isPremium`) ? "Tidak terbatas" : coin}\n` +
+                        `➲ Premium: ${await isOwner(ctx, senderNumber) === 1 || await global.db.fetch(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak"}\n` +
+                        `➲ Koin: ${await isOwner(ctx, senderNumber) === 1 || await global.db.fetch(`user.${senderNumber}.isPremium`) ? "Tidak terbatas" : coin}\n` +
                         "\n" +
                         global.msg.footer,
                     mentions: [senderJid]

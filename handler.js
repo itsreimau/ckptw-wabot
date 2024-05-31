@@ -34,7 +34,7 @@ exports.handler = async (ctx, options) => {
 
                     if (!ctx._args.length) return false;
 
-                    const isOwner = await smpl.isOwner(senderNumber);
+                    const isOwner = await smpl.isOwner(ctx, senderNumber);
                     if (isOwner === 1) return false;
 
                     const isPremium = await global.db.fetch(`user.${senderNumber}.isPremium`);
@@ -55,7 +55,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.group,
         },
         owner: {
-            function: async () => (await smpl.isOwner(senderNumber)) === 0,
+            function: async () => (await smpl.isOwner(ctx, senderNumber)) === 0,
             msg: global.msg.owner,
         },
         private: {
