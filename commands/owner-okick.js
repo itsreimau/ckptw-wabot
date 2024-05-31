@@ -19,7 +19,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const senderNumber = senderNumber;
+        const senderNumber = ctx.sender.jid.split("@")[0];
         const senderJid = ctx._sender.jid;
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const member = mentionedJids[0] || null;

@@ -16,7 +16,7 @@ module.exports = {
 
         const input = ctx._args.join(" ");
 
-        const senderNumber = senderNumber;
+        const senderNumber = ctx.sender.jid.split("@")[0];
         const senderJid = ctx._sender.jid;
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid || [];
         const inputUser = `${input}@s.whatsapp.net`;
