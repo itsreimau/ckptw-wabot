@@ -38,7 +38,7 @@ exports.handler = async (ctx, options) => {
                     if (isOwner === 1) return false;
 
                     const isPremium = await global.db.fetch(`user.${senderNumber}.isPremium`);
-                    if (isPremium === 1) return false;
+                    if (isPremium) return false;
 
                     const requiredCoins = options.coin || 0;
 
