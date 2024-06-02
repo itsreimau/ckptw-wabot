@@ -8,7 +8,7 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const Jimp = require("Jimp");
+const Jimp = require("jimp");
 const mime = require("mime-types");
 
 module.exports = {
