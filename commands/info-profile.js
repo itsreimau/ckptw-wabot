@@ -41,13 +41,11 @@ module.exports = {
                     text: `❖ ${bold("Profile")}\n` +
                         "\n" +
                         `➲ Nama: ${senderPushName}\n` +
-                        `➲ JID: @${senderNumber}\n` +
                         `➲ Premium: ${await isOwner(ctx, senderNumber) === 1 || await global.db.get(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak"}\n` +
                         `➲ Koin: ${await isOwner(ctx, senderNumber) === 1 || await global.db.get(`user.${senderNumber}.isPremium`) ? "Tidak terbatas" : coin}\n` +
                         "\n" +
                         global.msg.footer,
                     contextInfo: {
-                        mentions: [senderJid],
                         externalAdReply: {
                             title: "P R O F I L E",
                             body: null,

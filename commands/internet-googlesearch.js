@@ -1,11 +1,10 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    googlesearch
+} = require("../tools/scraper.js");
 const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "googlesearch",
@@ -24,19 +23,14 @@ module.exports = {
         if (!input) return ctx.reply(`${global.msg.argument}\n` + `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`);
 
         try {
-            const apiUrl = createAPIUrl("nyx", "/tools/gsearch", {
-                search: input
-            });
-            const response = await axios.get(apiUrl);
+            const result = await googlesearch(input);
 
-            if (response.status !== 200) throw new Error(global.msg.notFound);
+            if (!result) throw new Error(global.msg.notFound);
 
-            const data = await response.data;
-
-            const resultText = data.map((d) =>
-                `➲ Judul: ${d.title}\n` +
-                `➲ Deskripsi: ${d.description}\n` +
-                `➲ URL: ${d.url}`
+            const resultText = result.map((r) =>
+                `➲ Judul: ${r.title}\n` +
+                `➲ Deskripsi: ${r.snippet}\n` +
+                `➲ URL: ${r.url}`
             ).join("\n-----\n");
             return ctx.reply(
                 `❖ ${bold("Google Search")}\n` +
