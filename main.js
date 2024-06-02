@@ -71,10 +71,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         mentionJids.forEach(async (mentionJid) => {
-            const fetchAFKMention = db.fetch(`user.${mentionJid.split("@")[0]}.afk`);
+            const fetchAFKMention = db.get(`user.${mentionJid.split("@")[0]}.afk`);
             if (fetchAFKMention) {
-                const reason = await db.fetch(`user.${senderNumber}.afk.reason`);
-                const timeStamp = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
+                const reason = await db.get(`user.${senderNumber}.afk.reason`);
+                const timeStamp = await db.get(`user.${senderNumber}.afk.timeStamp`);
                 const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
 
                 ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`);
@@ -83,10 +83,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // AFK handling: Returning from AFK
-    const fetchAFKMessage = await db.fetch(`user.${senderNumber}.afk`);
+    const fetchAFKMessage = await db.get(`user.${senderNumber}.afk`);
     if (fetchAFKMessage) {
-        const reason = await db.fetch(`user.${senderNumber}.afk.reason`);
-        const timeStamp = await db.fetch(`user.${senderNumber}.afk.timeStamp`);
+        const reason = await db.get(`user.${senderNumber}.afk.reason`);
+        const timeStamp = await db.get(`user.${senderNumber}.afk.timeStamp`);
         const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
         await db.delete(`user.${senderNumber}.afk`);
 
@@ -135,7 +135,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Group-specific actions
         if (isGroup) {
-            const fetchAntilink = await db.fetch(`group.${groupNumber}.antilink`);
+            const fetchAntilink = await db.get(`group.${groupNumber}.antilink`);
             if (fetchAntilink) {
                 const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
                 if (m.content && urlRegex.test(m.content)) {
@@ -151,9 +151,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Private messages: Menfess handling
     if (isPrivate) {
-        const fetchMessageDataMenfess = await db.fetch(`menfess.${senderNumber}`);
+        const fetchMessageDataMenfess = await db.get(`menfess.${senderNumber}`);
         if (fetchMessageDataMenfess) {
-            const from = await db.fetch(`menfess.${senderNumber}.from`);
+            const from = await db.get(`menfess.${senderNumber}.from`);
             try {
                 await ctx.sendMessage(`${from}@s.whatsapp.net`, {
                     text: `❖ ${bold("Menfess")}\n` +
@@ -182,7 +182,7 @@ bot.ev.once(Events.UserJoin, async (m) => {
     } = m;
 
     try {
-        const fetchWelcome = await db.fetch(`group.${id.split("@")[0]}.welcome`);
+        const fetchWelcome = await db.get(`group.${id.split("@")[0]}.welcome`);
         if (fetchWelcome) {
             const metadata = await bot.core.groupMetadata(id);
 
@@ -226,7 +226,7 @@ bot.ev.once(Events.UserLeave, async (m) => {
     } = m;
 
     try {
-        const fetchWelcome = await db.fetch(`group.${id.split("@")[0]}.welcome`);
+        const fetchWelcome = await db.get(`group.${id.split("@")[0]}.welcome`);
         if (fetchWelcome) {
             const metadata = await bot.core.groupMetadata(id);
 

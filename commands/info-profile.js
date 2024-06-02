@@ -30,7 +30,7 @@ module.exports = {
             } catch {
                 profile = "https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu";
             }
-            const fetchCoin = await global.db.fetch(`user.${senderNumber}.coin`);
+            const fetchCoin = await global.db.get(`user.${senderNumber}.coin`);
             const coin = fetchCoin || '-';
 
             return await ctx.sendMessage(
@@ -39,12 +39,12 @@ module.exports = {
                         "\n" +
                         `➲ Nama: ${senderPushName}\n` +
                         `➲ JID: @${senderNumber}\n` +
-                        `➲ Premium: ${await isOwner(ctx, senderNumber) === 1 || await global.db.fetch(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak"}\n` +
-                        `➲ Koin: ${await isOwner(ctx, senderNumber) === 1 || await global.db.fetch(`user.${senderNumber}.isPremium`) ? "Tidak terbatas" : coin}\n` +
+                        `➲ Premium: ${await isOwner(ctx, senderNumber) === 1 || await global.db.get(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak"}\n` +
+                        `➲ Koin: ${await isOwner(ctx, senderNumber) === 1 || await global.db.get(`user.${senderNumber}.isPremium`) ? "Tidak terbatas" : coin}\n` +
                         "\n" +
                         global.msg.footer,
-                    mentions: [senderJid],
                     contextInfo: {
+                        mentions: [senderJid],
                         externalAdReply: {
                             title: "P R O F I L E",
                             body: null,

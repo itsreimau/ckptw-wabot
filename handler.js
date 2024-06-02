@@ -15,7 +15,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.admin,
         },
         banned: {
-            function: async () => await global.db.fetch(`user.${senderNumber}.isBanned`),
+            function: async () => await global.db.get(`user.${senderNumber}.isBanned`),
             msg: global.msg.banned,
         },
         botAdmin: {
@@ -25,7 +25,7 @@ exports.handler = async (ctx, options) => {
         coin: {
             function: async () => {
                 if (global.system.useCoin) {
-                    let fetchCoin = await global.db.fetch(`user.${senderNumber}.coin`);
+                    let fetchCoin = await global.db.get(`user.${senderNumber}.coin`);
 
                     if (fetchCoin === undefined) {
                         await global.db.add(`user.${senderNumber}.coin`, 10);
@@ -37,7 +37,7 @@ exports.handler = async (ctx, options) => {
                     const isOwner = await smpl.isOwner(ctx, senderNumber);
                     if (isOwner === 1) return false;
 
-                    const isPremium = await global.db.fetch(`user.${senderNumber}.isPremium`);
+                    const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
                     if (isPremium) return false;
 
                     const requiredCoins = options.coin || 0;
