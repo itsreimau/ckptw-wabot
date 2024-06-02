@@ -33,10 +33,10 @@ module.exports = {
 
             const data = await response.data;
 
-            const resultText = result.map((r) =>
-                `➲ Judul: ${r.title}\n` +
-                `➲ Deskripsi: ${r.description}\n` +
-                `➲ URL: ${r.url}`
+            const resultText = data.map((d) =>
+                `➲ Judul: ${d.title}\n` +
+                `➲ Deskripsi: ${d.description}\n` +
+                `➲ URL: ${d.url}`
             ).join("\n-----\n");
             return ctx.reply(
                 `❖ ${bold("Google Search")}\n` +
