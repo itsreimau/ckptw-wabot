@@ -1,4 +1,7 @@
 const {
+    blurredImageFrame
+} = require("../tools/simple.js");
+const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
@@ -47,7 +50,7 @@ module.exports = {
                         externalAdReply: {
                             title: "P L A Y",
                             body: null,
-                            thumbnailUrl: yt.image,
+                            thumbnailUrl: blurredImageFrame(yt.image) || yt.image,
                             sourceUrl: global.bot.groupChat,
                             mediaType: 1,
                             renderLargerThumbnail: true,

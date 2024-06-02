@@ -1,4 +1,7 @@
 const {
+    blurredImageFrame
+} = require("../tools/simple.js");
+const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
@@ -51,7 +54,7 @@ module.exports = {
                         externalAdReply: {
                             title: "L Y R I C S",
                             body: null,
-                            thumbnailUrl: data.hasil.gambar,
+                            thumbnailUrl: blurredImageFrame(data.hasil.gambar) || data.hasil.gambar,
                             sourceUrl: global.bot.groupChat,
                             mediaType: 1,
                             renderLargerThumbnail: true,

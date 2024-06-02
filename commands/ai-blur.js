@@ -8,7 +8,7 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const jimp = require("jimp");
+const Jimp = require("Jimp");
 const mime = require("mime-types");
 
 module.exports = {
@@ -32,9 +32,9 @@ module.exports = {
             const object = type ? quotedMessage[type] : null;
             const buffer = type === "imageMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             let level = ctx._args[0] || "5";
-            let img = await jimp.read(buffer);
+            let img = await Jimp.read(buffer);
             img.blur(isNaN(level) ? 5 : parseInt(level));
-            img.getBuffer(jimp.MIME_JPEG, async (err, buffer) => {
+            img.getBuffer(Jimp.MIME_JPEG, async (err, buffer) => {
                 if (err) throw new Error("Tidak dapat mengaburkan gambar!");
 
                 return await ctx.reply({
