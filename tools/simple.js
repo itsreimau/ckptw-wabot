@@ -6,7 +6,7 @@ const Jimp = require('jimp');
 /**
  * Function to create a blurred frame around an image.
  * @param {Buffer} image - Buffer containing the image data.
- * @returns {Promise<Buffer>} - Promise resolving to a buffer containing the processed image.
+ * @returns {Promise<Buffer>|null} - Promise resolving to a buffer containing the processed image.
  */
 exports.blurredImageFrame = async (image) => {
     try {
@@ -39,8 +39,8 @@ exports.blurredImageFrame = async (image) => {
 
         return buffer;
     } catch (error) {
-        console.error('Error processing image:', error);
-        throw new Error('Failed to process image.');
+        console.error("Error:", error);
+        return null;
     }
 };
 
