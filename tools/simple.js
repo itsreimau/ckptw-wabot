@@ -2,15 +2,19 @@ const {
     downloadContentFromMessage
 } = require("@whiskeysockets/baileys");
 const Jimp = require('jimp');
+const mime = require("mime-types");
+const {
+    uploadByBuffer
+} = require("telegraph-uploader");
 
 /**
  * Function to create a blurred frame around an image.
- * @param {Buffer} image - Buffer containing the image data.
- * @returns {Promise<Buffer>|null} - Promise resolving to a buffer containing the processed image.
+ * @param {string} imageUrl - URL of the image.
+ * @returns {Promise<Buffer>|null} - Completion promise on image URLs containing processed images.
  */
-exports.blurredImageFrame = async (image) => {
+exports.blurredImageFrame = async (imageUrl) => {
     try {
-        const image = await Jimp.read(image);
+        const image = await Jimp.read(imageUrl);
 
         const canvasWidth = 1280;
         const canvasHeight = 720;
@@ -36,8 +40,9 @@ exports.blurredImageFrame = async (image) => {
         canvas.composite(blurredBackground, -100, -100);
         canvas.composite(image.resize(newWidth, newHeight), xOffset, yOffset);
         const buffer = await canvas.getBufferAsync(Jimp.MIME_PNG);
+        const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
 
-        return buffer;
+        return uplRes.link;
     } catch (error) {
         console.error("Error:", error);
         return null;
