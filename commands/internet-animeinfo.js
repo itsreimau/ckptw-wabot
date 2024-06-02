@@ -63,7 +63,7 @@ module.exports = {
                         externalAdReply: {
                             title: "A N I M E I N F O",
                             body: null,
-                            thumbnailUrl: blurredImageFrame(info.images.jpg.large_image_url) || info.images.jpg.large_image_url,
+                            thumbnailUrl: await blurredImageFrame(info.images.jpg.large_image_url) || info.images.jpg.large_image_url,
                             sourceUrl: global.bot.groupChat,
                             mediaType: 1,
                             renderLargerThumbnail: true,

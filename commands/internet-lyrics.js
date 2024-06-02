@@ -54,7 +54,7 @@ module.exports = {
                         externalAdReply: {
                             title: "L Y R I C S",
                             body: null,
-                            thumbnailUrl: blurredImageFrame(data.hasil.gambar) || data.hasil.gambar,
+                            thumbnailUrl: await blurredImageFrame(data.hasil.gambar) || data.hasil.gambar,
                             sourceUrl: global.bot.groupChat,
                             mediaType: 1,
                             renderLargerThumbnail: true,

@@ -50,7 +50,7 @@ module.exports = {
                         externalAdReply: {
                             title: "P L A Y",
                             body: null,
-                            thumbnailUrl: blurredImageFrame(yt.image) || yt.image,
+                            thumbnailUrl: await blurredImageFrame(yt.image) || yt.image,
                             sourceUrl: global.bot.groupChat,
                             mediaType: 1,
                             renderLargerThumbnail: true,
