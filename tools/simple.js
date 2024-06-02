@@ -10,7 +10,7 @@ const Jimp = require('jimp');
  */
 exports.blurredImageFrame = async (image) => {
     try {
-        const image = await Jimp.read(imageBuffer);
+        const image = await Jimp.read(image);
 
         const canvasWidth = 1280;
         const canvasHeight = 720;
