@@ -24,7 +24,7 @@ module.exports = {
                 },
                 message: {
                     extendedTextMessage: {
-                        text: "Those who hate themselves, cannot love or trust others.",
+                        text: "”Those who hate themselves, cannot love or trust others.”",
                         title: config.bot.name
                     }
                 }

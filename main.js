@@ -13,6 +13,7 @@ const {
     exec
 } = require("child_process");
 const fs = require("fs");
+const mime = require("mime-types");
 const path = require("path");
 const util = require("util");
 
@@ -60,9 +61,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Penanganan pada mode bot
     const botMode = await db.get("bot.mode");
-    if (isPrivate && botMode === "group") return true;
-    if (isGroup && botMode === "private") return true;
-    if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return true;
+    if (isPrivate && botMode === "group") return;
+    if (isGroup && botMode === "private") return;
+    if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return;
 
     // Log pesan masuk
     if (isGroup) {
