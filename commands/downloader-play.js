@@ -37,28 +37,15 @@ module.exports = {
 
             const yt = search.videos[0];
 
-            await ctx.sendMessage(
-                ctx.id, {
-                    text: `❖ ${bold("Play")}\n` +
-                        "\n" +
-                        `➲ Judul: ${yt.title}\n` +
-                        `➲ Artis: ${yt.author.name}\n` +
-                        `➲ Durasi: ${yt.timestamp}\n` +
-                        "\n" +
-                        global.msg.footer,
-                    contextInfo: {
-                        externalAdReply: {
-                            title: "P L A Y",
-                            body: null,
-                            thumbnailUrl: await blurredImageFrame(yt.image) || yt.image,
-                            sourceUrl: global.bot.groupChat,
-                            mediaType: 1,
-                            renderLargerThumbnail: true,
-                        },
-                    },
-                }, {
-                    quoted: ctx._msg,
-                }
+            await ctx.reply(
+                `❖ ${bold("Play")}\n` +
+                "\n" +
+                `➲ Judul: ${yt.title}\n` +
+                `➲ Artis: ${yt.author.name}\n` +
+                `➲ Durasi: ${yt.timestamp}\n` +
+                `➲ URL: ${yt.url}\n` +
+                "\n" +
+                global.msg.footer
             );
 
             let ytdl;

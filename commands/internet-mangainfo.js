@@ -45,33 +45,19 @@ module.exports = {
             const info = data.data[0];
             const synopsisId = info.synopsis ? await translate(info.synopsis, "en", "id") : null;
 
-            return ctx.sendMessage(
-                ctx.id, {
-                    text: `❖ ${bold("Manga Info")}\n` +
-                        "\n" +
-                        `➲ Judul: ${info.title}\n` +
-                        `➲ Judul (Inggris): ${info.title_english}\n` +
-                        `➲ Judul (Jepang): ${info.title_japanese}\n` +
-                        `➲ Tipe: ${info.type}\n` +
-                        `➲ Bab: ${info.chapters}\n` +
-                        `➲ Volume: ${info.volumes}\n` +
-                        `➲ Ringkasan: ${synopsisId.translation}\n` +
-                        `➲ URL: ${info.url}\n` +
-                        "\n" +
-                        global.msg.footer,
-                    contextInfo: {
-                        externalAdReply: {
-                            title: "M A N G A I N F O",
-                            body: null,
-                            thumbnailUrl: await blurredImageFrame(info.images.jpg.large_image_url) || info.images.jpg.large_image_url,
-                            sourceUrl: global.bot.groupChat,
-                            mediaType: 1,
-                            renderLargerThumbnail: true,
-                        },
-                    },
-                }, {
-                    quoted: ctx._msg,
-                }
+            return await ctx.reply(
+                `❖ ${bold("Manga Info")}\n` +
+                "\n" +
+                `➲ Judul: ${info.title}\n` +
+                `➲ Judul (Inggris): ${info.title_english}\n` +
+                `➲ Judul (Jepang): ${info.title_japanese}\n` +
+                `➲ Tipe: ${info.type}\n` +
+                `➲ Bab: ${info.chapters}\n` +
+                `➲ Volume: ${info.volumes}\n` +
+                `➲ Ringkasan: ${synopsisId.translation}\n` +
+                `➲ URL: ${info.url}\n` +
+                "\n" +
+                global.msg.footer
             );
         } catch (error) {
             console.error("Error:", error);

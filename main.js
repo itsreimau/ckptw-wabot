@@ -71,8 +71,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         mentionJids.forEach(async (mentionJid) => {
-            const fetchAFKMention = db.get(`user.${mentionJid.split("@")[0]}.afk`);
-            if (fetchAFKMention) {
+            const getAFKMention = db.get(`user.${mentionJid.split("@")[0]}.afk`);
+            if (getAFKMention) {
                 const reason = await db.get(`user.${senderNumber}.afk.reason`);
                 const timeStamp = await db.get(`user.${senderNumber}.afk.timeStamp`);
                 const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
@@ -83,8 +83,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // AFK handling: Returning from AFK
-    const fetchAFKMessage = await db.get(`user.${senderNumber}.afk`);
-    if (fetchAFKMessage) {
+    const getAFKMessage = await db.get(`user.${senderNumber}.afk`);
+    if (getAFKMessage) {
         const reason = await db.get(`user.${senderNumber}.afk.reason`);
         const timeStamp = await db.get(`user.${senderNumber}.afk.timeStamp`);
         const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
@@ -135,8 +135,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Group-specific actions
         if (isGroup) {
-            const fetchAntilink = await db.get(`group.${groupNumber}.antilink`);
-            if (fetchAntilink) {
+            const getAntilink = await db.get(`group.${groupNumber}.antilink`);
+            if (getAntilink) {
                 const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
                 if (m.content && urlRegex.test(m.content)) {
                     if ((await smpl.isAdmin(ctx)) === 1) return;
@@ -151,8 +151,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Private messages: Menfess handling
     if (isPrivate) {
-        const fetchMessageDataMenfess = await db.get(`menfess.${senderNumber}`);
-        if (fetchMessageDataMenfess) {
+        const getMessageDataMenfess = await db.get(`menfess.${senderNumber}`);
+        if (getMessageDataMenfess) {
             const from = await db.get(`menfess.${senderNumber}.from`);
             try {
                 await ctx.sendMessage(`${from}@s.whatsapp.net`, {
@@ -182,8 +182,8 @@ bot.ev.once(Events.UserJoin, async (m) => {
     } = m;
 
     try {
-        const fetchWelcome = await db.get(`group.${id.split("@")[0]}.welcome`);
-        if (fetchWelcome) {
+        const getWelcome = await db.get(`group.${id.split("@")[0]}.welcome`);
+        if (getWelcome) {
             const metadata = await bot.core.groupMetadata(id);
 
             for (const jid of participants) {
@@ -226,8 +226,8 @@ bot.ev.once(Events.UserLeave, async (m) => {
     } = m;
 
     try {
-        const fetchWelcome = await db.get(`group.${id.split("@")[0]}.welcome`);
-        if (fetchWelcome) {
+        const getWelcome = await db.get(`group.${id.split("@")[0]}.welcome`);
+        if (getWelcome) {
             const metadata = await bot.core.groupMetadata(id);
 
             for (const jid of participants) {

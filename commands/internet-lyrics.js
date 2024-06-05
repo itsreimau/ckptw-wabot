@@ -40,29 +40,15 @@ module.exports = {
 
             const data = await response.data;
 
-            return ctx.sendMessage(
-                ctx.id, {
-                    text: `❖ ${bold("Lyrics")}\n` +
-                        "\n" +
-                        `➲ Judul: ${data.hasil.judul}\n` +
-                        `➲ Artis: ${data.hasil.artis}\n` +
-                        "-----\n" +
-                        `${data.hasil.lirik}\n` +
-                        "\n" +
-                        global.msg.footer,
-                    contextInfo: {
-                        externalAdReply: {
-                            title: "L Y R I C S",
-                            body: null,
-                            thumbnailUrl: await blurredImageFrame(data.hasil.gambar) || data.hasil.gambar,
-                            sourceUrl: global.bot.groupChat,
-                            mediaType: 1,
-                            renderLargerThumbnail: true,
-                        },
-                    },
-                }, {
-                    quoted: ctx._msg,
-                }
+            return ctx.reply(
+                `❖ ${bold("Lyrics")}\n` +
+                "\n" +
+                `➲ Judul: ${data.hasil.judul}\n` +
+                `➲ Artis: ${data.hasil.artis}\n` +
+                "-----\n" +
+                `${data.hasil.lirik}\n` +
+                "\n" +
+                global.msg.footer
             );
         } catch (error) {
             console.error("Error:", error);

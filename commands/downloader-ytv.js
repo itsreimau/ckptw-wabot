@@ -39,19 +39,16 @@ module.exports = {
             }
             const qualityOptions = Object.keys(ytdl.video);
 
-            await ctx.reply({
-                image: {
-                    url: ytdl.thumbnail,
-                },
-                mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("YT Video")}\n` +
-                    "\n" +
-                    `➲ Judul: ${ytdl.title}\n` +
-                    `➲ Pilih kualitas:\n` +
-                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
-                    "\n" +
-                    global.msg.footer
-            });
+            await ctx.reply(
+                `❖ ${bold("YT Video")}\n` +
+                "\n" +
+                `➲ Judul: ${ytdl.title}\n` +
+                `➲ URL: ${yt.url}\n` +
+                `➲ Pilih kualitas:\n` +
+                `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
+                "\n" +
+                global.msg.footer
+            );
 
             const col = ctx.MessageCollector({
                 time: 60000, // 1 menit

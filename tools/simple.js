@@ -1,53 +1,6 @@
 const {
     downloadContentFromMessage
 } = require("@whiskeysockets/baileys");
-const Jimp = require('jimp');
-const mime = require("mime-types");
-const {
-    uploadByBuffer
-} = require("telegraph-uploader");
-
-/**
- * Function to create a blurred frame around an image.
- * @param {string} imageUrl - URL of the image.
- * @returns {Promise<Buffer>|null} - Completion promise on image URLs containing processed images.
- */
-exports.blurredImageFrame = async (imageUrl) => {
-    try {
-        const image = await Jimp.read(imageUrl);
-
-        const canvasWidth = 1280;
-        const canvasHeight = 720;
-
-        const aspectRatio = canvasWidth / canvasHeight;
-        const imageAspectRatio = image.bitmap.width / image.bitmap.height;
-
-        let newWidth, newHeight;
-        if (imageAspectRatio > aspectRatio) {
-            newWidth = canvasWidth;
-            newHeight = canvasWidth / imageAspectRatio;
-        } else {
-            newWidth = canvasHeight * imageAspectRatio;
-            newHeight = canvasHeight;
-        }
-
-        const xOffset = (canvasWidth - newWidth) / 2;
-        const yOffset = (canvasHeight - newHeight) / 2;
-
-        const blurredBackground = image.clone().resize(canvasWidth + 200, canvasHeight + 200).blur(50);
-
-        const canvas = new Jimp(canvasWidth, canvasHeight);
-        canvas.composite(blurredBackground, -100, -100);
-        canvas.composite(image.resize(newWidth, newHeight), xOffset, yOffset);
-        const buffer = await canvas.getBufferAsync(Jimp.MIME_PNG);
-        const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-
-        return uplRes.link;
-    } catch (error) {
-        console.error("Error:", error);
-        return null;
-    }
-};
 
 /**
  * Function to check if the user is an admin in the group.

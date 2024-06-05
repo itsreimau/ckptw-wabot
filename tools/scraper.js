@@ -1,6 +1,9 @@
 const {
     createAPIUrl
 } = require("./api.js");
+const {
+    googleIt
+} = require("@bochilteam/scraper");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const FormData = require("form-data");

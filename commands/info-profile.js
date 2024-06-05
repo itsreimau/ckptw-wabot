@@ -33,32 +33,20 @@ module.exports = {
             } catch {
                 profile = "https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu";
             }
-            const fetchCoin = await global.db.get(`user.${senderNumber}.coin`);
-            const coin = fetchCoin || '-';
+            const getCoin = await global.db.get(`user.${senderNumber}.coin`);
+            const coin = getCoin || '-';
 
-            return await ctx.sendMessage(
-                ctx.id, {
-                    text: `❖ ${bold("Profile")}\n` +
-                        "\n" +
-                        `➲ Nama: ${senderPushName}\n` +
-                        `➲ Premium: ${await isOwner(ctx, senderNumber) === 1 || await global.db.get(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak"}\n` +
-                        `➲ Koin: ${await isOwner(ctx, senderNumber) === 1 || await global.db.get(`user.${senderNumber}.isPremium`) ? "Tidak terbatas" : coin}\n` +
-                        "\n" +
-                        global.msg.footer,
-                    contextInfo: {
-                        externalAdReply: {
-                            title: "P R O F I L E",
-                            body: null,
-                            thumbnailUrl: await blurredImageFrame(profile) || profile,
-                            sourceUrl: global.bot.groupChat,
-                            mediaType: 1,
-                            renderLargerThumbnail: true,
-                        },
-                    },
-                }, {
-                    quoted: ctx._msg,
-                }
-            );
+            return await ctx.reply({
+                image: {
+                    url: result,
+                },
+                mimetype: mime.contentType("png"),
+                caption: `❖ ${bold("Pinterest")}\n` +
+                    "\n" +
+                    `➲ Kueri: ${input}\n` +
+                    "\n" +
+                    global.msg.footer
+            });
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);

@@ -25,11 +25,11 @@ exports.handler = async (ctx, options) => {
         coin: {
             function: async () => {
                 if (global.system.useCoin) {
-                    let fetchCoin = await global.db.get(`user.${senderNumber}.coin`);
+                    let getCoin = await global.db.get(`user.${senderNumber}.coin`);
 
-                    if (fetchCoin === undefined) {
+                    if (getCoin === undefined) {
                         await global.db.add(`user.${senderNumber}.coin`, 10);
-                        fetchCoin = 10;
+                        getCoin = 10;
                     }
 
                     if (!ctx._args.length) return false;
@@ -42,7 +42,7 @@ exports.handler = async (ctx, options) => {
 
                     const requiredCoins = options.coin || 0;
 
-                    if (fetchCoin < requiredCoins) return true;
+                    if (getCoin < requiredCoins) return true;
 
                     await global.db.subtract(`user.${senderNumber}.coin`, requiredCoins);
                     return false;
