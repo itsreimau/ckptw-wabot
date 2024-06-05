@@ -45,7 +45,7 @@ module.exports = {
             const info = data.data[0];
             const synopsisId = info.synopsis ? await translate(info.synopsis, "en", "id") : null;
 
-            return await ctx.sendMessage(
+            return await ctx.reply(
                 `❖ ${bold("Anime Info")}\n` +
                 "\n" +
                 `➲ Judul: ${info.title}\n` +

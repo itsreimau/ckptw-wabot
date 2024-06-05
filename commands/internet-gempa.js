@@ -30,34 +30,24 @@ module.exports = {
             const data = await response.data;
             const gempa = data.Infogempa.gempa;
 
-            return ctx.sendMessage(
-                ctx.id, {
-                    text: `❖ ${bold("Gempa")}\n` +
-                        "\n" +
-                        `${gempa.Wilayah}\n` +
-                        "-----\n" +
-                        `➲ Tanggal: ${gempa.Tanggal}\n` +
-                        `➲ Potensi: ${gempa.Potensi}\n` +
-                        `➲ Magnitude: ${gempa.Magnitude}\n` +
-                        `➲ Kedalaman: ${gempa.Kedalaman}\n` +
-                        `➲ Koordinat: ${gempa.Coordinates}\n` +
-                        `➲ Dirasakan: ${gempa.Dirasakan}\n` +
-                        "\n" +
-                        global.msg.footer,
-                    contextInfo: {
-                        externalAdReply: {
-                            title: "G E M P A",
-                            body: null,
-                            thumbnailUrl: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`,
-                            sourceUrl: global.bot.groupChat,
-                            mediaType: 1,
-                            renderLargerThumbnail: true,
-                        },
-                    },
-                }, {
-                    quoted: ctx._msg,
-                }
-            );
+            return ctx.sendMessage({
+                image: {
+                    url: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`,
+                },
+                mimetype: mime.contentType("png"),
+                caption: `❖ ${bold("Gempa")}\n` +
+                    "\n" +
+                    `${gempa.Wilayah}\n` +
+                    "-----\n" +
+                    `➲ Tanggal: ${gempa.Tanggal}\n` +
+                    `➲ Potensi: ${gempa.Potensi}\n` +
+                    `➲ Magnitude: ${gempa.Magnitude}\n` +
+                    `➲ Kedalaman: ${gempa.Kedalaman}\n` +
+                    `➲ Koordinat: ${gempa.Coordinates}\n` +
+                    `➲ Dirasakan: ${gempa.Dirasakan}\n` +
+                    "\n" +
+                    global.msg.footer
+            });
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
