@@ -37,13 +37,13 @@ module.exports = {
                 axios.get(createAPIUrl("nyx", "/dl/twitter", {
                     url: input
                 })).then((response) => ({
-                    source: 'nyx',
+                    source: "nyx",
                     data: response.data
                 })),
                 axios.get(createAPIUrl("ngodingaja", "/api/twitter", {
                     url: input
                 })).then((response) => ({
-                    source: 'ngodingaja',
+                    source: "ngodingaja",
                     data: response.data
                 })),
             ];
@@ -53,10 +53,10 @@ module.exports = {
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
                     switch (res.value.source) {
-                        case 'nyx':
+                        case "nyx":
                             result = res.value.data.result.media[0].videos[0].url;
                             break;
-                        case 'ngodingaja':
+                        case "ngodingaja":
                             result = res.value.data.hasil.HD || res.value.data.hasil.SD;
                             break;
                     }

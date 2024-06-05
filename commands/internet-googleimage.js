@@ -32,10 +32,14 @@ module.exports = {
 
             if (!result) throw new Error(global.msg.notFound);
 
+            const imageUrl = getRandomElement(result);
+            const imageResponse = await axios.get(imageUrl, {
+                responseType: "arraybuffer"
+            });
+            const buffer = Buffer.from(imageResponse.data, "binary");
+
             return await ctx.reply({
-                image: {
-                    url: getRandomElement(result),
-                },
+                image: buffer,
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Google Image")}\n` +
                     "\n" +

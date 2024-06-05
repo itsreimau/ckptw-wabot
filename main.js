@@ -22,10 +22,10 @@ const {
     inspect
 } = require("util");
 
-// Connection message
+// Connection message.
 console.log("Connecting...");
 
-// Create a new bot instance
+// Create a new bot instance.
 const bot = new Client({
     prefix: global.bot.prefix,
     readIncommingMsg: true,
@@ -35,24 +35,24 @@ const bot = new Client({
     selfReply: true
 });
 
-// Create a new database instance
+// Create a new database instance.
 const db = new SimplDB();
 global.db = db;
 
-// Event handling when the bot is ready
+// Event handling when the bot is ready.
 bot.ev.once(Events.ClientReady, (m) => {
     console.log(`Ready at ${m.user.id}`);
     global.system.startTime = Date.now();
 });
 
-// Create command handlers and load commands
+// Create command handlers and load commands.
 const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
 cmd.load();
 
-// Assign global handler
+// Assign global handler.
 global.handler = handler;
 
-// Event handling when a message appears
+// Event handling when a message appears.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const senderNumber = ctx._sender.jid.split("@")[0];
     const senderJid = ctx._sender.jid;
@@ -61,13 +61,13 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
 
-    // Ignore messages sent by the bot itself
+    // Ignore messages sent by the bot itself.
     if (m.key.fromMe) return;
 
-    // Auto-typing simulation for commands
+    // Auto-typing simulation for commands.
     if (smpl.isCmd(m, ctx)) ctx.simulateTyping();
 
-    // AFK handling: Mentioned users
+    // AFK handling: Mentioned users.
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         mentionJids.forEach(async (mentionJid) => {
@@ -82,7 +82,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         });
     }
 
-    // AFK handling: Returning from AFK
+    // AFK handling: Returning from AFK.
     const getAFKMessage = await db.get(`user.${senderNumber}.afk`);
     if (getAFKMessage) {
         const reason = await db.get(`user.${senderNumber}.afk.reason`);
@@ -93,9 +93,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         return ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`);
     }
 
-    // Owner-only commands
+    // Owner-only commands.
     if (smpl.isOwner(ctx, senderNumber) === 1) {
-        // Eval command: Execute JavaScript code
+        // Eval command: Execute JavaScript code.
         if (m.content && m.content.startsWith && (m.content.startsWith("> ") || m.content.startsWith(">> "))) {
             const code = m.content.slice(2);
 
@@ -109,7 +109,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             }
         }
 
-        // Exec command: Execute shell commands
+        // Exec command: Execute shell commands.
         if (m.content && m.content.startsWith && m.content.startsWith("$ ")) {
             const command = m.content.slice(2);
 
@@ -133,7 +133,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             }
         }
 
-        // Group-specific actions
+        // Group-specific actions.
         if (isGroup) {
             const getAntilink = await db.get(`group.${groupNumber}.antilink`);
             if (getAntilink) {
@@ -149,7 +149,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
     }
 
-    // Private messages: Menfess handling
+    // Private messages: Menfess handling.
     if (isPrivate) {
         const getMessageDataMenfess = await db.get(`menfess.${senderNumber}`);
         if (getMessageDataMenfess) {
@@ -174,7 +174,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 });
 
-// Event handling when a user joins a group
+// Event handling when a user joins a group.
 bot.ev.once(Events.UserJoin, async (m) => {
     const {
         id,
@@ -218,7 +218,7 @@ bot.ev.once(Events.UserJoin, async (m) => {
     }
 });
 
-// Event handling when a user leaves a group
+// Event handling when a user leaves a group.
 bot.ev.once(Events.UserLeave, async (m) => {
     const {
         id,
@@ -262,5 +262,5 @@ bot.ev.once(Events.UserLeave, async (m) => {
     }
 });
 
-// Launch the bot
+// Launch the bot.
 bot.launch().catch((error) => console.error("Error:", error));

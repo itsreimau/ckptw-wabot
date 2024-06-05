@@ -48,11 +48,13 @@ module.exports = {
             if (response.status !== 200) throw new Error(global.msg.notFound);
 
             const data = await response.data;
+            const imageResponse = await axios.get(data.result, {
+                responseType: "arraybuffer"
+            });
+            const imageBuffer = Buffer.from(data, "binary");
 
             return await ctx.reply({
-                image: {
-                    url: data.result,
-                },
+                image: imageBuffer,
                 mimetype: mime.contentType("png"),
                 caption: null
             });

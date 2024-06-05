@@ -37,17 +37,17 @@ module.exports = {
                 axios.get(createAPIUrl("nyx", "/dl/tiktok", {
                     url: input
                 })).then(response => ({
-                    source: 'nyx',
+                    source: "nyx",
                     data: response.data
                 })),
                 axios.get(createAPIUrl("ngodingaja", "/api/tiktok", {
                     url: input
                 })).then(response => ({
-                    source: 'ngodingaja',
+                    source: "ngodingaja",
                     data: response.data
                 })),
                 fg.tiktok(input).then(data => ({
-                    source: 'fg',
+                    source: "fg",
                     data
                 }))
             ];
@@ -58,13 +58,13 @@ module.exports = {
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
                     switch (res.value.source) {
-                        case 'nyx':
+                        case "nyx":
                             result = mp3cmd.includes(ctx._used.command) ? res.value.data.result?.musik : res.value.data.result?.video_hd;
                             break;
-                        case 'ngodingaja':
+                        case "ngodingaja":
                             result = mp3cmd.includes(ctx._used.command) ? res.value.data.hasil?.musik : res.value.data.result?.video2 || res.value.data.result?.video1 || res.value.data.hasil?.tanpawm;
                             break;
-                        case 'fg':
+                        case "fg":
                             result = mp3cmd.includes(ctx._used.command) ? res.value.data.play : res.value.data.hdplay;
                             break;
                     }

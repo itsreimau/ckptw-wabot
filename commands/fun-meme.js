@@ -27,10 +27,13 @@ module.exports = {
 
             if (!imageUrl) throw new Error(global.msg.notFound);
 
+            const imageResponse = await axios.get(imageUrl, {
+                responseType: "arraybuffer"
+            });
+            const buffer = Buffer.from(imageResponse.data, "binary");
+
             return ctx.reply({
-                image: {
-                    url: imageUrl,
-                },
+                image: buffer,
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Meme")}\n` +
                     "\n" +

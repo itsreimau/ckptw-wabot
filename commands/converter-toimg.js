@@ -7,6 +7,7 @@ const {
 const {
     bold
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -28,12 +29,14 @@ module.exports = {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = type === "stickerMessage" ? await download(object, type.slice(0, -7)) : null;
-            const img = await webp2png(buffer);
+            const imageUrl = await webp2png(buffer);
+            const response = await axios.get(imageUrl, {
+                responseType: "arraybuffer"
+            });
+            const imgBuffer = Buffer.from(response.data, "binary");
 
-            return ctx.reply({
-                image: {
-                    url: img,
-                },
+            return await ctx.reply({
+                image: buffer,
                 mimetype: mime.contentType("png"),
                 caption: null
             });

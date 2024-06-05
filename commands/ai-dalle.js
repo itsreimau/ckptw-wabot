@@ -31,14 +31,16 @@ module.exports = {
             const apiUrl = createAPIUrl("aemt", `/dalle`, {
                 text: input
             });
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(apiUrl, {
+                responseType: "arraybuffer"
+            });
 
             if (response.status !== 200) throw new Error(global.msg.notFound);
 
+            const buffer = Buffer.from(response.data, "binary");
+
             return await ctx.reply({
-                image: {
-                    url: apiUrl,
-                },
+                image: buffer,
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("DALL·E")}\n` +
                     "\n" +

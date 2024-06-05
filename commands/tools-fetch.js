@@ -58,10 +58,12 @@ module.exports = {
         // Image, GIF, video, PDF, file, text check.
         const contentType = headers["content-type"];
         if (contentType && contentType.startsWith("image/")) {
+            const imageResponse = await axios.get(url, {
+                responseType: "arraybuffer"
+            });
+            const imageBuffer = Buffer.from(imageResponse.data, "binary");
             return ctx.reply({
-                image: {
-                    url: url,
-                },
+                image: imageBuffer,
                 mimetype: mime.contentType("png"),
                 caption: null
             });

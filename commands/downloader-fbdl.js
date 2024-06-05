@@ -43,29 +43,29 @@ module.exports = {
                 axios.get(createAPIUrl("nyx", "/dl/fb", {
                     url: input
                 })).then((response) => ({
-                    source: 'nyx',
+                    source: "nyx",
                     data: response.data
                 })),
                 axios.get(createAPIUrl("ngodingaja", "/api/fb", {
                     url: input
                 })).then((response) => ({
-                    source: 'ngodingaja',
+                    source: "ngodingaja",
                     data: response.data
                 })),
                 getFBInfo(input).then((data) => ({
-                    source: 'getFBInfo',
+                    source: "getFBInfo",
                     data
                 })),
                 fg.fbdl(input).then((data) => ({
-                    source: 'fg',
+                    source: "fg",
                     data
                 })),
                 facebookdl(input).then((data) => ({
-                    source: 'facebookdl',
+                    source: "facebookdl",
                     data
                 })),
                 facebookdlv2(input).then((data) => ({
-                    source: 'facebookdlv2',
+                    source: "facebookdlv2",
                     data
                 }))
             ];
@@ -75,22 +75,22 @@ module.exports = {
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
                     switch (res.value.source) {
-                        case 'nyx':
+                        case "nyx":
                             result = res.value.data.result.HD || res.value.data.result.SD;
                             break;
-                        case 'ngodingaja':
+                        case "ngodingaja":
                             result = res.value.data.hasil.url;
                             break;
-                        case 'getFBInfo':
+                        case "getFBInfo":
                             result = res.value.data.videoUrl;
                             break;
-                        case 'fg':
+                        case "fg":
                             result = res.value.data.hd || res.value.data.sd;
                             break;
-                        case 'facebookdl':
+                        case "facebookdl":
                             result = res.value.data.videoUrl;
                             break;
-                        case 'facebookdlv2':
+                        case "facebookdlv2":
                             result = res.value.data.videoUrl;
                             break;
                     }

@@ -40,23 +40,23 @@ module.exports = {
                 axios.get(createAPIUrl("miwudev", "/api/v1/igdl", {
                     url: input
                 })).then((response) => ({
-                    source: 'miwudev',
+                    source: "miwudev",
                     data: response.data
                 })),
                 axios.get(createAPIUrl("nyx", "/dl/ig", {
                     url: input
                 })).then((response) => ({
-                    source: 'nyx',
+                    source: "nyx",
                     data: response.data
                 })),
                 axios.get(createAPIUrl("ngodingaja", "/api/ig", {
                     url: input
                 })).then((response) => ({
-                    source: 'ngodingaja',
+                    source: "ngodingaja",
                     data: response.data
                 })),
                 instagramdl(input).then((data) => ({
-                    source: 'instagramdl',
+                    source: "instagramdl",
                     data
                 })),
             ];
@@ -66,16 +66,16 @@ module.exports = {
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
                     switch (res.value.source) {
-                        case 'miwudev':
+                        case "miwudev":
                             result = res.value.data.url;
                             break;
-                        case 'nyx':
+                        case "nyx":
                             result = res.value.data.result[0].url;
                             break;
-                        case 'ngodingaja':
+                        case "ngodingaja":
                             result = res.value.data.hasil.download_link;
                             break;
-                        case 'instagramdl':
+                        case "instagramdl":
                             result = res.value.data.result;
                             break;
                     }

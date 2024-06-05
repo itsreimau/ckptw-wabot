@@ -43,7 +43,7 @@ module.exports = {
                 `❖ ${bold("YT Audio")}\n` +
                 "\n" +
                 `➲ Judul: ${ytdl.title}\n` +
-                `➲ URL: ${yt.url}\n` +
+                `➲ URL: ${input}\n` +
                 `➲ Pilih kualitas:\n` +
                 `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
                 "\n" +

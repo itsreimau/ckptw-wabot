@@ -43,16 +43,16 @@ module.exports = {
                 url: uplRes.link
             });
 
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(apiUrl, {
+                responseType: "arraybuffer"
+            });
 
             if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const data = await response.data;
+            const imageBuffer = Buffer.from(response.data, "binary");
 
             return await ctx.reply({
-                image: {
-                    url: apiUrl,
-                },
+                image: imageBuffer,
                 mimetype: mime.contentType("png"),
                 caption: null
             });

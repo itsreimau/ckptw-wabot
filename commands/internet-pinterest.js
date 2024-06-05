@@ -31,10 +31,13 @@ module.exports = {
 
             if (!result) throw new Error(global.msg.notFound);
 
+            const response = await axios.get(result, {
+                responseType: "arraybuffer"
+            });
+            const buffer = Buffer.from(response.data, "binary");
+
             return await ctx.reply({
-                image: {
-                    url: result,
-                },
+                image: buffer,
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Pinterest")}\n` +
                     "\n" +

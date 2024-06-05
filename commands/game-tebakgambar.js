@@ -4,6 +4,8 @@ const {
 const {
     bold
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
+const mime = require("mime-types");
 
 const session = new Map();
 
@@ -21,10 +23,12 @@ module.exports = {
 
         await session.set(ctx.id, true);
 
+        const imgResponse = await axios.get(data.img, {
+            responseType: "arraybuffer"
+        });
+        const imgBuffer = Buffer.from(imgResponse.data, "binary");
         await ctx.reply({
-            image: {
-                url: data.img,
-            },
+            image: imgBuffer,
             caption: `❖ ${bold("Tebak Gambar")}\n` +
                 "\n" +
                 `➲ Deskripsi: ${data.deskripsi}` +

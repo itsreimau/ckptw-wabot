@@ -11,6 +11,7 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -27,23 +28,26 @@ module.exports = {
             const senderPushName = ctx._sender.pushName;
             const senderJid = ctx._sender.jid;
             const senderNumber = ctx._sender.jid.split("@")[0];
-            let profile;
+            const coin = await global.db.get(`user.${senderNumber}.coin`) || "-";
+
+            let profileBuffer;
             try {
                 profile = await ctx._client.profilePictureUrl(senderJid, "image");
             } catch {
                 profile = "https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu";
             }
-            const getCoin = await global.db.get(`user.${senderNumber}.coin`);
-            const coin = getCoin || '-';
+            const profileResponse = await axios.get(profile, {
+                responseType: "arraybuffer"
+            });
+            const profileBuffer = Buffer.from(imgResponse.data, "binary");
 
             return await ctx.reply({
-                image: {
-                    url: result,
-                },
+                image: profileBuffer,
                 mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Pinterest")}\n` +
+                caption: `❖ ${bold("Profile")}\n` +
                     "\n" +
-                    `➲ Kueri: ${input}\n` +
+                    `➲ Nama: ${senderPushName}\n` +
+                    `➲ Koin: ${coin}\n` +
                     "\n" +
                     global.msg.footer
             });
