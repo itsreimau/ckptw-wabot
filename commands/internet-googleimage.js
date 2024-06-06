@@ -5,6 +5,7 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const fg = require("api-dylux");
 const mime = require("mime-types");
 

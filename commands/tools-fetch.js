@@ -58,50 +58,66 @@ module.exports = {
         // Image, GIF, video, PDF, file, text check.
         const contentType = headers["content-type"];
         if (contentType && contentType.startsWith("image/")) {
-            const imageResponse = await axios.get(url, {
+            const imgRes = await axios.get(url, {
                 responseType: "arraybuffer"
             });
-            const imageBuffer = Buffer.from(imageResponse.data, "binary");
+            const imgBuff = Buffer.from(imgRes.data, "binary");
+
             return ctx.reply({
-                image: imageBuffer,
+                image: imgBuff,
                 mimetype: mime.contentType("png"),
                 caption: null
             });
         } else if (contentType === "image/gif") {
+            const gifRes = await axios.get(url, {
+                responseType: "arraybuffer"
+            });
+            const gifBuff = Buffer.from(gifRes.data, "binary");
+
             return ctx.reply({
-                video: {
-                    url: url,
-                },
+                video: gifBuff,
                 mimetype: mime.contentType("gif"),
                 caption: null,
                 gifPlayback: true
             });
         } else if (contentType === "video/mp4") {
+            const vidRes = await axios.get(url, {
+                responseType: "arraybuffer"
+            });
+            const vidBuff = Buffer.from(vidRes.data, "binary");
+
             return ctx.reply({
-                video: {
-                    url: url,
-                },
+                video: vidBuff,
                 mimetype: mime.contentType("mp4"),
                 caption: null,
                 gifPlayback: false
             });
         } else if (contentType === "application/pdf" || url.endsWith(".pdf")) {
+            const pdfRes = await axios.get(url, {
+                responseType: "arraybuffer"
+            });
+            const pdfBuff = Buffer.from(pdfRes.data, "binary");
+
             return ctx.reply({
-                document: {
-                    url: url,
-                },
+                document: pdfBuff,
                 mimetype: mime.contentType("pdf")
             });
         } else if (contentType === "application/octet-stream") {
+            const docRes = await axios.get(url, {
+                responseType: "arraybuffer"
+            });
+            const docBuff = Buffer.from(docRes.data, "binary");
+
             return ctx.reply({
-                document: {
-                    url: url,
-                },
+                document: docBuff,
                 mimetype: mime.contentType("bin")
             });
         } else {
-            console.log("Content-Type:", contentType);
-            return ctx.reply(`➲ Status: ${status}\n` + "➲ Respon:\n" + `${data}`);
+            return ctx.reply(
+                `➲ Status: ${status}\n` +
+                "➲ Respon:\n" +
+                `${data}`
+            );
         }
     }
 };
@@ -114,6 +130,7 @@ async function fetchWithTimeout(
 ) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), options.timeout);
+
     try {
         const response = await axios.get(url, {
             signal: controller.signal
@@ -129,6 +146,7 @@ async function fetchWithTimeout(
 function walkJSON(json, depth, array) {
     const arr = array || [];
     const d = depth || 0;
+
     for (const key in json) {
         arr.push("┊".repeat(d) + (d > 0 ? " " : "") + `*${key}:*`);
         if (typeof json[key] === "object" && json[key] !== null) walkJSON(json[key], d + 1, arr);
@@ -136,5 +154,6 @@ function walkJSON(json, depth, array) {
             arr[arr.length - 1] += " " + json[key];
         }
     }
+
     return arr.join("\n");
 }

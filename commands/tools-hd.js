@@ -49,10 +49,10 @@ module.exports = {
 
             if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const imageBuffer = Buffer.from(response.data, "binary");
+            const imgBuff = Buffer.from(response.data, "binary");
 
             return await ctx.reply({
-                image: imageBuffer,
+                image: imgBuff,
                 mimetype: mime.contentType("png"),
                 caption: null
             });

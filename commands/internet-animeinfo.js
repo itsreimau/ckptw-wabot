@@ -1,7 +1,4 @@
 const {
-    blurredImageFrame
-} = require("../tools/simple.js");
-const {
     createAPIUrl
 } = require("../tools/api.js");
 const {

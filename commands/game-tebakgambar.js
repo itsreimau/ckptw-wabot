@@ -23,12 +23,12 @@ module.exports = {
 
         await session.set(ctx.id, true);
 
-        const imgResponse = await axios.get(data.img, {
+        const imgRes = await axios.get(data.img, {
             responseType: "arraybuffer"
         });
-        const imgBuffer = Buffer.from(imgResponse.data, "binary");
+        const imgBuff = Buffer.from(imgRes.data, "binary");
         await ctx.reply({
-            image: imgBuffer,
+            image: imgBuff,
             caption: `❖ ${bold("Tebak Gambar")}\n` +
                 "\n" +
                 `➲ Deskripsi: ${data.deskripsi}` +

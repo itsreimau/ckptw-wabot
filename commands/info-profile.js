@@ -1,7 +1,4 @@
 const {
-    blurredImageFrame
-} = require("../tools/simple.js");
-const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
@@ -30,19 +27,18 @@ module.exports = {
             const senderNumber = ctx._sender.jid.split("@")[0];
             const coin = await global.db.get(`user.${senderNumber}.coin`) || "-";
 
-            let profileBuffer;
             try {
                 profile = await ctx._client.profilePictureUrl(senderJid, "image");
             } catch {
                 profile = "https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu";
             }
-            const profileResponse = await axios.get(profile, {
+            const imgRes = await axios.get(profile, {
                 responseType: "arraybuffer"
             });
-            const profileBuffer = Buffer.from(imgResponse.data, "binary");
+            const imgBuff = Buffer.from(imgRes.data, "binary");
 
             return await ctx.reply({
-                image: profileBuffer,
+                image: imgBuff,
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Profile")}\n` +
                     "\n" +

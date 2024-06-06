@@ -135,6 +135,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Group-specific actions.
         if (isGroup) {
+            // Antilink handling.
             const getAntilink = await db.get(`group.${groupNumber}.antilink`);
             if (getAntilink) {
                 const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
@@ -149,8 +150,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
     }
 
-    // Private messages: Menfess handling.
+    // Private messages.
     if (isPrivate) {
+        // Menfess handling.
         const getMessageDataMenfess = await db.get(`menfess.${senderNumber}`);
         if (getMessageDataMenfess) {
             const from = await db.get(`menfess.${senderNumber}.from`);
@@ -175,7 +177,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 });
 
 // Event handling when a user joins a group.
-bot.ev.once(Events.UserJoin, async (m) => {
+bot.ev.on(Events.UserJoin, async (m) => {
     const {
         id,
         participants
@@ -219,7 +221,7 @@ bot.ev.once(Events.UserJoin, async (m) => {
 });
 
 // Event handling when a user leaves a group.
-bot.ev.once(Events.UserLeave, async (m) => {
+bot.ev.on(Events.UserLeave, async (m) => {
     const {
         id,
         participants

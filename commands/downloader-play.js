@@ -1,7 +1,4 @@
 const {
-    blurredImageFrame
-} = require("../tools/simple.js");
-const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
