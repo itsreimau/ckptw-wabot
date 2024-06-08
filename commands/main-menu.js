@@ -22,7 +22,7 @@ module.exports = {
             const text = await getMenu(ctx);
 
             if (global.system.useInteractiveMessage) {
-                const messageContent = {
+                const InteractiveMessage = generateWAMessageFromContent(ctx.id, {
                     viewOnceMessage: {
                         message: {
                             messageContextInfo: {
@@ -46,31 +46,29 @@ module.exports = {
                                             name: "quick_reply",
                                             buttonParamsJson: JSON.stringify({
                                                 display_text: "🚀 Uptime",
-                                                id: "/uptime"
+                                                id: `${ctx._used.prefix}uptime`
                                             })
                                         },
                                         {
-                                            name: "cta_url",
-                                            buttonParamsJson: JSON.stringify({
-                                                display_text: "🚻 Group Chat",
-                                                url: global.bot.groupChat,
-                                                merchant_url: global.bot.groupChat
-                                            })
-                                        },
-                                        {
-                                            name: "cta_call",
+                                            name: "quick_reply",
                                             buttonParamsJson: JSON.stringify({
                                                 display_text: "📞 Owner",
-                                                id: `+${global.owner.number}`
+                                                id: `${ctx._used.prefix}owner`
                                             })
-                                        }
+                                        }, {
+                                            name: "cta_url",
+                                            buttonParamsJson: JSON.stringify({
+                                                display_text: "👥 Group Chat",
+                                                url: global.bot.groupChat,
+                                                merchant_url: "https://www.google.ca" // Don't disturb.
+                                            })
+                                        },
                                     ]
                                 })
                             })
                         }
                     }
-                };
-                const InteractiveMessage = generateWAMessageFromContent(ctx.chat, messageContent, {});
+                }, {});
 
                 return await ctx._client.relayMessage(ctx.id, InteractiveMessage.message, {
                     messageId: ctx._msg.key.id

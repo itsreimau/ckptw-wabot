@@ -5,6 +5,10 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
+const {
+    proto,
+    generateWAMessageFromContent
+} = require("@whiskeysockets/baileys");
 const mime = require("mime-types");
 
 module.exports = {
@@ -36,6 +40,46 @@ module.exports = {
             });
             const buffer = Buffer.from(response.data, "binary");
 
+            if (global.system.useInteractiveMessage) {
+                const InteractiveMessage = generateWAMessageFromContent(ctx.id, {
+                    viewOnceMessage: {
+                        message: {
+                            messageContextInfo: {
+                                deviceListMetadata: {},
+                                deviceListMetadataVersion: 2
+                            },
+                            interactiveMessage: proto.Message.InteractiveMessage.create({
+                                body: proto.Message.InteractiveMessage.Body.create({
+                                    text: `❖ ${bold("Pinterest")}\n` +
+                                        "\n" +
+                                        `➲ Kueri: ${input}\n` +
+                                        "\n" +
+                                        global.msg.footer
+                                }),
+                                header: proto.Message.InteractiveMessage.Header.create({
+                                    title: global.bot.name,
+                                    hasMediaAttachment: true,
+                                    imageMessage: await createImageMessage(ctx, buffer)
+                                }),
+                                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                                    buttons: [{
+                                        name: "quick_reply",
+                                        buttonParamsJson: JSON.stringify({
+                                            display_text: "🔄 Again",
+                                            id: `${ctx._used.prefix + ctx._used.command} ${input}`
+                                        })
+                                    }]
+                                })
+                            })
+                        }
+                    }
+                }, {});
+
+                return await ctx._client.relayMessage(ctx.id, InteractiveMessage.message, {
+                    messageId: ctx._msg.key.id
+                });
+            }
+
             return await ctx.reply({
                 image: buffer,
                 mimetype: mime.contentType("png"),
@@ -50,4 +94,18 @@ module.exports = {
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
+};
+
+async function createImageMessage(ctx, image) {
+    const {
+        imageMessage
+    } = await generateWAMessageContent({
+        image: {
+            image
+        }
+    }, {
+        upload: ctx._client.waUploadToServer
+    });
+
+    return imageMessage;
 };
