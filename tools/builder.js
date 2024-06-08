@@ -164,7 +164,15 @@ class InteractiveMessageBuilder {
         });
 
         const messageContent = {
-            interactiveMessage
+            viewOnceMessage: {
+                message: {
+                    messageContextInfo: {
+                        deviceListMetadata: {},
+                        deviceListMetadataVersion: 2
+                    },
+                    interactiveMessage: interactiveMessage
+                }
+            }
         };
 
         return generateWAMessageFromContent(this.ctx.id, messageContent, {});
