@@ -7,6 +7,7 @@ const {
 } = require("@mengkodingan/ckptw");
 const {
     proto,
+    generateWAMessageContent,
     generateWAMessageFromContent
 } = require("@whiskeysockets/baileys");
 const mime = require("mime-types");
