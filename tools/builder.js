@@ -10,7 +10,7 @@ class InteractiveMessageBuilder {
         this.body = null;
         this.footer = null;
         this.header = null;
-        this.buttons = {};
+        this.buttons = [];
     }
 
     addBody(text) {
@@ -159,9 +159,7 @@ class InteractiveMessageBuilder {
             footer: this.footer,
             header: this.header,
             nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                buttons: this.buttons.map(button =>
-                    proto.Message.InteractiveMessage.NativeFlowMessage.Button.create(button)
-                )
+                buttons: this.buttons.map(button => proto.Message.InteractiveMessage.NativeFlowMessage.Button.create(button))
             })
         });
 
