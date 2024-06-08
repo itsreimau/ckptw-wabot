@@ -1,5 +1,8 @@
 const package = require("../package.json");
 const {
+    InteractiveMessageBuilder
+} = require("../tools/builder.js");
+const {
     getMenu
 } = require("../tools/menu.js");
 const {
@@ -18,6 +21,25 @@ module.exports = {
         try {
             const text = await getMenu(ctx);
             const thumbnail = await fg.googleImage("rei ayanami wallpaper");
+
+            if (global.system.useInteractiveMessage) {
+                const InteractiveMessage = new InteractiveMessageBuilder(ctx)
+                    .addBody(text)
+                    .addFooter(global.msg.watermark)
+                    .addHeader({
+                        title: global.bot.name,
+                        subtitle: "Jangan lupa berdonasi agar bot tetap online!",
+                        hasMediaAttachment: false
+                    })
+                    .addQuickReply("Ping", "/ping")
+                    .addUrl("Group Chat", global.bot.groupChat, global.bot.groupChat)
+                    .addCall("Owner", `+${global.owner.number}`)
+                    .build();
+
+                return await ctx._client.relayMessage(ctx.id, InteractiveMessage.message, {
+                    messageId: ctx._msg.key.id
+                });
+            }
 
             return ctx.sendMessage(
                 ctx.id, {

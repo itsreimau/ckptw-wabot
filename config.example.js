@@ -62,5 +62,6 @@ global.system = {
     startTime: null,
     timeZone: "Asia/Jakarta",
     useCoin: true,
-    usePairingCode: true
+    usePairingCode: true,
+    useInteractiveMessage: true // Use it carefully, the possibility of being banned by WhatsApp is very high.
 };
