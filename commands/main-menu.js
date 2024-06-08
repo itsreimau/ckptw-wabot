@@ -1,7 +1,3 @@
-const package = require("../package.json");
-const {
-    InteractiveMessageBuilder
-} = require("../tools/builder.js");
 const {
     getMenu
 } = require("../tools/menu.js");
@@ -11,6 +7,10 @@ const {
 const {
     bold
 } = require("@mengkodingan/ckptw");
+const {
+    proto,
+    generateWAMessageFromContent
+} = require("@whiskeysockets/baileys");
 const fg = require("api-dylux");
 
 module.exports = {
@@ -20,21 +20,57 @@ module.exports = {
     code: async (ctx) => {
         try {
             const text = await getMenu(ctx);
-            const thumbnail = await fg.googleImage("rei ayanami wallpaper");
 
             if (global.system.useInteractiveMessage) {
-                const InteractiveMessage = new InteractiveMessageBuilder(ctx)
-                    .addBody(text)
-                    .addFooter(global.msg.watermark)
-                    .addHeader({
-                        title: global.bot.name,
-                        subtitle: "Jangan lupa berdonasi agar bot tetap online!",
-                        hasMediaAttachment: false
-                    })
-                    .addQuickReply("Ping", "/ping")
-                    .addUrl("Group Chat", global.bot.groupChat, global.bot.groupChat)
-                    .addCall("Owner", `+${global.owner.number}`)
-                    .build();
+                const messageContent = {
+                    viewOnceMessage: {
+                        message: {
+                            messageContextInfo: {
+                                deviceListMetadata: {},
+                                deviceListMetadataVersion: 2
+                            },
+                            interactiveMessage: proto.Message.InteractiveMessage.create({
+                                body: proto.Message.InteractiveMessage.Body.create({
+                                    text: text
+                                }),
+                                footer: proto.Message.InteractiveMessage.Footer.create({
+                                    text: global.msg.footer
+                                }),
+                                header: proto.Message.InteractiveMessage.Header.create({
+                                    title: global.bot.name,
+                                    subtitle: global.msg.watermark,
+                                    hasMediaAttachment: false
+                                }),
+                                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                                    buttons: [{
+                                            name: "quick_reply",
+                                            buttonParamsJson: JSON.stringify({
+                                                display_text: "🚀 Uptime",
+                                                id: "/uptime"
+                                            })
+                                        },
+                                        {
+                                            name: "cta_url",
+                                            buttonParamsJson: JSON.stringify({
+                                                display_text: "🚻 Group Chat",
+                                                url: global.bot.groupChat,
+                                                merchant_url: global.bot.groupChat
+                                            })
+                                        },
+                                        {
+                                            name: "cta_call",
+                                            buttonParamsJson: JSON.stringify({
+                                                display_text: "📞 Owner",
+                                                id: `+${global.owner.number}`
+                                            })
+                                        }
+                                    ]
+                                })
+                            })
+                        }
+                    }
+                };
+                const InteractiveMessage = generateWAMessageFromContent(ctx.chat, messageContent, {});
 
                 return await ctx._client.relayMessage(ctx.id, InteractiveMessage.message, {
                     messageId: ctx._msg.key.id
@@ -48,7 +84,7 @@ module.exports = {
                         externalAdReply: {
                             title: global.msg.watermark,
                             body: null,
-                            thumbnailUrl: getRandomElement(thumbnail) || global.bot.thumbnail,
+                            thumbnailUrl: global.bot.thumbnail,
                             sourceUrl: global.bot.groupChat,
                             mediaType: 1,
                             renderLargerThumbnail: true,
