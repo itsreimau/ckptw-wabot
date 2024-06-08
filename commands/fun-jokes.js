@@ -53,7 +53,7 @@ module.exports = {
                                     buttons: [{
                                         name: "quick_reply",
                                         buttonParamsJson: JSON.stringify({
-                                            display_text: "🔄 Again",
+                                            display_text: "Again 🔄",
                                             id: ctx._used.prefix + ctx._used.command
                                         })
                                     }]

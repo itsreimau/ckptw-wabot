@@ -63,13 +63,13 @@ module.exports = {
                                 header: proto.Message.InteractiveMessage.Header.create({
                                     title: global.bot.name,
                                     hasMediaAttachment: true,
-                                    imageMessage: await createImageMessage(ctx, buffer)
+                                    imageMessage: await createImageMessage(ctx, imageUrl)
                                 }),
                                 nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
                                     buttons: [{
                                         name: "quick_reply",
                                         buttonParamsJson: JSON.stringify({
-                                            display_text: "🔄 Again",
+                                            display_text: "Again 🔄",
                                             id: `${ctx._used.prefix + ctx._used.command} ${input}`
                                         })
                                     }]

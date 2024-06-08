@@ -45,21 +45,21 @@ module.exports = {
                                     buttons: [{
                                             name: "quick_reply",
                                             buttonParamsJson: JSON.stringify({
-                                                display_text: "🚀 Uptime",
+                                                display_text: "Uptime 🚀",
                                                 id: `${ctx._used.prefix}uptime`
                                             })
                                         },
                                         {
                                             name: "quick_reply",
                                             buttonParamsJson: JSON.stringify({
-                                                display_text: "📞 Owner",
+                                                display_text: "Owner 📞",
                                                 id: `${ctx._used.prefix}owner`
                                             })
                                         }, {
                                             name: "cta_url",
                                             buttonParamsJson: JSON.stringify({
-                                                display_text: "👥 Group Chat",
-                                                url: global.bot.groupChat,
+                                                display_text: "Website 🌐",
+                                                url: "https://itsreimau.is-a.dev",
                                                 merchant_url: "https://www.google.ca" // Don't disturb.
                                             })
                                         },
