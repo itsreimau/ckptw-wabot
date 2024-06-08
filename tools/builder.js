@@ -10,7 +10,7 @@ class InteractiveMessageBuilder {
         this.body = null;
         this.footer = null;
         this.header = null;
-        this.buttons = [];
+        this.buttons = {};
     }
 
     addBody(text) {
