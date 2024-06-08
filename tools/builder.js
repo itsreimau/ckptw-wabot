@@ -154,15 +154,17 @@ class InteractiveMessageBuilder {
     build() {
         if (!this.body) throw new Error("Body is required to build the message");
 
-        const messageContent = {
-            interactiveMessage: proto.Message.InteractiveMessage.create({
-                body: this.body,
-                footer: this.footer,
-                header: this.header,
-                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
-                    buttons: this.buttons.map(button => proto.Message.InteractiveMessage.NativeFlowMessage.Button.create(button))
-                })
+        const interactiveMessage = proto.Message.InteractiveMessage.create({
+            body: this.body,
+            footer: this.footer,
+            header: this.header,
+            nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+                buttons: this.buttons.map(button => proto.Message.InteractiveMessage.NativeFlowMessage.Button.create(button))
             })
+        });
+
+        const messageContent = {
+            interactiveMessage
         };
 
         return generateWAMessageFromContent(this.ctx.id, messageContent, {});
