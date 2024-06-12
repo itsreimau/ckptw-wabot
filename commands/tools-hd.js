@@ -43,6 +43,8 @@ module.exports = {
                 url: uplRes.link
             });
 
+            const response = await axios.get(apiUrl);
+
             if (response.status !== 200) throw new Error(global.msg.notFound);
 
             return await ctx.reply({
