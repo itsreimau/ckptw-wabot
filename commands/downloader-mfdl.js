@@ -58,7 +58,7 @@ module.exports = {
                             result = res.value.data.data.response.link;
                             break;
                         case "mediafiredl":
-                            result = res.value.data.url; || res.value.data.url2;
+                            result = res.value.data.url || res.value.data.url2;
                             break;
                     }
                     if (result) break;

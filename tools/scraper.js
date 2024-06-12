@@ -87,32 +87,6 @@ exports.coingecko = async (search) => {
     }
 };
 
-/**
- * Download a GitHub repository in ZIP format.
- * @param {string} owner The username of the repository owner.
- * @param {string} repo The name of the repository.
- * @returns {Promise<Buffer>|null} A buffer containing the ZIP data of the repository.
- */
-exports.github = async (owner, repo) => {
-    const apiUrl = createAPIUrl("https://api.github.com", `/repos/${owner}/${repo}/zipball/master`, {});
-
-    try {
-        const response = await axios({
-            method: "GET",
-            url: apiUrl,
-            responseType: "arraybuffer",
-            headers: {
-                "User-Agent": "Node.js",
-            },
-        });
-
-        return response.data;
-    } catch (error) {
-        console.error("Error:", error);
-        return null;
-    }
-};
-
 /*
  * Perform text search using Google or similar API.
  * @param {string} text - The text to be searched.

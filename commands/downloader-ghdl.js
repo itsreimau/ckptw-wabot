@@ -1,6 +1,7 @@
 const {
-    github
-} = require("../tools/scraper.js");
+    createAPIUrl
+} = require("./api.js");
+const axios = require("axios");
 const {
     bold,
     monospace
@@ -32,12 +33,21 @@ module.exports = {
 
             const [_, user, repo] = input.match(urlRegex) || [];
             const repoName = repo.replace(/.git$/, "");
-            const result = await github(user, repoName);
+            const apiUrl = createAPIUrl("https://api.github.com", `/repos/${owner}/${repo}/zipball/master`, {});
 
-            if (!result) throw new Error(global.msg.notFound);
+            const response = await axios({
+                method: "GET",
+                url: apiUrl,
+                responseType: "arraybuffer",
+                headers: {
+                    "User-Agent": "Node.js",
+                },
+            });
+
+            if (response.status !== 200) throw new Error(global.msg.notFound);
 
             return ctx.reply({
-                document: result,
+                document: response.data,
                 mimetype: mime.contentType("zip")
             });
         } catch (error) {
