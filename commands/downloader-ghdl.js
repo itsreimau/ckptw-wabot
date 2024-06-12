@@ -1,6 +1,6 @@
 const {
     createAPIUrl
-} = require("./api.js");
+} = require("../tools/api.js");
 const axios = require("axios");
 const {
     bold,
