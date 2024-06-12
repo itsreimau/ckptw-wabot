@@ -30,13 +30,11 @@ module.exports = {
             const object = type ? quotedMessage[type] : null;
             const buffer = type === "stickerMessage" ? await download(object, type.slice(0, -7)) : null;
             const imgUrl = await webp2png(buffer);
-            const imgRes = await axios.get(imgUrl, {
-                responseType: "arraybuffer"
-            });
-            const imgBuff = Buffer.from(imgRes.data, "binary");
 
             return await ctx.reply({
-                image: imgBuff,
+                image: {
+                    url: imgUrl
+                },
                 mimetype: mime.contentType("png"),
                 caption: null
             });

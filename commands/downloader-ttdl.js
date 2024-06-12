@@ -34,10 +34,10 @@ module.exports = {
             if (!urlRegex.test(input)) throw new Error(global.msg.urlInvalid);
 
             const promises = [
-                axios.get(createAPIUrl("nyx", "/dl/tiktok", {
+                axios.get(createAPIUrl("nyxs", "/dl/tiktok", {
                     url: input
                 })).then(response => ({
-                    source: "nyx",
+                    source: "nyxs",
                     data: response.data
                 })),
                 axios.get(createAPIUrl("ngodingaja", "/api/tiktok", {
@@ -58,7 +58,7 @@ module.exports = {
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
                     switch (res.value.source) {
-                        case "nyx":
+                        case "nyxs":
                             result = mp3cmd.includes(ctx._used.command) ? res.value.data.result?.musik : res.value.data.result?.video_hd;
                             break;
                         case "ngodingaja":

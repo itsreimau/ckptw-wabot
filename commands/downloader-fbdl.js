@@ -40,10 +40,10 @@ module.exports = {
             let result;
 
             const promises = [
-                axios.get(createAPIUrl("nyx", "/dl/fb", {
+                axios.get(createAPIUrl("nyxs", "/dl/fb", {
                     url: input
                 })).then((response) => ({
-                    source: "nyx",
+                    source: "nyxs",
                     data: response.data
                 })),
                 axios.get(createAPIUrl("ngodingaja", "/api/fb", {
@@ -75,7 +75,7 @@ module.exports = {
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
                     switch (res.value.source) {
-                        case "nyx":
+                        case "nyxs":
                             result = res.value.data.result.HD || res.value.data.result.SD;
                             break;
                         case "ngodingaja":

@@ -48,7 +48,7 @@ module.exports = {
             const object = type ? quotedMessage[type] : null;
             const buffer = type === "imageMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = createAPIUrl("nyx", `/ai/bardimg`, {
+            const apiUrl = createAPIUrl("nyxs", `/ai/bardimg`, {
                 text: input,
                 url: uplRes.link
             });

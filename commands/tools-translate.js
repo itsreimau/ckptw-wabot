@@ -33,7 +33,7 @@ module.exports = {
                 inp = ctx._args.slice(1);
             }
 
-            const apiUrl = createAPIUrl("nyx", "/tools/translate", {
+            const apiUrl = createAPIUrl("nyxs", "/tools/translate", {
                 text: inp.join(" "),
                 to: lang
             });

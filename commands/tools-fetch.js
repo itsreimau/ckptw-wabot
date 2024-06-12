@@ -32,10 +32,10 @@ module.exports = {
 
         let response;
         try {
-            const fetchPromise = fetchWithTimeout(url);
-            response = await fetchPromise;
-
-            if (response.status !== 200) return ctx.reply(`${response.statusText} (${response.status})`);
+            response = await fetchWithTimeout(url);
+            if (response.status !== 200) {
+                return ctx.reply(`${response.statusText} (${response.status})`);
+            }
         } catch (error) {
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
@@ -58,76 +58,58 @@ module.exports = {
         // Image, GIF, video, PDF, file, text check.
         const contentType = headers["content-type"];
         if (contentType && contentType.startsWith("image/")) {
-            const imgRes = await axios.get(url, {
-                responseType: "arraybuffer"
-            });
-            const imgBuff = Buffer.from(imgRes.data, "binary");
-
             return ctx.reply({
-                image: imgBuff,
-                mimetype: mime.contentType("png"),
+                image: {
+                    url
+                },
+                mimetype: mime.contentType(contentType),
                 caption: null
             });
         } else if (contentType === "image/gif") {
-            const gifRes = await axios.get(url, {
-                responseType: "arraybuffer"
-            });
-            const gifBuff = Buffer.from(gifRes.data, "binary");
-
             return ctx.reply({
-                video: gifBuff,
+                video: {
+                    url
+                },
                 mimetype: mime.contentType("gif"),
                 caption: null,
                 gifPlayback: true
             });
         } else if (contentType === "video/mp4") {
-            const vidRes = await axios.get(url, {
-                responseType: "arraybuffer"
-            });
-            const vidBuff = Buffer.from(vidRes.data, "binary");
-
             return ctx.reply({
-                video: vidBuff,
+                video: {
+                    url
+                },
                 mimetype: mime.contentType("mp4"),
                 caption: null,
                 gifPlayback: false
             });
         } else if (contentType === "application/pdf" || url.endsWith(".pdf")) {
-            const pdfRes = await axios.get(url, {
-                responseType: "arraybuffer"
-            });
-            const pdfBuff = Buffer.from(pdfRes.data, "binary");
-
             return ctx.reply({
-                document: pdfBuff,
+                document: {
+                    url
+                },
                 mimetype: mime.contentType("pdf")
             });
         } else if (contentType === "application/octet-stream") {
-            const docRes = await axios.get(url, {
-                responseType: "arraybuffer"
-            });
-            const docBuff = Buffer.from(docRes.data, "binary");
-
             return ctx.reply({
-                document: docBuff,
+                document: {
+                    url
+                },
                 mimetype: mime.contentType("bin")
             });
         } else {
             return ctx.reply(
                 `➲ Status: ${status}\n` +
                 "➲ Respon:\n" +
-                `${data}`
+                `${typeof data === "object" ? JSON.stringify(data, null, 2) : data}`
             );
         }
     }
 };
 
-async function fetchWithTimeout(
-    url,
-    options = {
-        timeout: 10000,
-    }
-) {
+async function fetchWithTimeout(url, options = {
+    timeout: 10000
+}) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), options.timeout);
 
@@ -143,17 +125,14 @@ async function fetchWithTimeout(
     }
 }
 
-function walkJSON(json, depth, array) {
-    const arr = array || [];
-    const d = depth || 0;
-
+function walkJSON(json, depth = 0, array = []) {
     for (const key in json) {
-        arr.push("┊".repeat(d) + (d > 0 ? " " : "") + `*${key}:*`);
-        if (typeof json[key] === "object" && json[key] !== null) walkJSON(json[key], d + 1, arr);
-        else {
-            arr[arr.length - 1] += " " + json[key];
+        array.push("┊".repeat(depth) + (depth > 0 ? " " : "") + `*${key}:*`);
+        if (typeof json[key] === "object" && json[key] !== null) {
+            walkJSON(json[key], depth + 1, array);
+        } else {
+            array[array.length - 1] += " " + json[key];
         }
     }
-
-    return arr.join("\n");
+    return array.join("\n");
 }

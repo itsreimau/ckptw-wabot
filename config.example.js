@@ -11,11 +11,11 @@ global.apiKey = {
 
 // Bot.
 global.bot = {
-    name: "Rei Ayanami",
+    name: "CKPTW",
     prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
     phoneNumber: "628xxxxxxxxxx", // Ignore if you use QR code for authentication.
-    thumbnail: "https://userstyles.org/style_screenshots/261795_after.jpeg?r=1715414479",
-    groupChat: "https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs"
+    thumbnail: "https://e1.pxfuel.com/desktop-wallpaper/943/672/desktop-wallpaper-whatsapp-bot-what-is-it-and-how-to-use-messenger-chatbots-chatbot.jpg",
+    groupChat: "https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs" // Don't forget to join, friends!
 };
 
 // MSG (Message).
@@ -31,7 +31,7 @@ global.msg = {
 
     // Command interface.
     watermark: `${package.name}@^${package.version}`,
-    footer: quote("Dibuat oleh ItsReimau | Take care of yourself."),
+    footer: quote("Created by ItsReimau."),
     readmore: "\u200E".repeat(4001),
 
     // Command process.
@@ -45,16 +45,16 @@ global.msg = {
 
 // Owner & CoOwner.
 global.owner = {
-    name: "ItsReimau",
-    number: "6283838039693",
-    organization: "Kumaha Aing",
-    co: ["6282191385540"]
+    name: "John Doe",
+    number: "628xxxxxxxxxx",
+    organization: "jdoe.org",
+    co: ["628xxxxxxxxxx"]
 };
 
 // Sticker.
 global.sticker = {
-    packname: "Take care of yourself.",
-    author: "@rei-ayanami"
+    packname: "Stiker ini dibuat oleh",
+    author: "@ckptw-wabot"
 };
 
 // System.
@@ -62,6 +62,5 @@ global.system = {
     startTime: null,
     timeZone: "Asia/Jakarta",
     useCoin: true,
-    usePairingCode: true,
-    useInteractiveMessage: true // Use it carefully, the possibility of being banned by WhatsApp is very high.
+    usePairingCode: true
 };

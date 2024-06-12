@@ -34,10 +34,10 @@ module.exports = {
             let result;
 
             const promises = [
-                axios.get(createAPIUrl("nyx", "/dl/twitter", {
+                axios.get(createAPIUrl("nyxs", "/dl/twitter", {
                     url: input
                 })).then((response) => ({
-                    source: "nyx",
+                    source: "nyxs",
                     data: response.data
                 })),
                 axios.get(createAPIUrl("ngodingaja", "/api/twitter", {
@@ -46,6 +46,12 @@ module.exports = {
                     source: "ngodingaja",
                     data: response.data
                 })),
+                axios.get(createAPIUrl("ssa", "/api/twitter", {
+                    url: input
+                })).then((response) => ({
+                    source: "ssa",
+                    data: response.data
+                }))
             ];
 
             const results = await Promise.allSettled(promises);
@@ -53,11 +59,14 @@ module.exports = {
             for (const res of results) {
                 if (res.status === "fulfilled" && res.value) {
                     switch (res.value.source) {
-                        case "nyx":
+                        case "nyxs":
                             result = res.value.data.result.media[0].videos[0].url;
                             break;
                         case "ngodingaja":
                             result = res.value.data.hasil.HD || res.value.data.hasil.SD;
+                            break;
+                        case "ssa":
+                            result = res.value.data.data.response.video_hd || res.value.data.data.response.video_sd;
                             break;
                     }
                     if (result) break;

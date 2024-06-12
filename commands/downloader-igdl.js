@@ -43,10 +43,10 @@ module.exports = {
                     source: "miwudev",
                     data: response.data
                 })),
-                axios.get(createAPIUrl("nyx", "/dl/ig", {
+                axios.get(createAPIUrl("nyxs", "/dl/ig", {
                     url: input
                 })).then((response) => ({
-                    source: "nyx",
+                    source: "nyxs",
                     data: response.data
                 })),
                 axios.get(createAPIUrl("ngodingaja", "/api/ig", {
@@ -69,7 +69,7 @@ module.exports = {
                         case "miwudev":
                             result = res.value.data.url;
                             break;
-                        case "nyx":
+                        case "nyxs":
                             result = res.value.data.result[0].url;
                             break;
                         case "ngodingaja":

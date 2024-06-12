@@ -39,20 +39,16 @@ module.exports = {
             const object = type ? quotedMessage[type] : null;
             const buffer = type === "imageMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = createAPIUrl("nyx", "/tools/hd", {
+            const apiUrl = createAPIUrl("nyxs", "/tools/hd", {
                 url: uplRes.link
-            });
-
-            const response = await axios.get(apiUrl, {
-                responseType: "arraybuffer"
             });
 
             if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const imgBuff = Buffer.from(response.data, "binary");
-
             return await ctx.reply({
-                image: imgBuff,
+                image: {
+                    url: apiUrl
+                },
                 mimetype: mime.contentType("png"),
                 caption: null
             });

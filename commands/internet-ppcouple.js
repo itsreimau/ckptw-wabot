@@ -28,25 +28,17 @@ module.exports = {
 
             const data = await response.data;
 
-            const maleUrl = data.male;
-            const maleResponse = await axios.get(maleUrl, {
-                responseType: "arraybuffer"
-            });
-            const maleBuffer = Buffer.from(maleResponse.data, "binary");
-
-            const femaleUrl = data.male;
-            const femaleResponse = await axios.get(femaleUrl, {
-                responseType: "arraybuffer"
-            });
-            const femaleBuffer = Buffer.from(maleResponse.data, "binary");
-
             await ctx.reply({
-                image: maleBuffer,
+                image: {
+                    url: data.male
+                },
                 mimetype: mime.contentType("png"),
                 caption: null
             });
             return await ctx.reply({
-                image: femaleBuffer,
+                image: {
+                    url: data.female
+                },
                 mimetype: mime.contentType("png"),
                 caption: null
             });

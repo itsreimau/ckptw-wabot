@@ -36,14 +36,11 @@ module.exports = {
             if (response.status !== 200) throw new Error(global.msg.notFound);
 
             const data = await response.data;
-            const imgUrl = data.result_url;
-            const imgRes = await axios.get(imgUrl, {
-                responseType: "arraybuffer"
-            });
-            const imgBuff = Buffer.from(imgRes.data, "binary");
 
             return await ctx.reply({
-                image: imgBuff,
+                image: {
+                    url: data.result_url
+                },
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Photoleap")}\n` +
                     "\n" +

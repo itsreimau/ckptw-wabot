@@ -1,21 +1,24 @@
 const APIs = {
     aemt: {
-        baseURL: "https://aemt.me",
+        baseURL: "https://aemt.me"
     },
     itzpire: {
-        baseURL: "https://itzpire.site",
+        baseURL: "https://itzpire.site"
     },
     miwudev: {
-        baseURL: "https://openapi.miwudev.my.id",
+        baseURL: "https://openapi.miwudev.my.id"
     },
-    nyx: {
-        baseURL: "https://api.nyx.my.id",
+    nyxs: {
+        baseURL: "https://api.nyxs.pw"
     },
     ngodingaja: {
         baseURL: "https://api.ngodingaja.my.id"
     },
     sandipbaruwal: {
-        baseURL: "https://sandipbaruwal.onrender.com",
+        baseURL: "https://sandipbaruwal.onrender.com"
+    },
+    ssa: {
+        baseURL: "https://ssa-api.vercel.app"
     }
 };
 

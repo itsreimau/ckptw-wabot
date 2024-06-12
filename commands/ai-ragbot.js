@@ -8,7 +8,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "you",
+    name: "ragbot",
+    aliases: ["rag"],
     category: "ai",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -26,16 +27,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("itzpire", "/ai/you", {
-                q: input
+            const apiUrl = createAPIUrl("ssa", "/api/ragbot", {
+                message: input
             });
             const response = await axios.get(apiUrl);
 
             if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const data = await response.data;
+            const data = response.data;
 
-            return ctx.reply(data.result.message);
+            return ctx.reply(data.data.response);
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);

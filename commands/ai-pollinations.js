@@ -35,10 +35,10 @@ module.exports = {
 
             if (response.status !== 200) throw new Error(global.msg.notFound);
 
-            const buffer = Buffer.from(response.data, "binary");
-
             return await ctx.reply({
-                image: buffer,
+                image: {
+                    url: apiUrl
+                },
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Pollinations")}\n` +
                     "\n" +

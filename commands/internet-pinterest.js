@@ -1,14 +1,11 @@
 const {
-    pinterest
-} = require("../tools/scraper.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const {
-    proto,
-    generateWAMessageFromContent
-} = require("@whiskeysockets/baileys");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -31,17 +28,19 @@ module.exports = {
         );
 
         try {
-            const result = await pinterest(input);
-
-            if (!result) throw new Error(global.msg.notFound);
-
-            const response = await axios.get(result, {
-                responseType: "arraybuffer"
+            const apiUrl = createAPIUrl("ssa", "/api/pinterest", {
+                message: input
             });
-            const buffer = Buffer.from(response.data, "binary");
+            const response = await axios.get(apiUrl);
+
+            if (response.status !== 200) throw new Error(global.msg.notFound);
+
+            const data = response.data;
 
             return await ctx.reply({
-                image: buffer,
+                image: {
+                    url: data.data.response
+                },
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Pinterest")}\n` +
                     "\n" +

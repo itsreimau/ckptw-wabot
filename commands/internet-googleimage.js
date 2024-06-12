@@ -5,10 +5,6 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const {
-    proto,
-    generateWAMessageFromContent
-} = require("@whiskeysockets/baileys");
 const axios = require("axios");
 const fg = require("api-dylux");
 const mime = require("mime-types");
@@ -38,13 +34,11 @@ module.exports = {
             if (!result) throw new Error(global.msg.notFound);
 
             const imageUrl = getRandomElement(result);
-            const imageResponse = await axios.get(imageUrl, {
-                responseType: "arraybuffer"
-            });
-            const buffer = Buffer.from(imageResponse.data, "binary");
 
             return await ctx.reply({
-                image: buffer,
+                image: {
+                    url: imageUrl
+                },
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Google Image")}\n` +
                     "\n" +

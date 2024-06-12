@@ -132,20 +132,20 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
             }
         }
+    }
 
-        // Group-specific actions.
-        if (isGroup) {
-            // Antilink handling.
-            const getAntilink = await db.get(`group.${groupNumber}.antilink`);
-            if (getAntilink) {
-                const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
-                if (m.content && urlRegex.test(m.content)) {
-                    if ((await smpl.isAdmin(ctx)) === 1) return;
+    // Group-specific actions.
+    if (isGroup) {
+        // Antilink handling.
+        const getAntilink = await db.get(`group.${groupNumber}.antilink`);
+        if (getAntilink) {
+            const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+            if (m.content && urlRegex.test(m.content)) {
+                if ((await smpl.isAdmin(ctx)) === 1) return;
 
-                    await ctx.deleteMessage(m.key);
+                await ctx.deleteMessage(m.key);
 
-                    return ctx.reply(`${bold("[ ! ]")} Jangan kirim tautan!`);
-                }
+                return ctx.reply(`${bold("[ ! ]")} Jangan kirim tautan!`);
             }
         }
     }

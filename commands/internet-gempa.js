@@ -29,13 +29,11 @@ module.exports = {
 
             const data = await response.data;
             const gempa = data.Infogempa.gempa;
-            const imgResponse = await axios.get(`https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`, {
-                responseType: "arraybuffer"
-            });
-            const imgBuffer = Buffer.from(imgResponse.data, "binary");
 
             return ctx.sendMessage({
-                image: imgBuffer,
+                image: {
+                    url: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`
+                },
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Gempa")}\n` +
                     "\n" +
