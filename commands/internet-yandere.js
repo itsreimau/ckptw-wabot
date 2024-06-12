@@ -9,8 +9,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "pinterest",
-    aliases: ["pin", "pint"],
+    name: "yans",
+    aliases: ["yande", "yandere"],
     category: "internet",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -28,7 +28,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("ssa", "/api/pinterest", {
+            const apiUrl = createAPIUrl("ssa", "/api/yans", {
                 query: input
             });
             const response = await axios.get(apiUrl);
@@ -42,7 +42,7 @@ module.exports = {
                     url: data.data.response
                 },
                 mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Pinterest")}\n` +
+                caption: `❖ ${bold("Yande.re")}\n` +
                     "\n" +
                     `➲ Kueri: ${input}\n` +
                     "\n" +
