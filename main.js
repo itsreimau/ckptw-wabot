@@ -143,9 +143,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             if (m.content && urlRegex.test(m.content)) {
                 if ((await smpl.isAdmin(ctx)) === 1) return;
 
-                await ctx.deleteMessage(m.key);
-
-                return ctx.reply(`${bold("[ ! ]")} Jangan kirim tautan!`);
+                await ctx.reply(`${bold("[ ! ]")} Jangan kirim tautan!`);
+                return await ctx.deleteMessage(m.key);
             }
         }
     }
