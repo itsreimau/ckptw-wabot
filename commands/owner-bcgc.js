@@ -49,7 +49,7 @@ module.exports = {
                                 title: "B R O A D C A S T",
                                 body: null,
                                 renderLargerThumbnail: true,
-                                thumbnailUrl: global.bot.thumbnail.landscape,
+                                thumbnailUrl: global.bot.thumbail,
                                 sourceUrl: global.bot.groupChat
                             },
                             forwardingScore: 9999,

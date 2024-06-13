@@ -7,8 +7,6 @@ const {
 const {
     bold
 } = require("@mengkodingan/ckptw");
-const axios = require('axios');
-const mime = require("mime-types");
 
 module.exports = {
     name: "menu",
@@ -17,9 +15,6 @@ module.exports = {
     code: async (ctx) => {
         try {
             const text = await getMenu(ctx);
-            const response = await axios.get(global.bot.thumbnail.square, {
-                responseType: "arraybuffer"
-            });
             const fakeProduct = {
                 key: {
                     fromMe: false,
@@ -55,7 +50,7 @@ module.exports = {
                             title: global.msg.watermark,
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: global.bot.thumbnail.landscape,
+                            thumbnailUrl: global.bot.thumbail,
                             sourceUrl: global.bot.groupChat
                         },
                         forwardingScore: 9999,
