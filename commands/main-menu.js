@@ -8,6 +8,7 @@ const {
     bold
 } = require("@mengkodingan/ckptw");
 const fg = require("api-dylux");
+const mime = require("mime-types");
 
 module.exports = {
     name: "menu",
@@ -16,19 +17,19 @@ module.exports = {
     code: async (ctx) => {
         try {
             const text = await getMenu(ctx);
-            const fakeOrder = {
+            const fakeStatus = {
                 key: {
-                    participant: ctx._sender.jid
+                    fromMe: false,
+                    participant: ctx._sender.jid, // Change it to "0@s.whatsapp.net" if you want to become an official WhatsApp account.
+                    ...({
+                        remoteJid: "status@broadcast"
+                    })
                 },
                 message: {
-                    orderMessage: {
-                        itemCount: 9999,
-                        status: 9999,
-                        surface: 9999,
-                        message: global.bot.name,
-                        orderTitle: `Owned by ${global.owner.name}`,
-                        thumbnailUrl: global.bot.thumbnail.square,
-                        sellerJid: ctx._sender.jid
+                    imageMessage: {
+                        mimetype: mime.contentType("png"),
+                        caption: `Owned by ${global.owner.name}`,
+                        thumbnailUrl: global.bot.thumbnail.square
                     }
                 }
             };
@@ -53,7 +54,7 @@ module.exports = {
                     },
                     mentions: [ctx._sender.jid]
                 }, {
-                    quoted: fakeOrder,
+                    quoted: fakeStatus,
                 }
             );
         } catch (error) {
