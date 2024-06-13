@@ -27,11 +27,11 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
         );
 
+        const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+        if (!urlRegex.test(input)) ctx.reply(global.msg.urlInvalid);
+
         try {
             const mp3cmd = ["tiktokmp3", "tta", "ttaudio", "ttmp3", "ttmusic", "ttmusik", "vta", "vtaudio", "vtmp3", "vtmusic", "vtmusik"];
-
-            const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
-            if (!urlRegex.test(input)) throw new Error(global.msg.urlInvalid);
 
             const promises = [
                 axios.get(createAPIUrl("nyxs", "/dl/tiktok", {
@@ -72,7 +72,7 @@ module.exports = {
                 }
             }
 
-            if (!result) throw new Error(global.msg.notFound);
+            if (!result) return ctx.reply(global.msg.notFound);
 
             return await ctx.reply({
                 video: {

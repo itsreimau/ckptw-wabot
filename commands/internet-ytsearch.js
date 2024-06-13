@@ -26,7 +26,7 @@ module.exports = {
         try {
             const result = await yts(input);
 
-            if (!result) throw new Error(global.msg.notFound);
+            if (!result) return ctx.reply(global.msg.notFound);
 
             const resultText = result.all
                 .map((r) => {

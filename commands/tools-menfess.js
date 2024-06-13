@@ -26,7 +26,7 @@ module.exports = {
             const [number, ...text] = ctx._args;
             const numberFormatted = number.replace(/[^\d]/g, "");
 
-            if (numberFormatted === ctx._sender.jid.split("@")[0]) throw new Error("Tidak dapat digunakan pada diri Anda sendiri.");
+            if (numberFormatted === ctx._sender.jid.split("@")[0]) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
             await ctx.sendMessage(`${numberFormatted}@s.whatsapp.net`, {
                 text: `❖ ${bold("Menfess")}\n` +

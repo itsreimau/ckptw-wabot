@@ -30,7 +30,7 @@ module.exports = {
             const restricted = ["require", "eval", "Function", "global"];
             for (const w of restricted) {
                 if (script.includes(w)) {
-                    throw new Error(`Penggunaan ${w} tidak diperbolehkan dalam kode.`);
+                    ctx.reply(`Penggunaan ${w} tidak diperbolehkan dalam kode.`);
                 }
             }
 
@@ -44,12 +44,12 @@ module.exports = {
                 });
 
                 childProcess.stderr.on("data", (data) => {
-                    throw new Error(data.toString());
+                    return ctx.reply(data.toString());
                 });
 
                 childProcess.on("close", (code) => {
                     if (code !== 0) {
-                        throw new Error(`Keluar dari proses dengan kode: ${code}`);
+                        return ctx.reply(`${bold("[ ! ]")} Keluar dari proses dengan kode: ${code}`);
                     } else {
                         resolve(result);
                     }
@@ -57,7 +57,7 @@ module.exports = {
 
                 setTimeout(() => {
                     childProcess.kill();
-                    throw new Error("Kode mencapai batas waktu proses.");
+                    return ctx.reply(`${bold("[ ! ]")} Kode mencapai batas waktu proses.`);
                 }, 10000);
             });
 

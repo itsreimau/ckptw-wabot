@@ -29,7 +29,7 @@ module.exports = {
         });
 
         try {
-            if (user === senderJid) throw new Error("Tidak dapat digunakan pada diri Anda sendiri.");
+            if (user === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
             await global.db.set(`user.${user.split("@")[0]}.isPremium`, true);
 

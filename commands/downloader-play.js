@@ -30,7 +30,7 @@ module.exports = {
         try {
             const search = await yts(input);
 
-            if (!search) throw new Error(global.msg.notFound);
+            if (!search) return ctx.reply(global.msg.notFound);
 
             const yt = search.videos[0];
 
@@ -55,7 +55,7 @@ module.exports = {
             const audio = Object.values(ytdl.audio)[0];
             const audiodl = await audio.download();
 
-            if (!audiodl) throw new Error(global.msg.notFound);
+            if (!audiodl) return ctx.reply(global.msg.notFound);
 
             return await ctx.reply({
                 audio: {

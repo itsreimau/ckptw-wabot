@@ -42,8 +42,8 @@ global.msg = {
     wait: `${bold("[ ! ]")} Tunggu sebentar...`,
 
     // Command process (Error).
-    notFound: `Tidak ada yang ditemukan!`,
-    urlInvalid: `URL tidak valid!`
+    notFound: `${bold("[ ! ]")} Tidak ada yang ditemukan!`,
+    urlInvalid: `${bold("[ ! ]")} URL tidak valid!`
 };
 
 // Owner & CoOwner.

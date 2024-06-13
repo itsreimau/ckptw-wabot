@@ -20,7 +20,7 @@ module.exports = {
         const apiUrl = await createAPIUrl("https://api.github.com", "/repos/itsreimau/ckptw-wabot", {});
         const response = await axios.get(apiUrl);
 
-        if (response.status !== 200) throw new Error(global.msg.notFound);
+        if (response.status !== 200) return ctx.reply(global.msg.notFound);
 
         const data = await response.data;
 

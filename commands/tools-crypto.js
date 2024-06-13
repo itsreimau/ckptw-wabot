@@ -28,7 +28,7 @@ module.exports = {
         try {
             const result = await coingecko(input);
 
-            if (!result) throw new Error(global.msg.notFound);
+            if (!result) return ctx.reply(global.msg.notFound);
 
             const resultText = result.map((r) =>
                 `➲ ${r.cryptoName}\n` +

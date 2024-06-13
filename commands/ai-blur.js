@@ -35,7 +35,7 @@ module.exports = {
             let img = await Jimp.read(buffer);
             img.blur(isNaN(level) ? 5 : parseInt(level));
             img.getBuffer(Jimp.MIME_JPEG, async (err, buffer) => {
-                if (err) throw new Error("Tidak dapat mengaburkan gambar!");
+                if (err) return ctx.reply(`${bold("[ ! ]")} Tidak dapat mengaburkan gambar!`);
 
                 return await ctx.reply({
                     image: buffer,

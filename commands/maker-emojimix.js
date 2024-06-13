@@ -47,7 +47,7 @@ module.exports = {
             const response = await axios.get(apiUrl);
             const data = await response.data;
 
-            if (!data.results[0].url) throw new Error(global.msg.notFound);
+            if (!data.results[0].url) return ctx.reply(global.msg.notFound);
 
             const sticker = new Sticker(data.results[0].url, {
                 pack: global.sticker.packname,

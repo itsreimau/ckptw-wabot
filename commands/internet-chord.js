@@ -27,7 +27,7 @@ module.exports = {
         try {
             const result = await chord(input);
 
-            if (!result) throw new Error(global.msg.notFound);
+            if (!result) return ctx.reply(global.msg.notFound);
 
             return ctx.reply(
                 `❖ ${bold("Chord")}\n` +

@@ -30,7 +30,7 @@ module.exports = {
         );
 
         try {
-            if (input.length > 10000) throw new Error("Maksimal 50 kata!");
+            if (input.length > 10000) return ctx.reply(`${bold("[ ! ]")} Maksimal 50 kata!`);
 
             const apiUrl = createAPIUrl("ngodingaja", "/api/attp", {
                 text: input

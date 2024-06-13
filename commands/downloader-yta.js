@@ -27,10 +27,10 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
         );
 
-        try {
-            const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
-            if (!urlRegex.test(input)) throw new Error(global.msg.urlInvalid);
+        const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+        if (!urlRegex.test(input)) ctx.reply(global.msg.urlInvalid);
 
+        try {
             let ytdl;
             try {
                 ytdl = await youtubedl(input);

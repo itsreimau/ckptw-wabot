@@ -31,9 +31,9 @@ module.exports = {
         });
 
         try {
-            if (member === senderJid) throw new Error("Tidak dapat digunakan pada diri Anda sendiri.");
+            if (member === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
-            if (!(await isAdmin(ctx, member)) === 1) throw new Error("Anggota ini adalah anggota biasa.");
+            if (!(await isAdmin(ctx, member)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah anggota biasa.`);
 
             await ctx._client.groupParticipantsUpdate(ctx.id, [member], "demote");
 

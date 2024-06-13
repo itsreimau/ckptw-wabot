@@ -27,10 +27,10 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://github.com/itsreimau/ckptw-wabot`)}`
         );
 
-        try {
-            const urlRegex = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i;
-            if (!urlRegex.test(input)) throw new Error(global.msg.urlInvalid);
+        const urlRegex = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i;
+        if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
 
+        try {
             const [_, user, repo] = input.match(urlRegex) || [];
             const repoName = repo.replace(/.git$/, "");
             const apiUrl = createAPIUrl("https://api.github.com", `/repos/${owner}/${repo}/zipball/master`, {});

@@ -38,21 +38,21 @@ module.exports = {
             const suraNumber = parseInt(sura);
             const ayaNumber = parseInt(aya);
 
-            if (isNaN(sura) && isNaN(aya)) throw new Error("Gunakan angka.");
+            if (isNaN(sura) && isNaN(aya)) return ctx.reply(`${bold("[ ! ]")} Gunakan angka.`);
 
-            if (suraNumber < 1 || suraNumber > 114) throw new Error(`Surah ${suraNumber} tidak ada.`);
+            if (suraNumber < 1 || suraNumber > 114) return ctx.reply(`${bold("[ ! ]")} Surah ${suraNumber} tidak ada.`);
 
             if (aya) {
-                if (ayaNumber < 1) throw new Error("Ayat harus lebih dari 0.");
+                if (ayaNumber < 1) return ctx.reply(`${bold("[ ! ]")} Ayat harus lebih dari 0.`);
 
                 const data = await fetchData(suraNumber, ayaNumber);
 
-                if (!data) throw new Error(global.msg.notFound);
+                if (!data) return ctx.reply(global.msg.notFound);
 
                 return ctx.reply(formatAya(data));
             } else {
                 const data = await fetchData(suraNumber);
-                if (!data) throw new Error(global.msg.notFound);
+                if (!data) return ctx.reply(global.msg.notFound);
 
                 return ctx.reply(formatSura(data));
             }

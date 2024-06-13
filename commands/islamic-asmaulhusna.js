@@ -51,7 +51,7 @@ module.exports = {
 
             const index = parseInt(input);
 
-            if (isNaN(index) || index < 1 || index > 99) throw new Error('Nomor Asmaul Husna tidak valid. Harap masukkan nomor antara 1 dan 99 atau ketik "all" untuk melihat semua Asmaul Husna.');
+            if (isNaN(index) || index < 1 || index > 99) ctx.reply(`${bold("[ ! ]")} Nomor Asmaul Husna tidak valid. Harap masukkan nomor antara 1 dan 99 atau ketik "all" untuk melihat semua Asmaul Husna.`);
 
             const selectedName = asmaulhusna.find((r) => parseInt(r.number) === index);
 

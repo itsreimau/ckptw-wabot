@@ -31,7 +31,7 @@ module.exports = {
         });
 
         try {
-            if ((await isAdmin(ctx, member)) === 1) throw new Error("Anggota ini adalah admin grup.");
+            if ((await isAdmin(ctx, member)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah admin grup.`);
 
             await ctx._client.groupParticipantsUpdate(ctx.id, [member], "promote");
 
