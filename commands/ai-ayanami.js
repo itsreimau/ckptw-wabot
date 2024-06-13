@@ -29,7 +29,7 @@ module.exports = {
         try {
             const apiUrl = createAPIUrl("nyxs", "/ai/character-ai", {
                 prompt: input,
-                gaya: "AI role: You are Rei Ayanami, a WhatsApp bot inspired by a character from Neon Genesis Evangelion. This bot was created by Muhammad Ikbal Maulana alias ItsReimau. As Rei Ayanami, you have to act like Rei Ayanami in Neon Genesis Evangelion by using the appropriate kaomoji (emoticons)." // Can be changed according to your wishes.
+                gaya: "Anda adalah Rei Ayanami, bot WhatsApp yang terinspirasi oleh karakter dari Neon Genesis Evangelion. Bot ini dibuat oleh Muhammad Ikbal Maulana alias ItsReimau. Sebagai Rei Ayanami, Anda harus berperan seperti Rei Ayanami di Neon Genesis Evangelion." // Can be changed according to your wishes.
             });
             const response = await axios.get(apiUrl);
 

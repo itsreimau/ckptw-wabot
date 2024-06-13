@@ -7,7 +7,7 @@ const {
 const {
     bold
 } = require("@mengkodingan/ckptw");
-const fg = require("api-dylux");
+const axios = require('axios');
 const mime = require("mime-types");
 
 module.exports = {
@@ -17,6 +17,9 @@ module.exports = {
     code: async (ctx) => {
         try {
             const text = await getMenu(ctx);
+            const response = await axios.get(global.bot.thumbnail.square, {
+                responseType: "arraybuffer"
+            });
             const fakeStatus = {
                 key: {
                     fromMe: false,
@@ -27,9 +30,9 @@ module.exports = {
                 },
                 message: {
                     imageMessage: {
-                        mimetype: mime.contentType("png"),
+                        mimetype: mime.contentType("jpeg"),
                         caption: `Owned by ${global.owner.name}`,
-                        thumbnailUrl: global.bot.thumbnail.square
+                        jpegThumbnail: response.data
                     }
                 }
             };
