@@ -20,7 +20,7 @@ module.exports = {
             const response = await axios.get(global.bot.thumbnail.square, {
                 responseType: "arraybuffer"
             });
-            const fakeStatus = {
+            const fakeProduct = {
                 key: {
                     fromMe: false,
                     participant: ctx._sender.jid, // Change it to "0@s.whatsapp.net" if you want to become an official WhatsApp account.
@@ -29,10 +29,20 @@ module.exports = {
                     })
                 },
                 message: {
-                    imageMessage: {
-                        mimetype: mime.contentType("jpeg"),
-                        caption: `Owned by ${global.owner.name}`,
-                        jpegThumbnail: response.data
+                    productMessage: {
+                        product: {
+                            productImage: {
+                                mimetype: mime.contentType("jpeg"),
+                                jpegThumbnail: response.data
+                            },
+                            title: global.bot.name,
+                            description: `Owned by ${global.owner.name}`,
+                            currencyCode: "IDR",
+                            priceAmount1000: "69",
+                            retailerId: "WhatsApp Bot",
+                            productImageCount: 1
+                        },
+                        businessOwnerJid: ctx._sender.jid
                     }
                 }
             };
@@ -57,7 +67,7 @@ module.exports = {
                     },
                     mentions: [ctx._sender.jid]
                 }, {
-                    quoted: fakeStatus,
+                    quoted: fakeProduct,
                 }
             );
         } catch (error) {

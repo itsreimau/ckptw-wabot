@@ -8,8 +8,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "ayanami",
-    aliases: ["rei"],
+    name: "characterai",
+    aliases: ["rei", "ayanami"],
     category: "ai",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
