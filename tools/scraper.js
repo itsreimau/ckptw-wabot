@@ -87,58 +87,6 @@ exports.coingecko = async (search) => {
     }
 };
 
-/*
- * Perform text search using Google or similar API.
- * @param {string} text - The text to be searched.
- * @returns {Array|null} - An array of JSON objects of search results or null if an error occurs.
- */
-exports.googlesearch = async (text) => {
-    let searchResults = null;
-
-    try {
-        const search = await googleIt(text);
-        if (search.articles.length > 0)
-            searchResults = search.articles.map((v, index) => {
-                return {
-                    index: index + 1,
-                    title: v.title || "-",
-                    url: v.url || "-",
-                    snippet: v.description || "-",
-                };
-            });
-    } catch (error) {
-        console.error("Error:", error);
-        return null;
-    }
-
-    if (!searchResults) {
-        const apiUrl = createAPIUrl("http://api.serpstack.com", `/search`, {
-            access_key: "7d3eb92cb730ed676d5afbd6c902ac1f",
-            type: "web",
-            query: text,
-        });
-
-        try {
-            const response = await axios.get(apiUrl);
-            const searchData = response.data;
-            if (searchData.organic_results.length > 0)
-                searchResults = searchData.organic_results.map((v, index) => {
-                    return {
-                        index: index + 1,
-                        title: v.title || "-",
-                        url: v.url || "-",
-                        snippet: v.snippet || "-",
-                    };
-                });
-        } catch (error) {
-            console.error("Error:", error);
-            return null;
-        }
-    }
-
-    return searchResults;
-};
-
 /**
  * Convert WebP image to MP4 video using ezgif.com.
  * @param {Buffer|string} source The source image as a buffer or a URL string.

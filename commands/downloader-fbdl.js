@@ -10,8 +10,8 @@ const {
     monospace
 } = require("@mengkodingan/ckptw");
 const getFBInfo = require("@xaviabot/fb-downloader");
-const axios = require("axios");
 const fg = require("api-dylux");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -39,62 +39,25 @@ module.exports = {
         try {
             let result;
 
-            const promises = [
-                axios.get(createAPIUrl("nyxs", "/dl/fb", {
+            const apiCalls = [
+                () => axios.get(createAPIUrl("nyxs", "/dl/fb", {
                     url: input
-                })).then((response) => ({
-                    source: "nyxs",
-                    data: response.data
-                })),
-                axios.get(createAPIUrl("ngodingaja", "/api/fb", {
+                })).then(response => response.data.result.HD || response.data.result.SD),
+                () => axios.get(createAPIUrl("ngodingaja", "/api/fb", {
                     url: input
-                })).then((response) => ({
-                    source: "ngodingaja",
-                    data: response.data
-                })),
-                getFBInfo(input).then((data) => ({
-                    source: "getFBInfo",
-                    data
-                })),
-                fg.fbdl(input).then((data) => ({
-                    source: "fg",
-                    data
-                })),
-                facebookdl(input).then((data) => ({
-                    source: "facebookdl",
-                    data
-                })),
-                facebookdlv2(input).then((data) => ({
-                    source: "facebookdlv2",
-                    data
-                }))
+                })).then(response => response.data.hasil.url),
+                () => getFBInfo(input).then(data => data.videoUrl),
+                () => fg.fbdl(input).then(data => data.hd || data.sd),
+                () => facebookdl(input).then(data => data.videoUrl),
+                () => facebookdlv2(input).then(data => data.videoUrl)
             ];
 
-            const results = await Promise.allSettled(promises);
-
-            for (const res of results) {
-                if (res.status === "fulfilled" && res.value) {
-                    switch (res.value.source) {
-                        case "nyxs":
-                            result = res.value.data.result.HD || res.value.data.result.SD;
-                            break;
-                        case "ngodingaja":
-                            result = res.value.data.hasil.url;
-                            break;
-                        case "getFBInfo":
-                            result = res.value.data.videoUrl;
-                            break;
-                        case "fg":
-                            result = res.value.data.hd || res.value.data.sd;
-                            break;
-                        case "facebookdl":
-                            result = res.value.data.videoUrl;
-                            break;
-                        case "facebookdlv2":
-                            result = res.value.data.videoUrl;
-                            break;
-                    }
+            for (const call of apiCalls) {
+                try {
+                    result = await call();
                     if (result) break;
+                } catch (error) {
+                    console.error("Error in API call:", error);
                 }
             }
 

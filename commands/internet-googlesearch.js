@@ -1,10 +1,11 @@
 const {
-    googlesearch
-} = require("../tools/scraper.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 module.exports = {
     name: "googlesearch",
@@ -23,14 +24,17 @@ module.exports = {
         if (!input) return ctx.reply(`${global.msg.argument}\n` + `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`);
 
         try {
-            const result = await googlesearch(input);
+            const apiUrl = await createAPIUrl("ngodingaja", "/api/gsearch", {
+                search: input
+            });
+            const response = await axios.get(apiUrl);
 
-            if (!result) return ctx.reply(global.msg.notFound);
+            const data = await response.data;
 
-            const resultText = result.map((r) =>
-                `➲ Judul: ${r.title}\n` +
-                `➲ Deskripsi: ${r.snippet}\n` +
-                `➲ URL: ${r.url}`
+            const resultText = data.result.map((d) =>
+                `➲ Judul: ${d.title}\n` +
+                `➲ Deskripsi: ${d.snippet}\n` +
+                `➲ URL: ${d.url}`
             ).join("\n-----\n");
             return ctx.reply(
                 `❖ ${bold("Google Search")}\n` +
@@ -41,6 +45,7 @@ module.exports = {
             );
         } catch (error) {
             console.error("Error:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }

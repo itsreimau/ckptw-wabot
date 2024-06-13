@@ -1,12 +1,9 @@
-const {
-    createAPIUrl
-} = require("../tools/api.js");
 const axios = require("axios");
+const mime = require("mime-types");
 const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const mime = require("mime-types");
 
 module.exports = {
     name: "ghdl",
@@ -27,14 +24,15 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://github.com/itsreimau/ckptw-wabot`)}`
         );
 
-        const urlRegex = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/(.+)/i;
-        if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
+        const urlRegex = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/([^\/:]+)/i;
+        const match = input.match(urlRegex);
+        if (!match) return ctx.reply(global.msg.urlInvalid);
+
+        const [_, user, repo] = match;
+        const repoName = repo.replace(/.git$/, "");
+        const apiUrl = `https://api.github.com/repos/${user}/${repoName}/zipball/master`;
 
         try {
-            const [_, user, repo] = input.match(urlRegex) || [];
-            const repoName = repo.replace(/.git$/, "");
-            const apiUrl = createAPIUrl("https://api.github.com", `/repos/${owner}/${repo}/zipball/master`, {});
-
             const response = await axios({
                 method: "GET",
                 url: apiUrl,
@@ -46,11 +44,14 @@ module.exports = {
 
             return ctx.reply({
                 document: response.data,
-                mimetype: mime.contentType("zip")
+                mimetype: mime.contentType("zip"),
+                fileName: `${repoName}-master.zip`
             });
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.response && error.response.status === 404) {
+                return ctx.reply(global.msg.notFound);
+            }
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }

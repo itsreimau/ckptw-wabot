@@ -21,55 +21,37 @@ module.exports = {
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         const input = ctx._args.join(" ");
-
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
         );
 
         const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
-        if (!urlRegex.test(input)) ctx.reply(global.msg.urlInvalid);
+        if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            let result;
-
-            const promises = [
-                axios.get(createAPIUrl("nyxs", "/dl/twitter", {
+            const apiCalls = [
+                () => axios.get(createAPIUrl("nyxs", "/dl/twitter", {
                     url: input
-                })).then((response) => ({
-                    source: "nyxs",
-                    data: response.data
-                })),
-                axios.get(createAPIUrl("ngodingaja", "/api/twitter", {
-                    url: input
-                })).then((response) => ({
-                    source: "ngodingaja",
-                    data: response.data
-                })),
-                axios.get(createAPIUrl("ssa", "/api/twitter", {
-                    url: input
-                })).then((response) => ({
-                    source: "ssa",
-                    data: response.data
                 }))
+                .then(response => response.data.result.media[0].videos[0].url),
+                () => axios.get(createAPIUrl("ngodingaja", "/api/twitter", {
+                    url: input
+                }))
+                .then(response => response.data.hasil.HD || response.data.hasil.SD),
+                () => axios.get(createAPIUrl("ssa", "/api/twitter", {
+                    url: input
+                }))
+                .then(response => response.data.data.response.video_hd || response.data.data.response.video_sd)
             ];
 
-            const results = await Promise.allSettled(promises);
-
-            for (const res of results) {
-                if (res.status === "fulfilled" && res.value) {
-                    switch (res.value.source) {
-                        case "nyxs":
-                            result = res.value.data.result.media[0].videos[0].url;
-                            break;
-                        case "ngodingaja":
-                            result = res.value.data.hasil.HD || res.value.data.hasil.SD;
-                            break;
-                        case "ssa":
-                            result = res.value.data.data.response.video_hd || res.value.data.data.response.video_sd;
-                            break;
-                    }
+            let result;
+            for (const call of apiCalls) {
+                try {
+                    result = await call();
                     if (result) break;
+                } catch (error) {
+                    console.error("Error in API call:", error);
                 }
             }
 
@@ -77,13 +59,11 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    url: result,
+                    url: result
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `❖ ${bold("Twitter Downloader")}\n` +
-                    "\n" +
                     `➲ URL: ${input}\n` +
-                    "\n" +
                     global.msg.footer,
                 gifPlayback: false
             });
