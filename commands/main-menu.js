@@ -31,16 +31,12 @@ module.exports = {
                 message: {
                     productMessage: {
                         product: {
-                            productImage: {
-                                mimetype: mime.contentType("jpeg"),
-                                jpegThumbnail: response.data
-                            },
                             title: global.bot.name,
-                            description: `Owned by ${global.owner.name}`,
+                            description: null,
                             currencyCode: "IDR",
-                            priceAmount1000: "69",
-                            retailerId: "WhatsApp Bot",
-                            productImageCount: 1
+                            priceAmount1000: "1000",
+                            retailerId: "CKPTW",
+                            productImageCount: 0
                         },
                         businessOwnerJid: ctx._sender.jid
                     }
