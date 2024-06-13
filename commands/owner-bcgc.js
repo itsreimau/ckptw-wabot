@@ -37,23 +37,25 @@ module.exports = {
 
             for (let i of anu) {
                 await delay(500);
-                const thumbnail = await fg.googleImage("rei ayanami wallpaper");
 
-                await ctx.sendMessage(i, {
-                    text: input,
-                    contextInfo: {
-                        forwardingScore: 1000,
-                        isForwarded: true,
-                        externalAdReply: {
-                            title: "B R O A D C A S T",
-                            body: null,
-                            thumbnailUrl: getRandomElement(thumbnail) || global.bot.thumbnail,
-                            sourceUrl: global.bot.groupChat,
-                            mediaType: 1,
-                            renderLargerThumbnail: true,
-                        },
-                    }
-                });
+                await ctx.sendMessage(
+                    ctx.id, {
+                        text: input,
+                        contextInfo: {
+                            externalAdReply: {
+                                mediaType: 1,
+                                previewType: 0,
+                                mediaUrl: global.bot.groupChat,
+                                title: "B R O A D C A S T",
+                                body: null,
+                                renderLargerThumbnail: true,
+                                thumbnailUrl: global.bot.thumbnail.landscape,
+                                sourceUrl: global.bot.groupChat
+                            },
+                            forwardingScore: 9999,
+                            isForwarded: true
+                        }
+                    });
             }
 
             return ctx.reply(`Berhasil mengirimkan siaran ke ${anu.length} obrolan grup.`);

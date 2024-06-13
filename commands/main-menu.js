@@ -16,22 +16,44 @@ module.exports = {
     code: async (ctx) => {
         try {
             const text = await getMenu(ctx);
+            const fakeOrder = {
+                key: {
+                    participant: ctx._sender.jid
+                },
+                message: {
+                    orderMessage: {
+                        itemCount: 9999,
+                        status: 9999,
+                        surface: 9999,
+                        message: global.bot.name,
+                        orderTitle: `Owned by ${global.owner.name}`,
+                        thumbnailUrl: global.bot.thumbnail.square,
+                        sellerJid: ctx._sender.jid
+                    }
+                }
+            };
 
             return ctx.sendMessage(
                 ctx.id, {
                     text: text,
                     contextInfo: {
+                        mentionedJid: [ctx._sender.jid],
                         externalAdReply: {
+                            mediaType: 1,
+                            previewType: 0,
+                            mediaUrl: global.bot.groupChat,
                             title: global.msg.watermark,
                             body: null,
-                            thumbnailUrl: global.bot.thumbnail,
-                            sourceUrl: global.bot.groupChat,
-                            mediaType: 1,
                             renderLargerThumbnail: true,
+                            thumbnailUrl: global.bot.thumbnail.landscape,
+                            sourceUrl: global.bot.groupChat
                         },
+                        forwardingScore: 9999,
+                        isForwarded: true
                     },
+                    mentions: [ctx._sender.jid]
                 }, {
-                    quoted: ctx._msg,
+                    quoted: fakeOrder,
                 }
             );
         } catch (error) {

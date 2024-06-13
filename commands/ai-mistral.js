@@ -31,13 +31,12 @@ module.exports = {
             });
             const response = await axios.get(apiUrl);
 
-            if (response.status !== 200) throw new Error(global.msg.notFound);
-
             const data = await response.data;
 
             return ctx.reply(data.answer);
         } catch (error) {
             console.error("Error:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }

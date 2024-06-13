@@ -19,7 +19,7 @@ module.exports = {
         try {
             await ctx.reply(global.msg.wait);
 
-            exec(`pm2 restart rei-ayanami`); // PM2.
+            exec(`pm2 restart ckptw-wabot`); // PM2.
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);

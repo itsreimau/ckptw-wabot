@@ -19,10 +19,12 @@ module.exports = {
 
         const url = ctx._args[0];
 
-        if (!url) return ctx.reply(
-            `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
-        );
+        if (!url) {
+            return ctx.reply(
+                `${global.msg.argument}\n` +
+                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
+            );
+        }
 
         try {
             new URL(url);
@@ -30,79 +32,60 @@ module.exports = {
             return ctx.reply(global.msg.urlInvalid);
         }
 
-        let response;
         try {
-            response = await fetchWithTimeout(url);
-            if (response.status !== 200) {
-                return ctx.reply(`${response.statusText} (${response.status})`);
+            const response = await fetchWithTimeout(url);
+            const contentType = response.headers["content-type"];
+            const status = response.status;
+            const data = response.data;
+
+            if (contentType) {
+                if (contentType.startsWith("image/")) {
+                    return ctx.reply({
+                        image: {
+                            url
+                        },
+                        mimetype: mime.contentType(contentType),
+                        caption: null
+                    });
+                } else if (contentType === "image/gif") {
+                    return ctx.reply({
+                        video: {
+                            url
+                        },
+                        mimetype: mime.contentType("gif"),
+                        caption: null,
+                        gifPlayback: true
+                    });
+                } else if (contentType.startsWith("video/")) {
+                    return ctx.reply({
+                        video: {
+                            url
+                        },
+                        mimetype: mime.contentType("mp4"),
+                        caption: null,
+                        gifPlayback: false
+                    });
+                } else {
+                    return ctx.reply({
+                        document: {
+                            url
+                        },
+                        mimetype: mime.contentType(contentType)
+                    });
+                }
+            } else {
+                if (isJSON(data)) {
+                    return ctx.reply(walkJSON(data));
+                } else {
+                    return ctx.reply(
+                        `➲ Status: ${status}\n` +
+                        "➲ Respon:\n" +
+                        `${typeof data === "object" ? JSON.stringify(data, null, 2) : data}`
+                    );
+                }
             }
         } catch (error) {
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
-        }
-
-        const headers = response.headers;
-        const status = response.status;
-        let data;
-        try {
-            data = response.data;
-        } catch (error) {
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: Gagal mendapatkan data respons.`);
-        }
-
-        // JSON check.
-        try {
-            const json = JSON.parse(data);
-            return ctx.reply(walkJSON(json));
-        } catch {}
-
-        // Image, GIF, video, PDF, file, text check.
-        const contentType = headers["content-type"];
-        if (contentType && contentType.startsWith("image/")) {
-            return ctx.reply({
-                image: {
-                    url
-                },
-                mimetype: mime.contentType(contentType),
-                caption: null
-            });
-        } else if (contentType === "image/gif") {
-            return ctx.reply({
-                video: {
-                    url
-                },
-                mimetype: mime.contentType("gif"),
-                caption: null,
-                gifPlayback: true
-            });
-        } else if (contentType === "video/mp4") {
-            return ctx.reply({
-                video: {
-                    url
-                },
-                mimetype: mime.contentType("mp4"),
-                caption: null,
-                gifPlayback: false
-            });
-        } else if (contentType === "application/pdf" || url.endsWith(".pdf")) {
-            return ctx.reply({
-                document: {
-                    url
-                },
-                mimetype: mime.contentType("pdf")
-            });
-        } else if (contentType === "application/octet-stream") {
-            return ctx.reply({
-                document: {
-                    url
-                },
-                mimetype: mime.contentType("bin")
-            });
-        } else {
-            return ctx.reply(
-                `➲ Status: ${status}\n` +
-                "➲ Respon:\n" +
-                `${typeof data === "object" ? JSON.stringify(data, null, 2) : data}`
-            );
         }
     }
 };
@@ -125,7 +108,20 @@ async function fetchWithTimeout(url, options = {
     }
 }
 
+function isJSON(data) {
+    try {
+        JSON.parse(data);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 function walkJSON(json, depth = 0, array = []) {
+    if (typeof json === 'string') {
+        json = JSON.parse(json);
+    }
+
     for (const key in json) {
         array.push("┊".repeat(depth) + (depth > 0 ? " " : "") + `*${key}:*`);
         if (typeof json[key] === "object" && json[key] !== null) {

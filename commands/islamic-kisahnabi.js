@@ -29,8 +29,6 @@ module.exports = {
             const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
             const response = await axios.get(apiUrl);
 
-            if (response.status !== 200) throw new Error(global.msg.notFound);
-
             const data = await response.data;
 
             return ctx.reply(
@@ -47,6 +45,7 @@ module.exports = {
             );
         } catch (error) {
             console.error("Error:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }

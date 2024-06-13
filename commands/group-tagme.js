@@ -13,9 +13,12 @@ module.exports = {
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         try {
+            const senderNumber = ctx.sender.jid.split("@")[0];
+            const senderJid = ctx._sender.jid;
+
             return ctx.reply({
                 text: `@${senderNumber}`,
-                mentions: [ctx._sender.jid]
+                mentions: [senderJid]
             });
         } catch (error) {
             console.error("Error:", error);

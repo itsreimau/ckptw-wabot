@@ -14,7 +14,10 @@ global.bot = {
     name: "CKPTW",
     prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
     phoneNumber: "628xxxxxxxxxx", // Ignore if you use QR code for authentication.
-    thumbnail: "https://e1.pxfuel.com/desktop-wallpaper/943/672/desktop-wallpaper-whatsapp-bot-what-is-it-and-how-to-use-messenger-chatbots-chatbot.jpg",
+    thumbnail: {
+        square: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZfKrHiNYrfU-Xu3AZjUOcbJ8zrEe0a4wHeQ&s",
+        landscape: "https://e1.pxfuel.com/desktop-wallpaper/943/672/desktop-wallpaper-whatsapp-bot-what-is-it-and-how-to-use-messenger-chatbots-chatbot.jpg",
+    },
     groupChat: "https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs" // Don't forget to join, friends!
 };
 
