@@ -27,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("itzpire", "/downloader/play-youtube", {
+            const apiUrl = createAPIUrl("itzpire", "/download/play-youtube", {
                 title: input
             });
             const response = await axios.get(apiUrl);

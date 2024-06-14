@@ -3,7 +3,7 @@ const APIs = {
         baseURL: "https://aemt.me"
     },
     itzpire: {
-        baseURL: "https://itzpire.site"
+        baseURL: "https://itzpire.com"
     },
     miwudev: {
         baseURL: "https://openapi.miwudev.my.id"
