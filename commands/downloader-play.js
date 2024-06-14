@@ -28,13 +28,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("nyxs", "/ai/gpt", {
-                text: input
+            const apiUrl = createAPIUrl("itzpire", "/downloader/play-youtube", {
+                title: input
             });
             const response = await axios.get(apiUrl);
 
             const data = response.data;
-            const audio = data.audio;
+            const audio = data.data.audio;
 
             await ctx.reply(
                 `❖ ${bold("Play")}\n` +
