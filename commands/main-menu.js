@@ -50,7 +50,7 @@ module.exports = {
                             title: global.msg.watermark,
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: global.bot.thumbail,
+                            thumbnailUrl: global.bot.thumbnail,
                             sourceUrl: global.bot.groupChat
                         },
                         forwardingScore: 9999,
