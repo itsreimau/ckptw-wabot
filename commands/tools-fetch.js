@@ -1,9 +1,11 @@
+const axios = require("axios");
 const {
-    bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
+const {
+    format
+} = require("util");
 
 module.exports = {
     name: "fetch",
@@ -19,116 +21,38 @@ module.exports = {
 
         const url = ctx._args[0];
 
-        if (!url) {
-            return ctx.reply(
-                `${global.msg.argument}\n` +
-                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
-            );
-        }
+        if (!url) return ctx.reply(
+            `${global.msg.argument}\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
+        );
+
+        const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+        if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            new URL(url);
-        } catch {
-            return ctx.reply(global.msg.urlInvalid);
-        }
+            const response = await axios.get(url, {
+                responseType: "arraybuffer"
+            });
 
-        try {
-            const response = await fetchWithTimeout(url);
-            const contentType = response.headers["content-type"];
-            const status = response.status;
-            const data = response.data;
+            if (!/utf-8|json|html|plain/.test(response?.headers?.['content-type'])) {
+                let fileName = /filename/i.test(response?.headers?.['content-disposition']) ? response?.headers?.['content-disposition']?.match(/filename=(.*)/)?.[1]?.replace(/["';]/g, '') : '';
+                return ctx.reply({
+                    document: response?.data,
+                    fileName,
+                    mimetype: mime.lookup(fileName)
+                });
+            }
 
-            if (contentType) {
-                if (contentType.startsWith("image/")) {
-                    return ctx.reply({
-                        image: {
-                            url
-                        },
-                        mimetype: mime.contentType(contentType),
-                        caption: null
-                    });
-                } else if (contentType === "image/gif") {
-                    return ctx.reply({
-                        video: {
-                            url
-                        },
-                        mimetype: mime.contentType("gif"),
-                        caption: null,
-                        gifPlayback: true
-                    });
-                } else if (contentType.startsWith("video/")) {
-                    return ctx.reply({
-                        video: {
-                            url
-                        },
-                        mimetype: mime.contentType("mp4"),
-                        caption: null,
-                        gifPlayback: false
-                    });
-                } else {
-                    return ctx.reply({
-                        document: {
-                            url
-                        },
-                        mimetype: mime.contentType(contentType)
-                    });
-                }
-            } else {
-                if (isJSON(data)) {
-                    return ctx.reply(walkJSON(data));
-                } else {
-                    return ctx.reply(
-                        `➲ Status: ${status}\n` +
-                        "➲ Respon:\n" +
-                        `${typeof data === "object" ? JSON.stringify(data, null, 2) : data}`
-                    );
-                }
+            let text = response?.data?.toString() || response?.data;
+            text = format(text);
+            try {
+                ctx.reply(text.slice(0, 65536) + '');
+            } catch (e) {
+                ctx.reply(format(e));
             }
         } catch (error) {
+            console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };
-
-async function fetchWithTimeout(url, options = {
-    timeout: 10000
-}) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), options.timeout);
-
-    try {
-        const response = await axios.get(url, {
-            signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        return response;
-    } catch (error) {
-        clearTimeout(timeoutId);
-        throw error;
-    }
-}
-
-function isJSON(data) {
-    try {
-        JSON.parse(data);
-        return true;
-    } catch {
-        return false;
-    }
-}
-
-function walkJSON(json, depth = 0, array = []) {
-    if (typeof json === 'string') {
-        json = JSON.parse(json);
-    }
-
-    for (const key in json) {
-        array.push("┊".repeat(depth) + (depth > 0 ? " " : "") + `*${key}:*`);
-        if (typeof json[key] === "object" && json[key] !== null) {
-            walkJSON(json[key], depth + 1, array);
-        } else {
-            array[array.length - 1] += " " + json[key];
-        }
-    }
-    return array.join("\n");
-}

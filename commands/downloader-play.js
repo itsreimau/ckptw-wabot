@@ -28,38 +28,26 @@ module.exports = {
         );
 
         try {
-            const search = await yts(input);
+            const apiUrl = createAPIUrl("nyxs", "/ai/gpt", {
+                text: input
+            });
+            const response = await axios.get(apiUrl);
 
-            if (!search) return ctx.reply(global.msg.notFound);
-
-            const yt = search.videos[0];
+            const data = response.data;
+            const audio = data.audio;
 
             await ctx.reply(
                 `❖ ${bold("Play")}\n` +
                 "\n" +
-                `➲ Judul: ${yt.title}\n` +
-                `➲ Artis: ${yt.author.name}\n` +
-                `➲ Durasi: ${yt.timestamp}\n` +
-                `➲ URL: ${yt.url}\n` +
+                `➲ Judul: ${audio.title}\n` +
+                `➲ Artis: ${audio.channel}\n` +
                 "\n" +
                 global.msg.footer
             );
 
-            let ytdl;
-            try {
-                ytdl = await youtubedl(yt.url);
-            } catch (error) {
-                ytdl = await youtubedlv2(yt.url);
-            }
-
-            const audio = Object.values(ytdl.audio)[0];
-            const audiodl = await audio.download();
-
-            if (!audiodl) return ctx.reply(global.msg.notFound);
-
             return await ctx.reply({
                 audio: {
-                    url: audiodl,
+                    url: audio.url,
                 },
                 mimetype: mime.contentType("mp3"),
                 ptt: false
