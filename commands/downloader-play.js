@@ -1,11 +1,12 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const {
+    youtubedl,
+    youtubedlv2
+} = require("@bochilteam/scraper");
+const yts = require("yt-search");
 const mime = require("mime-types");
 
 module.exports = {
@@ -27,26 +28,38 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("itzpire", "/download/play-youtube", {
-                title: input
-            });
-            const response = await axios.get(apiUrl);
+            const searchRes = await yts(input);
 
-            const data = response.data;
-            const audio = data.data.audio;
+            if (!searchRes) return ctx.reply(global.msg.notFound);
+
+            const ytVid = searchRes.videos[0];
 
             await ctx.reply(
                 `❖ ${bold("Play")}\n` +
                 "\n" +
-                `➲ Judul: ${audio.title}\n` +
-                `➲ Artis: ${audio.channel}\n` +
+                `➲ Judul: ${ytVid.title}\n` +
+                `➲ Artis: ${ytVid.author.name}\n` +
+                `➲ Durasi: ${ytVid.timestamp}\n` +
+                `➲ URL: ${ytVid.url}\n` +
                 "\n" +
                 global.msg.footer
             );
 
+            let ytdlRes;
+            try {
+                ytdlRes = await youtubedl(ytVid.url);
+            } catch (error) {
+                ytdlRes = await youtubedlv2(ytVid.url);
+            }
+
+            const audInfo = Object.values(ytdlRes.audio)[0];
+            const audUrl = await audInfo.download();
+
+            if (!audUrl) return ctx.reply(global.msg.notFound);
+
             return await ctx.reply({
                 audio: {
-                    url: audio.url,
+                    url: audUrl,
                 },
                 mimetype: mime.contentType("mp3"),
                 ptt: false
