@@ -26,7 +26,7 @@ exports.alkitab = async (q) => {
         const res = await axios.get(apiUrl, {
             headers: {
                 "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36",
-            },
+            }
         });
 
         const $ = cheerio.load(res.data);
@@ -40,7 +40,7 @@ exports.alkitab = async (q) => {
             result.push({
                 text,
                 link,
-                title,
+                title
             });
         });
 
@@ -74,7 +74,7 @@ exports.coingecko = async (search) => {
             if (crypto.name.toLowerCase().includes(search.toLowerCase())) {
                 const cryptoResult = {
                     cryptoName: cryptoName,
-                    priceChange: priceChange,
+                    priceChange: priceChange
                 };
                 result.push(cryptoResult);
             }
@@ -100,7 +100,7 @@ exports.webp2mp4 = async (source) => {
     form.append("new-image", isUrl ? "" : blob, "image.webp");
 
     let res = await axios.post("https://ezgif.com/webp-to-mp4", form, {
-        headers: form.getHeaders(),
+        headers: form.getHeaders()
     });
     let html = res.data;
     let {
@@ -136,7 +136,7 @@ exports.webp2png = async (source) => {
     form.append("new-image", isUrl ? "" : blob, "image.webp");
 
     let res = await axios.post("https://ezgif.com/webp-to-png", form, {
-        headers: form.getHeaders(),
+        headers: form.getHeaders()
     });
     let html = res.data;
     let {
@@ -150,7 +150,7 @@ exports.webp2png = async (source) => {
     }
 
     let res2 = await axios.post("https://ezgif.com/webp-to-png/" + obj.file, form2, {
-        headers: form2.getHeaders(),
+        headers: form2.getHeaders()
     });
     let html2 = res2.data;
     let {

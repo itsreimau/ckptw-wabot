@@ -37,8 +37,8 @@ module.exports = {
                 url: apiUrl,
                 responseType: "arraybuffer",
                 headers: {
-                    "User-Agent": "Node.js",
-                },
+                    "User-Agent": "Node.js"
+                }
             });
 
             return ctx.reply({

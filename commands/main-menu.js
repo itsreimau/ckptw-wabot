@@ -58,7 +58,7 @@ module.exports = {
                     },
                     mentions: [ctx._sender.jid]
                 }, {
-                    quoted: fakeProduct,
+                    quoted: fakeProduct
                 }
             );
         } catch (error) {

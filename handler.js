@@ -12,15 +12,15 @@ exports.handler = async (ctx, options) => {
     const checkOptions = {
         admin: {
             function: async () => ((await ctx.isGroup()) ? (await smpl.isAdmin(ctx)) === 0 : null),
-            msg: global.msg.admin,
+            msg: global.msg.admin
         },
         banned: {
             function: async () => await global.db.get(`user.${senderNumber}.isBanned`),
-            msg: global.msg.banned,
+            msg: global.msg.banned
         },
         botAdmin: {
             function: async () => ((await ctx.isGroup()) ? (await smpl.isBotAdmin(ctx)) === 0 : null),
-            msg: global.msg.botAdmin,
+            msg: global.msg.botAdmin
         },
         coin: {
             function: async () => {
@@ -48,20 +48,24 @@ exports.handler = async (ctx, options) => {
                     return false;
                 }
             },
-            msg: global.msg.coin,
+            msg: global.msg.coin
         },
         group: {
             function: async () => await !ctx.isGroup(),
-            msg: global.msg.group,
+            msg: global.msg.group
         },
         owner: {
             function: async () => (await smpl.isOwner(ctx, senderNumber)) === 0,
-            msg: global.msg.owner,
+            msg: global.msg.owner
+        },
+        premium: {
+            function: async () => await global.db.get(`user.${senderNumber}.isPremium`),
+            msg: global.msg.premium
         },
         private: {
             function: async () => await ctx.isGroup(),
-            msg: global.msg.private,
-        },
+            msg: global.msg.private
+        }
     };
 
     let status = false;
@@ -78,6 +82,6 @@ exports.handler = async (ctx, options) => {
 
     return {
         status,
-        message,
+        message
     };
 };
