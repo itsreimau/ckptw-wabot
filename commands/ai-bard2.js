@@ -19,7 +19,7 @@ const {
 
 module.exports = {
     name: "bard2",
-        aliases: ["bardai2"],
+    aliases: ["bardai2"],
     category: "ai",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {

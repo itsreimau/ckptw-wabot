@@ -25,8 +25,7 @@ module.exports = {
         );
 
         const urlRegex = /(?:https|git)(?::\/\/|@)github\.com[\/:]([^\/:]+)\/([^\/:]+)/i;
-        const match = input.match(urlRegex);
-        if (!match) return ctx.reply(global.msg.urlInvalid);
+        if (!input.match(urlRegex)) return ctx.reply(global.msg.urlInvalid);
 
         const [_, user, repo] = match;
         const repoName = repo.replace(/.git$/, "");
