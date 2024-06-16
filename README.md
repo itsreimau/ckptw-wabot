@@ -53,10 +53,10 @@ To add a new plugin, follow these steps:
    // plugins/info-ping.js
 
    module.exports = {
-     name: 'ping',
-     category: 'info',
+     name: "ping",
+     category: "info",
      code: async (ctx) => {
-       ctx.reply('Pong!');
+       return ctx.reply("Pong!");
      }
    };
    ```
