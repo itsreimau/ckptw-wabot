@@ -94,7 +94,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
         await db.delete(`user.${senderNumber}.afk`);
 
-        return ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`);
+        return ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`);
     }
 
     // Owner-only commands.
@@ -158,9 +158,17 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 });
 
-// Event handling when a user joins or leaves a group.
-bot.ev.on(Events.UserJoin, handleUserEvent);
-bot.ev.on(Events.UserLeave, handleUserEvent);
+// Event handling when a user joins or leaves a group
+bot.ev.on(Events.UserJoin, (m) => {
+    m.eventsType = "UserJoin";
+    handleUserEvent(m);
+});
+
+bot.ev.on(Events.UserLeave, (m) => {
+    m.eventsType = "UserLeave";
+    handleUserEvent(m);
+});
+
 
 // Launch the bot.
 bot.launch().catch((error) => console.error("Error:", error));
@@ -210,7 +218,7 @@ async function handleUserEvent(m) {
                     profile = "https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu";
                 }
 
-                const message = m.type === Events.UserJoin ? `Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!` : `@${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`;
+                const message = m.eventsType === "UserJoin" ? `Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!` : `@${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`;
 
                 await bot.core.sendMessage(id, {
                     text: message,
@@ -220,7 +228,7 @@ async function handleUserEvent(m) {
                             mediaType: 1,
                             previewType: 0,
                             mediaUrl: global.bot.groupChat,
-                            title: m.type === Events.UserJoin ? "JOIN" : "LEAVE",
+                            title: m.eventsType === "UserJoin" ? "JOIN" : "LEAVE",
                             body: null,
                             renderLargerThumbnail: true,
                             thumbnailUrl: profile,

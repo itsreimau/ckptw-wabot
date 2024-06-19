@@ -20,8 +20,7 @@ module.exports = {
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         const input = ctx._args.join(" ");
-        const inrplc = input.replace(/[^\d]/g, "");
-        const member = `${inrplc}@s.whatsapp.net`;
+
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -29,6 +28,8 @@ module.exports = {
         );
 
         try {
+            const member = `${input.replace(/[^\d]/g, "")}@s.whatsapp.net`;
+
             if (member === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
             if ((await isAdmin(ctx, member)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah admin grup.`);
