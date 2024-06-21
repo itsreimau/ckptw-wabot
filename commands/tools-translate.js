@@ -5,7 +5,9 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const {
+    translate
+} = require("bing-translate-api");
 
 module.exports = {
     name: "translate",
@@ -33,18 +35,13 @@ module.exports = {
                 inp = ctx._args.slice(1);
             }
 
-            const apiUrl = createAPIUrl("nyxs", "/tools/translate", {
-                text: inp.join(" "),
-                to: lang
-            });
-            const response = await axios.get(apiUrl);
+            const {
+                translation
+            } = await translate(inp.join(" "), null, lang);
 
-            const data = await response.data;
-
-            return await ctx.reply(data.result);
+            return ctx.reply(text);
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }

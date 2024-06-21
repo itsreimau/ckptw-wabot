@@ -31,9 +31,6 @@ module.exports = {
             const apiUrl = createAPIUrl("aemt", `/dalle`, {
                 text: input
             });
-            const response = await axios.get(apiUrl, {
-                responseType: "arraybuffer"
-            });
 
             return await ctx.reply({
                 image: {

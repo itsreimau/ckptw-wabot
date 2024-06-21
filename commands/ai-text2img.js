@@ -1,18 +1,16 @@
 const {
-    getRandomElement
-} = require("../tools/simple.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const fg = require("api-dylux");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "googleimage",
-    aliases: ["gimage"],
-    category: "internet",
+    name: "text2img",
+    category: "ai",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
@@ -29,25 +27,24 @@ module.exports = {
         );
 
         try {
-            const result = await fg.googleImage(input);
-
-            if (!result) return ctx.reply(global.msg.notFound);
-
-            const imageUrl = getRandomElement(result);
+            const apiUrl = createAPIUrl("aemt", `/ai/text2img`, {
+                text: input
+            });
 
             return await ctx.reply({
                 image: {
-                    url: imageUrl
+                    url: apiUrl
                 },
                 mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Google Image")}\n` +
+                caption: `❖ ${bold("TEXT2IMG")}\n` +
                     "\n" +
-                    `➲ Kueri: ${input}\n` +
+                    `➲ Prompt: ${input}\n` +
                     "\n" +
                     global.msg.footer
             });
         } catch (error) {
             console.error("Error:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }

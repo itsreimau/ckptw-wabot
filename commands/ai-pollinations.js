@@ -29,9 +29,6 @@ module.exports = {
 
         try {
             const apiUrl = createAPIUrl("https://image.pollinations.ai", `/prompt/${input}`, {});
-            const response = await axios.get(apiUrl, {
-                responseType: "arraybuffer"
-            });
 
             return await ctx.reply({
                 image: {

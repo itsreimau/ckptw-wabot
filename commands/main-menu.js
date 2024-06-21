@@ -30,7 +30,7 @@ module.exports = {
                             description: null,
                             currencyCode: "IDR",
                             priceAmount1000: "1000",
-                            retailerId: "CKPTW",
+                            retailerId: global.bot.name,
                             productImageCount: 0
                         },
                         businessOwnerJid: ctx._sender.jid
