@@ -40,7 +40,7 @@ module.exports = {
             let result;
 
             const apiCalls = [
-                () => axios.get(createAPIUrl("nazunaxz", "/downloader/facebook", {
+                () => axios.get(createAPIUrl("nazunaxz", "/api/downloader/facebook", {
                     url: input
                 })).then(response => response.data.data.media[0].url || response.data.data.media[1].url),
                 () => axios.get(createAPIUrl("nyxs", "/dl/fb", {
