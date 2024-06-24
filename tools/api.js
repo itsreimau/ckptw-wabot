@@ -8,6 +8,9 @@ const APIs = {
     miwudev: {
         baseURL: "https://openapi.miwudev.my.id"
     },
+    nazunaxz: {
+        baseURL: "https://api.nazunaxz.xyz"
+    },
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },

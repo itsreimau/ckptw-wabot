@@ -37,6 +37,12 @@ module.exports = {
             let result;
 
             const apiCalls = [
+                () => axios.get(createAPIUrl("nazunaxz", "/downloader/instagram", {
+                    url: input
+                })).then(response => response.data.data.media[0]),
+                () => axios.get(createAPIUrl("nazunaxz", "/downloader/instagramV2", {
+                    url: input
+                })).then(response => response.data.data.url[0].url),
                 () => axios.get(createAPIUrl("miwudev", "/api/v1/igdl", {
                     url: input
                 })).then(response => response.data.url),

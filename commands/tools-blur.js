@@ -13,7 +13,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "blur",
-    category: "ai",
+    category: "tools",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,

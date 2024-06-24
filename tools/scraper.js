@@ -112,29 +112,6 @@ exports.danbooru = async (url) => {
 }
 
 /**
- * Checks the trustworthiness of a website based on the provided URL.
- * @param {string[]} url The URL(s) of the website to check.
- * @returns {Object|null} An object containing the trustworthiness details, or null if an error occurs.
- */
-exports.trustpositif = async (url) => {
-    try {
-        const response = await axios.post('https://trustpositif.kominfo.go.id/Rest_server/getrecordsname_home',
-            new URLSearchParams(Object.entries({
-                name: url.join('%0A')
-            })), {
-                httpsAgent: new require('https').Agent({
-                    rejectUnauthorized: false
-                })
-            }
-        );
-        return response.data.values;
-    } catch (error) {
-        console.error(error);
-        return null;
-    }
-}
-
-/**
  * Convert WebP image to MP4 video using ezgif.com.
  * @param {Buffer|string} source The source image as a buffer or a URL string.
  * @returns {string} The URL of the converted MP4 video.
