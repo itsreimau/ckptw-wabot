@@ -27,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/SazumiVicky/cek-khodam/master/data/khodam/list.txt`, {});
+            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/SazumiVicky/cek-khodam/main/khodam/list.txt`, {});
             const response = await axios.get(apiUrl);
 
             const data = await response.data;
