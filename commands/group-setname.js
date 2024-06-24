@@ -20,7 +20,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis evangelion fans`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ckptw-wabot`)}`
         );
 
         try {

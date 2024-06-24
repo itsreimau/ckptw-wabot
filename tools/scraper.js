@@ -19,7 +19,7 @@ const {
  */
 exports.alkitab = async (q) => {
     const apiUrl = createAPIUrl("https://alkitab.me", "/search", {
-        q: q,
+        q: q
     });
 
     try {
@@ -86,6 +86,53 @@ exports.coingecko = async (search) => {
         return null;
     }
 };
+
+/**
+ * Fetches image information from Danbooru based on the provided URL.
+ * @param {string} url The URL of the image on Danbooru.
+ * @returns {Object|null} An object containing image details such as tags and size, or null if an error occurs.
+ */
+exports.danbooru = async (url) => {
+    try {
+        const html = (await axios.get(url)).data;
+        const $ = cheerio.load(html);
+        const obj = {};
+
+        $('#post-information > ul > li').each((idx, el) => {
+            const str = $(el).text().trim().replace(/\n/g, '').split(': ');
+            obj[str[0]] = str[1].replace('»', '').trim().split(' .')[0];
+        });
+
+        obj.url = $('#post-information > ul > li[id="post-info-size"] > a').attr('href');
+        return obj;
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+}
+
+/**
+ * Checks the trustworthiness of a website based on the provided URL.
+ * @param {string[]} url The URL(s) of the website to check.
+ * @returns {Object|null} An object containing the trustworthiness details, or null if an error occurs.
+ */
+exports.trustpositif = async (url) => {
+    try {
+        const response = await axios.post('https://trustpositif.kominfo.go.id/Rest_server/getrecordsname_home',
+            new URLSearchParams(Object.entries({
+                name: url.join('%0A')
+            })), {
+                httpsAgent: new require('https').Agent({
+                    rejectUnauthorized: false
+                })
+            }
+        );
+        return response.data.values;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
 
 /**
  * Convert WebP image to MP4 video using ezgif.com.

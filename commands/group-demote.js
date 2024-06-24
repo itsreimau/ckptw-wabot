@@ -22,20 +22,20 @@ module.exports = {
         const senderNumber = ctx.sender.jid.split("@")[0];
         const senderJid = ctx._sender.jid;
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-        const member = mentionedJids[0] || null;
+        const account = mentionedJids[0] || null;
 
-        if (!member.length) return ctx.reply({
+        if (!account.length) return ctx.reply({
             text: `${global.msg.argument}\n` +
                 `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`,
             mentions: [senderJid]
         });
 
         try {
-            if (member === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
+            if (account === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
-            if ((await isAdmin(ctx, member)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah anggota biasa.`);
+            if ((await isAdmin(ctx, account)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah anggota biasa.`);
 
-            await ctx._client.groupParticipantsUpdate(ctx.id, [member], "demote");
+            await ctx._client.groupParticipantsUpdate(ctx.id, [account], "demote");
 
             return ctx.reply(`${bold("[ ! ]")} Berhasil diturunkan dari admin menjadi anggota biasa!`);
         } catch (error) {

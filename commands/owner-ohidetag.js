@@ -8,7 +8,6 @@ module.exports = {
     category: "owner",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
-            banned: true,
             group: true,
             owner: true
         });
