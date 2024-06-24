@@ -8,7 +8,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "cekkhodam",
-    aliases: ["checkkhodam", "khodam"]
+    aliases: ["checkkhodam", "khodam"],
     category: "fun",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
