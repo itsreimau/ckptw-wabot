@@ -1,6 +1,6 @@
 const {
     createAPIUrl
-} = require("./api.js");
+} = require("../tools/api.js");
 const {
     bold,
     monospace
