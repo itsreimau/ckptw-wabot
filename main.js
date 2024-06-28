@@ -74,8 +74,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const getAFKMention = db.get(`user.${mentionJid.split("@")[0]}.afk`);
             if (getAFKMention) {
                 const [reason, timeStamp] = await Promise.all([
-                    db.get(`user.${senderNumber}.afk.reason`),
-                    db.get(`user.${senderNumber}.afk.timeStamp`)
+                    db.get(`user.${mentionJid.split("@")[0]}.afk.reason`),
+                    db.get(`user.${mentionJid.split("@")[0]}.afk.timeStamp`)
                 ]);
                 const timeAgo = smpl.convertMsToDuration(Date.now() - timeStamp);
 
