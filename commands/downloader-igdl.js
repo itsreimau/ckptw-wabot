@@ -38,11 +38,13 @@ module.exports = {
             let result;
 
             for (const source of sources) {
-                result = await igdl(source, input);
-                if (result) break;
-            } catch (error) {
-                console.error(`Error from ${source}:`, error);
-                continue;
+                try {
+                    result = await igdl(source, input);
+                    if (result) break;
+                } catch (error) {
+                    console.error(`Error from ${source}:`, error);
+                    continue;
+                }
             }
 
             if (!result) return ctx.reply(global.msg.notFound);
