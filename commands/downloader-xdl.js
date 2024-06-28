@@ -30,29 +30,12 @@ module.exports = {
         if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiCalls = [
-                () => axios.get(createAPIUrl("nyxs", "/dl/twitter", {
-                    url: input
-                }))
-                .then(response => response.data.result.media[0].videos[0].url),
-                () => axios.get(createAPIUrl("ngodingaja", "/api/twitter", {
-                    url: input
-                }))
-                .then(response => response.data.hasil.HD || response.data.hasil.SD),
-                () => axios.get(createAPIUrl("ssa", "/api/twitter", {
-                    url: input
-                }))
-                .then(response => response.data.data.response.video_hd || response.data.data.response.video_sd)
-            ];
-
+            const sources = ["nyxs", "ngodingaja", "ssa"];
             let result;
-            for (const call of apiCalls) {
-                try {
-                    result = await call();
-                    if (result) break;
-                } catch (error) {
-                    console.error("Error in API call:", error);
-                }
+
+            for (const source of sources) {
+                result = await xdl(source, input);
+                if (result) break;
             }
 
             if (!result) return ctx.reply(global.msg.notFound);
@@ -74,3 +57,29 @@ module.exports = {
         }
     }
 };
+
+async function xdl(source, url) {
+    let result = null;
+
+    switch (source) {
+        case "nyxs":
+            result = await axios.get(createAPIUrl("nyxs", "/dl/twitter", {
+                url
+            })).then(response => response.data.result.media[0].videos[0].url);
+            break;
+        case "ngodingaja":
+            result = await axios.get(createAPIUrl("ngodingaja", "/api/twitter", {
+                url
+            })).then(response => response.data.hasil.HD || response.data.hasil.SD);
+            break;
+        case "ssa":
+            result = await axios.get(createAPIUrl("ssa", "/api/twitter", {
+                url
+            })).then(response => response.data.data.response.video_hd || response.data.data.response.video_sd);
+            break;
+        default:
+            throw new Error(`Unsupported source: ${source}`);
+    }
+
+    return result;
+}

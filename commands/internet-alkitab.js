@@ -25,7 +25,7 @@ module.exports = {
 
         if (!ctx._args.length) return ctx.reply(
             `${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kej 1`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kej 2:18`)}`
         );
 
         if (ctx._args[0] === "list") {
@@ -44,7 +44,10 @@ module.exports = {
                 data
             } = await response.data;
 
-            const resultText = data.verses.map((v) => `➲ Ayat: ${v.verse}\n` + `➲ ${v.content}`).join("\n-----\n");
+            const resultText = data.verses.map((v) =>
+                `➲ Ayat: ${v.verse}\n` +
+                `➲ ${v.content}`
+            ).join("\n-----\n");
             return ctx.reply(
                 `❖ ${bold("Alkitab")}\n` +
                 "\n" +

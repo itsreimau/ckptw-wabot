@@ -34,34 +34,12 @@ module.exports = {
         if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
 
         try {
+            const sources = ["nazunaxz", "nyxs", "ngodingaja", "miwudev"];
             let result;
 
-            const apiCalls = [
-                () => axios.get(createAPIUrl("nazunaxz", "/api/downloader/instagram", {
-                    url: input
-                })).then(response => response.data.data.media[0]),
-                () => axios.get(createAPIUrl("nazunaxz", "/api/downloader/instagramV2", {
-                    url: input
-                })).then(response => response.data.data.url[0].url),
-                () => axios.get(createAPIUrl("miwudev", "/api/v1/igdl", {
-                    url: input
-                })).then(response => response.data.url),
-                () => axios.get(createAPIUrl("nyxs", "/dl/ig", {
-                    url: input
-                })).then(response => response.data.result[0].url),
-                () => axios.get(createAPIUrl("ngodingaja", "/api/ig", {
-                    url: input
-                })).then(response => response.data.hasil.download_link),
-                () => instagramdl(input).then(data => data.result)
-            ];
-
-            for (const call of apiCalls) {
-                try {
-                    result = await call();
-                    if (result) break;
-                } catch (error) {
-                    console.error("Error in API call:", error);
-                }
+            for (const source of sources) {
+                result = await igdl(source, input);
+                if (result) break;
             }
 
             if (!result) return ctx.reply(global.msg.notFound);
@@ -85,3 +63,34 @@ module.exports = {
         }
     }
 };
+
+async function igdl(source, url) {
+    let result = null;
+
+    switch (source) {
+        case "nazunaxz":
+            result = await axios.get(createAPIUrl("nazunaxz", "/api/downloader/instagram", {
+                url
+            })).then(response => response.data.data.media[0]);
+            break;
+        case "nyxs":
+            result = await axios.get(createAPIUrl("nyxs", "/dl/ig", {
+                url
+            })).then(response => response.data.result[0].url);
+            break;
+        case "ngodingaja":
+            result = await axios.get(createAPIUrl("ngodingaja", "/api/ig", {
+                url
+            })).then(response => response.data.hasil.download_link);
+            break;
+        case "miwudev":
+            result = await axios.get(createAPIUrl("miwudev", "/api/v1/igdl", {
+                url
+            })).then(response => response.data.url);
+            break;
+        default:
+            throw new Error(`Unsupported source: ${source}`);
+    }
+
+    return result;
+}

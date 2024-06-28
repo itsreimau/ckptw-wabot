@@ -11,7 +11,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "ttdl",
-    aliases: ["tiktokdl", "tiktokmp3", "tiktoknowm", "tt", "tta", "ttaudio", "ttmp3", "ttmusic", "ttmusik", "vt", "vta", "vtaudio", "vtdltiktok", "vtmp3", "vtmusic", "vtmusik", "vtnowm"],
+    aliases: ["tiktokdl", "tiktoknowm", "tt", "vt", , "vtdltiktok", "vtnowm"],
     category: "downloader",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -31,35 +31,12 @@ module.exports = {
         if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const mp3cmd = ["tiktokmp3", "tta", "ttaudio", "ttmp3", "ttmusic", "ttmusik", "vta", "vtaudio", "vtmp3", "vtmusic", "vtmusik"];
-
-            const apiCalls = [
-                () => axios.get(createAPIUrl("nyxs", "/dl/tiktok", {
-                    url: input
-                }))
-                .then(response => mp3cmd.includes(ctx._used.command) ?
-                    response.data.result?.musik :
-                    response.data.result?.video_hd),
-                () => axios.get(createAPIUrl("ngodingaja", "/api/tiktok", {
-                    url: input
-                }))
-                .then(response => mp3cmd.includes(ctx._used.command) ?
-                    response.data.hasil?.musik :
-                    response.data.result?.video2 || response.data.result?.video1 || response.data.hasil?.tanpawm),
-                () => fg.tiktok(input)
-                .then(data => mp3cmd.includes(ctx._used.command) ?
-                    data.play :
-                    data.hdplay)
-            ];
-
+            const sources = ["nyxs", "ngodingaja", "dylux"];
             let result;
-            for (const call of apiCalls) {
-                try {
-                    result = await call();
-                    if (result) break;
-                } catch (error) {
-                    console.error("Error in API call:", error);
-                }
+
+            for (const source of sources) {
+                result = await ttdl(source, input);
+                if (result) break;
             }
 
             if (!result) return ctx.reply(global.msg.notFound);
@@ -68,7 +45,7 @@ module.exports = {
                 video: {
                     url: result
                 },
-                mimetype: mime.contentType(mp3cmd.includes(ctx._used.command) ? "mp3" : "mp4"),
+                mimetype: mime.contentType("mp4"),
                 caption: `❖ ${bold("TT Downloader")}\n` +
                     "\n" +
                     `➲ URL: ${input}\n` +
@@ -83,3 +60,27 @@ module.exports = {
         }
     }
 };
+
+async function ttdl(source, url) {
+    let result = null;
+
+    switch (source) {
+        case "nyxs":
+            result = await axios.get(createAPIUrl("nyxs", "/dl/tiktok", {
+                url
+            })).then(response => response.data.result.musik || response.data.result.video_hd);
+            break;
+        case "ngodingaja":
+            result = await axios.get(createAPIUrl("ngodingaja", "/api/tiktok", {
+                url
+            })).then(response => response.data.hasil.musik || response.data.result.video2 || response.data.result.video1 || response.data.hasil.tanpawm);
+            break;
+        case "dylux":
+            result = await fg.tiktok(input).then(data => data.play || data.hdplay);
+            break;
+        default:
+            throw new Error(`Unsupported source: ${source}`);
+    }
+
+    return result;
+}

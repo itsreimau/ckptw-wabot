@@ -1,10 +1,12 @@
 const {
-    danbooru
-} = require("../tools/scraper.js");
+    createAPIUrl
+} = require("./api.js");
 const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
+const cheerio = require("cheerio");
 const mime = require("mime-types");
 
 module.exports = {
@@ -52,3 +54,22 @@ module.exports = {
         }
     }
 };
+
+async function danbooru(url) {
+    try {
+        const html = (await axios.get(url)).data;
+        const $ = cheerio.load(html);
+        const obj = {};
+
+        $('#post-information > ul > li').each((idx, el) => {
+            const str = $(el).text().trim().replace(/\n/g, '').split(': ');
+            obj[str[0]] = str[1].replace('»', '').trim().split(' .')[0];
+        });
+
+        obj.url = $('#post-information > ul > li[id="post-info-size"] > a').attr('href');
+        return obj;
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+}

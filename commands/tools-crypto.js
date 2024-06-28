@@ -1,10 +1,11 @@
 const {
-    coingecko
-} = require("../tools/scraper.js");
+    createAPIUrl
+} = require("./api.js");
 const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 module.exports = {
     name: "crypto",
@@ -47,3 +48,35 @@ module.exports = {
         }
     }
 };
+
+
+async function coingecko(search) {
+    const apiUrl = createAPIUrl("https://api.coingecko.com", "/api/v3/coins/markets", {
+        vs_currency: "usd",
+    });
+
+    try {
+        const response = await axios.get(apiUrl);
+        const data = response.data;
+        const result = [];
+
+        data.forEach((crypto) => {
+            const cryptoName = `${crypto.name} (${crypto.symbol}) - $${crypto.current_price}`;
+            const percentChange = crypto.price_change_percentage_24h.toFixed(2);
+            const priceChange = percentChange >= 0 ? `+${percentChange}%` : `${percentChange}%`;
+
+            if (crypto.name.toLowerCase().includes(search.toLowerCase())) {
+                const cryptoResult = {
+                    cryptoName: cryptoName,
+                    priceChange: priceChange
+                };
+                result.push(cryptoResult);
+            }
+        });
+
+        return result;
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+}

@@ -37,31 +37,12 @@ module.exports = {
         if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
 
         try {
+            const sources = ["nazunaxz", "nyxs", "ngodingaja", "xaviabot", "dylux", "bochilteam", "bochilteamv2"];
             let result;
 
-            const apiCalls = [
-                () => axios.get(createAPIUrl("nazunaxz", "/api/downloader/facebook", {
-                    url: input
-                })).then(response => response.data.data.media[0].url || response.data.data.media[1].url),
-                () => axios.get(createAPIUrl("nyxs", "/dl/fb", {
-                    url: input
-                })).then(response => response.data.result.HD || response.data.result.SD),
-                () => axios.get(createAPIUrl("ngodingaja", "/api/fb", {
-                    url: input
-                })).then(response => response.data.hasil.url),
-                () => getFBInfo(input).then(data => data.videoUrl),
-                () => fg.fbdl(input).then(data => data.hd || data.sd),
-                () => facebookdl(input).then(data => data.videoUrl),
-                () => facebookdlv2(input).then(data => data.videoUrl)
-            ];
-
-            for (const call of apiCalls) {
-                try {
-                    result = await call();
-                    if (result) break;
-                } catch (error) {
-                    console.error("Error in API call:", error);
-                }
+            for (const source of sources) {
+                result = await fbdl(source, input);
+                if (result) break;
             }
 
             if (!result) return ctx.reply(global.msg.notFound);
@@ -85,3 +66,41 @@ module.exports = {
         }
     }
 };
+
+async function fbdl(source, url) {
+    let result = null;
+
+    switch (source) {
+        case "nazunaxz":
+            result = await axios.get(createAPIUrl("nazunaxz", "/api/downloader/facebook", {
+                url
+            })).then(response => response.data.data.media[0].url || response.data.data.media[1].url);
+            break;
+        case "nyxs":
+            result = await axios.get(createAPIUrl("nyxs", "/dl/fb", {
+                url
+            })).then(response => response.data.result.HD || response.data.result.SD);
+            break;
+        case "ngodingaja":
+            result = await axios.get(createAPIUrl("ngodingaja", "/api/fb", {
+                url
+            })).then(response => response.data.hasil.url);
+            break;
+        case "xaviabot":
+            result = await getFBInfo(url).then(data => data.videoUrl);
+            break;
+        case "dylux":
+            result = await fg.fbdl(url).then(data => data.hd || data.sd);
+            break;
+        case "bochilteam":
+            result = await facebookdl(url).then(data => data.videoUrl);
+            break;
+        case "bochilteamv2":
+            result = await facebookdlv2(url).then(data => data.videoUrl);
+            break;
+        default:
+            throw new Error(`Unsupported source: ${source}`);
+    }
+
+    return result;
+}
