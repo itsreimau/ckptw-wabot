@@ -34,7 +34,7 @@ module.exports = {
 
             if ((await isAdmin(ctx, account)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah admin grup.`);
 
-            await ctx._client.groupParticipantsUpdate(ctx.id, [account], "remove");
+            await ctx.group().kick([account]);
 
             return ctx.reply(`${bold("[ ! ]")} Berhasil dikeluarkan!`);
         } catch (error) {

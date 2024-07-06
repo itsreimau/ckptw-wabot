@@ -26,8 +26,8 @@
     "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
     "dependencies": {
         "@bochilteam/scraper": "^4.2.4",
-        "@mengkodingan/ckptw": "^4.1.1",
-        "@whiskeysockets/baileys": "^6.7.2",
+        "@mengkodingan/ckptw": "^4.2.0",
+        "@whiskeysockets/baileys": "^6.7.5",
         "@xaviabot/fb-downloader": "^1.0.14",
         "api-dylux": "^1.8.4",
         "axios": "^1.7.2",
@@ -35,7 +35,7 @@
         "cfonts": "^3.2.0",
         "cheerio": "^1.0.0-rc.12",
         "form-data": "^4.0.0",
-        "jimp": "^0.16.13",
+        "jimp": "^0.16.1",
         "jsdom": "^24.1.0",
         "link-preview-js": "^3.0.5",
         "lowline.ai": "^1.0.18",
@@ -45,6 +45,6 @@
         "telegraph-uploader": "^2.0.0",
         "util": "^0.12.5",
         "wa-sticker-formatter": "^4.4.4",
-        "yt-search": "^2.11.0"
+        "yt-search": "^2.11.1"
     }
 }

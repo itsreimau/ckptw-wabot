@@ -19,19 +19,27 @@ module.exports = {
         const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
-            `${global.msg.argument} Argumen yang tersedia adalah open dan close.\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} close`)}`
+            `${global.msg.argument} Argumen yang tersedia adalah open, close, lock, dan unlock.\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} open`)}`
         );
 
         try {
-            const isClose = {
-                "open": "not_announcement",
-                "close": "announcement",
-            } [input];
-
-            if (!isClose) return ctx.reply(`${bold("[ ! ]")} Argumen yang tersedia adalah open dan close.`);
-
-            await ctx._client.groupSettingUpdate(ctx.id, isClose);
+            switch (input) {
+                case "open":
+                    await ctx.group().open();
+                    break;
+                case "close":
+                    await ctx.group().close();
+                    break;
+                case "lock":
+                    await ctx.group().lock();
+                    break;
+                case "unlock":
+                    await ctx.group().unlock();
+                    break;
+                default:
+                    return ctx.reply(`${bold("[ ! ]")} Argumen yang tersedia adalah open, close, lock, dan unlock.`);
+            }
 
             return ctx.reply(`${bold("[ ! ]")} Berhasil mengubah setelan grup!`);
         } catch (error) {

@@ -32,7 +32,7 @@ module.exports = {
         try {
             if ((await isAdmin(ctx, account)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah admin grup.`);
 
-            await ctx._client.groupParticipantsUpdate(ctx.id, [account], "promote");
+            await ctx.group().promote([account]);
 
             return ctx.reply(`${bold("[ ! ]")} Berhasil ditingkatkan dari anggota biasa menjadi admin!`);
         } catch (error) {

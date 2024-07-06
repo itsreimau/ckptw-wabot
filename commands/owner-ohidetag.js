@@ -17,7 +17,7 @@ module.exports = {
         const input = ctx._args.join(" ");
 
         try {
-            const data = await ctx._client.groupMetadata(ctx.id);
+            const data = await ctx.group().metadata();
             const len = data.participants.length;
             const mentions = [];
             for (let i = 0; i < len; i++) {

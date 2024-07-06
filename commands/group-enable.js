@@ -30,6 +30,7 @@ module.exports = {
 
             if (ctx._args[0] === "list") {
                 const listText = fs.readFileSync(path.resolve(__dirname, "../assets/txt/list-disable_enable.txt"), "utf8");
+                
                 return ctx.reply(
                     `❖ ${bold("Daftar")}\n\n${listText}\n\n${global.msg.footer}`
                 );

@@ -16,7 +16,7 @@ module.exports = {
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         try {
-            const link = await ctx._client.groupInviteCode(ctx.id);
+            const link = await ctx.group().inviteCode();
 
             return ctx.reply(`https://chat.whatsapp.com/${link}`);
         } catch (error) {

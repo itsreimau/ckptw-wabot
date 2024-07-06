@@ -34,7 +34,7 @@ module.exports = {
 
             if (account === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
-            await ctx._client.groupParticipantsUpdate(ctx.id, [account], "add");
+            await ctx.group().add([account]);
 
             return ctx.reply(`${bold("[ ! ]")} Berhasil ditambahkan!`);
         } catch (error) {

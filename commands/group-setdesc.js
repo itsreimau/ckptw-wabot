@@ -24,7 +24,7 @@ module.exports = {
         );
 
         try {
-            await ctx._client.groupUpdateDescription(ctx.id, input);
+            await ctx.group().updateDescription(input);
 
             return ctx.reply(`${bold("[ ! ]")} Berhasil mengubah deskripsi grup!`);
         } catch (error) {

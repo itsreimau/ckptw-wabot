@@ -26,8 +26,8 @@ module.exports = {
 
         try {
             const urlCode = match[1];
-            const res = await ctx._client.groupAcceptInvite(urlCode);
-            const groupInfo = await ctx._client.groupMetadata(res);
+            const res = await ctx.groups.acceptInvite(urlCode);
+            const groupInfo = await ctx.group().metadata();
             const participantsIds = groupInfo.participants.map(user => user.id);
 
             await ctx.sendMessage(res, {

@@ -34,7 +34,7 @@ module.exports = {
 
             if (!(await isAdmin(ctx, account)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah anggota biasa.`);
 
-            await ctx._client.groupParticipantsUpdate(ctx.id, [account], "demote");
+            await ctx.group().demote([account]);
 
             return ctx.reply(`${bold("[ ! ]")} Berhasil diturunkan dari admin menjadi anggota biasa!`);
         } catch (error) {
