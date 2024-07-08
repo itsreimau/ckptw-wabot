@@ -132,6 +132,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (isGroup) {
         // Antilink handling.
         const getAntilink = await db.get(`group.${groupNumber}.antilink`);
+        const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
         if (getAntilink && m.content && urlRegex.test(m.content)) {
             if ((await smpl.isAdmin(ctx)) === 1) return;
 
