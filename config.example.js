@@ -4,11 +4,6 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 
-// API Key.
-global.apiKey = {
-    lowline: "REPLACE_THIS_WITH_YOUR_API_KEY" // Get it at: https://chat.openai.com/ (Optional)
-};
-
 // Bot.
 global.bot = {
     name: "CKPTW",
