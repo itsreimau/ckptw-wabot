@@ -142,30 +142,32 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Antispam handling.
         const getAntispam = await db.get(`group.${groupNumber}.antispam`);
         if (getAntispam) {
-            if (await smpl.isAdmin(ctx)) return;
+            if (senderNumber && senderJid) {
+                if (await smpl.isAdmin(ctx)) return;
 
-            const now = Date.now();
-            const getSpam = await db.get(`group.${groupNumber}.spam`);
-            const spam = getSpam || {
-                user: senderNumber,
-                count: 0,
-                lastMessageTime: 0
-            };
+                const now = Date.now();
+                const getSpam = await db.get(`group.${groupNumber}.spam`);
+                const spam = getSpam || {
+                    user: senderNumber,
+                    count: 0,
+                    lastMessageTime: 0
+                };
 
-            if (spam.user === senderNumber && now - spam.lastMessageTime < 3000) {
-                spam.count++;
-            } else {
-                spam.user = senderNumber;
-                spam.count = 1;
-                spam.lastMessageTime = now;
-            }
+                if (spam.user === senderNumber && now - spam.lastMessageTime < 3000) {
+                    spam.count++;
+                } else {
+                    spam.user = senderNumber;
+                    spam.count = 1;
+                    spam.lastMessageTime = now;
+                }
 
-            if (spam.count < 4) return;
-            if (spam.count <= 5) {
-                await ctx.reply(`${bold("[! ]")} Jangan spam! (Warning ${spam.count}/5)`);
-            } else {
-                await ctx.reply(`${bold("[! ]")} Anda telah dikick karena spamming!`);
-                await ctx.group().kick([senderJid]);
+                if (spam.count < 4) return;
+                if (spam.count <= 5) {
+                    await ctx.reply(`${bold("[ ! ]")} Jangan spam! (Warning ${spam.count}/5)`);
+                } else {
+                    await ctx.reply(`${bold("[ ! ]")} Anda telah dikick karena spamming!`);
+                    await ctx.group().kick([senderJid]);
+                }
             }
 
             await db.set(`group.${groupNumber}.spam`, spam);
