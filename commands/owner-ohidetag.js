@@ -17,8 +17,8 @@ module.exports = {
         const input = ctx._args.join(" ");
 
         try {
-            const data = await ctx.group().metadata();
-            const len = data.participants.length;
+            const data = await ctx.group().members();
+            const len = data.length;
             const mentions = [];
             for (let i = 0; i < len; i++) {
                 const serialized = data.participants[i].id.split("@")[0];

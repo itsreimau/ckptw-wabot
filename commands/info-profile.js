@@ -25,7 +25,10 @@ module.exports = {
             const senderPushName = ctx._sender.pushName;
             const senderJid = ctx._sender.jid;
             const senderNumber = ctx._sender.jid.split("@")[0];
-            const coin = await global.db.get(`user.${senderNumber}.coin`) || "-";
+            const [coin, premium] = await Promise.all([
+                global.db.get(`user.${senderNumber}.coin`) || "-",
+                global.db.get(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak"
+            ]);
 
             let profileUrl;
             try {
@@ -42,6 +45,7 @@ module.exports = {
                 caption: `❖ ${bold("Profile")}\n` +
                     "\n" +
                     `➲ Nama: ${senderPushName}\n` +
+                    `➲ Premium: ${premium}\n` +
                     `➲ Koin: ${coin}\n` +
                     "\n" +
                     global.msg.footer

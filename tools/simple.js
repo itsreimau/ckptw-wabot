@@ -9,10 +9,10 @@ const {
  * @returns {number} Returns 1 if the user is an admin, otherwise returns 0.
  */
 async function checkAdmin(ctx, id) {
-    const group = await ctx.group().metadata();
+    const members = await ctx.group().members();
     const formattedId = `${id}@s.whatsapp.net`;
 
-    return group.participants.filter((v) => (v.admin === "superadmin" || v.admin === "admin") && v.id == formattedId).length ? true : false;
+    return members.filter((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id == formattedId).length ? true : false;
 }
 
 /**

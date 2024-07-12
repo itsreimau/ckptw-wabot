@@ -22,6 +22,7 @@ global.msg = {
     coin: `${bold("[ ! ]")} Anda tidak punya cukup koin!`,
     group: `${bold("[ ! ]")} Perintah hanya dapat diakses dalam grup!`,
     owner: `${bold("[ ! ]")} Perintah hanya dapat diakses Owner!`,
+    premium: `${bold("[ ! ]")} Anda bukan pengguna Premium!`,
     private: `${bold("[ ! ]")} Perintah hanya dapat diakses dalam obrolan pribadi!`,
 
     // Command interface.

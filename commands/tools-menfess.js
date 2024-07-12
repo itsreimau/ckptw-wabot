@@ -28,18 +28,19 @@ module.exports = {
 
             if (numberFormatted === ctx._sender.jid.split("@")[0]) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
+            const menfessText = `❖ ${bold("Menfess")}\n` +
+                `Hai, saya ${global.bot.name}, seseorang mengirimi Anda pesan melalui menfess ini!\n` +
+                "\n" +
+                `${text.join(" ")}\n` +
+                "\n" +
+                global.msg.footer;
             await ctx.sendMessage(`${numberFormatted}@s.whatsapp.net`, {
-                text: `❖ ${bold("Menfess")}\n` +
-                    `Hai, saya ${global.bot.name}, seseorang mengirimi Anda pesan melalui menfess ini!\n` +
-                    "\n" +
-                    `${text.join(" ")}\n` +
-                    "\n" +
-                    global.msg.footer
+                text: menfessText
             });
 
             global.db.set(`menfess.${numberFormatted}`, {
                 from: ctx._sender.jid.split("@")[0],
-                timeStamp: Date.now()
+                text: menfessText
             });
 
             return ctx.reply("Pesan berhasil terkirim!");

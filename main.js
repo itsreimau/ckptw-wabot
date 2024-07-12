@@ -139,6 +139,37 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             await ctx.reply(`${bold("[ ! ]")} Jangan kirim tautan!`);
             return await ctx.deleteMessage(m.key);
         }
+
+        // Antispam handling.
+        const getAntispam = await db.get(`group.${groupNumber}.antispam`);
+        if (getAntispam) {
+            if (await smpl.isAdmin(ctx)) return;
+
+            const now = Date.now();
+            const spam = getAntispam || {
+                user: senderNumber,
+                count: 0,
+                lastMessageTime: 0
+            };
+
+            if (spam.user === senderNumber && now - spam.lastMessageTime < 3000) {
+                spam.count++;
+            } else {
+                spam.user = senderNumber;
+                spam.count = 1;
+                spam.lastMessageTime = now;
+            }
+
+            if (spam.count < 4) return;
+            if (spam.count <= 5) {
+                await ctx.reply(`${bold("[! ]")} Jangan spam! (Warning ${spam.count}/5)`);
+            } else {
+                await ctx.reply(`${bold("[! ]")} Anda telah dikick karena spamming!`);
+                await ctx.group().kick([senderJid]);
+            }
+
+            await global.db.set(`group.${groupNumber}.spam`, spam);
+        }
     }
 
     // Private messages.
@@ -146,14 +177,16 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Menfess handling.
         const getMessageDataMenfess = await db.get(`menfess.${senderNumber}`);
         if (getMessageDataMenfess) {
-            const from = await db.get(`menfess.${senderNumber}.from`);
-            try {
-                await sendMenfess(ctx, senderNumber, from, m.content);
+            if (m.message?.extendedTextMessage?.contextInfo?.quotedMessage?.conversation === m.content) {
+                const from = await db.get(`menfess.${senderNumber}.from`);
+                try {
+                    await sendMenfess(ctx, m, senderNumber, from);
 
-                return ctx.reply("Pesan berhasil terkirim!");
-            } catch (error) {
-                console.error("Error:", error);
-                return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+                    return ctx.reply("Pesan berhasil terkirim!");
+                } catch (error) {
+                    console.error("Error:", error);
+                    return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+                }
             }
         }
     }
@@ -189,7 +222,7 @@ async function execPromise(command) {
     });
 }
 
-async function sendMenfess(ctx, senderNumber, from, content) {
+async function sendMenfess(ctx, m, senderNumber, from) {
     await ctx.sendMessage(`${from}@s.whatsapp.net`, {
         text: `❖ ${bold("Menfess")}\n` +
             `Hai, saya ${global.bot.name}, Dia (${senderNumber}) menjawab pesan menfess yang Anda kirimkan.\n` +
@@ -197,6 +230,9 @@ async function sendMenfess(ctx, senderNumber, from, content) {
             `${content}\n` +
             "-----\n" +
             "Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n",
+        {
+            quoted: m.key
+        }
     });
 }
 

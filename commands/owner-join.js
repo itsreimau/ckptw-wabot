@@ -27,8 +27,8 @@ module.exports = {
         try {
             const urlCode = match[1];
             const res = await ctx.groups.acceptInvite(urlCode);
-            const groupInfo = await ctx.group().metadata();
-            const participantsIds = groupInfo.participants.map(user => user.id);
+            const members = await ctx.group().members();
+            const participantsIds = members.map(user => user.id);
 
             await ctx.sendMessage(res, {
                 text: `Halo! Saya adalah Bot WhatsApp bernama ${global.bot.name}, dimiliki oleh ${global.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`
