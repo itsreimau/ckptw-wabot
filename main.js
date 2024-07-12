@@ -12,7 +12,6 @@ const {
     Events,
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const fg = require("api-dylux");
 const {
     exec
 } = require("child_process");
@@ -229,10 +228,9 @@ async function sendMenfess(ctx, m, senderNumber, from) {
             "-----\n" +
             `${content}\n` +
             "-----\n" +
-            "Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n",
-        {
-            quoted: m.key
-        }
+            "Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n"
+    }, {
+        quoted: m.key
     });
 }
 
