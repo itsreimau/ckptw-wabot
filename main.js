@@ -145,7 +145,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             if (await smpl.isAdmin(ctx)) return;
 
             const now = Date.now();
-            const getSpam = await db.get(`group.${groupNumber}.antispam`);
+            const getSpam = await db.get(`group.${groupNumber}.spam`);
             const spam = getSpam || {
                 user: senderNumber,
                 count: 0,
