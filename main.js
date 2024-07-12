@@ -167,7 +167,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 await ctx.group().kick([senderJid]);
             }
 
-            await global.db.set(`group.${groupNumber}.spam`, spam);
+            await db.set(`group.${groupNumber}.spam`, spam);
         }
     }
 
