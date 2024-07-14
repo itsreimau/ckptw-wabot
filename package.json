@@ -40,6 +40,7 @@
         "mime-types": "^2.1.35",
         "moment-timezone": "^0.5.45",
         "nayan-media-downloader": "^2.4.3",
+        "qs": "^6.12.3",
         "simpl.db": "^2.13.0",
         "telegraph-uploader": "^2.0.0",
         "util": "^0.12.5",
