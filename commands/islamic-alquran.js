@@ -40,69 +40,55 @@ module.exports = {
         }
 
         try {
-            const [sura, aya] = ctx._args;
-            const suraNumber = parseInt(sura);
-            const ayaNumber = parseInt(aya);
+            const suraNumber = parseInt(ctx._args[0]);
+            const ayaNumber = parseInt(ctx._args[1]);
 
-            if (isNaN(sura) && isNaN(aya)) return ctx.reply(`${bold("[ ! ]")} Gunakan angka.`);
+            if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) {
+                return ctx.reply(`${bold("[ ! ]")} Surah ${suraNumber} tidak ada.`);
+            }
 
-            if (suraNumber < 1 || suraNumber > 114) return ctx.reply(`${bold("[ ! ]")} Surah ${suraNumber} tidak ada.`);
+            if (ayaNumber && (isNaN(ayaNumber) || ayaNumber < 1)) {
+                return ctx.reply(`${bold("[ ! ]")} Ayat harus lebih dari 0.`);
+            }
 
-            if (aya) {
-                if (ayaNumber < 1) return ctx.reply(`${bold("[! ]")} Ayat harus lebih dari 0.`);
+            const apiUrl = createAPIUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
+            const response = await axios.get(apiUrl);
+            const data = response.data.data;
 
-                const data = await fetchData(suraNumber, ayaNumber);
-                if (!data) return ctx.reply(global.msg.notFound);
+            if (!data) return ctx.reply(global.msg.notFound);
 
-                return ctx.reply(formatAya(data));
+            if (ayaNumber) {
+                const aya = data.ayat.find((verse) => verse.nomorAyat === ayaNumber);
+                if (!aya) return ctx.reply(`${bold("[ ! ]")} Ayat ${ayaNumber} tidak ada.`);
+
+                return ctx.reply(
+                    `${bold("❖ Al-Quran")}\n` +
+                    "\n" +
+                    `${aya.teksArab} (${aya.teksLatin})\n` +
+                    `${italic(aya.teksIndonesia)}\n` +
+                    "\n" +
+                    global.msg.footer
+                );
             } else {
-                const data = await fetchData(suraNumber);
-                if (!data) return ctx.reply(global.msg.notFound);
+                const versesText = data.ayat.map((verse) => {
+                    return `${bold(`Ayat ${verse.nomorAyat}:`)}\n` +
+                        `${verse.teksArab} (${verse.teksLatin})\n` +
+                        `${italic(verse.teksIndonesia)}`;
+                }).join("\n");
 
-                return ctx.reply(formatSura(data));
+                return ctx.reply(
+                    `${bold("❖ Al-Quran")}\n` +
+                    "\n" +
+                    `➲ ${bold(`Surah ${data.namaLatin}`)}\n` +
+                    `➲ ${data.arti}\n` +
+                    `${versesText}\n` +
+                    "\n" +
+                    global.msg.footer
+                );
             }
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };
-
-async function fetchData(sura, aya) {
-    const apiUrl = createAPIUrl("https://api.quran.gading.dev", `/surah/${sura}/${aya || ""}`);
-    try {
-        const response = await axios.get(apiUrl);
-        return response.data;
-    } catch (error) {
-        return null;
-    }
-}
-
-function formatAya(data) {
-    return (
-        `${bold("❖ Al-Quran")}\n` +
-        `\n${data.text.arab}\n` +
-        `➲ ${italic(`${data.text.transliteration.en}`)}\n` +
-        `➲ ${data.translation.id}\n` +
-        `➲ Surah ${data.surah.name.transliteration.id}: ${data.number.inSurah}\n` +
-        `\n${global.msg.footer}`
-    );
-}
-
-function formatSura(data) {
-    const versesText = data.verses.map((verse) => {
-        return `${bold(`Ayat ${toArabicNumeral(verse.number.inSurah)}:`)}\n` +
-            `${verse.text.arab} (${verse.text.transliteration.en})\n` +
-            `${italic(verse.translation.id)}`;
-    }).join("\n");
-
-    return `${bold("❖ Al-Quran")}\n` +
-        `\n➲ ${bold(`Surah ${data.surah.name.transliteration.id}`)}\n` +
-        `➲ ${data.revelation.id}\n` +
-        `${versesText}\n` +
-        `\n${global.msg.footer}`;
-}
-
-function toArabicNumeral(number) {
-    return number.toString().replace(/\d/g, (digit) => String.fromCodePoint(0x660 + parseInt(digit)));
-}
