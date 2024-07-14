@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
@@ -39,7 +36,7 @@ module.exports = {
                 translation
             } = await translate(inp.join(" "), null, lang);
 
-            return ctx.reply(text);
+            return ctx.reply(translation);
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);

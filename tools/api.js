@@ -2,6 +2,9 @@ const APIs = {
     aemt: {
         baseURL: "https://aemt.me"
     },
+    gabut: {
+        baseURL: "https://api-gabut.bohr.io"
+    },
     itzpire: {
         baseURL: "https://itzpire.com"
     },

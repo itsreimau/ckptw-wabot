@@ -6,7 +6,6 @@ const {
     monospace
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const fg = require("api-dylux");
 const mime = require("mime-types");
 
 module.exports = {
@@ -29,11 +28,14 @@ module.exports = {
         );
 
         try {
-            const result = await fg.googleImage(input);
+            const apiUrl = createAPIUrl("gabut", "/api/googleimage", {
+                search: input
+            });
+            const response = await axios.get(apiUrl);
 
-            if (!result) return ctx.reply(global.msg.notFound);
+            const data = response.data;
 
-            const imageUrl = getRandomElement(result);
+            const imageUrl = getRandomElement(data.result);
 
             return await ctx.reply({
                 image: {
@@ -48,6 +50,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }

@@ -30,7 +30,13 @@ module.exports = {
         if (ctx._args[0] === "list") {
             const listText = fs.readFileSync(path.resolve(__dirname, "../assets/txt/list-alquran.txt"), "utf8");
 
-            return ctx.reply(`❖ ${bold("Daftar")}\n` + "\n" + `${listText}\n` + "\n" + global.msg.footer);
+            return ctx.reply(
+                `❖ ${bold("Daftar")}\n` +
+                "\n" +
+                `${listText}\n` +
+                "\n" +
+                global.msg.footer
+            );
         }
 
         try {
@@ -43,10 +49,9 @@ module.exports = {
             if (suraNumber < 1 || suraNumber > 114) return ctx.reply(`${bold("[ ! ]")} Surah ${suraNumber} tidak ada.`);
 
             if (aya) {
-                if (ayaNumber < 1) return ctx.reply(`${bold("[ ! ]")} Ayat harus lebih dari 0.`);
+                if (ayaNumber < 1) return ctx.reply(`${bold("[! ]")} Ayat harus lebih dari 0.`);
 
                 const data = await fetchData(suraNumber, ayaNumber);
-
                 if (!data) return ctx.reply(global.msg.notFound);
 
                 return ctx.reply(formatAya(data));
@@ -58,22 +63,16 @@ module.exports = {
             }
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(`${bold("[! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };
 
 async function fetchData(sura, aya) {
     const apiUrl = createAPIUrl("https://api.quran.gading.dev", `/surah/${sura}/${aya || ""}`);
-
     try {
         const response = await axios.get(apiUrl);
-        if (response.ok) {
-            const json = await response.data;
-            return json.data;
-        } else {
-            return null;
-        }
+        return response.data;
     } catch (error) {
         return null;
     }
@@ -82,13 +81,11 @@ async function fetchData(sura, aya) {
 function formatAya(data) {
     return (
         `${bold("❖ Al-Quran")}\n` +
-        "\n" +
-        `${data.text.arab}\n` +
+        `\n${data.text.arab}\n` +
         `➲ ${italic(`${data.text.transliteration.en}`)}\n` +
         `➲ ${data.translation.id}\n` +
         `➲ Surah ${data.surah.name.transliteration.id}: ${data.number.inSurah}\n` +
-        "\n" +
-        global.msg.footer
+        `\n${global.msg.footer}`
     );
 }
 
@@ -100,12 +97,10 @@ function formatSura(data) {
     }).join("\n");
 
     return `${bold("❖ Al-Quran")}\n` +
-        "\n" +
-        `➲ ${bold(`Surah ${data.name.transliteration.id}`)}\n` +
+        `\n➲ ${bold(`Surah ${data.surah.name.transliteration.id}`)}\n` +
         `➲ ${data.revelation.id}\n` +
         `${versesText}\n` +
-        "\n" +
-        global.msg.footer;
+        `\n${global.msg.footer}`;
 }
 
 function toArabicNumeral(number) {

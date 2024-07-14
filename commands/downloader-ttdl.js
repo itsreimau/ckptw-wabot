@@ -1,17 +1,15 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const fg = require("api-dylux");
-const axios = require("axios");
 const mime = require("mime-types");
+const {
+    tikdown
+} = require("nayan-media-downloader")
 
 module.exports = {
     name: "ttdl",
-    aliases: ["tiktokdl", "tiktoknowm", "tt", "vt", , "vtdltiktok", "vtnowm"],
+    aliases: ["tiktokdl", "tiktokmp3", "tiktoknowm", "tt", "tta", "ttaudio", "ttmp3", "ttmusic", "ttmusik", "vt", "vta", "vtaudio", "vtdltiktok", "vtmp3", "vtmusic", "vtmusik", "vtnowm"],
     category: "downloader",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -31,61 +29,42 @@ module.exports = {
         if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const sources = ["nyxs", "ngodingaja", "dylux"];
-            let result;
+            const mp3cmd = ["tiktokmp3", "tta", "ttaudio", "ttmp3", "ttmusic", "ttmusik", "vta", "vtaudio", "vtmp3", "vtmusic", "vtmusik"];
 
-            for (const source of sources) {
-                try {
-                    result = await ttdl(source, input);
-                    if (result) break;
-                } catch (error) {
-                    console.error(`Error from ${source}:`, error);
-                    continue;
-                }
-            }
+            const result = await tikdown(input)
 
             if (!result) return ctx.reply(global.msg.notFound);
 
-            return await ctx.reply({
-                video: {
-                    url: result
-                },
-                mimetype: mime.contentType("mp4"),
-                caption: `❖ ${bold("TT Downloader")}\n` +
-                    "\n" +
-                    `➲ URL: ${input}\n` +
-                    "\n" +
-                    global.msg.footer,
-                gifPlayback: false
-            });
+            if (mp3cmd.includes(ctx._used.command)) {
+                return await ctx.reply({
+                    audio: {
+                        url: result.data.audio
+                    },
+                    mimetype: mime.contentType("mp3"),
+                    caption: `❖ ${bold("TT Downloader")}\n` +
+                        "\n" +
+                        `➲ URL: ${input}\n` +
+                        "\n" +
+                        global.msg.footer,
+                    gifPlayback: false
+                });
+            } else {
+                return await ctx.reply({
+                    video: {
+                        url: result.data.video
+                    },
+                    mimetype: mime.contentType("mp4"),
+                    caption: `❖ ${bold("TT Downloader")}\n` +
+                        "\n" +
+                        `➲ URL: ${input}\n` +
+                        "\n" +
+                        global.msg.footer,
+                    gifPlayback: false
+                });
+            }
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };
-
-async function ttdl(source, url) {
-    let result = null;
-
-    switch (source) {
-        case "nyxs":
-            result = await axios.get(createAPIUrl("nyxs", "/dl/tiktok", {
-                url
-            })).then(response => response.data.result.musik || response.data.result.video_hd);
-            break;
-        case "ngodingaja":
-            result = await axios.get(createAPIUrl("ngodingaja", "/api/tiktok", {
-                url
-            })).then(response => response.data.hasil.musik || response.data.result.video2 || response.data.result.video1 || response.data.hasil.tanpawm);
-            break;
-        case "dylux":
-            result = await fg.tiktok(input).then(data => data.play || data.hdplay);
-            break;
-        default:
-            throw new Error(`Unsupported source: ${source}`);
-    }
-
-    return result;
-}

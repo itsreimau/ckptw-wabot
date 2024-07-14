@@ -52,8 +52,6 @@ module.exports = {
                 }
             }
 
-            if (!result) return ctx.reply(global.msg.notFound);
-
             return ctx.reply({
                 document: {
                     url: result
