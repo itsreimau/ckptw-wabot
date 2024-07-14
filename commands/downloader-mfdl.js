@@ -37,6 +37,9 @@ module.exports = {
             let result;
 
             const apiCalls = [
+                () => axios.get(createAPIUrl("ngodingaja", "/api/mediafire", {
+                    url: input
+                })).then(response => response.hasil.url),
                 () => axios.get(createAPIUrl("ssa", "/api/mediafire", {
                     url: input
                 })).then(response => response.data.data.response.link),

@@ -41,11 +41,6 @@ module.exports = {
                         url: result.data.audio
                     },
                     mimetype: mime.contentType("mp3"),
-                    caption: `❖ ${bold("TT Downloader")}\n` +
-                        "\n" +
-                        `➲ URL: ${input}\n` +
-                        "\n" +
-                        global.msg.footer,
                     gifPlayback: false
                 });
             } else {

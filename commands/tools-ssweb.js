@@ -2,19 +2,14 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    getRandomElement
-} = require("../tools/simple.js");
-const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "googleimage",
-    aliases: ["gimage"],
-    category: "internet",
+    name: "ssweb",
+    category: "tools",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
@@ -27,33 +22,30 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
         );
 
+        const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+        if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
+
         try {
-            const apiUrl = createAPIUrl("gabut", "/api/googleimage", {
-                search: input
+            const apiUrl = createAPIUrl("ssa", "/api/ssweb", {
+                url: input
             });
-            const response = await axios.get(apiUrl);
-
-            const data = response.data;
-
-            const imageUrl = getRandomElement(data.result);
 
             return await ctx.reply({
                 image: {
-                    url: imageUrl
+                    url: apiUrl
                 },
                 mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Google Image")}\n` +
+                caption: `❖ ${bold("SSWEB")}\n` +
                     "\n" +
-                    `➲ Kueri: ${input}\n` +
+                    `➲ URL: ${input}\n` +
                     "\n" +
                     global.msg.footer
             });
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
