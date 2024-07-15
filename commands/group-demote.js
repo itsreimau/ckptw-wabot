@@ -31,9 +31,6 @@ module.exports = {
         });
 
         try {
-            const onWhatsApp = await ctx._client.onWhatsApp(account)
-            if (!onWhatsApp[0].exists) return ctx.reply(`${bold("[ ! ]")} Akun tidak ada di WhatsApp.`);
-
             if (account === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
             if ((await isAdmin(ctx, account)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah anggota biasa.`);

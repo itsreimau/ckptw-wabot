@@ -29,6 +29,9 @@ module.exports = {
         });
 
         try {
+            const onWhatsApp = await ctx._client.onWhatsApp(user);
+            if (!onWhatsApp || !onWhatsApp[0] || !onWhatsApp[0].exists) return ctx.reply(`${bold("[ ! ]")} Pengguna tidak ada di WhatsApp.`);
+
             if (user === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
             await global.db.set(`user.${user.split("@")[0]}.isPremium`, false);

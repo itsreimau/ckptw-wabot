@@ -31,6 +31,9 @@ module.exports = {
         });
 
         try {
+            const onWhatsApp = await ctx._client.onWhatsApp(user);
+            if (!onWhatsApp || !onWhatsApp[0] || !onWhatsApp[0].exists) return ctx.reply(`${bold("[ ! ]")} Pengguna tidak ada di WhatsApp.`);
+
             await global.db.add(`user.${user.split("@")[0]}.coin`, coinAmount);
 
             ctx.sendMessage(user, {
