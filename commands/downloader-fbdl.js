@@ -34,23 +34,20 @@ module.exports = {
 
             if (!result) return ctx.reply(global.msg.notFound);
 
-            const videos = result.data;
-            const videoUrls = videos.map((video) => video.url);
+            const videos = result.data[0].url;
 
-            for (const url of videoUrls) {
-                await ctx.reply({
-                    video: {
-                        url,
-                    },
-                    mimetype: mime.contentType("mp4"),
-                    caption: `❖ ${bold("FB Downloader")}\n` +
-                        "\n" +
-                        `➲ URL: ${input}\n` +
-                        "\n" +
-                        global.msg.footer,
-                    gifPlayback: false,
-                });
-            }
+            return await ctx.reply({
+                video: {
+                    videos,
+                },
+                mimetype: mime.contentType("mp4"),
+                caption: `❖ ${bold("FB Downloader")}\n` +
+                    "\n" +
+                    `➲ URL: ${input}\n` +
+                    "\n" +
+                    global.msg.footer,
+                gifPlayback: false,
+            });
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);

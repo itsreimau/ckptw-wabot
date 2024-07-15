@@ -29,10 +29,8 @@ module.exports = {
         try {
             const account = `${input.replace(/[^\d]/g, "")}@s.whatsapp.net`;
 
-            const {
-                exists
-            } = await ctx._client.onWhatsApp(account)
-            if (!exists) return ctx.reply(`${bold("[ ! ]")} Akun tidak ada di WhatsApp.`);
+            const onWhatsApp = await ctx._client.onWhatsApp(account)
+            if (!onWhatsApp[0].exists) return ctx.reply(`${bold("[ ! ]")} Akun tidak ada di WhatsApp.`);
 
             if (account === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 

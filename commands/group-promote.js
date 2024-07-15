@@ -24,7 +24,7 @@ module.exports = {
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const account = mentionedJids[0] || null;
 
-        if (!account.length) return ctx.reply({
+        if (!account) return ctx.reply({
             text: `${global.msg.argument}\n` +
                 `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`,
             mentions: [senderJid]

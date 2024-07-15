@@ -29,10 +29,8 @@ module.exports = {
         });
 
         try {
-            const {
-                exists
-            } = await ctx._client.onWhatsApp(user)
-            if (!exists) return ctx.reply(`${bold("[ ! ]")} Pengguna tidak ada di WhatsApp.`);
+            const onWhatsApp = await ctx._client.onWhatsApp(account)
+            if (!onWhatsApp[0].exists) return ctx.reply(`${bold("[ ! ]")} Akun tidak ada di WhatsApp.`);
 
             if (user === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
