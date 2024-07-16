@@ -6,7 +6,7 @@ module.exports = {
     name: "afk",
     category: "main",
     code: async (ctx) => {
-        const input = ctx._args.join(" ");
+        const input = ctx._args.length ? ctx._args.join(" ") : null;
 
         try {
             const reason = input || "tanpa alasan";

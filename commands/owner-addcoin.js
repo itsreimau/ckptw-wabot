@@ -20,9 +20,9 @@ module.exports = {
 
         const senderNumber = ctx.sender.jid.split("@")[0];
         const senderJid = ctx._sender.jid;
-        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid || [];
-        const inputUser = `${input}@s.whatsapp.net`;
-        const user = mentionedJids[0] || inputUser || null;
+        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid || null;
+        const inputUser = input ? `${input}@s.whatsapp.net` || null;
+        const user = mentionedJids[0] || inputUser;
 
         if (!user || isNaN(coinAmount)) return ctx.reply({
             text: `${global.msg.argument}\n` +
