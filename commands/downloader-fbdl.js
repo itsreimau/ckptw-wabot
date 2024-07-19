@@ -5,7 +5,7 @@ const {
 const mime = require("mime-types");
 const {
     ndown
-} = require("nayan-media-downloader")
+} = require("nayan-media-downloader");
 
 module.exports = {
     name: "fbdl",
@@ -34,11 +34,14 @@ module.exports = {
 
             if (!result.status) return ctx.reply(global.msg.notFound);
 
-            const videos = result.data.sort((a, b) => b.resolution.localeCompare(a.resolution))[0].url;
+            const data = result.data.filter(video => !video.shouldRender);
+            const resolutions = data.map(video => parseInt(video.resolution.replace(/[^0-9]/g, '')));
+            const maxResolution = Math.max(...resolutions);
+            const videoUrl = data.find(video => parseInt(video.resolution.replace(/[^0-9]/g, '')) === maxResolution).url;
 
             return await ctx.reply({
                 video: {
-                    videos
+                    data
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `❖ ${bold("FB Downloader")}\n` +

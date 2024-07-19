@@ -39,7 +39,7 @@ module.exports = {
                 return ctx.reply({
                     document: response?.data,
                     fileName,
-                    mimetype: mime.lookup(fileName)
+                    mimetype: mime.contentType(response?.headers?.['content-type'])
                 });
             }
 

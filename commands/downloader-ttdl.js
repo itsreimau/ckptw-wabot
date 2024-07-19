@@ -5,7 +5,7 @@ const {
 const mime = require("mime-types");
 const {
     tikdown
-} = require("nayan-media-downloader")
+} = require("nayan-media-downloader");
 
 module.exports = {
     name: "ttdl",

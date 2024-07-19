@@ -5,7 +5,7 @@ const {
 const mime = require("mime-types");
 const {
     twitterdown
-} = require("nayan-media-downloader")
+} = require("nayan-media-downloader");
 
 module.exports = {
     name: "xdl",
@@ -33,9 +33,11 @@ module.exports = {
 
             if (!result) return ctx.reply(global.msg.notFound);
 
+            const videoUrl = result.data.HD || result.data.SD;
+
             return await ctx.reply({
                 video: {
-                    url: result.data.HD || result.data.SD
+                    url: videoUrl
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `❖ ${bold("Twitter Downloader")}\n` +

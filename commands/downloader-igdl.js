@@ -34,11 +34,11 @@ module.exports = {
 
             if (!result.status) return ctx.reply(global.msg.notFound);
 
-            const videos = result.data.sort((a, b) => b.resolution.localeCompare(a.resolution))[0].url;
+            const videoUrl = result.data[0].url;
 
             return await ctx.reply({
                 video: {
-                    videos
+                    videoUrl
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `❖ ${bold("IG Downloader")}\n` +
