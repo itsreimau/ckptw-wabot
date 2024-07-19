@@ -41,7 +41,7 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    data
+                    videoUrl
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `❖ ${bold("FB Downloader")}\n` +
