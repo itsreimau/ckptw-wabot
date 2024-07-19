@@ -34,11 +34,9 @@ module.exports = {
 
             if (!result.status) return ctx.reply(global.msg.notFound);
 
-            const videoUrl = result.data[0].url;
-
             return await ctx.reply({
                 video: {
-                    videoUrl
+                    result.data[0].url
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `❖ ${bold("IG Downloader")}\n` +
