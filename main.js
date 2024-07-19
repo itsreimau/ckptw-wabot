@@ -138,43 +138,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             await ctx.reply(`${bold("[ ! ]")} Jangan kirim tautan!`);
             return await ctx.deleteMessage(m.key);
         }
-
-        // Antispam handling
-        const getAntispam = await db.get(`group.${groupNumber}.antispam`);
-        if (getAntispam) {
-            if (await smpl.isAdmin(ctx)) return;
-
-            const now = Date.now();
-            let spam = await db.get(`group.${groupNumber}.spam`);
-
-            if (!spam) {
-                spam = {
-                    user: senderNumber,
-                    count: 0,
-                    lastMessageTime: 0
-                };
-            }
-
-            if (spam.user === senderNumber && now - spam.lastMessageTime < 3000) {
-                spam.count++;
-            } else {
-                spam.user = senderNumber;
-                spam.count = 1;
-            }
-            spam.lastMessageTime = now;
-
-            if (spam.count < 4) {
-                await db.set(`group.${groupNumber}.spam`, spam);
-                return;
-            } else if (spam.count <= 5) {
-                await ctx.reply(`${bold("[ ! ]")} Jangan spam! (Warning ${spam.count}/5)`);
-            } else {
-                await ctx.reply(`${bold("[ ! ]")} Anda telah dikick karena spamming!`);
-                await ctx.group().kick([senderJid]);
-            }
-
-            await db.set(`group.${groupNumber}.spam`, spam);
-        }
     }
 
     // Private messages.

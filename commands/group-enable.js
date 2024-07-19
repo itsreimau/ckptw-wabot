@@ -42,9 +42,6 @@ module.exports = {
                 case "antilink":
                     await global.db.set(`group.${groupNumber}.antilink`, true);
                     return ctx.reply(`${bold("[ ! ]")} Fitur 'antilink' berhasil diaktifkan!`);
-                case "antispam":
-                    await global.db.set(`group.${groupNumber}.antispam`, true);
-                    return ctx.reply(`${bold("[ ! ]")} Fitur 'antispam' berhasil diaktifkan!`);
                 case "welcome":
                     await global.db.set(`group.${groupNumber}.welcome`, true);
                     return ctx.reply(`${bold("[ ! ]")} Fitur 'welcome' berhasil diaktifkan!`);

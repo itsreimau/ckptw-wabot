@@ -33,7 +33,7 @@ module.exports = {
 
             const result = await tikdown(input)
 
-            if (!result) return ctx.reply(global.msg.notFound);
+            if (!result.status) return ctx.reply(global.msg.notFound);
 
             if (mp3cmd.includes(ctx._used.command)) {
                 return await ctx.reply({

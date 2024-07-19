@@ -32,13 +32,13 @@ module.exports = {
         try {
             const result = await ndown(input);
 
-            if (!result) return ctx.reply(global.msg.notFound);
+            if (!result.status) return ctx.reply(global.msg.notFound);
 
-            const videos = result.data[0].url;
+            const videos = result.data.sort((a, b) => b.resolution.localeCompare(a.resolution))[0].url;
 
             return await ctx.reply({
                 video: {
-                    videos,
+                    videos
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `❖ ${bold("IG Downloader")}\n` +
@@ -46,7 +46,7 @@ module.exports = {
                     `➲ URL: ${input}\n` +
                     "\n" +
                     global.msg.footer,
-                gifPlayback: false,
+                gifPlayback: false
             });
         } catch (error) {
             console.error("Error:", error);
