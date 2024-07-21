@@ -34,7 +34,7 @@ module.exports = {
             try {
                 profileUrl = await ctx._client.profilePictureUrl(senderJid, "image");
             } catch {
-                profileUrl = "https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu";
+                profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
 
             return await ctx.reply({

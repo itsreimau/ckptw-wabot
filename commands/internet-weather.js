@@ -42,6 +42,7 @@ module.exports = {
 
             const data = await response.data;
             const weatherId = await translate(data.weather[0].description, "en", "id");
+
             return ctx.reply(
                 `❖ ${bold("Weather")}\n` +
                 "\n" +

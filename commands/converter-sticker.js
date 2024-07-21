@@ -31,7 +31,7 @@ module.exports = {
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "documentMessage" || type === "imageMessage" || type === "videoMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
+            const buffer = type === "imageMessage" || type === "videoMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             const sticker = new Sticker(buffer, {
                 pack: global.sticker.packname,
                 author: global.sticker.author,

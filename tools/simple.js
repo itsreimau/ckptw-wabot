@@ -63,6 +63,7 @@ exports.formatSize = (bytes) => {
     if (bytes === 0) return "0 Byte";
 
     const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+
     return Math.round(bytes / Math.pow(1024, i), 2) + " " + sizes[i];
 };
 
@@ -108,6 +109,7 @@ exports.isCmd = (m, ctx) => {
  */
 exports.isAdmin = async (ctx, number) => {
     const isAdmin = await checkAdmin(ctx, number || ctx._sender.jid.split("@")[0]);
+
     return isAdmin ? 1 : 0;
 };
 
@@ -118,6 +120,7 @@ exports.isAdmin = async (ctx, number) => {
  */
 exports.isBotAdmin = async (ctx) => {
     const isBotAdmin = await checkAdmin(ctx, ctx._client.user.id.split(":")[0]);
+
     return isBotAdmin ? 1 : 0;
 };
 
@@ -128,6 +131,7 @@ exports.isBotAdmin = async (ctx) => {
  */
 exports.isOwner = (ctx, number) => {
     const isOwner = ctx._client.user.id.split(":")[0] == number || global.owner.number === number || global.owner.co.includes(number);
+
     return isOwner ? 1 : 0;
 };
 

@@ -13,14 +13,14 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args;
+        const input = ctx._args.length ? ctx._args.join(" ") : null;
 
         const userId = input[0];
         const coinAmount = parseInt(input[1], 10);
 
         const senderNumber = ctx.sender.jid.split("@")[0];
         const senderJid = ctx._sender.jid;
-        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid || null;
+        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid.length ? ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid : null;
         const inputUser = input ? `${input}@s.whatsapp.net` : null;
         const user = mentionedJids[0] || inputUser;
 

@@ -46,9 +46,7 @@ exports.createAPIUrl = (apiNameOrURL, endpoint, params = {}, apiKeyParamName) =>
 
     const queryParams = new URLSearchParams(params);
 
-    if (apiKeyParamName && api && "APIKey" in api) {
-        queryParams.set(apiKeyParamName, api.APIKey);
-    }
+    if (apiKeyParamName && api && "APIKey" in api) queryParams.set(apiKeyParamName, api.APIKey);
 
     const apiUrl = new URL(endpoint, api ? api.baseURL : apiNameOrURL.origin);
     apiUrl.search = queryParams.toString();

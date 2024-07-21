@@ -33,16 +33,16 @@ module.exports = {
         try {
             if (input.length > 10000) return ctx.reply(`${bold("[ ! ]")} Maksimal 50 kata!`);
 
-            let profilePicture;
+            let profileUrl;
             try {
-                profilePicture = await ctx._client.profilePictureUrl(ctx._sender.jid, "image");
-            } catch (_) {
-                profilePicture = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
+                profileUrl = await ctx._client.profileUrlUrl(ctx._sender.jid, "image");
+            } catch {
+                profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
 
             const apiUrl = createAPIUrl("ngodingaja", "/api/bubblechat", {
                 text: input,
-                url: profilePicture,
+                url: profileUrl,
                 nama: ctx._sender.pushName
             });
 

@@ -8,8 +8,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "ragbot",
-    aliases: ["rag"],
+    name: "llama3",
     category: "ai",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -27,7 +26,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("ssa", "/ai/ragbot", {
+            const apiUrl = createAPIUrl("ssa", "/ai/llama3", {
                 message: input
             });
             const response = await axios.get(apiUrl);
@@ -36,7 +35,7 @@ module.exports = {
                 data
             } = response.data;
 
-            return ctx.reply(data.response);
+            return ctx.reply(data.result);
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

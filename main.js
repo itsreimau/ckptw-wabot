@@ -1,4 +1,4 @@
-// Required modules and dependencies
+// Required modules and dependencies.
 const {
     handler
 } = require("./handler.js");
@@ -215,11 +215,11 @@ async function handleUserEvent(m) {
             const metadata = await bot.core.groupMetadata(id);
 
             for (const jid of participants) {
-                let profile;
+                let profileUrl;
                 try {
-                    profile = await bot.core.profilePictureUrl(jid, "image");
+                    profileUrl = await bot.core.profilePictureUrl(jid, "image");
                 } catch {
-                    profile = "https://lh3.googleusercontent.com/proxy/esjjzRYoXlhgNYXqU8Gf_3lu6V-eONTnymkLzdwQ6F6z0MWAqIwIpqgq_lk4caRIZF_0Uqb5U8NWNrJcaeTuCjp7xZlpL48JDx-qzAXSTh00AVVqBoT7MJ0259pik9mnQ1LldFLfHZUGDGY=w1200-h630-p-k-no-nu";
+                    profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
                 }
 
                 const message = m.eventsType === "UserJoin" ? `Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!` : `@${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`;
@@ -235,7 +235,7 @@ async function handleUserEvent(m) {
                             title: m.eventsType === "UserJoin" ? "JOIN" : "LEAVE",
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: profile,
+                            thumbnailUrl: profileUrl,
                             sourceUrl: global.bot.groupChat
                         }
                     }
