@@ -20,8 +20,8 @@ module.exports = {
 
         const senderNumber = ctx.sender.jid.split("@")[0];
         const senderJid = ctx._sender.jid;
-        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid.length ? ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid : null;
-        const account = mentionedJids[0] || null;
+        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+        const account = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : null;
 
         if (!account) return ctx.reply({
             text: `${global.msg.argument}\n` +

@@ -1,7 +1,4 @@
 const APIs = {
-    aemt: {
-        baseURL: "https://aemt.me"
-    },
     gabut: {
         baseURL: "https://api-gabut.bohr.io"
     },
@@ -19,6 +16,9 @@ const APIs = {
     },
     ssa: {
         baseURL: "https://ssa-api.vercel.app"
+    },
+    widipe: {
+        baseURL: "https://widipe.com"
     }
 };
 
