@@ -1,11 +1,7 @@
 const {
-    bold,
-    monospace
-} = require("@mengkodingan/ckptw");
-const {
-    youtubedl,
-    youtubedlv2
-} = require("@bochilteam/scraper");
+    createAPIUrl
+} = require("../tools/api.js");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -31,18 +27,18 @@ module.exports = {
         if (!urlRegex.test(input)) ctx.reply(global.msg.urlInvalid);
 
         try {
-            let ytdl;
-            try {
-                ytdl = await youtubedl(input);
-            } catch (error) {
-                ytdl = await youtubedlv2(input);
-            }
-            const qualityOptions = Object.keys(ytdl.audio);
+            const apiUrl = createAPIUrl("nyxs", "/dl/yt", {
+                url: input
+            });
+            const response = await axios.get(apiUrl);
+            const data = await response.data;
+
+            const qualityOptions = Object.keys(data.result.data).filter(quality => quality.endsWith("kbps"));
 
             await ctx.reply(
                 `❖ ${bold("YT Audio")}\n` +
                 "\n" +
-                `➲ Judul: ${ytdl.title}\n` +
+                `➲ Judul: ${data.result.title}\n` +
                 `➲ URL: ${input}\n` +
                 `➲ Pilih kualitas:\n` +
                 `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
@@ -51,7 +47,7 @@ module.exports = {
             );
 
             const col = ctx.MessageCollector({
-                time: 60000, // 1 minute.
+                time: 60000 // 1 minute.
             });
 
             col.on("collect", async (m) => {
@@ -60,15 +56,14 @@ module.exports = {
 
                 if (!isNaN(selectedNumber) && selectedQualityIndex >= 0 && selectedQualityIndex < qualityOptions.length) {
                     const selectedQuality = qualityOptions[selectedQualityIndex];
-                    const downloadFunction = ytdl.audio[selectedQuality].download;
+                    const url = data.result.data[selectedQuality].url;
                     ctx.react(ctx.id, "🔄", m.key);
-                    const url = await downloadFunction();
                     await ctx.reply({
                         audio: {
                             url: url,
                         },
                         mimetype: mime.contentType("mp3"),
-                        ptt: false,
+                        ptt: false
                     });
                     return col.stop();
                 }

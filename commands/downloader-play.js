@@ -28,44 +28,33 @@ module.exports = {
         );
 
         try {
-            const searchRes = await yts(input);
+            const apiUrl = createAPIUrl("ssa", "/api/play", {
+                url: input
+            });
+            const response = await axios.get(apiUrl);
+            const data = await response.data;
 
-            if (!searchRes) return ctx.reply(global.msg.notFound);
-
-            const ytVid = searchRes.videos[0];
+            const audio = data.response.audio;
 
             await ctx.reply(
                 `❖ ${bold("Play")}\n` +
                 "\n" +
-                `➲ Judul: ${ytVid.title}\n` +
-                `➲ Artis: ${ytVid.author.name}\n` +
-                `➲ Durasi: ${ytVid.timestamp}\n` +
-                `➲ URL: ${ytVid.url}\n` +
+                `➲ Judul: ${audio.title}\n` +
+                `➲ Artis: ${audio.channel}\n` +
                 "\n" +
                 global.msg.footer
             );
 
-            let ytdlRes;
-            try {
-                ytdlRes = await youtubedl(ytVid.url);
-            } catch (error) {
-                ytdlRes = await youtubedlv2(ytVid.url);
-            }
-
-            const audInfo = Object.values(ytdlRes.audio)[0];
-            const audUrl = await audInfo.download();
-
-            if (!audUrl) return ctx.reply(global.msg.notFound);
-
             return await ctx.reply({
                 audio: {
-                    url: audUrl,
+                    url: audio.url
                 },
                 mimetype: mime.contentType("mp3"),
                 ptt: false
             });
         } catch (error) {
             console.error("Error:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
