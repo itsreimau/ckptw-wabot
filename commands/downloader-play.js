@@ -1,12 +1,10 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const {
-    youtubedl,
-    youtubedlv2
-} = require("@bochilteam/scraper");
-const yts = require("yt-search");
 const mime = require("mime-types");
 
 module.exports = {
