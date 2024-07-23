@@ -1,4 +1,7 @@
 const {
+    getList
+} = require("../tools/list.js");
+const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
@@ -8,9 +11,7 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const fs = require("fs");
 const mime = require("mime-types");
-const path = require("path");
 
 module.exports = {
     name: "randomimage",
@@ -32,14 +33,14 @@ module.exports = {
         );
 
         if (ctx._args[0] === "list") {
-            const listText = fs.readFileSync(path.resolve(__dirname, "../assets/txt/list-randomimage.txt"), "utf8");
+            const listText = await getList("randomimage");
 
-            return ctx.reply(`❖ ${bold("Daftar")}\n` + "\n" + `${listText}\n` + "\n" + global.msg.footer);
+            return ctx.reply(listText);
         }
 
         const list = ["china", "vietnam", "thailand", "indonesia", "korea", "japan", "malaysia", "shinobu", "waifu", "neko", "hubbleimg"];
 
-        if (!input.includes(list)) return ctx.reply(`Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`);
+        if (!list.some(item => input.includes(item))) return ctx.reply(`Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`);
 
         try {
             const apiUrl = createAPIUrl("widipe", `/${input}`, {});

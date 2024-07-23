@@ -1,9 +1,10 @@
 const {
+    getList
+} = require("../tools/list.js");
+const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const fs = require("fs");
-const path = require("path");
 
 module.exports = {
     name: "disable",
@@ -26,11 +27,9 @@ module.exports = {
         );
 
         if (ctx._args[0] === "list") {
-            const listText = fs.readFileSync(path.resolve(__dirname, "../assets/txt/list-disable_enable.txt"), "utf8");
+            const listText = await getList("disable_enable");
 
-            return ctx.reply(
-                `❖ ${bold("Daftar")}\n\n${listText}\n\n${global.msg.footer}`
-            );
+            return ctx.reply(listText);
         }
 
         try {

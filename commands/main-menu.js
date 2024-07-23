@@ -1,6 +1,6 @@
 const {
-    getMenu
-} = require("../tools/menu.js");
+    getList
+} = require("../tools/list.js");
 const {
     getRandomElement
 } = require("../tools/simple.js");
@@ -14,7 +14,7 @@ module.exports = {
     category: "main",
     code: async (ctx) => {
         try {
-            const text = await getMenu(ctx);
+            const text = await getList("menu", ctx);
             const fakeProduct = {
                 key: {
                     fromMe: false,
