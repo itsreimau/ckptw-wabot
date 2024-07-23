@@ -27,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("aemt", `/ai/text2img`, {
+            const apiUrl = createAPIUrl("widipe", `/ai/text2img`, {
                 text: input
             });
 

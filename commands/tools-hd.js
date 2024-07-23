@@ -11,7 +11,6 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const axios = require("axios");
 const mime = require("mime-types");
 const {
     uploadByBuffer
@@ -42,8 +41,6 @@ module.exports = {
             const apiUrl = createAPIUrl("nyxs", "/tools/hd", {
                 url: uplRes.link
             });
-
-            const response = await axios.get(apiUrl);
 
             return await ctx.reply({
                 image: {

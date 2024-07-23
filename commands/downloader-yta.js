@@ -1,16 +1,16 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const {
+    youtubedl,
+    youtubedlv2
+} = require("@bochilteam/scraper");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "yta",
-    aliases: ["ytaudio", "ytmp3"],
+    name: "ytv",
+    aliases: ["ytmp4", "ytvideo"],
     category: "downloader",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -31,18 +31,18 @@ module.exports = {
         if (!urlRegex.test(input)) ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("nyxs", "/dl/yt", {
-                url: input
-            });
-            const response = await axios.get(apiUrl);
-            const data = await response.data;
-
-            const qualityOptions = Object.keys(data.result.data).filter(quality => quality.endsWith("kbps"));
+            let ytdl;
+            try {
+                ytdl = await youtubedl(input);
+            } catch (error) {
+                ytdl = await youtubedlv2(input);
+            }
+            const qualityOptions = Object.keys(ytdl.video);
 
             await ctx.reply(
-                `❖ ${bold("YT Audio")}\n` +
+                `❖ ${bold("YT Video")}\n` +
                 "\n" +
-                `➲ Judul: ${data.result.title}\n` +
+                `➲ Judul: ${ytdl.title}\n` +
                 `➲ URL: ${input}\n` +
                 `➲ Pilih kualitas:\n` +
                 `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
@@ -51,7 +51,7 @@ module.exports = {
             );
 
             const col = ctx.MessageCollector({
-                time: 60000 // 1 minute.
+                time: 60000, // 1 minute.
             });
 
             col.on("collect", async (m) => {
@@ -60,14 +60,20 @@ module.exports = {
 
                 if (!isNaN(selectedNumber) && selectedQualityIndex >= 0 && selectedQualityIndex < qualityOptions.length) {
                     const selectedQuality = qualityOptions[selectedQualityIndex];
-                    const url = data.result.data[selectedQuality].url;
+                    const downloadFunction = ytdl.video[selectedQuality].download;
                     ctx.react(ctx.id, "🔄", m.key);
+                    const url = await downloadFunction();
                     await ctx.reply({
-                        audio: {
+                        video: {
                             url: url,
                         },
-                        mimetype: mime.contentType("mp3"),
-                        ptt: false
+                        mimetype: mime.contentType("mp4"),
+                        caption: `❖ ${bold("YTV")}\n` +
+                            "\n" +
+                            `➲ Kualitas: ${selectedQuality}\n` +
+                            "\n" +
+                            global.msg.footer,
+                        gifPlayback: false,
                     });
                     return col.stop();
                 }

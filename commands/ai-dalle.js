@@ -28,7 +28,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("aemt", `/dalle`, {
+            const apiUrl = createAPIUrl("widipe", `/dalle`, {
                 text: input
             });
 
