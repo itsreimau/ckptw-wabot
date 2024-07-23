@@ -64,7 +64,7 @@ exports.getList = async (type, ctx) => {
                 text = `${bold("[ ! ]")} Terjadi kesalahan saat mengambil data Al-Quran.`;
             }
             break;
-        case "disable_enable":
+        case "disable_enable": {
             const list = ["antilink", "welcome"];
 
             text =
@@ -73,8 +73,9 @@ exports.getList = async (type, ctx) => {
                 `➲ ${list.join("\n➲ ")}\n` +
                 "\n" +
                 global.msg.footer;
-            break;
-        case "menu":
+        }
+        break;
+        case "menu": {
             const commandsMap = ctx._self.cmd;
             const tags = {
                 "main": "Main",
@@ -134,8 +135,9 @@ exports.getList = async (type, ctx) => {
             }
 
             text += global.msg.footer;
-            break;
-        case "randomimage":
+        }
+        break;
+        case "randomimage": {
             const list = ["china", "vietnam", "thailand", "indonesia", "korea", "japan", "malaysia", "shinobu", "waifu", "neko", "hubbleimg"];
 
             text =
@@ -144,7 +146,8 @@ exports.getList = async (type, ctx) => {
                 `➲ ${list.join("\n➲ ")}\n` +
                 "\n" +
                 global.msg.footer;
-            break;
+        }
+        break;
         default:
             text = `${bold("[ ! ]")} Terjadi kesalahan: Jenis daftar tidak dikenal.`;
             break;
