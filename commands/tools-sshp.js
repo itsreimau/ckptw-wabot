@@ -5,12 +5,11 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "text2img",
-    category: "ai",
+    name: "sshp",
+    category: "tools",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
             banned: true,
@@ -23,23 +22,15 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
         );
 
-        let apiPath = "/ai/text2img";
-
-        const versionRegex = /^\(v(\d+)\)\s*(.*)$/;
-        const match = input.match(versionRegex);
-
-        if (match) {
-            const version = match[1];
-            apiPath = `/v${version}/text2img`;
-            input = match[2];
-        }
+        const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+        if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("widipe", apiPath, {
-                text: input
+            const apiUrl = createAPIUrl("widipe", "/sshp", {
+                url: input
             });
 
             return await ctx.reply({
@@ -47,15 +38,14 @@ module.exports = {
                     url: apiUrl
                 },
                 mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("TEXT2IMG")}\n` +
+                caption: `❖ ${bold("SSHD")}\n` +
                     "\n" +
-                    `➲ Prompt: ${input}\n` +
+                    `➲ URL: ${input}\n` +
                     "\n" +
                     global.msg.footer
             });
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }

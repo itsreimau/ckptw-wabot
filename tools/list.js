@@ -13,7 +13,7 @@ const axios = require("axios");
 const moment = require("moment-timezone");
 
 /**
- * Generates a list of available commands based on the provided command map and context.
+ * Generates a list.
  * @param {Object} ctx The context object containing information about the current context.
  * @param {string} type The type of list to generate.
  * @returns {string} The generated list text.
@@ -54,8 +54,6 @@ exports.getList = async (type, ctx) => {
                 surahs.forEach(surah => {
                     text += `➲ Surah: ${surah.namaLatin} (${surah.nomor})\n`;
                     text += `➲ Ayat: ${surah.jumlahAyat}\n`;
-                    text += `➲ Tempat Turun: ${surah.tempatTurun}\n`;
-                    text += `➲ Arti: ${surah.arti}\n`;
                     text += "-----\n";
                 });
 
@@ -138,7 +136,7 @@ exports.getList = async (type, ctx) => {
         }
         break;
         case "randomimage": {
-            const list = ["china", "vietnam", "thailand", "indonesia", "korea", "japan", "malaysia", "shinobu", "waifu", "neko", "hubbleimg"];
+            const list = ["china", "hubbleimg", "indonesia", "japan", "korea", "malaysia", "neko", "shinobu", "thailand", "vietnam", "waifu"];
 
             text =
                 "❖ Daftar\n" +

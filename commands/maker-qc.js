@@ -40,10 +40,10 @@ module.exports = {
                 profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
 
-            const apiUrl = createAPIUrl("ngodingaja", "/api/bubblechat", {
-                text: input,
-                url: profileUrl,
-                nama: ctx._sender.pushName
+            const apiUrl = createAPIUrl("widipe", "/quotely", {
+                avatar: profileUrl,
+                username: ctx._sender.pushName,
+                text: input
             });
 
             const sticker = new Sticker(apiUrl, {

@@ -32,7 +32,7 @@ module.exports = {
         try {
             if (input.length > 10000) return ctx.reply(`${bold("[ ! ]")} Maksimal 50 kata!`);
 
-            const apiUrl = createAPIUrl("ngodingaja", "/api/ttp", {
+            const apiUrl = createAPIUrl("widipe", "/ttp", {
                 text: input
             });
 

@@ -11,11 +11,12 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
     name: "randomimage",
-    aliases: ["rimg", "randomimg"],
+    aliases: ["imagerandom", "imgr", "randomimg", "rimg"],
     category: "internet",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -38,12 +39,30 @@ module.exports = {
             return ctx.reply(listText);
         }
 
-        const list = ["china", "vietnam", "thailand", "indonesia", "korea", "japan", "malaysia", "shinobu", "waifu", "neko", "hubbleimg"];
-
+        const list = ["china", "hubbleimg", "indonesia", "japan", "korea", "malaysia", "neko", "shinobu", "thailand", "vietnam", "waifu"];
         if (!list.some(item => input.includes(item))) return ctx.reply(`Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`);
 
         try {
             const apiUrl = createAPIUrl("widipe", `/${input}`, {});
+
+            const listWithResUrl = ["hubbleimg", "neko", "shinobu", "waifu"];
+            if (listWithResUrl.some(item => input.includes(item))) {
+                const response = await axios.get(apiUrl);
+
+                const data = await response.data;
+
+                return await ctx.reply({
+                    image: {
+                        url: data.result.url
+                    },
+                    mimetype: mime.contentType("png"),
+                    caption: `❖ ${bold("Random Image")}\n` +
+                        "\n" +
+                        `➲ Kueri: ${ucword(input)}\n` +
+                        "\n" +
+                        global.msg.footer
+                });
+            }
 
             return await ctx.reply({
                 image: {
