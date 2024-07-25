@@ -22,7 +22,7 @@ module.exports = {
             const len = data.length;
             const mentions = [];
             for (let i = 0; i < len; i++) {
-                const serialized = data.participants[i].id.split("@")[0];
+                const serialized = data[i].id.split("@")[0];
                 mentions.push({
                     tag: `@${serialized}`,
                     mention: `${serialized}@s.whatsapp.net`

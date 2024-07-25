@@ -9,8 +9,8 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "ytv",
-    aliases: ["ytmp4", "ytvideo"],
+    name: "yta",
+    aliases: ["ytmp3", "ytaudio"],
     category: "downloader",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -37,10 +37,10 @@ module.exports = {
             } catch (error) {
                 ytdl = await youtubedlv2(input);
             }
-            const qualityOptions = Object.keys(ytdl.video);
+            const qualityOptions = Object.keys(ytdl.audio);
 
             await ctx.reply(
-                `❖ ${bold("YT Video")}\n` +
+                `❖ ${bold("YT Audio")}\n` +
                 "\n" +
                 `➲ Judul: ${ytdl.title}\n` +
                 `➲ URL: ${input}\n` +
@@ -60,20 +60,15 @@ module.exports = {
 
                 if (!isNaN(selectedNumber) && selectedQualityIndex >= 0 && selectedQualityIndex < qualityOptions.length) {
                     const selectedQuality = qualityOptions[selectedQualityIndex];
-                    const downloadFunction = ytdl.video[selectedQuality].download;
+                    const downloadFunction = ytdl.audio[selectedQuality].download;
                     ctx.react(ctx.id, "🔄", m.key);
                     const url = await downloadFunction();
                     await ctx.reply({
-                        video: {
+                        audio: {
                             url: url,
                         },
-                        mimetype: mime.contentType("mp4"),
-                        caption: `❖ ${bold("YTV")}\n` +
-                            "\n" +
-                            `➲ Kualitas: ${selectedQuality}\n` +
-                            "\n" +
-                            global.msg.footer,
-                        gifPlayback: false,
+                        mimetype: mime.contentType("mp3"),
+                        ptt: false
                     });
                     return col.stop();
                 }
@@ -84,7 +79,6 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }

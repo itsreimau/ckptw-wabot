@@ -9,7 +9,6 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "ssweb",
-    aliases: ["sspc"],
     category: "tools",
     code: async (ctx) => {
         const handlerObj = await global.handler(ctx, {
@@ -19,7 +18,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.length ? ctx._args.join(" ") : null;
+        const input = ctx._args.join(" ");
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -30,7 +29,7 @@ module.exports = {
         if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("widipe", "/sspc", {
+            const apiUrl = createAPIUrl("ssa", "/api/ssweb", {
                 url: input
             });
 
