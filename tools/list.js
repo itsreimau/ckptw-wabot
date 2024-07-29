@@ -1,7 +1,7 @@
-const api = require("./api.js");
 const {
-    convertMsToDuration
-} = require("./simple.js");
+    api,
+    general
+} = require("./exports.js");
 const package = require("../package.json");
 const {
     bold,
@@ -92,7 +92,7 @@ async function getList(type, ctx) {
             text =
                 `Hai ${ctx._sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
                 "\n" +
-                `╭ ➲ Waktu aktif: ${convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}\n` +
+                `╭ ➲ Waktu aktif: ${general.convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}\n` +
                 `│ ➲ Tanggal: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}\n` +
                 `│ ➲ Waktu: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}\n` +
                 `│ ➲ Versi: ${package.version}\n` +
