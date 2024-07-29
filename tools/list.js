@@ -1,14 +1,7 @@
-const {
-    api,
-    general
-} = require("./exports.js");
-const package = require("../package.json");
-const {
-    bold,
-    quote
-} = require("@mengkodingan/ckptw");
-const axios = require("axios");
-const moment = require("moment-timezone");
+const api = require('./api.js');
+const general = require('./general.js');
+const shared = require('./shared.js');
+const package = require('../package.json');
 
 async function get(type, ctx) {
     let text = "";
@@ -17,7 +10,7 @@ async function get(type, ctx) {
         case "alkitab":
             try {
                 const apiUrl = api.createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {});
-                const response = await axios.get(apiUrl);
+                const response = await shared.axios.get(apiUrl);
                 const data = response.data;
                 const passages = data.data;
 
@@ -31,13 +24,13 @@ async function get(type, ctx) {
 
                 text += global.msg.footer;
             } catch (error) {
-                text = `${bold("[ ! ]")} Terjadi kesalahan saat mengambil data Alkitab.`;
+                text = `${shared.bold("[ ! ]")} Terjadi kesalahan saat mengambil data Alkitab.`;
             }
             break;
         case "alquran":
             try {
                 const apiUrl = api.createUrl("https://equran.id", "/api/v2/surat", {});
-                const response = await axios.get(apiUrl);
+                const response = await shared.axios.get(apiUrl);
                 const data = response.data;
                 const surahs = data.data;
                 text =
@@ -51,7 +44,7 @@ async function get(type, ctx) {
 
                 text += global.msg.footer;
             } catch (error) {
-                text = `${bold("[ ! ]")} Terjadi kesalahan saat mengambil data Al-Quran.`;
+                text = `${shared.bold("[ ! ]")} Terjadi kesalahan saat mengambil data Al-Quran.`;
             }
             break;
         case "disable_enable": {
@@ -84,7 +77,7 @@ async function get(type, ctx) {
                 "": "No Category"
             };
 
-            if (!commandsMap || commandsMap.size === 0) return `${bold("[ ! ]")} Terjadi kesalahan: Tidak ada perintah yang ditemukan.`;
+            if (!commandsMap || commandsMap.size === 0) return `${shared.bold("[ ! ]")} Terjadi kesalahan: Tidak ada perintah yang ditemukan.`;
 
             const sortedCategories = Object.keys(tags);
 
@@ -93,12 +86,12 @@ async function get(type, ctx) {
                 `Hai ${ctx._sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
                 "\n" +
                 `╭ ➲ Waktu aktif: ${general.convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}\n` +
-                `│ ➲ Tanggal: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}\n` +
-                `│ ➲ Waktu: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}\n` +
+                `│ ➲ Tanggal: ${shared.moment.tz(global.system.timeZone).format("DD/MM/YY")}\n` +
+                `│ ➲ Waktu: ${shared.moment.tz(global.system.timeZone).format("HH:mm:ss")}\n` +
                 `│ ➲ Versi: ${package.version}\n` +
                 `╰ ➲ Prefix: ${ctx._used.prefix}\n` +
                 "\n" +
-                `${quote("Jangan lupa berdonasi agar bot tetap online!")}\n` +
+                `${shared.quote("Jangan lupa berdonasi agar bot tetap online!")}\n` +
                 `${global.msg.readmore}\n`;
 
             for (const category of sortedCategories) {
@@ -110,7 +103,7 @@ async function get(type, ctx) {
                     }));
 
                 if (categoryCommands.length > 0) {
-                    text += `╭─「 ${bold(tags[category])} 」\n`;
+                    text += `╭─「 ${shared.bold(tags[category])} 」\n`;
 
                     if (category === "main") {
                         text += `│ ➲ ${categoryCommands.map((cmd) => `${ctx._used.prefix || "/"}${cmd.name}${cmd.aliases ? `\n│ ➲ ${cmd.aliases.map((alias) => `${ctx._used.prefix || "/"}${alias}`).join("\n│ ➲ ")}` : ""}`).join("\n│ ➲ ")}\n`;
@@ -139,12 +132,12 @@ async function get(type, ctx) {
         }
         break;
         default:
-            text = `${bold("[ ! ]")} Terjadi kesalahan: Jenis daftar tidak dikenal.`;
+            text = `${shared.bold("[ ! ]")} Terjadi kesalahan: Jenis daftar tidak dikenal.`;
             break;
     }
 
     return text;
-};
+}
 
 module.exports = {
     get
