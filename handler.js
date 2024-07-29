@@ -1,17 +1,13 @@
-const smpl = require("./tools/simple.js");
+const {
+    general
+} = require("./tools/exports.js");
 
-/**
- * Handles requests based on the given options.
- * @param {Object} ctx The context of the request.
- * @param {Object} options The given options.
- * @returns {Object} Object containing status and message if applicable, otherwise null.
- */
-exports.handler = async (ctx, options) => {
+async function handler(ctx, options) {
     const senderNumber = ctx._sender.jid.split("@")[0];
 
     const checkOptions = {
         admin: {
-            function: async () => ((await ctx.isGroup()) ? (await smpl.isAdmin(ctx)) === 0 : null),
+            function: async () => ((await ctx.isGroup()) ? (await general.isAdmin(ctx)) === 0 : null),
             msg: global.msg.admin
         },
         banned: {
@@ -19,7 +15,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.banned
         },
         botAdmin: {
-            function: async () => ((await ctx.isGroup()) ? (await smpl.isBotAdmin(ctx)) === 0 : null),
+            function: async () => ((await ctx.isGroup()) ? (await general.isBotAdmin(ctx)) === 0 : null),
             msg: global.msg.botAdmin
         },
         coin: {
@@ -34,7 +30,7 @@ exports.handler = async (ctx, options) => {
 
                     if (!ctx._args.length) return false;
 
-                    const isOwner = await smpl.isOwner(ctx, senderNumber);
+                    const isOwner = await general.isOwner(ctx, senderNumber);
                     if (isOwner === 1) return false;
 
                     const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
@@ -55,7 +51,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.group
         },
         owner: {
-            function: async () => (await smpl.isOwner(ctx, senderNumber)) === 0,
+            function: async () => (await general.isOwner(ctx, senderNumber)) === 0,
             msg: global.msg.owner
         },
         premium: {
@@ -85,3 +81,5 @@ exports.handler = async (ctx, options) => {
         message
     };
 };
+
+module.exports = handler;
