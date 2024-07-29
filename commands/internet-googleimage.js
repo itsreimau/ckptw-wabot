@@ -1,9 +1,7 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    getRandomElement
-} = require("../tools/simple.js");
+    api,
+    general
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -23,7 +21,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.length ? ctx._args.join(" ") : null;
+        const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -31,14 +29,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("gabut", "/api/googleimage", {
+            const apiUrl = api.createUrl("gabut", "/api/googleimage", {
                 search: input
             });
             const response = await axios.get(apiUrl);
 
             const data = response.data;
 
-            const imageUrl = getRandomElement(data.result);
+            const imageUrl = general.getRandomElement(data.result);
 
             return await ctx.reply({
                 image: {

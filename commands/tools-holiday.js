@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api
+} = require("../tools/exports.js");
 const {
     bold
 } = require("@mengkodingan/ckptw");
@@ -20,7 +20,7 @@ module.exports = {
 
         try {
             const month = new Date().getMonth() + 1;
-            const apiUrl = createAPIUrl("https://api-harilibur.vercel.app", "/api", {
+            const apiUrl = api.createUrl("https://api-harilibur.vercel.app", "/api", {
                 month: month
             });
             const data = await axios.get(apiUrl).then((res) => (res.status == 200 ? res.data : null)).catch((err) => null);

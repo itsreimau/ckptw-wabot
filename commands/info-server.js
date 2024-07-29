@@ -1,11 +1,7 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    convertMsToDuration,
-    formatSize,
-    ucword
-} = require("../tools/simple.js");
+    api,
+    general
+} = require("../tools/exports.js");
 const {
     bold
 } = require("@mengkodingan/ckptw");
@@ -22,7 +18,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const apiUrl = createAPIUrl("http://ip-api.com", "/json", {});
+        const apiUrl = api.createUrl("http://ip-api.com", "/json", {});
 
         try {
             const response = await axios.get(apiUrl);
@@ -33,9 +29,9 @@ module.exports = {
                 `❖ ${bold("Server")}\n` +
                 "\n" +
                 `➲ OS: ${os.type()} (${os.arch()} / ${os.release()})\n` +
-                `➲ RAM: ${formatSize(process.memoryUsage().rss)} / ${formatSize(os.totalmem())}\n` +
-                Object.entries(data).map(([key, value]) => `➲ ${ucword(key)}: ${value}\n`).join("") +
-                `➲ Waktu aktif: ${convertMsToDuration(Date.now() - startTime) || "kurang dari satu detik."}\n` +
+                `➲ RAM: ${general.formatSize(process.memoryUsage().rss)} / ${general.formatSize(os.totalmem())}\n` +
+                Object.entries(data).map(([key, value]) => `➲ ${general.ucword(key)}: ${value}\n`).join("") +
+                `➲ Waktu aktif: ${general.convertMsToDuration(Date.now() - startTime) || "kurang dari satu detik."}\n` +
                 `➲ Prosesor: ${os.cpus()[0].model}\n` +
                 "\n" +
                 global.msg.footer

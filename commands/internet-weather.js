@@ -1,9 +1,7 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    ucword
-} = require("../tools/simple.js");
+    api,
+    general
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -25,7 +23,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.length ? ctx._args.join(" ") : null;
+        const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -33,7 +31,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await createAPIUrl("https://api.openweathermap.org", "/data/2.5/weather", {
+            const apiUrl = await api.createUrl("https://api.openweathermap.org", "/data/2.5/weather", {
                 q: input,
                 units: "metric",
                 appid: "060a6bcfa19809c2cd4d97a212b19273"
@@ -47,7 +45,7 @@ module.exports = {
                 `❖ ${bold("Weather")}\n` +
                 "\n" +
                 `➲ Tempat: ${data.name} (${data.sys.country})\n` +
-                `➲ Cuaca: ${ucword(weatherId.translation)}\n` +
+                `➲ Cuaca: ${general.ucword(weatherId.translation)}\n` +
                 `➲ Kelembapan: ${data.main.humidity} %\n` +
                 `➲ Angin: ${data.wind.speed} km/jam\n` +
                 `➲ Suhu saat ini: ${data.main.temp} °C\n` +

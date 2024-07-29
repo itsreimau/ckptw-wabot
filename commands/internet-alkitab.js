@@ -1,9 +1,7 @@
 const {
-    getList
-} = require("../tools/list.js");
-const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api,
+    list
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -30,13 +28,13 @@ module.exports = {
         );
 
         if (ctx._args[0] === "list") {
-            const listText = await getList("alkitab");
+            const listText = await list.get("alkitab");
 
             return ctx.reply(listText);
         }
 
         try {
-            const apiUrl = await createAPIUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {
+            const apiUrl = await api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {
                 ver: "tb"
             });
             const response = await axios.get(apiUrl);

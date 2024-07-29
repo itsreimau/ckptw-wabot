@@ -13,7 +13,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.length ? ctx._args.join(" ") : null;
+        const input = ctx._args.join(" ") || null;
 
         const userId = input[0];
         const coinAmount = parseInt(input[1], 10);

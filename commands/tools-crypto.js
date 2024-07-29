@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -19,7 +19,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.length ? ctx._args.join(" ") : null;
+        const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -51,7 +51,7 @@ module.exports = {
 
 
 async function coingecko(search) {
-    const apiUrl = createAPIUrl("https://api.coingecko.com", "/api/v3/coins/markets", {
+    const apiUrl = api.createUrl("https://api.coingecko.com", "/api/v3/coins/markets", {
         vs_currency: "usd",
     });
 

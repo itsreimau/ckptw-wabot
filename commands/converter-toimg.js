@@ -1,9 +1,7 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    download
-} = require("../tools/simple.js");
+    api,
+    general
+} = require("../tools/exports.js");
 const {
     bold
 } = require("@mengkodingan/ckptw");
@@ -33,7 +31,7 @@ module.exports = {
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "stickerMessage" ? await download(object, type.slice(0, -7)) : null;
+            const buffer = type === "stickerMessage" ? await general.download(object, type.slice(0, -7)) : null;
             const imgUrl = await webp2png(buffer);
 
             return await ctx.reply({

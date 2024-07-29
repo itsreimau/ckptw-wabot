@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -22,7 +22,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.length ? ctx._args.join(" ") : null;
+        const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -32,7 +32,7 @@ module.exports = {
         try {
             if (input.length > 10000) return ctx.reply(`${bold("[ ! ]")} Maksimal 50 kata!`);
 
-            const apiUrl = createAPIUrl("widipe", "/ttp", {
+            const apiUrl = api.createUrl("widipe", "/ttp", {
                 text: input
             });
 

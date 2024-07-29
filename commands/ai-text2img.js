@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -38,7 +38,7 @@ module.exports = {
         }
 
         try {
-            const apiUrl = createAPIUrl("widipe", apiPath, {
+            const apiUrl = api.createUrl("widipe", apiPath, {
                 text: input
             });
 

@@ -1,9 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    getRandomElement
-} = require("../tools/simple.js");
+    general
+} = require("../tools/exports.js");
 const {
     bold
 } = require("@mengkodingan/ckptw");
@@ -20,7 +17,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        return ctx.reply(getRandomElement(iq));
+        return ctx.reply(general.getRandomElement(iq));
     }
 };
 

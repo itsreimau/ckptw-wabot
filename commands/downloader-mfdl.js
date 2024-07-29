@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api
+} = require("../tools/exports.js");
 const {
     mediafiredl
 } = require("@bochilteam/scraper");
@@ -23,7 +23,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.length ? ctx._args.join(" ") : null;
+        const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -37,10 +37,10 @@ module.exports = {
             let result;
 
             const apiCalls = [
-                () => axios.get(createAPIUrl("ngodingaja", "/api/mediafire", {
+                () => axios.get(api.createUrl("ngodingaja", "/api/mediafire", {
                     url: input
                 })).then(response => response.hasil.url),
-                () => axios.get(createAPIUrl("ssa", "/api/mediafire", {
+                () => axios.get(api.createUrl("ssa", "/api/mediafire", {
                     url: input
                 })).then(response => response.data.data.response.link),
                 () => mediafiredl(input).then(response => response.data.url || response.data.url2)

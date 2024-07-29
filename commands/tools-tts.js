@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -33,7 +33,7 @@ module.exports = {
                 inp = ctx._args.slice(1);
             }
 
-            const apiUrl = createAPIUrl("nyxs", "/tools/tts", {
+            const apiUrl = api.createUrl("nyxs", "/tools/tts", {
                 text: inp.join(" "),
                 to: lang
             });

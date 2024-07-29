@@ -1,6 +1,6 @@
 const {
-    isAdmin
-} = require("../tools/simple.js");
+    general
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -19,7 +19,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.length ? ctx._args.join(" ") : null;
+        const input = ctx._args.join(" ") || null;
 
         if (!input && !isNaN(Number(input))) return ctx.reply(
             `${global.msg.argument}\n` +

@@ -1,6 +1,4 @@
-const {
-    createAPIUrl
-} = require("./api.js");
+const api = require("./api.js");
 const {
     convertMsToDuration
 } = require("./simple.js");
@@ -12,19 +10,13 @@ const {
 const axios = require("axios");
 const moment = require("moment-timezone");
 
-/**
- * Generates a list.
- * @param {Object} ctx The context object containing information about the current context.
- * @param {string} type The type of list to generate.
- * @returns {string} The generated list text.
- */
-exports.getList = async (type, ctx) => {
+async function getList(type, ctx) {
     let text = "";
 
     switch (type) {
         case "alkitab":
             try {
-                const apiUrl = createAPIUrl("https://beeble.vercel.app", "/api/v1/passage/list", {});
+                const apiUrl = api.createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {});
                 const response = await axios.get(apiUrl);
                 const data = response.data;
                 const passages = data.data;
@@ -44,7 +36,7 @@ exports.getList = async (type, ctx) => {
             break;
         case "alquran":
             try {
-                const apiUrl = createAPIUrl("https://equran.id", "/api/v2/surat", {});
+                const apiUrl = api.createUrl("https://equran.id", "/api/v2/surat", {});
                 const response = await axios.get(apiUrl);
                 const data = response.data;
                 const surahs = data.data;
@@ -152,4 +144,8 @@ exports.getList = async (type, ctx) => {
     }
 
     return text;
+};
+
+module.exports = {
+    get
 };

@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api
+} = require("../tools/exports.js");
 const {
     bold
 } = require("@mengkodingan/ckptw");
@@ -22,7 +22,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const apiUrl = createAPIUrl("https://candaan-api.vercel.app", "/api/image/random", {});
+        const apiUrl = api.createUrl("https://candaan-api.vercel.app", "/api/image/random", {});
 
         try {
             const response = await axios.get(apiUrl);

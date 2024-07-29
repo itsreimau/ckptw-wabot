@@ -1,6 +1,6 @@
 const {
-    isAdmin
-} = require("../tools/simple.js");
+    general
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -33,7 +33,7 @@ module.exports = {
         try {
             if (account === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
-            if ((await isAdmin(ctx, account)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah anggota biasa.`);
+            if ((await general.isAdmin(ctx, account)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah anggota biasa.`);
 
             await ctx.group().demote([account]);
 

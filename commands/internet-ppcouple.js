@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -21,7 +21,7 @@ module.exports = {
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         try {
-            const apiUrl = createAPIUrl("sandipbaruwal", "/dp", {});
+            const apiUrl = api.createUrl("sandipbaruwal", "/dp", {});
             const response = await axios.get(apiUrl);
 
             const data = await response.data;

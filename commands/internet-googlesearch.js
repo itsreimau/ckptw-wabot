@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -19,12 +19,12 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.length ? ctx._args.join(" ") : null;
+        const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(`${global.msg.argument}\n` + `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`);
 
         try {
-            const apiUrl = await createAPIUrl("ngodingaja", "/api/gsearch", {
+            const apiUrl = await api.createUrl("ngodingaja", "/api/gsearch", {
                 search: input
             });
             const response = await axios.get(apiUrl);

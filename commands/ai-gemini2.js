@@ -1,9 +1,7 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    download
-} = require("../tools/simple.js");
+    api,
+    general
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -28,7 +26,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.length ? ctx._args.join(" ") : null;
+        const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -45,9 +43,9 @@ module.exports = {
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
+            const buffer = type === "imageMessage" ? await general.download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = createAPIUrl("sandipbaruwal", `/gemini2`, {
+            const apiUrl = api.createUrl("sandipbaruwal", `/gemini2`, {
                 prompt: input,
                 url: uplRes.link
             });

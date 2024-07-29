@@ -1,6 +1,6 @@
 const {
-    isAdmin
-} = require("../tools/simple.js");
+    general
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -31,7 +31,7 @@ module.exports = {
         });
 
         try {
-            if ((await isAdmin(ctx, account)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah admin grup.`);
+            if ((await general.isAdmin(ctx, account)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah admin grup.`);
 
             await ctx.group().promote([account]);
 

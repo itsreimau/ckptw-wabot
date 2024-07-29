@@ -1,9 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    isOwner
-} = require("../tools/simple.js");
+    api
+} = require("../tools/exports.js");
 const {
     bold,
     monospace

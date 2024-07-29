@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -19,7 +19,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.length ? ctx._args.join(" ") : null;
+        const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -27,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("nyxs", "/ai/character-ai", {
+            const apiUrl = api.createUrl("nyxs", "/ai/character-ai", {
                 prompt: input,
                 gaya: `Bot WhatsApp bernama ${global.bot.name}, dimiliki oleh ${global.owner.name}.` // Can be changed according to your wishes.
             });

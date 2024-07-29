@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -23,7 +23,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.length ? ctx._args.join(" ") : null;
+        const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -40,7 +40,7 @@ module.exports = {
                 profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
 
-            const apiUrl = createAPIUrl("widipe", "/quotely", {
+            const apiUrl = api.createUrl("widipe", "/quotely", {
                 avatar: profileUrl,
                 username: ctx._sender.pushName,
                 text: input

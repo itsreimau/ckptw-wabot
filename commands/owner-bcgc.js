@@ -1,7 +1,4 @@
 const {
-    getRandomElement
-} = require("../tools/simple.js");
-const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
@@ -17,7 +14,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const input = ctx._args.length ? ctx._args.join(" ") : null;
+        const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +

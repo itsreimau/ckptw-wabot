@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -22,7 +22,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const apiUrl = await createAPIUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
+        const apiUrl = await api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
 
         try {
             const response = await axios.get(apiUrl);

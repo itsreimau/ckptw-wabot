@@ -1,9 +1,7 @@
 const {
-    getList
-} = require("../tools/list.js");
-const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api,
+    list
+} = require("../tools/exports.js");
 const {
     bold,
     italic,
@@ -29,7 +27,7 @@ module.exports = {
         );
 
         if (ctx._args[0] === "list") {
-            const listText = await getList("alquran");
+            const listText = await list.get("alquran");
 
             return ctx.reply(listText);
         }
@@ -42,7 +40,7 @@ module.exports = {
 
             if (ayaNumber && (isNaN(ayaNumber) || ayaNumber < 1)) return ctx.reply(`${bold("[ ! ]")} Ayat harus lebih dari 0.`);
 
-            const apiUrl = createAPIUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
+            const apiUrl = api.createUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
             const response = await axios.get(apiUrl);
             const data = response.data.data;
 

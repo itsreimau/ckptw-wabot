@@ -1,6 +1,6 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
+    api
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -36,7 +36,7 @@ module.exports = {
 
             const [emoji1, emoji2] = emojis.slice(0, 2);
 
-            const apiUrl = createAPIUrl("https://tenor.googleapis.com", `/v2/featured`, {
+            const apiUrl = api.createUrl("https://tenor.googleapis.com", `/v2/featured`, {
                 key: "AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ",
                 contentfilter: "high",
                 media_filter: "png_transparent",

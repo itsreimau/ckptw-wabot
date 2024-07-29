@@ -1,6 +1,6 @@
 const {
-    download
-} = require("../tools/simple.js");
+    general
+} = require("../tools/exports.js");
 const {
     bold,
     monospace
@@ -30,7 +30,7 @@ module.exports = {
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
+            const buffer = type === "imageMessage" ? await general.download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             let level = ctx._args[0] || "5";
             let img = await Jimp.read(buffer);
             img.blur(isNaN(level) ? 5 : parseInt(level));
