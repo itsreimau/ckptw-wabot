@@ -18,7 +18,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const script = ctx._args.join(" ") || null;
+        const input = ctx._args.join(" ") || null;
         const script = input;
 
         if (!script) return ctx.reply(
