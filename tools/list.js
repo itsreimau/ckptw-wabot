@@ -10,7 +10,7 @@ const {
 const axios = require("axios");
 const moment = require("moment-timezone");
 
-async function getList(type, ctx) {
+async function get(type, ctx) {
     let text = "";
 
     switch (type) {
