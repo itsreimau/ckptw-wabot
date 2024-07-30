@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold
 } = require("@mengkodingan/ckptw");
@@ -15,19 +15,21 @@ module.exports = {
     name: "meme",
     category: "fun",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
+        if (status) return ctx.reply(message);
 
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
-
-        const apiUrl = api.createUrl("https://candaan-api.vercel.app", "/api/image/random", {});
+        const apiUrl = createAPIUrl("https://candaan-api.vercel.app", "/api/image/random", {});
 
         try {
-            const response = await axios.get(apiUrl);
-
-            const data = await response.data;
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             return ctx.reply({
                 image: {

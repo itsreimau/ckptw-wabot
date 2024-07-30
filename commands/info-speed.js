@@ -9,20 +9,19 @@ module.exports = {
     name: "speed",
     category: "info",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
-            banned: true
-        });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
-
         try {
-            const pOld = performance.now();
-            const res = await ctx.reply("Menguji kecepatan...");
-            const speed = (performance.now() - pOld).toFixed(2);
-            return ctx.editMessage(res.key, `Merespon dalam ${speed} ms.`);
+            const handlerObj = await global.handler(ctx, {
+                banned: true
+            });
+            if (handlerObj.status) return ctx.reply(handlerObj.message);
+
+            const startTime = performance.now();
+            const message = await ctx.reply("Menguji kecepatan...");
+            const responseTime = (performance.now() - startTime).toFixed(2);
+            await ctx.editMessage(message.key, `Merespon dalam ${responseTime} ms.`);
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
-    }
+    },
 };

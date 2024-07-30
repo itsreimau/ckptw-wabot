@@ -7,7 +7,6 @@ module.exports = {
             banned: true,
             group: true
         });
-
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         const input = ctx._args.join(" ") || null;

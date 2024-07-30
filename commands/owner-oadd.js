@@ -1,6 +1,6 @@
 const {
-    general
-} = require("../tools/exports.js");
+    isAdmin
+} = require("../tools/general.js");
 const {
     bold,
     monospace

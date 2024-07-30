@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
@@ -16,12 +16,14 @@ module.exports = {
     aliases: ["emix"],
     category: "maker",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         if (!ctx._args.length) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -36,7 +38,7 @@ module.exports = {
 
             const [emoji1, emoji2] = emojis.slice(0, 2);
 
-            const apiUrl = api.createUrl("https://tenor.googleapis.com", `/v2/featured`, {
+            const apiUrl = createAPIUrl("https://tenor.googleapis.com", `/v2/featured`, {
                 key: "AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ",
                 contentfilter: "high",
                 media_filter: "png_transparent",

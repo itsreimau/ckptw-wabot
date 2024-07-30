@@ -1,7 +1,12 @@
 const {
-    api,
-    list
-} = require("../tools/exports.js");
+    getList
+} = require("../tools/list.js");
+const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
+    ucword
+} = require("../tools/general.js");
 const {
     bold,
     monospace
@@ -14,12 +19,14 @@ module.exports = {
     aliases: ["imagerandom", "imgr", "randomimg", "rimg"],
     category: "internet",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
@@ -29,7 +36,7 @@ module.exports = {
         );
 
         if (ctx._args[0] === "list") {
-            const listText = await list.get("randomimage");
+            const listText = await getList("randomimage");
 
             return ctx.reply(listText);
         }
@@ -38,7 +45,7 @@ module.exports = {
         if (!list.some(item => input.includes(item))) return ctx.reply(`Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`);
 
         try {
-            const apiUrl = api.createUrl("widipe", `/${input}`, {});
+            const apiUrl = createAPIUrl("widipe", `/${input}`, {});
 
             const listWithResUrl = ["hubbleimg", "neko", "shinobu", "waifu"];
             if (listWithResUrl.some(item => input.includes(item))) {
@@ -53,7 +60,7 @@ module.exports = {
                     mimetype: mime.contentType("png"),
                     caption: `❖ ${bold("Random Image")}\n` +
                         "\n" +
-                        `➲ Kueri: ${general.ucword(input)}\n` +
+                        `➲ Kueri: ${ucword(input)}\n` +
                         "\n" +
                         global.msg.footer
                 });

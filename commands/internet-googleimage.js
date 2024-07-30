@@ -1,7 +1,9 @@
 const {
-    api,
-    general
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
+const {
+    getRandomElement
+} = require("../tools/general.js");
 const {
     bold,
     monospace
@@ -14,12 +16,14 @@ module.exports = {
     aliases: ["gimage"],
     category: "internet",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
@@ -29,14 +33,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = api.createUrl("gabut", "/api/googleimage", {
+            const apiUrl = createAPIUrl("gabut", "/api/googleimage", {
                 search: input
             });
-            const response = await axios.get(apiUrl);
+            const {
+                data
+            } = await axios.get(apiUrl);
 
-            const data = response.data;
-
-            const imageUrl = general.getRandomElement(data.result);
+            const imageUrl = getRandomElement(data.result);
 
             return await ctx.reply({
                 image: {

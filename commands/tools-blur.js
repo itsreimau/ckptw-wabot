@@ -1,6 +1,6 @@
 const {
-    general
-} = require("../tools/exports.js");
+    download
+} = require("../tools/general.js");
 const {
     bold,
     monospace
@@ -15,12 +15,14 @@ module.exports = {
     name: "blur",
     category: "tools",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
@@ -30,7 +32,7 @@ module.exports = {
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ? await general.download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
+            const buffer = type === "imageMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             let level = ctx._args[0] || "5";
             let img = await Jimp.read(buffer);
             img.blur(isNaN(level) ? 5 : parseInt(level));

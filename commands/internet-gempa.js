@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
@@ -13,19 +13,21 @@ module.exports = {
     aliases: ["gempabumi"],
     category: "internet",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
+        if (status) return ctx.reply(message);
 
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
-
-        const apiUrl = await api.createUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json", {});
+        const apiUrl = await createAPIUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json", {});
 
         try {
-            const response = await axios.get(apiUrl);
-
-            const data = await response.data;
+            const {
+                data
+            } = await axios.get(apiUrl);
             const gempa = data.Infogempa.gempa;
 
             return ctx.sendMessage({

@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold
 } = require("@mengkodingan/ckptw");
@@ -17,7 +17,7 @@ module.exports = {
 
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const apiUrl = await api.createUrl("https://api.github.com", "/repos/itsreimau/ckptw-wabot", {});
+        const apiUrl = await createAPIUrl("https://api.github.com", "/repos/itsreimau/ckptw-wabot", {});
         const response = await axios.get(apiUrl);
 
         if (response.status !== 200) return ctx.reply(global.msg.notFound);

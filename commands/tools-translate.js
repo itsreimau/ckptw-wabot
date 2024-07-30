@@ -11,35 +11,29 @@ module.exports = {
     aliases: ["tr"],
     category: "tools",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
+        if (status) return ctx.reply(message);
 
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
-
-        if (!ctx._args.length) return ctx.reply(
+        const [lang = "id", ...text] = ctx._args;
+        if (!text.length) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo dunia!`)}`
+            `Example: ${monospace(`${ctx._used.prefix + ctx._used.command} en hello world!`)}`
         );
 
         try {
-            let lang = "id";
-            let inp = ctx._args;
-
-            if (ctx._args.length > 2) {
-                lang = ctx._args[0];
-                inp = ctx._args.slice(1);
-            }
-
             const {
                 translation
-            } = await translate(inp.join(" "), null, lang);
-
+            } = await translate(text.join(" "), null, lang);
             return ctx.reply(translation);
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(`${bold("[ ! ]")} Error: ${error.message}`);
         }
-    }
+    },
 };

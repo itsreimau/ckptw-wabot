@@ -8,11 +8,16 @@ module.exports = {
     aliases: ["creator", "developer"],
     category: "info",
     code: async (ctx) => {
-        const vcard = new VCardBuilder().setFullName(global.owner.name).setOrg(global.owner.organization).setNumber(global.owner.number).build();
+        const {
+            name,
+            organization,
+            number
+        } = global.owner;
+        const vcard = new VCardBuilder().setFullName(name).setOrg(organization).setNumber(number).build();
 
         return await ctx.reply({
             contacts: {
-                displayName: global.owner.name,
+                displayName: name,
                 contacts: [{
                     vcard
                 }]

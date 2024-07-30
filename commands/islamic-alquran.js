@@ -1,7 +1,9 @@
 const {
-    api,
-    list
-} = require("../tools/exports.js");
+    getList
+} = require("../tools/list.js");
+const {
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     italic,
@@ -14,12 +16,14 @@ module.exports = {
     aliases: ["quran"],
     category: "islamic",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         if (!ctx._args.length) return ctx.reply(
             `${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
@@ -27,7 +31,7 @@ module.exports = {
         );
 
         if (ctx._args[0] === "list") {
-            const listText = await list.get("alquran");
+            const listText = await getList("alquran");
 
             return ctx.reply(listText);
         }
@@ -40,7 +44,7 @@ module.exports = {
 
             if (ayaNumber && (isNaN(ayaNumber) || ayaNumber < 1)) return ctx.reply(`${bold("[ ! ]")} Ayat harus lebih dari 0.`);
 
-            const apiUrl = api.createUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
+            const apiUrl = createAPIUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
             const response = await axios.get(apiUrl);
             const data = response.data.data;
 

@@ -1,6 +1,6 @@
 const {
-    general
-} = require("../tools/exports.js");
+    isAdmin
+} = require("../tools/general.js");
 const {
     bold,
     monospace
@@ -32,7 +32,7 @@ module.exports = {
         try {
             if (account === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
-            if ((await general.isAdmin(ctx, account)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah admin grup.`);
+            if ((await isAdmin(ctx, account)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah admin grup.`);
 
             await ctx.group().kick([account]);
 

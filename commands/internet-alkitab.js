@@ -1,7 +1,9 @@
 const {
-    api,
-    list
-} = require("../tools/exports.js");
+    getList
+} = require("../tools/list");
+const {
+    createAPIUrl
+} = require("../tools/api");
 const {
     bold,
     monospace
@@ -13,12 +15,14 @@ module.exports = {
     aliases: ["injil"],
     category: "internet",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const [abbr, chapter] = ctx._args;
 
@@ -28,25 +32,23 @@ module.exports = {
         );
 
         if (ctx._args[0] === "list") {
-            const listText = await list.get("alkitab");
-
+            const listText = await getList("alkitab");
             return ctx.reply(listText);
         }
 
         try {
-            const apiUrl = await api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {
+            const apiUrl = await createAPIUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {
                 ver: "tb"
             });
-            const response = await axios.get(apiUrl);
-
             const {
                 data
-            } = await response.data;
+            } = await axios.get(apiUrl);
 
             const resultText = data.verses.map((v) =>
                 `➲ Ayat: ${v.verse}\n` +
                 `➲ ${v.content}`
             ).join("\n-----\n");
+
             return ctx.reply(
                 `❖ ${bold("Alkitab")}\n` +
                 "\n" +
@@ -62,5 +64,5 @@ module.exports = {
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
-    }
+    },
 };

@@ -1,6 +1,6 @@
 const {
-    general
-} = require("../tools/exports.js");
+    isAdmin
+} = require("../tools/simple.js");
 const {
     bold,
     monospace
@@ -17,23 +17,26 @@ module.exports = {
             group: true
         });
 
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (handlerObj.status) {
+            return ctx.reply(handlerObj.message);
+        }
 
         const senderNumber = ctx.sender.jid.split("@")[0];
         const senderJid = ctx._sender.jid;
-        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-        const account = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : null;
+        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid || [];
+        const account = mentionedJids[0] || null;
 
-        if (!account) return ctx.reply({
-            text: `${global.msg.argument}\n` +
-                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`,
-            mentions: [senderJid]
-        });
+        if (!account) {
+            return ctx.reply({
+                text: `${global.msg.argument}\nContoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`,
+                mentions: [senderJid]
+            });
+        }
 
         try {
             if (account === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
-            if ((await general.isAdmin(ctx, account)) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah admin grup.`);
+            if (await isAdmin(ctx, account) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah admin grup.`);
 
             await ctx.group().kick([account]);
 

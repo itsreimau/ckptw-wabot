@@ -1,6 +1,9 @@
 const {
-    general
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
+const {
+    download
+} = require("../tools/simple.js");
 const {
     bold,
     monospace
@@ -22,32 +25,33 @@ module.exports = {
     aliases: ["smeme", "stikermeme"],
     category: "maker",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} i want to be a cat|just meow meow`)}`
+            `Example: ${monospace(`${ctx._used.prefix + ctx._used.command} i want to be a cat|just meow meow`)}`
         );
 
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
-
         if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(`${bold("[ ! ]")} Berikan atau balas media berupa gambar!`);
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ? await general.download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
-            const [top, bottom] = input.split(`|`);
+            const buffer = type === "imageMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
+            const [top, bottom] = input.split("|");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const result = api.createUrl("https://api.memegen.link", `/images/custom/${top || ""}/${bottom || ""}.png`, {
+            const result = createAPIUrl("https://api.memegen.link", `/images/custom/${top || ""}/${bottom || ""}.png`, {
                 background: uplRes.link
             });
             const sticker = new Sticker(result, {

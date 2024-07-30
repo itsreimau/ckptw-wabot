@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
@@ -15,12 +15,14 @@ module.exports = {
     name: "attp",
     category: "maker",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
@@ -32,7 +34,7 @@ module.exports = {
         try {
             if (input.length > 10000) return ctx.reply(`${bold("[ ! ]")} Maksimal 50 kata!`);
 
-            const apiUrl = api.createUrl("widipe", "/attp", {
+            const apiUrl = createAPIUrl("widipe", "/attp", {
                 text: input
             });
 

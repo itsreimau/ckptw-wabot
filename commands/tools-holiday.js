@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold
 } = require("@mengkodingan/ckptw");
@@ -11,16 +11,18 @@ module.exports = {
     aliases: ["libur", "harilibur"],
     category: "tools",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         try {
             const month = new Date().getMonth() + 1;
-            const apiUrl = api.createUrl("https://api-harilibur.vercel.app", "/api", {
+            const apiUrl = createAPIUrl("https://api-harilibur.vercel.app", "/api", {
                 month: month
             });
             const data = await axios.get(apiUrl).then((res) => (res.status == 200 ? res.data : null)).catch((err) => null);

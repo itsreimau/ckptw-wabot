@@ -1,4 +1,3 @@
-// That's a list of free APIs, use them wisely!
 const APIs = {
     gabut: {
         baseURL: "https://api-gabut.bohr.io"
@@ -23,7 +22,7 @@ const APIs = {
     }
 };
 
-async function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
+exports.createAPIUrl = (apiNameOrURL, endpoint, params = {}, apiKeyParamName) => {
     const api = APIs[apiNameOrURL];
 
     if (!api) {
@@ -43,13 +42,4 @@ async function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
     apiUrl.search = queryParams.toString();
 
     return apiUrl.toString();
-}
-
-function listUrl() {
-    return APIs;
-}
-
-module.exports = {
-    createUrl,
-    listUrl
 };

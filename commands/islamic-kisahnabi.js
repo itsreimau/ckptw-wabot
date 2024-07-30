@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
@@ -11,12 +11,14 @@ module.exports = {
     name: "kisahnabi",
     category: "islamic",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
@@ -26,10 +28,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = api.createUrl("https://raw.githubusercontent.com", `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
-            const response = await axios.get(apiUrl);
-
-            const data = await response.data;
+            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             return ctx.reply(
                 `❖ ${bold("Kisah Nabi")}\n` +

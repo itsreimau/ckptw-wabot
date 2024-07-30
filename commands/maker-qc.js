@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
@@ -16,12 +16,14 @@ module.exports = {
     aliases: ["bubblechat"],
     category: "maker",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
@@ -40,7 +42,7 @@ module.exports = {
                 profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
 
-            const apiUrl = api.createUrl("widipe", "/quotely", {
+            const apiUrl = createAPIUrl("widipe", "/quotely", {
                 avatar: profileUrl,
                 username: ctx._sender.pushName,
                 text: input

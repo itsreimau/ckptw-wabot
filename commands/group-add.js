@@ -1,6 +1,6 @@
 const {
-    general
-} = require("../tools/exports.js");
+    isAdmin
+} = require("../tools/simple.js");
 const {
     bold,
     monospace
@@ -16,7 +16,6 @@ module.exports = {
             botAdmin: true,
             group: true
         });
-
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         const input = ctx._args.join(" ") || null;

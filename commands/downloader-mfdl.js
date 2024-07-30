@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     mediafiredl
 } = require("@bochilteam/scraper");
@@ -16,12 +16,14 @@ module.exports = {
     aliases: ["mf", "mediafire", "mediafiredl"],
     category: "downloader",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
@@ -30,17 +32,17 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
         );
 
-        const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+        const urlRegex = /((([A-Za-z]{39}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
         if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
 
         try {
             let result;
 
             const apiCalls = [
-                () => axios.get(api.createUrl("ngodingaja", "/api/mediafire", {
+                () => axios.get(createAPIUrl("ngodingaja", "/api/mediafire", {
                     url: input
                 })).then(response => response.hasil.url),
-                () => axios.get(api.createUrl("ssa", "/api/mediafire", {
+                () => axios.get(createAPIUrl("ssa", "/api/mediafire", {
                     url: input
                 })).then(response => response.data.data.response.link),
                 () => mediafiredl(input).then(response => response.data.url || response.data.url2)

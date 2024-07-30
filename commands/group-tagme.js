@@ -9,7 +9,6 @@ module.exports = {
         const handlerObj = await global.handler(ctx, {
             group: true
         });
-
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         try {

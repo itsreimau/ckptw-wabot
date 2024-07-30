@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
@@ -12,12 +12,14 @@ module.exports = {
     aliases: ["checkkhodam", "khodam"],
     category: "fun",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
@@ -27,10 +29,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = api.createUrl("https://raw.githubusercontent.com", `/SazumiVicky/cek-khodam/main/khodam/list.txt`, {});
-            const response = await axios.get(apiUrl);
-
-            const data = await response.data;
+            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/SazumiVicky/cek-khodam/main/khodam/list.txt`, {});
+            const {
+                data
+            } = await axios.get(apiUrl);
             const list = data.split('\n').filter(l => l.trim().length > 0);
             const khodam = list[Math.floor(Math.random() * list.length)];
 

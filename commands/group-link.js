@@ -17,7 +17,6 @@ module.exports = {
 
         try {
             const link = await ctx.group().inviteCode();
-
             return ctx.reply(`https://chat.whatsapp.com/${link}`);
         } catch (error) {
             console.error("Error:", error);

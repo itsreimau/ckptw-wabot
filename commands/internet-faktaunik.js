@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
@@ -15,26 +15,33 @@ module.exports = {
     aliases: ["fakta"],
     category: "internet",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            banned,
+            coin
+        } = {
             banned: true,
             coin: 3
+        };
+        const handlerObj = await global.handler(ctx, {
+            banned,
+            coin
         });
-
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
-        const apiUrl = await api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
-
         try {
-            const response = await axios.get(apiUrl);
+            const apiUrl = await createAPIUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
+            const {
+                data
+            } = await axios.get(apiUrl);
+            const {
+                translation
+            } = await translate(data.text, "en", "id");
 
-            const data = await response.data;
-            const result = await translate(data.text, "en", "id");
-
-            return ctx.reply(result.translation);
+            return ctx.reply(translation);
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.response && error.response.status === 404) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
-    }
+    },
 };

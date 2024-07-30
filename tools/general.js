@@ -2,7 +2,14 @@ const {
     downloadContentFromMessage
 } = require("@whiskeysockets/baileys");
 
-async function convertMsToDuration(ms) {
+async function checkAdmin(ctx, id) {
+    const members = await ctx.group().members();
+    const formattedId = `${id}@s.whatsapp.net`;
+
+    return members.filter((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id == formattedId).length ? true : false;
+}
+
+exports.convertMsToDuration = (ms) => {
     const seconds = Math.floor((ms / 1000) % 60);
     const minutes = Math.floor((ms / (1000 * 60)) % 60);
     const hours = Math.floor(ms / (1000 * 60 * 60));
@@ -17,7 +24,7 @@ async function convertMsToDuration(ms) {
     return durationString;
 };
 
-async function download(object, type) {
+exports.download = async (object, type) => {
     const stream = await downloadContentFromMessage(object, type);
     let buffer = Buffer.from([]);
 
@@ -28,7 +35,7 @@ async function download(object, type) {
     return buffer;
 };
 
-async function formatSize(bytes) {
+exports.formatSize = (bytes) => {
     const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
 
     if (bytes === 0) return "0 Byte";
@@ -38,7 +45,7 @@ async function formatSize(bytes) {
     return Math.round(bytes / Math.pow(1024, i), 2) + " " + sizes[i];
 };
 
-async function getRandomElement(arr) {
+exports.getRandomElement = (arr) => {
     if (arr.length === 0) return undefined;
 
     const randomIndex = Math.floor(Math.random() * arr.length);
@@ -46,7 +53,7 @@ async function getRandomElement(arr) {
     return arr[randomIndex];
 };
 
-async function isCmd(m, ctx) {
+exports.isCmd = (m, ctx) => {
     const prefixRegex = new RegExp(ctx._config.prefix, "i");
     const content = m.content && m.content.trim();
 
@@ -61,36 +68,24 @@ async function isCmd(m, ctx) {
     return false;
 };
 
-async function isAdmin(ctx, number) {
+exports.isAdmin = async (ctx, number) => {
     const isAdmin = await checkAdmin(ctx, number || ctx._sender.jid.split("@")[0]);
 
     return isAdmin ? 1 : 0;
 };
 
-async function isBotAdmin(ctx) {
+exports.isBotAdmin = async (ctx) => {
     const isBotAdmin = await checkAdmin(ctx, ctx._client.user.id.split(":")[0]);
 
     return isBotAdmin ? 1 : 0;
 };
 
-async function isOwner(ctx, number) {
+exports.isOwner = (ctx, number) => {
     const isOwner = ctx._client.user.id.split(":")[0] == number || global.owner.number === number || global.owner.co.includes(number);
 
     return isOwner ? 1 : 0;
 };
 
-function ucword(str) {
+exports.ucword = (str) => {
     return str.toLowerCase().replace(/\b(\w)/g, (s) => s.toUpperCase());
-}
-
-module.exports = {
-    convertMsToDuration,
-    download,
-    formatSize,
-    getRandomElement,
-    isCmd,
-    isAdmin,
-    isBotAdmin,
-    isOwner,
-    ucword
 };

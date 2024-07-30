@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
@@ -13,12 +13,14 @@ module.exports = {
     aliases: ["dall", "aiimg"],
     category: "ai",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
@@ -28,7 +30,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = api.createUrl("widipe", `/dalle`, {
+            const apiUrl = createAPIUrl("widipe", `/dalle`, {
                 text: input
             });
 

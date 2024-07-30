@@ -1,6 +1,6 @@
 const {
-    list
-} = require("../tools/exports.js");
+    getList
+} = require("../tools/list.js");
 const {
     bold,
     monospace
@@ -16,7 +16,6 @@ module.exports = {
             banned: true,
             group: true
         });
-
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         const input = ctx._args.join(" ") || null;
@@ -27,7 +26,7 @@ module.exports = {
         );
 
         if (ctx._args[0] === "list") {
-            const listText = await list.get("disable_enable");
+            const listText = await getList("disable_enable");
 
             return ctx.reply(listText);
         }

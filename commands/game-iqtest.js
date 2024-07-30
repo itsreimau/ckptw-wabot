@@ -1,6 +1,9 @@
 const {
-    general
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
+const {
+    getRandomElement
+} = require("../tools/general.js");
 const {
     bold
 } = require("@mengkodingan/ckptw");
@@ -10,14 +13,16 @@ module.exports = {
     name: "iqtest",
     category: "game",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
+        if (status) return ctx.reply(message);
 
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
-
-        return ctx.reply(general.getRandomElement(iq));
+        return ctx.reply(getRandomElement(iq));
     }
 };
 

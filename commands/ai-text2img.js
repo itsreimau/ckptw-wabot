@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
@@ -12,12 +12,14 @@ module.exports = {
     name: "text2img",
     category: "ai",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         let input = ctx._args.length ? ctx._args.join(" ") : null;
 
@@ -38,7 +40,7 @@ module.exports = {
         }
 
         try {
-            const apiUrl = api.createUrl("widipe", apiPath, {
+            const apiUrl = createAPIUrl("widipe", apiPath, {
                 text: input
             });
 

@@ -11,9 +11,8 @@ module.exports = {
             admin: true,
             banned: true,
             botAdmin: true,
-            group: true
+            group: true,
         });
-
         if (handlerObj.status) return ctx.reply(handlerObj.message);
 
         const input = ctx._args.join(" ") || null;
@@ -38,7 +37,9 @@ module.exports = {
                     await ctx.group().unlock();
                     break;
                 default:
-                    return ctx.reply(`${bold("[ ! ]")} Argumen yang tersedia adalah open, close, lock, dan unlock.`);
+                    return ctx.reply(
+                        `${bold("[ ! ]")} Argumen yang tersedia adalah open, close, lock, dan unlock.`
+                    );
             }
 
             return ctx.reply(`${bold("[ ! ]")} Berhasil mengubah setelan grup!`);
@@ -46,5 +47,5 @@ module.exports = {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
-    }
+    },
 };

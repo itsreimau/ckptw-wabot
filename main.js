@@ -1,8 +1,8 @@
 // Required modules and dependencies.
-const handler = require("./handler.js");
 const {
-    general
-} = require("./tools/exports.js");
+    handler
+} = require("./handler.js");
+const gnrl = require("./tools/general.js");
 const {
     bold,
     Client,
@@ -64,7 +64,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (m.key.fromMe) return;
 
     // Auto-typing simulation for commands.
-    if (general.isCmd(m, ctx)) ctx.simulateTyping();
+    if (gnrl.isCmd(m, ctx)) ctx.simulateTyping();
 
     // AFK handling: Mentioned users.
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
@@ -76,7 +76,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     db.get(`user.${mentionJid.split("@")[0]}.afk.reason`),
                     db.get(`user.${mentionJid.split("@")[0]}.afk.timeStamp`)
                 ]);
-                const timeAgo = general.convertMsToDuration(Date.now() - timeStamp);
+                const timeAgo = gnrl.convertMsToDuration(Date.now() - timeStamp);
 
                 return ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`);
             }
@@ -90,14 +90,14 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             db.get(`user.${senderNumber}.afk.reason`),
             db.get(`user.${senderNumber}.afk.timeStamp`)
         ]);
-        const timeAgo = general.convertMsToDuration(Date.now() - timeStamp);
+        const timeAgo = gnrl.convertMsToDuration(Date.now() - timeStamp);
         await db.delete(`user.${senderNumber}.afk`);
 
         return ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`);
     }
 
     // Owner-only commands.
-    if (general.isOwner(ctx, senderNumber) === 1) {
+    if (gnrl.isOwner(ctx, senderNumber) === 1) {
         // Eval command: Execute JavaScript code.
         if (m.content && m.content.startsWith && (m.content.startsWith("> ") || m.content.startsWith(">> "))) {
             const code = m.content.slice(2);
@@ -133,7 +133,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const getAntilink = await db.get(`group.${groupNumber}.antilink`);
         const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
         if (getAntilink && m.content && urlRegex.test(m.content)) {
-            if ((await general.isAdmin(ctx)) === 1) return;
+            if ((await gnrl.isAdmin(ctx)) === 1) return;
 
             await ctx.reply(`${bold("[ ! ]")} Jangan kirim tautan!`);
             return await ctx.deleteMessage(m.key);

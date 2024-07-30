@@ -1,7 +1,9 @@
 const {
-    api,
-    general
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
+const {
+    download
+} = require("../tools/general.js");
 const {
     bold,
     monospace
@@ -19,12 +21,14 @@ module.exports = {
     aliases: ["enhance", "enhancer", "hd", "hdr", "remini"],
     category: "tools",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
@@ -34,9 +38,9 @@ module.exports = {
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ? await general.download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
+            const buffer = type === "imageMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = api.createUrl("nyxs", "/tools/hd", {
+            const apiUrl = createAPIUrl("nyxs", "/tools/hd", {
                 url: uplRes.link
             });
 

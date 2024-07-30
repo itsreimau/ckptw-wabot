@@ -1,6 +1,9 @@
 const {
-    list
-} = require("../tools/exports.js");
+    getList
+} = require("../tools/list.js");
+const {
+    getRandomElement
+} = require("../tools/general.js");
 const {
     bold
 } = require("@mengkodingan/ckptw");
@@ -11,7 +14,7 @@ module.exports = {
     category: "main",
     code: async (ctx) => {
         try {
-            const text = await list.get("menu", ctx);
+            const text = await getList("menu", ctx);
             const fakeProduct = {
                 key: {
                     fromMe: false,

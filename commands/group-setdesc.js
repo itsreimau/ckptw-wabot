@@ -7,20 +7,22 @@ module.exports = {
     name: "setdesc",
     category: "group",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             admin: true,
             banned: true,
             botAdmin: true,
-            group: true
+            group: true,
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} fuck you!`)}`
+            `Example: ${monospace(`${ctx._used.prefix + ctx._used.command} fuck you!`)}`
         );
 
         try {
@@ -31,5 +33,5 @@ module.exports = {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
-    }
+    },
 };

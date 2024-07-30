@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
@@ -11,12 +11,14 @@ module.exports = {
     name: "cekhadits",
     category: "islamic",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
@@ -26,12 +28,12 @@ module.exports = {
         );
 
         try {
-            const apiUrl = api.createUrl("http://dorar.net", "/dorar_api.json", {
+            const apiUrl = createAPIUrl("http://dorar.net", "/dorar_api.json", {
                 skey: input
             });
-            const response = await axios.get(apiUrl);
-
-            const data = await response.data;
+            const {
+                data
+            } = await axios.get(apiUrl);
             let ahadith = data.ahadith.result;
             ahadith = ahadith.replace(/<a[^>]*>المزيد<\/a>/g, "");
             const formattedAhadith = ahadith.replace(/<[^>]*>/g, "").trim();

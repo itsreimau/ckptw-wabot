@@ -1,7 +1,9 @@
 const {
-    api,
-    general
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
+const {
+    ucword
+} = require("../tools/general.js");
 const {
     bold,
     monospace
@@ -16,12 +18,14 @@ module.exports = {
     aliases: ["cuaca"],
     category: "internet",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
@@ -31,21 +35,21 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await api.createUrl("https://api.openweathermap.org", "/data/2.5/weather", {
+            const apiUrl = await createAPIUrl("https://api.openweathermap.org", "/data/2.5/weather", {
                 q: input,
                 units: "metric",
                 appid: "060a6bcfa19809c2cd4d97a212b19273"
             });
-            const response = await axios.get(apiUrl);
-
-            const data = await response.data;
+            const {
+                data
+            } = await axios.get(apiUrl);
             const weatherId = await translate(data.weather[0].description, "en", "id");
 
             return ctx.reply(
                 `❖ ${bold("Weather")}\n` +
                 "\n" +
                 `➲ Tempat: ${data.name} (${data.sys.country})\n` +
-                `➲ Cuaca: ${general.ucword(weatherId.translation)}\n` +
+                `➲ Cuaca: ${ucword(weatherId.translation)}\n` +
                 `➲ Kelembapan: ${data.main.humidity} %\n` +
                 `➲ Angin: ${data.wind.speed} km/jam\n` +
                 `➲ Suhu saat ini: ${data.main.temp} °C\n` +

@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
@@ -12,12 +12,14 @@ module.exports = {
     aliases: ["ai", "chatai", "gpt", "gpt2"],
     category: "ai",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
@@ -27,12 +29,12 @@ module.exports = {
         );
 
         try {
-            const apiUrl = api.createUrl("widipe", "/openai", {
+            const apiUrl = createAPIUrl("widipe", "/openai", {
                 text: input
             });
-            const response = await axios.get(apiUrl);
-
-            const data = response.data;
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             return ctx.reply(data.result);
         } catch (error) {

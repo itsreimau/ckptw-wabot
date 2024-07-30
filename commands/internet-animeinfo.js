@@ -1,6 +1,6 @@
 const {
-    api
-} = require("../tools/exports.js");
+    createAPIUrl
+} = require("../tools/api.js");
 const {
     bold,
     monospace
@@ -16,12 +16,14 @@ module.exports = {
     aliases: ["anime"],
     category: "internet",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
 
@@ -31,12 +33,12 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await api.createUrl("https://api.jikan.moe", "/v4/anime", {
+            const apiUrl = await createAPIUrl("https://api.jikan.moe", "/v4/anime", {
                 q: input
             });
-            const response = await axios.get(apiUrl);
-
-            const data = await response.data;
+            const {
+                data
+            } = await axios.get(apiUrl);
             const info = data.data[0];
             const synopsisId = info.synopsis ? await translate(info.synopsis, "en", "id") : null;
 

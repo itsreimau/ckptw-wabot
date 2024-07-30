@@ -1,6 +1,6 @@
 const {
-    general
-} = require("../tools/exports.js");
+    convertMsToDuration
+} = require("../tools/simple.js");
 
 module.exports = {
     name: "uptime",
@@ -10,9 +10,11 @@ module.exports = {
             banned: true
         });
 
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (handlerObj.status) {
+            return ctx.reply(handlerObj.message);
+        }
 
-        const startTime = global.system.startTime;
-        return ctx.reply(`Bot telah aktif selama ${general.convertMsToDuration(Date.now() - startTime) || "kurang dari satu detik"}.`);
+        const uptime = convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik";
+        return ctx.reply(`Bot telah aktif selama ${uptime}.`);
     }
 };
