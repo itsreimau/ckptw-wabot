@@ -4,35 +4,34 @@ const {
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
-        name: "setname",
-        category: "group",
-        code: async (ctx) => {
-            const {
-                status,
-                message
-            } = await global.handler(ctx, {
-                admin: true,
-                banned: true,
-                botAdmin: true,
-                group: true
-            });
-            if (status) return ctx.reply(message);
+    name: "setname",
+    category: "group",
+    code: async (ctx) => {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
+            admin: true,
+            banned: true,
+            botAdmin: true,
+            group: true
+        });
+        if (status) return ctx.reply(message);
 
-            const input = ctx._args.join(" ").trim();
+        const input = ctx._args.join(" ").trim();
 
-            if (!input) {
-                return ctx.reply(
-                    `${global.msg.argument}\n` +
-                    `Contoh: ${monospace(`${ctx._used.prefix}${ctx._used.command} ckptw-wabot`)}`
-                );
+        if (!input) return ctx.reply(
+            `${global.msg.argument}\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix}${ctx._used.command} ckptw-wabot`)}`
+        );
 
-                try {
-                    await ctx.group().updateSubject(input);
+        try {
+            await ctx.group().updateSubject(input);
 
-                    return ctx.reply(`${bold("[ ! ]")} Berhasil mengubah nama grup!`);
-                } catch (error) {
-                    console.error("Error:", error);
-                    return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
-                }
-            }
-        };
+            return ctx.reply(`${bold("[ ! ]")} Berhasil mengubah nama grup!`);
+        } catch (error) {
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+        }
+    }
+};
