@@ -1,4 +1,4 @@
-sconst {
+const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
