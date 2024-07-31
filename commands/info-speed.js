@@ -19,9 +19,9 @@ module.exports = {
             if (status) return ctx.reply(message);
 
             const startTime = performance.now();
-            const message = await ctx.reply("Menguji kecepatan...");
+            const testSpeed = await ctx.reply("Menguji kecepatan...");
             const responseTime = (performance.now() - startTime).toFixed(2);
-            await ctx.editMessage(message.key, `Merespon dalam ${responseTime} ms.`);
+            await ctx.editMessage(testSpeed.key, `Merespon dalam ${responseTime} ms.`);
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
