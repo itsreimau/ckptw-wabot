@@ -1,6 +1,6 @@
 const {
     convertMsToDuration
-} = require("../tools/simple.js");
+} = require("../tools/general.js");
 
 module.exports = {
     name: "uptime",

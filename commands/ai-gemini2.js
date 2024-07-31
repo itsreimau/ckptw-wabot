@@ -3,7 +3,7 @@ const {
 } = require("../tools/api.js");
 const {
     download
-} = require("../tools/simple.js");
+} = require("../tools/general.js");
 const {
     bold,
     monospace
@@ -61,7 +61,7 @@ module.exports = {
             return ctx.reply(data.answer);
         } catch (error) {
             console.error("Error", error);
-            return ctx.reply(`${bold("[ ! ]"]} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     },
 };

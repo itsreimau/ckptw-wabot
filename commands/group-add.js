@@ -1,6 +1,6 @@
 const {
     isAdmin
-} = require("../tools/simple.js");
+} = require("../tools/general.js");
 const {
     bold,
     monospace

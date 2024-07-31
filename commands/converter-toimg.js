@@ -3,7 +3,7 @@ const {
 } = require("../tools/api.js");
 const {
     download
-} = require("../tools/simple.js");
+} = require("../tools/general.js");
 const {
     bold
 } = require("@mengkodingan/ckptw");
