@@ -35,5 +35,5 @@ module.exports = {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Error: ${error.message}`);
         }
-    },
+    }
 };

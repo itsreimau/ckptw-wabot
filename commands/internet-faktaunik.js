@@ -46,5 +46,5 @@ module.exports = {
             if (error.response && error.response.status === 404) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
-    },
+    }
 };

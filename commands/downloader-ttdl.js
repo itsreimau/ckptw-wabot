@@ -28,7 +28,7 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
         );
 
-        const urlRegex = /((([A-Za-z]{39}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+        const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
         if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
 
         try {
@@ -47,7 +47,7 @@ module.exports = {
                     audio: {
                         url: data.music.play_url
                     },
-                    mimetype: mime.lookup("mp3"),
+                    mimetype: mime.lookup("mp3")
                 });
             }
 
@@ -63,7 +63,7 @@ module.exports = {
                             `➲ URL: ${input}\n` +
                             "\n" +
                             global.msg.footer,
-                        gifPlayback: false,
+                        gifPlayback: false
                     });
                 }
 
@@ -79,7 +79,7 @@ module.exports = {
                                 "\n" +
                                 `➲ URL: ${input}\n` +
                                 "\n" +
-                                global.msg.footer,
+                                global.msg.footer
                         });
                     }
                 }

@@ -54,5 +54,5 @@ module.exports = {
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
-    },
+    }
 };
