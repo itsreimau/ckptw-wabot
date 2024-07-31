@@ -1,9 +1,9 @@
 const {
     createAPIUrl
-} = require("../tools/api");
+} = require("../tools/api.js");
 const {
     download
-} = require("../tools/simple");
+} = require("../tools/general.js");
 const {
     bold
 } = require("@mengkodingan/ckptw");

@@ -3,7 +3,7 @@ const {
 } = require("../tools/list");
 const {
     createAPIUrl
-} = require("../tools/api");
+} = require("../tools/api.js");
 const {
     bold,
     monospace
