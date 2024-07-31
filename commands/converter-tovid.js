@@ -39,7 +39,7 @@ module.exports = {
                 video: {
                     url: vidUrl
                 },
-                mimetype: ctx._used.command === "togif" ? mime.("gif") : mime.("mp4"),
+                mimetype: ctx._used.command === "togif" ? mime.contentType("gif") : mime.contentType("mp4"),
                 caption: null,
                 gifPlayback: ctx._used.command === "togif" ? true : false
             });

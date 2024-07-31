@@ -32,7 +32,7 @@ module.exports = {
                 image: {
                     url: profileUrl,
                 },
-                mimetype: mime.("png"),
+                mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Profile")}\n` +
                     "\n" +
                     `➲ Nama: ${ctx._sender.pushName}\n` +

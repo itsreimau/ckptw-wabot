@@ -41,7 +41,7 @@ module.exports = {
                 video: {
                     url: videoUrl,
                 },
-                mimetype: mime.("mp4"),
+                mimetype: mime.contentType("mp4"),
                 caption: `❖ ${bold("Twitter")}\n` +
                     "\n" +
                     `➲ URL: ${input}\n` +
