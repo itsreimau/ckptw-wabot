@@ -145,8 +145,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Menfess handling.
         const getMessageDataMenfess = await db.get(`menfess.${senderNumber}`);
         if (getMessageDataMenfess) {
-            if (m.message?.extendedTextMessage?.contextInfo?.quotedMessage?.conversation === m.content) {
-                const from = await db.get(`menfess.${senderNumber}.from`);
+            const [from, text] = await Promise.all([
+                db.get(`menfess.${senderNumber}.from`),
+                db.get(`menfess.${senderNumber}.text`)
+            ]);
+
+            if (m.message?.extendedTextMessage?.contextInfo?.quotedMessage?.conversation === text) {
                 try {
                     await sendMenfess(ctx, m, senderNumber, from);
 
