@@ -20,11 +20,14 @@ module.exports = {
             banned: true,
             coin: 3
         };
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned,
             coin
         });
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
         if (!input) {

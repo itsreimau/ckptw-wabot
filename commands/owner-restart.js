@@ -10,11 +10,13 @@ module.exports = {
     name: "restart",
     category: "owner",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             owner: true
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         try {
             await ctx.reply(global.msg.wait);

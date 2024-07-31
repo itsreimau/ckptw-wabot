@@ -9,13 +9,15 @@ module.exports = {
     aliases: ["confess"],
     category: "tools",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true,
             coin: 3,
             private: true
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         if (!ctx._args.length) return ctx.reply(
             `${global.msg.argument}\n` +

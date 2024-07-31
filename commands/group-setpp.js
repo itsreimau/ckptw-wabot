@@ -13,15 +13,17 @@ module.exports = {
     aliases: ["seticon", "setprofile"],
     category: "group",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             admin: true,
             banned: true,
             botAdmin: true,
             group: true
         });
-
-        if (handlerObj.status) {
-            return ctx.reply(handlerObj.message);
+        if (status) {
+            return ctx.reply(message);
         }
 
         const msgType = ctx.getMessageType();

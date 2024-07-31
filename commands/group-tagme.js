@@ -6,10 +6,13 @@ module.exports = {
     name: "tagme",
     category: "group",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             group: true
         });
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         try {
             const senderNumber = ctx.sender.jid.split("@")[0];

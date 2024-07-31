@@ -7,13 +7,15 @@ module.exports = {
     aliases: ["gclink", "grouplink"],
     category: "group",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             botAdmin: true,
             banned: true,
             group: true
         });
-
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         try {
             const link = await ctx.group().inviteCode();

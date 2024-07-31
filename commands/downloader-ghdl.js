@@ -34,7 +34,9 @@ module.exports = {
         const apiUrl = `https://api.github.com/repos/${user}/${repoName}/zipball/master`;
 
         try {
-            const response = await axios({
+            const {
+                data
+            } = await axios({
                 method: "GET",
                 url: apiUrl,
                 responseType: "arraybuffer",
@@ -44,13 +46,13 @@ module.exports = {
             });
 
             return ctx.reply({
-                document: response.data,
+                document: data,
                 mimetype: mime.contentType("zip"),
                 fileName: `${repoName}-master.zip`
             });
         } catch (error) {
             console.error("Error:", error);
-            if (error.response && error.response.status === 404) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }

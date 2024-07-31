@@ -18,10 +18,13 @@ module.exports = {
     aliases: ["tomp4", "togif"],
     category: "converter",
     code: async (ctx) => {
-        const handlerObj = await global.handler(ctx, {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
             banned: true
         });
-        if (handlerObj.status) return ctx.reply(handlerObj.message);
+        if (status) return ctx.reply(message);
 
         const quotedMessage = ctx._msg.message?.extended?.contextInfo?.quotedMessage;
         if (!quotedMessage) return ctx.reply(`${bold("[ ! ]")} Berikan atau balas media berupa sticker!`);

@@ -20,7 +20,6 @@ module.exports = {
             banned: true,
             coin: 3
         });
-
         if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
