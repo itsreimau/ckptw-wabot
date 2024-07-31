@@ -36,8 +36,8 @@ module.exports = {
             const resultText = data.result.map((d) =>
                 `➲ Judul: ${d.title}\n` +
                 `➲ Deskripsi: ${d.snippet}\n` +
-                `➲ URL: ${d.url}`
-            ).join("\n-----\n");
+                `➲ URL: ${d.link}`
+            ).join("\n" + "-----\n");
             return ctx.reply(
                 `❖ ${bold("Google Search")}\n` +
                 "\n" +

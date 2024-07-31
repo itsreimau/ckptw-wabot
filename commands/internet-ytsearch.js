@@ -42,7 +42,10 @@ module.exports = {
                             `➲ Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
                             `➲ Jumlah video: ${r.videoCount}`;
                 }
-            }).filter((r) => r).join("\n-----\n");
+            }).filter((r) => r).join(
+                "\n" +
+                "-----\n"
+            );
             return ctx.reply(
                 `${bold("❖ YT Search")}\n` +
                 "\n" +

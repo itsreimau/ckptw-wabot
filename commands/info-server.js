@@ -16,14 +16,6 @@ module.exports = {
     name: "server",
     category: "info",
     code: async (ctx) => {
-        const {
-            status,
-            message
-        } = await global.handler(ctx, {
-            banned: true
-        });
-        if (status) return ctx.reply(message);
-
         const apiUrl = createAPIUrl("http://ip-api.com", "/json", {});
 
         try {

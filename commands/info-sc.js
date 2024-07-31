@@ -7,15 +7,6 @@ module.exports = {
     aliases: ["script", "source", "sourcecode"],
     category: "info",
     code: async (ctx) => {
-        const {
-            status,
-            message
-        } = await global.handler(ctx, {
-            banned: true,
-            coin: 3
-        });
-        if (status) return ctx.reply(message);
-
         return await ctx.reply(
             `❖ ${bold("SC")}\n` +
             "\n" +

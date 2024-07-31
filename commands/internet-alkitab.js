@@ -47,7 +47,10 @@ module.exports = {
             const resultText = data.verses.map((v) =>
                 `➲ Ayat: ${v.verse}\n` +
                 `➲ ${v.content}`
-            ).join("\n-----\n");
+            ).join(
+                "\n" +
+                "-----\n"
+            );
 
             return ctx.reply(
                 `❖ ${bold("Alkitab")}\n` +

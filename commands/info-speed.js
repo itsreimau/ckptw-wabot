@@ -10,14 +10,6 @@ module.exports = {
     category: "info",
     code: async (ctx) => {
         try {
-            const {
-                status,
-                message
-            } = await global.handler(ctx, {
-                banned: true
-            });
-            if (status) return ctx.reply(message);
-
             const startTime = performance.now();
             const testSpeed = await ctx.reply("Menguji kecepatan...");
             const responseTime = (performance.now() - startTime).toFixed(2);

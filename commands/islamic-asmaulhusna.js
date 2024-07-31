@@ -39,7 +39,10 @@ module.exports = {
                     `➲ Latin: ${r.latin}\n` +
                     `➲ Arab: ${r.arab}\n` +
                     `➲ Arti: ${r.translate_id}`
-                ).join("\n-----\n");
+                ).join(
+                    "\n" +
+                    "-----\n"
+                );
                 return ctx.reply(
                     `❖ ${bold("Asmaul Husna")}\n` +
                     "\n" +

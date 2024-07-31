@@ -23,26 +23,33 @@ module.exports = {
         try {
             const month = new Date().getMonth() + 1;
             const apiUrl = createAPIUrl("https://api-harilibur.vercel.app", "/api", {
-                month: month
+                month
             });
-            const data = await axios.get(apiUrl).then((res) => (res.status == 200 ? res.data : null)).catch((err) => null);
+            const {
+                data
+            } = await axios.get(apiUrl);
 
-            if (!data.length) return ctx.reply(`${bold("[ ! ]")} Tidak ada hari libur di bulan ini.`);
+            const resultText = data.reverse().map((h) => {
+                const d = new Date(h.holiday_date);
+                const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+                const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
+                const day = days[d.getDay()];
+                const mon = months[d.getMonth()];
+                const year = d.getFullYear();
+
+                return `${bold(h.holiday_name)}\n` +
+                    `➲ ${day}, ${d.getDate()} ${mon} ${year}`;
+            }).join(
+                "\n" +
+                "-----\n"
+            );
             return ctx.reply(
                 `${bold("❖ Holiday")}\n` +
                 "\n" +
-                data.reverse().map((h, i) => {
-                    const d = new Date(h.holiday_date);
-                    const day = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"][d.getDay()];
-                    const mon = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"][d.getMonth()];
-                    const year = d.getFullYear();
-                    return `${bold(h.holiday_name)}\n` +
-                        `➲ ${day}, ${d.getDate()} ${mon} ${year}`;
-                }).join("\n-----\n") +
+                `${resultText}\n` +
                 "\n" +
-                "\n" +
-                `${global.msg.footer}`
+                global.msg.footer
             );
         } catch (error) {
             console.error("Error:", error);

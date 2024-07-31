@@ -199,7 +199,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
         text: `❖ ${bold("Menfess")}\n` +
             `Hai, saya ${global.bot.name}, Dia (${senderNumber}) menjawab pesan menfess yang Anda kirimkan.\n` +
             "-----\n" +
-            `${content}\n` +
+            `${m.content}\n` +
             "-----\n" +
             "Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n"
     }, {

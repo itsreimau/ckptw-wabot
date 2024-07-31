@@ -43,7 +43,6 @@ module.exports = {
             const apiUrl = createAPIUrl("nyxs", "/tools/ocr", {
                 url: uplRes.link
             });
-
             const {
                 data
             } = await axios.get(apiUrl);

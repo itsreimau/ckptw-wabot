@@ -35,13 +35,34 @@ module.exports = {
             const response = await axios.get(url, {
                 responseType: "arraybuffer"
             });
+            const contentType = response?.headers?.['content-type'];
 
-            if (!/utf-8|json|html|plain/.test(response?.headers?.['content-type'])) {
+            if (/image/.test(contentType);) {
+                let fileName = /filename/i.test(response?.headers?.['content-disposition']) ? response?.headers?.['content-disposition']?.match(/filename=(.*)/)?.[1]?.replace(/["';]/g, '') : '';
+                return ctx.reply({
+                    image: response?.data,
+                    mimetype: mime.contentType(contentType)
+                });
+            }
+
+            if (/audio/.test(contentType);) {
+                let fileName = /filename/i.test(response?.headers?.['content-disposition']) ? response?.headers?.['content-disposition']?.match(/filename=(.*)/)?.[1]?.replace(/["';]/g, '') : '';
+                return ctx.reply({
+                    audio: response?.data,
+                    mimetype: mime.contentType(contentType)
+                });
+            }
+
+            if (/webp/.test(contentType)) return ctx.reply({
+                sticker: response?.data
+            });
+
+            if (!/utf-8|json|html|plain/.test(contentType)) {
                 let fileName = /filename/i.test(response?.headers?.['content-disposition']) ? response?.headers?.['content-disposition']?.match(/filename=(.*)/)?.[1]?.replace(/["';]/g, '') : '';
                 return ctx.reply({
                     document: response?.data,
                     fileName,
-                    mimetype: mime.contentType(response?.headers?.['content-type'])
+                    mimetype: mime.contentType(contentType)
                 });
             }
 

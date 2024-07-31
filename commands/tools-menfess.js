@@ -39,13 +39,12 @@ module.exports = {
             await ctx.sendMessage(`${numberFormatted}@s.whatsapp.net`, {
                 text: menfessText
             });
-
             global.db.set(`menfess.${numberFormatted}`, {
                 from: ctx._sender.jid.split("@")[0],
                 text: menfessText
             });
 
-            return ctx.reply("Pesan berhasil terkirim!");
+            return ctx.reply(`${bold("[ ! ]")} Pesan berhasil terkirim!`);
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
