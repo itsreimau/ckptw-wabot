@@ -69,7 +69,7 @@ async function webp2mp4(source) {
     const form2 = new FormData();
     const obj = {};
 
-    for (const input of document.("form input[name]")) {
+    for (const input of document.querySelectorAll("form input[name]")) {
         obj[input.name] = input.value;
         form2.append(input.name, input.value);
     }
@@ -82,5 +82,5 @@ async function webp2mp4(source) {
     const {
         document: document2
     } = new jsdom.JSDOM(html2).window;
-    return new URL(document2.("div#output > p.outfile > video > source").src, res2.request.res.responseUrl).toString();
+    return new URL(document2.querySelector("div#output > p.outfile > video > source").src, res2.request.res.responseUrl).toString();
 }
