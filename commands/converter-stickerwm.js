@@ -25,17 +25,15 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
-        if (!input) {
-            return ctx.reply(
-                `${global.msg.argument}\n` +
-                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} i want to be a cat|just meow meow`)}`
-            );
-        }
+        if (!input) return ctx.reply(
+            `${global.msg.argument}\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} i want to be a cat|just meow meow`)}`
+        );
 
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extended?.contextInfo?.quotedMessage;
 
-        if (msgType !== .imageMessage && !quotedMessage) return ctx.reply(`${bold("[ ! ]")} Berikan atau balas media berupa gambar!`);
+        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(`${bold("[ ! ]")} Berikan atau balas media berupa gambar!`);
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
