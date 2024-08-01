@@ -22,9 +22,7 @@ module.exports = {
             botAdmin: true,
             group: true
         });
-        if (status) {
-            return ctx.reply(message);
-        }
+        if (status) return ctx.reply(message);
 
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;

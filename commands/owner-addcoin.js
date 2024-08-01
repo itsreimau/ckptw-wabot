@@ -17,24 +17,22 @@ module.exports = {
 
         const input = ctx._args.join(" ") || null;
 
-        const userId = input[0];
-        const coinAmount = parseInt(input[1], 10);
+        const userId = ctx._args[0];
+        const coinAmount = parseInt(ctx._args[1], 10);
 
         const senderNumber = ctx.sender.jid.split("@")[0];
         const senderJid = ctx._sender.jid;
-        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid.length ? ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid : null;
-        const inputUser = input ? `${input}@s.whatsapp.net` : null;
-        const user = mentionedJids[0] || inputUser;
+        const user = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid[0] || `${userId}@s.whatsapp.net`;
 
-        if (!user || isNaN(coinAmount)) return ctx.reply({
+        if (!input || !user || isNaN(coinAmount)) return ctx.reply({
             text: `${global.msg.argument}\n` +
                 `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber} 4`)}`,
             mentions: [senderJid]
         });
 
         try {
-            const onWhatsApp = await ctx._client.onWhatsApp(user);
-            if (!onWhatsApp || !onWhatsApp[0] || !onWhatsApp[0].exists) return ctx.reply(`${bold("[ ! ]")} Pengguna tidak ada di WhatsApp.`);
+            const [result] = await ctx._client.onWhatsApp(input.replace(/[^\d]/g, ""));
+            if (!result.exists) return ctx.reply(`${bold("[ ! ]")} Akun tidak ada di WhatsApp.`);
 
             await global.db.add(`user.${user.split("@")[0]}.coin`, coinAmount);
 

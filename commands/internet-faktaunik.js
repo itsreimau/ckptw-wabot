@@ -16,18 +16,11 @@ module.exports = {
     category: "internet",
     code: async (ctx) => {
         const {
-            banned,
-            coin
-        } = {
-            banned: true,
-            coin: 3
-        };
-        const {
             status,
             message
         } = await global.handler(ctx, {
-            banned,
-            coin
+            banned: true,
+            coin: 3
         });
         if (status) return ctx.reply(message);
 

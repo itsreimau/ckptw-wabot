@@ -14,26 +14,20 @@ module.exports = {
     category: "ai",
     code: async (ctx) => {
         const {
-            banned,
-            coin
-        } = {
-            banned: true,
-            coin: 3
-        };
-        const {
             status,
             message
         } = await global.handler(ctx, {
-            banned,
-            coin
+            banned: true,
+            coin: 3
         });
         if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
-        if (!input) {
-            const example = `${ctx._used.prefix + ctx._used.command} cat`;
-            return ctx.reply(`${global.msg.argument}\nContoh: ${monospace(example)}`);
-        }
+
+        if (!input) return ctx.reply(
+            `${global.msg.argument}\n` +
+            `Contoh: ${monospace(example)}`
+        );
 
         try {
             const apiUrl = createAPIUrl("https://image.pollinations.ai", `/prompt/${input}`, {});

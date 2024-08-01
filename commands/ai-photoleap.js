@@ -24,12 +24,10 @@ module.exports = {
 
         const input = ctx._args.join(" ") || null;
 
-        if (!input) {
-            return ctx.reply(
-                `${global.msg.argument}\n` +
-                `Example: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`
-            );
-        }
+        if (!input) return ctx.reply(
+            `${global.msg.argument}\n` +
+            `Example: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`
+        );
 
         try {
             const apiUrl = createAPIUrl("https://tti.photoleapapp.com", "/api/v1/generate", {

@@ -12,56 +12,83 @@ module.exports = {
     aliases: ["guesschemistry", "whatchemistry"],
     category: "game",
     code: async (ctx) => {
-        if (await session.has(ctx.id)) return ctx.reply("Sesi permainan sedang berjalan!");
-
-        const data = await tebakkimia();
-        const coin = 3;
-        const timeout = 120000;
-        const senderNumber = ctx._sender.jid.split("@")[0];
-
-        await session.set(ctx.id, true);
-
-        await ctx.reply(
-            `❖ ${bold("Tebak Kimia")}\n` +
-            "\n" +
-            `➲ Lambang: ${data.lambang}` +
-            (global.system.useCoin ? `\n➲ Bonus: ${coin} Koin\n` : "\n") +
-            `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
-            'Ketik "hint" untuk bantuan.\n' +
-            "\n" +
-            global.msg.footer
-        );
-
-        const col = ctx.MessageCollector({
-            time: timeout
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
+            banned: true
         });
+        if (status) return ctx.reply(message);
 
-        col.on("collect", async (m) => {
-            if (m.content.toLowerCase() === data.unsur.toLowerCase()) {
-                await session.delete(ctx.id);
-                if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
-                await ctx.reply(
-                    `${bold("[ ! ]")} Benar!` +
-                    (global.system.useCoin ? `\n+${coin} Koin` : "")
-                );
-                return col.stop();
-            } else if (m.content.toLowerCase() === "hint") {
-                const clue = data.unsur.replace(/[AIUEOaiueo]/g, "_");
-                await ctx.reply(clue);
-            } else if (m.content.toLowerCase().endsWith(data.unsur.split(" ")[1])) {
-                await ctx.reply("Sedikit lagi!");
-            }
-        });
+        if (session.has(ctx.id)) return await ctx.reply(`${bold("[ ! ]")} Sesi permainan sedang berjalan!`);
 
-        col.on("end", async (collector, r) => {
-            if (await session.has(ctx.id)) {
-                await session.delete(ctx.id);
+        try {
+            const data = await tebakkimia();
+            const coin = 3;
+            const timeout = 60000;
+            const senderNumber = ctx._sender.jid.split("@")[0];
 
-                return ctx.reply(
-                    `Waktu habis!\n` +
-                    `Jawabannya adalah ${data.unsur}.`
-                );
-            }
-        });
+            await session.set(ctx.id, true);
+
+            await ctx.reply(
+                `❖ ${bold("Tebak Kimia")}\n` +
+                "\n" +
+                `➲ Lambang: ${data.lambang}` +
+                (global.system.useCoin ? "\n" +
+                    `+${coin} Koin` : "\n") +
+                `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
+                'Ketik "hint" untuk bantuan.\n' +
+                "\n" +
+                global.msg.footer
+            );
+
+            const col = ctx.MessageCollector({
+                time: timeout
+            });
+
+            col.on("collect", async (m) => {
+                const userAnswer = m.content.toLowerCase();
+                const answer = data.unsur.toLowerCase();
+
+                if (userAnswer === answer) {
+                    await session.delete(ctx.id);
+                    if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
+                    await ctx.sendMessage(
+                        ctx.id, {
+                            text: `${bold("[ ! ]")} Benar!` +
+                                (global.system.useCoin ?
+                                    "\n" +
+                                    `+${coin} Koin` :
+                                    "")
+                        }, {
+                            quoted: m.key
+                        }
+                    );
+                    return col.stop();
+                } else if (userAnswer === "hint") {
+                    const clue = answer.replace(/[AIUEOaiueo]/g, "_");
+                    await ctx.reply(clue);
+                } else if (userAnswer.endsWith(answer.split(" ")[1])) {
+                    await ctx.reply("Sedikit lagi!");
+                }
+            });
+
+            col.on("end", async (collector, r) => {
+                const answer = data.unsur;
+
+                if (await session.has(ctx.id)) {
+                    await session.delete(ctx.id);
+
+                    return ctx.reply(
+                        `Waktu habis!\n` +
+                        `Jawabannya adalah ${answer}.`
+                    );
+                }
+            });
+
+        } catch (error) {
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+        }
     }
 };

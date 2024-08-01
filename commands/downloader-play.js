@@ -15,22 +15,16 @@ module.exports = {
     category: "downloader",
     code: async (ctx) => {
         const {
-            banned,
-            coin
-        } = {
-            banned: true,
-            coin: 3
-        };
-        const {
             status,
             message
         } = await global.handler(ctx, {
-            banned,
-            coin
+            banned: true,
+            coin: 3
         });
         if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
+
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
             `Example: ${monospace(`${ctx._used.prefix + ctx._used.command} hikaru utada - one last kiss`)}`

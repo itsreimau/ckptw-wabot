@@ -19,21 +19,17 @@ module.exports = {
             botAdmin: true,
             group: true
         });
-        if (status) {
-            return ctx.reply(message);
-        }
+        if (status) return ctx.reply(message);
 
         const senderNumber = ctx.sender.jid.split("@")[0];
         const senderJid = ctx._sender.jid;
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid || [];
         const account = mentionedJids[0] || null;
 
-        if (!account) {
-            return ctx.reply({
-                text: `${global.msg.argument}\nContoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`,
-                mentions: [senderJid]
-            });
-        }
+        if (!account) return ctx.reply({
+            text: `${global.msg.argument}\nContoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`,
+            mentions: [senderJid]
+        });
 
         try {
             if (account === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
