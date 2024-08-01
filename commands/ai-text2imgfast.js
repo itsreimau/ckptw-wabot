@@ -35,7 +35,7 @@ module.exports = {
             if (!result.status) return ctx.reply(global.msg.notFound);
 
             return await ctx.reply({
-                image: result.image
+                image: result.image,
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("TEXT2IMG (Fast)")}\n` +
                     "\n" +

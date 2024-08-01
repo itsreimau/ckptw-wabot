@@ -37,7 +37,7 @@ module.exports = {
             });
             const contentType = response?.headers?.['content-type'];
 
-            if (/image/.test(contentType);) {
+            if (/image/.test(contentType)) {
                 let fileName = /filename/i.test(response?.headers?.['content-disposition']) ? response?.headers?.['content-disposition']?.match(/filename=(.*)/)?.[1]?.replace(/["';]/g, '') : '';
                 return ctx.reply({
                     image: response?.data,
@@ -45,7 +45,7 @@ module.exports = {
                 });
             }
 
-            if (/audio/.test(contentType);) {
+            if (/audio/.test(contentType)) {
                 let fileName = /filename/i.test(response?.headers?.['content-disposition']) ? response?.headers?.['content-disposition']?.match(/filename=(.*)/)?.[1]?.replace(/["';]/g, '') : '';
                 return ctx.reply({
                     audio: response?.data,
