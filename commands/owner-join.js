@@ -23,8 +23,7 @@ module.exports = {
         );
 
         const urlRegex = /chat\.whatsapp\.com\/([0-9A-Za-z]{20,24})/i;
-        const match = input.match(urlRegex);
-        if (!match) return ctx.reply(global.msg.urlInvalid);
+        if (!input.match(urlRegex)) return ctx.reply(global.msg.urlInvalid);
 
         try {
             const urlCode = match[1];

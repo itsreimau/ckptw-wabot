@@ -2,10 +2,11 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
+    bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const mime = require("mime-types");
 const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
     name: "ttdl",
@@ -28,7 +29,7 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
         );
 
-        const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
+        const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
         if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
 
         try {
