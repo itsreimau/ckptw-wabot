@@ -15,6 +15,7 @@ const {
 const {
     exec
 } = require("child_process");
+const didyoumean = require("didyoumean");
 const path = require("path");
 const SimplDB = require("simpl.db");
 const {
@@ -61,10 +62,24 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isPrivate = !isGroup;
 
     // Ignore messages sent by the bot itself.
-    if (m.key.fromMe) return;
+    if (m.key.fromMe);
 
     // Auto-typing simulation for commands.
     if (gnrl.isCmd(m, ctx)) ctx.simulateTyping();
+
+    // "Did you mean?" for typo commands.
+    const prefixRegex = new RegExp(ctx._config.prefix, "i");
+    const content = m.content && m.content.trim();
+    if (prefixRegex.test(content)) {
+        const [cmdName] = content.slice(1).trim().toLowerCase().split(/\s+/);
+        const cmd = ctx._config.cmd;
+        const listCmd = Array.from(cmd.values()).map(command => {
+            [command.name, ...command.aliases];
+        });
+        const mean = didyoumean(cmdName, listCmd)
+
+        if (mean) ctx.reply(`Apakah maksud Anda ${mean}?`);
+    }
 
     // AFK handling: Mentioned users.
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
@@ -78,12 +93,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 ]);
                 const timeAgo = gnrl.convertMsToDuration(Date.now() - timeStamp);
 
-                return ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`);
+                ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`);
             }
         }
     }
 
-    // AFK handling: Returning from AFK.
+    // AFK handling: ing from AFK.
     const getAFKMessage = await db.get(`user.${senderNumber}.afk`);
     if (getAFKMessage) {
         const [reason, timeStamp] = await Promise.all([
@@ -93,7 +108,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const timeAgo = gnrl.convertMsToDuration(Date.now() - timeStamp);
         await db.delete(`user.${senderNumber}.afk`);
 
-        return ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`);
+        ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`);
     }
 
     // Owner-only commands.
@@ -105,10 +120,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             try {
                 const result = await eval(m.content.startsWith(">> ") ? `(async () => { ${code} })()` : code);
 
-                return await ctx.reply(inspect(result));
+                await ctx.reply(inspect(result));
             } catch (error) {
                 console.error("Error:", error);
-                return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+                ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
             }
         }
 
@@ -119,10 +134,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             try {
                 const output = await execPromise(command);
 
-                return await ctx.reply(output);
+                await ctx.reply(output);
             } catch (error) {
                 console.error("Error:", error);
-                return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+                ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
             }
         }
     }
@@ -133,10 +148,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const getAntilink = await db.get(`group.${groupNumber}.antilink`);
         const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
         if (getAntilink && m.content && urlRegex.test(m.content)) {
-            if ((await gnrl.isAdmin(ctx)) === 1) return;
+            if ((await gnrl.isAdmin(ctx)) === 1);
 
             await ctx.reply(`${bold("[ ! ]")} Jangan kirim tautan!`);
-            return await ctx.deleteMessage(m.key);
+            await ctx.deleteMessage(m.key);
         }
     }
 
@@ -154,10 +169,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 try {
                     await sendMenfess(ctx, m, senderNumber, from);
 
-                    return ctx.reply("Pesan berhasil terkirim!");
+                    ctx.reply("Pesan berhasil terkirim!");
                 } catch (error) {
                     console.error("Error:", error);
-                    return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+                    ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
                 }
             }
         }
@@ -181,7 +196,7 @@ bot.launch().catch((error) => console.error("Error:", error));
 
 // Utility functions
 async function execPromise(command) {
-    return new Promise((resolve, reject) => {
+    new Promise((resolve, reject) => {
         exec(command, (error, stdout, stderr) => {
             if (error) {
                 reject(new Error(error.message));
@@ -248,7 +263,7 @@ async function handleUserEvent(m) {
         }
     } catch (error) {
         console.error("Error:", error);
-        return bot.core.sendMessage(id, {
+        bot.core.sendMessage(id, {
             text: `${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`
         });
     }

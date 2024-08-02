@@ -11,8 +11,8 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, {
-            botAdmin: true,
             banned: true,
+            botAdmin: true,
             group: true
         });
         if (status) return ctx.reply(message);
