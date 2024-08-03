@@ -121,7 +121,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // Owner-only commands.
-    if (gnrl.isOwner(ctx, senderNumber) === 1) {
+    if (gnrl.isOwner(ctx, senderJid) === 1) {
         // Eval command: Execute JavaScript code.
         if (m.content && m.content.startsWith && (m.content.startsWith("> ") || m.content.startsWith(">> "))) {
             const code = m.content.slice(2);

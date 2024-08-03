@@ -69,7 +69,7 @@ exports.isCmd = (m, ctx) => {
 };
 
 exports.isAdmin = async (ctx, number) => {
-    const isAdmin = await checkAdmin(ctx, number || ctx._sender.jid.split("@")[0]);
+    const isAdmin = await checkAdmin(ctx, number.split("@")[0] || number.split(":")[0]);
 
     return isAdmin ? 1 : 0;
 };
