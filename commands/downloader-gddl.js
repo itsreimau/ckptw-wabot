@@ -63,7 +63,7 @@ async function googleDriveDl(url) {
 
     let res;
     try {
-        res = await axios.post(createAPIUrl("https://drive.google.com", "/uc" {
+        res = await axios.post(createAPIUrl("https://drive.google.com", "/uc", {
             id: id,
             authuser: 0,
             export: "download"
