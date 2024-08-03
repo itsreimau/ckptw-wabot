@@ -27,7 +27,7 @@ global.msg = {
 
     // Command interface.
     watermark: `${package.name}@^${package.version}`,
-    footer: quote("Created by ItsReimau."),
+    footer: quote("Developed by ItsReimau"),
     readmore: "\u200E".repeat(4001),
 
     // Command process.

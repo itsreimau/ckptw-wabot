@@ -43,3 +43,7 @@ exports.createAPIUrl = (apiNameOrURL, endpoint, params = {}, apiKeyParamName) =>
 
     return apiUrl.toString();
 };
+
+exports.listUrl = () => {
+    return APIs;
+}
