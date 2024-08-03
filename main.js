@@ -73,13 +73,15 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (prefixRegex.test(content)) {
         const [cmdName] = content.slice(1).trim().toLowerCase().split(/\s+/);
         const cmd = ctx._config.cmd;
-        const listCmd = Array.from(cmd.values()).map(command => {
-            [command.name, ...command.aliases];
+        const listCmd = Array.from(cmd.values()).flatMap(command => {
+            const aliases = Array.isArray(command.aliases) ? command.aliases : [];
+            return [command.name, ...aliases];
         });
-        const mean = didyoumean(cmdName, listCmd)
+        const mean = didyoumean(cmdName, listCmd);
 
         if (mean) ctx.reply(`Apakah maksud Anda ${mean}?`);
     }
+
 
     // AFK handling: Mentioned users.
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
