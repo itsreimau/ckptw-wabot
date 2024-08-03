@@ -6,7 +6,8 @@ const gnrl = require("./tools/general.js");
 const {
     bold,
     Client,
-    CommandHandler
+    CommandHandler,
+    monospace
 } = require("@mengkodingan/ckptw");
 const {
     Events,
@@ -71,15 +72,21 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const prefixRegex = new RegExp(ctx._config.prefix, "i");
     const content = m.content && m.content.trim();
     if (prefixRegex.test(content)) {
+        const prefix = content.charAt(0);
+
         const [cmdName] = content.slice(1).trim().toLowerCase().split(/\s+/);
         const cmd = ctx._config.cmd;
         const listCmd = Array.from(cmd.values()).flatMap(command => {
             const aliases = Array.isArray(command.aliases) ? command.aliases : [];
             return [command.name, ...aliases];
         });
+
         const mean = didyoumean(cmdName, listCmd);
 
-        if (mean) ctx.reply(`Apakah maksud Anda ${mean}?`);
+        // Hanya kirim balasan jika mean berbeda dari cmdName
+        if (mean && mean !== cmdName) {
+            ctx.reply(`Apakah maksud Anda ${monospace(prefix + mean)}?`);
+        }
     }
 
 

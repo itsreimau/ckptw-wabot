@@ -21,7 +21,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        let input = ctx._args.length ? ctx._args.join(" ") : null;
+        let input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +

@@ -22,6 +22,7 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const input = ctx._args.join(" ") || null;
+
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
