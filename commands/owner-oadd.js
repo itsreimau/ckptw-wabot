@@ -1,7 +1,4 @@
 const {
-    isAdmin
-} = require("../tools/general.js");
-const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
@@ -27,12 +24,11 @@ module.exports = {
         );
 
         try {
-            const account = `${input.replace(/[^\d]/g, "")}@s.whatsapp.net`;
+            const accountFormatted = input.replace(/[^\d]/g, "");
+            const account = `${accountFormatted}@s.whatsapp.net`;
 
-            const onWhatsApp = await ctx._client.onWhatsApp(account);
+            const onWhatsApp = await ctx._client.onWhatsApp(accountFormatted);
             if (!onWhatsApp || !onWhatsApp[0] || !onWhatsApp[0].exists) return ctx.reply(`${bold("[ ! ]")} Akun tidak ada di WhatsApp.`);
-
-            if (account === senderJid) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
             await ctx.group().add([account]);
 

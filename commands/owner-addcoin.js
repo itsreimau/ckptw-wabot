@@ -20,9 +20,10 @@ module.exports = {
         const userId = ctx._args[0];
         const coinAmount = parseInt(ctx._args[1], 10);
 
-        const senderNumber = ctx.sender.jid.split("@")[0];
         const senderJid = ctx._sender.jid;
-        const user = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid[0] || `${userId}@s.whatsapp.net`;
+        const senderNumber = senderJid.split("@")[0];
+        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+        const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : `${userId}@s.whatsapp.net`;
 
         if (!input || !user || isNaN(coinAmount)) return ctx.reply({
             text: `${global.msg.argument}\n` +
@@ -39,7 +40,7 @@ module.exports = {
             ctx.sendMessage(user, {
                 text: `Anda telah menerima ${coinAmount} koin dari Owner!`
             });
-            ctx.reply(`${bold("[ ! ]")} Berhasil menambahkan ${coinAmount} koin kepada pengguna!`);
+            return ctx.reply(`${bold("[ ! ]")} Berhasil menambahkan ${coinAmount} koin kepada pengguna!`);
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);

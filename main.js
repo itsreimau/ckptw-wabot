@@ -55,12 +55,12 @@ global.handler = handler;
 
 // Event handling when a message appears.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
-    const senderNumber = ctx._sender.jid.split("@")[0];
-    const senderJid = ctx._sender.jid;
-    const groupNumber = ctx.isGroup() ? m.key.remoteJid.split("@")[0] : null;
-    const groupJid = ctx.isGroup() ? m.key.remoteJid : null;
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
+    const senderJid = ctx._sender.jid;
+    const senderNumber = senderJid.split("@")[0];
+    const groupJid = isGroup ? m.key.remoteJid : null;
+    const groupNumber = isGroup ? groupJid.split("@")[0] : null;
 
     // Ignore messages sent by the bot itself.
     if (m.key.fromMe);
@@ -83,10 +83,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         const mean = didyoumean(cmdName, listCmd);
 
-        // Hanya kirim balasan jika mean berbeda dari cmdName
-        if (mean && mean !== cmdName) {
-            ctx.reply(`Apakah maksud Anda ${monospace(prefix + mean)}?`);
-        }
+        if (mean && mean !== cmdName) ctx.reply(`Apakah maksud Anda ${monospace(prefix + mean)}?`);
     }
 
 
@@ -121,7 +118,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // Owner-only commands.
-    if (gnrl.isOwner(ctx, senderJid) === 1) {
+    if (gnrl.isOwner(ctx) === 1) {
         // Eval command: Execute JavaScript code.
         if (m.content && m.content.startsWith && (m.content.startsWith("> ") || m.content.startsWith(">> "))) {
             const code = m.content.slice(2);
@@ -227,7 +224,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
             "-----\n" +
             "Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n"
     }, {
-        quoted: m.key
+        quoted: m
     });
 }
 

@@ -4,9 +4,8 @@ const {
 
 async function checkAdmin(ctx, id) {
     const members = await ctx.group().members();
-    const formattedId = `${id}@s.whatsapp.net`;
 
-    return members.filter((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id == formattedId).length ? true : false;
+    return members.filter((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id == id).length ? true : false;
 }
 
 exports.convertMsToDuration = (ms) => {
@@ -69,19 +68,22 @@ exports.isCmd = (m, ctx) => {
 };
 
 exports.isAdmin = async (ctx, number) => {
-    const isAdmin = await checkAdmin(ctx, number.split("@")[0] || number.split(":")[0]);
+    const id = number || ctx._sender.jid;
+    const isAdmin = await checkAdmin(ctx, id);
 
     return isAdmin ? 1 : 0;
 };
 
-exports.isBotAdmin = async (ctx) => {
-    const isBotAdmin = await checkAdmin(ctx, ctx._client.user.id.split(":")[0]);
+exports.isBotAdmin = async (ctx, number) => {
+    const id = number || ctx._sender.jid;
+    const isAdmin = await checkAdmin(ctx, id);
 
     return isBotAdmin ? 1 : 0;
 };
 
 exports.isOwner = (ctx, number) => {
-    const isOwner = ctx._client.user.id.split(":")[0] == number || global.owner.number === number || global.owner.co.includes(number);
+    const id = number.split("@")[0] || ctx._sender.jid.split("@")[0];
+    const isOwner = ctx._client.user.id.split(":")[0] == id || global.owner.number === id || global.owner.co.includes(id);
 
     return isOwner ? 1 : 0;
 };

@@ -21,8 +21,8 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const senderNumber = ctx.sender.jid.split("@")[0];
         const senderJid = ctx._sender.jid;
+        const senderNumber = senderJid.split("@")[0];
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const account = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : null;
 

@@ -9,7 +9,9 @@ const {
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const FormData = require("form-data");
-const jsdom = require("jsdom");
+const {
+    JSDOM
+} = require("jsdom");
 const mime = require("mime-types");
 
 module.exports = {
@@ -25,7 +27,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const quotedMessage = ctx._msg.message?.extended?.contextInfo?.quotedMessage;
+        const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
         if (!quotedMessage) return ctx.reply(`${bold("[ ! ]")} Berikan atau balas media berupa sticker!`);
 
         try {
@@ -64,7 +66,7 @@ async function webp2mp4(source) {
     const html = res.data;
     const {
         document
-    } = new jsdom.JSDOM(html).window;
+    } = new JSDOM(html).window;
     const form2 = new FormData();
     const obj = {};
 
@@ -80,6 +82,6 @@ async function webp2mp4(source) {
     const html2 = res2.data;
     const {
         document: document2
-    } = new jsdom.JSDOM(html2).window;
+    } = new JSDOM(html2).window;
     return new URL(document2.querySelector("div#output > p.outfile > video > source").src, res2.request.res.responseUrl).toString();
 }

@@ -61,7 +61,7 @@ module.exports = {
                                     `+${coin} Koin` :
                                     "")
                         }, {
-                            quoted: m.key
+                            quoted: m
                         }
                     );
                     return col.stop();

@@ -8,7 +8,6 @@ const gnrl = require("./tools/general.js");
  */
 exports.handler = async (ctx, options) => {
     const senderNumber = ctx._sender.jid.split("@")[0];
-    const senderJid = ctx._sender.jid;
 
     const checkOptions = {
         admin: {
@@ -35,7 +34,7 @@ exports.handler = async (ctx, options) => {
 
                     if (!ctx._args.length) return false;
 
-                    const isOwner = await gnrl.isOwner(ctx, senderJid);
+                    const isOwner = await gnrl.isOwner(ctx);
                     if (isOwner === 1) return false;
 
                     const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
@@ -56,7 +55,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.group
         },
         owner: {
-            function: async () => (await gnrl.isOwner(ctx, senderJid)) === 0,
+            function: async () => (await gnrl.isOwner(ctx)) === 0,
             msg: global.msg.owner
         },
         premium: {
