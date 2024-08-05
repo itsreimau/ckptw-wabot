@@ -140,7 +140,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             try {
                 const output = await execPromise(command);
 
-                await ctx.reply(output);
+                await ctx.reply(output.toString());
             } catch (error) {
                 console.error("Error:", error);
                 ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);

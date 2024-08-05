@@ -22,7 +22,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(`${bold("[ ! ]")} Sesi permainan sedang berjalan!`);
 
         try {
-            const data = await tebakbendera();
+            const data = await susunkata();
             const coin = 3;
             const timeout = 60000;
             const senderNumber = ctx._sender.jid.split("@")[0];
@@ -53,21 +53,19 @@ module.exports = {
                 if (userAnswer === answer.toLowerCase()) {
                     await session.delete(ctx.id);
                     if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
-                    await ctx.sendMessage(
+                    await ctx.replyWithJid(
                         ctx.id, {
                             text: `${bold("[ ! ]")} Benar!` +
                                 (global.system.useCoin ?
                                     "\n" +
                                     `+${coin} Koin` :
                                     "")
-                        }, {
-                            quoted: m
                         }
                     );
                     return col.stop();
                 } else if (userAnswer === "hint") {
                     const clue = answer.replace(/[AIUEOaiueo]/g, "_");
-                    await ctx.reply(clue);
+                    await ctx.reply(clue.toUpperCase());
                 } else if (userAnswer.endsWith(answer.split(" ")[1].toLowerCase())) {
                     await ctx.reply("Sedikit lagi!");
                 }

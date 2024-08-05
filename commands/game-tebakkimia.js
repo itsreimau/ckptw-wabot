@@ -53,21 +53,18 @@ module.exports = {
                 if (userAnswer === answer) {
                     await session.delete(ctx.id);
                     if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
-                    await ctx.sendMessage(
+                    await ctx.replyWithJid(
                         ctx.id, {
                             text: `${bold("[ ! ]")} Benar!` +
                                 (global.system.useCoin ?
                                     "\n" +
                                     `+${coin} Koin` :
                                     "")
-                        }, {
-                            quoted: m
-                        }
-                    );
+                        });
                     return col.stop();
                 } else if (userAnswer === "hint") {
                     const clue = answer.replace(/[AIUEOaiueo]/g, "_");
-                    await ctx.reply(clue);
+                    await ctx.reply(clue.toUpperCase());
                 } else if (userAnswer.endsWith(answer.split(" ")[1])) {
                     await ctx.reply("Sedikit lagi!");
                 }

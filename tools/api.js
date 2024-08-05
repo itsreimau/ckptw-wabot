@@ -2,9 +2,6 @@ const APIs = {
     gabut: {
         baseURL: "https://api-gabut.bohr.io"
     },
-    nazunaxz: {
-        baseURL: "https://api.nazunaxz.xyz"
-    },
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },
