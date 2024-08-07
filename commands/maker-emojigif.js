@@ -12,8 +12,8 @@ const {
 } = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "emojimix",
-    aliases: ["emix"],
+    name: "emojigif",
+    aliases: ["egif"],
     category: "maker",
     code: async (ctx) => {
         const {
@@ -25,7 +25,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const [emoji1, emoji2] = ctx._args;
+        const [emoji] = ctx._args;
 
         if (!ctx._args.length) return ctx.reply(
             `${global.msg.argument}\n` +
@@ -33,15 +33,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("vyturex", `/emoji`, {
-                emoji1,
-                emoji2
+            const apiUrl = createAPIUrl("vyturex", `/emoji-gif`, {
+                emoji
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            const sticker = new Sticker(data.mixedImg, {
+            const sticker = new Sticker(data.gifUrl, {
                 pack: global.sticker.packname,
                 author: global.sticker.author,
                 type: StickerTypes.FULL,

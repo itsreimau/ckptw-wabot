@@ -40,8 +40,8 @@ module.exports = {
             const object = type ? quotedMessage[type] : null;
             const buffer = type === "imageMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = createAPIUrl("nyxs", "/tools/hd", {
-                url: uplRes.link
+            const apiUrl = createAPIUrl("vyturex", "/upscale", {
+                imageUrl: uplRes.link
             });
 
             return await ctx.reply({
@@ -53,7 +53,6 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }

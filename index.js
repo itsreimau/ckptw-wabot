@@ -8,7 +8,7 @@ console.log("Starting...");
 CFonts.say(package.name, {
     font: "chrome",
     align: "center",
-    gradient: ["red", "magenta"],
+    gradient: ["red", "magenta"]
 });
 
 // Displays package information.
@@ -18,7 +18,7 @@ CFonts.say(
     `By ${authorName}`, {
         font: "console",
         align: "center",
-        gradient: ["red", "magenta"],
+        gradient: ["red", "magenta"]
     });
 
 // Import and run the main module.
