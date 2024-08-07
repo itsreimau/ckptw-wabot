@@ -22,7 +22,8 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const [lang = "id", ...text] = ctx._args;
-        if (text.length === 0) return ctx.reply(
+
+        if (!text.length) return ctx.reply(
             `${global.msg.argument}\n` +
             `Example: ${monospace(`${ctx._used.prefix + ctx._used.command} en hello world!`)}`
         );

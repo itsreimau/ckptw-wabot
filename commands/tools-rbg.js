@@ -44,7 +44,6 @@ module.exports = {
             const apiUrl = createAPIUrl("nyxs", "/tools/removebg", {
                 url: uplRes.link
             });
-
             const {
                 data
             } = await axios.get(apiUrl);
