@@ -21,17 +21,19 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const [lang = "id", ...text] = ctx._args;
+        const [lang, ...text] = ctx._args;
+        const langCode = lang.length === 2 ? lang : "id";
+        const textToSpeech = text.length ? text.join(" ") : ctx._args.join(" ");
 
-        if (!text.length) return ctx.reply(
+        if (!ctx._args.length) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Example: ${monospace(`${ctx._used.prefix + ctx._used.command} en hello world!`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} id halo dunia!`)}`
         );
 
         try {
             const apiUrl = createAPIUrl("nyxs", "/tools/tts", {
-                text: text.join(" "),
-                to: lang,
+                text: textToSpeech,
+                to: langCode
             });
             const {
                 data
@@ -42,7 +44,7 @@ module.exports = {
                     url: data.result,
                 },
                 mimetype: mime.contentType("mp3"),
-                ptt: false,
+                ptt: false
             });
         } catch (error) {
             console.error("Error:", error);

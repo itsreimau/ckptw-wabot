@@ -57,10 +57,15 @@ module.exports = {
                 }
             }
 
+            const url = new URL(input);
+            const filePath = url.pathname;
+            const filename = filePath.substring(filePath.lastIndexOf('/') + 1);
+
             return ctx.reply({
                 document: {
                     url: result
                 },
+                filename,
                 mimetype: mime.lookup(result) || "application/octet-stream"
             });
         } catch (error) {

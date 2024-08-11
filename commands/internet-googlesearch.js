@@ -37,7 +37,10 @@ module.exports = {
                 `➲ Judul: ${d.title}\n` +
                 `➲ Deskripsi: ${d.snippet}\n` +
                 `➲ URL: ${d.link}`
-            ).join("\n" + "-----\n");
+            ).join(
+                "\n" +
+                "-----\n"
+            );
             return ctx.reply(
                 `❖ ${bold("Google Search")}\n` +
                 "\n" +

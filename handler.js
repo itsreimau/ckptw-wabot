@@ -1,11 +1,5 @@
 const gnrl = require("./tools/general.js");
 
-/**
- * Handles requests based on the given options.
- * @param {Object} ctx The context of the request.
- * @param {Object} options The given options.
- * @returns {Object} Object containing status and message if applicable, otherwise null.
- */
 exports.handler = async (ctx, options) => {
     const senderNumber = ctx._sender.jid.split("@")[0];
 
@@ -45,7 +39,6 @@ exports.handler = async (ctx, options) => {
                     if (getCoin < requiredCoins) return true;
 
                     await global.db.subtract(`user.${senderNumber}.coin`, requiredCoins);
-                    return false;
                 }
             },
             msg: global.msg.coin
@@ -59,7 +52,14 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.owner
         },
         premium: {
-            function: async () => await global.db.get(`user.${senderNumber}.isPremium`),
+            function: async () => {
+                if (global.system.useCoin) {
+                    const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
+                    if (!isPremium) return true;
+
+                    return false;
+                }
+            },
             msg: global.msg.premium
         },
         private: {

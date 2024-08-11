@@ -76,11 +76,6 @@ module.exports = {
                                 url: image.url
                             },
                             mimetype: mime.lookup("png"),
-                            caption: `❖ ${bold("TT Downloader")}\n` +
-                                "\n" +
-                                `➲ URL: ${input}\n` +
-                                "\n" +
-                                global.msg.footer
                         });
                     }
                 }

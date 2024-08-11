@@ -34,7 +34,7 @@ module.exports = {
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extended?.contextInfo?.quotedMessage;
 
-        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(`${bold("[ ! ]")} Berikan atau balas media berupa gambar!`);
+        if (msgType !== MessageType.stickerMessage && !quotedMessage) return ctx.reply(`${bold("[ ! ]")} Berikan atau balas media berupa sticker!`);
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;

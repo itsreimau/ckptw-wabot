@@ -22,7 +22,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Example: ${monospace(`${ctx._used.prefix + ctx._used.command} fuck you!`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} fuck you!`)}`
         );
 
         try {

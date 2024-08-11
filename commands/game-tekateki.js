@@ -52,7 +52,7 @@ module.exports = {
                 if (userAnswer === answer) {
                     await session.delete(ctx.id);
                     if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
-                    await ctx.replyWithJid(
+                    await ctx.sendMessage(
                         ctx.id, {
                             text: `${bold("[ ! ]")} Benar!\n` +
                                 `${data.description}` +
@@ -60,6 +60,8 @@ module.exports = {
                                     "\n" +
                                     `+${coin} Koin` :
                                     "")
+                        }, {
+                            quoted: m
                         });
                     return col.stop();
                 } else if (userAnswer === "hint") {

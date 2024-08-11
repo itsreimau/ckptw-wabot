@@ -138,9 +138,19 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const command = m.content.slice(2);
 
             try {
-                const output = await execPromise(command);
+                const output = await new Promise((resolve, reject) => {
+                    exec(command, (error, stdout, stderr) => {
+                        if (error) {
+                            reject(new Error(`Error: ${error.message}`));
+                        } else if (stderr) {
+                            reject(new Error(stderr));
+                        } else {
+                            resolve(stdout);
+                        }
+                    });
+                });
 
-                await ctx.reply(output.toString());
+                await ctx.reply(output);
             } catch (error) {
                 console.error("Error:", error);
                 ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
@@ -201,20 +211,6 @@ bot.ev.on(Events.UserLeave, (m) => {
 bot.launch().catch((error) => console.error("Error:", error));
 
 // Utility functions
-async function execPromise(command) {
-    new Promise((resolve, reject) => {
-        exec(command, (error, stdout, stderr) => {
-            if (error) {
-                reject(new Error(error.message));
-            } else if (stderr) {
-                reject(new Error(stderr));
-            } else {
-                resolve(stdout);
-            }
-        });
-    });
-}
-
 async function sendMenfess(ctx, m, senderNumber, from) {
     await ctx.sendMessage(`${from}@s.whatsapp.net`, {
         text: `❖ ${bold("Menfess")}\n` +

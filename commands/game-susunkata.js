@@ -53,15 +53,16 @@ module.exports = {
                 if (userAnswer === answer.toLowerCase()) {
                     await session.delete(ctx.id);
                     if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
-                    await ctx.replyWithJid(
+                    await ctx.sendMessage(
                         ctx.id, {
                             text: `${bold("[ ! ]")} Benar!` +
                                 (global.system.useCoin ?
                                     "\n" +
                                     `+${coin} Koin` :
                                     "")
-                        }
-                    );
+                        }, {
+                            quoted: m
+                        });
                     return col.stop();
                 } else if (userAnswer === "hint") {
                     const clue = answer.replace(/[AIUEOaiueo]/g, "_");

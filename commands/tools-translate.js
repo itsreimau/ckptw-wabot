@@ -21,16 +21,18 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const [lang = "id", ...text] = ctx._args;
+        const langCode = lang.length === 2 ? lang : "id";
+        const textToTranslate = text.length ? text.join(" ") : ctx._args.join(" ");
 
-        if (!text.length) return ctx.reply(
+        if (!ctx._args.length) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Example: ${monospace(`${ctx._used.prefix + ctx._used.command} en hello world!`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} id halo dunia!`)}`
         );
 
         try {
             const {
                 translation
-            } = await translate(text.join(" "), null, lang);
+            } = await translate(textToTranslate, null, langCode);
 
             return ctx.reply(translation);
         } catch (error) {

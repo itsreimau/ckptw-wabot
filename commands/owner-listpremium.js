@@ -19,20 +19,20 @@ module.exports = {
             const databaseJSON = JSON.stringify(global.db);
             const parsedDB = JSON.parse(databaseJSON);
             const users = parsedDB.user;
-            const bannedUsers = [];
+            const premiumUsers = [];
 
             for (const userId in users) {
-                if (users[userId].isPremium === true) bannedUsers.push(userId);
+                if (users[userId].isPremium === true) premiumUsers.push(userId);
             }
 
             let resultText = "";
             let userMentions = [];
 
-            bannedUsers.forEach((userId) => {
+            premiumUsers.forEach((userId) => {
                 resultText += `➲ @${userId}\n`;
             });
 
-            bannedUsers.forEach((userId) => {
+            premiumUsers.forEach((userId) => {
                 userMentions.push(`${userId}@s.whatsapp.net`);
             });
 

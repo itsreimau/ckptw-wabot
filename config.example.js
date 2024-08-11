@@ -55,8 +55,8 @@ global.sticker = {
 
 // System.
 global.system = {
-    startTime: null,
     timeZone: "Asia/Jakarta",
     useCoin: true,
-    usePairingCode: true
+    usePairingCode: true,
+    usePremium: false
 };

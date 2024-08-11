@@ -33,18 +33,18 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("gabut", "/api/googleimage", {
-                search: input
+            const apiUrl = createAPIUrl("https://google-image-api.vercel.app", "/search", {
+                q: input
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            const imageUrl = getRandomElement(data.result);
+            const result = getRandomElement(data.result);
 
             return await ctx.reply({
                 image: {
-                    url: imageUrl
+                    url: result.url
                 },
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Google Image")}\n` +

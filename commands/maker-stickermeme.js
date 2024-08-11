@@ -38,7 +38,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Example: ${monospace(`${ctx._used.prefix + ctx._used.command} i want to be a cat|just meow meow`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} i want to be a cat|just meow meow`)}`
         );
 
         const msgType = ctx.getMessageType();

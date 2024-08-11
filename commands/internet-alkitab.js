@@ -37,21 +37,18 @@ module.exports = {
         }
 
         try {
-            const apiUrl = await createAPIUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {
-                ver: "tb"
-            });
+            const apiUrl = await createAPIUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {            });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            const resultText = data.verses.map((v) =>
+            const resultText = data.data.verses.map((v) =>
                 `➲ Ayat: ${v.verse}\n` +
                 `➲ ${v.content}`
             ).join(
                 "\n" +
                 "-----\n"
             );
-
             return ctx.reply(
                 `❖ ${bold("Alkitab")}\n` +
                 "\n" +

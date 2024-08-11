@@ -31,9 +31,9 @@ module.exports = {
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} get in the fucking robot, shinji!`)}`
         );
 
-        try {
-            if (input.length > 10000) return ctx.reply(`${bold("[ ! ]")} Maksimal 50 kata!`);
+        if (input.length > 10000) return ctx.reply(`${bold("[ ! ]")} Maksimal 50 kata!`);
 
+        try {
             const apiUrl = createAPIUrl("widipe", "/attp", {
                 text: input
             });

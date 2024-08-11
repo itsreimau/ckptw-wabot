@@ -1,7 +1,4 @@
 const APIs = {
-    gabut: {
-        baseURL: "https://api-gabut.bohr.io"
-    },
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },
@@ -15,7 +12,7 @@ const APIs = {
         baseURL: "https://ssa-api.vercel.app"
     },
     vyturex: {
-        baseURL: "https://www.api.vyturex.com/upscale?imageUrl="
+        baseURL: "https://www.api.vyturex.com"
     },
     widipe: {
         baseURL: "https://widipe.com"

@@ -27,7 +27,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Example: ${monospace(`${ctx._used.prefix + ctx._used.command} hikaru utada - one last kiss`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} hikaru utada - one last kiss`)}`
         );
 
         try {
