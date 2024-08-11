@@ -27,13 +27,14 @@ module.exports = {
         const apiUrl = createAPIUrl("https://candaan-api.vercel.app", "/api/image/random", {});
 
         try {
+            const response = await axios.get(apiUrl);
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = response.data;
 
             return ctx.reply({
                 image: {
-                    url: data.data.url
+                    url: data.url
                 },
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Meme")}\n` +

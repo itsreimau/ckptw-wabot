@@ -46,7 +46,9 @@ module.exports = {
 
             const apiUrl = createAPIUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
             const response = await axios.get(apiUrl);
-            const data = response.data.data;
+            const {
+                data
+            } = response.data;
 
             if (ayaNumber) {
                 const aya = data.ayat.find((verse) => verse.nomorAyat === ayaNumber);

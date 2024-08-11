@@ -33,13 +33,14 @@ module.exports = {
             const apiUrl = createAPIUrl("ssa", "/api/pinterest", {
                 query: input
             });
+            const response = await axios.get(apiUrl);
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = response.data;
 
             return await ctx.reply({
                 image: {
-                    url: data.data.response
+                    url: data.response
                 },
                 mimetype: mime.contentType("png"),
                 caption: `❖ ${bold("Pinterest")}\n` +

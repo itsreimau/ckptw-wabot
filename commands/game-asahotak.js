@@ -49,30 +49,30 @@ module.exports = {
             });
 
             col.on("collect", async (m) => {
-                    const userAnswer = m.content.toLowerCase();
-                    const answer = data.jawaban.toLowerCase();
+                const userAnswer = m.content.toLowerCase();
+                const answer = data.jawaban.toLowerCase();
 
-                    if (userAnswer === answer) {
-                        await session.delete(ctx.id);
-                        if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
-                        await ctx.sendMessage(
-                            ctx.id, {
-                                text: `${bold("[ ! ]")} Benar!` +
-                                    (global.system.useCoin ?
-                                        "\n" +
-                                        `+${coin} Koin` :
-                                        "")
-                            }, {
-                                quoted: m
-                            });
-                        return col.stop();
-                    } else if (userAnswer === "hint") {
-                        const clue = answer.replace(/[AIUEOaiueo]/g, "_");
-                        await ctx.reply(ctx.id, {
-                                text: clue.toUpperCase());
+                if (userAnswer === answer) {
+                    await session.delete(ctx.id);
+                    if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
+                    await ctx.sendMessage(
+                        ctx.id, {
+                            text: `${bold("[ ! ]")} Benar!` +
+                                (global.system.useCoin ?
+                                    "\n" +
+                                    `+${coin} Koin` :
+                                    "")
                         }, {
                             quoted: m
                         });
+                    return col.stop();
+                } else if (userAnswer === "hint") {
+                    const clue = answer.replace(/[AIUEOaiueo]/g, "_");
+                    await ctx.reply(ctx.id, {
+                        text: clue.toUpperCase()
+                    }, {
+                        quoted: m
+                    });
                 } else if (userAnswer.endsWith(answer.split(" ")[1])) {
                     await ctx.reply(ctx.id, {
                         text: "Sedikit lagi!"
@@ -82,23 +82,22 @@ module.exports = {
                 }
             });
 
-        col.on("end", async (collector, r) => {
-            const answer = data.jawaban;
+            col.on("end", async (collector, r) => {
+                const answer = data.jawaban;
 
-            if (await session.has(ctx.id)) {
-                await session.delete(ctx.id);
+                if (await session.has(ctx.id)) {
+                    await session.delete(ctx.id);
 
-                return ctx.reply(
-                    `Waktu habis!\n` +
-                    `Jawabannya adalah ${answer}.`
-                );
-            }
-        });
+                    return ctx.reply(
+                        `Waktu habis!\n` +
+                        `Jawabannya adalah ${answer}.`
+                    );
+                }
+            });
 
-    } catch (error) {
-        console.error("Error:", error);
-        return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+        } catch (error) {
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+        }
     }
-}
 };
-s
