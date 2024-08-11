@@ -39,8 +39,10 @@ module.exports = {
                 caption: `❖ ${bold("Tebak Gambar")}\n` +
                     "\n" +
                     `➲ Deskripsi: ${data.deskripsi}` +
-                    (global.system.useCoin ? "\n" +
-                        `+${coin} Koin` : "\n") +
+                    (global.system.useCoin ?
+                        "\n" +
+                        `+${coin} Koin` :
+                        "\n") +
                     `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
                     'Ketik "hint" untuk bantuan.\n' +
                     "\n" +
@@ -71,9 +73,19 @@ module.exports = {
                     return col.stop();
                 } else if (userAnswer === "hint") {
                     const clue = answer.replace(/[AIUEOaiueo]/g, "_");
-                    await ctx.reply(clue.toUpperCase());
+                    await ctx.sendMessage(
+                        ctx.id, {
+                            text: clue.toUpperCase()
+                        }, {
+                            quoted: m
+                        });
                 } else if (userAnswer.endsWith(answer.split(" ")[1])) {
-                    await ctx.reply("Sedikit lagi!");
+                    await sendMessage(
+                        ctx.id, {
+                            text: "Sedikit lagi!"
+                        }, {
+                            quoted: m
+                        });
                 }
             });
 

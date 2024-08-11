@@ -11,6 +11,7 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
+const axios = require("axios");
 const mime = require("mime-types");
 const {
     uploadByBuffer
@@ -43,10 +44,13 @@ module.exports = {
             const apiUrl = createAPIUrl("vyturex", "/upscale", {
                 imageUrl: uplRes.link
             });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: data.resultUrl
                 },
                 mimetype: mime.contentType("png"),
                 caption: null
