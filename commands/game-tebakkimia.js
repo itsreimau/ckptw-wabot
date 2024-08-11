@@ -69,7 +69,7 @@ module.exports = {
                     } else if (userAnswer === "hint") {
                         const clue = answer.replace(/[AIUEOaiueo]/g, "_");
                         await ctx.reply(ctx.id, {
-                                text: clue.toUpperCase());
+                                text: clue.toUpperCase()
                         }, {
                             quoted: m
                         });
