@@ -8,6 +8,7 @@ const pkg = require("../package.json");
 const {
     bold,
     italic,
+    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
