@@ -27,7 +27,7 @@ exports.getList = async (type, ctx) => {
                     "\n";
                 passages.forEach(book => {
                     text += `➲ Buku: ${book.name} (${book.abbr})\n`;
-                    text += `➲ Bab: ${book.chapter}\n`;
+                    text += `➲ Jumlah Bab: ${book.chapter}\n`;
                     text += "-----\n";
                 });
 
@@ -47,7 +47,7 @@ exports.getList = async (type, ctx) => {
                     "\n";
                 surahs.forEach(surah => {
                     text += `➲ Surah: ${surah.namaLatin} (${surah.nomor})\n`;
-                    text += `➲ Ayat: ${surah.jumlahAyat}\n`;
+                    text += `➲ Jumlah Ayat: ${surah.jumlahAyat}\n`;
                     text += "-----\n";
                 });
 
@@ -127,17 +127,6 @@ exports.getList = async (type, ctx) => {
             }
 
             text += global.msg.footer;
-        }
-        break;
-        case "randomimage": {
-            const list = ["china", "hubbleimg", "indonesia", "japan", "korea", "malaysia", "neko", "shinobu", "thailand", "vietnam", "waifu"];
-
-            text =
-                "❖ Daftar\n" +
-                "\n" +
-                `➲ ${list.join("\n➲ ")}\n` +
-                "\n" +
-                global.msg.footer;
         }
         break;
         default:

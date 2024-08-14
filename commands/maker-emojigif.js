@@ -29,7 +29,7 @@ module.exports = {
 
         if (!ctx._args.length) return ctx.reply(
             `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 😱 🤓`)}`
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 😱`)}`
         );
 
         try {

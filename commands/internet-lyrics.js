@@ -30,8 +30,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await createAPIUrl("ngodingaja", "/api/lirik", {
-                search: input
+            const apiUrl = await createAPIUrl("vyturex", "/lyrics", {
+                query: input
             });
             const {
                 data
@@ -40,10 +40,10 @@ module.exports = {
             return ctx.reply(
                 `❖ ${bold("Lyrics")}\n` +
                 "\n" +
-                `➲ Judul: ${data.hasil.judul}\n` +
-                `➲ Artis: ${data.hasil.artis}\n` +
+                `➲ Judul: ${data.title}\n` +
+                `➲ Artis: ${data.artist}\n` +
                 "-----\n" +
-                `${data.hasil.lirik}\n` +
+                `${data.lyrics}\n` +
                 "\n" +
                 global.msg.footer
             );
