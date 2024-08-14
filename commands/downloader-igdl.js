@@ -1,6 +1,7 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const mime = require("mime-types");
 const {
@@ -43,7 +44,7 @@ module.exports = {
                 mimetype: mime.contentType("mp4"),
                 caption: `❖ ${bold("IG Downloader")}\n` +
                     "\n" +
-                    `➲ URL: ${input}\n` +
+                    `${quote(`URL: ${input}`)}\n` +
                     "\n" +
                     global.msg.footer,
                 gifPlayback: false

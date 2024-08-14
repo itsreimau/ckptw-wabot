@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
@@ -35,16 +36,14 @@ module.exports = {
                     url: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`
                 },
                 mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Gempa")}\n` +
-                    "\n" +
-                    `${gempa.Wilayah}\n` +
+                caption: `${gempa.Wilayah}\n` +
                     "-----\n" +
-                    `➲ Tanggal: ${gempa.Tanggal}\n` +
-                    `➲ Potensi: ${gempa.Potensi}\n` +
-                    `➲ Magnitude: ${gempa.Magnitude}\n` +
-                    `➲ Kedalaman: ${gempa.Kedalaman}\n` +
-                    `➲ Koordinat: ${gempa.Coordinates}\n` +
-                    `➲ Dirasakan: ${gempa.Dirasakan}\n` +
+                    `${quote(`Tanggal: ${gempa.Tanggal}`)}\n` +
+                    `${quote(`Potensi: ${gempa.Potensi}`)}\n` +
+                    `${quote(`Magnitude: ${gempa.Magnitude}`)}\n` +
+                    `${quote(`Kedalaman: ${gempa.Kedalaman}`)}\n` +
+                    `${quote(`Koordinat: ${gempa.Coordinates}`)}\n` +
+                    `${quote(`Dirasakan: ${gempa.Dirasakan}`)}\n` +
                     "\n" +
                     global.msg.footer
             });

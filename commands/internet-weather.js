@@ -6,7 +6,8 @@ const {
 } = require("../tools/general.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const {
@@ -46,15 +47,13 @@ module.exports = {
             const weatherId = await translate(data.weather[0].description, "en", "id");
 
             return ctx.reply(
-                `❖ ${bold("Weather")}\n` +
-                "\n" +
-                `➲ Tempat: ${data.name} (${data.sys.country})\n` +
-                `➲ Cuaca: ${ucword(weatherId.translation)}\n` +
-                `➲ Kelembapan: ${data.main.humidity} %\n` +
-                `➲ Angin: ${data.wind.speed} km/jam\n` +
-                `➲ Suhu saat ini: ${data.main.temp} °C\n` +
-                `➲ Suhu tertinggi: ${data.main.temp_max} °C\n` +
-                `➲ Suhu terendah: ${data.main.temp_min} °C\n` +
+                `${quote(`Tempat: ${data.name} (${data.sys.country})`)}\n` +
+                `${quote(`Cuaca: ${ucword(weatherId.translation)}`)}\n` +
+                `${quote(`Kelembapan: ${data.main.humidity} %`)}\n` +
+                `${quote(`Angin: ${data.wind.speed} km/jam`)}\n` +
+                `${quote(`Suhu saat ini: ${data.main.temp} °C`)}\n` +
+                `${quote(`Suhu tertinggi: ${data.main.temp_max} °C`)}\n` +
+                `${quote(`Suhu terendah: ${data.main.temp_min} °C`)}\n` +
                 "\n" +
                 global.msg.footer
             );

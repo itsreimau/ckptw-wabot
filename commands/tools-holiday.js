@@ -2,7 +2,8 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    bold
+    bold,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 
@@ -39,14 +40,12 @@ module.exports = {
                 const year = d.getFullYear();
 
                 return `${bold(h.holiday_name)}\n` +
-                    `➲ ${day}, ${d.getDate()} ${mon} ${year}`;
+                    `${quote(`${day}, ${d.getDate()} ${mon} ${year}`)}`;
             }).join(
                 "\n" +
                 "-----\n"
             );
             return ctx.reply(
-                `${bold("❖ Holiday")}\n` +
-                "\n" +
                 `${resultText}\n` +
                 "\n" +
                 global.msg.footer

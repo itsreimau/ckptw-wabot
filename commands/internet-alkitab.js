@@ -6,7 +6,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 
@@ -44,17 +45,15 @@ module.exports = {
             } = response.data;
 
             const resultText = data.verses.map((v) =>
-                `➲ Ayat: ${v.verse}\n` +
-                `➲ ${v.content}`
+                `${quote(`Ayat: ${v.verse}`)}\n` +
+                `${quote(`${v.content}`)}`
             ).join(
                 "\n" +
                 "-----\n"
             );
             return ctx.reply(
-                `❖ ${bold("Alkitab")}\n` +
-                "\n" +
-                `➲ Nama: ${data.book.name}\n` +
-                `➲ Bab: ${data.book.chapter}\n` +
+                `${quote(`Nama: ${data.book.name}`)}\n` +
+                `${quote(`Bab: ${data.book.chapter}`)}\n` +
                 "-----\n" +
                 `${resultText}\n` +
                 "\n" +

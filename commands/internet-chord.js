@@ -3,7 +3,8 @@ const {
 } = require("@bochilteam/scraper");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
@@ -32,10 +33,8 @@ module.exports = {
             if (!result) return ctx.reply(global.msg.notFound);
 
             return ctx.reply(
-                `❖ ${bold("Chord")}\n` +
-                "\n" +
-                `➲ Judul: ${result.title.replace("Chords", "").trim()} (${result.url})\n` +
-                `➲ Artis: ${result.artist.replace("‣", "").trim()} (${result.artistUrl})\n` +
+                `${quote(`Judul: ${result.title.replace("Chords", "").trim()} (${result.url})`)}\n` +
+                `${quote(`Artis: ${result.artist.replace("‣", "").trim()} (${result.artistUrl})`)}\n` +
                 "-----\n" +
                 `${result.chord}\n` +
                 "\n" +

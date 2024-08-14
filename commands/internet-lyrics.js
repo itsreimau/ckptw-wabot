@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
@@ -38,10 +39,8 @@ module.exports = {
             } = await axios.get(apiUrl);
 
             return ctx.reply(
-                `❖ ${bold("Lyrics")}\n` +
-                "\n" +
-                `➲ Judul: ${data.title}\n` +
-                `➲ Artis: ${data.artist}\n` +
+                `${quote(`Judul: ${data.title}`)}\n` +
+                `${quote(`Artis: ${data.artist}`)}\n` +
                 "-----\n" +
                 `${data.lyrics}\n` +
                 "\n" +

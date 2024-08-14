@@ -1,20 +1,20 @@
 require("./config.js");
-const package = require("./package.json");
+const pkg = require("./package.json");
 const CFonts = require("cfonts");
 
 console.log("Starting...");
 
 // Display title using CFonts.
-CFonts.say(package.name, {
+CFonts.say(pkg.name, {
     font: "chrome",
     align: "center",
     gradient: ["red", "magenta"]
 });
 
-// Displays package information.
-const authorName = package.author.name || package.author;
+// Displays pkg information.
+const authorName = pkg.author.name || pkg.author;
 CFonts.say(
-    `'${package.description}'\n` +
+    `'${pkg.description}'\n` +
     `By ${authorName}`, {
         font: "console",
         align: "center",

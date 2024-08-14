@@ -6,7 +6,8 @@ const {
 } = require("../tools/general.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
@@ -47,9 +48,7 @@ module.exports = {
                     url: result.url
                 },
                 mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Google Image")}\n` +
-                    "\n" +
-                    `➲ Kueri: ${input}\n` +
+                caption: `${quote(`Kueri: ${input}`)}\n` +
                     "\n" +
                     global.msg.footer
             });

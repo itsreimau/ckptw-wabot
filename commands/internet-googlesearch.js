@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 
@@ -34,15 +35,15 @@ module.exports = {
             } = await axios.get(apiUrl);
 
             const resultText = data.result.map((d) =>
-                `➲ Judul: ${d.title}\n` +
-                `➲ Deskripsi: ${d.snippet}\n` +
-                `➲ URL: ${d.link}`
+                `${quote(`Judul: ${d.title}`)}\n` +
+                `${quote(`Deskripsi: ${d.snippet}`)}\n` +
+                `${quote(`URL: ${d.link}`)}`
             ).join(
                 "\n" +
                 "-----\n"
             );
             return ctx.reply(
-                `❖ ${bold("Google Search")}\n` +
+                ` ${bold("Google Search")}\n` +
                 "\n" +
                 `${resultText}\n` +
                 "\n" +

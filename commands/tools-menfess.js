@@ -1,6 +1,7 @@
  const {
      bold,
-     monospace
+     monospace,
+     quote
  } = require("@mengkodingan/ckptw");
 
  module.exports = {
@@ -31,7 +32,7 @@
 
              if (numberFormatted === senderNumber) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
 
-             const menfessText = `❖ ${bold("Menfess")}\n` +
+             const menfessText =
                  `Hai, saya ${global.bot.name}, seseorang mengirimi Anda pesan melalui menfess ini!\n` +
                  "\n" +
                  `${text.join(" ")}\n` +

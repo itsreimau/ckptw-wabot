@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 
@@ -34,15 +35,13 @@ module.exports = {
             if (!result) return ctx.reply(global.msg.notFound);
 
             const resultText = result.map((r) =>
-                `➲ ${r.cryptoName}\n` +
-                `➲ Harga: ${r.priceChange}`
+                `${quote(`${r.cryptoName}`)}\n` +
+                `${quote(`Harga: ${r.priceChange}`)}`
             ).join(
                 "\n" +
                 "-----\n"
             );
             return ctx.reply(
-                `❖ ${bold("Crypto")}\n` +
-                "\n" +
                 `${resultText}\n` +
                 "\n" +
                 global.msg.footer

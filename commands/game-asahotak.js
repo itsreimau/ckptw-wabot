@@ -2,7 +2,8 @@ const {
     asahotak
 } = require("@bochilteam/scraper");
 const {
-    bold
+    bold,
+    quote
 } = require("@mengkodingan/ckptw");
 
 const session = new Map();
@@ -31,9 +32,7 @@ module.exports = {
             await session.set(ctx.id, true);
 
             await ctx.reply(
-                `❖ ${bold("Asah Otak")}\n` +
-                "\n" +
-                `➲ Soal: ${data.soal}` +
+                `${quote(`Soal: ${data.soal}`)}` +
                 (global.system.useCoin ?
                     "\n" +
                     `+${coin} Koin\n` :

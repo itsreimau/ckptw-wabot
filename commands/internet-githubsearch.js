@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 
@@ -38,14 +39,12 @@ module.exports = {
             const repo = data.items[0];
 
             return ctx.reply(
-                `❖ ${bold("GitHub Search")}\n` +
-                "\n" +
-                `➲ Nama: ${repo.name}\n` +
-                `➲ Deskripsi: ${repo.description}\n` +
-                `➲ Owner: ${repo.owner.login}\n` +
-                `➲ Dibuat: ${formatDate(repo.created_at)}\n` +
-                `➲ Bahasa: ${repo.language}\n` +
-                `➲ Lisensi: ${repo.license.name}\n` +
+                `${quote(`Nama: ${repo.name}`)}\n` +
+                `${quote(`Deskripsi: ${repo.description}`)}\n` +
+                `${quote(`Owner: ${repo.owner.login}`)}\n` +
+                `${quote(`Dibuat: ${formatDate(repo.created_at)}`)}\n` +
+                `${quote(`Bahasa: ${repo.language}`)}\n` +
+                `${quote(`Lisensi: ${repo.license.name}`)}\n` +
                 "\n" +
                 global.msg.footer
             );

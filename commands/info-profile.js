@@ -1,6 +1,7 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const mime = require("mime-types");
 
@@ -33,11 +34,9 @@ module.exports = {
                     url: profileUrl,
                 },
                 mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Profile")}\n` +
-                    "\n" +
-                    `➲ Nama: ${ctx._sender.pushName}\n` +
-                    `➲ Premium: ${premium}\n` +
-                    `➲ Koin: ${coin}\n` +
+                caption: `${quote(`Nama: ${ctx._sender.pushName}`)}\n` +
+                    `${quote(`Premium: ${premium}`)}\n` +
+                    `${quote(`Koin: ${coin}`)}\n` +
                     "\n" +
                     global.msg.footer,
             });

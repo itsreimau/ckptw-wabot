@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const {
@@ -43,16 +44,14 @@ module.exports = {
             const synopsisId = info.synopsis ? await translate(info.synopsis, "en", "id") : null;
 
             return await ctx.reply(
-                `❖ ${bold("Anime Info")}\n` +
-                "\n" +
-                `➲ Judul: ${info.title}\n` +
-                `➲ Judul (Inggris): ${info.title_english}\n` +
-                `➲ Judul (Jepang): ${info.title_japanese}\n` +
-                `➲ Tipe: ${info.type}\n` +
-                `➲ Episode: ${info.episodes}\n` +
-                `➲ Durasi: ${info.duration}\n` +
-                `➲ Ringkasan: ${synopsisId.translation}\n` +
-                `➲ URL: ${info.url}\n` +
+                `${quote(`Judul: ${info.title}`)}\n` +
+                `${quote(`Judul (Inggris): ${info.title_english}`)}\n` +
+                `${quote(`Judul (Jepang): ${info.title_japanese}`)}\n` +
+                `${quote(`Tipe: ${info.type}`)}\n` +
+                `${quote(`Episode: ${info.episodes}`)}\n` +
+                `${quote(`Durasi: ${info.duration}`)}\n` +
+                `${quote(`Ringkasan: ${synopsisId.translation}`)}\n` +
+                `${quote(`URL: ${info.url}`)}\n` +
                 "\n" +
                 global.msg.footer
             );

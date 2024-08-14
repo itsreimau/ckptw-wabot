@@ -1,5 +1,6 @@
 const {
-    bold
+    bold,
+    quote
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
@@ -29,7 +30,7 @@ module.exports = {
             let userMentions = [];
 
             premiumUsers.forEach((userId) => {
-                resultText += `➲ @${userId}\n`;
+                resultText += `${quote(`@${userId}`)}\n`;
             });
 
             premiumUsers.forEach((userId) => {
@@ -37,7 +38,7 @@ module.exports = {
             });
 
             return ctx.reply({
-                text: `❖ ${bold("List Premium")}\n` +
+                text: ` ${bold("List Premium")}\n` +
                     "\n" +
                     `${resultText}` +
                     "\n" +

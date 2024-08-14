@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
@@ -59,9 +60,7 @@ module.exports = {
                             url: data.video.noWatermark
                         },
                         mimetype: mime.lookup("mp4"),
-                        caption: `❖ ${bold("TT Downloader")}\n` +
-                            "\n" +
-                            `➲ URL: ${input}\n` +
+                        caption: `${quote(`URL: ${input}`)}\n` +
                             "\n" +
                             global.msg.footer,
                         gifPlayback: false

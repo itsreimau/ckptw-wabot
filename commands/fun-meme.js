@@ -4,10 +4,6 @@ const {
 const {
     bold
 } = require("@mengkodingan/ckptw");
-const {
-    proto,
-    generateWAMessageFromContent
-} = require("@whiskeysockets/baileys");
 const axios = require("axios");
 const mime = require("mime-types");
 
@@ -37,9 +33,7 @@ module.exports = {
                     url: data.url
                 },
                 mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Meme")}\n` +
-                    "\n" +
-                    `➲ Sumber: ${data.source}\n` +
+                caption: `${quote(`Sumber: ${data.source}`)}\n` +
                     "\n" +
                     global.msg.footer
             });

@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
@@ -43,9 +44,7 @@ module.exports = {
                     url: data.response
                 },
                 mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Pinterest")}\n` +
-                    "\n" +
-                    `➲ Kueri: ${input}\n` +
+                caption: `${quote(`Kueri: ${input}`)}\n` +
                     "\n" +
                     global.msg.footer
             });

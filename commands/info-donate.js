@@ -1,5 +1,5 @@
 const {
-    bold
+    quote
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
@@ -8,13 +8,11 @@ module.exports = {
     category: "info",
     code: async (ctx) => {
         return ctx.reply(
-            `❖ ${bold("Donate")}\n` +
-            "\n" +
-            "➲ 083838039693 (DANA)\n" +
+            `${quote("083838039693 (DANA)")}\n` +
             "-----\n" +
-            "➲ https://paypal.me/itsreimau (PayPal)\n" +
-            "➲ https://saweria.co/itsreimau (Saweria)\n" +
-            "➲ https://trakteer.id/itsreimau (Trakteer)\n" +
+            `${quote("https://paypal.me/itsreimau (PayPal)")}\n` +
+            `${quote("https://saweria.co/itsreimau (Saweria)")}\n` +
+            `${quote("https://trakteer.id/itsreimau (Trakteer)")}\n` +
             "\n" +
             global.msg.footer
         );

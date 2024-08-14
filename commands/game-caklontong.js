@@ -2,7 +2,8 @@ const {
     caklontong
 } = require("@bochilteam/scraper");
 const {
-    bold
+    bold,
+    quote
 } = require("@mengkodingan/ckptw");
 
 const session = new Map();
@@ -30,9 +31,7 @@ module.exports = {
             await session.set(ctx.id, true);
 
             await ctx.reply(
-                `❖ ${bold("Cak Lontong")}\n` +
-                "\n" +
-                `➲ Soal: ${data.soal}` +
+                `${quote(`Soal: ${data.soal}`)}` +
                 (global.system.useCoin ?
                     "\n" +
                     `+${coin} Koin` :
@@ -48,31 +47,31 @@ module.exports = {
             });
 
             col.on("collect", async (m) => {
-                    const userAnswer = m.content.toLowerCase();
-                    const answer = data.name.toLowerCase();
+                const userAnswer = m.content.toLowerCase();
+                const answer = data.name.toLowerCase();
 
-                    if (userAnswer === answer) {
-                        await session.delete(ctx.id);
-                        if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
-                        await ctx.sendMessage(
-                            ctx.id, {
-                                text: `${bold("[ ! ]")} Benar!\n` +
-                                    `${data.description}` +
-                                    (global.system.useCoin ?
-                                        "\n" +
-                                        `+${coin} Koin` :
-                                        "")
-                            }, {
-                                quoted: m
-                            });
-                        return col.stop();
-                    } else if (userAnswer === "hint") {
-                        const clue = answer.replace(/[AIUEOaiueo]/g, "_");
-                        await ctx.reply(ctx.id, {
-                                text: clue.toUpperCase()
+                if (userAnswer === answer) {
+                    await session.delete(ctx.id);
+                    if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
+                    await ctx.sendMessage(
+                        ctx.id, {
+                            text: `${bold("[ ! ]")} Benar!\n` +
+                                `${data.description}` +
+                                (global.system.useCoin ?
+                                    "\n" +
+                                    `+${coin} Koin` :
+                                    "")
                         }, {
                             quoted: m
                         });
+                    return col.stop();
+                } else if (userAnswer === "hint") {
+                    const clue = answer.replace(/[AIUEOaiueo]/g, "_");
+                    await ctx.reply(ctx.id, {
+                        text: clue.toUpperCase()
+                    }, {
+                        quoted: m
+                    });
                 } else if (userAnswer.endsWith(answer.split(" ")[1])) {
                     ctx.reply(ctx.id, {
                         text: "Sedikit lagi!"
@@ -82,24 +81,24 @@ module.exports = {
                 }
             });
 
-        col.on("end", async (collector, r) => {
-            const answer = data.jawaban;
-            const description = data.description;
+            col.on("end", async (collector, r) => {
+                const answer = data.jawaban;
+                const description = data.description;
 
-            if (await session.has(ctx.id)) {
-                await session.delete(ctx.id);
+                if (await session.has(ctx.id)) {
+                    await session.delete(ctx.id);
 
-                return ctx.reply(
-                    `Waktu habis!\n` +
-                    `Jawabannya adalah ${answer}.\n` +
-                    description
-                );
-            }
-        });
+                    return ctx.reply(
+                        `Waktu habis!\n` +
+                        `Jawabannya adalah ${answer}.\n` +
+                        description
+                    );
+                }
+            });
 
-    } catch (error) {
-        console.error("Error:", error);
-        return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+        } catch (error) {
+            console.error("Error:", error);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+        }
     }
-}
 };

@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 
@@ -37,10 +38,8 @@ module.exports = {
             const khodam = list[Math.floor(Math.random() * list.length)];
 
             return ctx.reply(
-                `❖ ${bold("Cek Khodam")}\n` +
-                "\n" +
-                `➲ Nama: ${input}\n` +
-                `➲ Khodam: ${khodam}\n` +
+                `${quote(`Nama: ${input}`)}\n` +
+                `${quote(`Khodam: ${khodam}`)}\n` +
                 "\n" +
                 global.msg.footer
             );

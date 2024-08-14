@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const mime = require("mime-types");
 
@@ -40,9 +41,7 @@ module.exports = {
                     url: apiUrl
                 },
                 mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("SSWEB")}\n` +
-                    "\n" +
-                    `➲ URL: ${input}\n` +
+                caption: `${quote(`URL: ${input}`)}\n` +
                     "\n" +
                     global.msg.footer
             });

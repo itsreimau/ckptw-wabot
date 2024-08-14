@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
@@ -49,9 +50,7 @@ module.exports = {
                     url: apiUrl
                 },
                 mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("TEXT2IMG")}\n` +
-                    "\n" +
-                    `➲ Prompt: ${input}\n` +
+                caption: `${quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     global.msg.footer
             });

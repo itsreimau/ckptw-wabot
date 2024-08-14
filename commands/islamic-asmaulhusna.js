@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 
@@ -35,16 +36,17 @@ module.exports = {
             const asmaulhusna = data.result;
 
             if (input.toLowerCase() === "all") {
-                const resultText = asmaulhusna.map((r) => `➲ Nomor: ${r.number}\n` +
-                    `➲ Latin: ${r.latin}\n` +
-                    `➲ Arab: ${r.arab}\n` +
-                    `➲ Arti: ${r.translate_id}`
+                const resultText = asmaulhusna.map((r) =>
+                    `${quote(`Nomor: ${r.number}`)}\n` +
+                    `${quote(`Latin: ${r.latin}`)}\n` +
+                    `${quote(`Arab: ${r.arab}`)}\n` +
+                    `${quote(`Arti: ${r.translate_id}`)}`
                 ).join(
                     "\n" +
                     "-----\n"
                 );
                 return ctx.reply(
-                    `❖ ${bold("Asmaul Husna")}\n` +
+                    ` ${bold("Asmaul Husna")}\n` +
                     "\n" +
                     `Daftar semua Asmaul Husna:\n` +
                     `${resultText}\n` +
@@ -67,12 +69,10 @@ module.exports = {
                 } = selectedName;
 
                 return ctx.reply(
-                    `❖ ${bold("Asmaul Husna")}\n` +
-                    "\n" +
-                    `➲ Nomor: ${index}\n` +
-                    `➲ Latin: ${latin}\n` +
-                    `➲ Arab: ${arab}\n` +
-                    `➲ Arti: ${translate_id}\n` +
+                    `${quote(`Nomor: ${index}`)}\n` +
+                    `${quote(`Latin: ${latin}`)}\n` +
+                    `${quote(`Arab: ${arab}`)}\n` +
+                    `${quote(`Arti: ${translate_id}`)}\n` +
                     "\n" +
                     global.msg.footer
                 );

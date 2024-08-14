@@ -1,6 +1,7 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const yts = require("yt-search");
 
@@ -34,21 +35,19 @@ module.exports = {
                 switch (r.type) {
                     case "video":
                         return `${bold(`${r.title} (${r.url})`)}\n` +
-                            `➲ Durasi: ${r.timestamp}\n` +
-                            `➲ Diunggah: ${r.ago}\n` +
-                            `➲ Dilihat: ${r.views}`;
+                            `${quote(`Durasi: ${r.timestamp}`)}\n` +
+                            `${quote(`Diunggah: ${r.ago}`)}\n` +
+                            `${quote(`Dilihat: ${r.views}`)}`;
                     case "channel":
                         return `${bold(`${r.name} (${r.url})`)}\n` +
-                            `➲ Subscriber: ${r.subCountLabel} (${r.subCount})\n` +
-                            `➲ Jumlah video: ${r.videoCount}`;
+                            `${quote(`Subscriber: ${r.subCountLabel} (${r.subCount})`)}\n` +
+                            `${quote(`Jumlah video: ${r.videoCount}`)}`;
                 }
             }).filter((r) => r).join(
                 "\n" +
                 "-----\n"
             );
             return ctx.reply(
-                `${bold("❖ YT Search")}\n` +
-                "\n" +
                 `${resultText}\n` +
                 "\n" +
                 global.msg.footer

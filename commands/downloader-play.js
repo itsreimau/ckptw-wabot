@@ -1,6 +1,7 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const {
     youtubedl,
@@ -36,11 +37,11 @@ module.exports = {
 
             const ytVid = searchRes.videos[0];
             await ctx.reply(
-                `❖ ${bold("Play")}\n\n` +
-                `➲ Judul: ${ytVid.title}\n` +
-                `➲ Artis: ${ytVid.author.name}\n` +
-                `➲ Durasi: ${ytVid.timestamp}\n` +
-                `➲ URL: ${ytVid.url}\n\n` +
+                `${quote(`Judul: ${ytVid.title}`)}\n` +
+                `${quote(`Artis: ${ytVid.author.name}`)}\n` +
+                `${quote(`Durasi: ${ytVid.timestamp}`)}\n` +
+                `${quote(`URL: ${ytVid.url}`)}\n` +
+                "\n" +
                 global.msg.footer
             );
 

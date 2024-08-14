@@ -1,5 +1,5 @@
 const {
-    bold
+    quote
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
@@ -8,9 +8,7 @@ module.exports = {
     category: "info",
     code: async (ctx) => {
         return await ctx.reply(
-            `❖ ${bold("SC")}\n` +
-            "\n" +
-            `➲ https://github.com/itsreimau/ckptw-wabot\n` +
+            `${quote("https://github.com/itsreimau/ckptw-wabot")}\n` +
             "\n" +
             global.msg.footer
         ); // If you don't delete this, thank you!

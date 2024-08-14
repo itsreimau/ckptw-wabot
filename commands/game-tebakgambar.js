@@ -2,7 +2,8 @@ const {
     tebakgambar
 } = require("@bochilteam/scraper");
 const {
-    bold
+    bold,
+    quote
 } = require("@mengkodingan/ckptw");
 const mime = require("mime-types");
 
@@ -36,9 +37,7 @@ module.exports = {
                     url: data.img
                 },
                 mimetype: mime.contentType("png"),
-                caption: `❖ ${bold("Tebak Gambar")}\n` +
-                    "\n" +
-                    `➲ Deskripsi: ${data.deskripsi}` +
+                caption: `${quote(`Deskripsi: ${data.deskripsi}`)}` +
                     (global.system.useCoin ?
                         "\n" +
                         `+${coin} Koin` :

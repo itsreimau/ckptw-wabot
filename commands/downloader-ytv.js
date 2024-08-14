@@ -1,6 +1,7 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const {
     youtubedl,
@@ -42,11 +43,9 @@ module.exports = {
             const qualityOptions = Object.keys(ytdl.video);
 
             await ctx.reply(
-                `❖ ${bold("YT Video")}\n` +
-                "\n" +
-                `➲ Judul: ${ytdl.title}\n` +
-                `➲ URL: ${input}\n` +
-                `➲ Pilih kualitas:\n` +
+                `${quote(`Judul: ${ytdl.title}`)}\n` +
+                `${quote(`URL: ${input}`)}\n` +
+                `${quote(`Pilih kualitas:`)}\n` +
                 `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
                 "\n" +
                 global.msg.footer
@@ -70,9 +69,7 @@ module.exports = {
                             url: url,
                         },
                         mimetype: mime.contentType("mp4"),
-                        caption: `❖ ${bold("YTV")}\n` +
-                            "\n" +
-                            `➲ Kualitas: ${selectedQuality}\n` +
+                        caption: `${quote(`Kualitas: ${selectedQuality}`)}\n` +
                             "\n" +
                             global.msg.footer,
                         gifPlayback: false

@@ -7,7 +7,8 @@ const {
 const {
     bold,
     italic,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 
@@ -55,8 +56,6 @@ module.exports = {
                 if (!aya) return ctx.reply(`${bold("[ ! ]")} Ayat ${ayaNumber} tidak ada.`);
 
                 return ctx.reply(
-                    `${bold("❖ Al-Quran")}\n` +
-                    "\n" +
                     `${aya.teksArab} (${aya.teksLatin})\n` +
                     `${italic(aya.teksIndonesia)}\n` +
                     "\n" +
@@ -69,10 +68,9 @@ module.exports = {
                         `${italic(verse.teksIndonesia)}`;
                 }).join("\n");
                 return ctx.reply(
-                    `${bold("❖ Al-Quran")}\n` +
-                    "\n" +
-                    `➲ ${bold(`Surah ${data.namaLatin}`)}\n` +
-                    `➲ ${data.arti}\n` +
+                    `${bold(`Surah ${data.namaLatin}`)}\n` +
+                    `${quote(`${data.arti}`)}\n` +
+                    "-----\n"
                     `${versesText}\n` +
                     "\n" +
                     global.msg.footer

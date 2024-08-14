@@ -34,12 +34,10 @@ module.exports = {
             } = await axios.get(apiUrl);
 
             return ctx.reply(
-                `❖ ${bold("Kisah Nabi")}\n` +
-                "\n" +
-                `➲ Nama: ${data.name}\n` +
-                `➲ Tahun kelahiran: ${data.thn_kelahiran}\n` +
-                `➲ Tempat kelahiran: ${data.tmp}\n` +
-                `➲ Usia: ${data.usia}\n` +
+                `${quote(`Nama: ${data.name}`)}\n` +
+                `${quote(`Tahun kelahiran: ${data.thn_kelahiran}`)}\n` +
+                `${quote(`Tempat kelahiran: ${data.tmp}`)}\n` +
+                `${quote(`Usia: ${data.usia}`)}\n` +
                 "-----\n" +
                 `${data.description.trim()}\n` +
                 "\n" +

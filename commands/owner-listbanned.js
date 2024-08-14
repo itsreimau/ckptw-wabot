@@ -1,5 +1,6 @@
 const {
-    bold
+    bold,
+    quote
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
@@ -29,7 +30,7 @@ module.exports = {
             let userMentions = [];
 
             bannedUsers.forEach((userId) => {
-                resultText += `➲ @${userId}\n`;
+                resultText += `${quote(`@${userId}`)}\n`;
             });
 
             bannedUsers.forEach((userId) => {
@@ -37,7 +38,7 @@ module.exports = {
             });
 
             return ctx.reply({
-                text: `❖ ${bold("List Banned")}\n` +
+                text: ` ${bold("List Banned")}\n` +
                     "\n" +
                     `${resultText}` +
                     "\n" +
