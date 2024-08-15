@@ -17,18 +17,21 @@ const moment = require("moment-timezone");
 exports.getList = async (type, ctx) => {
     let text = "";
 
-    const generateMenuText = (commandsMap, tags) => {
-        let menuText = `Hai ${ctx._sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n\n` +
+    const generateMenuText = (cmds, tags) => {
+        let menuText =
+            `Hai ${ctx._sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
+            "\n" +
             `${quote(`Waktu aktif: ${convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}`)}\n` +
             `${quote(`Tanggal: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`)}\n` +
             `${quote(`Waktu: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}`)}\n` +
             `${quote(`Versi: ${pkg.version}`)}\n` +
-            `${quote(`Prefix: ${ctx._used.prefix}`)}\n\n` +
+            `${quote(`Prefix: ${ctx._used.prefix}`)}\n` +
+            "\n" +
             `${italic("Jangan lupa berdonasi agar bot tetap online!")}\n` +
             `${global.msg.readmore}\n`;
 
         for (const category of Object.keys(tags)) {
-            const categoryCommands = Array.from(commandsMap.values())
+            const categoryCommands = Array.from(cmds.values())
                 .filter(command => command.category === category)
                 .map(command => ({
                     name: command.name,
@@ -57,10 +60,10 @@ exports.getList = async (type, ctx) => {
     try {
         switch (type) {
             case "alkitab":
-                const alkitabResponse = await axios.get(createAPIUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
-                text = alkitabResponse.data.data.map(book =>
-                    `${quote(`Buku: ${book.name} (${book.abbr})`)}\n` +
-                    `${quote(`Jumlah Bab: ${book.chapter}`)}\n` +
+                const response = await axios.get(createAPIUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
+                text = response.data.data.map(b =>
+                    `${quote(`Buku: ${b.name} (${b.abbr})`)}\n` +
+                    `${quote(`Jumlah Bab: ${b.chapter}`)}\n` +
                     "-----\n"
                 ).join("");
 
@@ -68,10 +71,10 @@ exports.getList = async (type, ctx) => {
                 break;
 
             case "alquran":
-                const alquranResponse = await axios.get(createAPIUrl("https://equran.id", "/api/v2/surat", {}));
-                text = alquranResponse.data.data.map(surah =>
-                    `${quote(`Surah: ${surah.namaLatin} (${surah.nomor})`)}\n` +
-                    `${quote(`Jumlah Ayat: ${surah.jumlahAyat}`)}\n` +
+                const response = await axios.get(createAPIUrl("https://equran.id", "/api/v2/surat", {}));
+                text = response.data.data.map(s =>
+                    `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
+                    `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n` +
                     "-----\n"
                 ).join("");
 
@@ -91,7 +94,7 @@ exports.getList = async (type, ctx) => {
                 break;
 
             case "menu":
-                const commandsMap = ctx._self.cmd;
+                const cmds = ctx._self.cmd;
                 const tags = {
                     main: "Main",
                     ai: "AI",
@@ -109,19 +112,19 @@ exports.getList = async (type, ctx) => {
                     "": "No Category"
                 };
 
-                if (!commandsMap || commandsMap.size === 0) {
-                    text = `${bold("[ ! ]")} Terjadi kesalahan: Tidak ada perintah yang ditemukan.`;
+                if (!cmds || cmds.size === 0) {
+                    text = quote(`${bold("[ ! ]")} Terjadi kesalahan: Tidak ada perintah yang ditemukan.`);
                 } else {
-                    text = generateMenuText(commandsMap, tags);
+                    text = generateMenuText(cmds, tags);
                 }
                 break;
 
             default:
-                text = `${bold("[ ! ]")} Terjadi kesalahan: Jenis daftar tidak dikenal.`;
+                text = quote(`${bold("[ ! ]")} Terjadi kesalahan: Jenis daftar tidak dikenal.`);
                 break;
         }
     } catch (error) {
-        text = `${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`;
+        text = quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
     }
 
     return text;

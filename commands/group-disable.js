@@ -3,7 +3,8 @@ const {
 } = require("../tools/list.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
@@ -41,16 +42,16 @@ module.exports = {
             switch (input) {
                 case "antilink":
                     await global.db.set(`group.${groupNumber}.antilink`, false);
-                    return ctx.reply(`${bold("[ ! ]")} Fitur 'antilink' berhasil dinonaktifkan!`);
+                    return ctx.reply(quote(`${bold("[ ! ]")} Fitur 'antilink' berhasil dinonaktifkan!`));
                 case "welcome":
                     await global.db.set(`group.${groupNumber}.welcome`, false);
-                    return ctx.reply(`${bold("[ ! ]")} Fitur 'welcome' berhasil dinonaktifkan!`);
+                    return ctx.reply(quote(`${bold("[ ! ]")} Fitur 'welcome' berhasil dinonaktifkan!`));
                 default:
-                    return ctx.reply(`${bold("[ ! ]")} Perintah tidak valid. Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`);
+                    return ctx.reply(quote(`${bold("[ ! ]")} Perintah tidak valid. Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`));
             }
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

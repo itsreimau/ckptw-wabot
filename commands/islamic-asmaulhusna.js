@@ -24,7 +24,7 @@ module.exports = {
         const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${global.msg.argument}\n` +
+            `${quote(global.msg.argument)}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 7`)}`
         );
 
@@ -57,7 +57,7 @@ module.exports = {
 
             const index = parseInt(input);
 
-            if (isNaN(index) || index < 1 || index > 99) return ctx.reply(`${bold("[ ! ]")} Nomor Asmaul Husna tidak valid. Harap masukkan nomor antara 1 dan 99 atau ketik "all" untuk melihat semua Asmaul Husna.`);
+            if (isNaN(index) || index < 1 || index > 99) return ctx.reply(quote(`${bold("[ ! ]")} Nomor Asmaul Husna tidak valid. Harap masukkan nomor antara 1 dan 99 atau ketik "all" untuk melihat semua Asmaul Husna.`));
 
             const selectedName = asmaulhusna.find((r) => parseInt(r.number) === index);
 
@@ -80,7 +80,7 @@ module.exports = {
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

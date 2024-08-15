@@ -1,6 +1,7 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
@@ -19,7 +20,7 @@ module.exports = {
         const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${global.msg.argument}\n` +
+            `${quote(global.msg.argument)}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} halo!`)}`
         );
 
@@ -27,7 +28,7 @@ module.exports = {
             ctx.reply(Buffer.from(input, "utf-8").toString("base64"));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

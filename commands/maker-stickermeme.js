@@ -6,7 +6,8 @@ const {
 } = require("../tools/general.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const {
     MessageType
@@ -37,13 +38,13 @@ module.exports = {
         const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${global.msg.argument}\n` +
+            `${quote(global.msg.argument)}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} i want to be a cat|just meow meow`)}`
         );
 
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
-        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(`${bold("[ ! ]")} Berikan atau balas media berupa gambar!`);
+        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(quote(`${bold("[ ! ]")} Berikan atau balas media berupa gambar!`));
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
@@ -66,7 +67,7 @@ module.exports = {
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error("Error", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

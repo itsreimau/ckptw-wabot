@@ -1,6 +1,7 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const {
     exec
@@ -24,7 +25,7 @@ module.exports = {
             exec(`pm2 restart ckptw-wabot`); // PM2.
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

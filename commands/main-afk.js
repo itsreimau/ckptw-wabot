@@ -1,5 +1,6 @@
 const {
-    bold
+    bold,
+    quote
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
@@ -15,10 +16,10 @@ module.exports = {
                 timeStamp: Date.now()
             });
 
-            return ctx.reply(`Anda sekarang akan AFK dengan alasan ${reason}.`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Anda sekarang akan AFK dengan alasan ${reason}.`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

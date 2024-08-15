@@ -1,6 +1,7 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const {
     _ai
@@ -23,7 +24,7 @@ module.exports = {
         const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${global.msg.argument}\n` +
+            `${quote(global.msg.argument)}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
         );
 
@@ -35,7 +36,7 @@ module.exports = {
             return await ctx.reply(res.result);
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

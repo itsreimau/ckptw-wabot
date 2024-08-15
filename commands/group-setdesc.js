@@ -1,6 +1,7 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
@@ -21,17 +22,17 @@ module.exports = {
         const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${global.msg.argument}\n` +
+            `${quote(global.msg.argument)}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} fuck you!`)}`
         );
 
         try {
             await ctx.group().updateDescription(input);
 
-            return ctx.reply(`${bold("[ ! ]")} Berhasil mengubah deskripsi grup!`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Berhasil mengubah deskripsi grup!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

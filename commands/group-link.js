@@ -1,5 +1,6 @@
 const {
-    bold
+    bold,
+    quote
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
@@ -22,7 +23,7 @@ module.exports = {
             return ctx.reply(`https://chat.whatsapp.com/${link}`);
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

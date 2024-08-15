@@ -11,7 +11,7 @@ CFonts.say(pkg.name, {
     gradient: ["red", "magenta"]
 });
 
-// Displays pkg information.
+// Displays package information.
 const authorName = pkg.author.name || pkg.author;
 CFonts.say(
     `'${pkg.description}'\n` +

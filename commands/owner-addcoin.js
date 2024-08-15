@@ -1,6 +1,7 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
@@ -26,24 +27,24 @@ module.exports = {
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : `${userId}@s.whatsapp.net`;
 
         if (!input || !user || isNaN(coinAmount)) return ctx.reply({
-            text: `${global.msg.argument}\n` +
+            text: `${quote(global.msg.argument)}\n` +
                 `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber} 4`)}`,
             mentions: [senderJid]
         });
 
         try {
             const [result] = await ctx._client.onWhatsApp(input.replace(/[^\d]/g, ""));
-            if (!result.exists) return ctx.reply(`${bold("[ ! ]")} Akun tidak ada di WhatsApp.`);
+            if (!result.exists) return ctx.reply(quote(`${bold("[ ! ]")} Akun tidak ada di WhatsApp.`));
 
             await global.db.add(`user.${user.split("@")[0]}.coin`, coinAmount);
 
             ctx.sendMessage(user, {
-                text: `Anda telah menerima ${coinAmount} koin dari Owner!`
+                text: quote(`${bold("[ ! ]")} Anda telah menerima ${coinAmount} koin dari Owner!`)
             });
-            return ctx.reply(`${bold("[ ! ]")} Berhasil menambahkan ${coinAmount} koin kepada pengguna!`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Berhasil menambahkan ${coinAmount} koin kepada pengguna!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

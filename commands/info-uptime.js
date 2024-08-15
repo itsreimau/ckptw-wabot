@@ -1,6 +1,9 @@
 const {
     convertMsToDuration
 } = require("../tools/general.js");
+const {
+    quote
+} = require("@mengkodingan/ckptw");
 
 module.exports = {
     name: "uptime",
@@ -15,6 +18,6 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const uptime = convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik";
-        return ctx.reply(`Bot telah aktif selama ${uptime}.`);
+        return ctx.reply(quote(`Bot telah aktif selama ${uptime}.`));
     }
 };

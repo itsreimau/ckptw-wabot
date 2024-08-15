@@ -2,7 +2,8 @@ const {
     download
 } = require("../tools/general.js");
 const {
-    bold
+    bold,
+    quote
 } = require("@mengkodingan/ckptw");
 const {
     MessageType
@@ -28,9 +29,7 @@ module.exports = {
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
-        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage) return ctx.reply(
-            `${bold("[ ! ]")} Berikan atau balas media berupa gambar, GIF, atau video!`
-        );
+        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage) return ctx.reply(quote(`${bold("[ ! ]")} Berikan atau balas media berupa gambar, GIF, atau video!`));
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
@@ -48,7 +47,7 @@ module.exports = {
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error("Error", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

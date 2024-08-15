@@ -3,7 +3,8 @@ const {
 } = require("../tools/general.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const {
     MessageType
@@ -27,7 +28,7 @@ module.exports = {
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
-        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage) return ctx.reply(`${bold("[ ! ]")} Berikan atau balas media berupa gambar!`);
+        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage) return ctx.reply(quote(`${bold("[ ! ]")} Berikan atau balas media berupa gambar!`));
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
@@ -37,7 +38,7 @@ module.exports = {
             let img = await Jimp.read(buffer);
             img.blur(isNaN(level) ? 5 : parseInt(level));
             img.getBuffer(Jimp.MIME_JPEG, async (err, buffer) => {
-                if (error) return ctx.reply(`${bold("[ ! ]")} Tidak dapat mengaburkan gambar!`);
+                if (error) return ctx.reply(quote(`${bold("[ ! ]")} Tidak dapat mengaburkan gambar!`));
 
                 return await ctx.reply({
                     image: buffer,
@@ -47,7 +48,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

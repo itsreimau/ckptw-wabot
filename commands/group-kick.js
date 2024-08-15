@@ -3,7 +3,8 @@ const {
 } = require("../tools/general.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
@@ -27,20 +28,20 @@ module.exports = {
         const account = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : null;
 
         if (!account) return ctx.reply({
-            text: `${global.msg.argument}\n` +
+            text: `${quote(global.msg.argument)}\n` +
                 `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`,
             mentions: [senderJid]
         });
 
         try {
-            if (await isAdmin(ctx, account) === 1) return ctx.reply(`${bold("[ ! ]")} Anggota ini adalah admin grup.`);
+            if (await isAdmin(ctx, account) === 1) return ctx.reply(quote(`${bold("[ ! ]")} Anggota ini adalah admin grup.`));
 
             await ctx.group().kick([account]);
 
-            return ctx.reply(`${bold("[ ! ]")} Berhasil dikeluarkan!`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Berhasil dikeluarkan!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

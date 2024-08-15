@@ -1,6 +1,7 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
@@ -21,7 +22,7 @@ module.exports = {
         const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${global.msg.argument} Argumen yang tersedia adalah open, close, lock, dan unlock.\n` +
+            `${quote(`${global.msg.argument} Argumen yang tersedia adalah open, close, lock, dan unlock.`)}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} open`)}`
         );
 
@@ -40,15 +41,13 @@ module.exports = {
                     await ctx.group().unlock();
                     break;
                 default:
-                    return ctx.reply(
-                        `${bold("[ ! ]")} Argumen yang tersedia adalah open, close, lock, dan unlock.`
-                    );
+                    return ctx.reply(quote(`${bold("[ ! ]")} Argumen yang tersedia adalah open, close, lock, dan unlock.`));
             }
 
-            return ctx.reply(`${bold("[ ! ]")} Berhasil mengubah setelan grup!`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Berhasil mengubah setelan grup!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

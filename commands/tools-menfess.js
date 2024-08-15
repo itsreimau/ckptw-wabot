@@ -20,7 +20,7 @@
          if (status) return ctx.reply(message);
 
          if (!ctx._args.length) return ctx.reply(
-             `${global.msg.argument}\n` +
+             `${quote(global.msg.argument)}\n` +
              `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ${ctx._client.user.id.split(":")[0]} Halo dunia!`)}`
          );
 
@@ -30,7 +30,7 @@
              const [number, ...text] = ctx._args;
              const numberFormatted = number.replace(/[^\d]/g, "");
 
-             if (numberFormatted === senderNumber) return ctx.reply(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`);
+             if (numberFormatted === senderNumber) return ctx.reply(quote(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`));
 
              const menfessText =
                  `Hai, saya ${global.bot.name}, seseorang mengirimi Anda pesan melalui menfess ini!\n` +
@@ -46,10 +46,10 @@
                  text: menfessText
              });
 
-             return ctx.reply(`${bold("[ ! ]")} Pesan berhasil terkirim!`);
+             return ctx.reply(quote(`${bold("[ ! ]")} Pesan berhasil terkirim!`));
          } catch (error) {
              console.error("Error:", error);
-             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+             return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
          }
      }
  };

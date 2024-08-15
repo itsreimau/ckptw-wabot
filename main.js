@@ -7,7 +7,8 @@ const {
     bold,
     Client,
     CommandHandler,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const {
     Events,
@@ -83,7 +84,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         const mean = didyoumean(cmdName, listCmd);
 
-        if (mean && mean !== cmdName) ctx.reply(`Apakah maksud Anda ${monospace(prefix + mean)}?`);
+        if (mean && mean !== cmdName) ctx.reply(quote(`${bold("[ ! ]")} Apakah maksud Anda ${monospace(prefix + mean)}?`));
     }
 
 
@@ -99,7 +100,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 ]);
                 const timeAgo = gnrl.convertMsToDuration(Date.now() - timeStamp);
 
-                ctx.reply(`Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`);
+                ctx.reply(quote(`${bold("[ ! ]")} Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
             }
         }
     }
@@ -114,11 +115,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const timeAgo = gnrl.convertMsToDuration(Date.now() - timeStamp);
         await db.delete(`user.${senderNumber}.afk`);
 
-        ctx.reply(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`);
+        ctx.reply(quote(`${bold("[ ! ]")} Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
     }
 
     // Owner-only commands.
-    if (gnrl.isOwner(ctx, senderJid) === 1) {
+    if (gnrl.isOwner(ctx, senderNumber) === 1) {
         // Eval command: Execute JavaScript code.
         if (m.content && m.content.startsWith && (m.content.startsWith("> ") || m.content.startsWith(">> "))) {
             const code = m.content.slice(2);
@@ -129,7 +130,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 await ctx.reply(inspect(result));
             } catch (error) {
                 console.error("Error:", error);
-                ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+                ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
             }
         }
 
@@ -153,7 +154,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 await ctx.reply(output);
             } catch (error) {
                 console.error("Error:", error);
-                ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+                ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
             }
         }
     }
@@ -166,7 +167,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (getAntilink && m.content && urlRegex.test(m.content)) {
             if ((await gnrl.isAdmin(ctx)) === 1);
 
-            await ctx.reply(`${bold("[ ! ]")} Jangan kirim tautan!`);
+            await ctx.reply(quote(`${bold("[ ! ]")} ${bold("[ ! ]")} Jangan kirim tautan!`));
             await ctx.deleteMessage(m.key);
         }
     }
@@ -185,10 +186,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 try {
                     await sendMenfess(ctx, m, senderNumber, from);
 
-                    ctx.reply("Pesan berhasil terkirim!");
+                    ctx.reply(quote(`${bold("[ ! ]")} Pesan berhasil terkirim!`));
                 } catch (error) {
                     console.error("Error:", error);
-                    ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+                    ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
                 }
             }
         }
@@ -213,8 +214,7 @@ bot.launch().catch((error) => console.error("Error:", error));
 // Utility functions
 async function sendMenfess(ctx, m, senderNumber, from) {
     await ctx.sendMessage(`${from}@s.whatsapp.net`, {
-        text: `❖ ${bold("Menfess")}\n` +
-            `Hai, saya ${global.bot.name}, Dia (${senderNumber}) menjawab pesan menfess yang Anda kirimkan.\n` +
+        text: `Hai, saya ${global.bot.name}, Dia (${senderNumber}) menjawab pesan menfess yang Anda kirimkan.\n` +
             "-----\n" +
             `${m.content}\n` +
             "-----\n" +
@@ -243,7 +243,7 @@ async function handleUserEvent(m) {
                     profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
                 }
 
-                const message = m.eventsType === "UserJoin" ? `Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!` : `@${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`;
+                const message = m.eventsType === "UserJoin" ? quote(`${bold("[ ! ]")} Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`) : quote(`${bold("[ ! ]")} @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
 
                 await bot.core.sendMessage(id, {
                     text: message,
@@ -266,7 +266,7 @@ async function handleUserEvent(m) {
     } catch (error) {
         console.error("Error:", error);
         bot.core.sendMessage(id, {
-            text: `${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`
+            text: quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`)
         });
     }
 }

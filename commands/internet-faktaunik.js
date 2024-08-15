@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const {
@@ -36,8 +37,8 @@ module.exports = {
             return ctx.reply(translation);
         } catch (error) {
             console.error("Error:", error);
-            if (error.response && error.response.status === 404) return ctx.reply(global.msg.notFound);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

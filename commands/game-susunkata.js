@@ -20,13 +20,13 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        if (session.has(ctx.id)) return await ctx.reply(`${bold("[ ! ]")} Sesi permainan sedang berjalan!`);
+        if (session.has(ctx.id)) return await ctx.reply(quote(`${bold("[ ! ]")} Sesi permainan sedang berjalan!`));
 
         try {
             const data = await susunkata();
             const coin = 3;
             const timeout = 60000;
-            const senderNumber = ctx._sender.jid.split("@")[0];
+            const senderNumber = ctx.sender.jid.split("@")[0];
 
             await session.set(ctx.id, true);
 
@@ -34,39 +34,40 @@ module.exports = {
                 `${quote(`Soal: ${data.soal}`)}` +
                 (global.system.useCoin ?
                     "\n" +
-                    `+${coin} Koin` :
+                    quote(`+${coin} Koin`) :
                     "\n") +
-                `Batas waktu ${(timeout / 1000).toFixed(2)} detik.\n` +
-                'Ketik "hint" untuk bantuan.\n' +
+                `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
+                `${quote('Ketik "hint" untuk bantuan.')}\n` +
                 "\n" +
                 global.msg.footer
             );
 
-            const col = ctx.MessageCollector({
+            const collector = ctx.MessageCollector({
                 time: timeout
             });
 
-            col.on("collect", async (m) => {
+            collector.on("collect", async (m) => {
                 const userAnswer = m.content.toLowerCase();
                 const answer = data.jawaban.toLowerCase();
 
-                if (userAnswer === answer.toLowerCase()) {
+                if (userAnswer === answer) {
                     await session.delete(ctx.id);
                     if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
                     await ctx.sendMessage(
                         ctx.id, {
-                            text: `${bold("[ ! ]")} Benar!` +
+                            text: quote(`${bold("[ ! ]")} Benar!`) +
                                 (global.system.useCoin ?
                                     "\n" +
-                                    `+${coin} Koin` :
+                                    quote(`+${coin} Koin`) :
                                     "")
                         }, {
                             quoted: m
-                        });
-                    return col.stop();
+                        }
+                    );
+                    return collector.stop();
                 } else if (userAnswer === "hint") {
                     const clue = answer.replace(/[AIUEOaiueo]/g, "_");
-                    await ctx.reply(ctx.id, {
+                    await ctx.sendMessage(ctx.id, {
                         text: clue.toUpperCase()
                     }, {
                         quoted: m
@@ -80,13 +81,13 @@ module.exports = {
                 }
             });
 
-            col.on("end", async (collector, r) => {
+            collector.on("end", async (collector, reason) => {
                 const answer = data.jawaban;
 
                 if (await session.has(ctx.id)) {
                     await session.delete(ctx.id);
                     return ctx.reply(
-                        `Waktu habis!\n` +
+                        `${quote(`${bold("[ ! ]")} Waktu habis!`)}\n` +
                         `Jawabannya adalah ${answer}.`
                     );
                 }
@@ -94,7 +95,7 @@ module.exports = {
 
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

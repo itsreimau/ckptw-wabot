@@ -2,7 +2,8 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    bold
+    bold,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 
@@ -31,7 +32,7 @@ module.exports = {
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return message.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return message.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

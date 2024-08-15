@@ -5,7 +5,8 @@ const {
     download
 } = require("../tools/general.js");
 const {
-    bold
+    bold,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const FormData = require("form-data");
@@ -28,7 +29,7 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
-        if (!quotedMessage) return ctx.reply(`${bold("[ ! ]")} Berikan atau balas media berupa sticker!`);
+        if (!quotedMessage) return ctx.reply(quote(`${bold("[ ! ]")} Berikan atau balas media berupa sticker!`));
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
@@ -46,7 +47,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

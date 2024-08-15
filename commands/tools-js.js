@@ -1,6 +1,7 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const {
     spawn
@@ -24,7 +25,7 @@ module.exports = {
         const script = input;
 
         if (!script) return ctx.reply(
-            `${global.msg.argument}\n` +
+            `${quote(global.msg.argument)}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} console.log("Hello World");`)}`
         );
 
@@ -32,7 +33,7 @@ module.exports = {
             const restricted = ["require", "eval", "Function", "global"];
             for (const w of restricted) {
                 if (script.includes(w)) {
-                    return ctx.reply(`${bold("[ ! ]")} Penggunaan ${w} tidak diperbolehkan dalam kode.`);
+                    return ctx.reply(quote(`${bold("[ ! ]")} Penggunaan ${w} tidak diperbolehkan dalam kode.`));
                 }
             }
 
@@ -44,7 +45,7 @@ module.exports = {
 
                 childProcess.stdout.on('data', (chunk) => {
                     if (outputData.length >= 1024 * 1024) {
-                        resolve(`${bold("[ ! ]")} Kode mencapai batas penggunaan memori.`);
+                        resolve(quote(`${bold("[ ! ]")} Kode mencapai batas penggunaan memori.`));
                         childProcess.kill();
                     }
 
@@ -57,14 +58,14 @@ module.exports = {
 
                 childProcess.on("close", (code) => {
                     if (code !== 0) {
-                        return resolve(`${bold("[ ! ]")} Keluar dari proses dengan kode: ${code}`);
+                        return resolve(quote(`${bold("[ ! ]")} Keluar dari proses dengan kode: ${code}`));
                     } else {
                         resolve(result);
                     }
                 });
 
                 setTimeout(() => {
-                    resolve(`${bold("[ ! ]")} Kode mencapai batas waktu keluaran.`);
+                    resolve(quote(`${bold("[ ! ]")} Kode mencapai batas waktu keluaran.`));
                     childProcess.kill();
                 }, 10000);
             });
@@ -72,7 +73,7 @@ module.exports = {
             ctx.reply(output.trim());
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

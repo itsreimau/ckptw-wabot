@@ -3,7 +3,8 @@ const {
 } = require("../tools/api.js");
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const {
@@ -28,7 +29,7 @@ module.exports = {
         const [emoji1, emoji2] = ctx._args;
 
         if (!ctx._args.length) return ctx.reply(
-            `${global.msg.argument}\n` +
+            `${quote(global.msg.argument)}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 😱 🤓`)}`
         );
 
@@ -53,7 +54,7 @@ module.exports = {
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error("Error", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

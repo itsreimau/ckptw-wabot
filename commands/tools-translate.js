@@ -1,6 +1,7 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 const {
     translate
@@ -25,7 +26,7 @@ module.exports = {
         const textToTranslate = text.length ? text.join(" ") : ctx._args.join(" ");
 
         if (!ctx._args.length) return ctx.reply(
-            `${global.msg.argument}\n` +
+            `${quote(global.msg.argument)}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} id halo dunia!`)}`
         );
 
@@ -37,7 +38,7 @@ module.exports = {
             return ctx.reply(translation);
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Error: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Error: ${error.message}`));
         }
     }
 };

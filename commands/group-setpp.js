@@ -2,7 +2,8 @@ const {
     download
 } = require("../tools/general.js");
 const {
-    bold
+    bold,
+    quote
 } = require("@mengkodingan/ckptw");
 const {
     MessageType
@@ -27,7 +28,7 @@ module.exports = {
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
 
-        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(`${bold("[ ! ]")} Berikan atau balas media berupa gambar!`);
+        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(quote(`${bold("[ ! ]")} Berikan atau balas media berupa gambar!`));
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
@@ -36,10 +37,10 @@ module.exports = {
 
             await ctx._client.updateProfilePicture(ctx.id, buffer);
 
-            return ctx.reply(`${bold("[ ! ]")} Berhasil mengubah gambar profil foto grup!`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Berhasil mengubah gambar profil foto grup!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };

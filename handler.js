@@ -1,11 +1,12 @@
 const gnrl = require("./tools/general.js");
 
 exports.handler = async (ctx, options) => {
-    const senderNumber = ctx._sender.jid.split("@")[0];
+    const senderJid = ctx._sender.jid;
+    const senderNumber = senderJid.split("@")[0];
 
     const checkOptions = {
         admin: {
-            function: async () => ((await ctx.isGroup()) ? (await gnrl.isAdmin(ctx)) === 0 : null),
+            function: async () => ((await ctx.isGroup()) ? (await gnrl.isAdmin(ctx, senderJid)) === 0 : null),
             msg: global.msg.admin
         },
         banned: {
@@ -48,7 +49,7 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.group
         },
         owner: {
-            function: async () => (await gnrl.isOwner(ctx)) === 0,
+            function: async () => (await gnrl.isOwner(ctx, senderNumber)) === 0,
             msg: global.msg.owner
         },
         premium: {

@@ -1,4 +1,7 @@
 const APIs = {
+    fasturl: {
+        baseURL: "https://fastrestapis.fasturl.cloud/"
+    },
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },

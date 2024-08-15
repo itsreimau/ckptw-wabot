@@ -24,7 +24,10 @@ module.exports = {
 
         const input = ctx._args.join(" ") || null;
 
-        if (!input) return ctx.reply(`${global.msg.argument}\n` + `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`);
+        if (!input) return ctx.reply(
+            `${quote(global.msg.argument)}\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`
+        );
 
         try {
             const apiUrl = await createAPIUrl("ngodingaja", "/api/gsearch", {
@@ -52,7 +55,7 @@ module.exports = {
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
 };
