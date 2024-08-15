@@ -2,9 +2,6 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    mediafiredl
-} = require("@bochilteam/scraper");
-const {
     bold,
     monospace,
     quote
@@ -26,48 +23,30 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const url = ctx._args[0] || null;
 
-        if (!input) return ctx.reply(
+        if (!url) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
+             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
+        if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            let result;
-
-            const apiCalls = [
-                () => axios.get(createAPIUrl("ngodingaja", "/api/mediafire", {
-                    url: input
-                })).then(response => response.hasil.url),
-                () => axios.get(createAPIUrl("ssa", "/api/mediafire", {
-                    url: input
-                })).then(response => response.data.data.response.link),
-                () => mediafiredl(input).then(response => response.data.url || response.data.url2)
-            ];
-
-            for (const call of apiCalls) {
-                try {
-                    result = await call();
-                    if (result) break;
-                } catch (error) {
-                    console.error("Error in API call:", error);
-                }
-            }
-
-            const url = new URL(input);
-            const filePath = url.pathname;
-            const filename = filePath.substring(filePath.lastIndexOf('/') + 1);
+            const apiUrl = createAPIUrl("ryzendesu", "/api/downloader/mediafire", {
+                url
+            });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             return ctx.reply({
                 document: {
-                    url: result
+                    url: data.url || data.url2
                 },
-                filename,
-                mimetype: mime.lookup(result) || "application/octet-stream"
+                filename: data.filename,
+                mimetype: ext || "application/octet-stream"
             });
         } catch (error) {
             console.error("Error:", error);

@@ -21,7 +21,7 @@ module.exports = {
 
         if (!input && !isNaN(Number(input))) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ${ctx._client.user.id.split(":")[0]}`)}`
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ${ctx._client.user.id.split(":")[0]}`)}`)
         );
 
         try {

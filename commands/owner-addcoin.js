@@ -28,7 +28,7 @@ module.exports = {
 
         if (!input || !user || isNaN(coinAmount)) return ctx.reply({
             text: `${quote(global.msg.argument)}\n` +
-                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber} 4`)}`,
+                quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber} 4`)}`),
             mentions: [senderJid]
         });
 

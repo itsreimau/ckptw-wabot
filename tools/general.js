@@ -76,7 +76,7 @@ exports.isAdmin = async (ctx, number) => {
 
 exports.isBotAdmin = async (ctx) => {
     const id = ctx._client.user.id.replace(/:.*/, "");
-    const isAdmin = await checkAdmin(ctx, id);
+    const isBotAdmin = await checkAdmin(ctx, id);
 
     return isBotAdmin ? 1 : 0;
 };

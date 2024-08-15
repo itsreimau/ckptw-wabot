@@ -26,7 +26,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} john doe`)}`
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} john doe`)}`)
         );
 
         try {
@@ -37,12 +37,14 @@ module.exports = {
             const list = data.split('\n').filter(l => l.trim().length > 0);
             const khodam = list[Math.floor(Math.random() * list.length)];
 
-            return ctx.reply(
-                `${quote(`Nama: ${input}`)}\n` +
-                `${quote(`Khodam: ${khodam}`)}\n` +
-                "\n" +
-                global.msg.footer
-            );
+            return ctx.reply({
+                text: `${quote(`Nama: ${input}`)}\n` +
+                    `${quote(`Khodam: ${khodam}`)}\n` +
+                    "\n" +
+                    global.msg.footer
+            }, {
+                mentions: ctx.getMentioned()
+            });
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

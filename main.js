@@ -213,15 +213,49 @@ bot.launch().catch((error) => console.error("Error:", error));
 
 // Utility functions
 async function sendMenfess(ctx, m, senderNumber, from) {
-    await ctx.sendMessage(`${from}@s.whatsapp.net`, {
-        text: `Hai, saya ${global.bot.name}, Dia (${senderNumber}) menjawab pesan menfess yang Anda kirimkan.\n` +
-            "-----\n" +
-            `${m.content}\n` +
-            "-----\n" +
-            "Jika ingin membalas, Anda harus mengirimkan perintah lagi.\n"
-    }, {
-        quoted: m
-    });
+    const fakeText = {
+        key: {
+            fromMe: false,
+            participant: `${senderNumber}@s.whatsapp.net`, // Change it to "0@s.whatsapp.net" if you want to become an official WhatsApp account.
+            ...({
+                remoteJid: "status@broadcast"
+            })
+        },
+        message: {
+            extendedTextMessage: {
+                text: `${senderNumber} telah merespons pesan menfess Anda.`,
+                title: global.bot.name,
+                thumbnailUrl: global.bot.thumbnail
+
+            }
+        }
+    }
+
+    await ctx.sendMessage(
+        ctx.id, {
+            text: `${m.content}\n` +
+                `${global.msg.readmore}\n` +
+                "Jika ingin membalas, Anda harus mengirimkan perintah lagi.",
+            contextInfo: {
+                mentionedJid: [`${senderNumber}@s.whatsapp.net`],
+                externalAdReply: {
+                    mediaType: 1,
+                    previewType: 0,
+                    mediaUrl: global.bot.groupChat,
+                    title: global.msg.watermark,
+                    body: null,
+                    renderLargerThumbnail: true,
+                    thumbnailUrl: global.bot.thumbnail,
+                    sourceUrl: global.bot.groupChat
+                },
+                forwardingScore: 9999,
+                isForwarded: true
+            },
+            mentions: [`${senderNumber}@s.whatsapp.net`]
+        }, {
+            quoted: fakeText
+        }
+    );
 }
 
 async function handleUserEvent(m) {

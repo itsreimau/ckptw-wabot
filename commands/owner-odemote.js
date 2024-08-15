@@ -28,7 +28,7 @@ module.exports = {
 
         if (!account) return ctx.reply({
             text: `${quote(global.msg.argument)}\n` +
-                `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`,
+                 quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`),
             mentions: [senderJid]
         });
 

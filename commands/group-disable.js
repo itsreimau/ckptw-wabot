@@ -27,7 +27,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} welcome`)}`
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} welcome`)}`)
         );
 
         if (ctx._args[0] === "list") {

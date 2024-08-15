@@ -23,7 +23,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(`${global.msg.argument} Argumen yang tersedia adalah open, close, lock, dan unlock.`)}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} open`)}`
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} open`)}`)
         );
 
         try {

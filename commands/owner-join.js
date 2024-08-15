@@ -20,7 +20,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ${global.bot.groupChat}`)}`
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ${global.bot.groupChat}`)}`)
         );
 
         const urlRegex = /chat\.whatsapp\.com\/([0-9A-Za-z]{20,24})/i;

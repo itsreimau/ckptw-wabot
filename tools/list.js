@@ -53,15 +53,14 @@ exports.getList = async (type, ctx) => {
             }
         }
 
-        menuText += global.msg.footer;
         return menuText;
     };
 
     try {
         switch (type) {
             case "alkitab":
-                const response = await axios.get(createAPIUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
-                text = response.data.data.map(b =>
+                const alKitabResponse = await axios.get(createAPIUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
+                text = alKitabResponse.data.data.map(b =>
                     `${quote(`Buku: ${b.name} (${b.abbr})`)}\n` +
                     `${quote(`Jumlah Bab: ${b.chapter}`)}\n` +
                     "-----\n"
@@ -71,8 +70,8 @@ exports.getList = async (type, ctx) => {
                 break;
 
             case "alquran":
-                const response = await axios.get(createAPIUrl("https://equran.id", "/api/v2/surat", {}));
-                text = response.data.data.map(s =>
+                const alquranResponse = await axios.get(createAPIUrl("https://equran.id", "/api/v2/surat", {}));
+                text = alquranResponse.data.data.map(s =>
                     `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
                     `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n` +
                     "-----\n"
@@ -82,10 +81,10 @@ exports.getList = async (type, ctx) => {
                 break;
 
             case "disable_enable":
-                const list = ["antilink", "welcome"];
+                const deList = ["antilink", "welcome"];
                 text = "";
 
-                for (const item of list) {
+                for (const item of deList) {
                     text += `${quote(item)}\n`;
                 }
 

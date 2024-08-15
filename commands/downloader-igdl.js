@@ -1,12 +1,13 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     bold,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
-const {
-    ndown
-} = require("nayan-media-downloader");
 
 module.exports = {
     name: "igdl",
@@ -22,33 +23,37 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const url = ctx._args[0] || null;
 
-        if (!input) return ctx.reply(
+        if (!url) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`
+             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
+        if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const result = await ndown(input);
-
-            if (!result.status) return ctx.reply(global.msg.notFound);
+            const apiUrl = createAPIUrl("ryzendesu", "/api/downloader/fbdl", {
+                url
+            });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 video: {
-                    url: result.data[0].url
+                    url: data.video
                 },
                 mimetype: mime.contentType("mp4"),
-                caption: `${quote(`URL: ${input}`)}\n` +
+                caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     global.msg.footer,
                 gifPlayback: false
             });
         } catch (error) {
             console.error("Error:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }
