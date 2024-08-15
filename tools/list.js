@@ -53,6 +53,7 @@ exports.getList = async (type, ctx) => {
             }
         }
 
+        menuText += global.msg.footer;
         return menuText;
     };
 
