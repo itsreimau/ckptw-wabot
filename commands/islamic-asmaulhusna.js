@@ -46,9 +46,7 @@ module.exports = {
                     "-----\n"
                 );
                 return ctx.reply(
-                    ` ${bold("Asmaul Husna")}\n` +
-                    "\n" +
-                    `Daftar semua Asmaul Husna:\n` +
+                    `${quote("Daftar semua Asmaul Husna:")}\n` +
                     `${resultText}\n` +
                     "\n" +
                     global.msg.footer

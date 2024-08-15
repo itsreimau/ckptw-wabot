@@ -46,8 +46,6 @@ module.exports = {
                 "-----\n"
             );
             return ctx.reply(
-                ` ${bold("Google Search")}\n` +
-                "\n" +
                 `${resultText}\n` +
                 "\n" +
                 global.msg.footer

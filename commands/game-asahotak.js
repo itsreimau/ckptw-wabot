@@ -35,7 +35,7 @@ module.exports = {
                 `${quote(`Soal: ${data.soal}`)}` +
                 (global.system.useCoin ?
                     "\n" +
-                    `+${coin} Koin\n` :
+                    `${quote(`+${coin} Koin`)}\n` :
                     "\n") +
                 `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
                 `${quote('Ketik "hint" untuk bantuan.')}\n` +

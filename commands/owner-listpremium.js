@@ -38,9 +38,7 @@ module.exports = {
             });
 
             return ctx.reply({
-                text: ` ${bold("List Premium")}\n` +
-                    "\n" +
-                    `${resultText}` +
+                text: `${resultText}` +
                     "\n" +
                     global.msg.footer,
                 mentions: userMentions

@@ -38,8 +38,7 @@ module.exports = {
                 },
                 mimetype: mime.contentType("png"),
                 caption: (global.system.useCoin ?
-                        "\n" +
-                        quote(`+${coin} Koin`) :
+                        `${quote(`+${coin} Koin`)}\n` :
                         "\n") +
                     `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
                     `${quote('Ketik "hint" untuk bantuan.')}\n` +

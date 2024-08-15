@@ -8,6 +8,9 @@ const APIs = {
     ngodingaja: {
         baseURL: "https://api.ngodingaja.my.id"
     },
+    ryzendesu: {
+        baseURL: "https://apis.ryzendesu.vip"
+    },
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com"
     },
