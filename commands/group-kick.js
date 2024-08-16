@@ -29,12 +29,14 @@ module.exports = {
 
         if (!account) return ctx.reply({
             text: `${quote(global.msg.argument)}\n` +
-                 quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`),
+                quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`),
             mentions: [senderJid]
         });
 
         try {
-            if (await isAdmin(ctx, account) === 1) return ctx.reply(quote(`${bold("[ ! ]")} Anggota ini adalah admin grup.`));
+            if (await isAdmin(ctx, {
+                    id: account
+                }) === 1) return ctx.reply(quote(`${bold("[ ! ]")} Anggota ini adalah admin grup.`));
 
             await ctx.group().kick([account]);
 

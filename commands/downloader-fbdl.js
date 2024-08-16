@@ -1,13 +1,12 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     bold,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
+const {
+    ndown
+} = require("nayan-media-downloader");
 
 module.exports = {
     name: "fbdl",
@@ -27,23 +26,20 @@ module.exports = {
 
         if (!url) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("ryzendesu", "/api/downloader/fbdl", {
-                url
-            });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = await ndown(url);
+
+            if (!result.status) return ctx.reply(global.msg.notFound);
 
             return await ctx.reply({
                 video: {
-                    url: data.hd || data.sd
+                    url: result.data[0].url,
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
@@ -53,7 +49,6 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
         }
     }

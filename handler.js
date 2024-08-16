@@ -6,7 +6,9 @@ exports.handler = async (ctx, options) => {
 
     const checkOptions = {
         admin: {
-            function: async () => ((await ctx.isGroup()) ? (await gnrl.isAdmin(ctx, senderJid)) === 0 : null),
+            function: async () => ((await ctx.isGroup()) ? (await gnrl.isAdmin(ctx, {
+                id: senderJid
+            })) === 0 : null),
             msg: global.msg.admin
         },
         banned: {
@@ -29,7 +31,9 @@ exports.handler = async (ctx, options) => {
 
                     if (!ctx._args.length) return false;
 
-                    const isOwner = await gnrl.isOwner(ctx);
+                    const isOwner = await gnrl.isOwner(ctx, {
+                        id: senderNumber
+                    });
                     if (isOwner === 1) return false;
 
                     const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
@@ -49,7 +53,9 @@ exports.handler = async (ctx, options) => {
             msg: global.msg.group
         },
         owner: {
-            function: async () => (await gnrl.isOwner(ctx, senderNumber)) === 0,
+            function: async () => (await gnrl.isOwner(ctx, {
+                id: senderNumber
+            })) === 0,
             msg: global.msg.owner
         },
         premium: {

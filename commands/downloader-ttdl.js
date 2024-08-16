@@ -23,22 +23,22 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const url = ctx._args[0] || null;
 
-        if (!input) return ctx.reply(
+        if (!url) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!urlRegex.test(input)) return ctx.reply(global.msg.urlInvalid);
+        if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
             const audioCommands = ["tiktokmp3", "tta", "ttaudio", "ttmp3", "ttmusic", "ttmusik", "vta", "vtaudio", "vtmp3", "vtmusic", "vtmusik"];
             const mediaType = audioCommands.includes(ctx._used.command) ? "audio" : "video_image";
 
             const apiUrl = createAPIUrl("https://api.tiklydown.eu.org", "/api/download", {
-                url: input
+                url
             });
             const {
                 data
@@ -60,7 +60,7 @@ module.exports = {
                             url: data.video.noWatermark
                         },
                         mimetype: mime.lookup("mp4"),
-                        caption: `${quote(`URL: ${input}`)}\n` +
+                        caption: `${quote(`URL: ${url}`)}\n` +
                             "\n" +
                             global.msg.footer,
                         gifPlayback: false

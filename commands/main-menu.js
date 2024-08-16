@@ -9,6 +9,9 @@ const {
     ButtonBuilder,
     quote
 } = require("@mengkodingan/ckptw");
+const {
+    S_WHATSAPP_NET
+} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "menu",
@@ -20,7 +23,7 @@ module.exports = {
             const fakeProduct = {
                 key: {
                     fromMe: false,
-                    participant: ctx._sender.jid, // Change it to "0@s.whatsapp.net" if you want to become an official WhatsApp account.
+                    participant: ctx._sender.jid, // Change it to `0${S_WHATSAPP_NET}` if you want to become an official WhatsApp account.
                     ...({
                         remoteJid: "status@broadcast"
                     })
@@ -41,8 +44,8 @@ module.exports = {
             };
 
             if (global.system.useInteractiveMessage) {
-                const button1 = new ButtonBuilder().setId(`${ctx._used.prefix}owner`).setDisplayText("👨‍💻 Owner").setType("quick_reply").build();
-                const button2 = new ButtonBuilder().setId("button2").setDisplayText("🌐 Group Chat").setType("cta_url").setURL(global.bot.groupChat).setMerchantURL("https://google.co").build();
+                const button1 = new ButtonBuilder().setId(`${ctx._used.prefix}owner`).setDisplayText("Owner").setType("quick_reply").build();
+                const button2 = new ButtonBuilder().setId("button2").setDisplayText("Grup Bot").setType("cta_url").setURL(global.bot.groupChat).setMerchantURL("https://google.co").build();
 
                 return ctx.replyInteractiveMessage({
                     body: text,

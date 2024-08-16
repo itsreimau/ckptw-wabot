@@ -27,7 +27,7 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
@@ -42,14 +42,34 @@ module.exports = {
             }
             const qualityOptions = Object.keys(ytdl.video);
 
-            await ctx.reply(
-                `${quote(`Judul: ${ytdl.title}`)}\n` +
-                `${quote(`URL: ${input}`)}\n` +
-                `${quote(`Pilih kualitas:`)}\n` +
-                `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
-                "\n" +
-                global.msg.footer
-            );
+            if (global.system.useInteractiveMessage) {
+                const section1 = new SectionsBuilder().setDisplayText("Pilih Kualitas").addSection({
+                    title: 'Kualitas',
+                    rows: qualityOptions.map((quality, index) => ({
+                        title: quality,
+                        id: index + 1
+                    }))
+                }).build();
+                await ctx.replyInteractiveMessage({
+                    body: `${quote(`Judul: ${ytdl.title}`)}\n` +
+                        `${quote(`URL: ${input}`)}\n` +
+                        "\n" +
+                        global.msg.footer,
+                    footer: global.msg.watermark,
+                    nativeFlowMessage: {
+                        buttons: [section1]
+                    }
+                });
+            } else {
+                await ctx.reply(
+                    `${quote(`Judul: ${ytdl.title}`)}\n` +
+                    `${quote(`URL: ${input}`)}\n` +
+                    `${quote(`Pilih kualitas:`)}\n` +
+                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
+                    "\n" +
+                    global.msg.footer
+                );
+            }
 
             const col = ctx.MessageCollector({
                 time: 60000, // 1 minute.

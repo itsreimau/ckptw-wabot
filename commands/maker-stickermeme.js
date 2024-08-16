@@ -2,9 +2,6 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    download
-} = require("../tools/general.js");
-const {
     bold,
     monospace,
     quote
@@ -43,13 +40,20 @@ module.exports = {
         );
 
         const msgType = ctx.getMessageType();
-        const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        const quotedMessage = ctx.quoted;
         if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(quote(`${bold("[ ! ]")} Berikan atau balas media berupa gambar!`));
 
         try {
-            const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
-            const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
+            if (quotedMessage) {
+                const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
+                const object = type ? quotedMessage[type] : null;
+                const stream = await ctx.downloadContentFromMessage(object, type.slice(0, -7));
+                let quotedBuffer = Buffer.from([]);
+                for await (const chunk of stream) {
+                    quotedBuffer = Buffer.concat([quotedBuffer, chunk]);
+                }
+            }
+            const buffer = type === "imageMessage" ? quotedBuffer : await ctx.getMediaMessage(ctx._msg, "buffer");
             const [top, bottom] = input.split("|");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
             const result = createAPIUrl("https://api.memegen.link", `/images/custom/${top || ""}/${bottom || ""}.png`, {

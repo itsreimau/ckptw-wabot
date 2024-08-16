@@ -15,6 +15,9 @@ const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
 const {
+    S_WHATSAPP_NET
+} = require("@whiskeysockets/baileys");
+const {
     exec
 } = require("child_process");
 const didyoumean = require("didyoumean");
@@ -66,27 +69,25 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Ignore messages sent by the bot itself.
     if (m.key.fromMe);
 
-    // Auto-typing simulation for commands.
-    if (gnrl.isCmd(m, ctx)) ctx.simulateTyping();
+    // Is commands?
+    if (gnrl.isCmd(ctx, {
+            m
+        })) {
+        // Auto-typing simulation for commands.
+        await ctx.simulateTyping();
 
-    // "Did you mean?" for typo commands.
-    const prefixRegex = new RegExp(ctx._config.prefix, "i");
-    const content = m.content && m.content.trim();
-    if (prefixRegex.test(content)) {
+        // "Did you mean?" for typo commands.
+        const content = m.content && m.content.trim();
         const prefix = content.charAt(0);
-
         const [cmdName] = content.slice(1).trim().toLowerCase().split(/\s+/);
         const cmd = ctx._config.cmd;
         const listCmd = Array.from(cmd.values()).flatMap(command => {
             const aliases = Array.isArray(command.aliases) ? command.aliases : [];
             return [command.name, ...aliases];
         });
-
         const mean = didyoumean(cmdName, listCmd);
-
         if (mean && mean !== cmdName) ctx.reply(quote(`${bold("[ ! ]")} Apakah maksud Anda ${monospace(prefix + mean)}?`));
     }
-
 
     // AFK handling: Mentioned users.
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
@@ -105,7 +106,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
     }
 
-    // AFK handling: ing from AFK.
+    // AFK handling: Leaving from AFK.
     const getAFKMessage = await db.get(`user.${senderNumber}.afk`);
     if (getAFKMessage) {
         const [reason, timeStamp] = await Promise.all([
@@ -119,7 +120,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // Owner-only commands.
-    if (gnrl.isOwner(ctx, senderNumber) === 1) {
+    if (gnrl.isOwner(ctx, {
+            id: senderNumber
+        }) === 1) {
         // Eval command: Execute JavaScript code.
         if (m.content && m.content.startsWith && (m.content.startsWith("> ") || m.content.startsWith(">> "))) {
             const code = m.content.slice(2);
@@ -182,7 +185,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 db.get(`menfess.${senderNumber}.text`)
             ]);
 
-            if (m.message?.extendedTextMessage?.contextInfo?.quotedMessage?.conversation === text) {
+            if (ctx.quoted?.extendedTextMessage?.text === text) {
                 try {
                     await sendMenfess(ctx, m, senderNumber, from);
 
@@ -216,7 +219,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
     const fakeText = {
         key: {
             fromMe: false,
-            participant: `${senderNumber}@s.whatsapp.net`, // Change it to "0@s.whatsapp.net" if you want to become an official WhatsApp account.
+            participant: senderNumber + S_WHATSAPP_NET,
             ...({
                 remoteJid: "status@broadcast"
             })
@@ -237,7 +240,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
                 `${global.msg.readmore}\n` +
                 "Jika ingin membalas, Anda harus mengirimkan perintah lagi.",
             contextInfo: {
-                mentionedJid: [`${senderNumber}@s.whatsapp.net`],
+                mentionedJid: [senderNumber + S_WHATSAPP_NET],
                 externalAdReply: {
                     mediaType: 1,
                     previewType: 0,
@@ -251,7 +254,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
                 forwardingScore: 9999,
                 isForwarded: true
             },
-            mentions: [`${senderNumber}@s.whatsapp.net`]
+            mentions: [senderNumber + S_WHATSAPP_NET]
         }, {
             quoted: fakeText
         }

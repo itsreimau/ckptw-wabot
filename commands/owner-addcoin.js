@@ -3,6 +3,9 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const {
+    S_WHATSAPP_NET
+} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "addcoin",
@@ -24,7 +27,7 @@ module.exports = {
         const senderJid = ctx._sender.jid;
         const senderNumber = senderJid.split("@")[0];
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-        const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : `${userId}@s.whatsapp.net`;
+        const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : userId + S_WHATSAPP_NET;
 
         if (!input || !user || isNaN(coinAmount)) return ctx.reply({
             text: `${quote(global.msg.argument)}\n` +

@@ -2,6 +2,9 @@ const {
     bold,
     quote
 } = require("@mengkodingan/ckptw");
+const {
+    S_WHATSAPP_NET
+} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "listbanned",
@@ -34,7 +37,7 @@ module.exports = {
             });
 
             bannedUsers.forEach((userId) => {
-                userMentions.push(`${userId}@s.whatsapp.net`);
+                userMentions.push(userId + S_WHATSAPP_NET);
             });
 
             return ctx.reply({

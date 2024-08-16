@@ -2,6 +2,9 @@ const {
     bold,
     quote
 } = require("@mengkodingan/ckptw");
+const {
+    S_WHATSAPP_NET
+} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "otagall",
@@ -26,7 +29,7 @@ module.exports = {
                 const serialized = data[i].id.split("@")[0];
                 mentions.push({
                     tag: `@${serialized}`,
-                    mention: `${serialized}@s.whatsapp.net`
+                    mention: serialized + S_WHATSAPP_NET
                 });
             }
             const mentionText = mentions.map((mention) => mention.tag).join(" ");

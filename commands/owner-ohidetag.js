@@ -2,6 +2,9 @@ const {
     bold,
     quote
 } = require("@mengkodingan/ckptw");
+const {
+    S_WHATSAPP_NET
+} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "ohidetag",
@@ -26,7 +29,7 @@ module.exports = {
             for (let i = 0; i < len; i++) {
                 const serialized = data[i].id.split("@")[0];
                 mentions.push({
-                    mention: `${serialized}@s.whatsapp.net`
+                    mention: serialized + S_WHATSAPP_NET
                 });
             }
 

@@ -1,6 +1,6 @@
 {
     "name": "ckptw-wabot",
-    "version": "1.25.0",
+    "version": "1.26.0",
     "description": "WhatsApp Bot with @mengkodingan/ckptw.",
     "main": "index.js",
     "directories": {
@@ -15,7 +15,9 @@
         "type": "git",
         "url": "git+https://github.com/itsreimau/ckptw-wabot.git"
     },
-    "keywords": ["bot"],
+    "keywords": [
+        "bot"
+    ],
     "author": "Muhamad Ikbal Maulana | ItsReimau",
     "license": "MIT",
     "bugs": {
@@ -38,10 +40,13 @@
         "lowline.ai": "^1.0.18",
         "mime-types": "^2.1.35",
         "moment-timezone": "^0.5.45",
+        "nayan-media-downloader": "^2.4.7",
+        "qs": "^6.13.0",
         "simpl.db": "^2.13.0",
         "telegraph-uploader": "^2.0.0",
         "util": "^0.12.5",
         "wa-sticker-formatter": "^4.4.4",
         "yt-search": "^2.11.1"
-    }
+    },
+    "devDependencies": {}
 }

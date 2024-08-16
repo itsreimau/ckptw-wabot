@@ -1,7 +1,4 @@
 const {
-    download
-} = require("../tools/general.js");
-const {
     bold,
     quote
 } = require("@mengkodingan/ckptw");
@@ -27,21 +24,28 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const msgType = ctx.getMessageType();
-        const quotedMessage = ctx._msg.message?.extendedTextMessage?.contextInfo?.quotedMessage;
+        const quotedMessage = ctx.quoted;
 
         if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage) return ctx.reply(quote(`${bold("[ ! ]")} Berikan atau balas media berupa gambar, GIF, atau video!`));
 
         try {
-            const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
-            const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" || type === "videoMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
+            if (quotedMessage) {
+                const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
+                const object = type ? quotedMessage[type] : null;
+                const stream = await ctx.downloadContentFromMessage(object, type.slice(0, -7));
+                let quotedBuffer = Buffer.from([]);
+                for await (const chunk of stream) {
+                    quotedBuffer = Buffer.concat([quotedBuffer, chunk]);
+                }
+            }
+            const buffer = type === "imageMessage" || type === "videoMessage" ? quotedBuffer : await ctx.getMediaMessage(ctx._msg, "buffer");
             const sticker = new Sticker(buffer, {
                 pack: global.sticker.packname,
                 author: global.sticker.author,
                 type: StickerTypes.FULL,
                 categories: ["🤩", "🎉"],
                 id: ctx.id,
-                quality: 50,
+                quality: 50
             });
 
             return ctx.reply(await sticker.toMessage());

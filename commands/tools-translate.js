@@ -27,7 +27,7 @@ module.exports = {
 
         if (!ctx._args.length) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} id halo!`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} id halo!`)}`)
         );
 
         try {

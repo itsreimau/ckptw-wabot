@@ -3,6 +3,9 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const {
+    S_WHATSAPP_NET
+} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "menfess",
@@ -21,7 +24,7 @@ module.exports = {
 
         if (!ctx._args.length) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ${ctx._client.user.id.split(":")[0]} halo!`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ${ctx._client.user.id.split(":")[0]} halo!`)}`)
         );
 
         try {
@@ -39,7 +42,7 @@ module.exports = {
             const fakeText = {
                 key: {
                     fromMe: false,
-                    participant: `${numberFormatted}@s.whatsapp.net`, // Change it to "0@s.whatsapp.net" if you want to become an official WhatsApp account.
+                    participant: numberFormatted + S_WHATSAPP_NET, // Change it to "0S_WHATSAPP_NET" if you want to become an official WhatsApp account.
                     ...({
                         remoteJid: "status@broadcast"
                     })
@@ -53,10 +56,10 @@ module.exports = {
                     }
                 }
             }
-            await ctx.sendMessage(`${numberFormatted}@s.whatsapp.net`, {
+            await ctx.sendMessage(numberFormatted + S_WHATSAPP_NET, {
                 text: menfessText,
                 contextInfo: {
-                    mentionedJid: [`${numberFormatted}@s.whatsapp.net`],
+                    mentionedJid: [numberFormatted + S_WHATSAPP_NET],
                     externalAdReply: {
                         mediaType: 1,
                         previewType: 0,
@@ -70,7 +73,7 @@ module.exports = {
                     forwardingScore: 9999,
                     isForwarded: true
                 },
-                mentions: [`${numberFormatted}@s.whatsapp.net`]
+                mentions: [numberFormatted + S_WHATSAPP_NET]
             }, {
                 quoted: fakeText
             });

@@ -2,6 +2,9 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
+    mediafiredl
+} = require("@bochilteam/scraper");
+const {
     bold,
     monospace,
     quote
@@ -34,19 +37,37 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("ryzendesu", "/api/downloader/mediafire", {
-                url
-            });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            let result;
+
+            const apiCalls = [
+                () => axios.get(createAPIUrl("ngodingaja", "/api/mediafire", {
+                    url: url
+                })).then(response => response.hasil.url),
+                () => axios.get(createAPIUrl("ssa", "/api/mediafire", {
+                    url: url
+                })).then(response => response.data.data.response.link),
+                () => mediafiredl(url).then(response => response.data.url || response.data.url2)
+            ];
+
+            for (const call of apiCalls) {
+                try {
+                    result = await call();
+                    if (result) break;
+                } catch (error) {
+                    console.error("Error in API call:", error);
+                }
+            }
+
+            const url = new URL(url);
+            const filePath = url.pathname;
+            const filename = filePath.substring(filePath.lastIndexOf('/') + 1);
 
             return ctx.reply({
                 document: {
-                    url: data.url || data.url2
+                    url: result
                 },
-                filename: data.filename,
-                mimetype: mime.lookup(ext) || "application/octet-stream"
+                filename,
+                mimetype: mime.lookup(result) || "application/octet-stream"
             });
         } catch (error) {
             console.error("Error:", error);

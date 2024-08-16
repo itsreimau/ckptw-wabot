@@ -1,12 +1,11 @@
 const {
-    download
-} = require("../tools/general.js");
-const {
     bold,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const {} = require("@mengkodingan/ckptw/lib/Constant");
+const {
+    MessageType
+} = require("@mengkodingan/ckptw/lib/Constant");
 const {
     Sticker,
     StickerTypes
@@ -38,10 +37,16 @@ module.exports = {
         if (msgType !== MessageType.stickerMessage && !quotedMessage) return ctx.reply(quote(`${bold("[ ! ]")} Berikan atau balas media berupa sticker!`));
 
         try {
-            const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
-            const object = type ? quotedMessage[type] : null;
-            const buffer = type === "stickerMessage" ? await download(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
-
+            if (quotedMessage) {
+                const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
+                const object = type ? quotedMessage[type] : null;
+                const stream = await ctx.downloadContentFromMessage(object, type.slice(0, -7));
+                let quotedBuffer = Buffer.from([]);
+                for await (const chunk of stream) {
+                    quotedBuffer = Buffer.concat([quotedBuffer, chunk]);
+                }
+            }
+            const buffer = type === "stickerMessage" ? quotedMessage : await ctx.getMediaMessage(ctx._msg, "buffer");
             const [packname, author] = input.split("|");
             const sticker = new Sticker(buffer, {
                 pack: packname || global.sticker.packname,

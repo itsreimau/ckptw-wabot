@@ -3,6 +3,9 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const {
+    S_WHATSAPP_NET
+} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "add",
@@ -28,7 +31,7 @@ module.exports = {
 
         try {
             const accountFormatted = input.replace(/[^\d]/g, "");
-            const account = `${accountFormatted}@s.whatsapp.net`;
+            const account = accountFormatted + S_WHATSAPP_NET;
 
             const [result] = await ctx._client.onWhatsApp(accountFormatted);
             if (!result.exists) return ctx.reply(quote(`${bold("[ ! ]")} Akun tidak ada di WhatsApp.`));
