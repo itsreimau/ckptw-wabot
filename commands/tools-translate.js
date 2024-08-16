@@ -38,7 +38,7 @@ module.exports = {
             return ctx.reply(translation);
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Error: ${error.message}`));
+            return ctx.reply(quote(`⚠ Error: ${error.message}`));
         }
     }
 };

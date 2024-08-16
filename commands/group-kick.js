@@ -36,14 +36,14 @@ module.exports = {
         try {
             if (await isAdmin(ctx, {
                     id: account
-                }) === 1) return ctx.reply(quote(`${bold("[ ! ]")} Anggota ini adalah admin grup.`));
+                }) === 1) return ctx.reply(quote(`⚠ Anggota ini adalah admin grup.`));
 
             await ctx.group().kick([account]);
 
-            return ctx.reply(quote(`${bold("[ ! ]")} Berhasil dikeluarkan!`));
+            return ctx.reply(quote(`⚠ Berhasil dikeluarkan!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -33,7 +33,7 @@ module.exports = {
             const [number, ...text] = ctx._args;
             const numberFormatted = number.replace(/[^\d]/g, "");
 
-            if (numberFormatted === senderNumber) return ctx.reply(quote(`${bold("[ ! ]")} Tidak dapat digunakan pada diri Anda sendiri.`));
+            if (numberFormatted === senderNumber) return ctx.reply(quote(`⚠ Tidak dapat digunakan pada diri Anda sendiri.`));
 
             const menfessText =
                 `${text.join(" ")}\n` +
@@ -82,10 +82,10 @@ module.exports = {
                 text: menfessText
             });
 
-            return ctx.reply(quote(`${bold("[ ! ]")} Pesan berhasil terkirim!`));
+            return ctx.reply(quote(`⚠ Pesan berhasil terkirim!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

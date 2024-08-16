@@ -16,10 +16,10 @@ module.exports = {
                 timeStamp: Date.now()
             });
 
-            return ctx.reply(quote(`${bold("[ ! ]")} Anda sekarang akan AFK dengan alasan ${reason}.`));
+            return ctx.reply(quote(`⚠ Anda sekarang akan AFK dengan alasan ${reason}.`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

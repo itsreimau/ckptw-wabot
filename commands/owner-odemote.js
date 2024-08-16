@@ -35,14 +35,14 @@ module.exports = {
         try {
             if ((await isAdmin(ctx, {
                     id: account
-                })) === 0) return ctx.reply(quote(`${bold("[ ! ]")} Anggota ini adalah anggota biasa.`));
+                })) === 0) return ctx.reply(quote(`⚠ Anggota ini adalah anggota biasa.`));
 
             await ctx.group().demote([account]);
 
-            return ctx.reply(quote(`${bold("[ ! ]")} Berhasil diturunkan dari admin menjadi anggota biasa!`));
+            return ctx.reply(quote(`⚠ Berhasil diturunkan dari admin menjadi anggota biasa!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

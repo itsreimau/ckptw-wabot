@@ -1,4 +1,5 @@
 const {
+    downloadContentFromMessage,
     S_WHATSAPP_NET
 } = require("@whiskeysockets/baileys");
 
@@ -29,6 +30,17 @@ exports.getRandomElement = (arr) => {
     if (arr.length === 0) return undefined;
     const randomIndex = Math.floor(Math.random() * arr.length);
     return arr[randomIndex];
+};
+
+exports.getMediaQuotedMessage = async (object, type) => {
+    const stream = await downloadContentFromMessage(object, type);
+    let buffer = Buffer.from([]);
+
+    for await (const chunk of stream) {
+        buffer = Buffer.concat([buffer, chunk]);
+    }
+
+    return buffer;
 };
 
 exports.isCmd = (ctx, obj) => {

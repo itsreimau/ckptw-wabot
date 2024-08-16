@@ -35,17 +35,17 @@ module.exports = {
 
         try {
             const [result] = await ctx._client.onWhatsApp(input.replace(/[^\d]/g, ""));
-            if (!result.exists) return ctx.reply(quote(`${bold("[ ! ]")} Akun tidak ada di WhatsApp.`));
+            if (!result.exists) return ctx.reply(quote(`⚠ Akun tidak ada di WhatsApp.`));
 
             await global.db.set(`user.${user.split("@")[0]}.isBanned`, true);
 
             ctx.sendMessage(user, {
-                text: quote(`${bold("[ ! ]")} Anda telah dibanned oleh Owner!`)
+                text: quote(`⚠ Anda telah dibanned oleh Owner!`)
             });
-            return ctx.reply(quote(`${bold("[ ! ]")} Berhasil dibanned!`));
+            return ctx.reply(quote(`⚠ Berhasil dibanned!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

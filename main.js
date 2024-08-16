@@ -69,24 +69,25 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Ignore messages sent by the bot itself.
     if (m.key.fromMe);
 
-    // Is commands?
-    if (gnrl.isCmd(ctx, {
-            m
-        })) {
-        // Auto-typing simulation for commands.
-        await ctx.simulateTyping();
+    // Auto-typing simulation for commands.
+    if (gnrl.isCmd(m, ctx)) ctx.simulateTyping();
 
-        // "Did you mean?" for typo commands.
-        const content = m.content && m.content.trim();
+    // "Did you mean?" for typo commands.
+    const prefixRegex = new RegExp(ctx._config.prefix, "i");
+    const content = m.content && m.content.trim();
+    if (prefixRegex.test(content)) {
         const prefix = content.charAt(0);
+
         const [cmdName] = content.slice(1).trim().toLowerCase().split(/\s+/);
         const cmd = ctx._config.cmd;
         const listCmd = Array.from(cmd.values()).flatMap(command => {
             const aliases = Array.isArray(command.aliases) ? command.aliases : [];
             return [command.name, ...aliases];
         });
+
         const mean = didyoumean(cmdName, listCmd);
-        if (mean && mean !== cmdName) ctx.reply(quote(`${bold("[ ! ]")} Apakah maksud Anda ${monospace(prefix + mean)}?`));
+
+        if (mean && mean !== cmdName) ctx.reply(quote(`⚠ Apakah maksud Anda ${monospace(prefix + mean)}?`));
     }
 
     // AFK handling: Mentioned users.
@@ -101,7 +102,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 ]);
                 const timeAgo = gnrl.convertMsToDuration(Date.now() - timeStamp);
 
-                ctx.reply(quote(`${bold("[ ! ]")} Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
+                ctx.reply(quote(`⚠ Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
             }
         }
     }
@@ -116,7 +117,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const timeAgo = gnrl.convertMsToDuration(Date.now() - timeStamp);
         await db.delete(`user.${senderNumber}.afk`);
 
-        ctx.reply(quote(`${bold("[ ! ]")} Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
+        ctx.reply(quote(`⚠ Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
     }
 
     // Owner-only commands.
@@ -134,7 +135,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 await ctx.reply(inspect(result));
             } catch (error) {
                 console.error("Error:", error);
-                ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+                ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
             }
         }
 
@@ -158,7 +159,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 await ctx.reply(output);
             } catch (error) {
                 console.error("Error:", error);
-                ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+                ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
             }
         }
     }
@@ -171,7 +172,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (getAntilink && m.content && urlRegex.test(m.content)) {
             if ((await gnrl.isAdmin(ctx)) === 1);
 
-            await ctx.reply(quote(`${bold("[ ! ]")} ${bold("[ ! ]")} Jangan kirim tautan!`));
+            await ctx.reply(quote(`⚠ ⚠ Jangan kirim tautan!`));
             await ctx.deleteMessage(m.key);
         }
     }
@@ -190,10 +191,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 try {
                     await sendMenfess(ctx, m, senderNumber, from);
 
-                    ctx.reply(quote(`${bold("[ ! ]")} Pesan berhasil terkirim!`));
+                    ctx.reply(quote(`⚠ Pesan berhasil terkirim!`));
                 } catch (error) {
                     console.error("Error:", error);
-                    ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+                    ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
                 }
             }
         }
@@ -281,7 +282,7 @@ async function handleUserEvent(m) {
                     profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
                 }
 
-                const message = m.eventsType === "UserJoin" ? quote(`${bold("[ ! ]")} Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`) : quote(`${bold("[ ! ]")} @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
+                const message = m.eventsType === "UserJoin" ? quote(`⚠ Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`) : quote(`⚠ @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
 
                 await bot.core.sendMessage(id, {
                     text: message,
@@ -304,7 +305,7 @@ async function handleUserEvent(m) {
     } catch (error) {
         console.error("Error:", error);
         bot.core.sendMessage(id, {
-            text: quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`)
+            text: quote(`⚠ Terjadi kesalahan: ${error.message}`)
         });
     }
 }

@@ -41,9 +41,9 @@ module.exports = {
             const suraNumber = parseInt(ctx._args[0]);
             const ayaNumber = parseInt(ctx._args[1]);
 
-            if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`${bold("[ ! ]")} Surah ${suraNumber} tidak ada.`));
+            if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`⚠ Surah ${suraNumber} tidak ada.`));
 
-            if (ayaNumber && (isNaN(ayaNumber) || ayaNumber < 1)) return ctx.reply(quote(`${bold("[ ! ]")} Ayat harus lebih dari 0.`));
+            if (ayaNumber && (isNaN(ayaNumber) || ayaNumber < 1)) return ctx.reply(quote(`⚠ Ayat harus lebih dari 0.`));
 
             const apiUrl = createAPIUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
             const response = await axios.get(apiUrl);
@@ -53,7 +53,7 @@ module.exports = {
 
             if (ayaNumber) {
                 const aya = data.ayat.find((verse) => verse.nomorAyat === ayaNumber);
-                if (!aya) return ctx.reply(quote(`${bold("[ ! ]")} Ayat ${ayaNumber} tidak ada.`));
+                if (!aya) return ctx.reply(quote(`⚠ Ayat ${ayaNumber} tidak ada.`));
 
                 return ctx.reply(
                     `${aya.teksArab} (${aya.teksLatin})\n` +
@@ -79,7 +79,7 @@ module.exports = {
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

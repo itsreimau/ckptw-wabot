@@ -20,7 +20,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        if (session.has(ctx.id)) return await ctx.reply(quote(`${bold("[ ! ]")} Sesi permainan sedang berjalan!`));
+        if (session.has(ctx.id)) return await ctx.reply(quote(`⚠ Sesi permainan sedang berjalan!`));
 
         try {
             const data = await tekateki();
@@ -55,7 +55,7 @@ module.exports = {
                     if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
                     await ctx.sendMessage(
                         ctx.id, {
-                            text: `${quote(`${bold("[ ! ]")} Benar!`)}\n` +
+                            text: `${quote(`⚠ Benar!`)}\n` +
                                 `${data.description}` +
                                 (global.system.useCoin ?
                                     "\n" +
@@ -84,7 +84,7 @@ module.exports = {
                     await session.delete(ctx.id);
 
                     return ctx.reply(
-                        `${quote(`${bold("[ ! ]")} Waktu habis!`)}\n` +
+                        `${quote(`⚠ Waktu habis!`)}\n` +
                         `Jawabannya adalah ${answer}.\n` +
                         description
                     );
@@ -93,7 +93,7 @@ module.exports = {
 
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -33,7 +33,7 @@ module.exports = {
             const restricted = ["require", "eval", "Function", "global"];
             for (const w of restricted) {
                 if (script.includes(w)) {
-                    return ctx.reply(quote(`${bold("[ ! ]")} Penggunaan ${w} tidak diperbolehkan dalam kode.`));
+                    return ctx.reply(quote(`⚠ Penggunaan ${w} tidak diperbolehkan dalam kode.`));
                 }
             }
 
@@ -45,7 +45,7 @@ module.exports = {
 
                 childProcess.stdout.on('data', (chunk) => {
                     if (outputData.length >= 1024 * 1024) {
-                        resolve(quote(`${bold("[ ! ]")} Kode mencapai batas penggunaan memori.`));
+                        resolve(quote(`⚠ Kode mencapai batas penggunaan memori.`));
                         childProcess.kill();
                     }
 
@@ -58,14 +58,14 @@ module.exports = {
 
                 childProcess.on("close", (code) => {
                     if (code !== 0) {
-                        return resolve(quote(`${bold("[ ! ]")} Keluar dari proses dengan kode: ${code}`));
+                        return resolve(quote(`⚠ Keluar dari proses dengan kode: ${code}`));
                     } else {
                         resolve(result);
                     }
                 });
 
                 setTimeout(() => {
-                    resolve(quote(`${bold("[ ! ]")} Kode mencapai batas waktu keluaran.`));
+                    resolve(quote(`⚠ Kode mencapai batas waktu keluaran.`));
                     childProcess.kill();
                 }, 10000);
             });
@@ -73,7 +73,7 @@ module.exports = {
             ctx.reply(output.trim());
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -33,7 +33,7 @@ module.exports = {
             const groups = Object.entries(getGroups).slice(0).map((entry) => entry[1]);
             const anu = groups.map((a) => a.id);
 
-            ctx.reply(quote(`${bold("[ ! ]")} Mengirim siaran ke ${anu.length} obrolan grup, perkiraan waktu penyelesaian adalah ${(anu.length * 0, 5)} detik.`));
+            ctx.reply(quote(`⚠ Mengirim siaran ke ${anu.length} obrolan grup, perkiraan waktu penyelesaian adalah ${(anu.length * 0, 5)} detik.`));
 
             for (let i of anu) {
                 await delay(500);
@@ -57,10 +57,10 @@ module.exports = {
                 });
             }
 
-            return ctx.reply(quote(`${bold("[ ! ]")} Berhasil mengirimkan siaran ke ${anu.length} obrolan grup.`));
+            return ctx.reply(quote(`⚠ Berhasil mengirimkan siaran ke ${anu.length} obrolan grup.`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -28,7 +28,7 @@ module.exports = {
             ctx.reply(Buffer.from(input, "utf-8").toString("base64"));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

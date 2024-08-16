@@ -32,14 +32,14 @@ module.exports = {
             const account = accountFormatted + S_WHATSAPP_NET;
 
             const [result] = await ctx._client.onWhatsApp(accountFormatted);
-            if (!result.exists) return ctx.reply(quote(`${bold("[ ! ]")} Akun tidak ada di WhatsApp.`));
+            if (!result.exists) return ctx.reply(quote(`⚠ Akun tidak ada di WhatsApp.`));
 
             await ctx.group().add([account]);
 
-            return ctx.reply(quote(`${bold("[ ! ]")} Berhasil ditambahkan!`));
+            return ctx.reply(quote(`⚠ Berhasil ditambahkan!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -33,7 +33,7 @@ module.exports = {
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} get in the fucking robot, shinji!`)}`)
         );
 
-        if (input.length > 10000) return ctx.reply(quote(`${bold("[ ! ]")} Maksimal 50 kata!`));
+        if (input.length > 10000) return ctx.reply(quote(`⚠ Maksimal 50 kata!`));
 
         try {
             let profileUrl;
@@ -61,7 +61,7 @@ module.exports = {
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

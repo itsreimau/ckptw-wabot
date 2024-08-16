@@ -29,10 +29,10 @@ module.exports = {
         try {
             await ctx.group().updateSubject(input);
 
-            return ctx.reply(quote(`${bold("[ ! ]")} Berhasil mengubah nama grup!`));
+            return ctx.reply(quote(`⚠ Berhasil mengubah nama grup!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -113,18 +113,18 @@ exports.getList = async (type, ctx) => {
                 };
 
                 if (!cmds || cmds.size === 0) {
-                    text = quote(`${bold("[ ! ]")} Terjadi kesalahan: Tidak ada perintah yang ditemukan.`);
+                    text = quote(`⚠ Terjadi kesalahan: Tidak ada perintah yang ditemukan.`);
                 } else {
                     text = generateMenuText(cmds, tags);
                 }
                 break;
 
             default:
-                text = quote(`${bold("[ ! ]")} Terjadi kesalahan: Jenis daftar tidak dikenal.`);
+                text = quote(`⚠ Terjadi kesalahan: Jenis daftar tidak dikenal.`);
                 break;
         }
     } catch (error) {
-        text = quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+        text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
     }
 
     return text;

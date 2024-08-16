@@ -23,7 +23,7 @@ module.exports = {
             return ctx.reply(`https://chat.whatsapp.com/${link}`);
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

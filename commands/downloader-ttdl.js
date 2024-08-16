@@ -68,7 +68,7 @@ module.exports = {
                 }
 
                 if (data.images && data.images.length > 0) {
-                    await ctx.reply(quote(`${bold("[ ! ]")} Gambar terdeteksi! Bot akan mengirimkan gambar secara berurutan.`));
+                    await ctx.reply(quote(`⚠ Gambar terdeteksi! Bot akan mengirimkan gambar secara berurutan.`));
                     for (const image of data.images) {
                         await ctx.reply({
                             image: {
@@ -83,7 +83,7 @@ module.exports = {
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
