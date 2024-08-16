@@ -50,14 +50,14 @@ exports.isAdmin = async (ctx, obj) => {
 };
 
 exports.isBotAdmin = async (ctx) => {
-    const id = ctx._client.user.split(":")[0] + S_WHATSAPP_NET;
+    const id = ctx._client.user.id.split(":")[0] + S_WHATSAPP_NET;
     const isBotAdmin = await checkAdmin(ctx, id);
     return isBotAdmin ? 1 : 0;
 };
 
 exports.isOwner = (ctx, obj) => {
     const id = obj.id || ctx._sender.jid.replace(/@.*|:.*/g, '');
-    const isOwner = global.owner.number === id || global.owner.co.includes(id);
+    const isOwner = global.owner.number === id || global.owner.co.includes(id) || ctx._client.user.id.split(":")[0] === id;
     return isOwner ? 1 : 0;
 };
 
