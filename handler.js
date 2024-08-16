@@ -54,7 +54,8 @@ exports.handler = async (ctx, options) => {
         },
         owner: {
             function: async () => (await gnrl.isOwner(ctx, {
-                id: senderNumber
+                id: senderNumber,
+                selfOwner: true
             })) === 0,
             msg: global.msg.owner
         },
