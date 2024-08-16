@@ -122,7 +122,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Owner-only commands.
     if (gnrl.isOwner(ctx, {
             id: senderNumber,
-            selfOwner: true // Warning! (Spam)
+            selfOwner: false // Warning! (Spam)
         }) === 1) {
         // Eval command: Execute JavaScript code.
         if (m.content && m.content.startsWith && (m.content.startsWith("> ") || m.content.startsWith(">> "))) {
