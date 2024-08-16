@@ -4,8 +4,7 @@ const {
 
 async function checkAdmin(ctx, id) {
     const members = await ctx.group().members();
-    const find = members.find((m) => m.id == id);
-    if (find?.admin) return true;
+    return members.filter((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id == id).length ? true : false;
 }
 
 exports.convertMsToDuration = (ms) => {
