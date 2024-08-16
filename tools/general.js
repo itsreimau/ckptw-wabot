@@ -43,9 +43,9 @@ exports.getMediaQuotedMessage = async (object, type) => {
     return buffer;
 };
 
-exports.isCmd = (ctx, obj) => {
+exports.isCmd = (m, ctx) => {
     const prefixRegex = new RegExp(ctx._config.prefix, "i");
-    const content = obj.m.content && obj.m.content.trim();
+    const content = m.content && m.content.trim();
     if (!prefixRegex.test(content)) return false;
     const [cmdName] = content.slice(1).trim().toLowerCase().split(/\s+/);
     for (const cmd of ctx._config.cmd.values()) {
