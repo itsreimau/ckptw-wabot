@@ -62,7 +62,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
     const senderJid = ctx._sender.jid;
-    const senderNumber = senderJid.split("@")[0];
+    const senderNumber = ctx._sender.jid.replace(/@.*|:.*/g, '');
     const groupJid = isGroup ? m.key.remoteJid : null;
     const groupNumber = isGroup ? groupJid.split("@")[0] : null;
 

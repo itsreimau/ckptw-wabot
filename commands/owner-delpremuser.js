@@ -23,7 +23,7 @@ module.exports = {
         const input = ctx._args.join(" ") || null;
 
         const senderJid = ctx._sender.jid;
-        const senderNumber = senderJid.split("@")[0];
+        const senderNumber = ctx._sender.jid.replace(/@.*|:.*/g, '');
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : userId + S_WHATSAPP_NET;
 

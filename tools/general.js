@@ -56,8 +56,8 @@ exports.isBotAdmin = async (ctx) => {
 };
 
 exports.isOwner = (ctx, obj) => {
-    const id = obj.id || ctx._sender.jid.split("@")[0] || ctx._sender.jid.split(":")[0];
-    const isOwner = == global.owner.number === id || global.owner.co.includes(id);
+    const id = obj.id || ctx._sender.jid.replace(/@.*|:.*/g, '');
+    const isOwner = global.owner.number === id || global.owner.co.includes(id);
     return isOwner ? 1 : 0;
 };
 

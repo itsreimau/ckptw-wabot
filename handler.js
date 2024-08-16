@@ -2,7 +2,7 @@ const gnrl = require("./tools/general.js");
 
 exports.handler = async (ctx, options) => {
     const senderJid = ctx._sender.jid;
-    const senderNumber = senderJid.split("@")[0];
+    const senderNumber = ctx._sender.jid.replace(/@.*|:.*/g, '');
 
     const checkOptions = {
         admin: {
