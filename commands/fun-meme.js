@@ -2,7 +2,6 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    bold,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");

@@ -1,5 +1,4 @@
 const {
-    bold,
     quote
 } = require("@mengkodingan/ckptw");
 const {

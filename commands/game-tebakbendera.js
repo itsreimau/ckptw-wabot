@@ -2,7 +2,6 @@ const {
     tebakbendera
 } = require("@bochilteam/scraper");
 const {
-    bold,
     quote
 } = require("@mengkodingan/ckptw");
 const mime = require("mime-types");
@@ -87,7 +86,7 @@ module.exports = {
 
                     return ctx.reply(
                         `${quote(`⚠ Waktu habis!`)}\n` +
-                        `Jawabannya adalah ${answer}.`
+                        quote(`Jawabannya adalah ${answer}.`)
                     );
                 }
             });

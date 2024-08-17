@@ -1,6 +1,5 @@
 const pkg = require("./package.json");
 const {
-    bold,
     italic,
     quote
 } = require("@mengkodingan/ckptw");

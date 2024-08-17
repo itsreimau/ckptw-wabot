@@ -1,5 +1,4 @@
 const {
-    bold,
     monospace,
     SectionsBuilder,
     quote
@@ -24,84 +23,68 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const url = ctx._args[0] || null;
 
-        if (!input) return ctx.reply(
+        if (!url) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!urlRegex.test(input)) ctx.reply(global.msg.urlInvalid);
+        if (!urlRegex.test(url)) ctx.reply(global.msg.urlInvalid);
 
         try {
-            let ytdl;
-            try {
-                ytdl = await youtubedl(input);
-            } catch (error) {
-                ytdl = await youtubedlv2(input);
-            }
+            let ytdl = await youtubedl(url).catch(() => youtubedlv2(url));
             const qualityOptions = Object.keys(ytdl.audio);
 
             if (global.system.useInteractiveMessage) {
-                const section1 = new SectionsBuilder().setDisplayText("Pilih Kualitas").addSection({
-                    title: 'Kualitas',
-                    rows: qualityOptions.map((quality, index) => ({
-                        title: quality,
-                        id: index + 1
-                    }))
-                }).build();
+                const section = new SectionsBuilder()
+                    .setDisplayText("Select Quality 🖼")
+                    .addSection({
+                        title: "Quality:",
+                        rows: qualityOptions.map((q, i) => ({
+                            title: `${q}kbps`,
+                            id: i + 1
+                        }))
+                    }).build();
                 await ctx.replyInteractiveMessage({
-                    body: `${quote(`Judul: ${ytdl.title}`)}\n` +
-                        `${quote(`URL: ${input}`)}\n` +
-                        "\n" +
-                        global.msg.footer,
+                    body: replyText + global.msg.footer,
                     footer: global.msg.watermark,
                     nativeFlowMessage: {
-                        buttons: [section1]
+                        buttons: [section]
                     }
                 });
             } else {
-                await ctx.reply(
-                    `${quote(`Judul: ${ytdl.title}`)}\n` +
-                    `${quote(`URL: ${input}`)}\n` +
+                await ctx.reply(`${quote(`Judul: ${ytdl.title}`)}\n` +
+                    `${quote(`URL: ${url}`)}\n` +
                     `${quote(`Pilih kualitas:`)}\n` +
-                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
+                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}kbps`).join("\n")}\n` +
                     "\n" +
                     global.msg.footer
                 );
             }
 
             const col = ctx.MessageCollector({
-                time: 60000, // 1 minute.
+                time: 60000
             });
-
             col.on("collect", async (m) => {
-                const selectedNumber = parseInt(m.content.trim());
-                const selectedQualityIndex = selectedNumber - 1;
-
-                if (!isNaN(selectedNumber) && selectedQualityIndex >= 0 && selectedQualityIndex < qualityOptions.length) {
-                    const selectedQuality = qualityOptions[selectedQualityIndex];
-                    const downloadFunction = ytdl.audio[selectedQuality].download;
-                    ctx.react(ctx.id, "🔄", m.key);
-                    const url = await downloadFunction();
+                const selected = parseInt(m.content.trim()) - 1;
+                if (selected >= 0 && selected < qualityOptions.length) {
+                    const dl = await ytdl.audio[qualityOptions[selected]].download();
                     await ctx.reply({
                         audio: {
-                            url: url,
+                            url: dl
                         },
                         mimetype: mime.contentType("mp3"),
                         ptt: false
                     });
-                    return col.stop();
+                    col.stop();
                 }
             });
 
-            col.on("end", async (collector, r) => {
-                // No response when collector ends.
-            });
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

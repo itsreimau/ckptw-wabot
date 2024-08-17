@@ -5,7 +5,6 @@ const {
     getMediaQuotedMessage
 } = require("../tools/general.js");
 const {
-    bold,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");

@@ -2,7 +2,6 @@ const {
     caklontong
 } = require("@bochilteam/scraper");
 const {
-    bold,
     quote
 } = require("@mengkodingan/ckptw");
 
@@ -85,7 +84,7 @@ module.exports = {
 
                     return ctx.reply(
                         `${quote(`⚠ Waktu habis!`)}\n` +
-                        `Jawabannya adalah ${answer}.\n` +
+                        `${quote(quote(`Jawabannya adalah ${answer}.`))}\n` +
                         description
                     );
                 }

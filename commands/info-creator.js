@@ -1,5 +1,4 @@
 const {
-    bold,
     VCardBuilder
 } = require("@mengkodingan/ckptw");
 

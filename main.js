@@ -4,7 +4,6 @@ const {
 } = require("./handler.js");
 const gnrl = require("./tools/general.js");
 const {
-    bold,
     Client,
     CommandHandler,
     monospace,

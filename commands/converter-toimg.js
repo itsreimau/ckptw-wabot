@@ -5,7 +5,6 @@ const {
     getMediaQuotedMessage
 } = require("../tools/general.js");
 const {
-    bold,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");

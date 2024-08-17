@@ -5,7 +5,6 @@ const {
     mediafiredl
 } = require("@bochilteam/scraper");
 const {
-    bold,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");

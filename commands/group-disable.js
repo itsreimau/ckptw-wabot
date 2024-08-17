@@ -2,7 +2,6 @@ const {
     getList
 } = require("../tools/list.js");
 const {
-    bold,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");

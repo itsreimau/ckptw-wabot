@@ -2,7 +2,6 @@ const {
     siapakahaku
 } = require("@bochilteam/scraper");
 const {
-    bold,
     quote
 } = require("@mengkodingan/ckptw");
 
@@ -83,7 +82,7 @@ module.exports = {
                     await session.delete(ctx.id);
                     await ctx.reply(
                         quote(`⚠ Waktu habis!\n` +
-                            `Jawabannya adalah ${answer}.`
+                            quote(`Jawabannya adalah ${answer}.`)
                         )
                     );
                 }
