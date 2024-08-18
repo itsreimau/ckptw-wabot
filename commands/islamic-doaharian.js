@@ -32,7 +32,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/religi/islam/asmaulhusna.json`, {});
+            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/religi/islam/doaharian.json`, {});
             const {
                 data
             } = await axios.get(apiUrl);

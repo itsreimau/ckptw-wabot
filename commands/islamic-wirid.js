@@ -27,7 +27,7 @@ module.exports = {
                 data
             } = response.data;
 
-            const resultText = data.result.map((d) =>
+            const resultText = data.map((d) =>
                 data.arabic +
                 data.tnc ? `\n${data.tnc}` : ""
             ).join(

@@ -22,7 +22,7 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const senderJid = ctx._sender.jid;
-        const senderNumber = ctx._sender.jid.replace(/@.*|:.*/g, '');
+        const senderNumber = senderJid.replace(/@.*|:.*/g, "");
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const account = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : null;
 

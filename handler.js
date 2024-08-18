@@ -2,7 +2,7 @@ const gnrl = require("./tools/general.js");
 
 exports.handler = async (ctx, options) => {
     const senderJid = ctx._sender.jid;
-    const senderNumber = senderJid.replace(/@.*|:.*/g, '');
+    const senderNumber = senderJid.replace(/@.*|:.*/g, "");
 
     const checkOptions = {
         admin: {
@@ -24,20 +24,18 @@ exports.handler = async (ctx, options) => {
                 if (global.system.useCoin) {
                     let getCoin = await global.db.get(`user.${senderNumber}.coin`);
 
-                    if (getCoin === undefined) {
+                    if (!getCoin) {
                         await global.db.add(`user.${senderNumber}.coin`, 10);
                         getCoin = 10;
                     }
 
-                    if (!ctx._args.length) return false;
-
                     const isOwner = await gnrl.isOwner(ctx, {
-                        id: senderNumber
+                        id: senderNumber,
+                        selfOwner: true
                     });
-                    if (isOwner === 1) return false;
-
                     const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
-                    if (isPremium) return false;
+
+                    if (!ctx._args.length || isOwner === 1 || isPremium) return false;
 
                     const requiredCoins = options.coin || 0;
 
@@ -61,8 +59,12 @@ exports.handler = async (ctx, options) => {
         },
         premium: {
             function: async () => {
+                const isOwner = await gnrl.isOwner(ctx, {
+                    id: senderNumber,
+                    selfOwner: true
+                });
                 const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
-                if (!isPremium) return true;
+                if (isOwner === 0 || !isPremium) return true;
 
                 return false;
 

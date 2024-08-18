@@ -27,7 +27,7 @@ module.exports = {
                 data
             } = response.data;
 
-            const resultText = data.result.map((d) =>
+            const resultText = data.map((d) =>
                 `${quote(data.title)}` +
                 `${data.arabic}` +
                 `${quote(data.translation)}`

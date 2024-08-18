@@ -112,8 +112,13 @@ exports.getList = async (type, ctx) => {
                     "": "No Category"
                 };
 
+                const senderNumber = senderJid.replace(/@.*|:.*/g, "");
+                const isOwner = await gnrl.isOwner(ctx, {
+                    id: senderNumber,
+                    selfOwner: true
+                });
                 const isPremium = await global.db.get(`user.${ctx._sender.id}.isPremium`);
-                if (isPremium) tags.ghaib = "Ghaib";
+                if (isOwner || isPremium) tags.ghaib = "Ghaib";
 
                 if (!cmds || cmds.size === 0) {
                     text = quote(`⚠ Terjadi kesalahan: Tidak ada perintah yang ditemukan.`);

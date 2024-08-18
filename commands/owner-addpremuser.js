@@ -22,7 +22,7 @@ module.exports = {
         const input = ctx._args.join(" ") || null;
 
         const senderJid = ctx._sender.jid;
-        const senderNumber = ctx._sender.jid.replace(/@.*|:.*/g, '');
+        const senderNumber = senderJid.replace(/@.*|:.*/g, "");
         const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : userId + S_WHATSAPP_NET;
 
@@ -33,7 +33,7 @@ module.exports = {
         });
 
         try {
-            const [result] = await ctx._client.onWhatsApp(input.replace(/[^\d]/g, ""));
+            const [result] = await ctx._client.onWhatsApp(user);
             if (!result.exists) return ctx.reply(quote(`⚠ Akun tidak ada di WhatsApp.`));
 
             await global.db.set(`user.${user.split("@")[0]}.isPremium`, true);

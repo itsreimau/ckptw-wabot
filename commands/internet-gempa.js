@@ -30,7 +30,7 @@ module.exports = {
             } = await axios.get(apiUrl);
             const gempa = data.Infogempa.gempa;
 
-            return ctx.sendMessage({
+            return ctx.reply({
                 image: {
                     url: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`
                 },
