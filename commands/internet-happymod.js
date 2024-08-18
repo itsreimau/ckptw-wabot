@@ -30,7 +30,7 @@ module.exports = {
 
         try {
             const apiUrl = await createAPIUrl("agatz", "/api/happymod", {
-                search: input
+                message: input
             });
             const response = await axios.get(apiUrl);
             const {
