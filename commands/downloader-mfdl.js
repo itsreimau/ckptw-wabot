@@ -2,9 +2,6 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    mediafiredl
-} = require("@bochilteam/scraper");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -32,44 +29,28 @@ module.exports = {
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
+
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            let result;
-
-            const apiCalls = [
-                () => axios.get(createAPIUrl("ngodingaja", "/api/mediafire", {
-                    url: url
-                })).then(response => response.hasil.url),
-                () => axios.get(createAPIUrl("ssa", "/api/mediafire", {
-                    url: url
-                })).then(response => response.data.data.response.link),
-                () => mediafiredl(url).then(response => response.data.url || response.data.url2)
-            ];
-
-            for (const call of apiCalls) {
-                try {
-                    result = await call();
-                    if (result) break;
-                } catch (error) {
-                    console.error("Error in API call:", error);
-                }
-            }
-
-            const url = new URL(url);
-            const filePath = url.pathname;
-            const filename = filePath.substring(filePath.lastIndexOf('/') + 1);
+            const apiUrl = createAPIUrl("agatz", "/api/facebook", {
+                url
+            });
+            const response = await axios.get(apiUrl);
+            const {
+                data
+            } = response.data[0];
 
             return ctx.reply({
                 document: {
-                    url: result
+                    url: data.link
                 },
-                filename,
-                mimetype: mime.lookup(result) || "application/octet-stream"
+                filename: data.nama,
+                mimetype: mime.lookup(data.mime) || "application/octet-stream"
             });
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Error:", error.message);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }

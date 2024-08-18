@@ -3,9 +3,7 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const mime = require("mime-types");
-const {
-    ndown
-} = require("nayan-media-downloader");
+const axios = require("axios");
 
 module.exports = {
     name: "igdl",
@@ -32,20 +30,32 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const result = await ndown(url);
-
-            if (!result.status) return ctx.reply(global.msg.notFound);
-
-            return await ctx.reply({
-                video: {
-                    url: result.data[0].url
-                },
-                mimetype: mime.contentType("mp4"),
-                caption: `${quote(`URL: ${url}`)}\n` +
-                    "\n" +
-                    global.msg.footer,
-                gifPlayback: false
+            const apiUrl = createAPIUrl("agatz", "/api/instagram", {
+                url
             });
+            const response = await axios.get(apiUrl);
+            const {
+                data
+            } = response.data;
+
+            for (const item of data) {
+                const mediaResponse = await axios.get(item.link, {
+                    responseType: "arraybuffer"
+                });
+                const contentType = mediaResponse?.headers?.["content-type"];
+
+                if (/image/.test(contentType)) {
+                    await ctx.reply({
+                        image: mediaResponse.data,
+                        mimetype: mime.contentType(contentType)
+                    });
+                } else if (/video/.test(contentType)) {
+                    await ctx.reply({
+                        video: mediaResponse.data,
+                        mimetype: mime.contentType(contentType)
+                    });
+                }
+            }
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

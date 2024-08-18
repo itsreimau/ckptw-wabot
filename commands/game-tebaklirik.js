@@ -12,8 +12,8 @@ const axios = require("axios");
 const session = new Map();
 
 module.exports = {
-    name: "tebakkimia",
-    aliases: ["guesschemistry", "whatchemistry"],
+    name: "tebaklirik",
+    aliases: ["guesslyric", "whatlyric"],
     category: "game",
     code: async (ctx) => {
         const {
@@ -27,7 +27,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`⚠ Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebakkimia.json`, {});
+            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebaklirik.json`, {});
             const response = await axios.get(apiUrl);
             const data = getRandomElement(response.data);
             const coin = 3;
@@ -37,7 +37,7 @@ module.exports = {
             await session.set(ctx.id, true);
 
             await ctx.reply(
-                `${quote(`Lambang: ${data.lambang}`)}` +
+                `${quote(`Soal: ${data.soal}`)}` +
                 (global.system.useCoin ?
                     "\n" +
                     `${quote(`+${coin} Koin`)}\n` :
@@ -54,7 +54,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toLowerCase();
-                const answer = data.unsur.toLowerCase();
+                const answer = data.jawaban.toLowerCase();
 
                 if (userAnswer === answer) {
                     await session.delete(ctx.id);
@@ -82,7 +82,7 @@ module.exports = {
             });
 
             collector.on("end", async (collector, reason) => {
-                const answer = data.unsur;
+                const answer = data.jawaban;
 
                 if (await session.has(ctx.id)) {
                     await session.delete(ctx.id);

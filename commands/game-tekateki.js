@@ -1,14 +1,18 @@
 const {
-    tekateki
-} = require("@bochilteam/scraper");
+    createAPIUrl
+} = require("../tools/api.js");
+const {
+    getRandomElement
+} = require("../tools/general.js");
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 const session = new Map();
 
 module.exports = {
-    name: "caklontong",
+    name: "tekateki",
     category: "game",
     code: async (ctx) => {
         const {
@@ -22,10 +26,12 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`⚠ Sesi permainan sedang berjalan!`));
 
         try {
-            const data = await tekateki();
+            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tekateki.json`, {});
+            const response = await axios.get(apiUrl);
+            const data = getRandomElement(response.data);
             const coin = 3;
             const timeout = 60000;
-            const senderNumber = ctx.sender.jid.split("@")[0];
+            const senderNumber = ctx._sender.jid.replace(/@.*|:.*/g, '');
 
             await session.set(ctx.id, true);
 

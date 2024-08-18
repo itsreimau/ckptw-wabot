@@ -1,11 +1,12 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
-const {
-    ndown
-} = require("nayan-media-downloader");
 
 module.exports = {
     name: "fbdl",
@@ -32,13 +33,17 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const result = await ndown(url);
-
-            if (!result.status) return ctx.reply(global.msg.notFound);
+            const apiUrl = createAPIUrl("agatz", "/api/facebook", {
+                url
+            });
+            const response = await axios.get(apiUrl);
+            const {
+                data
+            } = response.data;
 
             return await ctx.reply({
                 video: {
-                    url: result.data[0].url,
+                    url: data.high || data.low
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +

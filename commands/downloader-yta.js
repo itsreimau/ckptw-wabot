@@ -3,10 +3,7 @@ const {
     SectionsBuilder,
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    youtubedl,
-    youtubedlv2
-} = require("@bochilteam/scraper");
+const ytdl = require("ytdl-core");
 const mime = require("mime-types");
 
 module.exports = {
@@ -34,31 +31,35 @@ module.exports = {
         if (!urlRegex.test(url)) ctx.reply(global.msg.urlInvalid);
 
         try {
-            let ytdl = await youtubedl(url).catch(() => youtubedlv2(url));
-            const qualityOptions = Object.keys(ytdl.audio);
+            const info = await ytdl.getInfo(url);
+            const audioFormats = ytdl.filterFormats(info.formats, 'audioonly');
+            const qualityOptions = audioFormats.map(format => format.audioBitrate + "kbps");
+            const infoText = `${quote(`Judul: ${info.videoDetails.title}`)}\n` +
+                `${quote(`URL: ${url}`)}\n`;
 
             if (global.system.useInteractiveMessage) {
                 const section = new SectionsBuilder()
-                    .setDisplayText("Select Quality 🖼")
+                    .setDisplayText("Choose Quality 🖼")
                     .addSection({
                         title: "Quality:",
                         rows: qualityOptions.map((q, i) => ({
-                            title: `${q}kbps`,
+                            title: `${q}`,
                             id: i + 1
                         }))
                     }).build();
                 await ctx.replyInteractiveMessage({
-                    body: replyText + global.msg.footer,
+                    body: infoText +
+                        global.msg.footer,
                     footer: global.msg.watermark,
                     nativeFlowMessage: {
                         buttons: [section]
                     }
                 });
             } else {
-                await ctx.reply(`${quote(`Judul: ${ytdl.title}`)}\n` +
-                    `${quote(`URL: ${url}`)}\n` +
+                await ctx.reply(
+                    infoText +
                     `${quote(`Pilih kualitas:`)}\n` +
-                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}kbps`).join("\n")}\n` +
+                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
                     "\n" +
                     global.msg.footer
                 );
@@ -70,11 +71,13 @@ module.exports = {
             col.on("collect", async (m) => {
                 const selected = parseInt(m.content.trim()) - 1;
                 if (selected >= 0 && selected < qualityOptions.length) {
-                    const dl = await ytdl.audio[qualityOptions[selected]].download();
+                    const format = audioFormats[selected];
+                    const dlStream = ytdl(url, {
+                        format
+                    });
+
                     await ctx.reply({
-                        audio: {
-                            url: dl
-                        },
+                        audio: dlStream,
                         mimetype: mime.contentType("mp3"),
                         ptt: false
                     });

@@ -1,9 +1,13 @@
 const {
-    tebakgambar
-} = require("@bochilteam/scraper");
+    createAPIUrl
+} = require("../tools/api.js");
+const {
+    getRandomElement
+} = require("../tools/general.js");
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 const session = new Map();
@@ -24,10 +28,12 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`⚠ Sesi permainan sedang berjalan!`));
 
         try {
-            const data = await tebakgambar();
+            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebakgambar.json`, {});
+            const response = await axios.get(apiUrl);
+            const data = getRandomElement(response.data);
             const coin = 3;
             const timeout = 60000;
-            const senderNumber = ctx.sender.jid.split("@")[0];
+            const senderNumber = ctx._sender.jid.replace(/@.*|:.*/g, '');
 
             await session.set(ctx.id, true);
 
@@ -82,13 +88,15 @@ module.exports = {
 
             collector.on("end", async (collector, reason) => {
                 const answer = data.jawaban;
+                const description = data.deskripsi;
 
                 if (await session.has(ctx.id)) {
                     await session.delete(ctx.id);
 
                     return ctx.reply(
                         `${quote(`⚠ Waktu habis!`)}\n` +
-                        quote(`Jawabannya adalah ${answer}.`)
+                        `${quote(`Jawabannya adalah ${answer}.`)}\n` +
+                        quote(description)
                     );
                 }
             });

@@ -1,6 +1,12 @@
 const APIs = {
+    agatz: {
+        baseURL: "https://api.agatz.xyz"
+    },
+    chiwa: {
+        baseURL: "https://api.chiwa.my.id"
+    },
     fasturl: {
-        baseURL: "https://fastrestapis.fasturl.cloud/"
+        baseURL: "https://fastrestapis.fasturl.cloud"
     },
     nyxs: {
         baseURL: "https://api.nyxs.pw"

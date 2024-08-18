@@ -43,8 +43,18 @@ module.exports = {
             };
 
             if (global.system.useInteractiveMessage) {
-                const button1 = new ButtonBuilder().setId(`${ctx._used.prefix}owner`).setDisplayText("Owner").setType("quick_reply").build();
-                const button2 = new ButtonBuilder().setId("button2").setDisplayText("Grup Bot").setType("cta_url").setURL(global.bot.groupChat).setMerchantURL("https://google.co").build();
+                const button1 = new ButtonBuilder()
+                    .setId(`${ctx._used.prefix}owner`)
+                    .setDisplayText("Owner 👨‍💻")
+                    .setType("quick_reply")
+                    .build();
+                const button2 = new ButtonBuilder()
+                    .setId("button2")
+                    .setDisplayText("Website 🌐")
+                    .setType("cta_url")
+                    .setURL("https://itsreimau.is-a.dev/rei-ayanami")
+                    .setMerchantURL("https://www.google.ca") // Don't disturb this!
+                    .build();
 
                 return ctx.replyInteractiveMessage({
                     body: text,

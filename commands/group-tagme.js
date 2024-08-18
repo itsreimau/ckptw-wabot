@@ -15,8 +15,8 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const senderNumber = ctx.sender.jid.split("@")[0];
             const senderJid = ctx._sender.jid;
+            const senderNumber = senderJid.replace(/@.*|:.*/g, '');
 
             return ctx.reply({
                 text: `@${senderNumber}`,

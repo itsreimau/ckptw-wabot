@@ -1,9 +1,13 @@
 const {
-    susunkata
-} = require("@bochilteam/scraper");
+    createAPIUrl
+} = require("../tools/api.js");
+const {
+    getRandomElement
+} = require("../tools/general.js");
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 const session = new Map();
 
@@ -22,15 +26,18 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`⚠ Sesi permainan sedang berjalan!`));
 
         try {
-            const data = await susunkata();
+            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/susunkata.json`, {});
+            const response = await axios.get(apiUrl);
+            const data = getRandomElement(response.data);
             const coin = 3;
             const timeout = 60000;
-            const senderNumber = ctx.sender.jid.split("@")[0];
+            const senderNumber = ctx._sender.jid.replace(/@.*|:.*/g, '');
 
             await session.set(ctx.id, true);
 
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}` +
+                `${quote(`Tipe: ${data.tipe}`)}` +
                 (global.system.useCoin ?
                     "\n" +
                     `${quote(`+${coin} Koin`)}\n` :

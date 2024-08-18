@@ -1,9 +1,13 @@
 const {
-    siapakahaku
-} = require("@bochilteam/scraper");
+    createAPIUrl
+} = require("../tools/api.js");
+const {
+    getRandomElement
+} = require("../tools/general.js");
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 const session = new Map();
 
@@ -23,10 +27,12 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`⚠ Sesi permainan sedang berjalan!`));
 
         try {
-            const data = await siapakahaku();
+            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/siapakahaku.json`, {});
+            const response = await axios.get(apiUrl);
+            const data = getRandomElement(response.data);
             const coin = 3;
             const timeout = 60000;
-            const senderNumber = ctx.sender.jid.split("@")[0];
+            const senderNumber = ctx._sender.jid.replace(/@.*|:.*/g, '');
 
             await session.set(ctx.id, true);
 
@@ -48,7 +54,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toLowerCase();
-                const answer = data.name.toLowerCase();
+                const answer = data.jawaban.toLowerCase();
 
                 if (userAnswer === answer) {
                     await session.delete(ctx.id);
@@ -76,7 +82,7 @@ module.exports = {
             });
 
             collector.on("end", async (collector, reason) => {
-                const answer = data.name;
+                const answer = data.jawaban;
 
                 if (await session.has(ctx.id)) {
                     await session.delete(ctx.id);

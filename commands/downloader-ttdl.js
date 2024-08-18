@@ -67,7 +67,6 @@ module.exports = {
                 }
 
                 if (data.images && data.images.length > 0) {
-                    await ctx.reply(quote(`⚠ Gambar terdeteksi! Bot akan mengirimkan gambar secara berurutan.`));
                     for (const image of data.images) {
                         await ctx.reply({
                             image: {

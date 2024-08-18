@@ -2,11 +2,8 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    youtubedl,
-    youtubedlv2
-} = require("@bochilteam/scraper");
 const yts = require("yt-search");
+const ytdl = require("ytdl-core");
 const mime = require("mime-types");
 
 module.exports = {
@@ -44,16 +41,10 @@ module.exports = {
                 global.msg.footer
             );
 
-            const ytdlRes = await (async () => {
-                try {
-                    return await youtubedl(ytVid.url);
-                } catch {
-                    return await youtubedlv2(ytVid.url);
-                }
-            })();
+            const info = await ytdl.getInfo(ytVid.url);
+            const format = ytdl.filterFormats(info.formats, 'audioonly')[0];
+            const audUrl = format.url;
 
-            const audInfo = Object.values(ytdlRes.audio)[0];
-            const audUrl = await audInfo.download();
             if (!audUrl) return ctx.reply(global.msg.notFound);
 
             return await ctx.reply({

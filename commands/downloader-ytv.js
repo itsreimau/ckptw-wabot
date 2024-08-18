@@ -3,10 +3,7 @@ const {
     SectionsBuilder,
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    youtubedl,
-    youtubedlv2
-} = require("@bochilteam/scraper");
+const ytdl = require("ytdl-core");
 const mime = require("mime-types");
 
 module.exports = {
@@ -23,7 +20,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const url = ctx._args[0] | null;
+        const url = ctx._args[0] || null;
 
         if (!url) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
@@ -31,24 +28,28 @@ module.exports = {
         );
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!urlRegex.test(url)) ctx.reply(global.msg.urlInvalid);
+        if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            let ytdl = await youtubedl(url).catch(() => youtubedlv2(url));
-            const qualityOptions = Object.keys(ytdl.video);
+            const info = await ytdl.getInfo(url);
+            const videoFormats = ytdl.filterFormats(info.formats, 'video');
+            const qualityOptions = videoFormats.map(format => `${format.qualityLabel}`);
+            const infoText = `${quote(`Judul: ${info.videoDetails.title}`)}\n` +
+                `${quote(`URL: ${url}`)}\n`;
 
             if (global.system.useInteractiveMessage) {
                 const section = new SectionsBuilder()
-                    .setDisplayText("Select Quality 🖼")
+                    .setDisplayText("Choose Quality 🖼")
                     .addSection({
                         title: "Quality:",
                         rows: qualityOptions.map((q, i) => ({
-                            title: `${q}p`,
+                            title: `${q}`,
                             id: i + 1
                         }))
                     }).build();
                 await ctx.replyInteractiveMessage({
-                    body: replyText + global.msg.footer,
+                    body: infoText +
+                        global.msg.footer,
                     footer: global.msg.watermark,
                     nativeFlowMessage: {
                         buttons: [section]
@@ -56,10 +57,9 @@ module.exports = {
                 });
             } else {
                 await ctx.reply(
-                    `${quote(`Judul: ${ytdl.title}`)}\n` +
-                    `${quote(`URL: ${url}`)}\n` +
+                    infoText +
                     `${quote(`Pilih kualitas:`)}\n` +
-                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}p`).join("\n")}\n` +
+                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
                     "\n" +
                     global.msg.footer
                 );
@@ -71,13 +71,16 @@ module.exports = {
             col.on("collect", async (m) => {
                 const selected = parseInt(m.content.trim()) - 1;
                 if (selected >= 0 && selected < qualityOptions.length) {
-                    const dl = await ytdl.video[qualityOptions[selected]].download();
+                    const format = videoFormats[selected];
+                    const dlStream = ytdl(url, {
+                        format
+                    });
+
                     await ctx.reply({
-                        video: {
-                            url: dl
-                        },
+                        video: dlStream,
                         mimetype: mime.contentType("mp4"),
-                        caption: `${quote(`Kualitas: ${qualityOptions[selected]}`)}\n${global.msg.footer}`,
+                        caption: `${quote(`Kualitas: ${qualityOptions[selected]}`)}\n` +
+                            global.msg.footer,
                         gifPlayback: false
                     });
                     col.stop();
