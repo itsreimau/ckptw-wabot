@@ -43,7 +43,7 @@ module.exports = {
 
             return ctx.reply(
                 `${quote(`Tempat: ${data.location.name}, ${data.data.location.region}, ${data.data.location.country}`)}\n` +
-                `${quote(`Cuaca: ${weatherId.translation)}`)}\n` +
+                `${quote(`Cuaca: ${weatherId.translation}`)}\n` +
                 `${quote(`Kelembapan: ${data.current.humidity} %`)}\n` +
                 `${quote(`Angin: ${data.current.wind_kph} km/jam (${data.data.current.wind_dir})`)}\n` +
                 `${quote(`Suhu saat ini: ${data.current.temp_c} °C`)}\n` +
