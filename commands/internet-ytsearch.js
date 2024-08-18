@@ -39,7 +39,7 @@ module.exports = {
                 data
             } = response.data;
 
-            const resultText = data.all.map((d) => {
+            const resultText = data.map((d) => {
                 switch (r.type) {
                     case "video":
                         return `${bold(`${d.title} (${d.url})`)}\n` +

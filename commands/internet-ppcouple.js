@@ -2,6 +2,9 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
+    getRandomElement
+} = require("../tools/general.js");
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -23,21 +26,22 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const apiUrl = createAPIUrl("sandipbaruwal", "/dp", {});
+            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/lainnya/ppcouple.json`, {});
             const {
                 data
             } = await axios.get(apiUrl);
+            const result = getRandomElement(data);
 
             await Promise.all([
                 ctx.reply({
                     image: {
-                        url: data.male
+                        url: result.male
                     },
                     mimetype: mime.contentType("png"),
                 }),
                 ctx.reply({
                     image: {
-                        url: data.female
+                        url: result.female
                     },
                     mimetype: mime.contentType("png")
                 })

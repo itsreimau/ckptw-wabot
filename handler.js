@@ -61,12 +61,11 @@ exports.handler = async (ctx, options) => {
         },
         premium: {
             function: async () => {
-                if (global.system.useCoin) {
-                    const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
-                    if (!isPremium) return true;
+                const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
+                if (!isPremium) return true;
 
-                    return false;
-                }
+                return false;
+
             },
             msg: global.msg.premium
         },

@@ -8,9 +8,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "simsimi",
-    aliases: ["simi"],
-    category: "fun",
+    name: "wirid",
+    category: "islamic",
     code: async (ctx) => {
         const {
             status,
@@ -21,23 +20,25 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
-
-        if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} halo!`)}`)
-        );
-
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/simsimi", {
-                message: input
-            });
+            const apiUrl = await createAPIUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/religi/islam/wirid.json", {});
             const response = await axios.get(apiUrl);
             const {
                 data
             } = response.data;
 
-            return ctx.reply(data);
+            const resultText = data.result.map((d) =>
+                data.arabic +
+                data.tnc ? `\n${data.tnc}` : ""
+            ).join(
+                "\n" +
+                `${quote("─────")}\n`
+            );
+            return ctx.reply(
+                `${resultText}\n` +
+                "\n" +
+                global.msg.footer
+            );
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

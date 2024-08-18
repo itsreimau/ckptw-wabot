@@ -8,8 +8,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "xnxxsearch",
-    category: "nsfw",
+    name: "xvideosearch",
+    category: "ghaib",
     code: async (ctx) => {
         const {
             status,
@@ -27,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await createAPIUrl("agatz", "/api/xnxx", {
+            const apiUrl = await createAPIUrl("agatz", "/api/xvideo", {
                 message: input
             });
             const response = await axios.get(apiUrl);

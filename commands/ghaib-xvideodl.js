@@ -10,7 +10,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "xvideodl",
-    category: "downloader",
+    category: "ghaib",
     code: async (ctx) => {
         const {
             status,

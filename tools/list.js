@@ -107,11 +107,13 @@ exports.getList = async (type, ctx) => {
                     internet: "Internet",
                     maker: "Maker",
                     tools: "Tools",
-                    nsfw: "NSFW",
                     owner: "Owner",
                     info: "Info",
                     "": "No Category"
                 };
+
+                const isPremium = await global.db.get(`user.${ctx._sender.id}.isPremium`);
+                if (isPremium) tags.ghaib = "Ghaib";
 
                 if (!cmds || cmds.size === 0) {
                     text = quote(`⚠ Terjadi kesalahan: Tidak ada perintah yang ditemukan.`);
