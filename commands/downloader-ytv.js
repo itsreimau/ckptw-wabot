@@ -1,8 +1,11 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const ytdl = require("ytdl-core");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
