@@ -1,9 +1,13 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     bold,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const yts = require("yt-search");
+const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
     name: "ytsearch",
@@ -27,25 +31,29 @@ module.exports = {
         );
 
         try {
-            const result = await yts(input);
+            const apiUrl = createAPIUrl("agatz", "/api/ytsearch", {
+                message: input
+            });
+            const response = await axios.get(apiUrl);
+            const {
+                data
+            } = response.data;
 
-            if (!result) return ctx.reply(global.msg.notFound);
-
-            const resultText = result.all.map((r) => {
+            const resultText = data.all.map((d) => {
                 switch (r.type) {
                     case "video":
-                        return `${bold(`${r.title} (${r.url})`)}\n` +
-                            `${quote(`Durasi: ${r.timestamp}`)}\n` +
-                            `${quote(`Diunggah: ${r.ago}`)}\n` +
-                            `${quote(`Dilihat: ${r.views}`)}`;
+                        return `${bold(`${d.title} (${d.url})`)}\n` +
+                            `${quote(`Durasi: ${d.timestamp}`)}\n` +
+                            `${quote(`Diunggah: ${d.ago}`)}\n` +
+                            `${quote(`Dilihat: ${d.views}`)}`;
                     case "channel":
-                        return `${bold(`${r.name} (${r.url})`)}\n` +
-                            `${quote(`Subscriber: ${r.subCountLabel} (${r.subCount})`)}\n` +
-                            `${quote(`Jumlah video: ${r.videoCount}`)}`;
+                        return `${bold(`${d.name} (${d.url})`)}\n` +
+                            `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
+                            `${quote(`Jumlah video: ${d.videoCount}`)}`;
                 }
             }).filter((r) => r).join(
                 "\n" +
-                "-----\n"
+                `${quote("─────")}\n`
             );
             return ctx.reply(
                 `${resultText}\n` +
@@ -54,6 +62,7 @@ module.exports = {
             );
         } catch (error) {
             console.error("Error:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

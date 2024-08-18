@@ -7,7 +7,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "igdl",
-    aliases: ["ig", "instagram"],
+    aliases: ["ig", "instagram", "instagramdl"],
     category: "downloader",
     code: async (ctx) => {
         const {
@@ -58,6 +58,7 @@ module.exports = {
             }
         } catch (error) {
             console.error("Error:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

@@ -10,7 +10,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "xdl",
-    aliases: ["twit", "twitdl", "twitterdl"],
+    aliases: ["x", "twit", "twitdl", "twitter", "twitterdl"],
     category: "downloader",
     code: async (ctx) => {
         const {
@@ -33,7 +33,7 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/facebook", {
+            const apiUrl = createAPIUrl("agatz", "/api/twitter", {
                 url
             });
             const response = await axios.get(apiUrl);
@@ -53,6 +53,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

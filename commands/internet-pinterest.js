@@ -30,17 +30,18 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("ssa", "/api/pinterest", {
-                query: input
+            const apiUrl = createAPIUrl("agatz", "/api/pinsearch", {
+                message: input
             });
             const response = await axios.get(apiUrl);
             const {
                 data
             } = response.data;
+            const result = getRandomElement(data);
 
             return await ctx.reply({
                 image: {
-                    url: data.response
+                    url: result.image_url
                 },
                 mimetype: mime.contentType("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +

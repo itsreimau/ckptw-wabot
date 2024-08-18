@@ -38,7 +38,7 @@ module.exports = {
                 `${quote(`Tahun kelahiran: ${data.thn_kelahiran}`)}\n` +
                 `${quote(`Tempat kelahiran: ${data.tmp}`)}\n` +
                 `${quote(`Usia: ${data.usia}`)}\n` +
-                "-----\n" +
+                `${quote("─────")}\n` +
                 `${data.description.trim()}\n` +
                 "\n" +
                 global.msg.footer

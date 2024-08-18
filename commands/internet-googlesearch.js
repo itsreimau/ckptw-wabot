@@ -29,12 +29,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await createAPIUrl("ngodingaja", "/api/gsearch", {
-                search: input
+            const apiUrl = await createAPIUrl("agatz", "/api/google", {
+                message: input
             });
+            const response = await axios.get(apiUrl);
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = response.data;
 
             const resultText = data.result.map((d) =>
                 `${quote(`Judul: ${d.title}`)}\n` +
@@ -42,7 +43,7 @@ module.exports = {
                 `${quote(`URL: ${d.link}`)}`
             ).join(
                 "\n" +
-                "-----\n"
+                `${quote("─────")}\n`
             );
             return ctx.reply(
                 `${resultText}\n` +

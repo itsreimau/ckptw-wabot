@@ -9,7 +9,7 @@ module.exports = {
     code: async (ctx) => {
         return ctx.reply(
             `${quote("083838039693 (DANA)")}\n` +
-            "-----\n" +
+            `${quote("─────")}\n` +
             `${quote("https://paypal.me/itsreimau (PayPal)")}\n` +
             `${quote("https://saweria.co/itsreimau (Saweria)")}\n` +
             `${quote("https://trakteer.id/itsreimau (Trakteer)")}\n` +

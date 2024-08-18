@@ -1,9 +1,11 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const yts = require("yt-search");
-const ytdl = require("ytdl-core");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -28,34 +30,42 @@ module.exports = {
         );
 
         try {
-            const searchRes = await yts(input);
-            if (!searchRes) return ctx.reply(global.msg.notFound);
+            const searchApiUrl = createAPIUrl("agatz", "/api/ytsearch", {
+                message: input
+            });
+            const searchResponse = await axios.get(searchApiUrl);
+            const {
+                data: searchData
+            } = searchResponse.data;
+            const selectedData = searchData[0];
 
-            const ytVid = searchRes.videos[0];
             await ctx.reply(
-                `${quote(`Judul: ${ytVid.title}`)}\n` +
-                `${quote(`Artis: ${ytVid.author.name}`)}\n` +
-                `${quote(`Durasi: ${ytVid.timestamp}`)}\n` +
-                `${quote(`URL: ${ytVid.url}`)}\n` +
+                `${quote(`Judul: ${selectedData.title}`)}\n` +
+                `${quote(`Artis: ${selectedData.author.name}`)}\n` +
+                `${quote(`Durasi: ${selectedData.timestamp}`)}\n` +
+                `${quote(`URL: ${selectedData.url}`)}\n` +
                 "\n" +
                 global.msg.footer
             );
 
-            const info = await ytdl.getInfo(ytVid.url);
-            const format = ytdl.filterFormats(info.formats, 'audioonly')[0];
-            const audUrl = format.url;
-
-            if (!audUrl) return ctx.reply(global.msg.notFound);
+            const downloadApiUrl = createAPIUrl("widipe", "/download/ytdl", {
+                url: selectedData.url
+            });
+            const downloadResponse = await axios.get(downloadApiUrl);
+            const {
+                result
+            } = downloadResponse.data;
 
             return await ctx.reply({
                 audio: {
-                    url: audUrl
+                    url: result.mp3
                 },
                 mimetype: mime.contentType("mp3"),
                 ptt: false
             });
         } catch (error) {
             console.error("Error:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

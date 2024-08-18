@@ -9,7 +9,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "githubsearch",
-    aliases: ["ghs"],
+    aliases: ["ghs", "ghsearch"],
     category: "internet",
     code: async (ctx) => {
         const {
@@ -29,21 +29,32 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await createAPIUrl("https://api.github.com", "/search/repositories", {
-                q: input
+            const apiUrl = await createAPIUrl("agatz", "/api/github", {
+                message: input
             });
+            const response = await axios.get(apiUrl);
             const {
                 data
-            } = await axios.get(apiUrl);
-            const repo = data.items[0];
+            } = response.data;
 
+            const resultText = data.result.map((d) =>
+                `${quote(`Nama: ${d.fullName}`)}\n` +
+                `${quote(`Fork: ${d.fork ? "Ya" : "Tidak"}`)}\n` +
+                `${quote(`URL: ${d.htmlUrl}`)}\n` +
+                `${quote(`Dibuat pada: ${d.createdAt}`)}\n` +
+                `${quote(`Diperbarui pada: ${d.updatedAt}`)}\n` +
+                `${quote(`Jumlah pengamat: ${d.watchers}`)}\n` +
+                `${quote(`Jumlah garpu: ${d.forks}`)}\n` +
+                `${quote(`Jumlah pengamat bintang: ${d.stargazersCount}`)}\n` +
+                `${quote(`Jumlah isu terbuka: ${d.openIssues}`)}\n` +
+                `${quote(`Deskripsi: ${d.description || "-"}`)}\n` +
+                `${quote(`URL kloning: ${d.cloneUrl}`)}`
+            ).join(
+                "\n" +
+                `${quote("─────")}\n`
+            );
             return ctx.reply(
-                `${quote(`Nama: ${repo.name}`)}\n` +
-                `${quote(`Deskripsi: ${repo.description}`)}\n` +
-                `${quote(`Owner: ${repo.owner.login}`)}\n` +
-                `${quote(`Dibuat: ${formatDate(repo.created_at)}`)}\n` +
-                `${quote(`Bahasa: ${repo.language}`)}\n` +
-                `${quote(`Lisensi: ${repo.license.name}`)}\n` +
+                `${resultText}\n` +
                 "\n" +
                 global.msg.footer
             );
@@ -54,16 +65,3 @@ module.exports = {
         }
     }
 };
-
-function formatDate(date, locale = "id") {
-    const dt = new Date(date);
-    return dt.toLocaleDateString(locale, {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-    });
-}

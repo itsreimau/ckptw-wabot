@@ -2,9 +2,6 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -12,9 +9,9 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "googleimage",
-    aliases: ["gimage"],
-    category: "internet",
+    name: "ttsearch",
+    aliases: ["vtsearch", "tiktoksearch"],
+    category: "downloader",
     code: async (ctx) => {
         const {
             status,
@@ -29,27 +26,24 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} evangelion`)}`)
         );
 
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/gimage", {
+            const apiUrl = createAPIUrl("agatz", "/api/tiktoksearch", {
                 message: input
             });
             const response = await axios.get(apiUrl);
             const {
                 data
             } = response.data;
-            const result = getRandomElement(data);
 
             return await ctx.reply({
-                image: {
-                    url: result.url
+                video: {
+                    url: data.no_watermark
                 },
-                mimetype: mime.contentType("png"),
-                caption: `${quote(`Kueri: ${input}`)}\n` +
-                    "\n" +
-                    global.msg.footer
+                mimetype: mime.contentType("mp4"),
+                gifPlayback: false
             });
         } catch (error) {
             console.error("Error:", error);

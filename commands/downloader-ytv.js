@@ -1,6 +1,5 @@
 const {
     monospace,
-    SectionsBuilder,
     quote
 } = require("@mengkodingan/ckptw");
 const ytdl = require("ytdl-core");
@@ -31,62 +30,23 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const info = await ytdl.getInfo(url);
-            const videoFormats = ytdl.filterFormats(info.formats, 'video');
-            const qualityOptions = videoFormats.map(format => `${format.qualityLabel}`);
-            const infoText = `${quote(`Judul: ${info.videoDetails.title}`)}\n` +
-                `${quote(`URL: ${url}`)}\n`;
+            const apiUrl = createAPIUrl("widipe", "/download/ytdl", {
+                url
+            });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
-            if (global.system.useInteractiveMessage) {
-                const section = new SectionsBuilder()
-                    .setDisplayText("Choose Quality 🖼")
-                    .addSection({
-                        title: "Quality:",
-                        rows: qualityOptions.map((q, i) => ({
-                            title: `${q}`,
-                            id: i + 1
-                        }))
-                    }).build();
-                await ctx.replyInteractiveMessage({
-                    body: infoText +
-                        global.msg.footer,
-                    footer: global.msg.watermark,
-                    nativeFlowMessage: {
-                        buttons: [section]
-                    }
-                });
-            } else {
-                await ctx.reply(
-                    infoText +
-                    `${quote(`Pilih kualitas:`)}\n` +
-                    `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
+            return await ctx.reply({
+                video: {
+                    url: data.result.mp4
+                },
+                mimetype: mime.contentType("mp4"),
+                caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
-                    global.msg.footer
-                );
-            }
-
-            const col = ctx.MessageCollector({
-                time: 60000
+                    global.msg.footer,
+                gifPlayback: false
             });
-            col.on("collect", async (m) => {
-                const selected = parseInt(m.content.trim()) - 1;
-                if (selected >= 0 && selected < qualityOptions.length) {
-                    const format = videoFormats[selected];
-                    const dlStream = ytdl(url, {
-                        format
-                    });
-
-                    await ctx.reply({
-                        video: dlStream,
-                        mimetype: mime.contentType("mp4"),
-                        caption: `${quote(`Kualitas: ${qualityOptions[selected]}`)}\n` +
-                            global.msg.footer,
-                        gifPlayback: false
-                    });
-                    col.stop();
-                }
-            });
-
         } catch (error) {
             console.error("Error:", error);
             ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

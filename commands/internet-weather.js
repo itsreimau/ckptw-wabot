@@ -2,9 +2,6 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    ucword
-} = require("../tools/general.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -35,24 +32,23 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await createAPIUrl("https://api.openweathermap.org", "/data/2.5/weather", {
-                q: input,
-                units: "metric",
-                appid: "060a6bcfa19809c2cd4d97a212b19273"
+            const apiUrl = await createAPIUrl("agatz", "/api/cuaca", {
+                message: input
             });
+            const response = await axios.get(apiUrl);
             const {
                 data
-            } = await axios.get(apiUrl);
-            const weatherId = await translate(data.weather[0].description, "en", "id");
+            } = response.data;
+            const weatherId = await translate(data.current.condition.text, "en", "id");
 
             return ctx.reply(
-                `${quote(`Tempat: ${data.name} (${data.sys.country})`)}\n` +
-                `${quote(`Cuaca: ${ucword(weatherId.translation)}`)}\n` +
-                `${quote(`Kelembapan: ${data.main.humidity} %`)}\n` +
-                `${quote(`Angin: ${data.wind.speed} km/jam`)}\n` +
-                `${quote(`Suhu saat ini: ${data.main.temp} °C`)}\n` +
-                `${quote(`Suhu tertinggi: ${data.main.temp_max} °C`)}\n` +
-                `${quote(`Suhu terendah: ${data.main.temp_min} °C`)}\n` +
+                `${quote(`Tempat: ${data.location.name}, ${data.data.location.region}, ${data.data.location.country}`)}\n` +
+                `${quote(`Cuaca: ${weatherId.translation)}`)}\n` +
+                `${quote(`Kelembapan: ${data.current.humidity} %`)}\n` +
+                `${quote(`Angin: ${data.current.wind_kph} km/jam (${data.data.current.wind_dir})`)}\n` +
+                `${quote(`Suhu saat ini: ${data.current.temp_c} °C`)}\n` +
+                `${quote(`Terasa seperti: ${data.current.feelslike_c} °C`)}\n` +
+                `${quote(`Kecepatan angin: ${data.current.gust_kph} km/jam`)}\n` +
                 "\n" +
                 global.msg.footer
             );

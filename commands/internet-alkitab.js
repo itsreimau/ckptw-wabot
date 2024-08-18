@@ -48,12 +48,12 @@ module.exports = {
                 `${quote(`${v.content}`)}`
             ).join(
                 "\n" +
-                "-----\n"
+                `${quote("─────")}\n`
             );
             return ctx.reply(
                 `${quote(`Nama: ${data.book.name}`)}\n` +
                 `${quote(`Bab: ${data.book.chapter}`)}\n` +
-                "-----\n" +
+                `${quote("─────")}\n` +
                 `${resultText}\n` +
                 "\n" +
                 global.msg.footer

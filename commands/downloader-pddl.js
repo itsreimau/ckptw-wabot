@@ -2,9 +2,6 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -12,9 +9,9 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "googleimage",
-    aliases: ["gimage"],
-    category: "internet",
+    name: "pddl",
+    aliases: ["pd", "pixeldrain", "pixeldraindl"],
+    category: "downloader",
     code: async (ctx) => {
         const {
             status,
@@ -25,34 +22,35 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const url = ctx._args[0] || null;
 
-        if (!input) return ctx.reply(
+        if (!url) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
+
+        const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
+        if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
+
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/gimage", {
-                message: input
+            const apiUrl = createAPIUrl("agatz", "/api/pixeldrain", {
+                url
             });
             const response = await axios.get(apiUrl);
             const {
                 data
             } = response.data;
-            const result = getRandomElement(data);
 
-            return await ctx.reply({
-                image: {
-                    url: result.url
+            return ctx.reply({
+                document: {
+                    url: data.download
                 },
-                mimetype: mime.contentType("png"),
-                caption: `${quote(`Kueri: ${input}`)}\n` +
-                    "\n" +
-                    global.msg.footer
+                filename: data.name,
+                mimetype: data.mime_type || "application/octet-stream"
             });
         } catch (error) {
-            console.error("Error:", error);
+            console.error("Error:", error.message);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }

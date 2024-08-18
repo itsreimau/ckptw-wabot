@@ -42,7 +42,7 @@ module.exports = {
                     `${quote(`${day}, ${d.getDate()} ${mon} ${year}`)}`;
             }).join(
                 "\n" +
-                "-----\n"
+                `${quote("─────")}\n`
             );
             return ctx.reply(
                 `${resultText}\n` +

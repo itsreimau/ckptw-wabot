@@ -42,7 +42,7 @@ module.exports = {
                     `${quote(`Arti: ${r.translate_id}`)}`
                 ).join(
                     "\n" +
-                    "-----\n"
+                    `${quote("─────")}\n`
                 );
                 return ctx.reply(
                     `${quote("Daftar semua Asmaul Husna:")}\n` +

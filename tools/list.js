@@ -64,7 +64,7 @@ exports.getList = async (type, ctx) => {
                 text = alKitabResponse.data.data.map(b =>
                     `${quote(`Buku: ${b.name} (${b.abbr})`)}\n` +
                     `${quote(`Jumlah Bab: ${b.chapter}`)}\n` +
-                    "-----\n"
+                    `${quote("─────")}\n`
                 ).join("");
 
                 text += global.msg.footer;
@@ -75,7 +75,7 @@ exports.getList = async (type, ctx) => {
                 text = alquranResponse.data.data.map(s =>
                     `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
                     `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n` +
-                    "-----\n"
+                    `${quote("─────")}\n`
                 ).join("");
 
                 text += global.msg.footer;

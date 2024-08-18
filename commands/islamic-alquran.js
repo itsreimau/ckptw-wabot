@@ -70,7 +70,7 @@ module.exports = {
                 return ctx.reply(
                     `${bold(`Surah ${data.namaLatin}`)}\n` +
                     `${quote(`${data.arti}`)}\n` +
-                    "-----\n"
+                    `${quote("─────")}\n`
                     `${versesText}\n` +
                     "\n" +
                     global.msg.footer

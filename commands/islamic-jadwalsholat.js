@@ -2,19 +2,15 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "googleimage",
-    aliases: ["gimage"],
-    category: "internet",
+    name: "jadwalsholat",
+    aliases: ["sholat"]
+    category: "islamic",
     code: async (ctx) => {
         const {
             status,
@@ -29,28 +25,27 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} bogor`)}`)
         );
 
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/gimage", {
-                message: input
+            const apiUrl = createAPIUrl("agatz", `/api/jadwalsholat`, {
+                kota: input
             });
             const response = await axios.get(apiUrl);
             const {
                 data
             } = response.data;
-            const result = getRandomElement(data);
 
-            return await ctx.reply({
-                image: {
-                    url: result.url
-                },
-                mimetype: mime.contentType("png"),
-                caption: `${quote(`Kueri: ${input}`)}\n` +
-                    "\n" +
-                    global.msg.footer
-            });
+            return ctx.reply(
+                `${quote(`Subuh: ${data.subuh}`)}\n` +
+                `${quote(`Dhuhur: ${data.dhuhur}`)}\n` +
+                `${quote(`Ashar: ${data.ashar}`)}\n` +
+                `${quote(`Maghrib: ${data.maghrib}`)}\n` +
+                `${quote(`Isya: ${data.isya}`)}\n` +
+                "\n" +
+                global.msg.footer
+            );
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

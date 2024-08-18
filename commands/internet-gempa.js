@@ -36,7 +36,7 @@ module.exports = {
                 },
                 mimetype: mime.contentType("png"),
                 caption: `${gempa.Wilayah}\n` +
-                    "-----\n" +
+                    `${quote("─────")}\n` +
                     `${quote(`Tanggal: ${gempa.Tanggal}`)}\n` +
                     `${quote(`Potensi: ${gempa.Potensi}`)}\n` +
                     `${quote(`Magnitude: ${gempa.Magnitude}`)}\n` +

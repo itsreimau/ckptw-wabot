@@ -38,7 +38,7 @@ module.exports = {
                 `${quote(`Harga: ${r.priceChange}`)}`
             ).join(
                 "\n" +
-                "-----\n"
+                `${quote("─────")}\n`
             );
             return ctx.reply(
                 `${resultText}\n` +

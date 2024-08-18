@@ -2,18 +2,14 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "googleimage",
-    aliases: ["gimage"],
+    name: "happymod",
+    aliases: ["hm", "hmsearch"],
     category: "internet",
     code: async (ctx) => {
         const {
@@ -29,28 +25,31 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} evangelion`)}`)
         );
 
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/gimage", {
-                message: input
+            const apiUrl = await createAPIUrl("agatz", "/api/happymod", {
+                search: input
             });
             const response = await axios.get(apiUrl);
             const {
                 data
             } = response.data;
-            const result = getRandomElement(data);
 
-            return await ctx.reply({
-                image: {
-                    url: result.url
-                },
-                mimetype: mime.contentType("png"),
-                caption: `${quote(`Kueri: ${input}`)}\n` +
-                    "\n" +
-                    global.msg.footer
-            });
+            const resultText = data.hsl.map((d) =>
+                `${quote(`Nama: ${d.name}`)}\n` +
+                `${quote(`Versi: ${d.version}`)}\n` +
+                `${quote(`URL: ${d.link}`)}`
+            ).join(
+                "\n" +
+                `${quote("─────")}\n`
+            );
+            return ctx.reply(
+                `${resultText}\n` +
+                "\n" +
+                global.msg.footer
+            );
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

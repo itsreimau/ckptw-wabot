@@ -40,7 +40,7 @@ module.exports = {
             return ctx.reply(
                 `${quote(`Judul: ${data.title}`)}\n` +
                 `${quote(`Artis: ${data.artist}`)}\n` +
-                "-----\n" +
+                `${quote("─────")}\n` +
                 `${data.lyrics}\n` +
                 "\n" +
                 global.msg.footer
