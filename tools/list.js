@@ -107,6 +107,7 @@ exports.getList = async (type, ctx) => {
                     internet: "Internet",
                     maker: "Maker",
                     tools: "Tools",
+                    nsfw: "NSFW",
                     owner: "Owner",
                     info: "Info",
                     "": "No Category"

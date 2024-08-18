@@ -42,7 +42,7 @@
         "simpl.db": "^2.13.0",
         "telegraph-uploader": "^2.0.0",
         "util": "^0.12.5",
-        "wa-sticker-formatter": "^4.4.4",
+        "wa-sticker-formatter": "^4.4.4"
     },
     "devDependencies": {}
 }

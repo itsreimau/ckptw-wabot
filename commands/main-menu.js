@@ -46,15 +46,13 @@ module.exports = {
                 const button1 = new ButtonBuilder()
                     .setId(`${ctx._used.prefix}owner`)
                     .setDisplayText("Owner 👨‍💻")
-                    .setType("quick_reply")
-                    .build();
+                    .setType("quick_reply").build();
                 const button2 = new ButtonBuilder()
                     .setId("button2")
                     .setDisplayText("Website 🌐")
                     .setType("cta_url")
                     .setURL("https://itsreimau.is-a.dev/rei-ayanami")
-                    .setMerchantURL("https://www.google.ca") // Don't disturb this!
-                    .build();
+                    .setMerchantURL("https://www.google.ca").build();
 
                 return ctx.replyInteractiveMessage({
                     body: text,

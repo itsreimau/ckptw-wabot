@@ -10,8 +10,7 @@ module.exports = {
         const vcard = new VCardBuilder()
             .setFullName(global.owner.name)
             .setOrg(global.owner.organization)
-            .setNumber(global.owner.number)
-            .build();
+            .setNumber(global.owner.number).build();
 
         return await ctx.reply({
             contacts: {

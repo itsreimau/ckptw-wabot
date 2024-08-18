@@ -7,8 +7,8 @@ const {
 } = require("lowline.ai");
 
 module.exports = {
-    name: "lowline",
-    aliases: ["ll"],
+    name: "chatgpt",
+    aliases: ["ai", "chatai", "gpt", "gpt2", "lowline"],
     category: "ai",
     code: async (ctx) => {
         const {

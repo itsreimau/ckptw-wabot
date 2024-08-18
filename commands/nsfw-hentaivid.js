@@ -6,19 +6,16 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "pollinations",
-    aliases: ["poll"],
-    category: "ai",
+    name: "hentaivid",
+    category: "nsfw",
     code: async (ctx) => {
         const {
             status,
             message
         } = await global.handler(ctx, {
-            banned: true,
-            coin: 3
+            premium: true
         });
         if (status) return ctx.reply(message);
 
@@ -26,23 +23,29 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} stepsister`)}`)
         );
 
         try {
-            const apiUrl = createAPIUrl("https://image.pollinations.ai", `/prompt/${input}`, {});
+            const apiUrl = await createAPIUrl("agatz", "/api/hentaivid", {
+                message: input
+            });
+            const response = await axios.get(apiUrl);
             const {
-                url
-            } = await axios.get(apiUrl);
+                data
+            } = response.data;
+            const result = getRandomElement(data);
 
-            return ctx.reply({
-                image: {
-                    url
+            return await ctx.reply({
+                video: {
+                    url: result.video_1 || result.video_2
                 },
-                mimetype: mime.contentType("png"),
-                caption: `${quote(`Prompt: ${input}`)}\n` +
+                mimetype: mime.contentType("mp4"),
+                caption: `${quote(`Judul: ${result.title}`)}\n` +
+                    `${quote(`Kategori: ${result.category}`)}\n` +
                     "\n" +
-                    global.msg.footer
+                    global.msg.footer,
+                gifPlayback: false
             });
         } catch (error) {
             console.error("Error:", error);

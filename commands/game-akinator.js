@@ -27,7 +27,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        if (session.has(ctx.id)) return await ctx.reply(quote(`⚠ Sesi permainan sedang berjalan!`));
+        if (session.has(ctx.id)) return ctx.reply(quote("⚠ Sesi permainan sedang berjalan!"));
 
         try {
             const startApiUrl = createAPIUrl("chiwa", "/api/game/akinator", {
@@ -69,6 +69,7 @@ module.exports = {
                 );
             }
 
+
             const collector = ctx.MessageCollector({
                 time: 86400000
             }); // 1 day
@@ -76,18 +77,21 @@ module.exports = {
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.trim();
 
-                if (userAnswer === "00") {
+                if (userAnswer === "0" || userAnswer === "00") {
                     const deleteSessionApiUrl = createAPIUrl("chiwa", "/api/game/akinator/deletesession", {
                         session: startData.sessionId
                     });
                     await axios.get(deleteSessionApiUrl);
                     session.delete(ctx.id);
                     collector.stop();
-                    return ctx.reply(quote(`⚠ Sesi Akinator telah dihapus.`));
+                    const replyMessage = userAnswer === "00" ?
+                        "⚠ Tebakan benar! Sesi Akinator telah dihapus." :
+                        "⚠ Sesi Akinator telah dihapus.";
+                    return ctx.reply(quote(replyMessage));
                 }
 
-                if (!["1", "2", "3", "4", "5", "0"].includes(userAnswer)) {
-                    return ctx.reply(quote(`⚠ Jawaban tidak valid! Harap ketik angka antara 1 hingga 5.`));
+                if (!["1", "2", "3", "4", "5"].includes(userAnswer)) {
+                    await ctx.reply(quote("⚠ Jawaban tidak valid! Harap ketik angka antara 1 hingga 5."));
                 }
 
                 try {
@@ -105,24 +109,26 @@ module.exports = {
                                 url: answerData.guess.photo
                             },
                             caption: quote(`Apakah yang kamu pikirkan adalah: ${answerData.guess.name_proposition} (${answerData.guess.description_proposition})?`),
-                            mimetype: mime.lookup("png"),
+                            mimetype: mime.lookup("png")
                         });
 
                         if (global.system.useInteractiveMessage) {
                             const section = new SectionsBuilder()
-                                .setDisplayText("Select Options 🔮")
+                                .setDisplayText("Select Answer & Options 🔮")
                                 .addSection({
                                     title: "Option:",
                                     rows: [{
-                                            title: "Correct",
-                                            id: "1"
-                                        },
-                                        {
-                                            title: "Wrong",
-                                            id: "0"
-                                        }
-                                    ]
+                                        title: "Correct",
+                                        id: "00"
+                                    }]
+                                }, {
+                                    title: "Answer:",
+                                    rows: answerData.answers.map((ans, index) => ({
+                                        title: ans,
+                                        id: index + 1
+                                    }))
                                 }).build();
+
                             await ctx.replyInteractiveMessage({
                                 body: quote("⚠ Apa tebakanku salah?"),
                                 footer: global.msg.watermark,
@@ -131,14 +137,7 @@ module.exports = {
                                 }
                             });
                         } else {
-                            await ctx.reply(quote("⚠ Apa tebakanku salah? Jika salah ketik 0 untuk melanjutkan. Ketik apa saja jika benar."));
-                        }
-
-                        if (userAnswer === "0") {
-                            await ctx.reply(quote(`⚠ Tebakan salah! Lanjutkan permainan.`));
-                        } else {
-                            session.delete(ctx.id);
-                            collector.stop();
+                            await ctx.reply(quote("⚠ Apa tebakanku salah? Jika benar, ketik 0 untuk menghentikan permainan."));
                         }
                     } else {
                         if (global.system.useInteractiveMessage) {
@@ -146,11 +145,12 @@ module.exports = {
                                 .setDisplayText("Select Answer 🔮")
                                 .addSection({
                                     title: "Answer:",
-                                    rows: startData.answers.map((ans, index) => ({
+                                    rows: answerData.answers.map((ans, index) => ({
                                         title: ans,
                                         id: index + 1
                                     }))
                                 }).build();
+
                             await ctx.replyInteractiveMessage({
                                 body: `${quote(`Pertanyaan: ${answerData.question}`)}\n` +
                                     "\n" +
@@ -173,13 +173,13 @@ module.exports = {
                     }
                 } catch (error) {
                     console.error("Error:", error);
-                    return ctx.reply(`⚠ Terjadi kesalahan saat memproses jawaban: ${error.message}`);
+                    return ctx.reply(quote(`⚠ Terjadi kesalahan saat memproses jawaban: ${error.message}`));
                 }
             });
 
             collector.on("end", async (collected, reason) => {
                 if (session.has(ctx.id)) {
-                    await ctx.reply(quote(`⚠ Waktu habis! Sesi Akinator telah berakhir.`));
+                    await ctx.reply(quote("⚠ Waktu habis! Sesi Akinator telah berakhir."));
                     const deleteSessionApiUrl = createAPIUrl("chiwa", "/api/game/akinator/deletesession", {
                         session: startData.sessionId
                     });
@@ -190,7 +190,9 @@ module.exports = {
 
         } catch (error) {
             console.error("Error:", error);
-            if (error.response && error.response.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.response && error.response.status !== 200) {
+                return ctx.reply(global.msg.notFound);
+            }
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

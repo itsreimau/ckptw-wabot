@@ -9,45 +9,45 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "photoleap",
-    aliases: ["pl"],
-    category: "ai",
+    name: "xvideodl",
+    category: "downloader",
     code: async (ctx) => {
         const {
             status,
             message
         } = await global.handler(ctx, {
-            banned: true,
-            coin: 3
+            premium: true
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const url = ctx._args[0] || null;
 
-        if (!input) return ctx.reply(
+        if (!url) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
+        const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
+        if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
+
         try {
-            const apiUrl = createAPIUrl("https://tti.photoleapapp.com", "/api/v1/generate", {
-                prompt: input,
+            const apiUrl = createAPIUrl("agatz", "/api/xvideodown", {
+                url
             });
+            const response = await axios.get(apiUrl);
             const {
                 data
-            } = await axios.get(apiUrl);
-            const {
-                result_url
-            } = data;
+            } = response.data;
 
             return await ctx.reply({
-                image: {
-                    url: result_url,
+                video: {
+                    url: data.url
                 },
-                mimetype: mime.contentType("png"),
-                caption: `${quote(`Prompt: ${input}`)}\n` +
+                mimetype: mime.contentType("mp4"),
+                caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
-                    global.msg.footer
+                    global.msg.footer,
+                gifPlayback: false
             });
         } catch (error) {
             console.error("Error:", error);

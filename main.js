@@ -281,7 +281,9 @@ async function handleUserEvent(m) {
                     profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
                 }
 
-                const message = m.eventsType === "UserJoin" ? quote(`⚠ Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`) : quote(`⚠ @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
+                const message = m.eventsType === "UserJoin" ?
+                    quote(`⚠ Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`) :
+                    quote(`⚠ @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
 
                 await bot.core.sendMessage(id, {
                     text: message,

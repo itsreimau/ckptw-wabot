@@ -8,16 +8,14 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "metallama",
-    aliases: ["llama"],
-    category: "ai",
+    name: "xnxxsearch",
+    category: "nsfw",
     code: async (ctx) => {
         const {
             status,
             message
         } = await global.handler(ctx, {
-            banned: true,
-            coin: 3
+            premium: true
         });
         if (status) return ctx.reply(message);
 
@@ -25,18 +23,30 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} stepsister`)}`)
         );
 
         try {
-            const apiUrl = createAPIUrl("sandipbaruwal", "/metallama", {
-                prompt: input
+            const apiUrl = await createAPIUrl("agatz", "/api/xnxx", {
+                message: input
             });
+            const response = await axios.get(apiUrl);
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = response.data;
 
-            return ctx.reply(data.answer);
+            const resultText = data.result.map((d) =>
+                `${quote(`Judul: ${d.title}`)}\n` +
+                `${quote(`URL: ${d.link}`)}`
+            ).join(
+                "\n" +
+                `${quote("─────")}\n`
+            );
+            return ctx.reply(
+                `${resultText}\n` +
+                "\n" +
+                global.msg.footer
+            );
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

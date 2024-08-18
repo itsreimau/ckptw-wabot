@@ -52,8 +52,7 @@ module.exports = {
                 image: {
                     url: data.result
                 },
-                mimetype: mime.contentType("png"),
-                caption: null
+                mimetype: mime.contentType("png")
             });
         } catch (error) {
             console.error("Error", error);

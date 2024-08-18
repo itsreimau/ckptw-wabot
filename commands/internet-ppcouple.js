@@ -34,15 +34,13 @@ module.exports = {
                         url: data.male
                     },
                     mimetype: mime.contentType("png"),
-                    caption: null,
                 }),
                 ctx.reply({
                     image: {
                         url: data.female
                     },
-                    mimetype: mime.contentType("png"),
-                    caption: null,
-                }),
+                    mimetype: mime.contentType("png")
+                })
             ]);
         } catch (error) {
             console.error("Error:", error);
