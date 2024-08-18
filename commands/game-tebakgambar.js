@@ -88,15 +88,13 @@ module.exports = {
 
             collector.on("end", async (collector, reason) => {
                 const answer = data.jawaban;
-                const description = data.deskripsi;
 
                 if (await session.has(ctx.id)) {
                     await session.delete(ctx.id);
 
                     return ctx.reply(
                         `${quote(`⚠ Waktu habis!`)}\n` +
-                        `${quote(`Jawabannya adalah ${answer}.`)}\n` +
-                        quote(description)
+                        quote(`Jawabannya adalah ${answer}.`)
                     );
                 }
             });

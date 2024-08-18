@@ -83,7 +83,7 @@ module.exports = {
 
             collector.on("end", async (collector, reason) => {
                 const answer = data.jawaban;
-                const description = data.description;
+                const description = data.dekripsi;
 
                 if (await session.has(ctx.id)) {
                     await session.delete(ctx.id);
@@ -91,7 +91,7 @@ module.exports = {
                     return ctx.reply(
                         `${quote(`⚠ Waktu habis!`)}\n` +
                         `${quote(quote(`Jawabannya adalah ${answer}.`))}\n` +
-                        description
+                        quote(description)
                     );
                 }
             });

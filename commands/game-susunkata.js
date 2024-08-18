@@ -36,7 +36,7 @@ module.exports = {
             await session.set(ctx.id, true);
 
             await ctx.reply(
-                `${quote(`Soal: ${data.soal}`)}` +
+                `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`Tipe: ${data.tipe}`)}` +
                 (global.system.useCoin ?
                     "\n" +
