@@ -9,7 +9,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "jadwalsholat",
-    aliases: ["sholat"]
+    aliases: ["sholat"],
     category: "islamic",
     code: async (ctx) => {
         const {
