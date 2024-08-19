@@ -41,7 +41,7 @@ module.exports = {
             const buffer = type === "imageMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
             const apiUrl = createAPIUrl("nyxs", "/tools/ocr", {
-                url: uplRes.link
+                imageUrl: uplRes.link
             });
             const {
                 data

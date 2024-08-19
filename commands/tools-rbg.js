@@ -41,16 +41,13 @@ module.exports = {
             const object = type ? quotedMessage[type] : null;
             const buffer = type === "imageMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = createAPIUrl("nyxs", "/tools/removebg", {
-                url: uplRes.link
+            const apiUrl = createAPIUrl("fasturl", "/tool/removebg", {
+                imageUrl: uplRes.link
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 image: {
-                    url: data.result
+                    url: apiUrl
                 },
                 mimetype: mime.contentType("png")
             });

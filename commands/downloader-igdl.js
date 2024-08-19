@@ -1,9 +1,12 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const mime = require("mime-types");
 const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
     name: "igdl",

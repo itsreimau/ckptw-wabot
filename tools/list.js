@@ -93,6 +93,28 @@ exports.getList = async (type, ctx) => {
                     global.msg.footer;
                 break;
 
+            case "texttoimage":
+                const texttoimageResponse = await axios.get(createAPIUrl("fasturl", "/ai/texttoimage", {}));
+
+                const models = texttoimageResponse.data.listmodelsforSDXL;
+                const styles = texttoimageResponse.data.liststyles;
+
+                let text = "";
+
+                text += `${quote(`Model:`)}\n`;
+                for (const item of models) {
+                    text += `${quote(item)}\n`;
+                }
+
+                text += `\n${quote(`Style:`)}\n`;
+                for (const item of styles) {
+                    text += `${quote(item)}\n`;
+                }
+
+                text += "\n" +
+                    global.msg.footer;
+                break;
+
             case "menu":
                 const cmds = ctx._self.cmd;
                 const tags = {

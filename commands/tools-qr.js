@@ -5,12 +5,11 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "text2img",
-    category: "ai",
+    name: "qr"
+    category: "tools",
     code: async (ctx) => {
         const {
             status,
@@ -21,27 +20,19 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        let input = ctx._args.join(" ") || null;
+        const url = ctx._args[0] || null;
 
-        if (!input) return ctx.reply(
+        if (!url) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
-        let apiPath = "/ai/text2img";
-
-        const versionRegex = /^\(v(\d+)\)\s*(.*)$/;
-        const match = input.match(versionRegex);
-
-        if (match) {
-            const version = match[1];
-            apiPath = `/v${version}/text2img`;
-            input = match[2];
-        }
+        const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
+        if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("widipe", apiPath, {
-                text: input
+            const apiUrl = createAPIUrl("fasturl", "/tool/qr", {
+                url
             });
 
             return await ctx.reply({
@@ -49,7 +40,7 @@ module.exports = {
                     url: apiUrl
                 },
                 mimetype: mime.contentType("png"),
-                caption: `${quote(`Prompt: ${input}`)}\n` +
+                caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     global.msg.footer
             });

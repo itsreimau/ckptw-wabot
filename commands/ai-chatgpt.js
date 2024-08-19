@@ -1,14 +1,16 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
+    bold,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    _ai
-} = require("lowline.ai");
+const axios = require("axios");
 
 module.exports = {
     name: "chatgpt",
-    aliases: ["ai", "chatai", "gpt", "gpt2", "lowline"],
+    aliases: ["ai", "chatai", "gpt", "gpt4"],
     category: "ai",
     code: async (ctx) => {
         const {
@@ -28,13 +30,18 @@ module.exports = {
         );
 
         try {
-            const res = await _ai.generatePlaintext({
-                prompt: input
+            const apiUrl = createAPIUrl("fasturl", "/api/gpt4", {
+                prompt: input,
+                sessionId: `${ctx._sender.jid.replace(/@.*|:.*/g, "")}-${global.bot.name.toUpperCase().replace(/ /g, "_")}`
             });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
-            return await ctx.reply(res.result);
+            return ctx.reply(data.response);
         } catch (error) {
             console.error("Error:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
