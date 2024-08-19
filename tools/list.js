@@ -1,4 +1,4 @@
-xconst {
+const {
     createAPIUrl
 } = require("./api.js");
 const {
