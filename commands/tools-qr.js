@@ -8,7 +8,7 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "qr"
+    name: "qr",
     category: "tools",
     code: async (ctx) => {
         const {
