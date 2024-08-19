@@ -43,9 +43,9 @@ module.exports = {
                 data
             } = response.data;
 
-            const resultText = data.verses.map((v) =>
-                `${quote(`Ayat: ${v.verse}`)}\n` +
-                `${quote(`${v.content}`)}`
+            const resultText = data.verses.map((d) =>
+                `${quote(`Ayat: ${d.verse}`)}\n` +
+                `${quote(`${d.content}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

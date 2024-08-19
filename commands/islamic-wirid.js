@@ -28,8 +28,8 @@ module.exports = {
             } = response.data;
 
             const resultText = data.map((d) =>
-                data.arabic +
-                data.tnc ? `\n${data.tnc}` : ""
+                d.arabic +
+                d.tnc ? `\n${d.tnc}` : ""
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

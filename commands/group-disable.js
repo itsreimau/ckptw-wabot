@@ -31,7 +31,6 @@ module.exports = {
 
         if (ctx._args[0] === "list") {
             const listText = await getList("disable_enable");
-
             return ctx.reply(listText);
         }
 

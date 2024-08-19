@@ -24,13 +24,6 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
-
-        if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} bogor`)}`)
-        );
-
         try {
             const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/religi/islam/doaharian.json`, {});
             const {
@@ -39,10 +32,10 @@ module.exports = {
             const result = getRandomElement(data);
 
             return ctx.reply(
-                `${quote(`Doa: ${data.nama}`)}\n` +
-                `${data.arab} (${data.latin})\n` +
-                `${italic(data.latin)}\n` +
-                `${quote(`Riwayat: ${data.riwayat}`)}\n` +
+                `${quote(`Doa: ${result.nama}`)}\n` +
+                `${result.arab} (${result.latin})\n` +
+                `${italic(result.latin)}\n` +
+                `${quote(`Riwayat: ${result.riwayat}`)}\n` +
                 "\n" +
                 global.msg.footer
             );

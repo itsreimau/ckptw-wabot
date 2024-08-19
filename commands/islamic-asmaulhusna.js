@@ -35,11 +35,11 @@ module.exports = {
             const asmaulhusna = data.result;
 
             if (input.toLowerCase() === "all") {
-                const resultText = asmaulhusna.map((r) =>
-                    `${quote(`Nomor: ${r.number}`)}\n` +
-                    `${quote(`Latin: ${r.latin}`)}\n` +
-                    `${quote(`Arab: ${r.arab}`)}\n` +
-                    `${quote(`Arti: ${r.translate_id}`)}`
+                const resultText = asmaulhusna.map((a) =>
+                    `${quote(`Nomor: ${a.number}`)}\n` +
+                    `${quote(`Latin: ${a.latin}`)}\n` +
+                    `${quote(`Arab: ${a.arab}`)}\n` +
+                    `${quote(`Arti: ${a.translate_id}`)}`
                 ).join(
                     "\n" +
                     `${quote("─────")}\n`
@@ -56,7 +56,7 @@ module.exports = {
 
             if (isNaN(index) || index < 1 || index > 99) return ctx.reply(quote(`⚠ Nomor Asmaul Husna tidak valid. Harap masukkan nomor antara 1 dan 99 atau ketik "all" untuk melihat semua Asmaul Husna.`));
 
-            const selectedName = asmaulhusna.find((r) => parseInt(r.number) === index);
+            const selectedName = asmaulhusna.find((a) => parseInt(a.number) === index);
 
             if (selectedName) {
                 const {
@@ -76,8 +76,8 @@ module.exports = {
             }
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            if (erroa.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${erroa.message}`));
         }
     }
 };

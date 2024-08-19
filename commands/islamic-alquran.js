@@ -33,17 +33,14 @@ module.exports = {
 
         if (ctx._args[0] === "list") {
             const listText = await getList("alquran");
-
             return ctx.reply(listText);
         }
 
         try {
             const suraNumber = parseInt(ctx._args[0]);
-            const ayaNumber = parseInt(ctx._args[1]);
+            const ayaInput = ctx._args[1];
 
             if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`⚠ Surah ${suraNumber} tidak ada.`));
-
-            if (ayaNumber && (isNaN(ayaNumber) || ayaNumber < 1)) return ctx.reply(quote(`⚠ Ayat harus lebih dari 0.`));
 
             const apiUrl = createAPIUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
             const response = await axios.get(apiUrl);
@@ -51,26 +48,54 @@ module.exports = {
                 data
             } = response.data;
 
-            if (ayaNumber) {
-                const aya = data.ayat.find((verse) => verse.nomorAyat === ayaNumber);
-                if (!aya) return ctx.reply(quote(`⚠ Ayat ${ayaNumber} tidak ada.`));
+            if (ayaInput) {
+                if (ayaInput.includes("-")) {
+                    const [startAya, endAya] = ayaInput.split("-").map(num => parseInt(num));
 
-                return ctx.reply(
-                    `${aya.teksArab} (${aya.teksLatin})\n` +
-                    `${italic(aya.teksIndonesia)}\n` +
-                    "\n" +
-                    global.msg.footer
-                );
+                    if (isNaN(startAya) || isNaN(endAya) || startAya < 1 || endAya < startAya) return ctx.reply(quote(`⚠ Rentang ayat tidak valid.`));
+
+                    const verses = data.ayat.filter((d) => d.nomorAyat >= startAya && d.nomorAyat <= endAya);
+                    if (verses.length === 0) return ctx.reply(quote(`⚠ Ayat dalam rentang ${startAya}-${endAya} tidak ada.`));
+
+                    const versesText = verses.map((d) => {
+                        return `${bold(`Ayat ${d.nomorAyat}:`)}\n` +
+                            `${d.teksArab} (${d.teksLatin})\n` +
+                            `${italic(d.teksIndonesia)}`;
+                    }).join("\n");
+
+                    return ctx.reply(
+                        `${bold(`Surah ${data.namaLatin}`)}\n` +
+                        `${quote(`${data.arti}`)}\n` +
+                        `${quote("─────")}\n` +
+                        `${versesText}\n` +
+                        "\n" +
+                        global.msg.footer
+                    );
+                } else {
+                    const ayaNumber = parseInt(ayaInput);
+
+                    if (isNaN(ayaNumber) || ayaNumber < 1) return ctx.reply(quote(`⚠ Ayat harus lebih dari 0.`));
+
+                    const aya = data.ayat.find((d) => d.nomorAyat === ayaNumber);
+                    if (!aya) return ctx.reply(quote(`⚠ Ayat ${ayaNumber} tidak ada.`));
+
+                    return ctx.reply(
+                        `${aya.teksArab} (${aya.teksLatin})\n` +
+                        `${italic(aya.teksIndonesia)}\n` +
+                        "\n" +
+                        global.msg.footer
+                    );
+                }
             } else {
-                const versesText = data.ayat.map((verse) => {
-                    return `${bold(`Ayat ${verse.nomorAyat}:`)}\n` +
-                        `${verse.teksArab} (${verse.teksLatin})\n` +
-                        `${italic(verse.teksIndonesia)}`;
+                const versesText = data.ayat.map((d) => {
+                    return `${bold(`Ayat ${d.nomorAyat}:`)}\n` +
+                        `${d.teksArab} (${d.teksLatin})\n` +
+                        `${italic(d.teksIndonesia)}`;
                 }).join("\n");
                 return ctx.reply(
                     `${bold(`Surah ${data.namaLatin}`)}\n` +
                     `${quote(`${data.arti}`)}\n` +
-                    `${quote("─────")}\n`
+                    `${quote("─────")}\n` +
                     `${versesText}\n` +
                     "\n" +
                     global.msg.footer

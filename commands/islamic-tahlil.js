@@ -28,9 +28,9 @@ module.exports = {
             } = response.data;
 
             const resultText = data.map((d) =>
-                `${quote(data.title)}` +
-                `${data.arabic}` +
-                `${quote(data.translation)}`
+                `${quote(d.title)}\n` +
+                `${d.arabic}\n` +
+                `${quote(d.translation)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

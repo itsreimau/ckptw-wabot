@@ -10,7 +10,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "fbdl",
-    aliases: ["fb", "facebook", "facebookdl"],
+    aliases: ["fb", "facebook"],
     category: "downloader",
     code: async (ctx) => {
         const {
@@ -29,21 +29,54 @@ module.exports = {
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
-        const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
+
+        const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/facebook", {
-                url
-            });
-            const response = await axios.get(apiUrl);
-            const {
-                data
-            } = response.data;
+            let result = null;
+
+            const apiCalls = [
+                async () => {
+                        const {
+                            data
+                        } = await axios.get(createAPIUrl("agatz", "/api/facebook", {
+                            url
+                        }));
+                        return data.hasil.url || data.high || data.low;
+                    },
+                    async () => {
+                            const {
+                                data
+                            } = await axios.get(createAPIUrl("nyxs", "/dl/fb", {
+                                url
+                            }));
+                            return data.result.HD || data.result.SD;
+                        },
+                        async () => {
+                            const {
+                                data
+                            } = await axios.get(createAPIUrl("ngodingaja", "/api/fb", {
+                                url
+                            }));
+                            return data.hasil.url;
+                        }
+            ];
+
+            for (const call of apiCalls) {
+                try {
+                    result = await call();
+                    if (result && urlRegex.test(result)) break;
+                } catch (error) {
+                    console.error("Error in API call:", error.message);
+                }
+            }
+
+            if (!result) return ctx.reply(global.msg.notFound);
 
             return await ctx.reply({
                 video: {
-                    url: data.high || data.low
+                    url: result
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
