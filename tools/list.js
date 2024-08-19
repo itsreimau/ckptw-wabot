@@ -1,4 +1,4 @@
-const {
+xconst {
     createAPIUrl
 } = require("./api.js");
 const {
@@ -59,7 +59,7 @@ exports.getList = async (type, ctx) => {
 
     try {
         switch (type) {
-            case "alkitab":
+            case "alkitab": {
                 const alKitabResponse = await axios.get(createAPIUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
                 text = alKitabResponse.data.data.map(b =>
                     `${quote(`Buku: ${b.name} (${b.abbr})`)}\n` +
@@ -69,8 +69,8 @@ exports.getList = async (type, ctx) => {
 
                 text += global.msg.footer;
                 break;
-
-            case "alquran":
+            }
+            case "alquran": {
                 const alquranResponse = await axios.get(createAPIUrl("https://equran.id", "/api/v2/surat", {}));
                 text = alquranResponse.data.data.map(s =>
                     `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
@@ -80,42 +80,29 @@ exports.getList = async (type, ctx) => {
 
                 text += global.msg.footer;
                 break;
-
-            case "disable_enable":
+            }
+            case "disable_enable": {
                 const deList = ["antilink", "welcome"];
-                text = "";
-
-                for (const item of deList) {
-                    text += `${quote(item)}\n`;
-                }
-
+                text = deList.map(item => quote(item)).join("\n");
                 text += "\n" +
                     global.msg.footer;
                 break;
-
-            case "texttoimage":
+            }
+            case "texttoimage": {
                 const texttoimageResponse = await axios.get(createAPIUrl("fasturl", "/ai/texttoimage", {}));
-
                 const models = texttoimageResponse.data.listmodelsforSDXL;
                 const styles = texttoimageResponse.data.liststyles;
 
-                let text = "";
-
-                text += `${quote(`Model:`)}\n`;
-                for (const item of models) {
-                    text += `${quote(item)}\n`;
-                }
-
-                text += `\n${quote(`Style:`)}\n`;
-                for (const item of styles) {
-                    text += `${quote(item)}\n`;
-                }
-
+                text += `${quote("Model:")}\n` +
+                    models.map(item => quote(item)).join("\n");
+                text += "\n" +
+                    `${quote("Style:")}\n` +
+                    styles.map(item => quote(item)).join("\n");
                 text += "\n" +
                     global.msg.footer;
                 break;
-
-            case "menu":
+            }
+            case "menu": {
                 const cmds = ctx._self.cmd;
                 const tags = {
                     main: "Main",
@@ -135,14 +122,14 @@ exports.getList = async (type, ctx) => {
                 };
 
                 if (!cmds || cmds.size === 0) {
-                    text = quote(`⚠ Terjadi kesalahan: Tidak ada perintah yang ditemukan.`);
+                    text = quote("⚠ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");
                 } else {
                     text = generateMenuText(cmds, tags);
                 }
                 break;
-
+            }
             default:
-                text = quote(`⚠ Terjadi kesalahan: Jenis daftar tidak dikenal.`);
+                text = quote("⚠ Terjadi kesalahan: Jenis daftar tidak dikenal.");
                 break;
         }
     } catch (error) {
