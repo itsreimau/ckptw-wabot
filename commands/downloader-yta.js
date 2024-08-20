@@ -34,7 +34,7 @@ module.exports = {
         if (!urlRegex.test(url)) ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = = createAPIUrl("vkrdownloader", "/server", {
+            const apiUrl = createAPIUrl("vkrdownloader", "/server", {
                 vkr: url
             });
             const response = await axios.get(apiUrl);
