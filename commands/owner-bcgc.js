@@ -56,7 +56,7 @@ module.exports = {
                 });
             }
 
-            return ctx.reply(quote(`⚠ Berhasil mengirimkan siaran ke ${anu.length} obrolan grup.`));
+            return ctx.reply(quote(`✅ Berhasil mengirimkan siaran ke ${anu.length} obrolan grup.`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

@@ -39,7 +39,7 @@ module.exports = {
 
             await ctx.group().demote([account]);
 
-            return ctx.reply(quote(`⚠ Berhasil diturunkan dari admin menjadi anggota biasa!`));
+            return ctx.reply(quote(`✅ Berhasil diturunkan dari admin menjadi anggota biasa!`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

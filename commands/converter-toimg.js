@@ -29,7 +29,7 @@ module.exports = {
 
         const quotedMessage = ctx.quoted;
 
-        if (!quotedMessage) return ctx.reply(quote(`⚠ Berikan atau balas media berupa sticker!`));
+        if (!quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;

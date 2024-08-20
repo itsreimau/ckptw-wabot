@@ -43,7 +43,7 @@ module.exports = {
                     return ctx.reply(quote(`⚠ Argumen yang tersedia adalah open, close, lock, dan unlock.`));
             }
 
-            return ctx.reply(quote(`⚠ Berhasil mengubah setelan grup!`));
+            return ctx.reply(quote(`✅ Berhasil mengubah setelan grup!`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

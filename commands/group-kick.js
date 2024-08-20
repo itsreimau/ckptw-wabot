@@ -39,7 +39,7 @@ module.exports = {
 
             await ctx.group().kick([account]);
 
-            return ctx.reply(quote(`⚠ Berhasil dikeluarkan!`));
+            return ctx.reply(quote(`✅ Berhasil dikeluarkan!`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

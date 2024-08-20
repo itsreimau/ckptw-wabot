@@ -37,7 +37,7 @@ module.exports = {
                 data
             } = response.data;
 
-            const resultText = data.result.map((d) =>
+            const resultText = data.map((d) =>
                 `${quote(`Judul: ${d.title}`)}\n` +
                 `${quote(`Deskripsi: ${d.snippet}`)}\n` +
                 `${quote(`URL: ${d.link}`)}`

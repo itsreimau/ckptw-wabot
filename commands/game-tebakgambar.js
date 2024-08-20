@@ -66,7 +66,7 @@ module.exports = {
                     if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
                     await ctx.sendMessage(
                         ctx.id, {
-                            text: quote(`⚠ Benar!`) +
+                            text: quote(`💯 Benar!`) +
                                 (global.system.useCoin ?
                                     "\n" +
                                     quote(`+${coin} Koin`) :
@@ -93,7 +93,7 @@ module.exports = {
                     await session.delete(ctx.id);
 
                     return ctx.reply(
-                        `${quote(`⚠ Waktu habis!`)}\n` +
+                        `${quote(`⌛ Waktu habis!`)}\n` +
                         quote(`Jawabannya adalah ${answer}.`)
                     );
                 }

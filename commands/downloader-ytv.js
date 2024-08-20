@@ -33,16 +33,18 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("widipe", "/download/ytdl", {
-                url
+            const apiUrl = = createAPIUrl("vkrdownloader", "/server", {
+                vkr: url
             });
+            const response = await axios.get(apiUrl);
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = response.data;
+            const result = data.downloads[0].url;
 
             return await ctx.reply({
                 video: {
-                    url: data.result.mp4
+                    url: result
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
@@ -52,7 +54,8 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error:", error);
-            ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

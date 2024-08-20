@@ -2,9 +2,7 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
+    bold,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -28,23 +26,22 @@ module.exports = {
         const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`)
+            `${global.msg.argument}\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`
         );
 
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/pinsearch", {
-                message: input
+            const apiUrl = createAPIUrl("ssa", "/api/pinterest", {
+                query: input
             });
             const response = await axios.get(apiUrl);
             const {
                 data
             } = response.data;
-            const result = getRandomElement(data);
 
             return await ctx.reply({
                 image: {
-                    url: result.image_url
+                    url: data.response
                 },
                 mimetype: mime.contentType("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +
@@ -54,7 +51,7 @@ module.exports = {
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

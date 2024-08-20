@@ -2,14 +2,16 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
+    bold,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 
 module.exports = {
-    name: "tahlil",
-    category: "islamic",
+    name: "blackbox",
+    aliases: ["bb"],
+    category: "ai",
     code: async (ctx) => {
         const {
             status,
@@ -20,26 +22,22 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
+        const input = ctx._args.join(" ") || null;
+
+        if (!input) return ctx.reply(
+            `${quote(global.msg.argument)}\n` +
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`)
+        );
+
         try {
-            const apiUrl = await createAPIUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/religi/islam/tahlil.json", {});
-            const response = await axios.get(apiUrl);
+            const apiUrl = createAPIUrl("chiwa", "/api/ai", {
+                prompt: input
+            });
             const {
                 data
-            } = response.data;
+            } = await axios.get(apiUrl);
 
-            const resultText = data.map((d) =>
-                `${quote(d.title)}\n` +
-                `${d.arabic}\n` +
-                `${quote(d.translation)}`
-            ).join(
-                "\n" +
-                `${quote("─────")}\n`
-            );
-            return ctx.reply(
-                `${resultText}\n` +
-                "\n" +
-                global.msg.footer
-            );
+            return ctx.reply(data.result);
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

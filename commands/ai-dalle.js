@@ -9,8 +9,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "dalle",
-    aliases: ["dall", "aiimg"],
+    name: "aiimg",
+    aliases: ["diff", "diffusion", "sxdl", "stablediffusion"],
     category: "ai",
     code: async (ctx) => {
         const {
@@ -30,13 +30,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("widipe", `/dalle`, {
-                text: input
+            const apiUrl = createAPIUrl("sanzy", `/api/stablediffusion-sxdl`, {
+                prompt: input
             });
+            const response = await axios.get(apiUrl);
+            const {
+                data
+            } = response.data;
 
             return await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: data.url
                 },
                 mimetype: mime.contentType("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +

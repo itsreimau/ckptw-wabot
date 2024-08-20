@@ -37,7 +37,7 @@ module.exports = {
                 data
             } = response.data;
 
-            const resultText = data.result.map((d) =>
+            const resultText = data.map((d) =>
                 `${quote(`Nama: ${d.fullName}`)}\n` +
                 `${quote(`Fork: ${d.fork ? "Ya" : "Tidak"}`)}\n` +
                 `${quote(`URL: ${d.htmlUrl}`)}\n` +

@@ -42,10 +42,10 @@ module.exports = {
             const weatherId = await translate(data.current.condition.text, "en", "id");
 
             return ctx.reply(
-                `${quote(`Tempat: ${data.location.name}, ${data.data.location.region}, ${data.data.location.country}`)}\n` +
+                `${quote(`Tempat: ${data.location.name}, ${data.location.region}, ${data.location.country}`)}\n` +
                 `${quote(`Cuaca: ${weatherId.translation}`)}\n` +
                 `${quote(`Kelembapan: ${data.current.humidity} %`)}\n` +
-                `${quote(`Angin: ${data.current.wind_kph} km/jam (${data.data.current.wind_dir})`)}\n` +
+                `${quote(`Angin: ${data.current.wind_kph} km/jam (${data.current.wind_dir})`)}\n` +
                 `${quote(`Suhu saat ini: ${data.current.temp_c} °C`)}\n` +
                 `${quote(`Terasa seperti: ${data.current.feelslike_c} °C`)}\n` +
                 `${quote(`Kecepatan angin: ${data.current.gust_kph} km/jam`)}\n` +

@@ -5,6 +5,7 @@ const {
     getRandomElement
 } = require("../tools/general.js");
 const {
+    bold,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -28,19 +29,18 @@ module.exports = {
         const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`)
+            `${global.msg.argument}\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`
         );
 
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/gimage", {
-                message: input
+            const apiUrl = createAPIUrl("https://google-image-api.vercel.app", "/search", {
+                q: input
             });
-            const response = await axios.get(apiUrl);
             const {
                 data
-            } = response.data;
-            const result = getRandomElement(data);
+            } = await axios.get(apiUrl);
+            const result = getRandomElement(data.result);
 
             return await ctx.reply({
                 image: {
@@ -54,7 +54,7 @@ module.exports = {
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

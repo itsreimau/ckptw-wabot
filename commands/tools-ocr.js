@@ -33,7 +33,7 @@ module.exports = {
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx.quoted;
 
-        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(quote(`⚠ Berikan atau balas media berupa gambar!`));
+        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;

@@ -29,19 +29,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/SazumiVicky/cek-khodam/main/khodam/list.txt`, {});
+            const apiUrl = createAPIUrl("https://raw.caliph.my.id", `/khodam.json`, {});
             const {
                 data
             } = await axios.get(apiUrl);
-            const list = data.split('\n').filter(l => l.trim().length > 0);
-            const khodam = list[Math.floor(Math.random() * list.length)];
+            const khodam = getRandomElement(data);
 
             return ctx.reply({
                 text: `${quote(`Nama: ${input}`)}\n` +
                     `${quote(`Khodam: ${khodam}`)}\n` +
                     "\n" +
-                    global.msg.footer
-            }, {
+                    global.msg.footer,
                 mentions: ctx.getMentioned()
             });
         } catch (error) {

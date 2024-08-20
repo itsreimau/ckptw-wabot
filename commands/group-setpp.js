@@ -27,7 +27,7 @@ module.exports = {
         const msgType = ctx.getMessageType();
         const quotedMessage = ctx.quoted;
 
-        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(quote(`⚠ Berikan atau balas media berupa gambar!`));
+        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
             const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
@@ -36,7 +36,7 @@ module.exports = {
 
             await ctx._client.updateProfilePicture(ctx.id, buffer);
 
-            return ctx.reply(quote(`⚠ Berhasil mengubah gambar profil foto grup!`));
+            return ctx.reply(quote(`✅ Berhasil mengubah gambar profil foto grup!`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

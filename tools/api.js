@@ -14,17 +14,14 @@ const APIs = {
     ngodingaja: {
         baseURL: "https://api.ngodingaja.my.id"
     },
-    ryzendesu: {
-        baseURL: "https://apis.ryzendesu.vip"
-    },
-    sandipbaruwal: {
-        baseURL: "https://sandipbaruwal.onrender.com"
-    },
-    ssa: {
-        baseURL: "https://ssa-api.vercel.app"
+    sanzy: {
+        baseURL: "https://api.sanzy.co"
     },
     vyturex: {
         baseURL: "https://www.api.vyturex.com"
+    },
+    vkrdownloader: {
+        baseURL: "https://vkrdownloader.vercel.app"
     },
     widipe: {
         baseURL: "https://widipe.com"

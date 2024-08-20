@@ -81,7 +81,7 @@ module.exports = {
                 text: menfessText
             });
 
-            return ctx.reply(quote(`⚠ Pesan berhasil terkirim!`));
+            return ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

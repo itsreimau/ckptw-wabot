@@ -34,14 +34,14 @@ module.exports = {
 
         try {
             const [result] = await ctx._client.onWhatsApp(user);
-            if (!result.exists) return ctx.reply(quote(`⚠ Akun tidak ada di WhatsApp.`));
+            if (!result.exists) return ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
 
             await global.db.set(`user.${user.split("@")[0]}.isPremium`, false);
 
             ctx.sendMessage(user, {
-                text: quote(`⚠ Anda telah dihapus sebagai pengguna Premium oleh Owner!`)
+                text: quote(`🎉 Anda telah dihapus sebagai pengguna Premium oleh Owner!`)
             });
-            return ctx.reply(quote(`⚠ Berhasil dihapus sebagai pengguna Premium!`));
+            return ctx.reply(quote(`✅ Berhasil dihapus sebagai pengguna Premium!`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

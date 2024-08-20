@@ -32,12 +32,12 @@ module.exports = {
             const participantsIds = members.map(user => user.id);
 
             await ctx.sendMessage(res, {
-                text: quote(`⚠ Halo! Saya adalah Bot WhatsApp bernama ${global.bot.name}, dimiliki oleh ${global.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)
+                text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${global.bot.name}, dimiliki oleh ${global.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)
             }, {
                 mentions: participantsIds
             });
 
-            return await ctx.reply(quote(`⚠ Berhasil bergabung dengan grup!`));
+            return await ctx.reply(quote(`✅ Berhasil bergabung dengan grup!`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

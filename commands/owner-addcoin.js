@@ -34,14 +34,14 @@ module.exports = {
 
         try {
             const [result] = await ctx._client.onWhatsApp(user);
-            if (!result.exists) return ctx.reply(quote(`⚠ Akun tidak ada di WhatsApp.`));
+            if (!result.exists) return ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
 
             await global.db.add(`user.${user.split("@")[0]}.coin`, coinAmount);
 
             ctx.sendMessage(user, {
-                text: quote(`⚠ Anda telah menerima ${coinAmount} koin dari Owner!`)
+                text: quote(`🎉 Anda telah menerima ${coinAmount} koin dari Owner!`)
             });
-            return ctx.reply(quote(`⚠ Berhasil menambahkan ${coinAmount} koin kepada pengguna!`));
+            return ctx.reply(quote(`✅ Berhasil menambahkan ${coinAmount} koin kepada pengguna!`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

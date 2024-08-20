@@ -38,7 +38,7 @@ module.exports = {
 
             await ctx.group().promote([account]);
 
-            return ctx.reply(quote(`⚠ Berhasil ditingkatkan dari anggota biasa menjadi admin!`));
+            return ctx.reply(quote(`✅ Berhasil ditingkatkan dari anggota biasa menjadi admin!`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

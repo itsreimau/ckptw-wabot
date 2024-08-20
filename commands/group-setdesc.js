@@ -28,7 +28,7 @@ module.exports = {
         try {
             await ctx.group().updateDescription(input);
 
-            return ctx.reply(quote(`⚠ Berhasil mengubah deskripsi grup!`));
+            return ctx.reply(quote(`✅ Berhasil mengubah deskripsi grup!`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

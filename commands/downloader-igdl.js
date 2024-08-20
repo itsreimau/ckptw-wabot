@@ -33,29 +33,30 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/instagram", {
-                url
+            const apiUrl = createAPIUrl("vkrdownloader", "/server", {
+                vkr: url
             });
             const response = await axios.get(apiUrl);
             const {
                 data
             } = response.data;
 
-            for (const item of data) {
-                const mediaResponse = await axios.get(item.link, {
-                    responseType: "arraybuffer"
-                });
-                const contentType = mediaResponse?.headers?.["content-type"];
+            for (const download of data.downloads) {
+                const mimeType = mime.contentType(download.extension);
 
-                if (/image/.test(contentType)) {
+                if (mimeType.startsWith('image/')) {
                     await ctx.reply({
-                        image: mediaResponse.data,
-                        mimetype: mime.contentType(contentType)
+                        image: {
+                            url: download.url
+                        },
+                        mimetype: mimeType
                     });
-                } else if (/video/.test(contentType)) {
+                } else if (mimeType.startsWith('video/')) {
                     await ctx.reply({
-                        video: mediaResponse.data,
-                        mimetype: mime.contentType(contentType)
+                        video: {
+                            url: download.url
+                        },
+                        mimetype: mimeType
                     });
                 }
             }

@@ -33,17 +33,18 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/facebook", {
-                url
+            const apiUrl = createAPIUrl("vkrdownloader", "/server", {
+                vkr: url
             });
             const response = await axios.get(apiUrl);
             const {
                 data
             } = response.data;
+            const downloadUrl = data.downloads.find(d => d.format_id === "hd")?.url || data.downloads.find(d => d.format_id === "sd")?.url;
 
             return await ctx.reply({
                 video: {
-                    url: data.high || data.low
+                    url: downloadUrl
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +

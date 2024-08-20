@@ -31,12 +31,12 @@ global.msg = {
     readmore: "\u200E".repeat(4001),
 
     // Command process.
-    argument: `⚠ Masukkan argumen!`,
-    wait: `⚠ Tunggu sebentar...`,
+    argument: `📌 Masukkan argumen!`,
+    wait: `🔄 Tunggu sebentar...`,
 
     // Command process (Error).
-    notFound: `⚠ Tidak ada yang ditemukan!`,
-    urlInvalid: `⚠ URL tidak valid!`
+    notFound: `❎ Tidak ada yang ditemukan!`,
+    urlInvalid: `❎ URL tidak valid!`
 };
 
 // Owner & CoOwner.

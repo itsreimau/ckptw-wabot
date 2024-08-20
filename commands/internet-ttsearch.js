@@ -11,7 +11,7 @@ const mime = require("mime-types");
 module.exports = {
     name: "ttsearch",
     aliases: ["vtsearch", "tiktoksearch"],
-    category: "downloader",
+    category: "internet",
     code: async (ctx) => {
         const {
             status,

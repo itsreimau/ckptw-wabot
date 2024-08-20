@@ -34,14 +34,14 @@ module.exports = {
 
         try {
             const [result] = await ctx._client.onWhatsApp(user);
-            if (!result.exists) return ctx.reply(quote(`⚠ Akun tidak ada di WhatsApp.`));
+            if (!result.exists) return ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
 
             await global.db.set(`user.${user.split("@")[0]}.isBanned`, false);
 
             ctx.sendMessage(user, {
-                text: quote(`⚠ Anda telah diunbanned oleh Owner!`)
+                text: quote(`🎉 Anda telah diunbanned oleh Owner!`)
             });
-            ctx.reply(quote(`⚠ Berhasil diunbanned!`));
+            ctx.reply(quote(`✅ Berhasil diunbanned!`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
