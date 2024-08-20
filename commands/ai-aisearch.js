@@ -35,10 +35,12 @@ module.exports = {
                 text: input
             });
             const response = await axios.get(apiUrl);
-            const data = response.data.data[0];
+            const data = response.data.data;
 
-            if (global.system.useInteractiveMessage) {
-                const relatedQuestions = data.find(d => d.type === "related_questions")?.questions || [];
+            const combinedText = data.find(d => d.type === "combined_text")?.text;
+            const relatedQuestions = data.find(d => d.type === "related_questions")?.questions || [];
+
+            if (global.system.useInteractiveMessage && relatedQuestions.length > 0) {
                 const section = new SectionsBuilder()
                     .setDisplayText("Select Related Questions ❓")
                     .addSection({
@@ -51,7 +53,7 @@ module.exports = {
                     .build();
 
                 return ctx.replyInteractiveMessage({
-                    body: data.text,
+                    body: combinedText || "Hasil pencarian tidak tersedia.",
                     footer: global.msg.watermark,
                     nativeFlowMessage: {
                         buttons: [section]
@@ -59,9 +61,10 @@ module.exports = {
                 });
             }
 
-            return ctx.reply(data.text);
+            return ctx.reply(combinedText || "Hasil pencarian tidak tersedia.");
         } catch (error) {
             console.error("Error:", error);
+            const statusCode = error.response?.status;
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
