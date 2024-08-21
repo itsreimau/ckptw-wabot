@@ -289,7 +289,7 @@ async function handleUserEvent(m) {
                     quote(`⚠ @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
                 const card = createAPIUrl("aggelos_007", "/welcomecard", {
                     text1: jid.split("@")[0],
-                    text2: m.eventsType === "UserJoin" ? "Selamat datang" : quote("Selamat tinggal!");,
+                    text2: m.eventsType === "UserJoin" ? "Selamat datang" : "Selamat tinggal!",
                     text3: metadata.subject,
                     avatar: profileUrl,
                     background: global.bot.thumbnail
