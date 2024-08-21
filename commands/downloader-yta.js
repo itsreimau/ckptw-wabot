@@ -1,17 +1,13 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
-const FormData = require("form-data");
 const mime = require("mime-types");
+const ytdl = require("node-yt-dl");
 
 module.exports = {
-    name: "yta",
-    aliases: ["ytmp3", "ytaudio"],
+    name: "ytv",
+    aliases: ["ytmp4", "ytvideo"],
     category: "downloader",
     code: async (ctx) => {
         const {
@@ -31,22 +27,16 @@ module.exports = {
         );
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!urlRegex.test(url)) ctx.reply(global.msg.urlInvalid);
+        if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("vkrdownloader", "/server", {
-                vkr: url
-            });
-            const response = await axios.get(apiUrl);
-            const {
-                data
-            } = response.data;
-            const result = data.downloads[0].url;
-            const buffer = video2audio(result);
+            const data = await ytdl.mp3(url);
+
+            if (!data.status) return ctx.reply(global.msg.notFound);
 
             return await ctx.reply({
                 video: {
-                    url: result
+                    url: data.media
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
@@ -61,67 +51,3 @@ module.exports = {
         }
     }
 };
-
-
-async function video2audio(input) {
-    try {
-        return await new Promise(async (resolve, reject) => {
-            let videoBuffer;
-
-            if (typeof input === "string") {
-                videoBuffer = await axios.get(input, {
-                        responseType: 'arraybuffer'
-                    }).then(res => res.data)
-                    .catch(error => reject(`Error during video download: ${error.message}`));
-
-                if (!Buffer.isBuffer(videoBuffer)) return reject("Failed to download video as buffer!");
-            } else if (Buffer.isBuffer(input)) {
-                videoBuffer = input;
-            } else {
-                return reject("Invalid input: expected a URL (string) or a Buffer");
-            }
-
-            const form = new FormData();
-            form.append("userfile", videoBuffer, `${Date.now()}.mp4`);
-
-            axios.post("https://service5.coolutils.org/upload.php", form, {
-                    headers: form.getHeaders(),
-                })
-                .then(async uploadRes => {
-                    const uploadedFile = uploadRes.data;
-                    if (!uploadedFile) return reject("Failed converting while uploading media!");
-
-                    const payload = new URLSearchParams();
-                    payload.append("Flag", 5);
-                    payload.append("srcfile", uploadedFile);
-                    payload.append("Ref", "/convert/MP4-to-MP3");
-                    payload.append("fmt", "mp3");
-                    payload.append("resize_constraint", "on");
-
-                    axios.post("https://service5.coolutils.org/movie_convert.php", payload.toString(), {
-                            headers: {
-                                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-                                "Content-Type": "application/x-www-form-urlencoded"
-                            },
-                            responseType: "arraybuffer"
-                        })
-                        .then(res => {
-                            if (!Buffer.isBuffer(res.data)) return reject("Failed converting video to audio!");
-                            resolve({
-                                status: true,
-                                data: {
-                                    audio: Buffer.from(res.data, "binary")
-                                }
-                            });
-                        })
-                        .catch(error => reject(`Error during conversion: ${error.message}`));
-                })
-                .catch(error => reject(`Error during upload: ${error.message}`));
-        });
-    } catch (e) {
-        return {
-            status: false,
-            message: e.message || e
-        };
-    }
-}

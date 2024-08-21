@@ -2,6 +2,9 @@ const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"
     },
+    aggelos_007: {
+        baseURL: "https://api.aggelos-007.xyz"
+    },
     chiwa: {
         baseURL: "https://api.chiwa.my.id"
     },
@@ -16,6 +19,9 @@ const APIs = {
     },
     sanzy: {
         baseURL: "https://api.sanzy.co"
+    },
+    ssa: {
+        baseURL: "https://ssa-api.vercel.app/"
     },
     vyturex: {
         baseURL: "https://www.api.vyturex.com"
@@ -50,6 +56,6 @@ exports.createAPIUrl = (apiNameOrURL, endpoint, params = {}, apiKeyParamName) =>
     return apiUrl.toString();
 };
 
-exports.listUrl = () => {
+exports.listAPIUrl = () => {
     return APIs;
 }

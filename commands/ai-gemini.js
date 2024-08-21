@@ -44,7 +44,7 @@ module.exports = {
 
         if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage?.conversation) {
             try {
-                const apiUrl = createAPIUrl("sanzy", "/api/gemini-image", {
+                const apiUrl = createAPIUrl("sanzy", "/api/gemini", {
                     text: input
                 });
                 const response = await axios.get(apiUrl);
@@ -52,7 +52,7 @@ module.exports = {
                     data
                 } = response.data;
 
-                return ctx.reply(data.answer);
+                return ctx.reply(data);
             } catch (error) {
                 console.error("Error:", error);
                 return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));

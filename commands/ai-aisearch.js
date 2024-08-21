@@ -53,7 +53,7 @@ module.exports = {
                     .build();
 
                 return ctx.replyInteractiveMessage({
-                    body: combinedText || "Hasil pencarian tidak tersedia.",
+                    body: combinedText,
                     footer: global.msg.watermark,
                     nativeFlowMessage: {
                         buttons: [section]
@@ -61,10 +61,9 @@ module.exports = {
                 });
             }
 
-            return ctx.reply(combinedText || "Hasil pencarian tidak tersedia.");
+            return ctx.reply(combinedText);
         } catch (error) {
             console.error("Error:", error);
-            const statusCode = error.response?.status;
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }

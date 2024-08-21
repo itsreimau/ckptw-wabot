@@ -1,6 +1,6 @@
 {
     "name": "ckptw-wabot",
-    "version": "1.29.2",
+    "version": "1.29.4",
     "description": "WhatsApp Bot with @mengkodingan/ckptw.",
     "main": "index.js",
     "directories": {
@@ -38,6 +38,7 @@
         "link-preview-js": "^3.0.5",
         "mime-types": "^2.1.35",
         "moment-timezone": "^0.5.45",
+        "node-yt-dl": "^2.1.9",
         "simpl.db": "^2.13.0",
         "telegraph-uploader": "^2.0.0",
         "util": "^0.12.5",

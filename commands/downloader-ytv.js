@@ -1,15 +1,9 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
+const ytdl = require("node-yt-dl");
 
 module.exports = {
     name: "ytv",
@@ -36,18 +30,13 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("vkrdownloader", "/server", {
-                vkr: url
-            });
-            const response = await axios.get(apiUrl);
-            const {
-                data
-            } = response.data;
-            const result = data.downloads[0].url;
+            const data = await ytdl.mp4(url);
+
+            if (!data.status) return ctx.reply(global.msg.notFound);
 
             return await ctx.reply({
                 video: {
-                    url: result
+                    url: data.media
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +

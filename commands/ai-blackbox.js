@@ -30,7 +30,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("chiwa", "/api/ai", {
+            const apiUrl = createAPIUrl("chiwa", "/api/blackbox", {
                 prompt: input
             });
             const {

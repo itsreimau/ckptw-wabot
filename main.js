@@ -2,6 +2,9 @@
 const {
     handler
 } = require("./handler.js");
+const {
+    createAPIUrl
+} = require("./tools/api.js");
 const gnrl = require("./tools/general.js");
 const {
     Client,
@@ -86,7 +89,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         const mean = didyoumean(cmdName, listCmd);
 
-        if (mean && mean !== cmdName) ctx.reply(quote(`⚠ Apakah maksud Anda ${monospace(prefix + mean)}?`));
+        if (mean && mean !== cmdName) ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
     }
 
     // AFK handling: Mentioned users.
@@ -101,7 +104,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 ]);
                 const timeAgo = gnrl.convertMsToDuration(Date.now() - timeStamp);
 
-                ctx.reply(quote(`⚠ Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
+                ctx.reply(quote(`🚫 Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
             }
         }
     }
@@ -116,7 +119,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const timeAgo = gnrl.convertMsToDuration(Date.now() - timeStamp);
         await db.delete(`user.${senderNumber}.afk`);
 
-        ctx.reply(quote(`⚠ Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
+        ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
     }
 
     // Owner-only commands.
@@ -171,7 +174,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (getAntilink && m.content && urlRegex.test(m.content)) {
             if ((await gnrl.isAdmin(ctx)) === 1);
 
-            await ctx.reply(quote(`⚠ ⚠ Jangan kirim tautan!`));
+            await ctx.reply(quote(`⚠ Jangan kirim tautan!`));
             await ctx.deleteMessage(m.key);
         }
     }
@@ -190,7 +193,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 try {
                     await sendMenfess(ctx, m, senderNumber, from);
 
-                    ctx.reply(quote(`⚠ Pesan berhasil terkirim!`));
+                    ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
                 } catch (error) {
                     console.error("Error:", error);
                     ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
@@ -284,6 +287,13 @@ async function handleUserEvent(m) {
                 const message = m.eventsType === "UserJoin" ?
                     quote(`⚠ Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`) :
                     quote(`⚠ @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
+                const card = createAPIUrl("aggelos_007", "/welcomecard", {
+                    text1: jid.split("@")[0],
+                    text2: m.eventsType === "UserJoin" ? "Selamat datang" : quote("Selamat tinggal!");,
+                    text3: metadata.subject,
+                    avatar: profileUrl,
+                    background: global.bot.thumbnail
+                });
 
                 await bot.core.sendMessage(id, {
                     text: message,
@@ -296,7 +306,7 @@ async function handleUserEvent(m) {
                             title: m.eventsType === "UserJoin" ? "JOIN" : "LEAVE",
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: profileUrl,
+                            thumbnailUrl: card || profileUrl || global.bot.thumbnail,
                             sourceUrl: global.bot.groupChat
                         }
                     }
