@@ -1,48 +1,50 @@
 {
-    "name": "ckptw-wabot",
-    "version": "1.29.4",
-    "description": "WhatsApp Bot with @mengkodingan/ckptw.",
-    "main": "index.js",
-    "directories": {
-        "lib": "lib"
-    },
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node .",
-        "start:pm2": "pm2 start"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/itsreimau/ckptw-wabot.git"
-    },
-    "keywords": [
-        "bot"
-    ],
-    "author": "Muhamad Ikbal Maulana | ItsReimau",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/itsreimau/ckptw-wabot/issues"
-    },
-    "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
-    "dependencies": {
-        "@mengkodingan/ckptw": "^4.3.3",
-        "@whiskeysockets/baileys": "^6.7.6",
-        "axios": "^1.7.4",
-        "bing-translate-api": "^4.0.2",
-        "cfonts": "^3.2.0",
-        "cheerio": "^1.0.0",
-        "didyoumean": "^1.2.2",
-        "form-data": "^4.0.0",
-        "jimp": "^0.16.1",
-        "jsdom": "^24.1.1",
-        "link-preview-js": "^3.0.5",
-        "mime-types": "^2.1.35",
-        "moment-timezone": "^0.5.45",
-        "node-yt-dl": "^2.1.9",
-        "simpl.db": "^2.13.0",
-        "telegraph-uploader": "^2.0.0",
-        "util": "^0.12.5",
-        "wa-sticker-formatter": "^4.4.4"
-    },
-    "devDependencies": {}
+  "name": "ckptw-wabot",
+  "version": "1.29.4",
+  "description": "WhatsApp Bot with @mengkodingan/ckptw.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .",
+    "start:pm2": "pm2 start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itsreimau/ckptw-wabot.git"
+  },
+  "keywords": [
+    "bot"
+  ],
+  "author": "Muhamad Ikbal Maulana | ItsReimau",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/itsreimau/ckptw-wabot/issues"
+  },
+  "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
+  "dependencies": {
+    "@mengkodingan/ckptw": "^4.3.3",
+    "axios": "^1.7.4",
+    "bing-translate-api": "^4.0.2",
+    "cfonts": "^3.2.0",
+    "cheerio": "^1.0.0",
+    "didyoumean": "^1.2.2",
+    "form-data": "^4.0.0",
+    "jimp": "^0.16.1",
+    "jsdom": "^24.1.1",
+    "link-preview-js": "^3.0.5",
+    "mime-types": "^2.1.35",
+    "moment-timezone": "^0.5.45",
+    "node-yt-dl": "^2.1.9",
+    "simpl.db": "^2.13.0",
+    "telegraph-uploader": "^2.0.0",
+    "util": "^0.12.5",
+    "wa-sticker-formatter": "^4.4.4"
+  },
+  "devDependencies": {},
+  "overrides": {
+    "@whiskeysockets/baileys": "6.7.7"
+  }
 }
