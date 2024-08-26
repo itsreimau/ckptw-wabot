@@ -20,9 +20,9 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const senderJid = ctx._sender.jid;
+        const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.replace(/@.*|:.*/g, "");
-        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+        const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const account = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : null;
 
         if (!account) return ctx.reply({

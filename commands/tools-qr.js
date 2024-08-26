@@ -20,7 +20,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const url = ctx._args[0] || null;
+        const url = ctx.args[0] || null;
 
         if (!url) return ctx.reply(
             `${quote(global.msg.argument)}\n` +

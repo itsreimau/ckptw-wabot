@@ -23,7 +23,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument}\n` +

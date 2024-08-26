@@ -22,7 +22,7 @@ module.exports = {
             const fakeProduct = {
                 key: {
                     fromMe: false,
-                    participant: ctx._sender.jid, // Change it to `0${S_WHATSAPP_NET}` if you want to become an official WhatsApp account.
+                    participant: ctx.sender.jid, // Change it to `0${S_WHATSAPP_NET}` if you want to become an official WhatsApp account.
                     ...({
                         remoteJid: "status@broadcast"
                     })
@@ -37,7 +37,7 @@ module.exports = {
                             retailerId: global.bot.name,
                             productImageCount: 0
                         },
-                        businessOwnerJid: ctx._sender.jid
+                        businessOwnerJid: ctx.sender.jid
                     }
                 }
             };
@@ -67,7 +67,7 @@ module.exports = {
                 ctx.id, {
                     text: text,
                     contextInfo: {
-                        mentionedJid: [ctx._sender.jid],
+                        mentionedJid: [ctx.sender.jid],
                         externalAdReply: {
                             mediaType: 1,
                             previewType: 0,
@@ -81,7 +81,7 @@ module.exports = {
                         forwardingScore: 9999,
                         isForwarded: true
                     },
-                    mentions: [ctx._sender.jid]
+                    mentions: [ctx.sender.jid]
                 }, {
                     quoted: fakeProduct
                 }

@@ -32,7 +32,7 @@ module.exports = {
             const data = getRandomElement(response.data);
             const coin = 3;
             const timeout = 60000;
-            const senderNumber = ctx._sender.jid.replace(/@.*|:.*/g, "");
+            const senderNumber = ctx.sender.jid.replace(/@.*|:.*/g, "");
 
             await session.set(ctx.id, true);
 

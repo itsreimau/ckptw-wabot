@@ -30,10 +30,10 @@ module.exports = {
         if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
+            const type = quotedMessage ? ctx._client.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
-            let level = ctx._args[0] || "5";
+            const buffer = type === "imageMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx.msg, "buffer");
+            let level = ctx.args[0] || "5";
             let img = await Jimp.read(buffer);
             img.blur(isNaN(level) ? 5 : parseInt(level));
             img.getBuffer(Jimp.MIME_JPEG, async (err, buffer) => {

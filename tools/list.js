@@ -103,7 +103,7 @@ exports.getList = async (type, ctx) => {
                 break;
             }
             case "menu": {
-                const cmds = ctx._self.cmd;
+                const cmds = ctx._config.cmd;
                 const tags = {
                     main: "Main",
                     ai: "AI",

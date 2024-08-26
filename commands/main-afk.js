@@ -6,11 +6,11 @@ module.exports = {
     name: "afk",
     category: "main",
     code: async (ctx) => {
-        const input = ctx._args.join(" ") || null;
+        const input = ctx.args.join(" ") || null;
 
         try {
             const reason = input || "tanpa alasan";
-            global.db.set(`user.${ctx._sender.jid.split("@")[0]}.afk`, {
+            global.db.set(`user.${ctx.sender.jid.split("@")[0]}.afk`, {
                 reason: reason,
                 timeStamp: Date.now()
             });

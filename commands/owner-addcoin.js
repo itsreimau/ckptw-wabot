@@ -18,15 +18,15 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const userId = ctx._args[0];
-        const coinAmount = parseInt(ctx._args[1], 10);
+        const userId = ctx.args[0];
+        const coinAmount = parseInt(ctx.args[1], 10);
 
-        const senderJid = ctx._sender.jid;
+        const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.replace(/@.*|:.*/g, "");
-        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+        const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : userId + S_WHATSAPP_NET;
 
-        if (!ctx._args.length || !user || isNaN(coinAmount)) return ctx.reply({
+        if (!ctx.args.length || !user || isNaN(coinAmount)) return ctx.reply({
             text: `${quote(global.msg.argument)}\n` +
                 quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber} 4`)}`),
             mentions: [senderJid]

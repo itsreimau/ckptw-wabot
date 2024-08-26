@@ -22,20 +22,20 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} welcome`)}`)
         );
 
-        if (ctx._args[0] === "list") {
+        if (ctx.args[0] === "list") {
             const listText = await getList("disable_enable");
             return ctx.reply(listText);
         }
 
         try {
-            const groupNumber = ctx.isGroup() ? ctx._msg.key.remoteJid.split("@")[0] : null;
+            const groupNumber = ctx.isGroup() ? ctx.msg.key.remoteJid.split("@")[0] : null;
 
             switch (input) {
                 case "antilink":

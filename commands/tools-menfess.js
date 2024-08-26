@@ -21,7 +21,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        if (!ctx._args.length) return ctx.reply(
+        if (!ctx.args.length) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ${ctx._client.user.id.split(":")[0]} halo!`)}`)
         );
@@ -29,7 +29,7 @@ module.exports = {
         try {
             const senderJid = ctx._sender.jid;
             const senderNumber = senderJid.replace(/@.*|:.*/g, "");
-            const [number, ...text] = ctx._args;
+            const [number, ...text] = ctx.args;
             const numberFormatted = number.replace(/[^\d]/g, "");
 
             if (numberFormatted === senderNumber) return ctx.reply(quote(`⚠ Tidak dapat digunakan pada diri Anda sendiri.`));

@@ -19,7 +19,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const input = ctx.args.join(" ") || null;
 
         try {
             const data = await ctx.group().members();

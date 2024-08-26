@@ -26,19 +26,19 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        if (!ctx._args.length) return ctx.reply(
+        if (!ctx.args.length) return ctx.reply(
             `${quote(`${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`)}\n` +
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 21 35`)}`)
         );
 
-        if (ctx._args[0] === "list") {
+        if (ctx.args[0] === "list") {
             const listText = await getList("alquran");
             return ctx.reply(listText);
         }
 
         try {
-            const suraNumber = parseInt(ctx._args[0]);
-            const ayaInput = ctx._args[1];
+            const suraNumber = parseInt(ctx.args[0]);
+            const ayaInput = ctx.args[1];
 
             if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`⚠ Surah ${suraNumber} tidak ada.`));
 

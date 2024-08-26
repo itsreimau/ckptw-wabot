@@ -30,9 +30,9 @@ module.exports = {
         if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
+            const type = quotedMessage ? ctx._client.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
+            const buffer = type === "imageMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx.msg, "buffer");
 
             await ctx._client.updateProfilePicture(ctx.id, buffer);
 

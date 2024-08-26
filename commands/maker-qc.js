@@ -25,7 +25,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
@@ -37,7 +37,7 @@ module.exports = {
         try {
             let profileUrl;
             try {
-                profileUrl = await ctx._client.profilePictureUrl(ctx._sender.jid, "image");
+                profileUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image");
             } catch {
                 profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
@@ -45,7 +45,7 @@ module.exports = {
             const apiUrl = createAPIUrl("ngodingaja", "/api/bubblechat", {
                 text: input,
                 url: profileUrl,
-                nama: ctx._sender.pushName
+                nama: ctx.sender.pushName
             });
 
             const sticker = new Sticker(apiUrl, {

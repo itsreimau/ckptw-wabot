@@ -15,7 +15,7 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const senderJid = ctx._sender.jid;
+            const senderJid = ctx.sender.jid;
             const senderNumber = senderJid.replace(/@.*|:.*/g, "");
 
             return ctx.reply({

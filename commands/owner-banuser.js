@@ -19,11 +19,11 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const input = ctx.args.join(" ") || null;
 
-        const senderJid = ctx._sender.jid;
+        const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.replace(/@.*|:.*/g, "");
-        const mentionedJids = ctx._msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+        const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : input + S_WHATSAPP_NET;
 
         if (!input || !user) return ctx.reply({

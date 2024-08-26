@@ -34,12 +34,13 @@ console.log("Connecting...");
 
 // Create a new bot instance.
 const bot = new Client({
+    WAVersion: [2, 3000, 1015901307],
+    phoneNumber: global.bot.phoneNumber,
     prefix: global.bot.prefix,
     readIncommingMsg: true,
     printQRInTerminal: !global.system.usePairingCode,
-    phoneNumber: global.bot.phoneNumber,
-    usePairingCode: global.system.usePairingCode,
-    selfReply: true
+    selfReply: true,
+    usePairingCode: global.system.usePairingCode
 });
 
 // Create a new database instance.

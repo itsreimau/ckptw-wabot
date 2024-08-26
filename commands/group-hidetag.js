@@ -22,7 +22,7 @@ module.exports = {
 
             if (status) return ctx.reply(message);
 
-            const input = ctx._args.join(" ") || "@everyone";
+            const input = ctx.args.join(" ") || "@everyone";
             const data = await ctx.group().members();
             const mentions = data.map(member => `${member.id.split("@")[0]}S_WHATSAPP_NET`);
 

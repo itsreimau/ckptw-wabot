@@ -20,11 +20,11 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const [lang = "id", ...text] = ctx._args;
+        const [lang = "id", ...text] = ctx.args;
         const langCode = lang.length === 2 ? lang : "id";
-        const textToTranslate = text.length ? text.join(" ") : ctx._args.join(" ");
+        const textToTranslate = text.length ? text.join(" ") : ctx.args.join(" ");
 
-        if (!ctx._args.length) return ctx.reply(
+        if (!ctx.args.length) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} id halo!`)}`)
         );

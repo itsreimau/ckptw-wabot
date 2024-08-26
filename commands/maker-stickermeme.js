@@ -34,7 +34,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
@@ -46,9 +46,9 @@ module.exports = {
         if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
+            const type = quotedMessage ? ctx._client.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
+            const buffer = type === "imageMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx.msg, "buffer");
             const [top, bottom] = input.split("|");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
             const result = createAPIUrl("https://api.memegen.link", `/images/custom/${top || ""}/${bottom || ""}.png`, {

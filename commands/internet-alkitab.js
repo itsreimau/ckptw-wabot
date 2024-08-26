@@ -24,14 +24,14 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const [abbr, chapter] = ctx._args;
+        const [abbr, chapter] = ctx.args;
 
-        if (!ctx._args.length) return ctx.reply(
+        if (!ctx.args.length) return ctx.reply(
             `${quote(`${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`)}\n` +
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kej 2:18`)}`)
         );
 
-        if (ctx._args[0] === "list") {
+        if (ctx.args[0] === "list") {
             const listText = await getList("alkitab");
             return ctx.reply(listText);
         }

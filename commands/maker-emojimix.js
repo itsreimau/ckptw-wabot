@@ -25,9 +25,9 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const [emoji1, emoji2] = ctx._args;
+        const [emoji1, emoji2] = ctx.args;
 
-        if (!ctx._args.length) return ctx.reply(
+        if (!ctx.args.length) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 😱 🤓`)}`)
         );

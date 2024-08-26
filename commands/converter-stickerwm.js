@@ -24,7 +24,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
@@ -37,9 +37,9 @@ module.exports = {
         if (msgType !== MessageType.stickerMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
 
         try {
-            const type = quotedMessage ? ctx._self.getContentType(quotedMessage) : null;
+            const type = quotedMessage ? ctx._client.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "stickerMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx._msg, "buffer");
+            const buffer = type === "stickerMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx.msg, "buffer");
             const [packname, author] = input.split("|");
             const sticker = new Sticker(buffer, {
                 pack: packname || global.sticker.packname,
