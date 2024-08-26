@@ -1,6 +1,6 @@
 # ckptw-wabot - WhatsApp Bot with @mengkodingan/ckptw
 
-> **Warning:** This script is no longer maintained.
+> **Notes:** This script has been re-maintained.
 
 ## Overview
 
@@ -55,11 +55,26 @@ To add a new plugin, follow these steps:
    // plugins/info-ping.js
 
    module.exports = {
-     name: "ping",
-     category: "info",
-     code: async (ctx) => {
-       return ctx.reply("Pong!");
-     }
+       name: "ping",
+       category: "info",
+       code: async (ctx) => {
+           const {
+               status,
+               message
+           } = await global.handler(ctx, {
+               admin: Boolean,
+               botAdmin: Boolean,
+               banned: Boolean,
+               coin: Number,
+               group: Boolean,
+               owner: Boolean,
+               premium: Boolean,
+               private: Boolean
+           });
+           if (status) return ctx.reply(message);
+
+           return ctx.reply("Pong!");
+       }
    };
    ```
 

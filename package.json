@@ -1,10 +1,11 @@
 {
   "name": "ckptw-wabot",
-  "version": "1.29.4",
+  "version": "1.29.5",
   "description": "WhatsApp Bot with @mengkodingan/ckptw.",
   "main": "index.js",
   "directories": {
-    "lib": "lib"
+    "commands": "commands",
+    "tools": "tools"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -16,7 +17,8 @@
     "url": "git+https://github.com/itsreimau/ckptw-wabot.git"
   },
   "keywords": [
-    "bot"
+    "whatsapp",
+    "whatsapp-bot"
   ],
   "author": "Muhamad Ikbal Maulana | ItsReimau",
   "license": "MIT",
@@ -25,7 +27,8 @@
   },
   "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
   "dependencies": {
-    "@mengkodingan/ckptw": "^4.3.3",
+    "@mengkodingan/ckptw": "^4.3.4",
+    "@whiskeysockets/baileys": "6.7.7",
     "axios": "^1.7.4",
     "bing-translate-api": "^4.0.2",
     "cfonts": "^3.2.0",
@@ -43,8 +46,5 @@
     "util": "^0.12.5",
     "wa-sticker-formatter": "^4.4.4"
   },
-  "devDependencies": {},
-  "overrides": {
-    "@whiskeysockets/baileys": "6.7.7"
-  }
+  "devDependencies": {}
 }
