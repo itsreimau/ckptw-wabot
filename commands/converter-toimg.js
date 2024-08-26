@@ -32,7 +32,7 @@ module.exports = {
         if (!quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
 
         try {
-            const type = quotedMessage ? ctx._client.getContentType(quotedMessage) : null;
+            const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = type === "stickerMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : null;
             const imgUrl = buffer ? await webp2png(buffer) : null;

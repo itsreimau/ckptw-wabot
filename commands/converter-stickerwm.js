@@ -37,7 +37,7 @@ module.exports = {
         if (msgType !== MessageType.stickerMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
 
         try {
-            const type = quotedMessage ? ctx._client.getContentType(quotedMessage) : null;
+            const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = type === "stickerMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx.msg, "buffer");
             const [packname, author] = input.split("|");

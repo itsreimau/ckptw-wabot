@@ -46,7 +46,7 @@ module.exports = {
         if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const type = quotedMessage ? ctx._client.getContentType(quotedMessage) : null;
+            const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = type === "imageMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx.msg, "buffer");
             const [top, bottom] = input.split("|");

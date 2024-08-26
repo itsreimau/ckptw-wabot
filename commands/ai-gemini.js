@@ -59,7 +59,7 @@ module.exports = {
             }
         } else {
             try {
-                const type = quotedMessage ? ctx._client.getContentType(quotedMessage) : null;
+                const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
                 const object = type ? quotedMessage[type] : null;
                 const buffer = type === "imageMessage" ?
                     await getMediaQuotedMessage(object, type.slice(0, -7)) :
