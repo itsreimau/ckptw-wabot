@@ -41,7 +41,7 @@ module.exports = {
             const buffer = type === "imageMessage" ?
                 await getMediaQuotedMessage(object, type.slice(0, -7)) :
                 await ctx.getMediaMessage(ctx.msg, "buffer");
-            const result = await upscale(buffer, ctx.args[0], ctx.args[1] === "anime");
+            const result = await upscale(buffer, ctx.args[0], ctx.args[1] === "anime" ? true : false);
 
             return await ctx.reply({
                 image: {
