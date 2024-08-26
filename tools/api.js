@@ -23,9 +23,6 @@ const APIs = {
     ssa: {
         baseURL: "https://ssa-api.vercel.app/"
     },
-    vyturex: {
-        baseURL: "https://www.api.vyturex.com"
-    },
     vkrdownloader: {
         baseURL: "https://vkrdownloader.vercel.app"
     },

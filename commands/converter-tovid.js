@@ -1,5 +1,5 @@
 const {
-    
+
     createAPIUrl
 } = require("../tools/api.js");
 const {
@@ -36,7 +36,9 @@ module.exports = {
             const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
             const buffer = type === "stickerMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : null;
-            const vidUrl = await webp2mp4(buffer);
+            const vidUrl = buffer ? await webp2mp4(buffer) : null;
+
+            if (!vidUrl) return ctx.reply(quote(`⚠ Terjadi kesalahan: Media tidak valid.`));
 
             return await ctx.reply({
                 video: {

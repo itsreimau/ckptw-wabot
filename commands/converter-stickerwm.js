@@ -39,7 +39,9 @@ module.exports = {
         try {
             const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "stickerMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx.msg, "buffer");
+            const buffer = type === "stickerMessage" ?
+                await getMediaQuotedMessage(object, type.slice(0, -7)) :
+                await ctx.getMediaMessage(ctx.msg, "buffer");
             const [packname, author] = input.split("|");
             const sticker = new Sticker(buffer, {
                 pack: packname || global.sticker.packname,

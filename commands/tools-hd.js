@@ -12,10 +12,9 @@ const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
 const axios = require("axios");
+const FormData = require("form-data");
+const Jimp = require("jimp");
 const mime = require("mime-types");
-const {
-    uploadByBuffer
-} = require("telegraph-uploader");
 
 module.exports = {
     name: "hd",
@@ -39,18 +38,14 @@ module.exports = {
         try {
             const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx.msg, "buffer");
-            const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = createAPIUrl("vyturex", "/upscale", {
-                imageUrl: uplRes.link
-            });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const buffer = type === "imageMessage" ?
+                await getMediaQuotedMessage(object, type.slice(0, -7)) :
+                await ctx.getMediaMessage(ctx.msg, "buffer");
+            const result = await upscale(buffer, ctx.args[0], ctx.args[1] === "anime");
 
             return await ctx.reply({
                 image: {
-                    url: data.resultUrl
+                    url: result.image
                 },
                 mimetype: mime.contentType("png")
             });
@@ -61,3 +56,47 @@ module.exports = {
         }
     }
 };
+
+// Created by https://github.com/ZTRdiamond
+async function upscale(buffer, size = 2, anime = false) {
+    if (!buffer) throw new Error("undefined buffer input!");
+    if (!Buffer.isBuffer(buffer)) throw new Error("invalid buffer input");
+    if (!/(2|4|6|8|16)/.test(size.toString())) throw new Error("invalid upscale size!");
+
+    const image = await Jimp.read(buffer);
+    const {
+        width,
+        height
+    } = image.bitmap;
+    const newWidth = width * size;
+    const newHeight = height * size;
+
+    const form = new FormData();
+    form.append("name", "upscale-" + Date.now());
+    form.append("imageName", "upscale-" + Date.now());
+    form.append("desiredHeight", newHeight.toString());
+    form.append("desiredWidth", newWidth.toString());
+    form.append("outputFormat", "png");
+    form.append("compressionLevel", "none");
+    form.append("anime", anime.toString());
+    form.append("image_file", buffer, {
+        filename: "upscale-" + Date.now() + ".png",
+        contentType: 'image/png',
+    });
+
+    const response = await axios.post("https://api.upscalepics.com/upscale-to-size", form, {
+        headers: {
+            ...form.getHeaders(),
+            origin: "https://upscalepics.com",
+            referer: "https://upscalepics.com"
+        }
+    });
+
+    const data = response.data;
+    if (data.error) throw new Error("Error from upscaler API!");
+
+    return {
+        status: true,
+        image: data.bgRemoved
+    };
+}

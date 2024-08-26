@@ -39,7 +39,9 @@ module.exports = {
         try {
             const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
             const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : await ctx.getMediaMessage(ctx.msg, "buffer");
+            const buffer = type === "imageMessage" ?
+                await getMediaQuotedMessage(object, type.slice(0, -7)) :
+                await ctx.getMediaMessage(ctx.msg, "buffer");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
             const apiUrl = createAPIUrl("fasturl", "/tool/removebg", {
                 imageUrl: uplRes.link
