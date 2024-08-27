@@ -18,7 +18,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "hd",
-    aliases: ["enhance", "enhancer", "hd", "hdr", "remini"],
+    aliases: ["enhance", "enhancer", "hd", "hdr", "remini", "upscale", "upscaler"],
     category: "tools",
     code: async (ctx) => {
         const {
