@@ -20,14 +20,19 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const [lang = "id", ...text] = ctx.args;
-        const langCode = lang.length === 2 ? lang : "id";
-        const textToTranslate = text.length ? text.join(" ") : ctx.args.join(" ");
-
-        if (!ctx.args.length) return ctx.reply(
+        if (!ctx.args.length && !ctx.quoted) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} id halo!`)}`)
         );
+
+        let langCode = "id";
+        let textToTranslate = ctx.args.join(" ");
+
+        if (ctx.args[0] && ctx.args[0].length === 2) {
+            langCode = ctx.args[0];
+            textToTranslate = ctx.args.slice(1).join(" ");
+        }
+        if (!textToTranslate && ctx.quoted) textToTranslate = ctx.quoted.conversation;
 
         try {
             const {

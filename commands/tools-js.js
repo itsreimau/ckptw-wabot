@@ -47,19 +47,18 @@ module.exports = {
                         resolve(quote(`⚠ Kode mencapai batas penggunaan memori.`));
                         childProcess.kill();
                     }
-
-                    outputData += chunk.toString();;
+                    outputData += chunk.toString();
                 });
 
                 childProcess.stderr.on('data', (chunk) => {
-                    errorData += chunk.toString();;
+                    errorData += chunk.toString();
                 });
 
                 childProcess.on("close", (code) => {
                     if (code !== 0) {
-                        return resolve(quote(`⚠ Keluar dari proses dengan kode: ${code}`));
+                        resolve(quote(`⚠ Keluar dari proses dengan kode: ${code}\n${errorData.trim()}`));
                     } else {
-                        resolve(result);
+                        resolve(outputData.trim());
                     }
                 });
 
@@ -69,7 +68,7 @@ module.exports = {
                 }, 10000);
             });
 
-            ctx.reply(output.trim());
+            ctx.reply(output);
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
