@@ -5,18 +5,6 @@ const APIs = {
     aggelos_007: {
         baseURL: "https://api.aggelos-007.xyz"
     },
-    ai_xterm: {
-        baseURL: "https://ai.xterm.codes"
-    },
-    alpis: {
-        baseURL: "https://alpis.eu.org"
-    },
-    betabotz: {
-        baseURL: "https://api.betabotz.eu.org"
-    },
-    botcahx: {
-        baseURL: "https://api.botcahx.eu.org"
-    },
     chiwa: {
         baseURL: "https://api.chiwa.my.id"
     },
@@ -47,9 +35,6 @@ const APIs = {
     lolhuman: {
         baseURL: "https://api.lolhuman.xyz"
     },
-    maher_zubair: {
-        baseURL: "https://api.maher-zubair.tech"
-    },
     manaxu_seven: {
         baseURL: "https://manaxu-seven.vercel.app"
     },
@@ -74,26 +59,14 @@ const APIs = {
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com"
     },
-    skizo: {
-        baseURL: "https://skizo.tech"
-    },
     ssa: {
         baseURL: "https://ssa-api.vercel.app"
-    },
-    tiklydown: {
-        baseURL: "https://api.tiklydown.eu.org"
-    },
-    vihangayt: {
-        baseURL: "https://api.vihangayt.asia"
     },
     vkrdownloader: {
         baseURL: "https://vkrdownloader.vercel.app"
     },
     widipe: {
         baseURL: "https://widipe.com"
-    },
-    xfarr: {
-        baseURL: "https://api.xfarr.com"
     },
     yanzbotz: {
         baseURL: "https://api.yanzbotz.my.id"
