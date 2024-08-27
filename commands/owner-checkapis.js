@@ -25,7 +25,7 @@ module.exports = {
             const APIs = listAPIUrl();
             let result = "";
 
-            for (const [api] of Object.entries(APIs)) {
+            for (const [name, api] of Object.entries(APIs)) {
                 try {
                     const response = await axios.get(api.baseURL, {
                         headers: {
