@@ -27,23 +27,24 @@ module.exports = {
             const quotedMessage = ctx.quoted;
             textToTranslate = Object.values(quotedMessage).find(
                 msg => msg.caption || msg.text
-            )?.caption || ctx.args.join(" ") || '';
+            )?.caption || textToTranslate || null;
         }
 
         if (ctx.args[0] && ctx.args[0].length === 2) {
             langCode = ctx.args[0];
-            textToTranslate = ctx.args.slice(1).join(" ");
+            textToTranslate = textToTranslate ? textToTranslate : ctx.args.slice(1).join(" ");
         }
 
         if (!textToTranslate) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} id halo!`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo!`)}`)
         );
 
         try {
             const {
                 translation
             } = await translate(textToTranslate, null, langCode);
+
             return ctx.reply(translation);
         } catch (error) {
             console.error("Error:", error);

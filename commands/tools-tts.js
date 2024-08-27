@@ -21,24 +21,24 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        let textToTranslate = ctx.args.join(" ");
+        let textToSpeech = ctx.args.join(" ");
         let langCode = "id";
 
         if (ctx.quoted) {
             const quotedMessage = ctx.quoted;
-            textToTranslate = Object.values(quotedMessage).find(
+            textToSpeech = Object.values(quotedMessage).find(
                 msg => msg.caption || msg.text
-            )?.caption || ctx.args.join(" ") || '';
+            )?.caption || textToSpeech || null;
         }
 
         if (ctx.args[0] && ctx.args[0].length === 2) {
             langCode = ctx.args[0];
-            textToTranslate = ctx.args.slice(1).join(" ");
+            textToSpeech = textToSpeech ? textToSpeech : ctx.args.slice(1).join(" ");
         }
 
-        if (!textToTranslate) return ctx.reply(
+        if (!textToSpeech) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} id halo!`)}`)
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo!`)}`)
         );
 
         try {
