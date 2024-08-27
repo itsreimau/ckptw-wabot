@@ -27,15 +27,23 @@ module.exports = {
 
             for (const [name, api] of Object.entries(APIs)) {
                 try {
-                    await axios.get(api.baseURL);
-                    result += `${name}: ${api.baseURL} (Aktif)\n`;
+                    const response = await axios.get(api.baseURL, {
+                        headers: {
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36'
+                        }
+                    });
+                    if (response.status === 200) {
+                        result += quote(`${name}: ${api.baseURL} (Aktif)\n`);
+                    } else {
+                        result += quote(`${name}: ${api.baseURL} (Tidak aktif, Status: ${response.status})\n`);
+                    }
                 } catch (error) {
-                    result += `${name}: ${api.baseURL} (Tidak aktif)\n`;
+                    result += quote(`${name}: ${api.baseURL} (Tidak aktif, Gagal diakses)\n`);
                 }
             }
 
             return ctx.reply(
-                result.trim() +
+                `${result.trim()}\n` +
                 "\n" +
                 global.msg.footer
             );
