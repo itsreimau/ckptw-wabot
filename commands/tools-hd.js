@@ -48,7 +48,7 @@ module.exports = {
                     url: result.image
                 },
                 caption: `${quote(`Anda bisa mengaturnya. Tersedia ukuran 2, 4, 6, 8, dan 16, defaultnya adalah 2. Gunakan ${monospace("anime")} jika gambarnya anime.`)}\n` +
-                    quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 16 anime`)}`)
+                    quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 16 anime`)}`),
                 mimetype: mime.contentType("png")
             });
         } catch (error) {
