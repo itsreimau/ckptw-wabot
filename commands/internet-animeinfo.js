@@ -38,7 +38,11 @@ module.exports = {
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const info = data.data[0];
             const synopsisId = info.synopsis ? await translate(info.synopsis, "en", "id") : null;
 

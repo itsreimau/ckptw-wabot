@@ -21,19 +21,21 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        let textToSpeech = ctx.args.join(" ");
+        let textToTranslate = ctx.args.join(" ");
         let langCode = "id";
 
         if (ctx.quoted) {
             const quotedMessage = ctx.quoted;
-            textToSpeech = Object.values(quotedMessage).find(
+            textToTranslate = Object.values(quotedMessage).find(
                 msg => msg.caption || msg.text
-            )?.caption || textToSpeech || null;
-        }
+            )?.caption || textToTranslate || null;
 
-        if (ctx.args[0] && ctx.args[0].length === 2) {
-            langCode = ctx.args[0];
-            textToSpeech = textToSpeech ? textToSpeech : ctx.args.slice(1).join(" ");
+            if (ctx.args[0] && ctx.args[0].length === 2) langCode = ctx.args[0];
+        } else {
+            if (ctx.args[0] && ctx.args[0].length === 2) {
+                langCode = ctx.args[0];
+                textToTranslate = textToTranslate ? textToTranslate : ctx.args.slice(1).join(" ");
+            }
         }
 
         if (!textToSpeech) return ctx.reply(
@@ -48,7 +50,11 @@ module.exports = {
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
 
             return await ctx.reply({
                 audio: {

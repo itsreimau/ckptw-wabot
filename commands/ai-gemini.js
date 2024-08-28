@@ -47,7 +47,11 @@ module.exports = {
                 const apiUrl = createAPIUrl("sanzy", "/api/gemini", {
                     text: input
                 });
-                const response = await axios.get(apiUrl);
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        "User-Agent": global.system.userAgent
+                    }
+                });
                 const {
                     data
                 } = response.data;
@@ -70,7 +74,11 @@ module.exports = {
                     text: input,
                     image: uplRes.link
                 });
-                const response = await axios.get(apiUrl);
+                const response = await axios.get(apiUrl, {
+                    headers: {
+                        "User-Agent": global.system.userAgent
+                    }
+                });
                 const {
                     data
                 } = response.data;

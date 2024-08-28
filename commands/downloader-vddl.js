@@ -36,7 +36,11 @@ module.exports = {
             const apiUrl = createAPIUrl("agatz", "/api/videydl", {
                 url
             });
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const {
                 data
             } = response.data;

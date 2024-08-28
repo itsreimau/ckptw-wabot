@@ -28,7 +28,11 @@ module.exports = {
 
         try {
             const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/siapakahaku.json`, {});
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const data = getRandomElement(response.data);
             const coin = 3;
             const timeout = 60000;
@@ -87,9 +91,8 @@ module.exports = {
                 if (await session.has(ctx.id)) {
                     await session.delete(ctx.id);
                     await ctx.reply(
-                        quote(`⌛ Waktu habis!\n` +
-                            quote(`Jawabannya adalah ${answer}.`)
-                        )
+                        `${quote(`⌛ Waktu habis!`)}\n` +
+                        quote(`Jawabannya adalah ${answer}.`)
                     );
                 }
             });

@@ -36,7 +36,11 @@ module.exports = {
             const apiUrl = createAPIUrl("agatz", "/api/threads", {
                 url
             });
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const {
                 data
             } = response.data;
@@ -63,7 +67,6 @@ module.exports = {
                     });
                 }
             }
-
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

@@ -32,12 +32,9 @@ module.exports = {
 
         try {
             const emojisString = ctx._args.join("");
-
             const emojiRegex = /\p{Emoji}/gu;
             const emojis = Array.from(emojisString.matchAll(emojiRegex), (match) => match[0]);
-
             const [emoji1, emoji2] = emojis.slice(0, 2);
-
             const apiUrl = createAPIUrl("https://tenor.googleapis.com", `/v2/featured`, {
                 key: "AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ",
                 contentfilter: "high",
@@ -46,7 +43,11 @@ module.exports = {
                 collection: "emoji_kitchen_v5",
                 q: `${emoji1}_${emoji2}`
             });
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const data = await response.data;
 
             if (!data.results[0].url) return ctx.reply(global.msg.notFound);

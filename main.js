@@ -37,9 +37,9 @@ const bot = new Client({
     WAVersion: [2, 3000, 1015901307],
     phoneNumber: global.bot.phoneNumber,
     prefix: global.bot.prefix,
-    readIncommingMsg: true,
+    readIncommingMsg: global.system.autoRead,
     printQRInTerminal: !global.system.usePairingCode,
-    selfReply: true,
+    selfReply: global.system.selfReply,
     usePairingCode: global.system.usePairingCode
 });
 

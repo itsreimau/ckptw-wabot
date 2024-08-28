@@ -34,7 +34,10 @@ module.exports = {
 
         try {
             const response = await axios.get(url, {
-                responseType: "arraybuffer"
+                responseType: "arraybuffer",
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
             });
             const contentType = response?.headers?.["content-type"];
 

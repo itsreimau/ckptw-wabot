@@ -37,7 +37,11 @@ module.exports = {
             const apiUrl = await createAPIUrl("agatz", "/api/sticker", {
                 message: input
             });
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const {
                 data
             } = response.data;

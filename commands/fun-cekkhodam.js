@@ -35,7 +35,11 @@ module.exports = {
             const apiUrl = createAPIUrl("https://raw.caliph.my.id", `/khodam.json`, {});
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const khodam = getRandomElement(data);
 
             return ctx.reply({

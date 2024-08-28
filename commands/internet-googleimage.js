@@ -39,7 +39,11 @@ module.exports = {
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const result = getRandomElement(data.result);
 
             return await ctx.reply({

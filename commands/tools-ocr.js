@@ -42,14 +42,31 @@ module.exports = {
                 await getMediaQuotedMessage(object, type.slice(0, -7)) :
                 await ctx.getMediaMessage(ctx.msg, "buffer");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = createAPIUrl("nyxs", "/tools/ocr", {
+            const apiUrl = createAPIUrl("fasturl", "/tool/ocr", {
                 imageUrl: uplRes.link
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
 
-            return await ctx.reply(data.result);
+            const resultText = data.segments.map((segment, index) => {
+                return `${quote(`Teks: ${segment.text}`)}\n` +
+                    `${quote(`Posisi: (X: ${segment.boundingBox.pixelCoords.x}, Y: ${segment.boundingBox.pixelCoords.y})`)}\n` +
+                    `${quote(`Ukuran: ${segment.boundingBox.pixelCoords.width}x${segment.boundingBox.pixelCoords.height}`)}\n` +
+                    `${quote(`Center: (${segment.boundingBox.centerPerX * 100}%, ${segment.boundingBox.centerPerY * 100}%)`)}`
+            }).join(
+                "\n" +
+                `${quote("─────")}\n`
+            );
+            return await ctx.reply(
+                `${resultText}\n` +
+                "\n" +
+                global.msg.footer
+            );
         } catch (error) {
             console.error("Error", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

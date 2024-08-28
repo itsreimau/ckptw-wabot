@@ -43,10 +43,9 @@ module.exports = {
                 data
             } = await axios.get(apiUrl, {
                 headers: {
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+                    "User-Agent": global.system.userAgent
                 }
             });
-
 
             if (mediaType === "audio") {
                 return await ctx.reply({
@@ -82,7 +81,6 @@ module.exports = {
                     }
                 }
             }
-
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

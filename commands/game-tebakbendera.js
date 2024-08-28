@@ -29,7 +29,11 @@ module.exports = {
 
         try {
             const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebakbendera2.json`, {});
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const data = getRandomElement(response.data);
             const coin = 3;
             const timeout = 60000;
@@ -44,7 +48,7 @@ module.exports = {
                 mimetype: mime.contentType("png"),
                 caption: (global.system.useCoin ?
                         `${quote(`+${coin} Koin`)}\n` :
-                        "\n") +
+                        "") +
                     `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
                     `${quote('Ketik "hint" untuk bantuan.')}\n` +
                     "\n" +

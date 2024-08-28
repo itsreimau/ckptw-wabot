@@ -27,7 +27,11 @@ module.exports = {
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
 
             const resultText = data.reverse().map((h) => {
                 const d = new Date(h.holiday_date);

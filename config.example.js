@@ -55,9 +55,12 @@ global.sticker = {
 
 // System.
 global.system = {
+    autoRead: true,
+    selfReply: true,
     timeZone: "Asia/Jakarta",
     useCoin: true,
     useInteractiveMessage: true,
     usePairingCode: true,
-    usePremium: false
+    usePremium: false,
+    userAgent: "Mozilla/5.0 (X11; Ubuntu; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.5790.170 Safari/537.36"
 };

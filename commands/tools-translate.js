@@ -28,11 +28,13 @@ module.exports = {
             textToTranslate = Object.values(quotedMessage).find(
                 msg => msg.caption || msg.text
             )?.caption || textToTranslate || null;
-        }
 
-        if (ctx.args[0] && ctx.args[0].length === 2) {
-            langCode = ctx.args[0];
-            textToTranslate = textToTranslate ? textToTranslate : ctx.args.slice(1).join(" ");
+            if (ctx.args[0] && ctx.args[0].length === 2) langCode = ctx.args[0];
+        } else {
+            if (ctx.args[0] && ctx.args[0].length === 2) {
+                langCode = ctx.args[0];
+                textToTranslate = textToTranslate ? textToTranslate : ctx.args.slice(1).join(" ");
+            }
         }
 
         if (!textToTranslate) return ctx.reply(

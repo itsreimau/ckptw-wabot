@@ -34,7 +34,11 @@ module.exports = {
             const apiUrl = createAPIUrl("sanzy", "/api/ai-search", {
                 text: input
             });
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const data = response.data.data;
 
             const combinedText = data.find(d => d.type === "combined_text")?.text;

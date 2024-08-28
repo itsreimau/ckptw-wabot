@@ -21,7 +21,11 @@ module.exports = {
         try {
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const startTime = global.system.startTime;
 
             return ctx.reply(

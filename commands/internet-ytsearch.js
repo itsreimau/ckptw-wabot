@@ -34,13 +34,17 @@ module.exports = {
             const apiUrl = createAPIUrl("agatz", "/api/ytsearch", {
                 message: input
             });
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const {
                 data
             } = response.data;
 
             const resultText = data.map((d) => {
-                switch (r.type) {
+                switch (d.type) {
                     case "video":
                         return `${bold(`${d.title} (${d.url})`)}\n` +
                             `${quote(`Durasi: ${d.timestamp}`)}\n` +
@@ -51,7 +55,7 @@ module.exports = {
                             `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
                             `${quote(`Jumlah video: ${d.videoCount}`)}`;
                 }
-            }).filter((r) => r).join(
+            }).filter((d) => d).join(
                 "\n" +
                 `${quote("─────")}\n`
             );

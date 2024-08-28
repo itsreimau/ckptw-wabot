@@ -27,7 +27,11 @@ module.exports = {
         try {
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const gempa = data.Infogempa.gempa;
 
             return ctx.reply({

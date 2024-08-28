@@ -60,7 +60,11 @@ exports.getList = async (type, ctx) => {
     try {
         switch (type) {
             case "alkitab": {
-                const alKitabResponse = await axios.get(createAPIUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
+                const alKitabResponse = await axios.get(createAPIUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}), {
+                    headers: {
+                        "User-Agent": global.system.userAgent
+                    }
+                });
                 text = alKitabResponse.data.data.map(b =>
                     `${quote(`Buku: ${b.name} (${b.abbr})`)}\n` +
                     `${quote(`Jumlah Bab: ${b.chapter}`)}\n` +
@@ -71,7 +75,11 @@ exports.getList = async (type, ctx) => {
                 break;
             }
             case "alquran": {
-                const alquranResponse = await axios.get(createAPIUrl("https://equran.id", "/api/v2/surat", {}));
+                const alquranResponse = await axios.get(createAPIUrl("https://equran.id", "/api/v2/surat", {}), {
+                    headers: {
+                        "User-Agent": global.system.userAgent
+                    }
+                });
                 text = alquranResponse.data.data.map(s =>
                     `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
                     `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n` +
@@ -84,20 +92,7 @@ exports.getList = async (type, ctx) => {
             case "disable_enable": {
                 const deList = ["antilink", "welcome"];
                 text = deList.map(item => quote(item)).join("\n");
-                text += "\n" +
-                    global.msg.footer;
-                break;
-            }
-            case "texttoimage": {
-                const texttoimageResponse = await axios.get(createAPIUrl("fasturl", "/ai/texttoimage", {}));
-                const models = texttoimageResponse.data.listmodelsforSDXL;
-                const styles = texttoimageResponse.data.liststyles;
 
-                text += `${quote("Model:")}\n` +
-                    models.map(item => quote(item)).join("\n");
-                text += "\n" +
-                    `${quote("Style:")}\n` +
-                    styles.map(item => quote(item)).join("\n");
                 text += "\n" +
                     global.msg.footer;
                 break;
