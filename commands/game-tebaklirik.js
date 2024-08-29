@@ -1,7 +1,7 @@
 const {
     createAPIUrl
 } = require("../tools/api.js");
-const
+const {
     getRandomElement
 } = require("../tools/general.js");
 const {

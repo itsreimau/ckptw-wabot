@@ -1,5 +1,6 @@
 const {
-    createAPIUrl
+    createAPIUrl,
+    listAPIUrl
 } = require("../tools/api.js");
 const {
     getMediaQuotedMessage
@@ -46,11 +47,18 @@ module.exports = {
             const apiUrl = createAPIUrl("fasturl", "/tool/removebg", {
                 imageUrl: uplRes.link
             });
+            const {
+                data
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent,
+                    "x-api-key": listAPIUrl().fasturl.APIKey
+                },
+                responseType: "arraybuffer"
+            });
 
             return await ctx.reply({
-                image: {
-                    url: apiUrl
-                },
+                image: data,
                 mimetype: mime.contentType("png")
             });
         } catch (error) {

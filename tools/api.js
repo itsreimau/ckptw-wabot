@@ -12,7 +12,8 @@ const APIs = {
         baseURL: "https://deku-rest-api.gleeze.com"
     },
     fasturl: {
-        baseURL: "https://fastrestapis.fasturl.cloud"
+        baseURL: "https://fastrestapis.fasturl.cloud",
+        APIKey: "8f03c932-7c66-4194-a245-b3ba83e556a8" // This is mine, if you want to make it yourself you can make it here: https://fastrestapis.fasturl.cloud/api/register?username=
     },
     firda: {
         baseURL: "https://api.firda.uz"

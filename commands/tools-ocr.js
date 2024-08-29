@@ -1,5 +1,6 @@
 const {
-    createAPIUrl
+    createAPIUrl,
+    listAPIUrl
 } = require("../tools/api.js");
 const {
     getMediaQuotedMessage
@@ -49,24 +50,13 @@ module.exports = {
                 data
             } = await axios.get(apiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent
+                    "User-Agent": global.system.userAgent,
+                    "x-api-key": listAPIUrl().fasturl.APIKey
                 }
             });
 
-            const resultText = data.segments.map((segment, index) => {
-                return `${quote(`Teks: ${segment.text}`)}\n` +
-                    `${quote(`Posisi: (X: ${segment.boundingBox.pixelCoords.x}, Y: ${segment.boundingBox.pixelCoords.y})`)}\n` +
-                    `${quote(`Ukuran: ${segment.boundingBox.pixelCoords.width}x${segment.boundingBox.pixelCoords.height}`)}\n` +
-                    `${quote(`Center: (${segment.boundingBox.centerPerX * 100}%, ${segment.boundingBox.centerPerY * 100}%)`)}`
-            }).join(
-                "\n" +
-                `${quote("─────")}\n`
-            );
-            return await ctx.reply(
-                `${resultText}\n` +
-                "\n" +
-                global.msg.footer
-            );
+            const resultText = data.segments.map(d => d.text).join("\n");
+            return await ctx.reply(resultText.trim());
         } catch (error) {
             console.error("Error", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

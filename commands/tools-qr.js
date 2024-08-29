@@ -1,10 +1,12 @@
 const {
-    createAPIUrl
+    createAPIUrl,
+    listAPIUrl
 } = require("../tools/api.js");
 const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -34,11 +36,18 @@ module.exports = {
             const apiUrl = createAPIUrl("fasturl", "/tool/qr", {
                 url
             });
+            const {
+                data
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent,
+                    "x-api-key": listAPIUrl().fasturl.APIKey
+                },
+                responseType: "arraybuffer"
+            });
 
             return await ctx.reply({
-                image: {
-                    url: apiUrl
-                },
+                image: data,
                 mimetype: mime.contentType("png"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
