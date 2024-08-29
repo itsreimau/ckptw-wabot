@@ -42,13 +42,12 @@ module.exports = {
             });
             const khodam = getRandomElement(data);
 
-            return ctx.reply({
-                text: `${quote(`Nama: ${input}`)}\n` +
-                    `${quote(`Khodam: ${khodam}`)}\n` +
-                    "\n" +
-                    global.msg.footer,
-                mentions: ctx.getMentioned()
-            });
+            return ctx.reply(
+                `${quote(`Nama: ${input}`)}\n` +
+                `${quote(`Khodam: ${khodam}`)}\n` +
+                "\n" +
+                global.msg.footer
+            );
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
