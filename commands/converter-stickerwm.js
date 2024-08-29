@@ -1,11 +1,10 @@
 const {
-    getMediaQuotedMessage
-} = require("../tools/general.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const {} = require("@mengkodingan/ckptw/lib/Constant");
+const {
+    MessageType
+} = require("@mengkodingan/ckptw/lib/Constant");
 const {
     Sticker,
     StickerTypes
@@ -32,16 +31,12 @@ module.exports = {
         );
 
         const msgType = ctx.getMessageType();
-        const quotedMessage = ctx.quoted;
+        const media = ctx.msg.media || ctx.quoted?.media;
 
-        if (msgType !== MessageType.stickerMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
+        if (msgType !== MessageType.stickerMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
 
         try {
-            const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
-            const object = type ? quotedMessage[type] : null;
-            const buffer = type === "stickerMessage" ?
-                await getMediaQuotedMessage(object, type.slice(0, -7)) :
-                await ctx.getMediaMessage(ctx.msg, "buffer");
+            const buffer = await media.toBuffer();
             const [packname, author] = input.split("|");
             const sticker = new Sticker(buffer, {
                 pack: packname || global.sticker.packname,

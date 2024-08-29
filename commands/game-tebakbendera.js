@@ -14,7 +14,6 @@ const session = new Map();
 
 module.exports = {
     name: "tebakbendera",
-    aliases: ["guessflag", "whatflag"],
     category: "game",
     code: async (ctx) => {
         const {

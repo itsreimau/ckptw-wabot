@@ -2,9 +2,6 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    getMediaQuotedMessage
-} = require("../tools/general.js");
-const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -32,9 +29,7 @@ module.exports = {
         if (!quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
 
         try {
-            const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
-            const object = type ? quotedMessage[type] : null;
-            const buffer = type === "stickerMessage" ? await getMediaQuotedMessage(object, type.slice(0, -7)) : null;
+            const buffer = await quotedMessage.media.toBuffer()
             const imgUrl = buffer ? await webp2png(buffer) : null;
 
             if (!imgUrl) return ctx.reply(quote(`⚠ Terjadi kesalahan: Media tidak valid.`));

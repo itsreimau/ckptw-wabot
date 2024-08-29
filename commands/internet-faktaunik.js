@@ -6,9 +6,6 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const {
-    translate
-} = require("bing-translate-api");
 
 module.exports = {
     name: "faktaunik",
@@ -25,19 +22,27 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const apiUrl = await createAPIUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
-            const {
-                data
-            } = await axios.get(apiUrl, {
+            const faktaApiUrl = await createAPIUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
+            const faktaResponse = await axios.get(faktaApiUrl, {
                 headers: {
                     "User-Agent": global.system.userAgent
                 }
             });
-            const {
-                translation
-            } = await translate(data.text, "en", "id");
+            const faktaText = faktaResponse.data.text;
 
-            return ctx.reply(translation);
+            const translationApiUrl = createAPIUrl("fasturl", "/tool/translate", {
+                text: faktaText,
+                target: "id"
+            });
+            const translationResponse = await axios.get(translationApiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent,
+                    "x-api-key": listAPIUrl().fasturl.APIKey
+                }
+            });
+            const translatedText = translationResponse.data.translatedText;
+
+            return ctx.reply(translatedText);
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

@@ -1,7 +1,4 @@
 const {
-    getMediaQuotedMessage
-} = require("../tools/general.js");
-const {
     quote
 } = require("@mengkodingan/ckptw");
 const {
@@ -25,16 +22,12 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const msgType = ctx.getMessageType();
-        const quotedMessage = ctx.quoted;
+        const media = ctx.msg.media || ctx.quoted?.media;
 
-        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
+        if (msgType !== MessageType.imageMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
-            const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ?
-                await getMediaQuotedMessage(object, type.slice(0, -7)) :
-                await ctx.getMediaMessage(ctx.msg, "buffer");
+            const buffer = await media.toBuffer();
             await ctx._client.updateProfilePicture(ctx.id, buffer);
 
             return ctx.reply(quote(`✅ Berhasil mengubah gambar profil foto grup!`));

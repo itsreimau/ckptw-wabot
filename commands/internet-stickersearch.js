@@ -68,7 +68,7 @@ module.exports = {
             }
         } catch (error) {
             console.error("Error:", error);
-            if (error.response && error.response.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

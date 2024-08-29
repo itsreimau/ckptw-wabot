@@ -1,7 +1,4 @@
 const {
-    getMediaQuotedMessage
-} = require("../tools/general.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -25,16 +22,12 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const msgType = ctx.getMessageType();
-        const quotedMessage = ctx.quoted;
+        const media = ctx.msg.media || ctx.quoted?.media;
 
-        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
+        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
-            const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ?
-                await getMediaQuotedMessage(object, type.slice(0, -7)) :
-                await ctx.getMediaMessage(ctx.msg, "buffer");
+            const buffer = await media.toBuffer();
             let level = ctx.args[0] || "5";
             let img = await Jimp.read(buffer);
             img.blur(isNaN(level) ? 5 : parseInt(level));

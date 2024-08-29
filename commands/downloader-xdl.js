@@ -10,7 +10,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "xdl",
-    aliases: ["x", "twit", "twitdl", "twitter", "twitterdl"],
+    aliases: ["twit", "twitdl", "twitter", "twitterdl", "x"],
     category: "downloader",
     code: async (ctx) => {
         const {

@@ -6,10 +6,6 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const {
-    translate
-} = require("bing-translate-api");
-const mime = require("mime-types");
 
 module.exports = {
     name: "animeinfo",
@@ -33,18 +29,27 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await createAPIUrl("https://api.jikan.moe", "/v4/anime", {
+            const animeApiUrl = await createAPIUrl("https://api.jikan.moe", "/v4/anime", {
                 q: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl, {
+            const animeResponse = await axios.get(animeApiUrl, {
                 headers: {
                     "User-Agent": global.system.userAgent
                 }
             });
-            const info = data.data[0];
-            const synopsisId = info.synopsis ? await translate(info.synopsis, "en", "id") : null;
+            const info = animeResponse.data.data[0];
+
+            const translationApiUrl = createAPIUrl("fasturl", "/tool/translate", {
+                text: info.synopsis,
+                target: "id"
+            });
+            const translationResponse = await axios.get(translationApiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent,
+                    "x-api-key": listAPIUrl().fasturl.APIKey
+                }
+            });
+            const synopsisId = translationResponse.data.translatedText || info.synopsis;
 
             return await ctx.reply(
                 `${quote(`Judul: ${info.title}`)}\n` +
@@ -53,7 +58,7 @@ module.exports = {
                 `${quote(`Tipe: ${info.type}`)}\n` +
                 `${quote(`Episode: ${info.episodes}`)}\n` +
                 `${quote(`Durasi: ${info.duration}`)}\n` +
-                `${quote(`Ringkasan: ${synopsisId.translation}`)}\n` +
+                `${quote(`Ringkasan: ${synopsisId.replace("\n\n", ". ")}`)}\n` +
                 `${quote(`URL: ${info.url}`)}\n` +
                 "\n" +
                 global.msg.footer

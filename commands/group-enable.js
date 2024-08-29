@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: "enable",
-    aliases: ["on", "enabled"],
+    aliases: ["on"],
     category: "owner",
     code: async (ctx) => {
         const {

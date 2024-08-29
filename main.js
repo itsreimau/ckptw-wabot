@@ -129,7 +129,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             selfOwner: false // Warning! (Spam)
         }) === 1) {
         // Eval command: Execute JavaScript code.
-        if (m.content && m.content.startsWith && (m.content.startsWith("> ") || m.content.startsWith(">> "))) {
+        if (m.content && m.content.startsWith && (m.content.startsWith("$> ") || m.content.startsWith("$>> "))) {
             const code = m.content.slice(2);
 
             try {
@@ -240,7 +240,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
     }
 
     await ctx.sendMessage(
-        ctx.id, {
+        from + S_WHATSAPP_NET, {
             text: `${m.content}\n` +
                 `${global.msg.readmore}\n` +
                 "Jika ingin membalas, Anda harus mengirimkan perintah lagi.",

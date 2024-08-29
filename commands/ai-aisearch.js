@@ -11,7 +11,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "aisearch",
-    aliases: ["ai", "aisearch", "chatai", "chataisearch"],
+    aliases: ["aisearch", "perplexity", "you"],
     category: "ai",
     code: async (ctx) => {
         const {

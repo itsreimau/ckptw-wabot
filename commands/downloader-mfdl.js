@@ -53,7 +53,7 @@ module.exports = {
                 mimetype: mime.lookup(data.mime) || "application/octet-stream"
             });
         } catch (error) {
-            console.error("Error:", error.message);
+            console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }

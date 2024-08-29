@@ -2,9 +2,6 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    getMediaQuotedMessage
-} = require("../tools/general.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -31,16 +28,12 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const msgType = ctx.getMessageType();
-        const quotedMessage = ctx.quoted;
+        const media = ctx.msg.media || ctx.quoted?.media;
 
-        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
+        if (msgType !== MessageType.imageMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
-            const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ?
-                await getMediaQuotedMessage(object, type.slice(0, -7)) :
-                await ctx.getMediaMessage(ctx.msg, "buffer");
+            const buffer = await media.toBuffer();
             const result = await upscale(buffer, ctx.args[0], ctx.args[1] === "anime" ? true : false);
 
             return await ctx.reply({

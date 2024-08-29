@@ -10,7 +10,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "fbdl",
-    aliases: ["fb", "facebook"],
+    aliases: ["fb", "facebook", "facebookdl"],
     category: "downloader",
     code: async (ctx) => {
         const {

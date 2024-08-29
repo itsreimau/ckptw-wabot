@@ -2,9 +2,6 @@ const {
     createAPIUrl
 } = require("../tools/api.js");
 const {
-    getMediaQuotedMessage
-} = require("../tools/general.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -42,15 +39,12 @@ module.exports = {
         );
 
         const msgType = ctx.getMessageType();
-        const quotedMessage = ctx.quoted;
-        if (msgType !== MessageType.imageMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
+        const media = ctx.msg.media || ctx.quoted?.media;
+
+        if (msgType !== MessageType.imageMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
-            const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" ?
-                await getMediaQuotedMessage(object, type.slice(0, -7)) :
-                await ctx.getMediaMessage(ctx.msg, "buffer");
+            const buffer = await media.toBuffer();
             const [top, bottom] = input.split("|");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
             const result = createAPIUrl("https://api.memegen.link", `/images/custom/${top || ""}/${bottom || ""}.png`, {

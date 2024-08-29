@@ -13,7 +13,6 @@ const session = new Map();
 
 module.exports = {
     name: "asahotak",
-    aliases: ["brainteaser"],
     category: "game",
     code: async (ctx) => {
         const {

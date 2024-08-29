@@ -1,7 +1,4 @@
 const {
-    getMediaQuotedMessage
-} = require("../tools/general.js");
-const {
     quote
 } = require("@mengkodingan/ckptw");
 const {
@@ -26,16 +23,12 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const msgType = ctx.getMessageType();
-        const quotedMessage = ctx.quoted;
+        const media = ctx.msg.media || ctx.quoted?.media;
 
-        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar, GIF, atau video!`));
+        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar, GIF, atau video!`));
 
         try {
-            const type = quotedMessage ? ctx.getContentType(quotedMessage) : null;
-            const object = type ? quotedMessage[type] : null;
-            const buffer = type === "imageMessage" || type === "videoMessage" ?
-                await getMediaQuotedMessage(object, type.slice(0, -7)) :
-                await ctx.getMediaMessage(ctx.msg, "buffer");
+            const buffer = await media.toBuffer();
             const sticker = new Sticker(buffer, {
                 pack: global.sticker.packname,
                 author: global.sticker.author,

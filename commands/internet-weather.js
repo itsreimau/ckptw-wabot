@@ -6,9 +6,6 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const {
-    translate
-} = require("bing-translate-api");
 
 module.exports = {
     name: "weather",
@@ -32,27 +29,36 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await createAPIUrl("agatz", "/api/cuaca", {
+            const weatherApiUrl = await createAPIUrl("agatz", "/api/cuaca", {
                 message: input
             });
-            const response = await axios.get(apiUrl, {
+            const weatherResponse = await axios.get(weatherApiUrl, {
                 headers: {
                     "User-Agent": global.system.userAgent
                 }
             });
-            const {
-                data
-            } = response.data;
-            const weatherId = await translate(data.current.condition.text, "en", "id");
+            const weatherData = weatherResponse.data.data;
+
+            const translationApiUrl = createAPIUrl("fasturl", "/tool/translate", {
+                text: weatherData.current.condition.text,
+                target: "id"
+            });
+            const translationResponse = await axios.get(translationApiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent,
+                    "x-api-key": listAPIUrl().fasturl.APIKey
+                }
+            });
+            const translatedText = translationResponse.data.translatedText;
 
             return ctx.reply(
-                `${quote(`Tempat: ${data.location.name}, ${data.location.region}, ${data.location.country}`)}\n` +
-                `${quote(`Cuaca: ${weatherId.translation}`)}\n` +
-                `${quote(`Kelembapan: ${data.current.humidity} %`)}\n` +
-                `${quote(`Angin: ${data.current.wind_kph} km/jam (${data.current.wind_dir})`)}\n` +
-                `${quote(`Suhu saat ini: ${data.current.temp_c} °C`)}\n` +
-                `${quote(`Terasa seperti: ${data.current.feelslike_c} °C`)}\n` +
-                `${quote(`Kecepatan angin: ${data.current.gust_kph} km/jam`)}\n` +
+                `${quote(`Tempat: ${weatherData.location.name}, ${weatherData.location.region}, ${weatherData.location.country}`)}\n` +
+                `${quote(`Cuaca: ${translatedText}`)}\n` +
+                `${quote(`Kelembapan: ${weatherData.current.humidity} %`)}\n` +
+                `${quote(`Angin: ${weatherData.current.wind_kph} km/jam (${weatherData.current.wind_dir})`)}\n` +
+                `${quote(`Suhu saat ini: ${weatherData.current.temp_c} °C`)}\n` +
+                `${quote(`Terasa seperti: ${weatherData.current.feelslike_c} °C`)}\n` +
+                `${quote(`Kecepatan angin: ${weatherData.current.gust_kph} km/jam`)}\n` +
                 "\n" +
                 global.msg.footer
             );

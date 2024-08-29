@@ -16,7 +16,8 @@ const {
 } = require("telegraph-uploader");
 
 module.exports = {
-    name: "ocr",
+    name: "removebg",
+    aliases: ["rbg"],
     category: "tools",
     code: async (ctx) => {
         const {
@@ -36,7 +37,7 @@ module.exports = {
         try {
             const buffer = await media.toBuffer();
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = createAPIUrl("fasturl", "/tool/ocr", {
+            const apiUrl = createAPIUrl("fasturl", "/tool/removebg", {
                 imageUrl: uplRes.link
             });
             const {
@@ -45,11 +46,14 @@ module.exports = {
                 headers: {
                     "User-Agent": global.system.userAgent,
                     "x-api-key": listAPIUrl().fasturl.APIKey
-                }
+                },
+                responseType: "arraybuffer"
             });
 
-            const resultText = data.segments.map(d => d.text).join("\n");
-            return await ctx.reply(resultText.trim());
+            return await ctx.reply({
+                image: data,
+                mimetype: mime.contentType("png")
+            });
         } catch (error) {
             console.error("Error", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

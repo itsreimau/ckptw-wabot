@@ -10,7 +10,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "ttsg",
-    aliases: ["tts", "ttsgoogle", "texttospeechgoogle"],
+    aliases: ["texttospeechgoogle", "tts", "ttsgoogle"],
     category: "tools",
     code: async (ctx) => {
         const {

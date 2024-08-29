@@ -10,7 +10,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "aiimg",
-    aliases: ["diff", "diffusion", "sxdl", "stablediffusion"],
+    aliases: ["diff", "diffusion", "stablediffusion", "sxdl"],
     category: "ai",
     code: async (ctx) => {
         const {

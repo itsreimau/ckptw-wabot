@@ -1,10 +1,11 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    translate
-} = require("bing-translate-api");
+const axios = require("axios");
 
 module.exports = {
     name: "translate",
@@ -43,14 +44,24 @@ module.exports = {
         );
 
         try {
+            const apiUrl = createAPIUrl("fasturl", "/tool/translate", {
+                text: textToTranslate,
+                target: langCode
+            });
             const {
-                translation
-            } = await translate(textToTranslate, null, langCode);
+                data
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent,
+                    "x-api-key": listAPIUrl().fasturl.APIKey
+                }
+            });
 
-            return ctx.reply(translation);
+            return ctx.reply(data.translatedText);
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Error: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

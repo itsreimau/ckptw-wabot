@@ -7,7 +7,7 @@ const ytdl = require("node-yt-dl");
 
 module.exports = {
     name: "ytv",
-    aliases: ["ytmp4", "ytvideo"],
+    aliases: ["ytmp3", "ytaudio"],
     category: "downloader",
     code: async (ctx) => {
         const {
@@ -35,10 +35,10 @@ module.exports = {
             if (!data.status) return ctx.reply(global.msg.notFound);
 
             return await ctx.reply({
-                video: {
+                audio: {
                     url: data.media
                 },
-                mimetype: mime.contentType("mp4"),
+                mimetype: mime.contentType("mp3"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     global.msg.footer,

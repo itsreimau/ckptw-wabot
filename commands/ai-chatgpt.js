@@ -10,7 +10,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "chatgpt",
-    aliases: ["chatai", "gpt", "gpt4"],
+    aliases: ["ai", "chatai", "gpt", "gpt4"],
     category: "ai",
     code: async (ctx) => {
         const {
@@ -22,7 +22,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx.args.join(" ") || null;
+        const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
@@ -30,18 +30,20 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("chiwa", "/api/ai", {
-                text: input
+            const apiUrl = createAPIUrl("fasturl", "/api/gpt4", {
+                prompt: input,
+                sessionId: `${ctx._sender.jid.replace(/@.*|:.*/g, "")}-${global.bot.name.toUpperCase().replace(/ /g, "_")}`
             });
             const {
                 data
             } = await axios.get(apiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent
+                    "User-Agent": global.system.userAgent,
+                    "x-api-key": listAPIUrl().fasturl.APIKey
                 }
             });
 
-            return ctx.reply(data.result);
+            return ctx.reply(data.response);
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

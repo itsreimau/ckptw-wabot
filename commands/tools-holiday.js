@@ -8,7 +8,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "holiday",
-    aliases: ["libur", "harilibur"],
+    aliases: ["harilibur", "libur"],
     category: "tools",
     code: async (ctx) => {
         const {

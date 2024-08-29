@@ -32,17 +32,6 @@ exports.getRandomElement = (arr) => {
     return arr[randomIndex];
 };
 
-exports.getMediaQuotedMessage = async (object, type) => {
-    const stream = await downloadContentFromMessage(object, type);
-    let buffer = Buffer.from([]);
-
-    for await (const chunk of stream) {
-        buffer = Buffer.concat([buffer, chunk]);
-    }
-
-    return buffer;
-};
-
 exports.isCmd = (m, ctx) => {
     const prefixRegex = new RegExp(ctx._config.prefix, "i");
     const content = m.content && m.content.trim();

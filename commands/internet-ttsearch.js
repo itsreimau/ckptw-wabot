@@ -10,7 +10,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "ttsearch",
-    aliases: ["vtsearch", "tiktoksearch"],
+    aliases: ["tiktoksearch", "vtsearch"],
     category: "internet",
     code: async (ctx) => {
         const {
