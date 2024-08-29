@@ -35,7 +35,7 @@ module.exports = {
         if (msgType !== MessageType.stickerMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
 
         try {
-            const buffer = ctx.msg.media.toBuffer() || ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const [packname, author] = input.split("|");
             const sticker = new Sticker(buffer, {
                 pack: packname || global.sticker.packname,

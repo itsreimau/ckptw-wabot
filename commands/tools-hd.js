@@ -32,7 +32,7 @@ module.exports = {
         if (msgType !== MessageType.imageMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const buffer = ctx.msg.media.toBuffer() || ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const result = await upscale(buffer, ctx.args[0], ctx.args[1] === "anime" ? true : false);
 
             return await ctx.reply({

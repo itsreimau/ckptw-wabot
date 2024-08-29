@@ -43,7 +43,7 @@ module.exports = {
         if (msgType !== MessageType.imageMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const buffer = ctx.msg.media.toBuffer() || ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const [top, bottom] = input.split("|");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
             const result = createAPIUrl("https://api.memegen.link", `/images/custom/${top || ""}/${bottom || ""}.png`, {

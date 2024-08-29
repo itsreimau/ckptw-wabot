@@ -53,7 +53,7 @@ module.exports = {
 
                 return ctx.reply(data);
             } else if (media) {
-                const buffer = ctx.msg.media.toBuffer() || ctx.quoted?.media.toBuffer();
+                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadResponse = await uploadByBuffer(buffer, mime.lookup("png"));
                 const apiUrl = createAPIUrl("sanzy", "/api/gemini-image", {
                     text: input,

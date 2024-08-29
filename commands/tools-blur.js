@@ -26,7 +26,7 @@ module.exports = {
         if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const buffer = ctx.msg.media.toBuffer() || ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             let level = ctx.args[0] || "5";
             let img = await Jimp.read(buffer);
             img.blur(isNaN(level) ? 5 : parseInt(level));

@@ -26,7 +26,7 @@ module.exports = {
         if (msgType !== MessageType.imageMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const buffer = ctx.msg.media.toBuffer() || ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             await ctx._client.updateProfilePicture(ctx.id, buffer);
 
             return ctx.reply(quote(`✅ Berhasil mengubah gambar profil foto grup!`));
