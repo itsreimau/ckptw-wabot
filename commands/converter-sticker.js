@@ -23,12 +23,11 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const msgType = ctx.getMessageType();
-        const media = ctx.msg.media || ctx.quoted?.media;
 
         if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar, GIF, atau video!`));
 
         try {
-            const buffer = await media.toBuffer();
+            const buffer = ctx.msg.media.toBuffer() || ctx.quoted?.media.toBuffer();
             const sticker = new Sticker(buffer, {
                 pack: global.sticker.packname,
                 author: global.sticker.author,

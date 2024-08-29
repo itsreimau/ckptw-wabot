@@ -36,7 +36,6 @@ module.exports = {
         );
 
         const msgType = ctx.getMessageType();
-        const media = ctx.msg.media || ctx.quoted?.media;
 
         try {
             if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !ctx.quoted?.conversation) {
@@ -54,7 +53,7 @@ module.exports = {
 
                 return ctx.reply(data);
             } else if (media) {
-                const buffer = await media.toBuffer();
+                const buffer = ctx.msg.media.toBuffer() || ctx.quoted?.media.toBuffer();
                 const uploadResponse = await uploadByBuffer(buffer, mime.lookup("png"));
                 const apiUrl = createAPIUrl("sanzy", "/api/gemini-image", {
                     text: input,

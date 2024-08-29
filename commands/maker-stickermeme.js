@@ -39,12 +39,11 @@ module.exports = {
         );
 
         const msgType = ctx.getMessageType();
-        const media = ctx.msg.media || ctx.quoted?.media;
 
         if (msgType !== MessageType.imageMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const buffer = await media.toBuffer();
+            const buffer = ctx.msg.media.toBuffer() || ctx.quoted?.media.toBuffer();
             const [top, bottom] = input.split("|");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
             const result = createAPIUrl("https://api.memegen.link", `/images/custom/${top || ""}/${bottom || ""}.png`, {

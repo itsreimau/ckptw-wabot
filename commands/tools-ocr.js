@@ -29,12 +29,11 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         const msgType = ctx.getMessageType();
-        const media = ctx.msg.media || ctx.quoted?.media;
 
         if (msgType !== MessageType.imageMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
-            const buffer = await media.toBuffer();
+            const buffer = ctx.msg.media.toBuffer() || ctx.quoted?.media.toBuffer();
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
             const apiUrl = createAPIUrl("fasturl", "/tool/ocr", {
                 imageUrl: uplRes.link

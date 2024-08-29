@@ -31,12 +31,11 @@ module.exports = {
         );
 
         const msgType = ctx.getMessageType();
-        const media = ctx.msg.media || ctx.quoted?.media;
 
         if (msgType !== MessageType.stickerMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
 
         try {
-            const buffer = await media.toBuffer();
+            const buffer = ctx.msg.media.toBuffer() || ctx.quoted?.media.toBuffer();
             const [packname, author] = input.split("|");
             const sticker = new Sticker(buffer, {
                 pack: packname || global.sticker.packname,
