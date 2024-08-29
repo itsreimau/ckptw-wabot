@@ -9,7 +9,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "tts",
+    name: "ttsg",
+    aliases: ["tts", "ttsgoogle", "texttospeechgoogle"],
     category: "tools",
     code: async (ctx) => {
         const {
@@ -21,20 +22,20 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        let textToTranslate = ctx.args.join(" ");
+        let textToSpeech = ctx.args.join(" ") || null;
         let langCode = "id";
 
         if (ctx.quoted) {
             const quotedMessage = ctx.quoted;
-            textToTranslate = Object.values(quotedMessage).find(
+            textToSpeech = Object.values(quotedMessage).find(
                 msg => msg.caption || msg.text
-            )?.caption || textToTranslate || null;
+            )?.caption || textToSpeech || null;
 
             if (ctx.args[0] && ctx.args[0].length === 2) langCode = ctx.args[0];
         } else {
             if (ctx.args[0] && ctx.args[0].length === 2) {
                 langCode = ctx.args[0];
-                textToTranslate = textToTranslate ? textToTranslate : ctx.args.slice(1).join(" ");
+                textToSpeech = textToSpeech ? textToSpeech : ctx.args.slice(1).join(" ");
             }
         }
 
@@ -44,29 +45,31 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("nyxs", "/tools/tts", {
+            const apiUrl = createAPIUrl("fasturl", "/tool/tts/google", {
                 text: textToSpeech,
-                to: langCode
+                speaker: langCode
             });
             const {
                 data
             } = await axios.get(apiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent
-                }
+                    "User-Agent": global.system.userAgent,
+                    "x-api-key": listAPIUrl().fasturl.APIKey
+                },
+                responseType: "arraybuffer"
             });
 
             return await ctx.reply({
-                audio: {
-                    url: data.result,
-                },
+                audio: data,
                 mimetype: mime.contentType("mp3"),
-                ptt: false
+                ptt: true
             });
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(⚠Terjadi kesalahan: $ {
+                error.message
+            }));
         }
     }
 };

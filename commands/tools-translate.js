@@ -20,7 +20,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        let textToTranslate = ctx.args.join(" ");
+        let textToTranslate = ctx.args.join(" ") || null;
         let langCode = "id";
 
         if (ctx.quoted) {

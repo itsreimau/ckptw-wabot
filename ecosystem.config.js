@@ -5,8 +5,6 @@ module.exports = {
         script: "./index.js",
 
         // Advanced features.
-        instances: "max",
-        exec_mode: "cluster",
         watch: true,
         ignore_watch: ["database.json", "node_modules", "state"],
         max_memory_restart: "300M",
