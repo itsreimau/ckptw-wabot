@@ -55,6 +55,7 @@ global.sticker = {
 
 // System.
 global.system = {
+    autoMention: false, // Don't use it, there will still be errors.
     autoRead: true,
     selfReply: true,
     timeZone: "Asia/Jakarta",
