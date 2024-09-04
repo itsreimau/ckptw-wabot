@@ -1,7 +1,4 @@
 const {
-    getList
-} = require("../tools/list");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -29,7 +26,7 @@ module.exports = {
         );
 
         if (ctx.args[0] === "list") {
-            const listText = await getList("alkitab");
+            const listText = await global.tools.list.get("alkitab");
             return ctx.reply(listText);
         }
 

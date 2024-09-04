@@ -1,7 +1,4 @@
 const {
-    getList
-} = require("../tools/list.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -30,7 +27,7 @@ module.exports = {
         );
 
         if (ctx.args[0] === "list") {
-            const listText = await getList("disable_enable");
+            const listText = await global.tools.list.get("disable_enable");
             return ctx.reply(listText);
         }
 

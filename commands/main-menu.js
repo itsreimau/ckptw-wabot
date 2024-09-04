@@ -1,7 +1,4 @@
 const {
-    getList
-} = require("../tools/list.js");
-const {
     ButtonBuilder,
     quote
 } = require("@mengkodingan/ckptw");
@@ -15,7 +12,7 @@ module.exports = {
     category: "main",
     code: async (ctx) => {
         try {
-            const text = await getList("menu", ctx);
+            const text = await global.tools.list.get("menu", ctx);
             const fakeProduct = {
                 key: {
                     fromMe: false,
