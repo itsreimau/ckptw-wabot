@@ -39,7 +39,7 @@ async function get(type, ctx) {
                 }));
 
             if (categoryCommands.length > 0) {
-                menuText += `◈ ${bold(tags[category])}\n`;
+                menuText += `${bold(tags[category])}\n`;
 
                 categoryCommands.forEach(cmd => {
                     menuText += quote(monospace(`${ctx._used.prefix || "/"}${cmd.name}`));
@@ -63,23 +63,73 @@ async function get(type, ctx) {
                 const response = await fetch(createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
                 const data = await response.json();
                 text = data.data.map(b =>
-                    `${quote(`Buku: ${b.name} (${b.abbreviation})`)}\n` +
-                    `${quote(`Jumlah pasal: ${b.total_chapter}`)}\n` +
-                    `${quote(`Ayat yang tersimpan: ${b.saved_verse}`)}\n`
-                ).join("\n");
+                    `${quote(`Buku: ${b.name} (${b.abbr})`)}\n` +
+                    `${quote(`Jumlah Bab: ${b.chapter}`)}\n` +
+                    "-----\n"
+                ).join("");
+
+                text += global.msg.footer;
                 break;
             }
 
-            default:
-                text = generateMenuText(ctx._config.cmd, global.system.cmdTags);
+            case "alquran": {
+                const response = await fetch(createUrl("https://equran.id", "/api/v2/surat", {}));
+                const data = await response.json();
+                text = data.data.map(s =>
+                    `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
+                    `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n` +
+                    "-----\n"
+                ).join("");
+
+                text += global.msg.footer;
                 break;
+            }
+
+            case "disable_enable": {
+                const deList = ["antilink", "welcome"];
+                text = deList.map(item => `${quote(item)}`).join("\n");
+                text += "\n" + global.msg.footer;
+                break;
+            }
+
+            case "menu": {
+                const cmds = ctx._self.cmd;
+                const tags = {
+                    main: "Main",
+                    ai: "AI",
+                    game: "Game",
+                    converter: "Converter",
+                    downloader: "Downloader",
+                    fun: "Fun",
+                    group: "Group",
+                    islamic: "Islamic",
+                    internet: "Internet",
+                    maker: "Maker",
+                    tools: "Tools",
+                    owner: "Owner",
+                    info: "Info",
+                    "": "No Category"
+                };
+
+                if (!cmds || cmds.size === 0) {
+                    text = quote(`${bold("[ ! ]")} Terjadi kesalahan: Tidak ada perintah yang ditemukan.`);
+                } else {
+                    text = generateMenuText(cmds, tags);
+                }
+                break;
+            }
+
+            default: {
+                text = quote(`${bold("[ ! ]")} Terjadi kesalahan: Jenis daftar tidak dikenal.`);
+                break;
+            }
         }
-    } catch (err) {
-        text = `${bold("Maaf kak! Sepertinya ada masalah saat memuat daftar perintah.")}\n${quote(`Error: ${err.message}`)}\n\nMohon hubungi pengembang untuk memperbaikinya.`;
+    } catch (error) {
+        text = quote(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
     }
 
     return text;
-};
+}
 
 module.exports = {
     get

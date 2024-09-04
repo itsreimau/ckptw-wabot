@@ -92,7 +92,8 @@ async function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
         queryParams.set(apiKeyParamName, api.APIKey);
     }
 
-    const apiUrl = new URL(endpoint, api ? api.baseURL : apiNameOrURL.origin);
+    const baseURL = api ? api.baseURL : apiNameOrURL.origin;
+    const apiUrl = new URL(endpoint, baseURL);
     apiUrl.search = queryParams.toString();
 
     return apiUrl.toString();
