@@ -7,7 +7,7 @@ const {
     SectionsBuilder,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "aisearch",
@@ -34,12 +34,8 @@ module.exports = {
             const apiUrl = createAPIUrl("sanzy", "/api/ai-search", {
                 text: input
             });
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
-            const data = response.data.data;
+            const response = await fetch(apiUrl);
+            const data = await response.json();
 
             const combinedText = data.find(d => d.type === "combined_text")?.text;
             const relatedQuestions = data.find(d => d.type === "related_questions")?.questions || [];

@@ -6,7 +6,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "faktaunik",
@@ -24,24 +24,21 @@ module.exports = {
 
         try {
             const faktaApiUrl = await createAPIUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
-            const faktaResponse = await axios.get(faktaApiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
-            const faktaText = faktaResponse.data.text;
+            const faktaResponse = await fetch(faktaApiUrl);
+            const faktaData = await faktaResponse.json();
+            const faktaText = faktaData.text;
 
             const translationApiUrl = createAPIUrl("fasturl", "/tool/translate", {
                 text: faktaText,
                 target: "id"
             });
-            const translationResponse = await axios.get(translationApiUrl, {
+            const translationResponse = await fetch(translationApiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent,
                     "x-api-key": listAPIUrl().fasturl.APIKey
                 }
             });
-            const translatedText = translationResponse.data.translatedText;
+            const translationData = await translationResponse.json();
+            const translatedText = translationData.translatedText;
 
             return ctx.reply(translatedText);
         } catch (error) {
@@ -51,3 +48,12 @@ module.exports = {
         }
     }
 };
+``
+`
+
+In the modified code, we replaced the `
+axios` import with `
+node - fetch` and used the `
+fetch` function instead of `
+axios.get` for making the HTTP requests. We also removed the 'User-Agent' headers from the requests since `
+node - fetch` doesn't automatically add them.

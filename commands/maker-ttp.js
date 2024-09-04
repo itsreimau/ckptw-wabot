@@ -5,7 +5,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 const {
     Sticker,
     StickerTypes
@@ -38,7 +38,14 @@ module.exports = {
                 text: input
             });
 
-            const sticker = new Sticker(apiUrl, {
+            const response = await fetch(apiUrl, {
+                headers: {
+                    'User-Agent': ''
+                }
+            });
+            const imageUrl = await response.text();
+
+            const sticker = new Sticker(imageUrl, {
                 pack: global.sticker.packname,
                 author: global.sticker.author,
                 type: StickerTypes.FULL,

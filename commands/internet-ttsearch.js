@@ -5,8 +5,8 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "ttsearch",
@@ -33,14 +33,14 @@ module.exports = {
             const apiUrl = createAPIUrl("agatz", "/api/tiktoksearch", {
                 message: input
             });
-            const response = await axios.get(apiUrl, {
+            const response = await fetch(apiUrl, {
                 headers: {
                     "User-Agent": global.system.userAgent
                 }
             });
             const {
                 data
-            } = response.data;
+            } = await response.json();
 
             return await ctx.reply({
                 video: {

@@ -10,7 +10,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "alquran",
@@ -43,14 +43,10 @@ module.exports = {
             if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`⚠ Surah ${suraNumber} tidak ada.`));
 
             const apiUrl = createAPIUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
             const {
                 data
-            } = response.data;
+            } = await response.json();
 
             if (ayaInput) {
                 if (ayaInput.includes("-")) {

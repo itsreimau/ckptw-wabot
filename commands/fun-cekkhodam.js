@@ -8,7 +8,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "cekkhodam",
@@ -33,13 +33,8 @@ module.exports = {
 
         try {
             const apiUrl = createAPIUrl("https://raw.caliph.my.id", `/khodam.json`, {});
-            const {
-                data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
+            const data = await response.json();
             const khodam = getRandomElement(data);
 
             return ctx.reply(

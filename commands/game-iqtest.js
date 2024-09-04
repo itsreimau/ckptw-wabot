@@ -7,7 +7,7 @@ const {
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "iqtest",

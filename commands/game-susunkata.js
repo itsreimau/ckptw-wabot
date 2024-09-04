@@ -7,7 +7,7 @@ const {
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 const session = new Map();
 
@@ -27,12 +27,8 @@ module.exports = {
 
         try {
             const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/susunkata.json`, {});
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
-            const data = getRandomElement(response.data);
+            const response = await fetch(apiUrl);
+            const data = getRandomElement(await response.json());
             const coin = 3;
             const timeout = 60000;
             const senderNumber = ctx.sender.jid.replace(/@.*|:.*/g, "");

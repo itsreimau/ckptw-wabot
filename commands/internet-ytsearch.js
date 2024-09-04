@@ -6,8 +6,8 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "ytsearch",
@@ -34,36 +34,29 @@ module.exports = {
             const apiUrl = createAPIUrl("agatz", "/api/ytsearch", {
                 message: input
             });
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
             const {
                 data
-            } = response.data;
+            } = await response.json();
 
-            const resultText = data.map((d) => {
-                switch (d.type) {
-                    case "video":
-                        return `${bold(`${d.title} (${d.url})`)}\n` +
-                            `${quote(`Durasi: ${d.timestamp}`)}\n` +
-                            `${quote(`Diunggah: ${d.ago}`)}\n` +
-                            `${quote(`Dilihat: ${d.views}`)}`;
-                    case "channel":
-                        return `${bold(`${d.name} (${d.url})`)}\n` +
-                            `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
-                            `${quote(`Jumlah video: ${d.videoCount}`)}`;
-                }
-            }).filter((d) => d).join(
-                "\n" +
-                `${quote("─────")}\n`
-            );
-            return ctx.reply(
-                `${resultText}\n` +
-                "\n" +
-                global.msg.footer
-            );
+            const resultText = data
+                .map((d) => {
+                    switch (d.type) {
+                        case "video":
+                            return `${bold(`${d.title} (${d.url})`)}\n` +
+                                `${quote(`Durasi: ${d.timestamp}`)}\n` +
+                                `${quote(`Diunggah: ${d.ago}`)}\n` +
+                                `${quote(`Dilihat: ${d.views}`)}`;
+                        case "channel":
+                            return `${bold(`${d.name} (${d.url})`)}\n` +
+                                `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
+                                `${quote(`Jumlah video: ${d.videoCount}`)}`;
+                    }
+                })
+                .filter((d) => d)
+                .join("\n" + `${quote("─────")}\n`);
+
+            return ctx.reply(`${resultText}\n\n` + global.msg.footer);
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

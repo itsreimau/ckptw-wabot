@@ -1,4 +1,4 @@
-const axios = require("axios");
+const fetch = require("node-fetch");
 const {
     monospace,
     quote
@@ -33,52 +33,51 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const response = await axios.get(url, {
-                responseType: "arraybuffer",
+            const response = await fetch(url, {
                 headers: {
-                    "User-Agent": global.system.userAgent
+                    "User-Agent": ""
                 }
             });
-            const contentType = response?.headers?.["content-type"];
+            const contentType = response.headers.get("content-type");
 
             if (/image/.test(contentType)) {
-                let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
+                let fileName = /filename/i.test(response.headers.get("content-disposition")) ? response.headers.get("content-disposition").match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return ctx.reply({
-                    image: response?.data,
+                    image: await response.buffer(),
                     mimetype: mime.contentType(contentType)
                 });
             }
 
             if (/video/.test(contentType)) {
-                let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
+                let fileName = /filename/i.test(response.headers.get("content-disposition")) ? response.headers.get("content-disposition").match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return ctx.reply({
-                    video: response?.data,
+                    video: await response.buffer(),
                     mimetype: mime.contentType(contentType)
                 });
             }
 
             if (/audio/.test(contentType)) {
-                let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
+                let fileName = /filename/i.test(response.headers.get("content-disposition")) ? response.headers.get("content-disposition").match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return ctx.reply({
-                    audio: response?.data,
+                    audio: await response.buffer(),
                     mimetype: mime.contentType(contentType)
                 });
             }
 
             if (/webp/.test(contentType)) return ctx.reply({
-                sticker: response?.data
+                sticker: await response.buffer()
             });
 
             if (!/utf-8|json|html|plain/.test(contentType)) {
-                let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
+                let fileName = /filename/i.test(response.headers.get("content-disposition")) ? response.headers.get("content-disposition").match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return ctx.reply({
-                    document: response?.data,
+                    document: await response.buffer(),
                     fileName,
                     mimetype: mime.contentType(contentType)
                 });
             }
 
-            let text = response?.data?.toString() || response?.data;
+            let text = await response.text();
             text = format(text);
             try {
                 ctx.reply(text.slice(0, 65536) + "");

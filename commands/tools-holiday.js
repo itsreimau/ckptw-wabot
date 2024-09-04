@@ -4,7 +4,7 @@ const {
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "holiday",
@@ -25,13 +25,8 @@ module.exports = {
             const apiUrl = createAPIUrl("https://api-harilibur.vercel.app", "/api", {
                 month
             });
-            const {
-                data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
+            const data = await response.json();
 
             const resultText = data.reverse().map((h) => {
                 const d = new Date(h.holiday_date);

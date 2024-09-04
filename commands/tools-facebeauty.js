@@ -9,8 +9,8 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const axios = require("axios");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 const {
     uploadByBuffer
 } = require("telegraph-uploader");
@@ -38,15 +38,13 @@ module.exports = {
             const apiUrl = createAPIUrl("fasturl", "/tool/facebeauty", {
                 faceUrl: uplRes.link
             });
-            const {
-                data
-            } = await axios.get(apiUrl, {
+            const response = await fetch(apiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent,
                     "x-api-key": listAPIUrl().fasturl.APIKey
                 },
                 responseType: "arraybuffer"
             });
+            const data = await response.buffer();
 
             return await ctx.reply({
                 image: data,

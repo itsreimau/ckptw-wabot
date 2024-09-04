@@ -5,8 +5,8 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "trdl",
@@ -36,14 +36,10 @@ module.exports = {
             const apiUrl = createAPIUrl("agatz", "/api/threads", {
                 url
             });
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
             const {
                 data
-            } = response.data;
+            } = await response.json();
 
             if (data.image_urls && data.image_urls.length > 0) {
                 for (const imageUrl of data.image_urls) {

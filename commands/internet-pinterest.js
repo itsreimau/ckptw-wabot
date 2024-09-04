@@ -6,8 +6,8 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "pinterest",
@@ -34,14 +34,10 @@ module.exports = {
             const apiUrl = createAPIUrl("ssa", "/api/pinterest", {
                 query: input
             });
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
             const {
                 data
-            } = response.data;
+            } = await response.json();
 
             return await ctx.reply({
                 image: {

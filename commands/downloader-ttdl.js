@@ -5,8 +5,8 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "ttdl",
@@ -39,13 +39,8 @@ module.exports = {
             const apiUrl = createAPIUrl("https://api.tiklydown.eu.org", "/api/download", {
                 url
             });
-            const {
-                data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
+            const data = await response.json();
 
             if (mediaType === "audio") {
                 return await ctx.reply({

@@ -6,8 +6,8 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "ttst",
@@ -35,15 +35,12 @@ module.exports = {
                 text: input,
                 speaker: "id_001"
             });
-            const {
-                data
-            } = await axios.get(apiUrl, {
+            const response = await fetch(apiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent,
                     "x-api-key": listAPIUrl().fasturl.APIKey
-                },
-                responseType: "arraybuffer"
+                }
             });
+            const data = await response.buffer();
 
             return await ctx.reply({
                 audio: data,

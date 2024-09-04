@@ -5,8 +5,8 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "fbdl",
@@ -36,14 +36,10 @@ module.exports = {
             const apiUrl = createAPIUrl("vkrdownloader", "/server", {
                 vkr: url
             });
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
             const {
                 data
-            } = response.data;
+            } = await response.json();
             const downloadUrl = data.downloads.find(d => d.format_id === "hd")?.url || data.downloads.find(d => d.format_id === "sd")?.url;
 
             return await ctx.reply({

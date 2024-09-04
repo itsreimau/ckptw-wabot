@@ -91,7 +91,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         const mean = didyoumean(cmdName, listCmd);
 
-        if (mean && mean !== cmdName) ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
+        if (mean && mean !== cmdName) return ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
     }
 
     // AFK handling: Mentioned users.
@@ -134,12 +134,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const code = m.content.slice(2);
 
             try {
-                const result = await eval(m.content.startsWith(">> ") ? `(async () => { ${code} })()` : code);
+                const result = await eval(m.content.startsWith("$>> ") ? `(async () => { ${code} })()` : code);
 
-                await ctx.reply(inspect(result));
+                return await ctx.reply(inspect(result));
             } catch (error) {
                 console.error("Error:", error);
-                ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+                return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
             }
         }
 
@@ -160,10 +160,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     });
                 });
 
-                await ctx.reply(output);
+                return await ctx.reply(output);
             } catch (error) {
                 console.error("Error:", error);
-                ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+                return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
             }
         }
     }
@@ -173,11 +173,13 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Antilink handling.
         const getAntilink = await db.get(`group.${groupNumber}.antilink`);
         const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
-        if (getAntilink && m.content && urlRegex.test(m.content)) {
-            if ((await gnrl.isAdmin(ctx)) === 1);
+        if (getAntilink) {
+            if ( && m.content && urlRegex.test(m.content)) {
+                if ((await gnrl.isAdmin(ctx)) === 1);
 
-            await ctx.reply(quote(`⚠ Jangan kirim tautan!`));
-            await ctx.deleteMessage(m.key);
+                await ctx.reply(quote(`⚠ Jangan kirim tautan!`));
+                return await ctx.deleteMessage(m.key);
+            }
         }
     }
 
@@ -195,10 +197,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 try {
                     await sendMenfess(ctx, m, senderNumber, from);
 
-                    ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
+                    return ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
                 } catch (error) {
                     console.error("Error:", error);
-                    ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+                    return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
                 }
             }
         }
@@ -240,7 +242,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
         }
     }
 
-    await ctx.sendMessage(
+    return await ctx.sendMessage(
         from + S_WHATSAPP_NET, {
             text: `${m.content}\n` +
                 `${global.msg.readmore}\n` +
@@ -317,7 +319,7 @@ async function handleUserEvent(m) {
         }
     } catch (error) {
         console.error("Error:", error);
-        bot.core.sendMessage(id, {
+        return bot.core.sendMessage(id, {
             text: quote(`⚠ Terjadi kesalahan: ${error.message}`)
         });
     }

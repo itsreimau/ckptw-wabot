@@ -4,12 +4,12 @@ const {
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const FormData = require("form-data");
 const {
     JSDOM
 } = require("jsdom");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "toimg",
@@ -55,10 +55,12 @@ async function webp2png(source) {
     form.append("new-image", isUrl ? "" : blob, "image.webp");
 
     try {
-        const res = await axios.post("https://ezgif.com/webp-to-png", form, {
+        const res = await fetch("https://ezgif.com/webp-to-png", {
+            method: "POST",
+            body: form,
             headers: form.getHeaders(),
         });
-        const html = res.data;
+        const html = await res.text();
         const {
             document
         } = new JSDOM(html).window;
@@ -69,14 +71,16 @@ async function webp2png(source) {
             form2.append(input.name, input.value);
         }
 
-        const res2 = await axios.post(`https://ezgif.com/webp-to-png/${obj.file}`, form2, {
+        const res2 = await fetch(`https://ezgif.com/webp-to-png/${obj.file}`, {
+            method: "POST",
+            body: form2,
             headers: form2.getHeaders(),
         });
-        const html2 = res2.data;
+        const html2 = await res2.text();
         const {
             document: document2
         } = new JSDOM(html2).window;
-        return new URL(document2.querySelector("div#output > p.outfile > img").src, res2.request.res.responseUrl).toString();
+        return new URL(document2.querySelector("div#output > p.outfile > img").src, res2.url).toString();
     } catch (error) {
         console.error("Error in webp2png function:", error);
         return null;

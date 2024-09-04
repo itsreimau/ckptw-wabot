@@ -6,7 +6,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "blackbox",
@@ -33,13 +33,8 @@ module.exports = {
             const apiUrl = createAPIUrl("chiwa", "/api/blackbox", {
                 prompt: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
+            const data = await response.json();
 
             return ctx.reply(data.result);
         } catch (error) {

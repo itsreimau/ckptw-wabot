@@ -5,7 +5,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 const {
     Sticker,
     StickerTypes
@@ -37,14 +37,10 @@ module.exports = {
             const apiUrl = await createAPIUrl("agatz", "/api/sticker", {
                 message: input
             });
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
             const {
                 data
-            } = response.data;
+            } = await response.json();
 
             await ctx.reply(
                 `${quote(`Judul: ${data.title}`)}\n` +

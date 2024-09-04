@@ -9,8 +9,8 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const axios = require("axios");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 const {
     uploadByBuffer
 } = require("telegraph-uploader");
@@ -40,9 +40,8 @@ module.exports = {
             });
             const {
                 data
-            } = await axios.get(apiUrl, {
+            } = await fetch(apiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent,
                     "x-api-key": listAPIUrl().fasturl.APIKey
                 }
             });

@@ -6,7 +6,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "translate",
@@ -49,14 +49,12 @@ module.exports = {
                 text: textToTranslate,
                 target: langCode
             });
-            const {
-                data
-            } = await axios.get(apiUrl, {
+            const response = await fetch(apiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent,
                     "x-api-key": listAPIUrl().fasturl.APIKey
                 }
             });
+            const data = await response.json();
 
             return ctx.reply(data.translatedText);
         } catch (error) {

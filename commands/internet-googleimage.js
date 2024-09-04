@@ -9,8 +9,8 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "googleimage",
@@ -37,13 +37,8 @@ module.exports = {
             const apiUrl = createAPIUrl("https://google-image-api.vercel.app", "/search", {
                 q: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
+            const data = await response.json();
             const result = getRandomElement(data.result);
 
             return await ctx.reply({

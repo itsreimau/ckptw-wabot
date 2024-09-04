@@ -5,8 +5,8 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "lyrics",
@@ -33,13 +33,8 @@ module.exports = {
             const apiUrl = await createAPIUrl("ngodingaja", "/api/lirik", {
                 search: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
+            const data = await response.json();
 
             return ctx.reply(
                 `❖ ${bold("Lyrics")}\n` +

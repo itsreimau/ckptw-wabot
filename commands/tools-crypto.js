@@ -5,7 +5,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "crypto",
@@ -59,12 +59,8 @@ async function coingecko(search) {
     });
 
     try {
-        const response = await axios.get(apiUrl, {
-            headers: {
-                "User-Agent": global.system.userAgent
-            }
-        });
-        const data = response.data;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
         const result = [];
 
         data.forEach((crypto) => {

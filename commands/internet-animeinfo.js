@@ -6,7 +6,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "animeinfo",
@@ -33,24 +33,21 @@ module.exports = {
             const animeApiUrl = await createAPIUrl("https://api.jikan.moe", "/v4/anime", {
                 q: input
             });
-            const animeResponse = await axios.get(animeApiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
-            const info = animeResponse.data.data[0];
+            const animeResponse = await fetch(animeApiUrl);
+            const animeData = await animeResponse.json();
+            const info = animeData.data[0];
 
             const translationApiUrl = createAPIUrl("fasturl", "/tool/translate", {
                 text: info.synopsis,
                 target: "id"
             });
-            const translationResponse = await axios.get(translationApiUrl, {
+            const translationResponse = await fetch(translationApiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent,
                     "x-api-key": listAPIUrl().fasturl.APIKey
                 }
             });
-            const synopsisId = translationResponse.data.translatedText || info.synopsis;
+            const translationData = await translationResponse.json();
+            const synopsisId = translationData.translatedText || info.synopsis;
 
             return await ctx.reply(
                 `${quote(`Judul: ${info.title}`)}\n` +

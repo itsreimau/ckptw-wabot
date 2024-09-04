@@ -5,7 +5,7 @@ const {
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "checkapis",
@@ -28,11 +28,7 @@ module.exports = {
 
             for (const [name, api] of Object.entries(APIs)) {
                 try {
-                    const response = await axios.get(api.baseURL, {
-                        headers: {
-                            "User-Agent": global.system.userAgent
-                        }
-                    });
+                    const response = await fetch(api.baseURL);
                     result += quote(`${api.baseURL} 🟢\n`);
                 } catch (error) {
                     result += quote(`${api.baseURL} 🔴\n`);

@@ -4,12 +4,12 @@ const {
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const FormData = require("form-data");
 const {
     JSDOM
 } = require("jsdom");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "tovid",
@@ -56,11 +56,12 @@ async function webp2mp4(source) {
     form.append("new-image-url", isUrl ? blob : "");
     form.append("new-image", isUrl ? "" : blob, "image.webp");
 
-    const res = await axios.post("https://ezgif.com/webp-to-mp4", form, {
-        headers: form.getHeaders()
+    const res = await fetch("https://ezgif.com/webp-to-mp4", {
+        method: "POST",
+        body: form
     });
 
-    const html = res.data;
+    const html = await res.text();
     const {
         document
     } = new JSDOM(html).window;
@@ -72,13 +73,14 @@ async function webp2mp4(source) {
         form2.append(input.name, input.value);
     }
 
-    const res2 = await axios.post(`https://ezgif.com/webp-to-mp4/${obj.file}`, form2, {
-        headers: form2.getHeaders()
+    const res2 = await fetch(`https://ezgif.com/webp-to-mp4/${obj.file}`, {
+        method: "POST",
+        body: form2
     });
 
-    const html2 = res2.data;
+    const html2 = await res2.text();
     const {
         document: document2
     } = new JSDOM(html2).window;
-    return new URL(document2.querySelector("div#output > p.outfile > video > source").src, res2.request.res.responseUrl).toString();
+    return new URL(document2.querySelector("div#output > p.outfile > video > source").src, res2.url).toString();
 }

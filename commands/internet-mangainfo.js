@@ -6,7 +6,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "mangainfo",
@@ -33,24 +33,21 @@ module.exports = {
             const mangaApiUrl = await createAPIUrl("https://api.jikan.moe", "/v4/manga", {
                 q: input
             });
-            const mangaResponse = await axios.get(mangaApiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
-            const info = mangaResponse.data.data[0];
+            const mangaResponse = await fetch(mangaApiUrl);
+            const mangaData = await mangaResponse.json();
+            const info = mangaData.data[0];
 
             const translationApiUrl = createAPIUrl("fasturl", "/tool/translate", {
                 text: info.synopsis,
                 target: "ids"
             });
-            const translationResponse = await axios.get(translationApiUrl, {
+            const translationResponse = await fetch(translationApiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent,
                     "x-api-key": listAPIUrl().fasturl.APIKey
                 }
             });
-            const synopsisId = translationResponse.data.translatedText || info.synopsis;
+            const translationData = await translationResponse.json();
+            const synopsisId = translationData.translatedText || info.synopsis;
 
             return await ctx.reply(
                 `${quote(`Judul: ${info.title}`)}\n` +
@@ -71,3 +68,12 @@ module.exports = {
         }
     }
 };
+``
+`
+
+In the updated code, I replaced the `
+axios` import with `
+node - fetch` and used the `
+fetch` function instead of `
+axios.get` for making the API requests. I also removed the "User-Agent" headers from the requests since `
+node - fetch` doesn't require them explicitly.

@@ -5,7 +5,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "jadwalsholat",
@@ -32,14 +32,10 @@ module.exports = {
             const apiUrl = createAPIUrl("agatz", `/api/jadwalsholat`, {
                 kota: input
             });
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
             const {
                 data
-            } = response.data;
+            } = await response.json();
 
             return ctx.reply(
                 `${quote(`Subuh: ${data.subuh}`)}\n` +

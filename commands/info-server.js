@@ -9,7 +9,7 @@ const {
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 const os = require("os");
 
 module.exports = {
@@ -19,13 +19,8 @@ module.exports = {
         const apiUrl = createAPIUrl("http://ip-api.com", "/json", {});
 
         try {
-            const {
-                data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
+            const data = await response.json();
             const startTime = global.system.startTime;
 
             return ctx.reply(

@@ -8,10 +8,10 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const axios = require("axios");
 const FormData = require("form-data");
 const Jimp = require("jimp");
 const mime = require("mime-types");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "hd",
@@ -79,16 +79,17 @@ async function upscale(buffer, size = 2, anime = false) {
     });
 
     const apiUrl = createAPIUrl("https://api.upscalepics.com", "/upscale-to-size", {});
-    const response = await axios.post(apiUrl, form, {
+    const response = await fetch(apiUrl, {
+        method: 'POST',
+        body: form,
         headers: {
-            "User-Agent": global.system.userAgent,
             ...form.getHeaders(),
             origin: "https://upscalepics.com",
             referer: "https://upscalepics.com"
         }
     });
 
-    const data = response.data;
+    const data = await response.json();
     if (data.error) throw new Error("Error from upscaler API!");
 
     return {

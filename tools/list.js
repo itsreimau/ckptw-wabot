@@ -11,8 +11,8 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const moment = require("moment-timezone");
+const fetch = require("node-fetch");
 
 exports.getList = async (type, ctx) => {
     let text = "";
@@ -60,12 +60,9 @@ exports.getList = async (type, ctx) => {
     try {
         switch (type) {
             case "alkitab": {
-                const alKitabResponse = await axios.get(createAPIUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}), {
-                    headers: {
-                        "User-Agent": global.system.userAgent
-                    }
-                });
-                text = alKitabResponse.data.data.map(b =>
+                const response = await fetch(createAPIUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
+                const data = await response.json();
+                text = data.data.map(b =>
                     `${quote(`Buku: ${b.name} (${b.abbr})`)}\n` +
                     `${quote(`Jumlah Bab: ${b.chapter}`)}\n` +
                     `${quote("─────")}\n`
@@ -75,12 +72,9 @@ exports.getList = async (type, ctx) => {
                 break;
             }
             case "alquran": {
-                const alquranResponse = await axios.get(createAPIUrl("https://equran.id", "/api/v2/surat", {}), {
-                    headers: {
-                        "User-Agent": global.system.userAgent
-                    }
-                });
-                text = alquranResponse.data.data.map(s =>
+                const response = await fetch(createAPIUrl("https://equran.id", "/api/v2/surat", {}));
+                const data = await response.json();
+                text = data.data.map(s =>
                     `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
                     `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n` +
                     `${quote("─────")}\n`

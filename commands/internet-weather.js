@@ -6,7 +6,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "weather",
@@ -33,24 +33,20 @@ module.exports = {
             const weatherApiUrl = await createAPIUrl("agatz", "/api/cuaca", {
                 message: input
             });
-            const weatherResponse = await axios.get(weatherApiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
-            const weatherData = weatherResponse.data.data;
+            const weatherResponse = await fetch(weatherApiUrl);
+            const weatherData = await weatherResponse.json();
 
             const translationApiUrl = createAPIUrl("fasturl", "/tool/translate", {
                 text: weatherData.current.condition.text,
                 target: "id"
             });
-            const translationResponse = await axios.get(translationApiUrl, {
+            const translationResponse = await fetch(translationApiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent,
                     "x-api-key": listAPIUrl().fasturl.APIKey
                 }
             });
-            const translatedText = translationResponse.data.translatedText;
+            const translationData = await translationResponse.json();
+            const translatedText = translationData.translatedText;
 
             return ctx.reply(
                 `${quote(`Tempat: ${weatherData.location.name}, ${weatherData.location.region}, ${weatherData.location.country}`)}\n` +

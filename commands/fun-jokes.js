@@ -4,7 +4,7 @@ const {
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const fetch = require("node-fetch");
 
 module.exports = {
     name: "jokes",
@@ -22,14 +22,10 @@ module.exports = {
         const apiUrl = createAPIUrl("https://candaan-api.vercel.app", "/api/text/random", {});
 
         try {
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await fetch(apiUrl);
             const {
                 data
-            } = await response.data;
+            } = await response.json();
 
             return ctx.reply(data);
         } catch (error) {
