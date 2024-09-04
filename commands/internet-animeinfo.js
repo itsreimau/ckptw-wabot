@@ -23,11 +23,11 @@ module.exports = {
 
         const input = ctx.args.join(" ") || null;
 
-        if (!input)             return ctx.reply(
-                `${quote(global.msg.argument)}\n` +
-                quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis evangelion`)}`)
-            );
-        
+        if (!input) return ctx.reply(
+            `${quote(global.msg.argument)}\n` +
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis evangelion`)}`)
+        );
+
         try {
             const animeApiUrl = await global.tools.api.createUrl("https://api.jikan.moe", "/v4/anime", {
                 q: input

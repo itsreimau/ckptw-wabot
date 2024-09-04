@@ -37,8 +37,8 @@ module.exports = {
         try {
             if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !ctx.quoted?.conversation) {
                 const apiUrl = global.tools.api.createUrl("sandipbaruwal", "/gemini", {
-                prompt: input
-            });
+                    prompt: input
+                });
                 const response = await fetch(apiUrl);
                 const {
                     data
@@ -48,10 +48,10 @@ module.exports = {
             } else if (media) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadResponse = await uploadByBuffer(buffer, mime.lookup("png"));
-                const apiUrl = global.tools.api.createUrl(("sandipbaruwal", `/gemini2`, {
-                prompt: input,
-                url: uploadResponse.link
-            });
+                const apiUrl = global.tools.api.createUrl("sandipbaruwal", `/gemini2`, {
+                    prompt: input,
+                    url: uploadResponse.link
+                });
                 const response = await fetch(apiUrl);
                 const {
                     data
