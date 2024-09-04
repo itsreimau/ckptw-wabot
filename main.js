@@ -129,7 +129,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }) === 1) {
         // Eval command: Execute JavaScript code.
         if (m.content && m.content.startsWith && (m.content.startsWith("$> ") || m.content.startsWith("$>> "))) {
-            const code = m.content.slice(2);
+            const code = m.content.startsWith("$>> ") ? m.content.slice(3) : m.content.slice(2);
 
             try {
                 const result = await eval(m.content.startsWith("$>> ") ? `(async () => { ${code} })()` : code);
