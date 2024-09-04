@@ -2,9 +2,6 @@ const {
     getList
 } = require("../tools/list");
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -37,7 +34,7 @@ module.exports = {
         }
 
         try {
-            const apiUrl = await createAPIUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {});
+            const apiUrl = await global.tools.api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {});
             const response = await fetch(apiUrl);
             const {
                 data

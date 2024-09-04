@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -29,7 +26,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await createAPIUrl("agatz", "/api/google", {
+            const apiUrl = await global.tools.api.createUrl("agatz", "/api/google", {
                 message: input
             });
             const response = await fetch(apiUrl);

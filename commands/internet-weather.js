@@ -1,11 +1,10 @@
 const {
-    createAPIUrl,
-    listAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const {
+    translate
+} = require("bing-translate-api");
 const fetch = require("node-fetch");
 
 module.exports = {
@@ -30,27 +29,16 @@ module.exports = {
         );
 
         try {
-            const weatherApiUrl = await createAPIUrl("agatz", "/api/cuaca", {
+            const weatherApiUrl = await global.tools.api.createUrl("agatz", "/api/cuaca", {
                 message: input
             });
             const weatherResponse = await fetch(weatherApiUrl);
             const weatherData = await weatherResponse.json();
-
-            const translationApiUrl = createAPIUrl("fasturl", "/tool/translate", {
-                text: weatherData.current.condition.text,
-                target: "id"
-            });
-            const translationResponse = await fetch(translationApiUrl, {
-                headers: {
-                    "x-api-key": listAPIUrl().fasturl.APIKey
-                }
-            });
-            const translationData = await translationResponse.json();
-            const translatedText = translationData.translatedText;
+            const weatherId = await translate(data.weather[0].description, "en", "id");
 
             return ctx.reply(
                 `${quote(`Tempat: ${weatherData.location.name}, ${weatherData.location.region}, ${weatherData.location.country}`)}\n` +
-                `${quote(`Cuaca: ${translatedText}`)}\n` +
+                `${quote(`Cuaca: ${weatherId}`)}\n` +
                 `${quote(`Kelembapan: ${weatherData.current.humidity} %`)}\n` +
                 `${quote(`Angin: ${weatherData.current.wind_kph} km/jam (${weatherData.current.wind_dir})`)}\n` +
                 `${quote(`Suhu saat ini: ${weatherData.current.temp_c} °C`)}\n` +

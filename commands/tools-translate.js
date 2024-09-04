@@ -1,8 +1,4 @@
 const {
-    createAPIUrl,
-    listAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -27,9 +23,7 @@ module.exports = {
 
         if (ctx.quoted) {
             const quotedMessage = ctx.quoted;
-            textToTranslate = Object.values(quotedMessage).find(
-                msg => msg.caption || msg.text
-            )?.caption || textToTranslate || null;
+            textToTranslate = Object.values(quotedMessage).find(msg => msg.caption || msg.text)?.caption || textToTranslate || null;
 
             if (ctx.args[0] && ctx.args[0].length === 2) langCode = ctx.args[0];
         } else {
@@ -45,18 +39,11 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("fasturl", "/tool/translate", {
-                text: textToTranslate,
-                target: langCode
-            });
-            const response = await fetch(apiUrl, {
-                headers: {
-                    "x-api-key": listAPIUrl().fasturl.APIKey
-                }
-            });
-            const data = await response.json();
+            const {
+                translation
+            } = await translate(textToTranslate, null, langCode);
 
-            return ctx.reply(data.translatedText);
+            return ctx.reply(translation);
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

@@ -1,7 +1,4 @@
 const {
-    isAdmin
-} = require("../tools/general.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -32,7 +29,7 @@ module.exports = {
         });
 
         try {
-            if ((await isAdmin(ctx, {
+            if ((await global.tools.general.isAdmin(ctx, {
                     id: account
                 })) === 1) return ctx.reply(quote(`⚠ Anggota ini adalah admin grup.`));
 

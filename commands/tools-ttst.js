@@ -1,8 +1,4 @@
 const {
-    createAPIUrl,
-    listAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -31,13 +27,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("fasturl", "/tool/tts/tiktok", {
+            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/tts/tiktok", {
                 text: input,
                 speaker: "id_001"
             });
             const response = await fetch(apiUrl, {
                 headers: {
-                    "x-api-key": listAPIUrl().fasturl.APIKey
+                    "x-api-key": global.tools.api.listAPIUrl().fasturl.APIKey
                 }
             });
             const data = await response.buffer();

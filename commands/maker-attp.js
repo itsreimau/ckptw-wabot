@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -34,7 +31,7 @@ module.exports = {
         if (input.length > 10000) return ctx.reply(quote(`⚠ Maksimal 50 kata!`));
 
         try {
-            const apiUrl = createAPIUrl("widipe", "/attp", {
+            const apiUrl = global.tools.api.createUrl("widipe", "/attp", {
                 text: input
             });
 

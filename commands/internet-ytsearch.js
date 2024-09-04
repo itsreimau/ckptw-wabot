@@ -1,7 +1,5 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
+
     bold,
     monospace,
     quote
@@ -31,7 +29,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/ytsearch", {
+            const apiUrl = global.tools.api.createUrl("agatz", "/api/ytsearch", {
                 message: input
             });
             const response = await fetch(apiUrl);

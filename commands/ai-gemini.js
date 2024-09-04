@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -39,28 +36,28 @@ module.exports = {
 
         try {
             if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !ctx.quoted?.conversation) {
-                const apiUrl = createAPIUrl("sanzy", "/api/gemini", {
-                    text: input
-                });
+                const apiUrl = global.tools.api.createUrl("sandipbaruwal", "/gemini", {
+                prompt: input
+            });
                 const response = await fetch(apiUrl);
                 const {
                     data
                 } = await response.json();
 
-                return ctx.reply(data);
+                return ctx.reply(data.answer);
             } else if (media) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadResponse = await uploadByBuffer(buffer, mime.lookup("png"));
-                const apiUrl = createAPIUrl("sanzy", "/api/gemini-image", {
-                    text: input,
-                    image: uploadResponse.link
-                });
+                const apiUrl = global.tools.api.createUrl(("sandipbaruwal", `/gemini2`, {
+                prompt: input,
+                url: uploadResponse.link
+            });
                 const response = await fetch(apiUrl);
                 const {
                     data
                 } = await response.json();
 
-                return ctx.reply(data);
+                return ctx.reply(data.answer);
             }
         } catch (error) {
             console.error("Error:", error);

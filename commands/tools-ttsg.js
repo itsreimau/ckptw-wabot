@@ -1,8 +1,4 @@
 const {
-    createAPIUrl,
-    listAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -28,9 +24,7 @@ module.exports = {
 
         if (ctx.quoted) {
             const quotedMessage = ctx.quoted;
-            textToSpeech = Object.values(quotedMessage).find(
-                msg => msg.caption || msg.text
-            )?.caption || textToSpeech || null;
+            textToSpeech = Object.values(quotedMessage).find(msg => msg.caption || msg.text)?.caption || textToSpeech || null;
 
             if (ctx.args[0] && ctx.args[0].length === 2) langCode = ctx.args[0];
         } else {
@@ -46,13 +40,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("fasturl", "/tool/tts/google", {
+            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/tts/google", {
                 text: textToSpeech,
                 speaker: langCode
             });
             const response = await fetch(apiUrl, {
                 headers: {
-                    "x-api-key": listAPIUrl().fasturl.APIKey
+                    "x-api-key": global.tools.api.listAPIUrl().fasturl.APIKey
                 }
             });
             const data = await response.buffer();

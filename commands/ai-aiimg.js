@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -30,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("sanzy", `/api/stablediffusion-sxdl`, {
+            const apiUrl = global.tools.api.createUrl("sanzy", `/api/stablediffusion-sxdl`, {
                 prompt: input
             });
             const response = await fetch(apiUrl);

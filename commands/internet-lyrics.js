@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
@@ -30,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await createAPIUrl("ngodingaja", "/api/lirik", {
+            const apiUrl = await global.tools.api.createUrl("ngodingaja", "/api/lirik", {
                 search: input
             });
             const response = await fetch(apiUrl);

@@ -1,8 +1,4 @@
 const {
-    createAPIUrl,
-    listAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -33,12 +29,12 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("fasturl", "/tool/qr", {
+            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/qr", {
                 url
             });
             const response = await fetch(apiUrl, {
                 headers: {
-                    "x-api-key": listAPIUrl().fasturl.APIKey
+                    "x-api-key": global.tools.api.listAPIUrl().fasturl.APIKey
                 }
             });
             const data = await response.buffer();

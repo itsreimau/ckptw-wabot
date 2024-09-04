@@ -1,9 +1,7 @@
 const {
+
     getList
 } = require("../tools/list.js");
-const {
-    createAPIUrl
-} = require("../tools/api.js");
 const {
     bold,
     italic,
@@ -42,7 +40,7 @@ module.exports = {
 
             if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`⚠ Surah ${suraNumber} tidak ada.`));
 
-            const apiUrl = createAPIUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
+            const apiUrl = global.tools.api.createUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
             const response = await fetch(apiUrl);
             const {
                 data

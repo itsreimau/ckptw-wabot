@@ -1,10 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
     quote
 } = require("@mengkodingan/ckptw");
 const fetch = require("node-fetch");
@@ -22,7 +16,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        return ctx.reply(getRandomElement(iq));
+        return ctx.reply(global.tools.general.getRandomElement(iq));
     }
 };
 

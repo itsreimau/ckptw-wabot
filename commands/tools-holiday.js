@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     quote
 } = require("@mengkodingan/ckptw");
 const fetch = require("node-fetch");
@@ -22,7 +19,7 @@ module.exports = {
 
         try {
             const month = new Date().getMonth() + 1;
-            const apiUrl = createAPIUrl("https://api-harilibur.vercel.app", "/api", {
+            const apiUrl = global.tools.api.createUrl("https://api-harilibur.vercel.app", "/api", {
                 month
             });
             const response = await fetch(apiUrl);

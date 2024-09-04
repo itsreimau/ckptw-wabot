@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -42,7 +39,7 @@ module.exports = {
                 profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
 
-            const apiUrl = createAPIUrl("ngodingaja", "/api/bubblechat", {
+            const apiUrl = global.tools.api.createUrl("ngodingaja", "/api/bubblechat", {
                 text: input,
                 url: profileUrl,
                 nama: ctx.sender.pushName

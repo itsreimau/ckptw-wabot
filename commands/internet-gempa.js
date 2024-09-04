@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -22,7 +19,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const apiUrl = await createAPIUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json", {});
+        const apiUrl = await global.tools.api.createUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json", {});
 
         try {
             const response = await fetch(apiUrl);

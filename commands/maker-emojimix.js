@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
@@ -35,7 +32,7 @@ module.exports = {
             const emojiRegex = /\p{Emoji}/gu;
             const emojis = Array.from(emojisString.matchAll(emojiRegex), (match) => match[0]);
             const [emoji1, emoji2] = emojis.slice(0, 2);
-            const apiUrl = createAPIUrl("https://tenor.googleapis.com", `/v2/featured`, {
+            const apiUrl = global.tools.api.createUrl("https://tenor.googleapis.com", `/v2/featured`, {
                 key: "AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ",
                 contentfilter: "high",
                 media_filter: "png_transparent",

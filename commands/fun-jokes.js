@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     quote
 } = require("@mengkodingan/ckptw");
 const fetch = require("node-fetch");
@@ -19,7 +16,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const apiUrl = createAPIUrl("https://candaan-api.vercel.app", "/api/text/random", {});
+        const apiUrl = global.tools.api.createUrl("https://candaan-api.vercel.app", "/api/text/random", {});
 
         try {
             const response = await fetch(apiUrl);

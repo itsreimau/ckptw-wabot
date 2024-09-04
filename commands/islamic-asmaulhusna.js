@@ -1,7 +1,5 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
+
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -28,7 +26,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/religi/islam/asmaulhusna.json`, {});
+            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/religi/islam/asmaulhusna.json`, {});
             const response = await fetch(apiUrl);
             const data = await response.json();
             const asmaulhusna = data.result;

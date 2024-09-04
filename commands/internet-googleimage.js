@@ -1,10 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
     bold,
     monospace,
     quote
@@ -34,12 +28,12 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("https://google-image-api.vercel.app", "/search", {
+            const apiUrl = global.tools.api.createUrl("https://google-image-api.vercel.app", "/search", {
                 q: input
             });
             const response = await fetch(apiUrl);
             const data = await response.json();
-            const result = getRandomElement(data.result);
+            const result = global.tools.general.getRandomElement(data.result);
 
             return await ctx.reply({
                 image: {

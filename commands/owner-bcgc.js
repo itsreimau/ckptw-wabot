@@ -1,7 +1,5 @@
 const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
+
     monospace,
     quote
 } = require("@mengkodingan/ckptw");

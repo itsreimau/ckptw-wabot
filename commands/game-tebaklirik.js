@@ -1,10 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
     quote
 } = require("@mengkodingan/ckptw");
 const fetch = require("node-fetch");
@@ -26,9 +20,9 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`⚠ Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebaklirik.json`, {});
+            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebaklirik.json`, {});
             const response = await fetch(apiUrl);
-            const data = getRandomElement(await response.json());
+            const data = global.tools.general.getRandomElement(await response.json());
             const coin = 3;
             const timeout = 60000;
             const senderNumber = ctx.sender.jid.replace(/@.*|:.*/g, "");

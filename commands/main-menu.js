@@ -2,9 +2,6 @@ const {
     getList
 } = require("../tools/list.js");
 const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
     ButtonBuilder,
     quote
 } = require("@mengkodingan/ckptw");

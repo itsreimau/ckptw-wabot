@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -54,7 +51,7 @@ module.exports = {
 
 
 async function coingecko(search) {
-    const apiUrl = createAPIUrl("https://api.coingecko.com", "/api/v3/coins/markets", {
+    const apiUrl = global.tools.api.createUrl("https://api.coingecko.com", "/api/v3/coins/markets", {
         vs_currency: "usd",
     });
 

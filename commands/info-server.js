@@ -1,12 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    convertMsToDuration,
-    formatSize,
-    ucword
-} = require("../tools/general.js");
-const {
     quote
 } = require("@mengkodingan/ckptw");
 const fetch = require("node-fetch");
@@ -16,7 +8,7 @@ module.exports = {
     name: "server",
     category: "info",
     code: async (ctx) => {
-        const apiUrl = createAPIUrl("http://ip-api.com", "/json", {});
+        const apiUrl = global.tools.api.createUrl("http://ip-api.com", "/json", {});
 
         try {
             const response = await fetch(apiUrl);
@@ -25,9 +17,9 @@ module.exports = {
 
             return ctx.reply(
                 `${quote(`OS: ${os.type()} (${os.arch()} / ${os.release()})`)}\n` +
-                `${quote(`RAM: ${formatSize(process.memoryUsage().rss)} / ${formatSize(os.totalmem())}`)}\n` +
-                Object.entries(data).map(([key, value]) => `${quote(`${ucword(key)}: ${value}`)}\n`).join("") +
-                `${quote(`Waktu aktif: ${convertMsToDuration(Date.now() - startTime) || "kurang dari satu detik."}`)}\n` +
+                `${quote(`RAM: ${global.tools.general.formatSize(process.memoryUsage().rss)} / ${global.tools.general.formatSize(os.totalmem())}`)}\n` +
+                Object.entries(data).map(([key, value]) => `${quote(`${global.tools.general.ucword(key)}: ${value}`)}\n`).join("") +
+                `${quote(`Waktu aktif: ${global.tools.general.convertMsToDuration(Date.now() - startTime) || "kurang dari satu detik."}`)}\n` +
                 `${quote(`Prosesor: ${os.cpus()[0].model}`)}\n` +
                 "\n" +
                 global.msg.footer

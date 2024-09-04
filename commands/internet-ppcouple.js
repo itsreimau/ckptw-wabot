@@ -1,10 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -26,10 +20,10 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/lainnya/ppcouple.json`, {});
+            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/lainnya/ppcouple.json`, {});
             const response = await fetch(apiUrl);
             const data = await response.json();
-            const result = getRandomElement(data);
+            const result = global.tools.general.getRandomElement(data);
 
             await Promise.all([
                 ctx.reply({

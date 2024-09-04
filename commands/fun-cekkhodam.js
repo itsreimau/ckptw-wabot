@@ -1,10 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -32,10 +26,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = createAPIUrl("https://raw.caliph.my.id", `/khodam.json`, {});
+            const apiUrl = global.tools.api.createUrl("https://raw.caliph.my.id", `/khodam.json`, {});
             const response = await fetch(apiUrl);
             const data = await response.json();
-            const khodam = getRandomElement(data);
+            const khodam = global.tools.general.getRandomElement(data);
 
             return ctx.reply(
                 `${quote(`Nama: ${input}`)}\n` +

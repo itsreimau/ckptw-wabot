@@ -1,8 +1,4 @@
 const {
-    createAPIUrl,
-    listAPIUrl
-} = require("../tools/api.js");
-const {
     quote
 } = require("@mengkodingan/ckptw");
 const fetch = require("node-fetch");
@@ -23,7 +19,7 @@ module.exports = {
         try {
             await ctx.reply(global.msg.wait);
 
-            const APIs = listAPIUrl();
+            const APIs = global.tools.api.listAPIUrl();
             let result = "";
 
             for (const [name, api] of Object.entries(APIs)) {

@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     quote
 } = require("@mengkodingan/ckptw");
 const FormData = require("form-data");

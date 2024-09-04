@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -36,7 +33,7 @@ module.exports = {
             const audioCommands = ["tiktokmp3", "tta", "ttaudio", "ttmp3", "ttmusic", "ttmusik", "vta", "vtaudio", "vtmp3", "vtmusic", "vtmusik"];
             const mediaType = audioCommands.includes(ctx._used.command) ? "audio" : "video_image";
 
-            const apiUrl = createAPIUrl("https://api.tiklydown.eu.org", "/api/download", {
+            const apiUrl = global.tools.api.createUrl("https://api.tiklydown.eu.org", "/api/download", {
                 url
             });
             const response = await fetch(apiUrl);

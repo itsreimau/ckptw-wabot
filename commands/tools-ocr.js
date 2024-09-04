@@ -1,8 +1,4 @@
 const {
-    createAPIUrl,
-    listAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -35,14 +31,14 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = createAPIUrl("fasturl", "/tool/ocr", {
+            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/ocr", {
                 imageUrl: uplRes.link
             });
             const {
                 data
             } = await fetch(apiUrl, {
                 headers: {
-                    "x-api-key": listAPIUrl().fasturl.APIKey
+                    "x-api-key": global.tools.api.listAPIUrl().fasturl.APIKey
                 }
             });
 

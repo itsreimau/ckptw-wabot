@@ -1,5 +1,5 @@
 const {
-    createAPIUrl
+    createUrl
 } = require("./api.js");
 const {
     convertMsToDuration
@@ -14,7 +14,7 @@ const {
 const moment = require("moment-timezone");
 const fetch = require("node-fetch");
 
-exports.getList = async (type, ctx) => {
+async function get(type, ctx) {
     let text = "";
 
     const generateMenuText = (cmds, tags) => {
@@ -60,70 +60,27 @@ exports.getList = async (type, ctx) => {
     try {
         switch (type) {
             case "alkitab": {
-                const response = await fetch(createAPIUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
+                const response = await fetch(createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
                 const data = await response.json();
                 text = data.data.map(b =>
-                    `${quote(`Buku: ${b.name} (${b.abbr})`)}\n` +
-                    `${quote(`Jumlah Bab: ${b.chapter}`)}\n` +
-                    `${quote("─────")}\n`
-                ).join("");
-
-                text += global.msg.footer;
+                    `${quote(`Buku: ${b.name} (${b.abbreviation})`)}\n` +
+                    `${quote(`Jumlah pasal: ${b.total_chapter}`)}\n` +
+                    `${quote(`Ayat yang tersimpan: ${b.saved_verse}`)}\n`
+                ).join("\n");
                 break;
             }
-            case "alquran": {
-                const response = await fetch(createAPIUrl("https://equran.id", "/api/v2/surat", {}));
-                const data = await response.json();
-                text = data.data.map(s =>
-                    `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
-                    `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n` +
-                    `${quote("─────")}\n`
-                ).join("");
 
-                text += global.msg.footer;
-                break;
-            }
-            case "disable_enable": {
-                const deList = ["antilink", "welcome"];
-                text = deList.map(item => quote(item)).join("\n");
-
-                text += "\n" +
-                    global.msg.footer;
-                break;
-            }
-            case "menu": {
-                const cmds = ctx._config.cmd;
-                const tags = {
-                    main: "Main",
-                    ai: "AI",
-                    game: "Game",
-                    converter: "Converter",
-                    downloader: "Downloader",
-                    fun: "Fun",
-                    group: "Group",
-                    islamic: "Islamic",
-                    internet: "Internet",
-                    maker: "Maker",
-                    tools: "Tools",
-                    owner: "Owner",
-                    info: "Info",
-                    "": "No Category"
-                };
-
-                if (!cmds || cmds.size === 0) {
-                    text = quote("⚠ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");
-                } else {
-                    text = generateMenuText(cmds, tags);
-                }
-                break;
-            }
             default:
-                text = quote("⚠ Terjadi kesalahan: Jenis daftar tidak dikenal.");
+                text = generateMenuText(ctx._config.cmd, global.system.cmdTags);
                 break;
         }
-    } catch (error) {
-        text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
+    } catch (err) {
+        text = `${bold("Maaf kak! Sepertinya ada masalah saat memuat daftar perintah.")}\n${quote(`Error: ${err.message}`)}\n\nMohon hubungi pengembang untuk memperbaikinya.`;
     }
 
     return text;
+};
+
+module.exports = {
+    get
 };

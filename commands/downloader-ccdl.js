@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -33,7 +30,7 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/capcut", {
+            const apiUrl = global.tools.api.createUrl("agatz", "/api/capcut", {
                 url
             });
             const response = await fetch(apiUrl);

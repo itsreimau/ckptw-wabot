@@ -1,11 +1,6 @@
 // Required modules and dependencies.
-const {
-    handler
-} = require("./handler.js");
-const {
-    createAPIUrl
-} = require("./tools/api.js");
-const gnrl = require("./tools/general.js");
+const handler = require("./handler.js");
+const tools = require("./tools/exports.js");
 const {
     Client,
     CommandHandler,
@@ -61,6 +56,9 @@ cmd.load();
 // Assign global handler.
 global.handler = handler;
 
+// Assign global tools.
+global.tools = tools;
+
 // Event handling when a message appears.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
@@ -74,7 +72,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (m.key.fromMe);
 
     // Auto-typing simulation for commands.
-    if (gnrl.isCmd(m, ctx)) ctx.simulateTyping();
+    if (tools.general.isCmd(m, ctx)) ctx.simulateTyping();
 
     // "Did you mean?" for typo commands.
     const prefixRegex = new RegExp(ctx._config.prefix, "i");
@@ -104,7 +102,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     db.get(`user.${mentionJid.split("@")[0]}.afk.reason`),
                     db.get(`user.${mentionJid.split("@")[0]}.afk.timeStamp`)
                 ]);
-                const timeAgo = gnrl.convertMsToDuration(Date.now() - timeStamp);
+                const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
 
                 ctx.reply(quote(`🚫 Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
             }
@@ -118,14 +116,14 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             db.get(`user.${senderNumber}.afk.reason`),
             db.get(`user.${senderNumber}.afk.timeStamp`)
         ]);
-        const timeAgo = gnrl.convertMsToDuration(Date.now() - timeStamp);
+        const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
         await db.delete(`user.${senderNumber}.afk`);
 
         ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
     }
 
     // Owner-only commands.
-    if (gnrl.isOwner(ctx, {
+    if (tools.general.isOwner(ctx, {
             id: senderNumber,
             selfOwner: true
         }) === 1) {
@@ -175,7 +173,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
         if (getAntilink) {
             if ( && m.content && urlRegex.test(m.content)) {
-                if ((await gnrl.isAdmin(ctx)) === 1);
+                if ((await tools.general.isAdmin(ctx)) === 1);
 
                 await ctx.reply(quote(`⚠ Jangan kirim tautan!`));
                 return await ctx.deleteMessage(m.key);
@@ -291,7 +289,7 @@ async function handleUserEvent(m) {
                 const message = m.eventsType === "UserJoin" ?
                     quote(`⚠ Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`) :
                     quote(`⚠ @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
-                const card = createAPIUrl("aggelos_007", "/welcomecard", {
+                const card = tools.api.createUrl("aggelos_007", "/welcomecard", {
                     text1: jid.split("@")[0],
                     text2: m.eventsType === "UserJoin" ? "Selamat datang" : "Selamat tinggal!",
                     text3: metadata.subject,
