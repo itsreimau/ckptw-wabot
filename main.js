@@ -30,7 +30,6 @@ console.log("Connecting...");
 // Create a new bot instance.
 const bot = new Client({
     WAVersion: [2, 3000, 1015901307],
-    autoMention: global.system.autoMention,
     phoneNumber: global.bot.phoneNumber,
     prefix: global.bot.prefix,
     readIncommingMsg: global.system.autoRead,
