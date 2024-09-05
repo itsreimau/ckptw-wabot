@@ -33,47 +33,47 @@ module.exports = {
         );
 
         try {
-            const restricted = ["require", "eval", "Function", "global"];
-            for (const w of restricted) {
+            for (const w of ["require", "eval", "Function", "global"]) {
                 if (script.includes(w)) {
-                    return ctx.reply(quote(`⚠️ ${await global.tools.msg.translate(`Penggunaan ${w} tidak diperbolehkan dalam kode.`, userLanguage)}`)));
-            }
-        }
-
-        const output = await new Promise((resolve) => {
-            const childProcess = spawn("node", ["-e", script]);
-
-            let outputData = '';
-            let errorData = '';
-
-            childProcess.stdout.on('data', (chunk) => {
-                outputData += chunk.toString();
-            });
-
-            childProcess.stderr.on('data', (chunk) => {
-                errorData += chunk.toString();
-            });
-
-            childProcess.on("close", (code) => {
-                if (code !== 0) {
-                    resolve(quote(
-                        `⚠️ ${await global.tools.msg.translate("Keluar dari proses dengan kode", userLanguage)}: ${code}\n` +
-                        errorData.trim()
-                    ));
-                } else {
-                    resolve(outputData.trim());
+                    return ctx.reply(quote(`⚠️ ${await global.tools.msg.translate(`Penggunaan ${w} tidak diperbolehkan dalam kode.`, userLanguage)}`));
                 }
+            }
+
+            const output = await new Promise((resolve) => {
+                const childProcess = spawn("node", ["-e", script]);
+
+                let outputData = '';
+                let errorData = '';
+
+                childProcess.stdout.on('data', (chunk) => {
+                    outputData += chunk.toString();
+                });
+
+                childProcess.stderr.on('data', (chunk) => {
+                    errorData += chunk.toString();
+                });
+
+                childProcess.on("close", (code) => {
+                    if (code !== 0) {
+                        resolve(quote(
+                            `⚠️ ${await global.tools.msg.translate("Keluar dari proses dengan kode", userLanguage)}: ${code}\n` +
+                            errorData.trim()
+                        ));
+                    } else {
+                        resolve(outputData.trim());
+                    }
+                });
+
+                setTimeout(() => {
+                    childProcess.kill();
+                    resolve(quote(`⏰ ${await global.tools.msg.translate("Kode mencapai batas waktu keluaran.", userLanguage)}`));
+                }, 10000);
             });
 
-            setTimeout(() => {
-                childProcess.kill();
-                resolve(quote(`⏰ ${await global.tools.msg.translate("Kode mencapai batas waktu keluaran.", userLanguage)}`));
-            }, 10000);
-        });
-
-        ctx.reply(output);
-    } catch (error) {
-        console.error("Error:", error);
-        return ctx.reply(quote(`⚠️ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            ctx.reply(output);
+        } catch (error) {
+            console.error("Error:", error);
+            return ctx.reply(quote(`⚠️ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+        }
     }
 };
