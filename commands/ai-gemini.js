@@ -1,5 +1,4 @@
 const {
-    
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -50,7 +49,7 @@ module.exports = {
                 } = response.data;
 
                 return ctx.reply(data.answer);
-            } else if (media) {
+            } else {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadResponse = await uploadByBuffer(buffer, mime.lookup("png"));
                 const apiUrl = await global.tools.api.createUrl("sandipbaruwal", `/gemini2`, {
