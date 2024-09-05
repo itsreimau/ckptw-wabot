@@ -35,12 +35,11 @@ module.exports = {
         try {
             const restricted = ["require", "eval", "Function", "global"];
             for (const w of restricted) {
-                if (script.includes(w)) {
-                    return ctx.reply(quote(`⚠ ${await global.tools.msg.translate(`Penggunaan ${w} tidak diperbolehkan dalam kode.`, userLanguage)})`));
-                }
+                if (script.includes(w)) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate(`Penggunaan ${w} tidak diperbolehkan dalam kode.`, userLanguage)})`));
             }
 
             const output = await new Promise((resolve) => {
+                const translateFunc = global.tools.msg.translate;
                 const childProcess = spawn("node", ["-e", script]);
 
                 let outputData = '';
@@ -48,7 +47,6 @@ module.exports = {
 
                 childProcess.stdout.on('data', (chunk) => {
                     if (outputData.length >= 1024 * 1024) {
-                        const translateFunc = global.tools.msg.translate;
                         resolve(quote(`⚠ ${(await translateFunc("Kode mencapai batas penggunaan memori.", userLanguage))}`));
                         childProcess.kill();
                     }
@@ -62,7 +60,7 @@ module.exports = {
                 childProcess.on("close", (code) => {
                     if (code !== 0) {
                         resolve(quote(
-                            `⚠ ${await global.tools.msg.translate("Keluar dari proses dengan kode", userLanguage)}: ${code}\n` +
+                            `⚠ ${await translateFunc("Keluar dari proses dengan kode", userLanguage)}: ${code}\n` +
                             errorData.trim()
                         ));
                     } else {
@@ -71,7 +69,7 @@ module.exports = {
                 });
 
                 setTimeout(() => {
-                    resolve(quote(`⚠ ${await global.tools.msg.translate("Kode mencapai batas waktu keluaran.", userLanguage)}`));
+                    resolve(quote(`⚠ ${await translateFunc("Kode mencapai batas waktu keluaran.", userLanguage)}`));
                     childProcess.kill();
                 }, 10000);
             });
