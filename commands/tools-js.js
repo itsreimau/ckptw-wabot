@@ -48,7 +48,7 @@ module.exports = {
 
                 childProcess.stdout.on('data', (chunk) => {
                     if (outputData.length >= 1024 * 1024) {
-                        resolve(quote(`⚠ ${await global.tools.msg.translate("Kode mencapai batas penggunaan memori.", userLanguage)}`));
+                        resolve(quote(`⚠ ${(await global.tools.msg.translate("Kode mencapai batas penggunaan memori.", userLanguage))}`));
                         childProcess.kill();
                     }
                     outputData += chunk.toString();
