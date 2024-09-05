@@ -7,6 +7,10 @@ module.exports = {
     name: "setname",
     category: "group",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -21,17 +25,17 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ckptw-wabot`)}`)
+            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} ckptw-wabot`)}`)
         );
 
         try {
             await ctx.group().updateSubject(input);
 
-            return ctx.reply(quote(`✅ Berhasil mengubah nama grup!`));
+            return ctx.reply(quote(`✅ ${await global.tools.msg.translate("Berhasil mengubah nama grup!", userLanguage)}`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

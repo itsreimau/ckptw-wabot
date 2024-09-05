@@ -2,7 +2,7 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const fetch = require("node-fetch");
+const axios = require("axios");
 const {
     Sticker,
     StickerTypes
@@ -13,6 +13,10 @@ module.exports = {
     aliases: ["emix"],
     category: "maker",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -22,17 +26,17 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        if (!ctx._args.length) return ctx.reply(
-            `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 😱 🤓`)}`
+        if (!ctx.args.length) return ctx.reply(
+            `${await global.tools.msg.argument}\n` +
+            `${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} 😱 🤓`)}`
         );
 
         try {
-            const emojisString = ctx._args.join("");
+            const emojisString = ctx.args.join("");
             const emojiRegex = /\p{Emoji}/gu;
             const emojis = Array.from(emojisString.matchAll(emojiRegex), (match) => match[0]);
             const [emoji1, emoji2] = emojis.slice(0, 2);
-            const apiUrl = global.tools.api.createUrl("https://tenor.googleapis.com", `/v2/featured`, {
+            const apiUrl = await global.tools.api.createUrl("https://tenor.googleapis.com", `/v2/featured`, {
                 key: "AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ",
                 contentfilter: "high",
                 media_filter: "png_transparent",
@@ -40,8 +44,9 @@ module.exports = {
                 collection: "emoji_kitchen_v5",
                 q: `${emoji1}_${emoji2}`
             });
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             if (!data.results[0].url) return ctx.reply(global.msg.notFound);
 
@@ -56,8 +61,9 @@ module.exports = {
 
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
-            console.error("Error", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            console.error("Error:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

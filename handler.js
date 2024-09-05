@@ -1,10 +1,10 @@
 async function handler(ctx, options) {
-    const senderJid = ctx._sender.jid;
+    const senderJid = ctx.sender.jid;
     const senderNumber = senderJid.replace(/@.*|:.*/g, "");
 
     const checkOptions = {
         admin: {
-            function: async () => ((await ctx.isGroup()) ? (await global.general.isAdmin(ctx, {
+            function: async () => ((await ctx.isGroup()) ? (await global.tools.general.isAdmin(ctx, {
                 id: senderJid
             })) === 0 : null),
             msg: global.msg.admin
@@ -14,7 +14,7 @@ async function handler(ctx, options) {
             msg: global.msg.banned
         },
         botAdmin: {
-            function: async () => ((await ctx.isGroup()) ? (await global.general.isBotAdmin(ctx)) === 0 : null),
+            function: async () => ((await ctx.isGroup()) ? (await global.tools.general.isBotAdmin(ctx)) === 0 : null),
             msg: global.msg.botAdmin
         },
         coin: {
@@ -27,7 +27,7 @@ async function handler(ctx, options) {
                         getCoin = 10;
                     }
 
-                    const isOwner = await global.general.isOwner(ctx, {
+                    const isOwner = await global.tools.general.isOwner(ctx, {
                         id: senderNumber,
                         selfOwner: true
                     });
@@ -49,7 +49,7 @@ async function handler(ctx, options) {
             msg: global.msg.group
         },
         owner: {
-            function: async () => (await global.general.isOwner(ctx, {
+            function: async () => (await global.tools.general.isOwner(ctx, {
                 id: senderNumber,
                 selfOwner: true
             })) === 0,
@@ -57,7 +57,7 @@ async function handler(ctx, options) {
         },
         premium: {
             function: async () => {
-                const isOwner = await global.general.isOwner(ctx, {
+                const isOwner = await global.tools.general.isOwner(ctx, {
                     id: senderNumber,
                     selfOwner: true
                 });
@@ -82,7 +82,7 @@ async function handler(ctx, options) {
         const checkOption = checkOptions[option];
         if (await checkOption.function()) {
             status = true;
-            message = checkOption.msg;
+            message = `⚠ ${await global.tools.msg.translate(checkOption.msg, userLanguage)}`;
             break;
         }
     }

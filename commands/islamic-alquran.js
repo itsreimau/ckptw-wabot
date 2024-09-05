@@ -4,13 +4,17 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const fetch = require("node-fetch");
+const axios = require("axios");
 
 module.exports = {
     name: "alquran",
     aliases: ["quran"],
     category: "islamic",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -21,8 +25,8 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         if (!ctx.args.length) return ctx.reply(
-            `${quote(`${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 21 35`)}`)
+            `${quote(`⚠ ${await global.tools.msg.translate(`${await global.tools.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} 21 35`)}`)
         );
 
         if (ctx.args[0] === "list") {
@@ -34,22 +38,22 @@ module.exports = {
             const suraNumber = parseInt(ctx.args[0]);
             const ayaInput = ctx.args[1];
 
-            if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`⚠ Surah ${suraNumber} tidak ada.`));
+            if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate(`Surah ${suraNumber} tidak ada.`, userLanguage)}`));
 
-            const apiUrl = global.tools.api.createUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
-            const response = await fetch(apiUrl);
+            const apiUrl = await global.tools.api.createUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
+            const response = await axios.get(apiUrl);
             const {
                 data
-            } = await response.json();
+            } = response.data;
 
             if (ayaInput) {
                 if (ayaInput.includes("-")) {
                     const [startAya, endAya] = ayaInput.split("-").map(num => parseInt(num));
 
-                    if (isNaN(startAya) || isNaN(endAya) || startAya < 1 || endAya < startAya) return ctx.reply(quote(`⚠ Rentang ayat tidak valid.`));
+                    if (isNaN(startAya) || isNaN(endAya) || startAya < 1 || endAya < startAya) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate(`Rentang ayat tidak valid.`, userLanguage)}`));
 
                     const verses = data.ayat.filter((d) => d.nomorAyat >= startAya && d.nomorAyat <= endAya);
-                    if (verses.length === 0) return ctx.reply(quote(`⚠ Ayat dalam rentang ${startAya}-${endAya} tidak ada.`));
+                    if (verses.length === 0) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate(`Ayat dalam rentang ${startAya}-${endAya} tidak ada.`, userLanguage)}`));
 
                     const versesText = verses.map((d) => {
                         return `${bold(`Ayat ${d.nomorAyat}:`)}\n` +
@@ -68,10 +72,10 @@ module.exports = {
                 } else {
                     const ayaNumber = parseInt(ayaInput);
 
-                    if (isNaN(ayaNumber) || ayaNumber < 1) return ctx.reply(quote(`⚠ Ayat harus lebih dari 0.`));
+                    if (isNaN(ayaNumber) || ayaNumber < 1) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate(`Ayat harus lebih dari 0.`, userLanguage)}`));
 
                     const aya = data.ayat.find((d) => d.nomorAyat === ayaNumber);
-                    if (!aya) return ctx.reply(quote(`⚠ Ayat ${ayaNumber} tidak ada.`));
+                    if (!aya) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate(`Ayat ${ayaNumber} tidak ada.`, userLanguage)}`));
 
                     return ctx.reply(
                         `${aya.teksArab} (${aya.teksLatin})\n` +
@@ -97,7 +101,8 @@ module.exports = {
             }
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

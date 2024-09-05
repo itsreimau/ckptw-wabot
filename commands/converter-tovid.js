@@ -5,14 +5,18 @@ const FormData = require("form-data");
 const {
     JSDOM
 } = require("jsdom");
+const axios = require("axios");
 const mime = require("mime-types");
-const fetch = require("node-fetch");
 
 module.exports = {
     name: "tovid",
     aliases: ["tomp4", "togif"],
     category: "converter",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -23,13 +27,13 @@ module.exports = {
 
         const quotedMessage = ctx.quoted;
 
-        if (!quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
+        if (!quotedMessage) return ctx.reply(quote(`📌 ${await global.tools.msg.translate("Berikan atau balas media berupa sticker!", userLanguage)}`));
 
         try {
             const buffer = await quotedMessage.media.toBuffer()
             const vidUrl = buffer ? await webp2mp4(buffer) : null;
 
-            if (!vidUrl) return ctx.reply(quote(`⚠ Terjadi kesalahan: Media tidak valid.`));
+            if (!vidUrl) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan: Media tidak valid.", userLanguage)}`));
 
             return await ctx.reply({
                 video: {
@@ -40,7 +44,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };
@@ -53,12 +57,11 @@ async function webp2mp4(source) {
     form.append("new-image-url", isUrl ? blob : "");
     form.append("new-image", isUrl ? "" : blob, "image.webp");
 
-    const res = await fetch("https://ezgif.com/webp-to-mp4", {
-        method: "POST",
-        body: form
+    const res = await axios.post("https://ezgif.com/webp-to-mp4", form, {
+        headers: form.getHeaders()
     });
 
-    const html = await res.text();
+    const html = res.data;
     const {
         document
     } = new JSDOM(html).window;
@@ -70,14 +73,13 @@ async function webp2mp4(source) {
         form2.append(input.name, input.value);
     }
 
-    const res2 = await fetch(`https://ezgif.com/webp-to-mp4/${obj.file}`, {
-        method: "POST",
-        body: form2
+    const res2 = await axios.post(`https://ezgif.com/webp-to-mp4/${obj.file}`, form2, {
+        headers: form2.getHeaders()
     });
 
-    const html2 = await res2.text();
+    const html2 = res2.data;
     const {
         document: document2
     } = new JSDOM(html2).window;
-    return new URL(document2.querySelector("div#output > p.outfile > video > source").src, res2.url).toString();
+    return new URL(document2.querySelector("div#output > p.outfile > video > source").src, res2.config.url).toString();
 }

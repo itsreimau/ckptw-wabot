@@ -2,14 +2,18 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
-const fetch = require("node-fetch");
 
 module.exports = {
     name: "ttst",
     aliases: ["texttospeechtiktok", "ttstiktok"],
     category: "tools",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -22,21 +26,23 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo!`)}`)
+            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo!`)}`)
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/tts/tiktok", {
+            const apiUrl = await global.tools.api.createUrl("fasturl", "/tool/tts/tiktok", {
                 text: input,
                 speaker: "id_001"
             });
-            const response = await fetch(apiUrl, {
+            const {
+                data
+            } = await axios.get(apiUrl, {
                 headers: {
-                    "x-api-key": global.tools.api.listAPIUrl().fasturl.APIKey
-                }
+                    "x-api-key": await global.tools.api.listAPIUrl().fasturl.APIKey
+                },
+                responseType: "arraybuffer"
             });
-            const data = await response.buffer();
 
             return await ctx.reply({
                 audio: data,
@@ -45,7 +51,8 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

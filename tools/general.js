@@ -43,7 +43,7 @@ function isCmd(m, ctx) {
 }
 
 async function isAdmin(ctx, obj) {
-    const id = obj.id || ctx._sender.jid;
+    const id = obj.id || ctx.sender.jid;
     const isAdmin = await checkAdmin(ctx, id);
     return isAdmin ? 1 : 0;
 }
@@ -55,7 +55,7 @@ async function isBotAdmin(ctx) {
 }
 
 function isOwner(ctx, obj) {
-    const id = obj.id || ctx._sender.jid.replace(/@.*|:.*/g, "");
+    const id = obj.id || ctx.sender.jid.replace(/@.*|:.*/g, "");
     const isOwner = obj.selfOwner ? ctx._client.user.id.split(":")[0] === id || global.owner.number === id || global.owner.co.includes(id) : global.owner.number === id || global.owner.co.includes(id);
     return isOwner ? 1 : 0;
 }

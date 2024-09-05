@@ -4,14 +4,18 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
-const fetch = require("node-fetch");
 
 module.exports = {
     name: "ytsearch",
     aliases: ["yts"],
     category: "internet",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -24,31 +28,31 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis evangelion`)}`)
+            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis evangelion`)}`)
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/ytsearch", {
+            const apiUrl = await global.tools.api.createUrl("agatz", "/api/ytsearch", {
                 message: input
             });
-            const response = await fetch(apiUrl);
+            const response = await axios.get(apiUrl);
             const {
                 data
-            } = await response.json();
+            } = response.data;
 
             const resultText = data
                 .map((d) => {
                     switch (d.type) {
                         case "video":
                             return `${bold(`${d.title} (${d.url})`)}\n` +
-                                `${quote(`Durasi: ${d.timestamp}`)}\n` +
-                                `${quote(`Diunggah: ${d.ago}`)}\n` +
-                                `${quote(`Dilihat: ${d.views}`)}`;
+                                `${quote(`${await global.tools.msg.translate("Durasi", userLanguage)}: ${d.timestamp}`)}\n` +
+                                `${quote(`${await global.tools.msg.translate("Diunggah", userLanguage)}: ${d.ago}`)}\n` +
+                                `${quote(`${await global.tools.msg.translate("Dilihat", userLanguage)}: ${d.views}`)}`;
                         case "channel":
                             return `${bold(`${d.name} (${d.url})`)}\n` +
                                 `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
-                                `${quote(`Jumlah video: ${d.videoCount}`)}`;
+                                `${quote(`${await global.tools.msg.translate("Jumlah video", userLanguage)}: ${d.videoCount}`)}`;
                     }
                 })
                 .filter((d) => d)
@@ -57,7 +61,8 @@ module.exports = {
             return ctx.reply(`${resultText}\n\n` + global.msg.footer);
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

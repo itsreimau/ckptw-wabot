@@ -7,14 +7,18 @@ const {
 } = require("@mengkodingan/ckptw/lib/Constant");
 const FormData = require("form-data");
 const Jimp = require("jimp");
+const axios = require("axios");
 const mime = require("mime-types");
-const fetch = require("node-fetch");
 
 module.exports = {
     name: "hd",
     aliases: ["enhance", "enhancer", "hd", "hdr", "remini", "upscale", "upscaler"],
     category: "tools",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -26,7 +30,7 @@ module.exports = {
 
         const msgType = ctx.getMessageType();
 
-        if (msgType !== MessageType.imageMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
+        if (msgType !== MessageType.imageMessage && !ctx.quoted?.media.toBuffer()) return ctx.reply(quote(`📌 ${await global.tools.msg.translate("Berikan atau balas media berupa gambar!", userLanguage)}`));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
@@ -36,13 +40,13 @@ module.exports = {
                 image: {
                     url: result.image
                 },
-                caption: `${quote(`Anda bisa mengaturnya. Tersedia ukuran 2, 4, 6, 8, dan 16, defaultnya adalah 2. Gunakan ${monospace("anime")} jika gambarnya anime.`)}\n` +
-                    quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 16 anime`)}`),
+                caption: `${quote(await global.tools.msg.translate(`Anda bisa mengaturnya. Tersedia ukuran 2, 4, 6, 8, dan 16, defaultnya adalah 2. Gunakan ${monospace("anime")} jika gambarnya anime.`, userLanguage))}\n` +
+                    quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} 16 anime`)}`),
                 mimetype: mime.contentType("png")
             });
         } catch (error) {
             console.error("Error", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };
@@ -74,10 +78,8 @@ async function upscale(buffer, size = 2, anime = false) {
         contentType: 'image/png',
     });
 
-    const apiUrl = global.tools.api.createUrl("https://api.upscalepics.com", "/upscale-to-size", {});
-    const response = await fetch(apiUrl, {
-        method: 'POST',
-        body: form,
+    const apiUrl = await global.tools.api.createUrl("https://api.upscalepics.com", "/upscale-to-size", {});
+    const response = await axios.post(apiUrl, form, {
         headers: {
             ...form.getHeaders(),
             origin: "https://upscalepics.com",
@@ -85,7 +87,7 @@ async function upscale(buffer, size = 2, anime = false) {
         }
     });
 
-    const data = await response.json();
+    const data = response.data;
     if (data.error) throw new Error("Error from upscaler API!");
 
     return {

@@ -2,16 +2,20 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const {
     translate
 } = require("bing-translate-api");
-const fetch = require("node-fetch");
 
 module.exports = {
     name: "mangainfo",
     aliases: ["manga"],
     category: "internet",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -24,16 +28,16 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis evangelion`)}`)
+            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis evangelion`)}`)
         );
 
         try {
-            const mangaApiUrl = await global.tools.api.createUrl("https://api.jikan.moe", "/v4/manga", {
+            const mangaApiUrl = await await global.tools.api.createUrl("https://api.jikan.moe", "/v4/manga", {
                 q: input
             });
-            const mangaResponse = await fetch(mangaApiUrl);
-            const mangaData = await mangaResponse.json();
+            const mangaResponse = await axios.get(mangaApiUrl);
+            const mangaData = mangaResponse.data;
 
             if (!mangaData.data || mangaData.data.length === 0) return ctx.reply(global.msg.notFound);
 
@@ -41,20 +45,21 @@ module.exports = {
             const synopsisId = info.synopsis ? await translate(info.synopsis, "en", "id").then(res => res.translation) : null;
 
             return await ctx.reply(
-                `${quote(`Judul: ${info.title}`)}\n` +
-                `${quote(`Judul (Inggris): ${info.title_english || "N/A"}`)}\n` +
-                `${quote(`Judul (Jepang): ${info.title_japanese || "N/A"}`)}\n` +
-                `${quote(`Tipe: ${info.type || "N/A"}`)}\n` +
-                `${quote(`Bab: ${info.chapters || "N/A"}`)}\n` +
-                `${quote(`Volume: ${info.volumes || "N/A"}`)}\n` +
-                `${quote(`Ringkasan: ${synopsisId ? synopsisId.replace("\n\n", ". ") : "N/A"}`)}\n` +
-                `${quote(`URL: ${info.url}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Judul", userLanguage)}: ${animeInfo.title}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Judul (Inggris)", userLanguage)}: ${animeInfo.title_english || "N/A"}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Judul (Jepang)", userLanguage)}: ${animeInfo.title_japanese || "N/A"}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Tipe", userLanguage)}: ${animeInfo.type || "N/A"}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Bab", userLanguage)}: ${info.chapters || "N/A"}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Volume", userLanguage)}: ${info.volumes || "N/A"}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Ringkasan", userLanguage)}: ${synopsisId ? synopsisId.replace("\n\n", ". ") : "N/A"}`)}\n` +
+                `${quote(`URL: ${animeInfo.url}`)}\n` +
                 "\n" +
                 global.msg.footer
             );
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

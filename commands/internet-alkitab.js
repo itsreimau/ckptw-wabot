@@ -2,13 +2,17 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const fetch = require("node-fetch");
+const axios = require("axios");
 
 module.exports = {
     name: "alkitab",
     aliases: ["injil"],
     category: "internet",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -21,8 +25,8 @@ module.exports = {
         const [abbr, chapter] = ctx.args;
 
         if (!ctx.args.length) return ctx.reply(
-            `${quote(`${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} kej 2:18`)}`)
+            `${quote(`⚠ ${await global.tools.msg.translate(`${await global.tools.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} kej 2:18`)}`)
         );
 
         if (ctx.args[0] === "list") {
@@ -31,11 +35,11 @@ module.exports = {
         }
 
         try {
-            const apiUrl = await global.tools.api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {});
-            const response = await fetch(apiUrl);
+            const apiUrl = await await global.tools.api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {});
+            const response = await axios.get(apiUrl);
             const {
                 data
-            } = await response.json();
+            } = response.data;
 
             const resultText = data.verses.map((d) =>
                 `${quote(`Ayat: ${d.verse}`)}\n` +
@@ -45,8 +49,8 @@ module.exports = {
                 `${quote("─────")}\n`
             );
             return ctx.reply(
-                `${quote(`Nama: ${data.book.name}`)}\n` +
-                `${quote(`Bab: ${data.book.chapter}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Nama", userLanguage)}: ${data.book.name}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Bab", userLanguage)}: ${data.book.chapter}`)}\n` +
                 `${quote("─────")}\n` +
                 `${resultText}\n` +
                 "\n" +
@@ -54,7 +58,8 @@ module.exports = {
             );
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

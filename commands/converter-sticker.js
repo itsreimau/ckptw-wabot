@@ -10,37 +10,40 @@ const {
 } = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "sticker",
-    aliases: ["s", "stiker"],
-    category: "converter",
-    code: async (ctx) => {
-        const {
-            status,
-            message
-        } = await global.handler(ctx, {
-            banned: true
-        });
-        if (status) return ctx.reply(message);
+        name: "sticker",
+        aliases: ["s", "stiker"],
+        category: "converter",
+        code: async (ctx) => {
+                const [userLanguage] = await Promise.all([
+                    global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+                ]);
 
-        const msgType = ctx.getMessageType();
+                const {
+                    status,
+                    message
+                } = await global.handler(ctx, {
+                    banned: true
+                });
+                if (status) return ctx.reply(message);
 
-        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar, GIF, atau video!`));
+                const msgType = ctx.getMessageType();
 
-        try {
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const sticker = new Sticker(buffer, {
-                pack: global.sticker.packname,
-                author: global.sticker.author,
-                type: StickerTypes.FULL,
-                categories: ["🤩", "🎉"],
-                id: ctx.id,
-                quality: 50,
-            });
+                if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !ctx.quoted?.media.toBuffer()) return ctx.reply(quote(`📌 ${await global.tools.msg.translate("Berikan atau balas media berupa gambar, GIF, atau video!", userLanguage)}`));
 
-            return ctx.reply(await sticker.toMessage());
-        } catch (error) {
-            console.error("Error", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
-        }
-    }
-};
+                try {
+                    const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+                    const sticker = new Sticker(buffer, {
+                            pack: global.sticker.packname,
+                            author: global.sticker.author,
+                            type: StickerTypes.FULL,
+                            categories: ["🤩", "🎉"],
+                            !ctx.quoted?.media.toBuffer();
+
+                            return ctx.reply(await sticker.toMessage());
+                        }
+                        catch (error) {
+                            console.error("Error", error);
+                            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+                        }
+                    }
+                };

@@ -5,14 +5,18 @@ const FormData = require("form-data");
 const {
     JSDOM
 } = require("jsdom");
+const axios = require("axios");
 const mime = require("mime-types");
-const fetch = require("node-fetch");
 
 module.exports = {
     name: "toimg",
     aliases: ["topng", "toimage"],
     category: "converter",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -23,13 +27,13 @@ module.exports = {
 
         const quotedMessage = ctx.quoted;
 
-        if (!quotedMessage) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
+        if (!quotedMessage) return ctx.reply(quote(`📌 ${await global.tools.msg.translate("Berikan atau balas media berupa sticker!", userLanguage)}`));
 
         try {
             const buffer = await quotedMessage.media.toBuffer()
             const imgUrl = buffer ? await webp2png(buffer) : null;
 
-            if (!imgUrl) return ctx.reply(quote(`⚠ Terjadi kesalahan: Media tidak valid.`));
+            if (!imgUrl) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan: Media tidak valid.", userLanguage)}`));
 
             return await ctx.reply({
                 image: {
@@ -39,7 +43,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };
@@ -52,12 +56,10 @@ async function webp2png(source) {
     form.append("new-image", isUrl ? "" : blob, "image.webp");
 
     try {
-        const res = await fetch("https://ezgif.com/webp-to-png", {
-            method: "POST",
-            body: form,
+        const res = await axios.post("https://ezgif.com/webp-to-png", form, {
             headers: form.getHeaders(),
         });
-        const html = await res.text();
+        const html = res.data;
         const {
             document
         } = new JSDOM(html).window;
@@ -68,16 +70,14 @@ async function webp2png(source) {
             form2.append(input.name, input.value);
         }
 
-        const res2 = await fetch(`https://ezgif.com/webp-to-png/${obj.file}`, {
-            method: "POST",
-            body: form2,
+        const res2 = await axios.post(`https://ezgif.com/webp-to-png/${obj.file}`, form2, {
             headers: form2.getHeaders(),
         });
-        const html2 = await res2.text();
+        const html2 = res2.data;
         const {
             document: document2
         } = new JSDOM(html2).window;
-        return new URL(document2.querySelector("div#output > p.outfile > img").src, res2.url).toString();
+        return new URL(document2.querySelector("div#output > p.outfile > img").src, res2.config.url).toString();
     } catch (error) {
         console.error("Error in webp2png function:", error);
         return null;

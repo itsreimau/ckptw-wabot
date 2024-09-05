@@ -1,13 +1,17 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const fetch = require("node-fetch");
+const axios = require("axios");
 
 module.exports = {
     name: "holiday",
     aliases: ["harilibur", "libur"],
     category: "tools",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -19,11 +23,12 @@ module.exports = {
 
         try {
             const month = new Date().getMonth() + 1;
-            const apiUrl = global.tools.api.createUrl("https://api-harilibur.vercel.app", "/api", {
+            const apiUrl = await global.tools.api.createUrl("https://api-harilibur.vercel.app", "/api", {
                 month
             });
-            const response = await fetch(apiUrl);
-            const data = await response.json();
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             const resultText = data.reverse().map((h) => {
                 const d = new Date(h.holiday_date);
@@ -35,7 +40,7 @@ module.exports = {
                 const year = d.getFullYear();
 
                 return `${bold(h.holiday_name)}\n` +
-                    `${quote(`${day}, ${d.getDate()} ${mon} ${year}`)}`;
+                    `${quote(await global.tools.msg.translate(`${day}, ${d.getDate()} ${mon} ${year}`, userLanguage))}`;
             }).join(
                 "\n" +
                 `${quote("─────")}\n`
@@ -47,7 +52,8 @@ module.exports = {
             );
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };
