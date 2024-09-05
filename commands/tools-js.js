@@ -45,7 +45,7 @@ module.exports = {
                 let outputData = '';
                 let errorData = '';
 
-                childProcess.stdout.on('data', (chunk) => {
+                childProcess.stdout.on('data', async (chunk) => {
                     if (outputData.length >= 1024 * 1024) {
                         resolve(quote(`⚠ ${(await translateFunc("Kode mencapai batas penggunaan memori.", userLanguage))}`));
                         childProcess.kill();
