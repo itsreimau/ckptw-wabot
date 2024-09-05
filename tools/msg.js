@@ -1,8 +1,8 @@
 const bta = require("bing-translate-api");
 
-async function translate(msg, lc) {
-    if (lc === "en") {
-        return msg; // Not translated due to system language
+async function translate(msg, lc = "id") {
+    if (lc === "id") {
+        return msg; // Not translated due to system language.
     }
 
     try {
