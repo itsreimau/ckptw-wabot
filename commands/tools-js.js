@@ -35,7 +35,9 @@ module.exports = {
         try {
             const restricted = ["require", "eval", "Function", "global"];
             for (const w of restricted) {
-                if (script.includes(w)) return ctx.reply(quote(`⚠️ ${await global.tools.msg.translate(`Penggunaan ${w} tidak diperbolehkan dalam kode.`, userLanguage)}`)));
+                if (script.includes(w)) {
+                    return ctx.reply(quote(`⚠️ ${await global.tools.msg.translate(`Penggunaan ${w} tidak diperbolehkan dalam kode.`, userLanguage)}`)));
+            }
         }
 
         const output = await new Promise((resolve) => {
