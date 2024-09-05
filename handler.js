@@ -1,6 +1,9 @@
 async function handler(ctx, options) {
     const senderJid = ctx.sender.jid;
     const senderNumber = senderJid.replace(/@.*|:.*/g, "");
+    const [userLanguage] = await Promise.all([
+        global.db.get(`user.${senderNumber}.language`)
+    ]);
 
     const checkOptions = {
         admin: {

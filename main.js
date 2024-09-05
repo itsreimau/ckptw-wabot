@@ -64,6 +64,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const senderNumber = senderJid.replace(/@.*|:.*/g, "");
     const groupJid = isGroup ? m.key.remoteJid : null;
     const groupNumber = isGroup ? groupJid.replace(/@.*|:.*/g, "") : null;
+    const [userLanguage] = await Promise.all([
+        global.db.get(`user.${senderNumber}.language`)
+    ]);
 
     // Ignore messages sent by the bot itself.
     if (m.key.fromMe) return;
