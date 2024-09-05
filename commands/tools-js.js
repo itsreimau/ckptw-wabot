@@ -53,7 +53,7 @@ module.exports = {
                     errorData += chunk.toString();
                 });
 
-                childProcess.on("close", (code) => {
+                childProcess.on("close", async (code) => {
                     if (code !== 0) {
                         resolve(quote(
                             `⚠️ ${await global.tools.msg.translate("Keluar dari proses dengan kode", userLanguage)}: ${code}\n` +
@@ -64,7 +64,7 @@ module.exports = {
                     }
                 });
 
-                setTimeout(() => {
+                setTimeout(async () => {
                     childProcess.kill();
                     resolve(quote(`⏰ ${await global.tools.msg.translate("Kode mencapai batas waktu keluaran.", userLanguage)}`));
                 }, 10000);
