@@ -38,19 +38,19 @@ module.exports = {
                 data
             } = response.data;
 
-            const resultText = data.map((d) =>
-                `${quote(`${await global.tools.msg.translate("Nama", userLanguage)}: ${d.fullName}`)}\n` +
-                `${quote(`Fork: ${d.fork ? "Y" : "N"}`)}\n` +
-                `${quote(`URL: ${d.htmlUrl}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Dibuat pada", userLanguage)}: ${d.createdAt}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Diperbarui pada", userLanguage)}: ${d.updatedAt}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Jumlah pengamat", userLanguage)}: ${d.watchers}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Jumlah garpu", userLanguage)}: ${d.forks}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Jumlah pengamat bintang", userLanguage)}: ${d.stargazersCount}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Jumlah isu terbuka", userLanguage)}: ${d.openIssues}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Deskripsi", userLanguage)}: ${d.description || "-"}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("URL kloning", userLanguage)}: ${d.cloneUrl}`)}`
-            ).join(
+            const resultText = data.map((d) => {
+                return `${quote(`${await global.tools.msg.translate("Nama", userLanguage)}: ${d.fullName}`)}\n` +
+                    `${quote(`Fork: ${d.fork ? "Y" : "N"}`)}\n` +
+                    `${quote(`URL: ${d.htmlUrl}`)}\n` +
+                    `${quote(`${await global.tools.msg.translate("Dibuat pada", userLanguage)}: ${d.createdAt}`)}\n` +
+                    `${quote(`${await global.tools.msg.translate("Diperbarui pada", userLanguage)}: ${d.updatedAt}`)}\n` +
+                    `${quote(`${await global.tools.msg.translate("Jumlah pengamat", userLanguage)}: ${d.watchers}`)}\n` +
+                    `${quote(`${await global.tools.msg.translate("Jumlah garpu", userLanguage)}: ${d.forks}`)}\n` +
+                    `${quote(`${await global.tools.msg.translate("Jumlah pengamat bintang", userLanguage)}: ${d.stargazersCount}`)}\n` +
+                    `${quote(`${await global.tools.msg.translate("Jumlah isu terbuka", userLanguage)}: ${d.openIssues}`)}\n` +
+                    `${quote(`${await global.tools.msg.translate("Deskripsi", userLanguage)}: ${d.description || "-"}`)}\n` +
+                    `${quote(`${await global.tools.msg.translate("URL kloning", userLanguage)}: ${d.cloneUrl}`)}\n`;
+            }).join(
                 "\n" +
                 `${quote("─────")}\n`
             );
