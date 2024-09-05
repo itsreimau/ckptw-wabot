@@ -36,12 +36,18 @@ module.exports = {
             const asmaulhusna = data.result;
 
             if (input.toLowerCase() === "all") {
-                const resultText = asmaulhusna.map((a) =>
-                    `${quote(`${await global.tools.msg.translate("Nomor", userLanguage)}: ${a.number}`)}\n` +
-                    `${quote(`${await global.tools.msg.translate("Latin", userLanguage)}: ${a.latin}`)}\n` +
-                    `${quote(`${await global.tools.msg.translate("Arab", userLanguage)}: ${a.arab}`)}\n` +
-                    `${quote(`${await global.tools.msg.translate("Arti", userLanguage)}: ${a.translate_id}`)}`
-                ).join(
+                const translations = await Promise.all([
+                    global.tools.msg.translate("Nomor", userLanguage),
+                    global.tools.msg.translate("Latin", userLanguage),
+                    global.tools.msg.translate("Arab", userLanguage),
+                    global.tools.msg.translate("Arti", userLanguage)
+                ]);
+                const resultText = asmaulhusna.map((a) => {
+                    return `${quote(`${translations[0]}: ${a.number}`)}\n` +
+                        `${quote(`${translations[1]}: ${a.latin}`)}\n` +
+                        `${quote(`${translations[2]}: ${a.arab}`)}\n` +
+                        `${quote(`${translations[3]}: ${a.translate_id}`)}`
+                }).join(
                     "\n" +
                     `${quote("─────")}\n`
                 );

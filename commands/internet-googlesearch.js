@@ -38,11 +38,15 @@ module.exports = {
                 data
             } = response.data;
 
-            const resultText = data.map((d) =>
-                `${quote(`${await global.tools.msg.translate("Judul", userLanguage)}: ${d.title}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Deskripsi", userLanguage)}: ${d.snippet}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
-            ).join(
+            const translations = await Promise.all([
+                global.tools.msg.translate("Judul", userLanguage),
+                global.tools.msg.translate("Deskripsi", userLanguage)
+            ]);
+            const resultText = data.map((d) => {
+                return `${quote(`${translations[0]}: ${d.title}`)}\n` +
+                    `${quote(`${translations[1]}: ${d.snippet}`)}\n` +
+                    `${quote(`URL: ${d.link}`)}`
+            }).join(
                 "\n" +
                 `${quote("─────")}\n`
             );

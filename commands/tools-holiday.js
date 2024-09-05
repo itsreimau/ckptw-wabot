@@ -40,7 +40,7 @@ module.exports = {
                 const year = d.getFullYear();
 
                 return `${bold(h.holiday_name)}\n` +
-                    `${quote(await global.tools.msg.translate(`${day}, ${d.getDate()} ${mon} ${year}`, userLanguage))}`;
+                    `${quote(`${day}, ${d.getDate()} ${mon} ${year}`, userLanguage)}`;
             }).join(
                 "\n" +
                 `${quote("─────")}\n`

@@ -38,18 +38,31 @@ module.exports = {
                 data
             } = response.data;
 
+            const translations = await Promise.all([
+                global.tools.msg.translate("Nama", userLanguage),
+                global.tools.msg.translate("Fork", userLanguage),
+                global.tools.msg.translate("URL", userLanguage),
+                global.tools.msg.translate("Dibuat pada", userLanguage),
+                global.tools.msg.translate("Diperbarui pada", userLanguage),
+                global.tools.msg.translate("Jumlah pengamat", userLanguage),
+                global.tools.msg.translate("Jumlah garpu", userLanguage),
+                global.tools.msg.translate("Jumlah pengamat bintang", userLanguage),
+                global.tools.msg.translate("Jumlah isu terbuka", userLanguage),
+                global.tools.msg.translate("Deskripsi", userLanguage),
+                global.tools.msg.translate("URL kloning", userLanguage)
+            ]);
             const resultText = data.map((d) => {
-                return `${quote(`${await global.tools.msg.translate("Nama", userLanguage)}: ${d.fullName}`)}\n` +
-                    `${quote(`Fork: ${d.fork ? "Y" : "N"}`)}\n` +
-                    `${quote(`URL: ${d.htmlUrl}`)}\n` +
-                    `${quote(`${await global.tools.msg.translate("Dibuat pada", userLanguage)}: ${d.createdAt}`)}\n` +
-                    `${quote(`${await global.tools.msg.translate("Diperbarui pada", userLanguage)}: ${d.updatedAt}`)}\n` +
-                    `${quote(`${await global.tools.msg.translate("Jumlah pengamat", userLanguage)}: ${d.watchers}`)}\n` +
-                    `${quote(`${await global.tools.msg.translate("Jumlah garpu", userLanguage)}: ${d.forks}`)}\n` +
-                    `${quote(`${await global.tools.msg.translate("Jumlah pengamat bintang", userLanguage)}: ${d.stargazersCount}`)}\n` +
-                    `${quote(`${await global.tools.msg.translate("Jumlah isu terbuka", userLanguage)}: ${d.openIssues}`)}\n` +
-                    `${quote(`${await global.tools.msg.translate("Deskripsi", userLanguage)}: ${d.description || "-"}`)}\n` +
-                    `${quote(`${await global.tools.msg.translate("URL kloning", userLanguage)}: ${d.cloneUrl}`)}\n`;
+                return `${quote(`${translations[0]}: ${d.fullName}`)}\n` +
+                    `${quote(`${translations[1]}: ${d.fork ? "Y" : "N"}`)}\n` +
+                    `${quote(`${translations[2]}: ${d.htmlUrl}`)}\n` +
+                    `${quote(`${translations[3]}: ${d.createdAt}`)}\n` +
+                    `${quote(`${translations[4]}: ${d.updatedAt}`)}\n` +
+                    `${quote(`${translations[5]}: ${d.watchers}`)}\n` +
+                    `${quote(`${translations[6]}: ${d.forks}`)}\n` +
+                    `${quote(`${translations[7]}: ${d.stargazersCount}`)}\n` +
+                    `${quote(`${translations[8]}: ${d.openIssues}`)}\n` +
+                    `${quote(`${translations[9]}: ${d.description || "-"}`)}\n` +
+                    `${quote(`${translations[10]}: ${d.cloneUrl}`)}\n`;
             }).join(
                 "\n" +
                 `${quote("─────")}\n`

@@ -1,5 +1,4 @@
 const {
-
     bold,
     monospace,
     quote
@@ -41,24 +40,33 @@ module.exports = {
                 data
             } = response.data;
 
-            const resultText = data
-                .map((d) => {
-                    switch (d.type) {
-                        case "video":
-                            return `${bold(`${d.title} (${d.url})`)}\n` +
-                                `${quote(`${await global.tools.msg.translate("Durasi", userLanguage)}: ${d.timestamp}`)}\n` +
-                                `${quote(`${await global.tools.msg.translate("Diunggah", userLanguage)}: ${d.ago}`)}\n` +
-                                `${quote(`${await global.tools.msg.translate("Dilihat", userLanguage)}: ${d.views}`)}`;
-                        case "channel":
-                            return `${bold(`${d.name} (${d.url})`)}\n` +
-                                `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
-                                `${quote(`${await global.tools.msg.translate("Jumlah video", userLanguage)}: ${d.videoCount}`)}`;
-                    }
-                })
-                .filter((d) => d)
-                .join("\n" + `${quote("─────")}\n`);
-
-            return ctx.reply(`${resultText}\n\n` + global.msg.footer);
+            const translations = await Promise.all([
+                global.tools.msg.translate("Durasi", userLanguage),
+                global.tools.msg.translate("Diunggah", userLanguage),
+                global.tools.msg.translate("Dilihat", userLanguage),
+                global.tools.msg.translate("Jumlah video", userLanguage)
+            ]);
+            const resultText = data.map((d) => {
+                switch (d.type) {
+                    case "video":
+                        return `${bold(`${d.title} (${d.url})`)}\n` +
+                            `${quote(`${translations[0]}: ${d.timestamp}`)}\n` +
+                            `${quote(`${translations[1]}: ${d.ago}`)}\n` +
+                            `${quote(`${translations[2]}: ${d.views}`)}`;
+                    case "channel":
+                        return `${bold(`${d.name} (${d.url})`)}\n` +
+                            `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
+                            `${quote(`${translations[3]}: ${d.videoCount}`)}`;
+                }
+            }).filter((d) => d).join(
+                "\n" +
+                `${quote("─────")}\n`
+            );
+            return ctx.reply(
+                `${resultText}\n` +
+                "\n" +
+                global.msg.footer
+            );
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

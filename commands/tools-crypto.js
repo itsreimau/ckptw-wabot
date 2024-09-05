@@ -34,10 +34,13 @@ module.exports = {
 
             if (!result) return ctx.reply(global.msg.notFound);
 
-            const resultText = result.map((r) =>
-                `${quote(`${r.cryptoName}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Harga", userLanguage)}: ${r.priceChange}`)}`
-            ).join(
+            const translations = await Promise.all([
+                global.tools.msg.translate("Harga", userLanguage)
+            ]);
+            const resultText = result.map((r) => {
+                return `${quote(`${r.cryptoName}`)}\n` +
+                    `${quote(`${translations[0]}: ${r.priceChange}`)}`
+            }).join(
                 "\n" +
                 `${quote("─────")}\n`
             );

@@ -41,10 +41,13 @@ module.exports = {
                 data
             } = response.data;
 
-            const resultText = data.verses.map((d) =>
-                `${quote(`Ayat: ${d.verse}`)}\n` +
-                `${quote(`${d.content}`)}`
-            ).join(
+            const translations = await Promise.all([
+                global.tools.msg.translate("Ayat", userLanguage)
+            ]);
+            const resultText = data.verses.map((d) => {
+                return `${quote(`${translations[0]}: ${d.verse}`)}\n` +
+                    `${quote(`${d.content}`)}`;
+            }).join(
                 "\n" +
                 `${quote("─────")}\n`
             );

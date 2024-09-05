@@ -55,17 +55,16 @@ module.exports = {
                     const verses = data.ayat.filter((d) => d.nomorAyat >= startAya && d.nomorAyat <= endAya);
                     if (verses.length === 0) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate(`Ayat dalam rentang ${startAya}-${endAya} tidak ada.`, userLanguage)}`));
 
-                    const versesText = verses.map((d) => {
+                    const resultText = verses.map((d) => {
                         return `${bold(`Ayat ${d.nomorAyat}:`)}\n` +
                             `${d.teksArab} (${d.teksLatin})\n` +
                             `${italic(d.teksIndonesia)}`;
                     }).join("\n");
-
                     return ctx.reply(
                         `${bold(`Surah ${data.namaLatin}`)}\n` +
                         `${quote(`${data.arti}`)}\n` +
                         `${quote("─────")}\n` +
-                        `${versesText}\n` +
+                        `${resultText}\n` +
                         "\n" +
                         global.msg.footer
                     );
@@ -85,7 +84,7 @@ module.exports = {
                     );
                 }
             } else {
-                const versesText = data.ayat.map((d) => {
+                const resultText = data.ayat.map((d) => {
                     return `${bold(`Ayat ${d.nomorAyat}:`)}\n` +
                         `${d.teksArab} (${d.teksLatin})\n` +
                         `${italic(d.teksIndonesia)}`;
@@ -94,7 +93,7 @@ module.exports = {
                     `${bold(`Surah ${data.namaLatin}`)}\n` +
                     `${quote(`${data.arti}`)}\n` +
                     `${quote("─────")}\n` +
-                    `${versesText}\n` +
+                    `${resultText}\n` +
                     "\n" +
                     global.msg.footer
                 );
