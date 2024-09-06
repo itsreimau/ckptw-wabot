@@ -1,4 +1,8 @@
 const {
+    createAPIUrl,
+    listAPIUrl
+} = require("../tools/api.js");
+const {
     bold,
     monospace,
     quote
@@ -10,10 +14,6 @@ module.exports = {
     aliases: ["ai", "chatai", "gpt", "gpt4"],
     category: "ai",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -23,26 +23,32 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx.args.join(" ") || null;
+        const input = ctx._args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
-            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`)
+            `${quote(global.msg.argument)}\n` +
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`)
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("chiwa", "/api/ai/chatgpt", {
-                text: input
+            const apiUrl = createAPIUrl("fasturl", "/api/gpt4", {
+                prompt: input,
+                sessionId: `${ctx._sender.jid.replace(/@.*|:.*/g, "")}-${global.bot.name.toUpperCase().replace(/ /g, "_")}`
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent,
+                    "x-api-key": listAPIUrl().fasturl.APIKey
+                }
+            });
 
-            return ctx.reply(data.result);
+            return ctx.reply(data.response);
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

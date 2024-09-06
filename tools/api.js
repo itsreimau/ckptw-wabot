@@ -13,7 +13,7 @@ const APIs = {
     },
     fasturl: {
         baseURL: "https://fastrestapis.fasturl.cloud",
-        APIKey: "8f03c932-7c66-4194-a245-b3ba83e556a8"
+        APIKey: "8f03c932-7c66-4194-a245-b3ba83e556a8" // This is mine, if you want to make it yourself you can make it here: https://fastrestapis.fasturl.cloud/api/register?username=
     },
     firda: {
         baseURL: "https://api.firda.uz"
@@ -74,7 +74,7 @@ const APIs = {
     }
 };
 
-async function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
+exports.createAPIUrl = (apiNameOrURL, endpoint, params = {}, apiKeyParamName) => {
     const api = APIs[apiNameOrURL];
 
     if (!api) {
@@ -88,22 +88,14 @@ async function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
 
     const queryParams = new URLSearchParams(params);
 
-    if (apiKeyParamName && api && "APIKey" in api) {
-        queryParams.set(apiKeyParamName, api.APIKey);
-    }
+    if (apiKeyParamName && api && "APIKey" in api) queryParams.set(apiKeyParamName, api.APIKey);
 
-    const baseURL = api ? api.baseURL : apiNameOrURL.origin;
-    const apiUrl = new URL(endpoint, baseURL);
+    const apiUrl = new URL(endpoint, api ? api.baseURL : apiNameOrURL.origin);
     apiUrl.search = queryParams.toString();
 
     return apiUrl.toString();
-}
+};
 
-function listUrl() {
+exports.listAPIUrl = () => {
     return APIs;
 }
-
-module.exports = {
-    createUrl,
-    listUrl
-};

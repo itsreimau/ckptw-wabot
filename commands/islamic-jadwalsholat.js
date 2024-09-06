@@ -1,4 +1,7 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -9,10 +12,6 @@ module.exports = {
     aliases: ["sholat"],
     category: "islamic",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -25,15 +24,19 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(await global.tools.msg.argument)}\n` +
+            `${quote(global.msg.argument)}\n` +
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} bogor`)}`)
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("agatz", `/api/jadwalsholat`, {
+            const apiUrl = createAPIUrl("agatz", `/api/jadwalsholat`, {
                 kota: input
             });
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const {
                 data
             } = response.data;

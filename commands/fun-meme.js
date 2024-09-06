@@ -1,4 +1,7 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -8,10 +11,6 @@ module.exports = {
     name: "meme",
     category: "fun",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -21,13 +20,17 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const apiUrl = await global.tools.api.createUrl("https://candaan-api.vercel.app", "/api/image/random", {});
+        const apiUrl = createAPIUrl("https://candaan-api.vercel.app", "/api/image/random", {});
 
         try {
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const {
                 data
-            } = response;
+            } = response.data;
 
             return ctx.reply({
                 image: {
@@ -41,7 +44,7 @@ module.exports = {
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

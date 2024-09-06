@@ -1,4 +1,10 @@
 const {
+    getList
+} = require("../tools/list.js");
+const {
+    getRandomElement
+} = require("../tools/general.js");
+const {
     ButtonBuilder,
     quote
 } = require("@mengkodingan/ckptw");
@@ -11,12 +17,8 @@ module.exports = {
     aliases: ["help", "?"],
     category: "main",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         try {
-            const text = await global.tools.list.get("menu", ctx);
+            const text = await getList("menu", ctx);
             const fakeProduct = {
                 key: {
                     fromMe: false,
@@ -86,7 +88,7 @@ module.exports = {
             );
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

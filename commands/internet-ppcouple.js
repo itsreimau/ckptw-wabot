@@ -1,4 +1,10 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
+    getRandomElement
+} = require("../tools/general.js");
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -10,10 +16,6 @@ module.exports = {
     aliases: ["ppcp"],
     category: "internet",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -24,11 +26,15 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const apiUrl = await global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/lainnya/ppcouple.json`, {});
+            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/lainnya/ppcouple.json`, {});
             const {
                 data
-            } = await axios.get(apiUrl);
-            const result = global.tools.general.getRandomElement(data);
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
+            const result = getRandomElement(data);
 
             await Promise.all([
                 ctx.reply({
@@ -47,7 +53,7 @@ module.exports = {
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

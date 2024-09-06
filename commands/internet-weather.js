@@ -1,10 +1,11 @@
 const {
+    createAPIUrl,
+    listAPIUrl
+} = require("../tools/api.js");
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    translate
-} = require("bing-translate-api");
 const axios = require("axios");
 
 module.exports = {
@@ -12,10 +13,6 @@ module.exports = {
     aliases: ["cuaca"],
     category: "internet",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -28,33 +25,48 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
-            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} bogor`)}`)
+            `${quote(global.msg.argument)}\n` +
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} bogor`)}`)
         );
 
         try {
-            const weatherApiUrl = await await global.tools.api.createUrl("agatz", "/api/cuaca", {
+            const weatherApiUrl = await createAPIUrl("agatz", "/api/cuaca", {
                 message: input
             });
-            const weatherResponse = await axios.get(weatherApiUrl);
-            const weatherData = weatherResponse.data;
-            const weatherId = await translate(data.weather[0].description, "en", "id");
+            const weatherResponse = await axios.get(weatherApiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
+            const weatherData = weatherResponse.data.data;
+
+            const translationApiUrl = createAPIUrl("fasturl", "/tool/translate", {
+                text: weatherData.current.condition.text,
+                target: "id"
+            });
+            const translationResponse = await axios.get(translationApiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent,
+                    "x-api-key": listAPIUrl().fasturl.APIKey
+                }
+            });
+            const translatedText = translationResponse.data.translatedText;
 
             return ctx.reply(
-                `${quote(`${await global.tools.msg.translate("Tempat", userLanguage)}: ${weatherData.location.name}, ${weatherData.location.region}, ${weatherData.location.country}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Cuaca", userLanguage)}: ${weatherId}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Kelembapan", userLanguage)}: ${weatherData.current.humidity} %`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Angin", userLanguage)}: ${weatherData.current.wind_kph} km/jam (${weatherData.current.wind_dir})`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Suhu saat ini", userLanguage)}: ${weatherData.current.temp_c} °C`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Terasa seperti", userLanguage)}: ${weatherData.current.feelslike_c} °C`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Kecepatan angin", userLanguage)}: ${weatherData.current.gust_kph} km/jam`)}\n` +
+                `${quote(`Tempat: ${weatherData.location.name}, ${weatherData.location.region}, ${weatherData.location.country}`)}\n` +
+                `${quote(`Cuaca: ${translatedText}`)}\n` +
+                `${quote(`Kelembapan: ${weatherData.current.humidity} %`)}\n` +
+                `${quote(`Angin: ${weatherData.current.wind_kph} km/jam (${weatherData.current.wind_dir})`)}\n` +
+                `${quote(`Suhu saat ini: ${weatherData.current.temp_c} °C`)}\n` +
+                `${quote(`Terasa seperti: ${weatherData.current.feelslike_c} °C`)}\n` +
+                `${quote(`Kecepatan angin: ${weatherData.current.gust_kph} km/jam`)}\n` +
                 "\n" +
                 global.msg.footer
             );
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
