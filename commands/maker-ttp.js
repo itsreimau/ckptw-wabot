@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -15,6 +12,10 @@ module.exports = {
     name: "ttp",
     category: "maker",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -27,18 +28,21 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} get in the fucking robot, shinji!`)}`)
+            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} get in the fucking robot, shinji!`)}`)
         );
 
-        if (input.length > 10000) return ctx.reply(quote(`⚠ Maksimal 50 kata!`));
+        if (input.length > 10000) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Maksimal 50 kata!", userLanguage)}`));
 
         try {
-            const apiUrl = createAPIUrl("widipe", "/ttp", {
+            const apiUrl = await global.tools.api.createUrl("widipe", "/ttp", {
                 text: input
             });
 
-            const sticker = new Sticker(apiUrl, {
+            const response = await axios.get(apiUrl);
+            const imageUrl = response.data;
+
+            const sticker = new Sticker(imageUrl, {
                 pack: global.sticker.packname,
                 author: global.sticker.author,
                 type: StickerTypes.FULL,
@@ -50,7 +54,8 @@ module.exports = {
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

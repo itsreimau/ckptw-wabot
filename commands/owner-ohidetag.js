@@ -10,6 +10,10 @@ module.exports = {
     aliases: ["oht"],
     category: "owner",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -26,7 +30,7 @@ module.exports = {
             const len = data.length;
             const mentions = [];
             for (let i = 0; i < len; i++) {
-                const serialized = data[i].id.split("@")[0];
+                const serialized = data[i].id.replace(/@.*|:.*/g, "");
                 mentions.push({
                     mention: serialized + S_WHATSAPP_NET
                 });
@@ -38,7 +42,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

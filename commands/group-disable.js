@@ -1,7 +1,4 @@
 const {
-    getList
-} = require("../tools/list.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -11,6 +8,10 @@ module.exports = {
     aliases: ["off"],
     category: "owner",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -25,31 +26,31 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} welcome`)}`)
+            `${quote(`⚠ ${await global.tools.msg.translate(`${await global.tools.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} welcome`)}`)
         );
 
         if (ctx.args[0] === "list") {
-            const listText = await getList("disable_enable");
+            const listText = await global.tools.list.get("disable_enable");
             return ctx.reply(listText);
         }
 
         try {
-            const groupNumber = ctx.isGroup() ? ctx.msg.key.remoteJid.split("@")[0] : null;
+            const groupNumber = ctx.isGroup() ? ctx.msg.key.remoteJid.replace(/@.*|:.*/g, "") : null;
 
             switch (input) {
                 case "antilink":
                     await global.db.set(`group.${groupNumber}.antilink`, false);
-                    return ctx.reply(quote(`⚠ Fitur 'antilink' berhasil dinonaktifkan!`));
+                    return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Fitur 'antilink' berhasil dinonaktifkan!", userLanguage)}`));
                 case "welcome":
                     await global.db.set(`group.${groupNumber}.welcome`, false);
-                    return ctx.reply(quote(`⚠ Fitur 'welcome' berhasil dinonaktifkan!`));
+                    return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Fitur 'welcome' berhasil dinonaktifkan!", userLanguage)}`));
                 default:
-                    return ctx.reply(quote(`⚠ Perintah tidak valid. Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`));
+                    return ctx.reply(quote(`⚠ ${await global.tools.msg.translate(`Perintah tidak valid. Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`, userLanguage)}`));
             }
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

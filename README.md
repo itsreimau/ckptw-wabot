@@ -1,10 +1,10 @@
 # ckptw-wabot - WhatsApp Bot with @mengkodingan/ckptw
 
-> **Notes:** This script has been re-maintained.
+> **Warning:** This script is no longer maintained.
 
 ## Overview
 
-`ckptw-wabot` is a WhatsApp Bot built using the [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/) library. This bot allows you to automate various tasks on WhatsApp, and it supports a modular architecture through plugins.
+`ckptw-wabot` is a WhatsApp Bot built using the [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/) library. This bot allows you to automate various tasks on WhatsApp, and it supports a modular architecture through commands.
 
 ## Features
 
@@ -12,7 +12,7 @@
 - **Command Parsing:** Parse commands sent by users to trigger specific actions.
 - **Interactive Responses:** Provide interactive and dynamic responses to user queries.
 - **Media Handling:** Support for sending and receiving media files such as images, videos, and documents.
-- **Plugin System:** Easily extend and customize the bot by adding new plugins.
+- **Command System:** Easily extend and customize the bot by adding new commands.
 
 ## Getting Started
 
@@ -45,14 +45,14 @@ Follow these steps to set up and run `ckptw-wabot`:
 
 ## Customization
 
-### Adding a New Plugin
+### Adding a New Command
 
-To add a new plugin, follow these steps:
+To add a new Command, follow these steps:
 
-1. Create a new JavaScript file in the `plugins` folder with your desired functionality. For example, `ping.js`:
+1. Create a new JavaScript file in the `commands` folder with your desired functionality. For example, `ping.js`:
 
    ```javascript
-   // plugins/info-ping.js
+   // commands/info-ping.js
 
    module.exports = {
        name: "ping",
@@ -78,7 +78,7 @@ To add a new plugin, follow these steps:
    };
    ```
 
-2. Your plugin is now ready to use. Users can trigger it by sending `/ping` in the chat.
+2. Your Command is now ready to use. Users can trigger it by sending `/ping` in the chat.
 
 ### [Check @mengkodingan/ckptw Documentation](https://ckptw.mengkodingan.my.id/)
 

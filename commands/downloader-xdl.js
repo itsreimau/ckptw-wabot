@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -13,6 +10,10 @@ module.exports = {
     aliases: ["twit", "twitdl", "twitter", "twitterdl", "x"],
     category: "downloader",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -25,7 +26,7 @@ module.exports = {
         const url = ctx.args[0] || null;
 
         if (!url) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
+            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
@@ -33,14 +34,10 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = createAPIUrl("agatz", "/api/twitter", {
+            const apiUrl = await global.tools.api.createUrl("agatz", "/api/twitter", {
                 url
             });
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            const response = await axios.get(apiUrl);
             const {
                 data
             } = response.data;

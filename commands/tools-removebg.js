@@ -1,8 +1,4 @@
 const {
-    createAPIUrl,
-    listAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -20,6 +16,10 @@ module.exports = {
     aliases: ["rbg"],
     category: "tools",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -31,20 +31,19 @@ module.exports = {
 
         const msgType = ctx.getMessageType();
 
-        if (msgType !== MessageType.imageMessage && !ctx.quoted) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
+        if (msgType !== MessageType.imageMessage && !(ctx.quoted && ctx.quoted.media && ctx.quoted.media.toBuffer())) return ctx.reply(quote(`📌 ${await global.tools.msg.translate("Berikan atau balas media berupa gambar!", userLanguage)}`));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = createAPIUrl("fasturl", "/tool/removebg", {
+            const apiUrl = await global.tools.api.createUrl("fasturl", "/tool/removebg", {
                 imageUrl: uplRes.link
             });
             const {
                 data
             } = await axios.get(apiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent,
-                    "x-api-key": listAPIUrl().fasturl.APIKey
+                    "x-api-key": await global.tools.api.listAPIUrl().fasturl.APIKey
                 },
                 responseType: "arraybuffer"
             });
@@ -55,8 +54,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

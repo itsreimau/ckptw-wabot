@@ -1,10 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -15,6 +9,10 @@ module.exports = {
     name: "tebakkimia",
     category: "game",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -26,13 +24,9 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`⚠ Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebakkimia.json`, {});
-            const response = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
-            const data = getRandomElement(response.data);
+            const apiUrl = await global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebakkimia.json`, {});
+            const response = await axios.get(apiUrl);
+            const data = global.tools.general.getRandomElement(response.data);
             const coin = 3;
             const timeout = 60000;
             const senderNumber = ctx.sender.jid.replace(/@.*|:.*/g, "");
@@ -40,13 +34,13 @@ module.exports = {
             await session.set(ctx.id, true);
 
             await ctx.reply(
-                `${quote(`Lambang: ${data.lambang}`)}` +
+                `${quote(`c: ${data.lambang}`)}` +
                 (global.system.useCoin ?
                     "\n" +
-                    `${quote(`+${coin} Koin`)}\n` :
+                    `${quote(`+${coin} ${await global.tools.msg.translate("Koin", userLanguage)}`)}\n` :
                     "\n") +
-                `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
-                `${quote('Ketik "hint" untuk bantuan.')}\n` +
+                `${quote(await global.tools.msg.translate("Batas waktu ${(timeout / 1000).toFixed(2)} detik.", userLanguage))}\n` +
+                `${quote(await global.tools.msg.translate('Ketik "hint" untuk bantuan.', userLanguage))}\n` +
                 "\n" +
                 global.msg.footer
             );
@@ -64,10 +58,10 @@ module.exports = {
                     if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
                     await ctx.sendMessage(
                         ctx.id, {
-                            text: quote(`💯 Benar!`) +
+                            text: quote(`💯 ${await global.tools.msg.translate("Benar!", userLanguage)}`) +
                                 (global.system.useCoin ?
                                     "\n" +
-                                    quote(`+${coin} Koin`) :
+                                    quote(`+${coin} ${await global.tools.msg.translate("Koin", userLanguage)}`) :
                                     "")
                         }, {
                             quoted: m
@@ -91,15 +85,16 @@ module.exports = {
                     await session.delete(ctx.id);
 
                     return ctx.reply(
-                        `${quote(`⌛ Waktu habis!`)}\n` +
-                        quote(`Jawabannya adalah ${answer}.`)
+                        `${quote(`⌛ ${await global.tools.msg.translate("Waktu habis!", userLanguage)}`)}\n` +
+                        quote(`${await global.tools.msg.translate("Jawabannya adalah", userLanguage)} ${answer}.`)
                     );
                 }
             });
 
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

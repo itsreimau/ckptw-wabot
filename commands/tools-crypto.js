@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -12,6 +9,10 @@ module.exports = {
     aliases: ["coingecko"],
     category: "tools",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -24,8 +25,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} bitcoin`)}`)
+            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} bitcoin`)}`)
         );
 
         try {
@@ -33,10 +34,13 @@ module.exports = {
 
             if (!result) return ctx.reply(global.msg.notFound);
 
-            const resultText = result.map((r) =>
-                `${quote(`${r.cryptoName}`)}\n` +
-                `${quote(`Harga: ${r.priceChange}`)}`
-            ).join(
+            const translations = await Promise.all([
+                global.tools.msg.translate("Harga", userLanguage)
+            ]);
+            const resultText = result.map((r) => {
+                return `${quote(`${r.cryptoName}`)}\n` +
+                    `${quote(`${translations[0]}: ${r.priceChange}`)}`
+            }).join(
                 "\n" +
                 `${quote("─────")}\n`
             );
@@ -47,23 +51,20 @@ module.exports = {
             );
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };
 
 
 async function coingecko(search) {
-    const apiUrl = createAPIUrl("https://api.coingecko.com", "/api/v3/coins/markets", {
+    const apiUrl = await global.tools.api.createUrl("https://api.coingecko.com", "/api/v3/coins/markets", {
         vs_currency: "usd",
     });
 
     try {
-        const response = await axios.get(apiUrl, {
-            headers: {
-                "User-Agent": global.system.userAgent
-            }
-        });
+        const response = await axios.get(apiUrl);
         const data = response.data;
         const result = [];
 

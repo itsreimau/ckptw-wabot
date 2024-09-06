@@ -1,7 +1,4 @@
 const {
-    createAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -11,6 +8,10 @@ module.exports = {
     name: "kisahnabi",
     category: "islamic",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -23,25 +24,21 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} muhammad`)}`)
+            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} muhammad`)}`)
         );
 
         try {
-            const apiUrl = createAPIUrl("https://raw.githubusercontent.com", `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
+            const apiUrl = await global.tools.api.createUrl("https://raw.githubusercontent.com", `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
             const {
                 data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
+            } = await axios.get(apiUrl);
 
             return ctx.reply(
-                `${quote(`Nama: ${data.name}`)}\n` +
-                `${quote(`Tahun kelahiran: ${data.thn_kelahiran}`)}\n` +
-                `${quote(`Tempat kelahiran: ${data.tmp}`)}\n` +
-                `${quote(`Usia: ${data.usia}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Nama", userLanguage)}: ${data.name}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Tahun kelahiran", userLanguage)}: ${data.thn_kelahiran} SM`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Tempat kelahiran", userLanguage)}: ${data.tmp}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Usia kesalahan", userLanguage)}: ${data.usia}`)}\n` +
                 `${quote("─────")}\n` +
                 `${data.description.trim()}\n` +
                 "\n" +
@@ -50,7 +47,7 @@ module.exports = {
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

@@ -1,8 +1,4 @@
 const {
-    createAPIUrl,
-    listAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -13,6 +9,10 @@ module.exports = {
     aliases: ["fakta"],
     category: "internet",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -23,31 +23,28 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const faktaApiUrl = await createAPIUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
-            const faktaResponse = await axios.get(faktaApiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent
-                }
-            });
-            const faktaText = faktaResponse.data.text;
+            const faktaApiUrl = await await global.tools.api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
+            const faktaResponse = await axios.get(faktaApiUrl);
+            const faktaData = faktaResponse.data;
+            const faktaText = faktaData.text;
 
-            const translationApiUrl = createAPIUrl("fasturl", "/tool/translate", {
+            const translationApiUrl = await global.tools.api.createUrl("fasturl", "/tool/translate", {
                 text: faktaText,
                 target: "id"
             });
             const translationResponse = await axios.get(translationApiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent,
-                    "x-api-key": listAPIUrl().fasturl.APIKey
+                    "x-api-key": await global.tools.api.listAPIUrl().fasturl.APIKey
                 }
             });
-            const translatedText = translationResponse.data.translatedText;
+            const translationData = translationResponse.data;
+            const translatedText = translationData.translatedText;
 
             return ctx.reply(translatedText);
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };
