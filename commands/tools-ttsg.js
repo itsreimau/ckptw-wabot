@@ -1,8 +1,4 @@
 const {
-    createAPIUrl,
-    listAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -14,6 +10,10 @@ module.exports = {
     aliases: ["texttospeechgoogle", "tts", "ttsgoogle"],
     category: "tools",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -39,12 +39,12 @@ module.exports = {
         }
 
         if (!textToSpeech) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo!`)}`)
+            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo!`)}`)
         );
 
         try {
-            const apiUrl = createAPIUrl("fasturl", "/tool/tts/google", {
+            const apiUrl = await global.tools.api.createUrl("fasturl", "/tool/tts/google", {
                 text: textToSpeech,
                 speaker: langCode
             });
@@ -52,8 +52,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl, {
                 headers: {
-                    "User-Agent": global.system.userAgent,
-                    "x-api-key": listAPIUrl().fasturl.APIKey
+                    "x-api-key": await global.tools.api.listAPIUrl().fasturl.APIKey
                 },
                 responseType: "arraybuffer"
             });
@@ -66,7 +65,7 @@ module.exports = {
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

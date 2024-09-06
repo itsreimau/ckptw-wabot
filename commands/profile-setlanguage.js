@@ -36,7 +36,7 @@ module.exports = {
             lang = JSON.parse(list);
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ ${await tools.msg.translate("Error reading language data.", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
 
         if (text === "list") {
@@ -45,12 +45,12 @@ module.exports = {
             return ctx.reply(format);
         }
 
-        if (!Object.keys(lang).includes(input)) return ctx.reply(quote(`⚠ ${await tools.msg.translate("Invalid language code. Use 'list' to see available languages.", userLanguage)}`));
+        if (!Object.keys(lang).includes(input)) return ctx.reply(quote(`⚠ ${await tools.msg.translate("Kode bahasa tidak valid. Gunakan 'daftar' untuk melihat bahasa yang tersedia.", userLanguage)}`));
 
         try {
             global.db.set(`user.${ctx.from.id}.language`, input);
 
-            return ctx.reply(quote(`✅ ${await global.tools.msg.translate("Language changed successfully.", userLanguage)}`));
+            return ctx.reply(quote(`✅ ${await global.tools.msg.translate("Bahasa berhasil diubah.", userLanguage)}`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));

@@ -11,6 +11,10 @@ module.exports = {
     aliases: ["javascript"],
     category: "tools",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -24,15 +28,14 @@ module.exports = {
         const script = input;
 
         if (!script) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} console.log("Hello World");`)}`)
+            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} console.log("Hello World");`)}`)
         );
 
         try {
-            const restricted = ["require", "eval", "Function", "global"];
-            for (const w of restricted) {
+            for (const w of ["require", "eval", "Function", "global"]) {
                 if (script.includes(w)) {
-                    return ctx.reply(quote(`⚠ Penggunaan ${w} tidak diperbolehkan dalam kode.`));
+                    return ctx.reply(quote(`⚠️ ${await global.tools.msg.translate(`Penggunaan ${w} tidak diperbolehkan dalam kode.`, userLanguage)}`));
                 }
             }
 
@@ -43,10 +46,6 @@ module.exports = {
                 let errorData = '';
 
                 childProcess.stdout.on('data', (chunk) => {
-                    if (outputData.length >= 1024 * 1024) {
-                        resolve(quote(`⚠ Kode mencapai batas penggunaan memori.`));
-                        childProcess.kill();
-                    }
                     outputData += chunk.toString();
                 });
 
@@ -54,24 +53,27 @@ module.exports = {
                     errorData += chunk.toString();
                 });
 
-                childProcess.on("close", (code) => {
+                childProcess.on("close", async (code) => {
                     if (code !== 0) {
-                        resolve(quote(`⚠ Keluar dari proses dengan kode: ${code}\n${errorData.trim()}`));
+                        resolve(quote(
+                            `⚠️ ${await global.tools.msg.translate("Keluar dari proses dengan kode", userLanguage)}: ${code}\n` +
+                            errorData.trim()
+                        ));
                     } else {
                         resolve(outputData.trim());
                     }
                 });
 
-                setTimeout(() => {
-                    resolve(quote(`⚠ Kode mencapai batas waktu keluaran.`));
+                setTimeout(async () => {
                     childProcess.kill();
+                    resolve(quote(`⏰ ${await global.tools.msg.translate("Kode mencapai batas waktu keluaran.", userLanguage)}`));
                 }, 10000);
             });
 
             ctx.reply(output);
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠️ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

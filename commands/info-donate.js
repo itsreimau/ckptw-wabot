@@ -7,6 +7,10 @@ module.exports = {
     aliases: ["donasi"],
     category: "info",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         return ctx.reply(
             `${quote("083838039693 (DANA)")}\n` +
             `${quote("─────")}\n` +

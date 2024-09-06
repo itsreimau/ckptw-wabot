@@ -7,6 +7,10 @@ module.exports = {
     name: "group",
     category: "group",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -14,15 +18,15 @@ module.exports = {
             admin: true,
             banned: true,
             botAdmin: true,
-            group: true,
+            group: true
         });
         if (status) return ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`${global.msg.argument} Argumen yang tersedia adalah open, close, lock, dan unlock.`)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} open`)}`)
+            `${quote(`⚠ ${await global.tools.msg.translate(`${await global.tools.msg.argument} Argumen yang tersedia adalah open, close, lock, dan unlock.`, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} open`)}`)
         );
 
         try {
@@ -40,13 +44,13 @@ module.exports = {
                     await ctx.group().unlock();
                     break;
                 default:
-                    return ctx.reply(quote(`⚠ Argumen yang tersedia adalah open, close, lock, dan unlock.`));
+                    return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Argumen yang tersedia adalah open, close, lock, dan unlock.", userLanguage)}`));
             }
 
-            return ctx.reply(quote(`✅ Berhasil mengubah setelan grup!`));
+            return ctx.reply(quote(`✅ ${await global.tools.msg.translate("Berhasil mengubah setelan grup!", userLanguage)}`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

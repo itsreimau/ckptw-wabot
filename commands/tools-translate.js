@@ -1,18 +1,20 @@
 const {
-    createAPIUrl,
-    listAPIUrl
-} = require("../tools/api.js");
-const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const {
+    translate
+} = require("bing-translate-api");
 
 module.exports = {
     name: "translate",
     aliases: ["tr"],
     category: "tools",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -38,29 +40,20 @@ module.exports = {
         }
 
         if (!textToTranslate) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo!`)}`)
+            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo!`)}`)
         );
 
         try {
-            const apiUrl = createAPIUrl("fasturl", "/tool/translate", {
-                text: textToTranslate,
-                target: langCode
-            });
             const {
-                data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "User-Agent": global.system.userAgent,
-                    "x-api-key": listAPIUrl().fasturl.APIKey
-                }
-            });
+                translation
+            } = await translate(textToTranslate, null, langCode);
 
-            return ctx.reply(data.translatedText);
+            return ctx.reply(translation);
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

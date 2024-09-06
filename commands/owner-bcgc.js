@@ -1,7 +1,5 @@
 const {
-    getRandomElement
-} = require("../tools/general.js");
-const {
+
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -11,6 +9,10 @@ module.exports = {
     aliases: ["broadcastgc"],
     category: "owner",
     code: async (ctx) => {
+        const [userLanguage] = await Promise.all([
+            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+        ]);
+
         const {
             status,
             message
@@ -22,8 +24,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} halo!`)}`)
+            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} halo!`)}`)
         );
 
         try {
@@ -32,7 +34,7 @@ module.exports = {
             const groups = Object.entries(getGroups).slice(0).map((entry) => entry[1]);
             const anu = groups.map((a) => a.id);
 
-            ctx.reply(quote(`⚠ Mengirim siaran ke ${anu.length} obrolan grup, perkiraan waktu penyelesaian adalah ${(anu.length * 0, 5)} detik.`));
+            ctx.reply(quote(`⚠ ${await global.tools.msg.translate(`Mengirim siaran ke ${anu.length} obrolan grup, perkiraan waktu penyelesaian adalah ${(anu.length * 0, 5)} detik.`, userLanguage)}`));
 
             for (let i of anu) {
                 await delay(500);
@@ -56,10 +58,10 @@ module.exports = {
                 });
             }
 
-            return ctx.reply(quote(`✅ Berhasil mengirimkan siaran ke ${anu.length} obrolan grup.`));
+            return ctx.reply(quote(`✅ ${await global.tools.msg.translate(`Berhasil mengirimkan siaran ke ${anu.length} obrolan grup.`, userLanguage)}`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };
