@@ -10,10 +10,6 @@ module.exports = {
     aliases: ["seticon", "setprofile"],
     category: "group",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -27,16 +23,16 @@ module.exports = {
 
         const msgType = ctx.getMessageType();
 
-        if (msgType !== MessageType.imageMessage && !(ctx.quoted && ctx.quoted.media && ctx.quoted.media.toBuffer())) return ctx.reply(quote(`📌 ${await global.tools.msg.translate("Berikan atau balas media berupa gambar!", userLanguage)}`));
+        if (msgType !== MessageType.imageMessage && !(ctx.quoted && ctx.quoted.media && ctx.quoted.media.toBuffer())) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             await ctx._client.updateProfilePicture(ctx.id, buffer);
 
-            return ctx.reply(quote(`✅ ${await global.tools.msg.translate("Berhasil mengubah gambar profil foto grup!", userLanguage)}`));
+            return ctx.reply(quote(`✅ Berhasil mengubah gambar profil foto grup!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

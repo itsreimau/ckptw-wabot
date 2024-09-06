@@ -1,12 +1,9 @@
 const {
-    createUrl
+    createAPIUrl
 } = require("./api.js");
 const {
     convertMsToDuration
 } = require("./general.js");
-const {
-    translate
-} = require("./msg.js");
 const pkg = require("../package.json");
 const {
     bold,
@@ -14,23 +11,23 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const moment = require("moment-timezone");
-const fetch = require("node-fetch");
 
-async function get(type, ctx) {
+exports.getList = async (type, ctx) => {
     let text = "";
 
     const generateMenuText = (cmds, tags) => {
         let menuText =
-            `${translate(`Hai ${ctx._sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!`, userLanguage)}\n` +
+            `Hai ${ctx._sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
             "\n" +
-            `${quote(`Runtime: ${convertMsToDuration(Date.now() - global.system.startTime) || global.tools.msg.translate("kurang dari satu detik.", userLanguage)}`)}\n` +
-            `${quote(`${translate("Tanggal", userLanguage)}: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`)}\n` +
-            `${quote(`${translate("Waktu", userLanguage)}: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}`)}\n` +
-            `${quote(`${translate("Versi", userLanguage)}: ${pkg.version}`)}\n` +
+            `${quote(`Waktu aktif: ${convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}`)}\n` +
+            `${quote(`Tanggal: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`)}\n` +
+            `${quote(`Waktu: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}`)}\n` +
+            `${quote(`Versi: ${pkg.version}`)}\n` +
             `${quote(`Prefix: ${ctx._used.prefix}`)}\n` +
             "\n" +
-            `${italic(translate("Jangan lupa berdonasi agar bot tetap online!"))}\n` +
+            `${italic("Jangan lupa berdonasi agar bot tetap online!")}\n` +
             `${global.msg.readmore}\n`;
 
         for (const category of Object.keys(tags)) {
@@ -42,7 +39,7 @@ async function get(type, ctx) {
                 }));
 
             if (categoryCommands.length > 0) {
-                menuText += `${bold(tags[category])}\n`;
+                menuText += `◈ ${bold(tags[category])}\n`;
 
                 categoryCommands.forEach(cmd => {
                     menuText += quote(monospace(`${ctx._used.prefix || "/"}${cmd.name}`));
@@ -63,43 +60,47 @@ async function get(type, ctx) {
     try {
         switch (type) {
             case "alkitab": {
-                const response = await fetch(createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
-                const data = await response.json();
-                text = data.data.map(b =>
-                    `${quote(`${translate("Buku", userLanguage)}: ${b.name} (${b.abbr})`)}\n` +
-                    `${quote(`${translate("Jumlah Bab", userLanguage)}: ${b.chapter}`)}\n` +
-                    "-----\n"
+                const alKitabResponse = await axios.get(createAPIUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}), {
+                    headers: {
+                        "User-Agent": global.system.userAgent
+                    }
+                });
+                text = alKitabResponse.data.data.map(b =>
+                    `${quote(`Buku: ${b.name} (${b.abbr})`)}\n` +
+                    `${quote(`Jumlah Bab: ${b.chapter}`)}\n` +
+                    `${quote("─────")}\n`
                 ).join("");
 
                 text += global.msg.footer;
                 break;
             }
-
             case "alquran": {
-                const response = await fetch(createUrl("https://equran.id", "/api/v2/surat", {}));
-                const data = await response.json();
-                text = data.data.map(s =>
-                    `${quote(`${translate("Surah", userLanguage)}: ${s.namaLatin} (${s.nomor})`)}\n` +
-                    `${quote(`${translate("Jumlah Ayat", userLanguage)}: ${s.jumlahAyat}`)}\n` +
-                    "-----\n"
+                const alquranResponse = await axios.get(createAPIUrl("https://equran.id", "/api/v2/surat", {}), {
+                    headers: {
+                        "User-Agent": global.system.userAgent
+                    }
+                });
+                text = alquranResponse.data.data.map(s =>
+                    `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
+                    `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n` +
+                    `${quote("─────")}\n`
                 ).join("");
 
                 text += global.msg.footer;
                 break;
             }
-
             case "disable_enable": {
                 const deList = ["antilink", "welcome"];
-                text = deList.map(item => `${quote(item)}`).join("\n");
-                text += "\n" + global.msg.footer;
+                text = deList.map(item => quote(item)).join("\n");
+
+                text += "\n" +
+                    global.msg.footer;
                 break;
             }
-
             case "menu": {
-                const cmds = ctx._self.cmd;
+                const cmds = ctx._config.cmd;
                 const tags = {
                     main: "Main",
-                    profile: "Profile",
                     ai: "AI",
                     game: "Game",
                     converter: "Converter",
@@ -116,25 +117,19 @@ async function get(type, ctx) {
                 };
 
                 if (!cmds || cmds.size === 0) {
-                    text = quote(`⚠ ${translate("Terjadi kesalahan: Tidak ada perintah yang ditemukan.", userLanguage)}`);
+                    text = quote("⚠ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");
                 } else {
                     text = generateMenuText(cmds, tags);
                 }
                 break;
             }
-
-            default: {
-                text = quote(`⚠ ${translate("Terjadi kesalahan: Jenis daftar tidak dikenal.", userLanguage)}`);
+            default:
+                text = quote("⚠ Terjadi kesalahan: Jenis daftar tidak dikenal.");
                 break;
-            }
         }
     } catch (error) {
-        text = quote(`⚠ ${translate("Terjadi kesalahan", userLanguage)}: ${error.message}`);
+        text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
     }
 
     return text;
-}
-
-module.exports = {
-    get
 };

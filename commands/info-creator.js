@@ -7,10 +7,6 @@ module.exports = {
     aliases: ["creator", "developer"],
     category: "info",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const vcard = new VCardBuilder()
             .setFullName(global.owner.name)
             .setOrg(global.owner.organization)

@@ -1,13 +1,16 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
+const axios = require("axios");
 const FormData = require("form-data");
 const Jimp = require("jimp");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -15,10 +18,6 @@ module.exports = {
     aliases: ["enhance", "enhancer", "hd", "hdr", "remini", "upscale", "upscaler"],
     category: "tools",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -30,7 +29,7 @@ module.exports = {
 
         const msgType = ctx.getMessageType();
 
-        if (msgType !== MessageType.imageMessage && !(ctx.quoted && ctx.quoted.media && ctx.quoted.media.toBuffer())) return ctx.reply(quote(`📌 ${await global.tools.msg.translate("Berikan atau balas media berupa gambar!", userLanguage)}`));
+        if (msgType !== MessageType.imageMessage && !(ctx.quoted && ctx.quoted.media && ctx.quoted.media.toBuffer())) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
@@ -40,13 +39,14 @@ module.exports = {
                 image: {
                     url: result.image
                 },
-                caption: `${quote(await global.tools.msg.translate(`Anda bisa mengaturnya. Tersedia ukuran 2, 4, 6, 8, dan 16, defaultnya adalah 2. Gunakan ${monospace("anime")} jika gambarnya anime.`, userLanguage))}\n` +
-                    quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} 16 anime`)}`),
+                caption: `${quote(`Anda bisa mengaturnya. Tersedia ukuran 2, 4, 6, 8, dan 16, defaultnya adalah 2. Gunakan ${monospace("anime")} jika gambarnya anime.`)}\n` +
+                    quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 16 anime`)}`),
                 mimetype: mime.contentType("png")
             });
         } catch (error) {
             console.error("Error", error);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
@@ -78,9 +78,10 @@ async function upscale(buffer, size = 2, anime = false) {
         contentType: 'image/png',
     });
 
-    const apiUrl = await global.tools.api.createUrl("https://api.upscalepics.com", "/upscale-to-size", {});
+    const apiUrl = createAPIUrl("https://api.upscalepics.com", "/upscale-to-size", {});
     const response = await axios.post(apiUrl, form, {
         headers: {
+            "User-Agent": global.system.userAgent,
             ...form.getHeaders(),
             origin: "https://upscalepics.com",
             referer: "https://upscalepics.com"

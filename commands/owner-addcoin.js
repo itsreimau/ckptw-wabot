@@ -10,10 +10,6 @@ module.exports = {
     name: "addcoin",
     category: "owner",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -31,24 +27,24 @@ module.exports = {
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : userId + S_WHATSAPP_NET;
 
         if (!ctx.args.length || !user || isNaN(coinAmount)) return ctx.reply({
-            text: `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
-                quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber} 4`)}`),
+            text: `${quote(global.msg.argument)}\n` +
+                quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber} 4`)}`),
             mentions: [senderJid]
         });
 
         try {
             const [result] = await ctx._client.onWhatsApp(user);
-            if (!result.exists) return ctx.reply(quote(`❎ ${await global.tools.msg.translate("Akun tidak ada di WhatsApp.", userLanguage)}`));
+            if (!result.exists) return ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
 
-            await global.db.add(`user.${user.replace(/@.*|:.*/g, "")}.coin`, coinAmount);
+            await global.db.add(`user.${user.split("@")[0]}.coin`, coinAmount);
 
             ctx.sendMessage(user, {
-                text: quote(`🎉 ${await global.tools.msg.translate(`Anda telah menerima ${coinAmount} koin dari Owner!`, userLanguage)}`)
+                text: quote(`🎉 Anda telah menerima ${coinAmount} koin dari Owner!`)
             });
-            return ctx.reply(quote(`✅ ${await global.tools.msg.translate(`Berhasil menambahkan ${coinAmount} koin kepada pengguna!`, userLanguage)}`));
+            return ctx.reply(quote(`✅ Berhasil menambahkan ${coinAmount} koin kepada pengguna!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

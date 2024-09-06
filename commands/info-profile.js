@@ -8,10 +8,6 @@ module.exports = {
     name: "profile",
     category: "info",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -21,10 +17,10 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const senderNumber = ctx.sender.jid.replace(/@.*|:.*/g, "");
-            const [userCoin, userPremium] = await Promise.all([
-                global.db.get(`user.${senderNumber}.userCoin`) || "-",
-                global.db.get(`user.${senderNumber}.isuserPremium`) ? "Ya" : "Tidak",
+            const senderNumber = ctx.sender.jid.split("@")[0];
+            const [coin, premium] = await Promise.all([
+                global.db.get(`user.${senderNumber}.coin`) || "-",
+                global.db.get(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak",
             ]);
 
             let profileUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image");
@@ -38,14 +34,14 @@ module.exports = {
                 },
                 mimetype: mime.contentType("png"),
                 caption: `${quote(`Nama: ${ctx.sender.pushName}`)}\n` +
-                    `${quote(`Premium: ${userPremium}`)}\n` +
-                    `${quote(`Koin: ${userCoin}`)}\n` +
+                    `${quote(`Premium: ${premium}`)}\n` +
+                    `${quote(`Koin: ${coin}`)}\n` +
                     "\n" +
                     global.msg.footer,
             });
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -1,4 +1,7 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -12,10 +15,6 @@ module.exports = {
     name: "attp",
     category: "maker",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -28,19 +27,18 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
-            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} get in the fucking robot, shinji!`)}`)
+            `${quote(global.msg.argument)}\n` +
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} get in the fucking robot, shinji!`)}`)
         );
 
-        if (input.length > 10000) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Maksimal 50 kata!", userLanguage)}`));
+        if (input.length > 10000) return ctx.reply(quote(`⚠ Maksimal 50 kata!`));
 
         try {
-            const apiUrl = await global.tools.api.createUrl("widipe", "/attp", {
+            const apiUrl = createAPIUrl("widipe", "/attp", {
                 text: input
             });
 
-            const response = await axios.get(apiUrl);
-            const sticker = new Sticker(response.data.url, {
+            const sticker = new Sticker(apiUrl, {
                 pack: global.sticker.packname,
                 author: global.sticker.author,
                 type: StickerTypes.FULL,
@@ -52,8 +50,7 @@ module.exports = {
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

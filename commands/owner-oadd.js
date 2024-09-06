@@ -10,10 +10,6 @@ module.exports = {
     name: "oadd",
     category: "owner",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -26,8 +22,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input && !isNaN(Number(input))) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
-            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} ${ctx._client.user.id.split(":")[0]}`)}`)
+            `${quote(global.msg.argument)}\n` +
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ${ctx._client.user.id.split(":")[0]}`)}`)
         );
 
         try {
@@ -35,14 +31,14 @@ module.exports = {
             const account = accountFormatted + S_WHATSAPP_NET;
 
             const [result] = await ctx._client.onWhatsApp(accountFormatted);
-            if (!result.exists) return ctx.reply(quote(`❎ ${await global.tools.msg.translate("Akun tidak ada di WhatsApp.", userLanguage)}`));
+            if (!result.exists) return ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
 
             await ctx.group().add([account]);
 
-            return ctx.reply(quote(`✅ ${await global.tools.msg.translate("Berhasil ditambahkan!", userLanguage)}`));
+            return ctx.reply(quote(`✅ Berhasil ditambahkan!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

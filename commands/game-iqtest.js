@@ -1,4 +1,10 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
+    getRandomElement
+} = require("../tools/general.js");
+const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -7,25 +13,16 @@ module.exports = {
     name: "iqtest",
     category: "game",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
+            banned: true,
+            coin: 3
+        });
+        if (status) return ctx.reply(message);
 
-        try {
-            const {
-                status,
-                message
-            } = await global.handler(ctx, {
-                banned: true,
-                coin: 3
-            });
-            if (status) return ctx.reply(message);
-
-            return ctx.reply(await global.tools.msg.translate(global.tools.general.getRandomElement(iq), userLanguage));
-        } catch (error) {
-            console.error(error);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
-        }
+        return ctx.reply(getRandomElement(iq));
     }
 };
 

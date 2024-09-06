@@ -1,4 +1,7 @@
 const {
+    createAPIUrl
+} = require("../tools/api.js");
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
@@ -9,10 +12,6 @@ module.exports = {
     aliases: ["google", "gsearch"],
     category: "internet",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -25,28 +24,28 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
-            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`)
+            `${quote(global.msg.argument)}\n` +
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`)
         );
 
         try {
-            const apiUrl = await await global.tools.api.createUrl("agatz", "/api/google", {
+            const apiUrl = await createAPIUrl("agatz", "/api/google", {
                 message: input
             });
-            const response = await axios.get(apiUrl);
+            const response = await axios.get(apiUrl, {
+                headers: {
+                    "User-Agent": global.system.userAgent
+                }
+            });
             const {
                 data
             } = response.data;
 
-            const translations = await Promise.all([
-                global.tools.msg.translate("Judul", userLanguage),
-                global.tools.msg.translate("Deskripsi", userLanguage)
-            ]);
-            const resultText = data.map((d) => {
-                return `${quote(`${translations[0]}: ${d.title}`)}\n` +
-                    `${quote(`${translations[1]}: ${d.snippet}`)}\n` +
-                    `${quote(`URL: ${d.link}`)}`
-            }).join(
+            const resultText = data.map((d) =>
+                `${quote(`Judul: ${d.title}`)}\n` +
+                `${quote(`Deskripsi: ${d.snippet}`)}\n` +
+                `${quote(`URL: ${d.link}`)}`
+            ).join(
                 "\n" +
                 `${quote("─────")}\n`
             );
@@ -58,7 +57,7 @@ module.exports = {
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

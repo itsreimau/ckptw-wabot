@@ -12,10 +12,6 @@ module.exports = {
     name: "blur",
     category: "tools",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -27,7 +23,7 @@ module.exports = {
 
         const msgType = ctx.getMessageType();
 
-        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !(ctx.quoted && ctx.quoted.media && ctx.quoted.media.toBuffer())) return ctx.reply(quote(`📌 ${await global.tools.msg.translate("Berikan atau balas media berupa gambar!", userLanguage)}`));
+        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !(ctx.quoted && ctx.quoted.media && ctx.quoted.media.toBuffer())) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
@@ -35,7 +31,7 @@ module.exports = {
             let img = await Jimp.read(buffer);
             img.blur(isNaN(level) ? 5 : parseInt(level));
             img.getBuffer(Jimp.MIME_JPEG, async (err, buffer) => {
-                if (error) return ctx.reply(quote(`❎ ${await global.tools.msg.translate("Tidak dapat mengaburkan gambar!", userLanguage)}`));
+                if (error) return ctx.reply(quote(`❎ Tidak dapat mengaburkan gambar!`));
 
                 return await ctx.reply({
                     image: buffer,
@@ -44,7 +40,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error", error);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

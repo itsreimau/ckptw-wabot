@@ -10,10 +10,6 @@ module.exports = {
     aliases: ["ht"],
     category: "group",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         try {
             const {
                 status,
@@ -28,7 +24,7 @@ module.exports = {
 
             const input = ctx.args.join(" ") || "@everyone";
             const data = await ctx.group().members();
-            const mentions = data.map(member => `${member.id.replace(/@.*|:.*/g, "")}S_WHATSAPP_NET`);
+            const mentions = data.map(member => `${member.id.split("@")[0]}S_WHATSAPP_NET`);
 
             return ctx.reply({
                 text: input,
@@ -36,7 +32,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

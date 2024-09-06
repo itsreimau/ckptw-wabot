@@ -29,8 +29,7 @@
   "dependencies": {
     "@mengkodingan/ckptw": "^4.3.6",
     "@whiskeysockets/baileys": "6.7.7",
-    "axios": "1.7.7",
-    "bing-translate-api": "^4.0.2",
+    "axios": "^1.7.5",
     "cfonts": "^3.3.0",
     "cheerio": "^1.0.0",
     "didyoumean": "^1.2.2",
