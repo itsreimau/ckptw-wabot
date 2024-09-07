@@ -26,7 +26,7 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            `${quote(`📌 ${await global.tools.msg.translate(`${await global.tools.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`, userLanguage)}`)}\n` +
             quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`)
         );
 
@@ -39,7 +39,7 @@ module.exports = {
             return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
 
-        if (text === "list") {
+        if (input === "list") {
             const format = Object.entries(lang).map(([code, name]) => `- ${code}: ${name}`).join('\n');
 
             return ctx.reply(format);
@@ -48,7 +48,7 @@ module.exports = {
         if (!Object.keys(lang).includes(input)) return ctx.reply(quote(`⚠ ${await tools.msg.translate("Kode bahasa tidak valid. Gunakan 'daftar' untuk melihat bahasa yang tersedia.", userLanguage)}`));
 
         try {
-            global.db.set(`user.${ctx.from.id}.language`, input);
+            global.db.set(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`, input);
 
             return ctx.reply(quote(`✅ ${await global.tools.msg.translate("Bahasa berhasil diubah.", userLanguage)}`));
         } catch (error) {
