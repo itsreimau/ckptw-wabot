@@ -24,9 +24,9 @@ async function get(type, ctx) {
 
     let text = "";
 
-    const generateMenuText = (cmds, tags) => {
+    const generateMenuText = async (cmds, tags) => {
         let menuText =
-            `${await translate(`Hai ${ctx._sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!`, userLanguage)}\n` +
+            `${await translate(`Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!`, userLanguage)}\n` +
             "\n" +
             `${quote(`Runtime: ${convertMsToDuration(Date.now() - global.system.startTime) || await translate("kurang dari satu detik.", userLanguage)}`)}\n` +
             `${quote(`${await translate("Tanggal", userLanguage)}: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`)}\n` +

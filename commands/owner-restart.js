@@ -28,7 +28,7 @@ module.exports = {
             exec(`pm2 restart ckptw-wabot`); // PM2.
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ ${await c("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

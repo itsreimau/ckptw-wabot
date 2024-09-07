@@ -1,3 +1,4 @@
+// That's a list of free APIs, use them wisely!
 const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"
@@ -45,17 +46,8 @@ const APIs = {
     miwudev: {
         baseURL: "https://openapi.miwudev.my.id"
     },
-    ngodingaja: {
-        baseURL: "https://api.ngodingaja.my.id"
-    },
     nyxs: {
         baseURL: "https://api.nyxs.pw"
-    },
-    ryzendesu: {
-        baseURL: "https://apis.ryzendesu.vip"
-    },
-    sanzy: {
-        baseURL: "https://api.sanzy.co"
     },
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com"
@@ -68,9 +60,6 @@ const APIs = {
     },
     widipe: {
         baseURL: "https://widipe.com"
-    },
-    yanzbotz: {
-        baseURL: "https://api.yanzbotz.my.id"
     }
 };
 
