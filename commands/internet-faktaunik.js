@@ -34,7 +34,7 @@ module.exports = {
             });
             const translationResponse = await axios.get(translationApiUrl, {
                 headers: {
-                    "x-api-key": await global.tools.api.listAPIUrl().fasturl.APIKey
+                    "x-api-key": await global.tools.api.listUrl().fasturl.APIKey
                 }
             });
             const translationData = translationResponse.data;

@@ -18,6 +18,10 @@ const moment = require("moment-timezone");
 const fetch = require("node-fetch");
 
 async function get(type, ctx) {
+    const [userLanguage] = await Promise.all([
+        global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
+    ]);
+
     let text = "";
 
     const generateMenuText = (cmds, tags) => {

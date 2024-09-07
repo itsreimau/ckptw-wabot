@@ -64,12 +64,21 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const senderNumber = senderJid.replace(/@.*|:.*/g, "");
     const groupJid = isGroup ? m.key.remoteJid : null;
     const groupNumber = isGroup ? groupJid.replace(/@.*|:.*/g, "") : null;
+
+    // Database for user.
+    const userDb = await db.get(`user.${senderNumber}`);
+    if (!userDb) {
+        await db.set(`user.${senderNumber}`, {
+            banned: false,
+            coin: 10,
+            language: senderNumber.startsWith("62") ? "id" : "en",
+            premium: false
+        });
+    }
     const [userLanguage] = await Promise.all([
-        global.db.get(`user.${senderNumber}.language`)
+        db.get(`user.${senderNumber}.language`)
     ]);
 
-    // Ignore messages sent by the bot itself.
-    if (m.key.fromMe) return;
 
     // Auto-typing simulation for commands.
     if (tools.general.isCmd(m, ctx)) await ctx.simulateTyping();

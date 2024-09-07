@@ -25,21 +25,14 @@ async function handler(ctx, options) {
                 if (global.system.useCoin) {
                     let getCoin = await global.db.get(`user.${senderNumber}.coin`);
 
-                    if (!getCoin) {
-                        await global.db.add(`user.${senderNumber}.coin`, 10);
-                        getCoin = 10;
-                    }
-
                     const isOwner = await global.tools.general.isOwner(ctx, {
                         id: senderNumber,
                         selfOwner: true
                     });
                     const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
-
                     if (!ctx._args.length || isOwner === 1 || isPremium) return false;
 
                     const requiredCoins = options.coin || 0;
-
                     if (getCoin < requiredCoins) return true;
 
                     await global.db.subtract(`user.${senderNumber}.coin`, requiredCoins);

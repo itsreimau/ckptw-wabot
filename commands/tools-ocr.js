@@ -42,7 +42,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl, {
                 headers: {
-                    "x-api-key": await global.tools.api.listAPIUrl().fasturl.APIKey
+                    "x-api-key": await global.tools.api.listUrl().fasturl.APIKey
                 }
             });
 

@@ -23,7 +23,7 @@ module.exports = {
         try {
             await ctx.reply(global.msg.wait);
 
-            const APIs = await global.tools.api.listAPIUrl();
+            const APIs = await global.tools.api.listUrl();
             let result = "";
 
             for (const [name, api] of Object.entries(APIs)) {
