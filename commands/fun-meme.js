@@ -34,7 +34,7 @@ module.exports = {
                     url: data.url
                 },
                 mimetype: mime.contentType("png"),
-                caption: `${quote(`Sumber: ${data.source}`)}\n` +
+                caption: `${quote(`${await global.tools.msg.translate("Sumber", userLanguage)}: ${data.source}`)}\n` +
                     "\n" +
                     global.msg.footer
             });

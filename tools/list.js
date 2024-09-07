@@ -31,10 +31,10 @@ async function get(type, ctx) {
             `${quote(`Runtime: ${convertMsToDuration(Date.now() - global.system.startTime) || await translate("kurang dari satu detik.", userLanguage)}`)}\n` +
             `${quote(`${await translate("Tanggal", userLanguage)}: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`)}\n` +
             `${quote(`${await translate("Waktu", userLanguage)}: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}`)}\n` +
-            `${quote(`${await translate("Versi", userLanguage)}: ${pkg.version}`)}\n` +
+            `${quote(`${await translate("Versi Bot", userLanguage)}: ${pkg.version}`)}\n` +
             `${quote(`Prefix: ${ctx._used.prefix}`)}\n` +
             "\n" +
-            `${italic(await translate("Jangan lupa berdonasi agar bot tetap online!"))}\n` +
+            `${italic(await translate("Jangan lupa berdonasi agar bot tetap online!", userLanguage))}\n` +
             `${global.msg.readmore}\n`;
 
         for (const category of Object.keys(tags)) {

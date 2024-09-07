@@ -39,7 +39,7 @@ module.exports = {
         const msgType = ctx.getMessageType();
 
         try {
-            if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !ctx.quoted?.conversation) {
+            if (msgType !== MessageType.imageMessage || msgType !== MessageType.videoMessage || !ctx.quoted?.conversation) {
                 const apiUrl = await global.tools.api.createUrl("sandipbaruwal", "/gemini", {
                     prompt: input
                 });

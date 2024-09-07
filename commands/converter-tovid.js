@@ -27,7 +27,7 @@ module.exports = {
 
         const quotedMessage = ctx.quoted;
 
-        if (!(quotedMessage && quotedMessage.media && quotedMessage.media.toBuffer())) return ctx.reply(quote(`📌 ${await global.tools.msg.translate("Berikan atau balas media berupa sticker!", userLanguage)}`));
+        if (!(await quotedMessage.media.toBuffer())) return ctx.reply(quote(`📌 ${await global.tools.msg.translate("Berikan atau balas media berupa sticker!", userLanguage)}`));
 
         try {
             const buffer = await quotedMessage.media.toBuffer()
