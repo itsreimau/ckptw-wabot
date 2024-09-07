@@ -26,15 +26,15 @@ async function get(type, ctx) {
 
     const generateMenuText = (cmds, tags) => {
         let menuText =
-            `${translate(`Hai ${ctx._sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!`, userLanguage)}\n` +
+            `${await translate(`Hai ${ctx._sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!`, userLanguage)}\n` +
             "\n" +
-            `${quote(`Runtime: ${convertMsToDuration(Date.now() - global.system.startTime) || global.tools.msg.translate("kurang dari satu detik.", userLanguage)}`)}\n` +
-            `${quote(`${translate("Tanggal", userLanguage)}: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`)}\n` +
-            `${quote(`${translate("Waktu", userLanguage)}: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}`)}\n` +
-            `${quote(`${translate("Versi", userLanguage)}: ${pkg.version}`)}\n` +
+            `${quote(`Runtime: ${convertMsToDuration(Date.now() - global.system.startTime) || await translate("kurang dari satu detik.", userLanguage)}`)}\n` +
+            `${quote(`${await translate("Tanggal", userLanguage)}: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`)}\n` +
+            `${quote(`${await translate("Waktu", userLanguage)}: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}`)}\n` +
+            `${quote(`${await translate("Versi", userLanguage)}: ${pkg.version}`)}\n` +
             `${quote(`Prefix: ${ctx._used.prefix}`)}\n` +
             "\n" +
-            `${italic(translate("Jangan lupa berdonasi agar bot tetap online!"))}\n` +
+            `${italic(await translate("Jangan lupa berdonasi agar bot tetap online!"))}\n` +
             `${global.msg.readmore}\n`;
 
         for (const category of Object.keys(tags)) {
@@ -70,8 +70,8 @@ async function get(type, ctx) {
                 const response = await fetch(createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
                 const data = await response.json();
                 text = data.data.map(b =>
-                    `${quote(`${translate("Buku", userLanguage)}: ${b.name} (${b.abbr})`)}\n` +
-                    `${quote(`${translate("Jumlah Bab", userLanguage)}: ${b.chapter}`)}\n` +
+                    `${quote(`${await translate("Buku", userLanguage)}: ${b.name} (${b.abbr})`)}\n` +
+                    `${quote(`${await translate("Jumlah Bab", userLanguage)}: ${b.chapter}`)}\n` +
                     "-----\n"
                 ).join("");
 
@@ -83,8 +83,8 @@ async function get(type, ctx) {
                 const response = await fetch(createUrl("https://equran.id", "/api/v2/surat", {}));
                 const data = await response.json();
                 text = data.data.map(s =>
-                    `${quote(`${translate("Surah", userLanguage)}: ${s.namaLatin} (${s.nomor})`)}\n` +
-                    `${quote(`${translate("Jumlah Ayat", userLanguage)}: ${s.jumlahAyat}`)}\n` +
+                    `${quote(`${await translate("Surah", userLanguage)}: ${s.namaLatin} (${s.nomor})`)}\n` +
+                    `${quote(`${await translate("Jumlah Ayat", userLanguage)}: ${s.jumlahAyat}`)}\n` +
                     "-----\n"
                 ).join("");
 
@@ -120,7 +120,7 @@ async function get(type, ctx) {
                 };
 
                 if (!cmds || cmds.size === 0) {
-                    text = quote(`⚠ ${translate("Terjadi kesalahan: Tidak ada perintah yang ditemukan.", userLanguage)}`);
+                    text = quote(`⚠ ${await translate("Terjadi kesalahan: Tidak ada perintah yang ditemukan.", userLanguage)}`);
                 } else {
                     text = generateMenuText(cmds, tags);
                 }
@@ -128,12 +128,12 @@ async function get(type, ctx) {
             }
 
             default: {
-                text = quote(`⚠ ${translate("Terjadi kesalahan: Jenis daftar tidak dikenal.", userLanguage)}`);
+                text = quote(`⚠ ${await translate("Terjadi kesalahan: Jenis daftar tidak dikenal.", userLanguage)}`);
                 break;
             }
         }
     } catch (error) {
-        text = quote(`⚠ ${translate("Terjadi kesalahan", userLanguage)}: ${error.message}`);
+        text = quote(`⚠ ${await translate("Terjadi kesalahan", userLanguage)}: ${error.message}`);
     }
 
     return text;

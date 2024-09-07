@@ -69,10 +69,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const userDb = await db.get(`user.${senderNumber}`);
     if (!userDb) {
         await db.set(`user.${senderNumber}`, {
-            banned: false,
             coin: 10,
-            language: senderNumber.startsWith("62") ? "id" : "en",
-            premium: false
+            isBanned: false,
+            isPremium: false,
+            language: senderNumber.startsWith("62") ? "id" : "en"
         });
     }
     const [userLanguage] = await Promise.all([
