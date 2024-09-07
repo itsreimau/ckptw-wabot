@@ -69,10 +69,14 @@ async function get(type, ctx) {
             case "alkitab": {
                 const response = await fetch(createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
                 const data = await response.json();
+                const translations = await Promise.all([
+                    await translate("Buku", userLanguage),
+                    await translate("Jumlah Bab", userLanguage)
+                ]);
                 text = data.data.map(b =>
-                    `${quote(`${await translate("Buku", userLanguage)}: ${b.name} (${b.abbr})`)}\n` +
-                    `${quote(`${await translate("Jumlah Bab", userLanguage)}: ${b.chapter}`)}\n` +
-                    "-----\n"
+                    `${quote(`${translations[0]}: ${b.name} (${b.abbr})`)}\n` +
+                    `${quote(`${translations[1]}: ${b.chapter}`)}\n` +
+                    "─────\n"
                 ).join("");
 
                 text += global.msg.footer;
@@ -82,10 +86,13 @@ async function get(type, ctx) {
             case "alquran": {
                 const response = await fetch(createUrl("https://equran.id", "/api/v2/surat", {}));
                 const data = await response.json();
+                const translations = await Promise.all([
+                    await translate("Jumlah Ayat", userLanguage)
+                ]);
                 text = data.data.map(s =>
-                    `${quote(`${await translate("Surah", userLanguage)}: ${s.namaLatin} (${s.nomor})`)}\n` +
-                    `${quote(`${await translate("Jumlah Ayat", userLanguage)}: ${s.jumlahAyat}`)}\n` +
-                    "-----\n"
+                    `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
+                    `${quote(`${translations[0]}: ${s.jumlahAyat}`)}\n` +
+                    "─────\n"
                 ).join("");
 
                 text += global.msg.footer;
