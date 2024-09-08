@@ -24,7 +24,7 @@ module.exports = {
                 `${quote(`OS: ${os.type()} (${os.arch()} / ${os.release()})`)}\n` +
                 `${quote(`RAM: ${global.tools.general.formatSize(process.memoryUsage().rss)} / ${global.tools.general.formatSize(os.totalmem())}`)}\n` +
                 Object.entries(data).map(([key, value]) => `${quote(`${global.tools.general.ucword(key)}: ${value}`)}\n`).join("") +
-                `${quote(await global.tools.msg.translate(`Waktu aktif: ${convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}`, userLanguage)}\n` +
+                `${quote(await global.tools.msg.translate(`Waktu aktif: ${convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}`, userLanguage))}\n` +
                 `${quote(`${await global.tools.msg.translate("Prosesor", userLanguage)}: ${os.cpus()[0].model}`)}\n` +
                 "\n" +
                 global.msg.footer
