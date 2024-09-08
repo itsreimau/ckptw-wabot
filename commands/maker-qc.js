@@ -29,7 +29,7 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
             quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} get in the fucking robot, shinji!`)}`)
         );
 
@@ -43,7 +43,7 @@ module.exports = {
                 profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
 
-            const apiUrl = await global.tools.api.createUrl("ngodingaja", "/api/bubblechat", {
+            const apiUrl = global.tools.api.createUrl("ngodingaja", "/api/bubblechat", {
                 text: input,
                 url: profileUrl,
                 nama: ctx.sender.pushName
@@ -62,7 +62,7 @@ module.exports = {
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
             return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }

@@ -25,7 +25,7 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
             quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} fuck you!`)}`)
         );
 

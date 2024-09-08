@@ -23,7 +23,7 @@ module.exports = {
 
         try {
             const month = new Date().getMonth() + 1;
-            const apiUrl = await global.tools.api.createUrl("https://api-harilibur.vercel.app", "/api", {
+            const apiUrl = global.tools.api.createUrl("https://api-harilibur.vercel.app", "/api", {
                 month
             });
             const {
@@ -52,7 +52,7 @@ module.exports = {
             );
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
             return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }

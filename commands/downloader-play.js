@@ -26,7 +26,7 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
             quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} hikaru utada - one last kiss`)}`)
         );
 
@@ -34,13 +34,13 @@ module.exports = {
         try {
             const search = await ytdl.search(input);
 
-            if (!search.status) return ctx.reply(global.msg.notFound);
+            if (!search.status) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
 
             const data = search.data[0];
 
             await ctx.reply(
-                `${quote(`Judul: ${data.title}`)}\n` +
-                `${quote(`Artis: ${data.author.name}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Judul", userLanguage)}: ${data.title}`)}\n` +
+                `${quote(`${await global.tools.msg.translate("Artis", userLanguage)}: ${data.author.name}`)}\n` +
                 `${quote(`URL: ${data.url}`)}\n` +
                 "\n" +
                 global.msg.footer
@@ -48,7 +48,7 @@ module.exports = {
 
             const mp3 = await ytdl.mp3(data.url);
 
-            if (!mp3.status) return ctx.reply(global.msg.notFound);
+            if (!mp3.status) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
 
             return await ctx.reply({
                 audio: {

@@ -31,7 +31,7 @@ module.exports = {
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : input + S_WHATSAPP_NET;
 
         if (!input || !user) return ctx.reply({
-            text: `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            text: `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
                 quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`),
             mentions: [senderJid]
         });
@@ -43,9 +43,9 @@ module.exports = {
             await global.db.set(`user.${user.replace(/@.*|:.*/g, "")}.isBanned`, false);
 
             ctx.sendMessage(user, {
-                text: quote(`🎉 Anda telah diunbanned oleh Owner!`)
+                text: quote(`🎉 ${await global.tools.msg.translate("Anda telah diunbanned oleh Owner!", userLanguage)}`)
             });
-            ctx.reply(quote(`✅ Berhasil diunbanned!`));
+            ctx.reply(quote(`✅ ${await global.tools.msg.translate("Berhasil diunbanned!", userLanguage)}`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));

@@ -23,18 +23,18 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const faktaApiUrl = await await global.tools.api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
+            const faktaApiUrl = await global.tools.api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
             const faktaResponse = await axios.get(faktaApiUrl);
             const faktaData = faktaResponse.data;
             const faktaText = faktaData.text;
 
-            const translationApiUrl = await global.tools.api.createUrl("fasturl", "/tool/translate", {
+            const translationApiUrl = global.tools.api.createUrl("fasturl", "/tool/translate", {
                 text: faktaText,
                 target: "id"
             });
             const translationResponse = await axios.get(translationApiUrl, {
                 headers: {
-                    "x-api-key": await global.tools.api.listUrl().fasturl.APIKey
+                    "x-api-key": global.tools.api.listUrl().fasturl.APIKey
                 }
             });
             const translationData = translationResponse.data;
@@ -43,7 +43,7 @@ module.exports = {
             return ctx.reply(translatedText);
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
             return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }

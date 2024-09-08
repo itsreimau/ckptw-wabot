@@ -25,14 +25,14 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
             quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} bitcoin`)}`)
         );
 
         try {
             const result = await coingecko(input);
 
-            if (!result) return ctx.reply(global.msg.notFound);
+            if (!result) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
 
             const translations = await Promise.all([
                 global.tools.msg.translate("Harga", userLanguage)
@@ -51,7 +51,7 @@ module.exports = {
             );
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
             return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
@@ -59,7 +59,7 @@ module.exports = {
 
 
 async function coingecko(search) {
-    const apiUrl = await global.tools.api.createUrl("https://api.coingecko.com", "/api/v3/coins/markets", {
+    const apiUrl = global.tools.api.createUrl("https://api.coingecko.com", "/api/v3/coins/markets", {
         vs_currency: "usd",
     });
 

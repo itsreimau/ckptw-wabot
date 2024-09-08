@@ -24,12 +24,12 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
             quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} 7`)}`)
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/religi/islam/asmaulhusna.json`, {});
+            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/religi/islam/asmaulhusna.json`, {});
             const {
                 data
             } = await axios.get(apiUrl);
@@ -83,7 +83,7 @@ module.exports = {
             }
         } catch (error) {
             console.error("Error:", error);
-            if (error.response.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.response.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
             return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }

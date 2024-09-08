@@ -23,7 +23,7 @@ module.exports = {
         try {
             await ctx.reply(global.msg.wait);
 
-            const APIs = await global.tools.api.listUrl();
+            const APIs = global.tools.api.listUrl();
             let result = "";
 
             for (const [name, api] of Object.entries(APIs)) {
@@ -42,7 +42,7 @@ module.exports = {
             );
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
             return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }

@@ -35,14 +35,14 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = await global.tools.api.createUrl("fasturl", "/tool/facebeauty", {
+            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/facebeauty", {
                 faceUrl: uplRes.link
             });
             const {
                 data
             } = await axios.get(apiUrl, {
                 headers: {
-                    "x-api-key": await global.tools.api.listUrl().fasturl.APIKey
+                    "x-api-key": global.tools.api.listUrl().fasturl.APIKey
                 },
                 responseType: "arraybuffer"
             });

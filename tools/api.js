@@ -63,7 +63,7 @@ const APIs = {
     }
 };
 
-async function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
+function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
     const api = APIs[apiNameOrURL];
 
     if (!api) {

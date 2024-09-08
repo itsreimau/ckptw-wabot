@@ -23,7 +23,7 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            await ctx.reply(global.tools.msg.translate(global.msg.wait, userLanguage));
+            await ctx.reply(`🔄 ${await global.tools.msg.translate(global.msg.wait, userLanguage)}`);
 
             exec(`pm2 restart ckptw-wabot`); // PM2.
         } catch (error) {

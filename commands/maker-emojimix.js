@@ -36,7 +36,7 @@ module.exports = {
             const emojiRegex = /\p{Emoji}/gu;
             const emojis = Array.from(emojisString.matchAll(emojiRegex), (match) => match[0]);
             const [emoji1, emoji2] = emojis.slice(0, 2);
-            const apiUrl = await global.tools.api.createUrl("https://tenor.googleapis.com", `/v2/featured`, {
+            const apiUrl = global.tools.api.createUrl("https://tenor.googleapis.com", `/v2/featured`, {
                 key: "AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ",
                 contentfilter: "high",
                 media_filter: "png_transparent",
@@ -48,7 +48,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
-            if (!data.results[0].url) return ctx.reply(global.msg.notFound);
+            if (!data.results[0].url) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
 
             const sticker = new Sticker(data.results[0].url, {
                 pack: global.sticker.packname,
@@ -62,7 +62,7 @@ module.exports = {
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
             return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }

@@ -27,7 +27,7 @@ module.exports = {
         const account = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : null;
 
         if (!account) return ctx.reply({
-            text: `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            text: `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
                 quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`),
             mentions: [senderJid]
         });

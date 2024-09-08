@@ -25,7 +25,7 @@ module.exports = {
         const url = ctx.args[0] || null;
 
         if (!url) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
             quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
@@ -33,14 +33,14 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = await global.tools.api.createUrl("fasturl", "/tool/qr", {
+            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/qr", {
                 url
             });
             const {
                 data
             } = await axios.get(apiUrl, {
                 headers: {
-                    "x-api-key": await global.tools.api.listUrl().fasturl.APIKey
+                    "x-api-key": global.tools.api.listUrl().fasturl.APIKey
                 },
                 responseType: "arraybuffer"
             });
@@ -54,7 +54,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
             return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }

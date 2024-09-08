@@ -31,7 +31,7 @@ module.exports = {
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : input + S_WHATSAPP_NET;
 
         if (!input || !user) return ctx.reply({
-            text: `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            text: `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
                 quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`),
             mentions: [senderJid]
         });

@@ -39,7 +39,7 @@ module.exports = {
             const mentionText = mentions.map((mention) => mention.tag).join(" ");
 
             return ctx.reply({
-                text: `${input || "Hai!"}\n` +
+                text: `${input || "Halo Dunia!"}\n` +
                     `─────\n` +
                     `${mentionText}`,
                 mentions: mentions.map((mention) => mention.mention)

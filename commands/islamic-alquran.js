@@ -40,7 +40,7 @@ module.exports = {
 
             if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate(`Surah ${suraNumber} tidak ada.`, userLanguage)}`));
 
-            const apiUrl = await global.tools.api.createUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
+            const apiUrl = global.tools.api.createUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
             const response = await axios.get(apiUrl);
             const {
                 data
@@ -56,7 +56,7 @@ module.exports = {
                     if (verses.length === 0) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate(`Ayat dalam rentang ${startAya}-${endAya} tidak ada.`, userLanguage)}`));
 
                     const resultText = verses.map((d) => {
-                        return `${bold(`Ayat ${d.nomorAyat}:`)}\n` +
+                        return `${bold(`${await global.tools.msg.translate("Ayat", userLanguage)} ${d.nomorAyat}:`)}\n` +
                             `${d.teksArab} (${d.teksLatin})\n` +
                             `${italic(d.teksIndonesia)}`;
                     }).join("\n");
@@ -85,7 +85,7 @@ module.exports = {
                 }
             } else {
                 const resultText = data.ayat.map((d) => {
-                    return `${bold(`Ayat ${d.nomorAyat}:`)}\n` +
+                    return `${bold(`${await global.tools.msg.translate("Ayat", userLanguage)} ${d.nomorAyat}:`)}\n` +
                         `${d.teksArab} (${d.teksLatin})\n` +
                         `${italic(d.teksIndonesia)}`;
                 }).join("\n");
@@ -100,7 +100,7 @@ module.exports = {
             }
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
             return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }

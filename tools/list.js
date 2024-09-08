@@ -28,9 +28,9 @@ async function get(type, ctx) {
         let menuText =
             `${await translate(`Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!`, userLanguage)}\n` +
             "\n" +
-            `${quote(`Runtime: ${convertMsToDuration(Date.now() - global.system.startTime) || await translate("kurang dari satu detik.", userLanguage)}`)}\n` +
-            `${quote(`${await translate("Tanggal", userLanguage)}: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`)}\n` +
-            `${quote(`${await translate("Waktu", userLanguage)}: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}`)}\n` +
+            `${quote(await translate(`Waktu aktif: ${convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}`, userLanguage)}\n` +
+            `${quote(await translate(`Tanggal: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`, userLanguage))}\n` +
+            `${quote(await translate(`Waktu: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}`, userLanguage))}\n` +
             `${quote(`${await translate("Versi Bot", userLanguage)}: ${pkg.version}`)}\n` +
             `${quote(`Prefix: ${ctx._used.prefix}`)}\n` +
             "\n" +
@@ -107,7 +107,7 @@ async function get(type, ctx) {
             }
 
             case "menu": {
-                const cmds = ctx._self.cmd;
+                const cmds = ctx._config.cmd;
                 const tags = {
                     main: "Main",
                     profile: "Profile",

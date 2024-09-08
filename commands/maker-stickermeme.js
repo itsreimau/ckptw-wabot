@@ -35,7 +35,7 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(await global.msg.argument, userLanguage)}`)}\n` +
+            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
             quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} i want to be a cat|just meow meow`)}`)
         );
 
@@ -47,7 +47,7 @@ module.exports = {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const [top, bottom] = input.split("|");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const result = await global.tools.api.createUrl("https://api.memegen.link", `/images/custom/${top || ""}/${bottom || ""}.png`, {
+            const result = global.tools.api.createUrl("https://api.memegen.link", `/images/custom/${top || ""}/${bottom || ""}.png`, {
                 background: uplRes.link
             });
             const sticker = new Sticker(result, {

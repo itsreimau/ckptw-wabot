@@ -36,7 +36,7 @@ module.exports = {
         try {
             const data = await ytdl.mp4(url);
 
-            if (!data.status) return ctx.reply(global.msg.notFound);
+            if (!data.status) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
 
             return await ctx.reply({
                 video: {

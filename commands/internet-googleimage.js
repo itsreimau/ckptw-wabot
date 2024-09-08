@@ -27,12 +27,12 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${await global.tools.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`
+            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
+            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`)
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("https://google-image-api.vercel.app", "/search", {
+            const apiUrl = global.tools.api.createUrl("https://google-image-api.vercel.app", "/search", {
                 q: input
             });
             const {
@@ -45,13 +45,14 @@ module.exports = {
                     url: result.url
                 },
                 mimetype: mime.contentType("png"),
-                caption: `${quote(`Kueri: ${input}`)}\n` +
+                caption: `${quote(`${await global.tools.msg.translate("Kueri", userLanguage)}: ${input}`)}\n` +
                     "\n" +
                     global.msg.footer
             });
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
+            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
         }
     }
 };

@@ -19,7 +19,7 @@ module.exports = {
                 timeStamp: Date.now()
             });
 
-            return ctx.reply(quote(`📴 ${await global.tools.msg.translate(`Anda sekarang akan AFK dengan alasan ${reason}.`, userLanguage)}`));
+            return ctx.reply(quote(`📴 ${await global.tools.msg.translate(`Anda sekarang akan AFK dengan alasan`, userLanguage)} ${reason}.`));
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
