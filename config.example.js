@@ -1,7 +1,6 @@
 const pkg = require("./package.json");
 const {
-    italic,
-    quote
+    italic
 } = require("@mengkodingan/ckptw");
 
 // Bot.
@@ -16,14 +15,14 @@ global.bot = {
 // MSG (Message).
 global.msg = {
     // Command access.
-    admin: quote("Perintah hanya dapat diakses oleh admin grup!"),
-    banned: quote("Tidak dapat memproses karena Anda telah dibanned!"),
-    botAdmin: quote("Bot bukan admin, tidak bisa menggunakan perintah!"),
-    coin: quote("Anda tidak punya cukup koin!"),
-    group: quote("Perintah hanya dapat diakses dalam grup!"),
-    owner: quote("Perintah hanya dapat diakses Owner!"),
-    premium: quote("Anda bukan pengguna Premium!"),
-    private: quote("Perintah hanya dapat diakses dalam obrolan pribadi!"),
+    admin: "Perintah hanya dapat diakses oleh admin grup!",
+    banned: "Tidak dapat memproses karena Anda telah dibanned!",
+    botAdmin: "Bot bukan admin, tidak bisa menggunakan perintah!",
+    coin: "Anda tidak punya cukup koin!",
+    group: "Perintah hanya dapat diakses dalam grup!",
+    owner: "Perintah hanya dapat diakses Owner!",
+    premium: "Anda bukan pengguna Premium!",
+    private: "Perintah hanya dapat diakses dalam obrolan pribadi!",
 
     // Command interface.
     watermark: `${pkg.name}@^${pkg.version}`,
