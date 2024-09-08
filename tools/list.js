@@ -28,7 +28,7 @@ async function get(type, ctx) {
         let menuText =
             `${await translate(`Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!`, userLanguage)}\n` +
             "\n" +
-            `${quote(await translate(`Waktu aktif: ${convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}`, userLanguage)}\n` +
+            `${quote(await translate(`Waktu aktif: ${convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}`, userLanguage))}\n` +
             `${quote(await translate(`Tanggal: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`, userLanguage))}\n` +
             `${quote(await translate(`Waktu: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}`, userLanguage))}\n` +
             `${quote(`${await translate("Versi Bot", userLanguage)}: ${pkg.version}`)}\n` +
