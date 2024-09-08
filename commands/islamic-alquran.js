@@ -55,8 +55,11 @@ module.exports = {
                     const verses = data.ayat.filter((d) => d.nomorAyat >= startAya && d.nomorAyat <= endAya);
                     if (verses.length === 0) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate(`Ayat dalam rentang ${startAya}-${endAya} tidak ada.`, userLanguage)}`));
 
+                    const translations = await Promise.all([
+                        global.tools.msg.translate("Ayat", userLanguage)
+                    ]);
                     const resultText = verses.map((d) => {
-                        return `${bold(`${await global.tools.msg.translate("Ayat", userLanguage)} ${d.nomorAyat}:`)}\n` +
+                        return `${bold(`${translations[0]} ${d.nomorAyat}:`)}\n` +
                             `${d.teksArab} (${d.teksLatin})\n` +
                             `${italic(d.teksIndonesia)}`;
                     }).join("\n");
@@ -84,8 +87,11 @@ module.exports = {
                     );
                 }
             } else {
+                const translations = await Promise.all([
+                    global.tools.msg.translate("Ayat", userLanguage)
+                ]);
                 const resultText = data.ayat.map((d) => {
-                    return `${bold(`${await global.tools.msg.translate("Ayat", userLanguage)} ${d.nomorAyat}:`)}\n` +
+                    return `${bold(`${translations[0]} ${d.nomorAyat}:`)}\n` +
                         `${d.teksArab} (${d.teksLatin})\n` +
                         `${italic(d.teksIndonesia)}`;
                 }).join("\n");
