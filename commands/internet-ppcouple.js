@@ -20,7 +20,7 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const apiUrl = global.tools.api.createURL("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/lainnya/ppcouple.json`, {});
+            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/lainnya/ppcouple.json`, {});
             const {
                 data
             } = await axios.get(apiUrl);

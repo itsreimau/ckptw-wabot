@@ -41,7 +41,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createURL("fasturl", "/tool/translate", {
+            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/translate", {
                 text: textToTranslate,
                 target: langCode
             });

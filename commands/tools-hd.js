@@ -75,7 +75,7 @@ async function upscale(buffer, size = 2, anime = false) {
         contentType: 'image/png',
     });
 
-    const apiUrl = global.tools.api.createURL("https://api.upscalepics.com", "/upscale-to-size", {});
+    const apiUrl = global.tools.api.createUrl("https://api.upscalepics.com", "/upscale-to-size", {});
     const response = await axios.post(apiUrl, form, {
         headers: {
             "User-Agent": global.system.userAgent,

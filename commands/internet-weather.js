@@ -26,13 +26,13 @@ module.exports = {
         );
 
         try {
-            const weatherApiUrl = await global.tools.api.createURL("agatz", "/api/cuaca", {
+            const weatherApiUrl = await global.tools.api.createUrl("agatz", "/api/cuaca", {
                 message: input
             });
             const weatherResponse = await axios.get(weatherApiUrl);
             const weatherData = weatherResponse.data.data;
 
-            const translationApiUrl = global.tools.api.createURL("fasturl", "/tool/translate", {
+            const translationApiUrl = global.tools.api.createUrl("fasturl", "/tool/translate", {
                 text: weatherData.current.condition.text,
                 target: "id"
             });

@@ -29,7 +29,7 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.api.createURL("fasturl", "/tool/qr", {
+            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/qr", {
                 url
             });
             const {

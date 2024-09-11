@@ -26,7 +26,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createURL("agatz", `/api/jadwalsholat`, {
+            const apiUrl = global.tools.api.createUrl("agatz", `/api/jadwalsholat`, {
                 kota: input
             });
             const response = await axios.get(apiUrl);

@@ -25,7 +25,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createURL("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/religi/islam/asmaulhusna.json`, {});
+            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/religi/islam/asmaulhusna.json`, {});
             const {
                 data
             } = await axios.get(apiUrl);

@@ -42,7 +42,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createURL("fasturl", "/tool/tts/google", {
+            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/tts/google", {
                 text: textToSpeech,
                 speaker: langCode
             });

@@ -28,7 +28,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createURL("ssa", "/api/pinterest", {
+            const apiUrl = global.tools.api.createUrl("ssa", "/api/pinterest", {
                 query: input
             });
             const response = await axios.get(apiUrl);

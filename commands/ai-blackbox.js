@@ -27,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createURL("chiwa", "/api/ai/blackbox", {
+            const apiUrl = global.tools.api.createUrl("chiwa", "/api/ai/blackbox", {
                 prompt: input
             });
             const {

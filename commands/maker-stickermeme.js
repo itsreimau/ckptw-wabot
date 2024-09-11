@@ -43,7 +43,7 @@ module.exports = {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const [top, bottom] = input.split("|");
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const result = global.tools.api.createURL("https://api.memegen.link", `/images/custom/${top || ""}/${bottom || ""}.png`, {
+            const result = global.tools.api.createUrl("https://api.memegen.link", `/images/custom/${top || ""}/${bottom || ""}.png`, {
                 background: uplRes.link
             });
             const sticker = new Sticker(result, {

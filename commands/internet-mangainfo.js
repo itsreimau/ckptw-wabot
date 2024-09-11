@@ -26,13 +26,13 @@ module.exports = {
         );
 
         try {
-            const mangaApiUrl = await global.tools.api.createURL("https://api.jikan.moe", "/v4/manga", {
+            const mangaApiUrl = await global.tools.api.createUrl("https://api.jikan.moe", "/v4/manga", {
                 q: input
             });
             const mangaResponse = await axios.get(mangaApiUrl);
             const info = mangaResponse.data.data[0];
 
-            const translationApiUrl = global.tools.api.createURL("fasturl", "/tool/translate", {
+            const translationApiUrl = global.tools.api.createUrl("fasturl", "/tool/translate", {
                 text: info.synopsis,
                 target: "ids"
             });

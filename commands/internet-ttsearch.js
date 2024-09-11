@@ -27,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createURL("agatz", "/api/tiktoksearch", {
+            const apiUrl = global.tools.api.createUrl("agatz", "/api/tiktoksearch", {
                 message: input
             });
             const response = await axios.get(apiUrl);

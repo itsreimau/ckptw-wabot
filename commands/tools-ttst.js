@@ -27,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createURL("fasturl", "/tool/tts/tiktok", {
+            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/tts/tiktok", {
                 text: input,
                 speaker: "id_001"
             });

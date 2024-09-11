@@ -8,7 +8,7 @@ module.exports = {
     name: "server",
     category: "info",
     code: async (ctx) => {
-        const apiUrl = global.tools.api.createURL("http://ip-api.com", "/json", {});
+        const apiUrl = global.tools.api.createUrl("http://ip-api.com", "/json", {});
 
         try {
             const {

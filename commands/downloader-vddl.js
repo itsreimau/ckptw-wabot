@@ -30,7 +30,7 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.api.createURL("agatz", "/api/videydl", {
+            const apiUrl = global.tools.api.createUrl("agatz", "/api/videydl", {
                 url
             });
             const response = await axios.get(apiUrl);

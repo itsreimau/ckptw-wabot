@@ -1,4 +1,5 @@
-const tools = require("./exports.js");
+const api = require("./api.js");
+const general = require("./general.js");
 const pkg = require("../package.json");
 const {
     bold,
@@ -16,7 +17,7 @@ async function get(type, ctx) {
         let menuText =
             `Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
             "\n" +
-            `${quote(`Waktu aktif: ${tools.general.convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}`)}\n` +
+            `${quote(`Waktu aktif: ${general.convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}`)}\n` +
             `${quote(`Tanggal: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`)}\n` +
             `${quote(`Waktu: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}`)}\n` +
             `${quote(`Versi: ${pkg.version}`)}\n` +
@@ -55,7 +56,7 @@ async function get(type, ctx) {
     try {
         switch (type) {
             case "alkitab": {
-                const alKitabResponse = await axios.get(tools.api.createURL("https://beeble.vercel.app", "/api/v1/passage/list", {}), );
+                const alKitabResponse = await axios.get(api.createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}), );
                 text = alKitabResponse.data.data.map(b =>
                     `${quote(`Buku: ${b.name} (${b.abbr})`)}\n` +
                     `${quote(`Jumlah Bab: ${b.chapter}`)}\n` +
@@ -66,7 +67,7 @@ async function get(type, ctx) {
                 break;
             }
             case "alquran": {
-                const alquranResponse = await axios.get(tools.api.createURL("https://equran.id", "/api/v2/surat", {}), );
+                const alquranResponse = await axios.get(api.createUrl("https://equran.id", "/api/v2/surat", {}), );
                 text = alquranResponse.data.data.map(s =>
                     `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
                     `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n` +

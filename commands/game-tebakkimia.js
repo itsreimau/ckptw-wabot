@@ -20,7 +20,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`⚠ Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = global.tools.api.createURL("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebakkimia.json`, {});
+            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebakkimia.json`, {});
             const response = await axios.get(apiUrl);
             const data = global.tools.general.getRandomElement(response.data);
             const coin = 3;
