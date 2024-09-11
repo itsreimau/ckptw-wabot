@@ -26,7 +26,7 @@ module.exports = {
         );
 
         if (ctx.args[0] === "list") {
-            const listText = await getList("alquran");
+            const listText = await global.tools.list.get("alquran");
             return ctx.reply(listText);
         }
 
