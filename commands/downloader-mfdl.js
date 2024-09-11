@@ -30,7 +30,7 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.createURL("agatz", "/api/facebook", {
+            const apiUrl = global.tools.api.createURL("agatz", "/api/facebook", {
                 url
             });
             const response = await axios.get(apiUrl);

@@ -25,7 +25,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.createURL("https://raw.githubusercontent.com", `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
+            const apiUrl = global.tools.api.createURL("https://raw.githubusercontent.com", `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
             const {
                 data
             } = await axios.get(apiUrl);

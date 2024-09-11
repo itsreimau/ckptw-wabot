@@ -31,7 +31,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await global.tools.createURL("agatz", "/api/sticker", {
+            const apiUrl = await global.tools.api.createURL("agatz", "/api/sticker", {
                 message: input
             });
             const response = await axios.get(apiUrl);

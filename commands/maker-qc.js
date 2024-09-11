@@ -39,7 +39,7 @@ module.exports = {
                 profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
 
-            const apiUrl = global.tools.createURL("ngodingaja", "/api/bubblechat", {
+            const apiUrl = global.tools.api.createURL("ngodingaja", "/api/bubblechat", {
                 text: input,
                 url: profileUrl,
                 nama: ctx.sender.pushName

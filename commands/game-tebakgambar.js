@@ -21,7 +21,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`⚠ Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = global.tools.createURL("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebakgambar.json`, {});
+            const apiUrl = global.tools.api.createURL("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebakgambar.json`, {});
             const response = await axios.get(apiUrl);
             const data = global.tools.general.getRandomElement(response.data);
             const coin = 3;

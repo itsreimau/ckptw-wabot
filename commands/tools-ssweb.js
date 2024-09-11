@@ -28,7 +28,7 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.createURL("chiwa", "/api/ssweb", {
+            const apiUrl = global.tools.api.createURL("chiwa", "/api/ssweb", {
                 url
             });
 

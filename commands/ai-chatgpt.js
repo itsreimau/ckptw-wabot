@@ -27,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.createURL("nyxs", "/api/gpt4", {
+            const apiUrl = global.tools.api.createURL("nyxs", "/api/gpt4", {
                 text: input
             });
             const {

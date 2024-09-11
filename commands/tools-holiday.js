@@ -19,7 +19,7 @@ module.exports = {
 
         try {
             const month = new Date().getMonth() + 1;
-            const apiUrl = global.tools.createURL("https://api-harilibur.vercel.app", "/api", {
+            const apiUrl = global.tools.api.createURL("https://api-harilibur.vercel.app", "/api", {
                 month
             });
             const {

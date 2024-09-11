@@ -19,11 +19,11 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const faktaApiUrl = await global.tools.createURL("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
+            const faktaApiUrl = await global.tools.api.createURL("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
             const faktaResponse = await axios.get(faktaApiUrl);
             const faktaText = faktaResponse.data.text;
 
-            const translationApiUrl = global.tools.createURL("fasturl", "/tool/translate", {
+            const translationApiUrl = global.tools.api.createURL("fasturl", "/tool/translate", {
                 text: faktaText,
                 target: "id"
             });

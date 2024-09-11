@@ -32,7 +32,7 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = global.tools.createURL("fasturl", "/tool/removebg", {
+            const apiUrl = global.tools.api.createURL("fasturl", "/tool/removebg", {
                 imageUrl: uplRes.link
             });
             const {

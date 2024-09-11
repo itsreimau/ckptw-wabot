@@ -28,7 +28,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.createURL("https://google-image-api.vercel.app", "/search", {
+            const apiUrl = global.tools.api.createURL("https://google-image-api.vercel.app", "/search", {
                 q: input
             });
             const {

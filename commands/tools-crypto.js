@@ -51,7 +51,7 @@ module.exports = {
 
 
 async function coingecko(search) {
-    const apiUrl = global.tools.createURL("https://api.coingecko.com", "/api/v3/coins/markets", {
+    const apiUrl = global.tools.api.createURL("https://api.coingecko.com", "/api/v3/coins/markets", {
         vs_currency: "usd",
     });
 

@@ -27,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await global.tools.createURL("ngodingaja", "/api/lirik", {
+            const apiUrl = await global.tools.api.createURL("ngodingaja", "/api/lirik", {
                 search: input
             });
             const {

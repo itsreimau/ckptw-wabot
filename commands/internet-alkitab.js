@@ -31,7 +31,7 @@ module.exports = {
         }
 
         try {
-            const apiUrl = await global.tools.createURL("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {});
+            const apiUrl = await global.tools.api.createURL("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {});
             const response = await axios.get(apiUrl);
             const {
                 data

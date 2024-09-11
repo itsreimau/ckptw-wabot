@@ -19,7 +19,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const apiUrl = await global.tools.createURL("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json", {});
+        const apiUrl = await global.tools.api.createURL("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json", {});
 
         try {
             const {
