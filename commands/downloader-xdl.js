@@ -10,10 +10,6 @@ module.exports = {
     aliases: ["twit", "twitdl", "twitter", "twitterdl", "x"],
     category: "downloader",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -26,7 +22,7 @@ module.exports = {
         const url = ctx.args[0] || null;
 
         if (!url) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
+            `${quote(global.msg.argument)}\n` +
             quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} https://example.com/`)}`)
         );
 
@@ -34,7 +30,7 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/twitter", {
+            const apiUrl = global.tools.createURL("agatz", "/api/twitter", {
                 url
             });
             const response = await axios.get(apiUrl);
@@ -54,7 +50,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

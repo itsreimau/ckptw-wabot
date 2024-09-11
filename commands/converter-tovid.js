@@ -1,11 +1,11 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const FormData = require("form-data");
 const {
     JSDOM
 } = require("jsdom");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -13,10 +13,6 @@ module.exports = {
     aliases: ["tomp4", "togif"],
     category: "converter",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -27,13 +23,13 @@ module.exports = {
 
         const quotedMessage = ctx.quoted;
 
-        if (!(await quotedMessage.media.toBuffer())) return ctx.reply(quote(`📌 ${await global.tools.msg.translate("Berikan atau balas media berupa sticker!", userLanguage)}`));
+        if (!(await quotedMessage.media.toBuffer())) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
 
         try {
             const buffer = await quotedMessage.media.toBuffer()
             const vidUrl = buffer ? await webp2mp4(buffer) : null;
 
-            if (!vidUrl) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan: Media tidak valid.", userLanguage)}`));
+            if (!vidUrl) return ctx.reply(quote(`⚠ Terjadi kesalahan: Media tidak valid.`));
 
             return await ctx.reply({
                 video: {
@@ -44,7 +40,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error", error);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
@@ -81,5 +77,5 @@ async function webp2mp4(source) {
     const {
         document: document2
     } = new JSDOM(html2).window;
-    return new URL(document2.querySelector("div#output > p.outfile > video > source").src, res2.config.url).toString();
+    return new URL(document2.querySelector("div#output > p.outfile > video > source").src, res2.request.res.responseUrl).toString();
 }

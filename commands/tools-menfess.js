@@ -9,12 +9,8 @@ const {
 module.exports = {
     name: "menfess",
     aliases: ["conf", "confes", "confess", "menf", "menfes"],
-    category: "tools",
+    category: "global.tools",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -26,22 +22,22 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         if (!ctx.args.length) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
-            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} ${ctx._client.user.id.split(":")[0]} halo!`)}`)
+            `${quote(global.msg.argument)}\n` +
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ${ctx._client.user.id.split(":")[0]} halo!`)}`)
         );
 
         try {
-            const senderJid = ctx.sender.jid;
+            const senderJid = ctx._sender.jid;
             const senderNumber = senderJid.replace(/@.*|:.*/g, "");
             const [number, ...text] = ctx.args;
             const numberFormatted = number.replace(/[^\d]/g, "");
 
-            if (numberFormatted === senderNumber) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Tidak dapat digunakan pada diri Anda sendiri.", userLanguage)}`));
+            if (numberFormatted === senderNumber) return ctx.reply(quote(`⚠ Tidak dapat digunakan pada diri Anda sendiri.`));
 
             const menfessText =
                 `${text.join(" ")}\n` +
                 `${global.msg.readmore}\n` +
-                await global.tools.msg.translate("Jika Anda ingin membalas, cukup balas pesan ini dan pesan Anda akan terkirim.", userLanguage);
+                "Jika Anda ingin membalas, cukup balas pesan ini dan pesan Anda akan terkirim.";
             const fakeText = {
                 key: {
                     fromMe: false,
@@ -52,7 +48,7 @@ module.exports = {
                 },
                 message: {
                     extendedTextMessage: {
-                        text: await global.tools.msg.translate("Seseorang telah mengirimimu pesan menfess.", userLanguage),
+                        text: "Seseorang telah mengirimimu pesan menfess.",
                         title: global.bot.name,
                         thumbnailUrl: global.bot.thumbnail
 
@@ -85,10 +81,10 @@ module.exports = {
                 text: menfessText
             });
 
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Pesan berhasil terkirim!", userLanguage)}`));
+            return ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

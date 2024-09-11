@@ -1,5 +1,4 @@
 const {
-
     bold,
     monospace,
     quote
@@ -12,10 +11,6 @@ module.exports = {
     aliases: ["pin", "pint"],
     category: "internet",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -28,32 +23,32 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
-            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`)
+            `${global.msg.argument}\n` +
+            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} cat`)}`
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("ssa", "/api/pinterest", {
+            const apiUrl = global.tools.createURL("ssa", "/api/pinterest", {
                 query: input
             });
             const response = await axios.get(apiUrl);
             const {
                 data
-            } = response;
+            } = response.data;
 
             return await ctx.reply({
                 image: {
                     url: data.response
                 },
                 mimetype: mime.contentType("png"),
-                caption: `${quote(`${await global.tools.msg.translate("Kueri", userLanguage)}: ${input}`)}\n` +
+                caption: `${quote(`Kueri: ${input}`)}\n` +
                     "\n" +
                     global.msg.footer
             });
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }
 };

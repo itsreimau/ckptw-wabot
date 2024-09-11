@@ -7,12 +7,8 @@ const axios = require("axios");
 module.exports = {
     name: "crypto",
     aliases: ["coingecko"],
-    category: "tools",
+    category: "global.tools",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -25,22 +21,19 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
-            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} bitcoin`)}`)
+            `${quote(global.msg.argument)}\n` +
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} bitcoin`)}`)
         );
 
         try {
             const result = await coingecko(input);
 
-            if (!result) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
+            if (!result) return ctx.reply(global.msg.notFound);
 
-            const translations = await Promise.all([
-                global.tools.msg.translate("Harga", userLanguage)
-            ]);
-            const resultText = result.map((r) => {
-                return `${quote(`${r.cryptoName}`)}\n` +
-                    `${quote(`${translations[0]}: ${r.priceChange}`)}`
-            }).join(
+            const resultText = result.map((r) =>
+                `${quote(`${r.cryptoName}`)}\n` +
+                `${quote(`Harga: ${r.priceChange}`)}`
+            ).join(
                 "\n" +
                 `${quote("─────")}\n`
             );
@@ -51,20 +44,23 @@ module.exports = {
             );
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
 
 
 async function coingecko(search) {
-    const apiUrl = global.tools.api.createUrl("https://api.coingecko.com", "/api/v3/coins/markets", {
+    const apiUrl = global.tools.createURL("https://api.coingecko.com", "/api/v3/coins/markets", {
         vs_currency: "usd",
     });
 
     try {
-        const response = await axios.get(apiUrl);
+        const response = await axios.get(apiUrl, {
+            headers: {
+                "User-Agent": global.system.userAgent
+            }
+        });
         const data = response.data;
         const result = [];
 

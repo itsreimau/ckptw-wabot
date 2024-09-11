@@ -30,6 +30,7 @@ console.log("Connecting...");
 // Create a new bot instance.
 const bot = new Client({
     WAVersion: [2, 3000, 1015901307],
+    autoMention: global.system.autoMention,
     phoneNumber: global.bot.phoneNumber,
     prefix: global.bot.prefix,
     readIncommingMsg: global.system.autoRead,
@@ -52,18 +53,17 @@ bot.ev.once(Events.ClientReady, async (m) => {
 const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
 cmd.load();
 
-// Assign global handler and tools.
+// Assign global handler.
 global.handler = handler;
-global.tools = tools;
 
 // Event handling when a message appears.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
-    const senderJid = ctx.sender.jid;
+    const senderJid = ctx._sender.jid;
     const senderNumber = senderJid.replace(/@.*|:.*/g, "");
     const groupJid = isGroup ? m.key.remoteJid : null;
-    const groupNumber = isGroup ? groupJid.replace(/@.*|:.*/g, "") : null;
+    const groupNumber = isGroup ? groupJid.split("@")[0] : null;
 
     // Database for user.
     const userDb = await db.get(`user.${senderNumber}`);
@@ -71,47 +71,44 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         await db.set(`user.${senderNumber}`, {
             coin: 10,
             isBanned: false,
-            isPremium: false,
-            language: senderNumber.startsWith("62") ? "id" : "en"
+            isPremium: false
         });
     }
-    const [userLanguage] = await Promise.all([
-        db.get(`user.${senderNumber}.language`)
-    ]);
-
 
     // Auto-typing simulation for commands.
-    if (tools.general.isCmd(m, ctx)) await ctx.simulateTyping();
+    if (tools.general.isCmd(m, ctx)) ctx.simulateTyping();
 
     // "Did you mean?" for typo commands.
     const prefixRegex = new RegExp(ctx._config.prefix, "i");
     const content = m.content && m.content.trim();
     if (prefixRegex.test(content)) {
         const prefix = content.charAt(0);
+
         const [cmdName] = content.slice(1).trim().toLowerCase().split(/\s+/);
-        const listCmd = Array.from(ctx._config.cmd.values()).flatMap(command => {
+        const cmd = ctx._config.cmd;
+        const listCmd = Array.from(cmd.values()).flatMap(command => {
             const aliases = Array.isArray(command.aliases) ? command.aliases : [];
             return [command.name, ...aliases];
         });
 
         const mean = didyoumean(cmdName, listCmd);
 
-        if (mean && mean !== cmdName) await ctx.reply(quote(`❓ ${await tools.msg.translate("Apakah maksud Anda", userLanguage)} ${monospace(prefix + mean)}?`));
+        if (mean && mean !== cmdName) ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
     }
 
     // AFK handling: Mentioned users.
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         for (const mentionJid of mentionJids) {
-            const getAFKMention = await db.get(`user.${mentionJid.replace(/@.*|:.*/g, "")}.afk`);
+            const getAFKMention = db.get(`user.${mentionJid.split("@")[0]}.afk`);
             if (getAFKMention) {
                 const [reason, timeStamp] = await Promise.all([
-                    db.get(`user.${mentionJid.replace(/@.*|:.*/g, "")}.afk.reason`),
-                    db.get(`user.${mentionJid.replace(/@.*|:.*/g, "")}.afk.timeStamp`)
+                    db.get(`user.${mentionJid.split("@")[0]}.afk.reason`),
+                    db.get(`user.${mentionJid.split("@")[0]}.afk.timeStamp`)
                 ]);
-                const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp) || "kurang dari satu detik.";
+                const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
 
-                await ctx.reply(quote(`🚫 ${await tools.msg.translate(`Dia AFK dengan alasan ${reason} selama ${timeAgo}.`, userLanguage)}`));
+                ctx.reply(quote(`🚫 Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
             }
         }
     }
@@ -123,10 +120,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             db.get(`user.${senderNumber}.afk.reason`),
             db.get(`user.${senderNumber}.afk.timeStamp`)
         ]);
-        const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp) || "kurang dari satu detik.";
+        const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
         await db.delete(`user.${senderNumber}.afk`);
 
-        await ctx.reply(quote(`📴 ${await tools.msg.translate(`Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}`, userLanguage)}`));
+        ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
     }
 
     // Owner-only commands.
@@ -135,15 +132,16 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             selfOwner: true
         }) === 1) {
         // Eval command: Execute JavaScript code.
-        if (m.content && m.content.startsWith && (m.content.startsWith("$>> ") || m.content.startsWith("$> "))) {
-            const code = m.content.startsWith("$>> ") ? m.content.slice(3) : m.content.slice(2);
+        if (m.content && m.content.startsWith && (m.content.startsWith("=>> ") || m.content.startsWith("=> "))) {
+            const code = m.content.slice(2);
 
             try {
-                const result = await eval(m.content.startsWith("$>> ") ? `(async () => { ${code} })()` : code);
+                const result = await eval(m.content.startsWith("=>> ") ? `(async () => { ${code} })()` : code);
+
                 await ctx.reply(inspect(result));
             } catch (error) {
                 console.error("Error:", error);
-                await ctx.reply(quote(`⚠ ${await tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+                ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
             }
         }
 
@@ -167,7 +165,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 await ctx.reply(output);
             } catch (error) {
                 console.error("Error:", error);
-                await ctx.reply(quote(`⚠ ${await tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+                ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
             }
         }
     }
@@ -177,10 +175,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Antilink handling.
         const getAntilink = await db.get(`group.${groupNumber}.antilink`);
         const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
-        if (getAntilink && urlRegex.test(m.content)) {
-            if ((await tools.general.isAdmin(ctx)) === 1) return; // Skip admins.
+        if (getAntilink && m.content && urlRegex.test(m.content)) {
+            if ((await tools.general.isAdmin(ctx)) === 1);
 
-            await ctx.reply(quote(`⚠ ${await tools.msg.translate("Jangan kirim tautan!", userLanguage)}`));
+            await ctx.reply(quote(`⚠ Jangan kirim tautan!`));
             await ctx.deleteMessage(m.key);
         }
     }
@@ -198,16 +196,16 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             if (ctx.quoted?.extendedTextMessage?.text === text) {
                 try {
                     await sendMenfess(ctx, m, senderNumber, from);
-                    await ctx.reply(quote(`✅ ${await tools.msg.translate("Pesan berhasil terkirim!", userLanguage)}`));
+
+                    ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
                 } catch (error) {
                     console.error("Error:", error);
-                    await ctx.reply(quote(`⚠ ${await tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+                    ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
                 }
             }
         }
     }
 });
-
 
 // Event handling when a user joins or leaves a group
 bot.ev.on(Events.UserJoin, (m) => {
@@ -236,7 +234,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
         },
         message: {
             extendedTextMessage: {
-                text: await tools.msg.translate(`${senderNumber} telah merespons pesan menfess Anda.`, userLanguage),
+                text: `${senderNumber} telah merespons pesan menfess Anda.`,
                 title: global.bot.name,
                 thumbnailUrl: global.bot.thumbnail
 
@@ -248,7 +246,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
         from + S_WHATSAPP_NET, {
             text: `${m.content}\n` +
                 `${global.msg.readmore}\n` +
-                await tools.msg.translate("Jika ingin membalas, Anda harus mengirimkan perintah lagi.", userLanguage),
+                "Jika ingin membalas, Anda harus mengirimkan perintah lagi.",
             contextInfo: {
                 mentionedJid: [senderNumber + S_WHATSAPP_NET],
                 externalAdReply: {
@@ -278,7 +276,7 @@ async function handleUserEvent(m) {
     } = m;
 
     try {
-        const getWelcome = await db.get(`group.${id.replace(/@.*|:.*/g, "")}.welcome`);
+        const getWelcome = await db.get(`group.${id.split("@")[0]}.welcome`);
         if (getWelcome) {
             const metadata = await bot.core.groupMetadata(id);
 
@@ -291,11 +289,11 @@ async function handleUserEvent(m) {
                 }
 
                 const message = m.eventsType === "UserJoin" ?
-                    quote(`⚠ ${await tools.msg.translate(`Selamat datang @${jid.replace(/@.*|:.*/g, "")} di grup ${metadata.subject}!`, userLanguage)}`) :
-                    quote(`⚠ ${await tools.msg.translate(`@${jid.replace(/@.*|:.*/g, "")} keluar dari grup ${metadata.subject}.`, userLanguage)}`);
-                const card = tools.api.createUrl("aggelos_007", "/welcomecard", {
-                    text1: jid.replace(/@.*|:.*/g, ""),
-                    text2: m.eventsType === "UserJoin" ? "WELCOME" : "GOODBYE",
+                    quote(`⚠ Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`) :
+                    quote(`⚠ @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
+                const card = tools.api.createURL("aggelos_007", "/welcomecard", {
+                    text1: jid.split("@")[0],
+                    text2: m.eventsType === "UserJoin" ? "Selamat datang" : "Selamat tinggal!",
                     text3: metadata.subject,
                     avatar: profileUrl,
                     background: global.bot.thumbnail
@@ -321,8 +319,8 @@ async function handleUserEvent(m) {
         }
     } catch (error) {
         console.error("Error:", error);
-        await bot.core.sendMessage(id, {
-            text: quote(`⚠ ${await tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`)
+        bot.core.sendMessage(id, {
+            text: quote(`⚠ Terjadi kesalahan: ${error.message}`)
         });
     }
 }

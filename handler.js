@@ -1,9 +1,6 @@
 async function handler(ctx, options) {
-    const senderJid = ctx.sender.jid;
+    const senderJid = ctx._sender.jid;
     const senderNumber = senderJid.replace(/@.*|:.*/g, "");
-    const [userLanguage] = await Promise.all([
-        global.db.get(`user.${senderNumber}.language`)
-    ]);
 
     const checkOptions = {
         admin: {
@@ -23,7 +20,7 @@ async function handler(ctx, options) {
         coin: {
             function: async () => {
                 if (global.system.useCoin) {
-                    let getCoin = await global.db.get(`user.${senderNumber}.coin`);
+                    const getCoin = await global.db.get(`user.${senderNumber}.coin`);
 
                     const isOwner = await global.tools.general.isOwner(ctx, {
                         id: senderNumber,
@@ -33,9 +30,10 @@ async function handler(ctx, options) {
                     if (!ctx._args.length || isOwner === 1 || isPremium) return false;
 
                     const requiredCoins = options.coin || 0;
-                    if (getCoin < requiredCoins) return true;
-
-                    await global.db.subtract(`user.${senderNumber}.coin`, requiredCoins);
+                    if (getCoin < requiredCoins) {
+                        await global.db.subtract(`user.${senderNumber}.coin`, requiredCoins);
+                        return true;
+                    }
                 }
             },
             msg: global.msg.coin
@@ -78,7 +76,7 @@ async function handler(ctx, options) {
         const checkOption = checkOptions[option];
         if (await checkOption.function()) {
             status = true;
-            message = `⚠ ${await global.tools.msg.translate(checkOption.msg, userLanguage)}`;
+            message = checkOption.msg;
             break;
         }
     }
@@ -87,6 +85,6 @@ async function handler(ctx, options) {
         status,
         message
     };
-};
+}
 
 module.exports = handler;

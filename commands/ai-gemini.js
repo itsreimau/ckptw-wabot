@@ -2,10 +2,10 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const axios = require("axios");
 const mime = require("mime-types");
 const {
     uploadByBuffer
@@ -15,10 +15,6 @@ module.exports = {
     name: "gemini",
     category: "ai",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -31,15 +27,15 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
-            `${quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} apa itu whatsapp?`)}`)}\n` +
-            quote(await global.tools.msg.translate("Catatan: AI ini dapat melihat gambar dan menjawab pertanyaan tentangnya. Kirim gambar dan tanyakan apa saja!", userLanguage))
+            `${quote(global.msg.argument)}\n` +
+            `${quote(`Contoh: ${monospace(`${ctx._used.prefix}${ctx._used.command} apa itu whatsapp?`)}`)}\n` +
+            quote("Catatan: AI ini dapat melihat gambar dan menjawab pertanyaan tentangnya. Kirim gambar dan tanyakan apa saja!")
         );
 
         const msgType = ctx.getMessageType();
 
         try {
-            if (msgType !== MessageType.imageMessage || msgType !== MessageType.videoMessage || !ctx.quoted?.conversation) {
+            if (msgType !== MessageType.imageMessage || msgType !== MessageType.videoMessage || !(await ctx.quoted.media.toBuffer())?.conversation) {
                 const apiUrl = global.tools.api.createUrl("sandipbaruwal", "/gemini", {
                     prompt: input
                 });
@@ -63,8 +59,8 @@ module.exports = {
             }
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

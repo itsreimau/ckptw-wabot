@@ -1,12 +1,5 @@
-const {
-    createUrl
-} = require("./api.js");
-const {
-    convertMsToDuration
-} = require("./general.js");
-const {
-    translate
-} = require("./msg.js");
+const handler = require("./handler.js");
+const tools = require("./tools/exports.js");
 const pkg = require("../package.json");
 const {
     bold,
@@ -14,27 +7,23 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const moment = require("moment-timezone");
-const fetch = require("node-fetch");
 
 async function get(type, ctx) {
-    const [userLanguage] = await Promise.all([
-        global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-    ]);
-
     let text = "";
 
-    const generateMenuText = async (cmds, tags) => {
+    const generateMenuText = (cmds, tags) => {
         let menuText =
-            `${await translate(`Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!`, userLanguage)}\n` +
+            `Hai ${ctx._sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
             "\n" +
-            `${quote(await translate(`Waktu aktif: ${convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}`, userLanguage))}\n` +
-            `${quote(await translate(`Tanggal: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`, userLanguage))}\n` +
-            `${quote(await translate(`Waktu: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}`, userLanguage))}\n` +
-            `${quote(`${await translate("Versi Bot", userLanguage)}: ${pkg.version}`)}\n` +
+            `${quote(`Waktu aktif: ${tools.general.convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}`)}\n` +
+            `${quote(`Tanggal: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`)}\n` +
+            `${quote(`Waktu: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}`)}\n` +
+            `${quote(`Versi: ${pkg.version}`)}\n` +
             `${quote(`Prefix: ${ctx._used.prefix}`)}\n` +
             "\n" +
-            `${italic(await translate("Jangan lupa berdonasi agar bot tetap online!", userLanguage))}\n` +
+            `${italic("Jangan lupa berdonasi agar bot tetap online!")}\n` +
             `${global.msg.readmore}\n`;
 
         for (const category of Object.keys(tags)) {
@@ -46,7 +35,7 @@ async function get(type, ctx) {
                 }));
 
             if (categoryCommands.length > 0) {
-                menuText += `${bold(tags[category])}\n`;
+                menuText += `◈ ${bold(tags[category])}\n`;
 
                 categoryCommands.forEach(cmd => {
                     menuText += quote(monospace(`${ctx._used.prefix || "/"}${cmd.name}`));
@@ -67,50 +56,47 @@ async function get(type, ctx) {
     try {
         switch (type) {
             case "alkitab": {
-                const response = await fetch(createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
-                const data = await response.json();
-                const translations = await Promise.all([
-                    await translate("Buku", userLanguage),
-                    await translate("Jumlah Bab", userLanguage)
-                ]);
-                text = data.data.map(b =>
-                    `${quote(`${translations[0]}: ${b.name} (${b.abbr})`)}\n` +
-                    `${quote(`${translations[1]}: ${b.chapter}`)}\n` +
-                    "─────\n"
+                const alKitabResponse = await axios.get(tools.api.createURL("https://beeble.vercel.app", "/api/v1/passage/list", {}), {
+                    headers: {
+                        "User-Agent": global.system.userAgent
+                    }
+                });
+                text = alKitabResponse.data.data.map(b =>
+                    `${quote(`Buku: ${b.name} (${b.abbr})`)}\n` +
+                    `${quote(`Jumlah Bab: ${b.chapter}`)}\n` +
+                    `${quote("─────")}\n`
                 ).join("");
 
                 text += global.msg.footer;
                 break;
             }
-
             case "alquran": {
-                const response = await fetch(createUrl("https://equran.id", "/api/v2/surat", {}));
-                const data = await response.json();
-                const translations = await Promise.all([
-                    await translate("Jumlah Ayat", userLanguage)
-                ]);
-                text = data.data.map(s =>
+                const alquranResponse = await axios.get(tools.api.createURL("https://equran.id", "/api/v2/surat", {}), {
+                    headers: {
+                        "User-Agent": global.system.userAgent
+                    }
+                });
+                text = alquranResponse.data.data.map(s =>
                     `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
-                    `${quote(`${translations[0]}: ${s.jumlahAyat}`)}\n` +
-                    "─────\n"
+                    `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n` +
+                    `${quote("─────")}\n`
                 ).join("");
 
                 text += global.msg.footer;
                 break;
             }
-
             case "disable_enable": {
                 const deList = ["antilink", "welcome"];
-                text = deList.map(item => `${quote(item)}`).join("\n");
-                text += "\n" + global.msg.footer;
+                text = deList.map(item => quote(item)).join("\n");
+
+                text += "\n" +
+                    global.msg.footer;
                 break;
             }
-
             case "menu": {
                 const cmds = ctx._config.cmd;
                 const tags = {
                     main: "Main",
-                    profile: "Profile",
                     ai: "AI",
                     game: "Game",
                     converter: "Converter",
@@ -127,24 +113,22 @@ async function get(type, ctx) {
                 };
 
                 if (!cmds || cmds.size === 0) {
-                    text = quote(`⚠ ${await translate("Terjadi kesalahan: Tidak ada perintah yang ditemukan.", userLanguage)}`);
+                    text = quote("⚠ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");
                 } else {
                     text = generateMenuText(cmds, tags);
                 }
                 break;
             }
-
-            default: {
-                text = quote(`⚠ ${await translate("Terjadi kesalahan: Jenis daftar tidak dikenal.", userLanguage)}`);
+            default:
+                text = quote("⚠ Terjadi kesalahan: Jenis daftar tidak dikenal.");
                 break;
-            }
         }
     } catch (error) {
-        text = quote(`⚠ ${await translate("Terjadi kesalahan", userLanguage)}: ${error.message}`);
+        text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
     }
 
     return text;
-}
+};
 
 module.exports = {
     get

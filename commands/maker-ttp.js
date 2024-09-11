@@ -12,10 +12,6 @@ module.exports = {
     name: "ttp",
     category: "maker",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -28,21 +24,18 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
-            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} get in the fucking robot, shinji!`)}`)
+            `${quote(global.msg.argument)}\n` +
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} get in the fucking robot, shinji!`)}`)
         );
 
-        if (input.length > 10000) return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Maksimal 50 kata!", userLanguage)}`));
+        if (input.length > 10000) return ctx.reply(quote(`⚠ Maksimal 50 kata!`));
 
         try {
-            const apiUrl = global.tools.api.createUrl("widipe", "/ttp", {
+            const apiUrl = global.tools.createURL("widipe", "/ttp", {
                 text: input
             });
 
-            const response = await axios.get(apiUrl);
-            const imageUrl = response.data;
-
-            const sticker = new Sticker(imageUrl, {
+            const sticker = new Sticker(apiUrl, {
                 pack: global.sticker.packname,
                 author: global.sticker.author,
                 type: StickerTypes.FULL,
@@ -54,8 +47,7 @@ module.exports = {
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

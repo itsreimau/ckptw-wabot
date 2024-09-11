@@ -1,8 +1,7 @@
-const tools = {
+const global.tools = {
     api: require("./api.js"),
     general: require("./general.js"),
-    list: require("./list.js"),
-    msg: require("./msg.js")
+    list: require("./list.js")
 };
 
-module.exports = tools;
+module.exports = global.tools;

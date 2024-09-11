@@ -10,10 +10,6 @@ module.exports = {
     name: "tebaklagu",
     category: "game",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -25,7 +21,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`⚠ Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebaklagu.json`, {});
+            const apiUrl = global.tools.createURL("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebaklagu.json`, {});
             const response = await axios.get(apiUrl);
             const data = global.tools.general.getRandomElement(response.data);
             const coin = 3;
@@ -42,13 +38,13 @@ module.exports = {
                 ptt: false
             });
             await ctx.reply(
-                `${quote(`${await global.tools.msg.translate("Artis", userLanguage)}: ${data.artist}`)}` +
+                `${quote(`Artis: ${data.artist}`)}` +
                 (global.system.useCoin ?
                     "\n" +
-                    `${quote(`+${coin} ${await global.tools.msg.translate("Koin", userLanguage)}`)}\n` :
+                    `${quote(`+${coin} Koin`)}\n` :
                     "\n") +
-                `${quote(await global.tools.msg.translate(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`, userLanguage))}\n` +
-                `${quote(await global.tools.msg.translate('Ketik "hint" untuk bantuan.', userLanguage))}\n` +
+                `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
+                `${quote('Ketik "hint" untuk bantuan.')}\n` +
                 "\n" +
                 global.msg.footer
             );
@@ -66,10 +62,10 @@ module.exports = {
                     if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
                     await ctx.sendMessage(
                         ctx.id, {
-                            text: quote(`💯 ${await global.tools.msg.translate("Benar!", userLanguage)}`) +
+                            text: quote(`💯 Benar!`) +
                                 (global.system.useCoin ?
                                     "\n" +
-                                    quote(`+${coin} ${await global.tools.msg.translate("Koin", userLanguage)}`) :
+                                    quote(`+${coin} Koin`) :
                                     "")
                         }, {
                             quoted: m
@@ -93,16 +89,15 @@ module.exports = {
                     await session.delete(ctx.id);
 
                     return ctx.reply(
-                        `${quote(`⌛ ${await global.tools.msg.translate("Waktu habis!", userLanguage)}`)}\n` +
-                        quote(`${await global.tools.msg.translate("Jawabannya adalah", userLanguage)} ${answer}.`)
+                        `${quote(`⌛ Waktu habis!`)}\n` +
+                        quote(`Jawabannya adalah ${answer}.`)
                     );
                 }
             });
 
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

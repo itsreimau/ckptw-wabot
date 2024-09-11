@@ -8,10 +8,6 @@ module.exports = {
     aliases: ["cekapi", "checkapi"],
     category: "owner",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -23,12 +19,16 @@ module.exports = {
         try {
             await ctx.reply(global.msg.wait);
 
-            const APIs = global.tools.api.listUrl();
+            const APIs = global.tools.listAPIUrl();
             let result = "";
 
             for (const [name, api] of Object.entries(APIs)) {
                 try {
-                    const response = await axios.get(api.baseURL);
+                    const response = await axios.get(api.baseURL, {
+                        headers: {
+                            "User-Agent": global.system.userAgent
+                        }
+                    });
                     result += quote(`${api.baseURL} 🟢\n`);
                 } catch (error) {
                     result += quote(`${api.baseURL} 🔴\n`);
@@ -42,8 +42,7 @@ module.exports = {
             );
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

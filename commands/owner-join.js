@@ -7,10 +7,6 @@ module.exports = {
     name: "join",
     category: "owner",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -22,8 +18,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
-            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} ${global.bot.groupChat}`)}`)
+            `${quote(global.msg.argument)}\n` +
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ${global.bot.groupChat}`)}`)
         );
 
         const urlRegex = /chat\.whatsapp\.com\/([0-9A-Za-z]{20,24})/i;
@@ -36,15 +32,15 @@ module.exports = {
             const participantsIds = members.map(user => user.id);
 
             await ctx.sendMessage(res, {
-                text: quote(`👋 ${await global.tools.msg.translate(`Halo! Saya adalah Bot WhatsApp bernama ${global.bot.name}, dimiliki oleh ${global.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`, userLanguage)}`)
+                text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${global.bot.name}, dimiliki oleh ${global.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)
             }, {
                 mentions: participantsIds
             });
 
-            return await ctx.reply(quote(`✅ ${await global.tools.msg.translate("Berhasil bergabung dengan grup!", userLanguage)}`));
+            return await ctx.reply(quote(`✅ Berhasil bergabung dengan grup!`));
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

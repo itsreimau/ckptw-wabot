@@ -14,7 +14,7 @@ const APIs = {
     },
     fasturl: {
         baseURL: "https://fastrestapis.fasturl.cloud",
-        APIKey: "8f03c932-7c66-4194-a245-b3ba83e556a8"
+        APIKey: "8f03c932-7c66-4194-a245-b3ba83e556a8" // Create your own API key, don't use this one!
     },
     firda: {
         baseURL: "https://api.firda.uz"

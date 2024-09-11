@@ -10,10 +10,6 @@ module.exports = {
     aliases: ["p"],
     category: "downloader",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -26,21 +22,21 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
-            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} hikaru utada - one last kiss`)}`)
+            `${quote(global.msg.argument)}\n` +
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} hikaru utada - one last kiss`)}`)
         );
 
 
         try {
             const search = await ytdl.search(input);
 
-            if (!search.status) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
+            if (!search.status) return ctx.reply(global.msg.notFound);
 
             const data = search.data[0];
 
             await ctx.reply(
-                `${quote(`${await global.tools.msg.translate("Judul", userLanguage)}: ${data.title}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Artis", userLanguage)}: ${data.author.name}`)}\n` +
+                `${quote(`Judul: ${data.title}`)}\n` +
+                `${quote(`Artis: ${data.author.name}`)}\n` +
                 `${quote(`URL: ${data.url}`)}\n` +
                 "\n" +
                 global.msg.footer
@@ -48,7 +44,7 @@ module.exports = {
 
             const mp3 = await ytdl.mp3(data.url);
 
-            if (!mp3.status) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
+            if (!mp3.status) return ctx.reply(global.msg.notFound);
 
             return await ctx.reply({
                 audio: {
@@ -59,7 +55,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("Error:", error);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

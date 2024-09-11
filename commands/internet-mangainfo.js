@@ -3,19 +3,12 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const {
-    translate
-} = require("bing-translate-api");
 
 module.exports = {
     name: "mangainfo",
     aliases: ["manga"],
     category: "internet",
     code: async (ctx) => {
-        const [userLanguage] = await Promise.all([
-            global.db.get(`user.${ctx.sender.jid.replace(/@.*|:.*/g, "")}.language`)
-        ]);
-
         const {
             status,
             message
@@ -28,38 +21,44 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`📌 ${await global.tools.msg.translate(global.msg.argument, userLanguage)}`)}\n` +
-            quote(`${await global.tools.msg.translate("Contoh", userLanguage)}: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis evangelion`)}`)
+            `${quote(global.msg.argument)}\n` +
+            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} neon genesis evangelion`)}`)
         );
 
         try {
-            const mangaApiUrl = await global.tools.api.createUrl("https://api.jikan.moe", "/v4/manga", {
+            const mangaApiUrl = await global.tools.createURL("https://api.jikan.moe", "/v4/manga", {
                 q: input
             });
             const mangaResponse = await axios.get(mangaApiUrl);
-            const mangaData = mangaResponse.data;
+            const info = mangaResponse.data.data[0];
 
-            if (!mangaData.data || mangaData.data.length === 0) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
-
-            const info = mangaData.data[0];
-            const synopsisId = info.synopsis ? await translate(info.synopsis, "en", "id").then(res => res.translation) : null;
+            const translationApiUrl = global.tools.createURL("fasturl", "/tool/translate", {
+                text: info.synopsis,
+                target: "ids"
+            });
+            const translationResponse = await axios.get(translationApiUrl, {
+                headers: {
+                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
+                }
+            });
+            const synopsisId = translationResponse.data.translatedText || info.synopsis;
 
             return await ctx.reply(
-                `${quote(`${await global.tools.msg.translate("Judul", userLanguage)}: ${animeInfo.title}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Judul (Inggris)", userLanguage)}: ${animeInfo.title_english || "N/A"}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Judul (Jepang)", userLanguage)}: ${animeInfo.title_japanese || "N/A"}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Tipe", userLanguage)}: ${animeInfo.type || "N/A"}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Bab", userLanguage)}: ${info.chapters || "N/A"}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Volume", userLanguage)}: ${info.volumes || "N/A"}`)}\n` +
-                `${quote(`${await global.tools.msg.translate("Ringkasan", userLanguage)}: ${synopsisId ? synopsisId.replace("\n\n", ". ") : "N/A"}`)}\n` +
-                `${quote(`URL: ${animeInfo.url}`)}\n` +
+                `${quote(`Judul: ${info.title}`)}\n` +
+                `${quote(`Judul (Inggris): ${info.title_english}`)}\n` +
+                `${quote(`Judul (Jepang): ${info.title_japanese}`)}\n` +
+                `${quote(`Tipe: ${info.type}`)}\n` +
+                `${quote(`Bab: ${info.chapters}`)}\n` +
+                `${quote(`Volume: ${info.volumes}`)}\n` +
+                `${quote(`Ringkasan: ${synopsisId.replace("\n\n", ". ")}`)}\n` +
+                `${quote(`URL: ${info.url}`)}\n` +
                 "\n" +
                 global.msg.footer
             );
         } catch (error) {
             console.error("Error:", error);
-            if (error.status !== 200) return ctx.reply(`⛔ ${await global.tools.msg.translate(global.msg.notFound, userLanguage)}`);
-            return ctx.reply(quote(`⚠ ${await global.tools.msg.translate("Terjadi kesalahan", userLanguage)}: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
