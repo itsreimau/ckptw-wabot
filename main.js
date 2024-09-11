@@ -53,8 +53,9 @@ bot.ev.once(Events.ClientReady, async (m) => {
 const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
 cmd.load();
 
-// Assign global handler.
+// Assign global handler and tools.
 global.handler = handler;
+global.handler = tools;
 
 // Event handling when a message appears.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
