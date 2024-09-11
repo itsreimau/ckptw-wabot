@@ -1,4 +1,3 @@
-const handler = require("./handler.js");
 const tools = require("./tools/exports.js");
 const pkg = require("../package.json");
 const {
