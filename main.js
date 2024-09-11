@@ -55,7 +55,7 @@ cmd.load();
 
 // Assign global handler and tools.
 global.handler = handler;
-global.handler = tools;
+global.tools = tools;
 
 // Event handling when a message appears.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
