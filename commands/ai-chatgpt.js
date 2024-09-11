@@ -19,7 +19,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx._args.join(" ") || null;
+        const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
             `${quote(global.msg.argument)}\n` +
@@ -27,19 +27,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.createURL("fasturl", "/api/gpt4", {
-                prompt: input,
-                sessionId: `${ctx._sender.jid.replace(/@.*|:.*/g, "")}-${global.bot.name.toUpperCase().replace(/ /g, "_")}`
+            const apiUrl = global.tools.createURL("nyxs", "/api/gpt4", {
+                text: input
             });
             const {
                 data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                }
-            });
+            } = await axios.get(apiUrl);
 
-            return ctx.reply(data.response);
+            return ctx.reply(data.result);
         } catch (error) {
             console.error("Error:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);

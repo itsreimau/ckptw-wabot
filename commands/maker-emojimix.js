@@ -22,13 +22,13 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        if (!ctx._args.length) return ctx.reply(
+        if (!ctx.args.length) return ctx.reply(
             `${global.msg.argument}\n` +
             `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 😱 🤓`)}`
         );
 
         try {
-            const emojisString = ctx._args.join("");
+            const emojisString = ctx.args.join("");
             const emojiRegex = /\p{Emoji}/gu;
             const emojis = Array.from(emojisString.matchAll(emojiRegex), (match) => match[0]);
             const [emoji1, emoji2] = emojis.slice(0, 2);

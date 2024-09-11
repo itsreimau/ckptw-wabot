@@ -1,5 +1,5 @@
 async function handler(ctx, options) {
-    const senderJid = ctx._sender.jid;
+    const senderJid = ctx.sender.jid;
     const senderNumber = senderJid.replace(/@.*|:.*/g, "");
 
     const checkOptions = {

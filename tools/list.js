@@ -14,7 +14,7 @@ async function get(type, ctx) {
 
     const generateMenuText = (cmds, tags) => {
         let menuText =
-            `Hai ${ctx._sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
+            `Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
             "\n" +
             `${quote(`Waktu aktif: ${tools.general.convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}`)}\n` +
             `${quote(`Tanggal: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`)}\n` +
