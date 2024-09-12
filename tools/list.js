@@ -13,7 +13,7 @@ const moment = require("moment-timezone");
 async function get(type, ctx) {
     let text = "";
 
-    const generateMenuText = (cmds, tags) => {
+    const generateMenuText = (cmd, tag) => {
         try {
             let menuText =
                 `Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
@@ -27,8 +27,8 @@ async function get(type, ctx) {
                 `${italic("Jangan lupa berdonasi agar bot tetap online!")}\n` +
                 `${global.msg.readmore}\n`;
 
-            for (const category of Object.keys(tags)) {
-                const categoryCommands = Array.from(cmds.values())
+            for (const category of Object.keys(tag)) {
+                const categoryCommands = Array.from(cmd.values())
                     .filter(command => command.category === category)
                     .map(command => ({
                         name: command.name,
@@ -36,7 +36,7 @@ async function get(type, ctx) {
                     }));
 
                 if (categoryCommands.length > 0) {
-                    menuText += ` ${bold(tags[category])}\n`;
+                    menuText += ` ${bold(tag[category])}\n`;
 
                     categoryCommands.forEach(cmd => {
                         menuText += quote(monospace(`${ctx._used.prefix || "/"}${cmd.name}`));
@@ -106,8 +106,10 @@ async function get(type, ctx) {
                 break;
             }
             case "menu": {
-                const cmds = ctx._config.cmd;
-                const tags = {
+                const {
+                    cmd
+                } = ctx._config;
+                const tag = {
                     main: "Main",
                     ai: "AI",
                     game: "Game",
@@ -124,10 +126,10 @@ async function get(type, ctx) {
                     "": "No Category"
                 };
 
-                if (!cmds || cmds.size === 0) {
+                if (!cmd || cmd.size === 0) {
                     text = quote("⚠ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");
                 } else {
-                    text = generateMenuText(cmds, tags);
+                    text = generateMenuText(cmd, tag);
                 }
                 break;
             }

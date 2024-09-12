@@ -47,12 +47,32 @@ module.exports = {
                     .setType("cta_url")
                     .setURL("https://itsreimau.is-a.dev/rei-ayanami")
                     .setMerchantURL("https://www.google.ca").build();
+                const mediaAttachment = await ctx.prepareWAMessageMedia({
+                    image: {
+                        url: global.bot.thumbnail
+                    }
+                }, {
+                    upload: ctx._client.waUploadToServer
+                })
+                const card = new CarouselBuilder()
+                    .addCard({
+                        body: text,
+                        footer: global.msg.watermark,
+                        header: {
+                            title: global.bot.name,
+                            hasMediaAttachment: true,
+                            ...mediaAttachment
+                        },
+                        nativeFlowMessage: {
+                            buttons: [button1, button2]
+                        }
+                    }).build();
 
                 return ctx.replyInteractiveMessage({
                     body: text,
                     footer: global.msg.watermark,
-                    nativeFlowMessage: {
-                        buttons: [button1, button2]
+                    carouselMessage: {
+                        card
                     }
                 })
             }
