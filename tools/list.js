@@ -106,7 +106,29 @@ async function get(type, ctx) {
                 break;
             }
             case "menu": {
-                text = generateMenuText(cmds, tags);
+                const cmds = ctx._config.cmd;
+                const tags = {
+                    main: "Main",
+                    ai: "AI",
+                    game: "Game",
+                    converter: "Converter",
+                    downloader: "Downloader",
+                    fun: "Fun",
+                    group: "Group",
+                    islamic: "Islamic",
+                    internet: "Internet",
+                    maker: "Maker",
+                    tools: "Tools",
+                    owner: "Owner",
+                    info: "Info",
+                    "": "No Category"
+                };
+
+                if (!cmds || cmds.size === 0) {
+                    text = quote("⚠ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");
+                } else {
+                    text = generateMenuText(cmds, tags);
+                }
                 break;
             }
             default: {
