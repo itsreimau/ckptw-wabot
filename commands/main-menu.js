@@ -1,5 +1,6 @@
 const {
     ButtonBuilder,
+    CarouselBuilder,
     quote
 } = require("@mengkodingan/ckptw");
 const {
