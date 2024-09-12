@@ -5,7 +5,6 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const axios = require("axios");
 const mime = require("mime-types");
 const {
     uploadByBuffer
@@ -34,12 +33,8 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("fasturl", "/tool/ocr", {
                 imageUrl: uplRes.link
             });
-            const {
-                data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                }
+            const data = await global.tools.fetch.buffer(apiUrl, {
+                "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
             });
 
             const resultText = data.segments.map(d => d.text).join("\n");

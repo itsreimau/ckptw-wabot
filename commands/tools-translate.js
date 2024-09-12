@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "translate",
@@ -45,12 +44,8 @@ module.exports = {
                 text: textToTranslate,
                 target: langCode
             });
-            const {
-                data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                }
+            const data = await global.tools.fetch.buffer(apiUrl, {
+                "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
             });
 
             return ctx.reply(data.translatedText);

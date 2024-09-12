@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "cekkhodam",
@@ -27,9 +26,7 @@ module.exports = {
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.caliph.my.id", `/khodam.json`, {});
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const data = await global.tools.fetch.json(apiUrl);
             const khodam = global.tools.general.getRandomElement(data);
 
             return ctx.reply(

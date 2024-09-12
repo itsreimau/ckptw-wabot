@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "weather",
@@ -29,17 +28,16 @@ module.exports = {
             const weatherApiUrl = await global.tools.api.createUrl("agatz", "/api/cuaca", {
                 message: input
             });
-            const weatherResponse = await axios.get(weatherApiUrl);
+            const weatherResponse = await global.tools.fetch.json(weatherApiUrl);
             const weatherData = weatherResponse.data.data;
 
             const translationApiUrl = global.tools.api.createUrl("fasturl", "/tool/translate", {
                 text: weatherData.current.condition.text,
                 target: "id"
             });
-            const translationResponse = await axios.get(translationApiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                }
+            const translationResponse = await global.tools.fetch.json(translationApiUrl, {
+                "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
+
             });
             const translatedText = translationResponse.data.translatedText;
 

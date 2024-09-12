@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -22,9 +21,7 @@ module.exports = {
         const apiUrl = await global.tools.api.createUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json", {});
 
         try {
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const data = await global.tools.fetch.json(apiUrl);
             const gempa = data.Infogempa.gempa;
 
             return ctx.reply({

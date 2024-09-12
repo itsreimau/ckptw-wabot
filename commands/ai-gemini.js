@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
@@ -41,7 +40,7 @@ module.exports = {
                 });
                 const {
                     data
-                } = await axios.get(apiUrl);
+                } = await global.tools.fetch.json(apiUrl);
 
                 return ctx.reply(data.answer);
             } else {
@@ -53,7 +52,7 @@ module.exports = {
                 });
                 const {
                     data
-                } = await axios.get(apiUrl);
+                } = await global.tools.fetch.json(apiUrl);
 
                 return ctx.reply(data.answer);
             }

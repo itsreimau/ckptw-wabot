@@ -1,7 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "jokes",
@@ -19,7 +18,7 @@ module.exports = {
         const apiUrl = global.tools.api.createUrl("https://candaan-api.vercel.app", "/api/text/random", {});
 
         try {
-            const response = await axios.get(apiUrl);
+            const response = await global.tools.fetch.json(apiUrl);
             const {
                 data
             } = await response.data;

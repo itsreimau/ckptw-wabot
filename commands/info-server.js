@@ -1,7 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const os = require("os");
 
 module.exports = {
@@ -11,9 +10,7 @@ module.exports = {
         const apiUrl = global.tools.api.createUrl("http://ip-api.com", "/json", {});
 
         try {
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const data = await global.tools.fetch.json(apiUrl);
             const startTime = global.system.startTime;
 
             return ctx.reply(

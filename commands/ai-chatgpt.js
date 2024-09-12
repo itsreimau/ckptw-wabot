@@ -3,7 +3,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "chatgpt",
@@ -30,9 +29,7 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("nyxs", "/api/gpt4", {
                 text: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const data = await global.tools.fetch.json(apiUrl);
 
             return ctx.reply(data.result);
         } catch (error) {

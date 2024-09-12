@@ -5,7 +5,6 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const axios = require("axios");
 const mime = require("mime-types");
 const {
     uploadByBuffer
@@ -34,13 +33,9 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("fasturl", "/tool/facebeauty", {
                 faceUrl: uplRes.link
             });
-            const {
-                data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                },
-                responseType: "arraybuffer"
+            const data = await global.tools.fetch.json(apiUrl, {
+                "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
+
             });
 
             return await ctx.reply({

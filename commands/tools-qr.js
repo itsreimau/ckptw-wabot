@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -32,13 +31,9 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("fasturl", "/tool/qr", {
                 url
             });
-            const {
-                data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                },
-                responseType: "arraybuffer"
+            const data = await global.tools.fetch.json(apiUrl, {
+                "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
+
             });
 
             return await ctx.reply({

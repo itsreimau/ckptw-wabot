@@ -4,7 +4,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "alquran",
@@ -37,7 +36,7 @@ module.exports = {
             if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`⚠ Surah ${suraNumber} tidak ada.`));
 
             const apiUrl = global.tools.api.createUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
-            const response = await axios.get(apiUrl);
+            const response = await global.tools.fetch.json(apiUrl);
             const {
                 data
             } = response.data;

@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "googlesearch",
@@ -29,7 +28,7 @@ module.exports = {
             const apiUrl = await global.tools.api.createUrl("agatz", "/api/google", {
                 message: input
             });
-            const response = await axios.get(apiUrl);
+            const response = await global.tools.fetch.json(apiUrl);
             const {
                 data
             } = response.data;

@@ -1,7 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "checkapis",
@@ -24,7 +23,7 @@ module.exports = {
 
             for (const [name, api] of Object.entries(APIs)) {
                 try {
-                    const response = await axios.get(api.baseURL, {
+                    const response = await global.tools.fetch.json(api.baseURL, {
                         headers: {
                             "User-Agent": global.system.userAgent
                         }

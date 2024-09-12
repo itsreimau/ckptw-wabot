@@ -2,7 +2,6 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -30,9 +29,7 @@ module.exports = {
             const apiUrl = await global.tools.api.createUrl("ngodingaja", "/api/lirik", {
                 search: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const data = await global.tools.fetch.json(apiUrl);
 
             return ctx.reply(
                 `❖ ${bold("Lyrics")}\n` +

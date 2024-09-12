@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "faktaunik",
@@ -20,17 +19,16 @@ module.exports = {
 
         try {
             const faktaApiUrl = await global.tools.api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
-            const faktaResponse = await axios.get(faktaApiUrl);
+            const faktaResponse = await global.tools.fetch.json(faktaApiUrl);
             const faktaText = faktaResponse.data.text;
 
             const translationApiUrl = global.tools.api.createUrl("fasturl", "/tool/translate", {
                 text: faktaText,
                 target: "id"
             });
-            const translationResponse = await axios.get(translationApiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                }
+            const translationResponse = await global.tools.fetch.json(translationApiUrl, {
+                "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
+
             });
             const translatedText = translationResponse.data.translatedText;
 

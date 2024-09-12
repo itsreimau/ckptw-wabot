@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "mangainfo",
@@ -29,17 +28,16 @@ module.exports = {
             const mangaApiUrl = await global.tools.api.createUrl("https://api.jikan.moe", "/v4/manga", {
                 q: input
             });
-            const mangaResponse = await axios.get(mangaApiUrl);
+            const mangaResponse = await global.tools.fetch.json(mangaApiUrl);
             const info = mangaResponse.data.data[0];
 
             const translationApiUrl = global.tools.api.createUrl("fasturl", "/tool/translate", {
                 text: info.synopsis,
                 target: "ids"
             });
-            const translationResponse = await axios.get(translationApiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                }
+            const translationResponse = await global.tools.fetch.json(translationApiUrl, {
+                "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
+
             });
             const synopsisId = translationResponse.data.translatedText || info.synopsis;
 

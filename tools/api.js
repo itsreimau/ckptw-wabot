@@ -1,4 +1,4 @@
-// That's a list of free APIs, use them wisely!
+// List of free APIs, use them wisely!
 const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"
@@ -64,28 +64,28 @@ const APIs = {
 };
 
 function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
-    const api = APIs[apiNameOrURL];
+    try {
+        const api = APIs[apiNameOrURL];
 
-    if (!api) {
-        try {
+        if (!api) {
             const url = new URL(apiNameOrURL);
             apiNameOrURL = url;
-        } catch (error) {
-            throw new Error(`Invalid API name or custom URL: ${apiNameOrURL}`);
         }
+
+        const queryParams = new URLSearchParams(params);
+
+        if (apiKeyParamName && api && "APIKey" in api) {
+            queryParams.set(apiKeyParamName, api.APIKey);
+        }
+
+        const baseURL = api ? api.baseURL : apiNameOrURL.origin;
+        const apiUrl = new URL(endpoint, baseURL);
+        apiUrl.search = queryParams.toString();
+
+        return apiUrl.toString();
+    } catch (error) {
+        console.error("Error:", error);
     }
-
-    const queryParams = new URLSearchParams(params);
-
-    if (apiKeyParamName && api && "APIKey" in api) {
-        queryParams.set(apiKeyParamName, api.APIKey);
-    }
-
-    const baseURL = api ? api.baseURL : apiNameOrURL.origin;
-    const apiUrl = new URL(endpoint, baseURL);
-    apiUrl.search = queryParams.toString();
-
-    return apiUrl.toString();
 }
 
 function listUrl() {

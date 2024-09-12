@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "alkitab",
@@ -32,7 +31,7 @@ module.exports = {
 
         try {
             const apiUrl = await global.tools.api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {});
-            const response = await axios.get(apiUrl);
+            const response = await global.tools.fetch.json(apiUrl);
             const {
                 data
             } = response.data;

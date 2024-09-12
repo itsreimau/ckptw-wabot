@@ -3,7 +3,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -31,9 +30,7 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("https://google-image-api.vercel.app", "/search", {
                 q: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const data = await global.tools.fetch.json(apiUrl);
             const result = global.tools.general.getRandomElement(data.result);
 
             return await ctx.reply({

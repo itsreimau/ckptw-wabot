@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -33,7 +32,7 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("agatz", "/api/pixeldrain", {
                 url
             });
-            const response = await axios.get(apiUrl);
+            const response = await global.tools.fetch.json(apiUrl);
             const {
                 data
             } = response.data;

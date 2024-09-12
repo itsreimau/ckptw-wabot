@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "kisahnabi",
@@ -26,9 +25,7 @@ module.exports = {
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const data = await global.tools.fetch.json(apiUrl);
 
             return ctx.reply(
                 `${quote(`Nama: ${data.name}`)}\n` +

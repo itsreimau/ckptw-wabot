@@ -2,7 +2,6 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const {
     Sticker,
     StickerTypes
@@ -40,7 +39,7 @@ module.exports = {
                 collection: "emoji_kitchen_v5",
                 q: `${emoji1}_${emoji2}`
             });
-            const response = await axios.get(apiUrl);
+            const response = await global.tools.fetch.json(apiUrl);
             const data = await response.data;
 
             if (!data.results[0].url) return ctx.reply(global.msg.notFound);
