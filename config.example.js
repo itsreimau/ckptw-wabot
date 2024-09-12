@@ -16,14 +16,14 @@ global.bot = {
 // MSG (Message).
 global.msg = {
     // Command access.
-    admin: quote(`⚠ Perintah hanya dapat diakses oleh admin grup!`),
-    banned: quote(`⚠ Tidak dapat memproses karena Anda telah dibanned!`),
-    botAdmin: quote(`⚠ Bot bukan admin, tidak bisa menggunakan perintah!`),
-    coin: quote(`⚠ Anda tidak punya cukup koin!`),
-    group: quote(`⚠ Perintah hanya dapat diakses dalam grup!`),
-    owner: quote(`⚠ Perintah hanya dapat diakses Owner!`),
-    premium: quote(`⚠ Anda bukan pengguna Premium!`),
-    private: quote(`⚠ Perintah hanya dapat diakses dalam obrolan pribadi!`),
+    admin: quote("⚠ Perintah hanya dapat diakses oleh admin grup!"),
+    banned: quote("⚠ Tidak dapat memproses karena Anda telah dibanned!"),
+    botAdmin: quote("⚠ Bot bukan admin, tidak bisa menggunakan perintah!"),
+    coin: quote("⚠ Anda tidak punya cukup koin!"),
+    group: quote("⚠ Perintah hanya dapat diakses dalam grup!"),
+    owner: quote("⚠ Perintah hanya dapat diakses Owner!"),
+    premium: quote("⚠ Anda bukan pengguna Premium!"),
+    private: quote("⚠ Perintah hanya dapat diakses dalam obrolan pribadi!"),
 
     // Command interface.
     watermark: `${pkg.name}@^${pkg.version}`,
@@ -31,12 +31,12 @@ global.msg = {
     readmore: "\u200E".repeat(4001),
 
     // Command process.
-    argument: `📌 Masukkan argumen!`,
-    wait: `🔄 Tunggu sebentar...`,
+    argument: "📌 Masukkan argumen!",
+    wait: "🔄 Tunggu sebentar...",
 
     // Command process (Error).
-    notFound: `❎ Tidak ada yang ditemukan!`,
-    urlInvalid: `❎ URL tidak valid!`
+    notFound: "❎ Tidak ada yang ditemukan!",
+    urlInvalid: "❎ URL tidak valid!"
 };
 
 // Owner & CoOwner.

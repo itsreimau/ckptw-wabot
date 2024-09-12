@@ -179,7 +179,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (getAntilink && m.content && urlRegex.test(m.content)) {
             if ((await tools.general.isAdmin(ctx)) === 1);
 
-            await ctx.reply(quote(`⚠ Jangan kirim tautan!`));
+            await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
             await ctx.deleteMessage(m.key);
         }
     }
@@ -290,8 +290,8 @@ async function handleUserEvent(m) {
                 }
 
                 const message = m.eventsType === "UserJoin" ?
-                    quote(`⚠ Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`) :
-                    quote(`⚠ @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
+                    quote(`👋 Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`) :
+                    quote(`👋 @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
                 const card = tools.api.createUrl("aggelos_007", "/welcomecard", {
                     text1: jid.split("@")[0],
                     text2: m.eventsType === "UserJoin" ? "Selamat datang" : "Selamat tinggal!",

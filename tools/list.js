@@ -36,7 +36,7 @@ async function get(type, ctx) {
                     }));
 
                 if (categoryCommands.length > 0) {
-                    menuText += `◈ ${bold(tags[category])}\n`;
+                    menuText += ` ${bold(tags[category])}\n`;
 
                     categoryCommands.forEach(cmd => {
                         menuText += quote(monospace(`${ctx._used.prefix || "/"}${cmd.name}`));

@@ -18,7 +18,7 @@ module.exports = {
 
         try {
             const senderNumber = ctx.sender.jid.split("@")[0];
-            const [coin, premium] = await Promise.all([
+            const [coin, isPremium] = await Promise.all([
                 global.db.get(`user.${senderNumber}.coin`) || "-",
                 global.db.get(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak",
             ]);
@@ -33,15 +33,22 @@ module.exports = {
                     url: profileUrl,
                 },
                 mimetype: mime.contentType("png"),
-                caption: `${quote(`Nama: ${ctx.sender.pushName}`)}\n` +
-                    `${quote(`Premium: ${premium}`)}\n` +
-                    `${quote(`Koin: ${coin}`)}\n` +
+                caption: `${quote(`Nama: ${ctx.sender.pushName}`)}` +
+                    (global.system.usePremium ?
+                        "\n" +
+                        `${quote(`Premium: ${isPremium}`)}\n` :
+                        "\n") +
+                    (global.system.useCoin ?
+                        "\n" +
+                        `${quote(`Koin: ${coin}`)}` :
+                        "\n") +
                     "\n" +
-                    global.msg.footer,
+                    global.msg.footer
+
             });
         } catch (error) {
             console.error("Error:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
-    }
+    },
 };
