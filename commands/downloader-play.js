@@ -1,9 +1,12 @@
 const {
+    youtubedl,
+    youtubedlv2
+} = require("@bochilteam/scraper");
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const mime = require("mime-types");
-const ytdl = require("node-yt-dl");
 
 module.exports = {
     name: "play",
