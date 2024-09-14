@@ -77,7 +77,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const userDb = await db.get(`user.${senderNumber}`);
     if (!userDb) {
         await db.set(`user.${senderNumber}`, {
-            energy: 100,
+            energy: 50,
             isBanned: false,
             isPremium: false,
             onCharger: false

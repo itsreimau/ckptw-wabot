@@ -47,7 +47,7 @@ function generateCommandExample(command, args) {
         throw new Error("Arguments must be provided.");
     }
 
-    const commandMessage = `Contoh: ${monospace(command + args)}`;
+    const commandMessage = `Contoh: ${monospace(`${command} ${args}`)}`;
     return commandMessage;
 }
 
