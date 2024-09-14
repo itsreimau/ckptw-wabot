@@ -24,7 +24,7 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"])}\n` +
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "cat")
         );
 
