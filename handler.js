@@ -24,6 +24,10 @@ async function handler(ctx, options) {
         },
         energy: {
             function: async () => {
+                if (isOwner || isPremium) {
+                    return false;
+                }
+
                 const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
                 const requiredEnergy = options.energy || 0;
 
@@ -33,9 +37,10 @@ async function handler(ctx, options) {
                 }
 
                 if (userEnergy < requiredEnergy) {
-                    await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
                     return true;
                 }
+
+                await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
                 return false;
             },
             msg: global.msg.energy
