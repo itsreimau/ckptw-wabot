@@ -1,3 +1,7 @@
+const {
+    monospace
+} = require("@mengkodingan/ckptw");
+
 function generateInstruction(actions, mediaTypes) {
     if (!actions || !actions.length) {
         throw new Error("Necessary actions must be determined.");

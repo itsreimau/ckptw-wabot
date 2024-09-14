@@ -77,7 +77,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const userDb = await db.get(`user.${senderNumber}`);
     if (!userDb) {
         await db.set(`user.${senderNumber}`, {
-            energy: 10,
+            energy: 100,
             isBanned: false,
             isPremium: false,
             onCharger: false
@@ -347,9 +347,10 @@ async function energyCharger() {
             if (user.onCharger) {
                 let energy = await db.get(`${userPath}.energy`) || 0;
                 const maxEnergy = 100;
+                const energyIncrement = 5;
 
                 if (energy < maxEnergy) {
-                    energy += 1;
+                    energy = Math.min(energy + energyIncrement, maxEnergy);
                     await db.set(`${userPath}.energy`, energy);
                     console.log(`[ckptw-wabot] Energi ${senderNumber} sekarang: ${energy}`);
                 } else {
