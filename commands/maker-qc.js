@@ -35,8 +35,8 @@ module.exports = {
         try {
             let profileUrl;
             try {
-                profileUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image");
-            } catch {
+                profileUrl = await bot.core.profilePictureUrl(jid, "image");
+            } catch (error) {
                 profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
 

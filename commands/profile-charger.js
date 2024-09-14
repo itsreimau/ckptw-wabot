@@ -18,7 +18,11 @@ module.exports = {
 
         const senderNumber = ctx.sender.jid.replace(/@.*|:.*/g, "");
 
+        const userEnergy = global.db.get(`user.${senderNumber}.energy`) || 0;
         const isOnCharger = global.db.get(`user.${senderNumber}.onCharger`);
+
+        if (userEnergy >= 100) return ctx.reply(quote(`⚡ Energi Anda sudah penuh. Anda tidak bisa mengisi energi lagi.`));
+
         if (isOnCharger) return ctx.reply(quote(`⚡ Anda sudah mengisi energi sebelumnya. Tidak perlu mengisi lagi.`));
 
         global.db.set(`user.${senderNumber}.onCharger`, true);

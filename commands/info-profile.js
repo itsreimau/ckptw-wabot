@@ -24,8 +24,10 @@ module.exports = {
                 global.db.get(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak",
             ]);
 
-            let profileUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image");
-            if (!profileUrl) {
+            let profileUrl;
+            try {
+                profileUrl = await bot.core.profilePictureUrl(jid, "image");
+            } catch (error) {
                 profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
 

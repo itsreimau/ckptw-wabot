@@ -295,7 +295,7 @@ async function handleUserEvent(m) {
                 let profileUrl;
                 try {
                     profileUrl = await bot.core.profilePictureUrl(jid, "image");
-                } catch {
+                } catch (error) {
                     profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
                 }
 

@@ -27,6 +27,11 @@ async function handler(ctx, options) {
                 const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
                 const requiredEnergy = options.energy || 0;
 
+                const isOnCharger = await global.db.get(`user.${senderNumber}.onCharger`);
+                if (isOnCharger) {
+                    return true;
+                }
+
                 if (userEnergy < requiredEnergy) {
                     await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
                     return true;
@@ -63,6 +68,12 @@ async function handler(ctx, options) {
             msg
         } = checkOptions[option] || {};
         if (checkFunction && await checkFunction()) {
+            if (option === "energy" && await global.db.get(`user.${senderNumber}.onCharger`)) {
+                return {
+                    status: true,
+                    message: global.msg.onCharger
+                };
+            }
             return {
                 status: true,
                 message: msg
