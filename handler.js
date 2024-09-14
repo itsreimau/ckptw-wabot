@@ -24,13 +24,11 @@ async function handler(ctx, options) {
         },
         energy: {
             function: async () => {
-                if (!global.system.useenergy || isOwner || isPremium) return false;
+                const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
+                const requiredEnergy = options.energy || 0;
 
-                const userenergy = await global.db.get(`user.${senderNumber}.energy`);
-                const requiredenergys = options.energy || 0;
-
-                if (userenergy < requiredenergys) {
-                    await global.db.subtract(`user.${senderNumber}.energy`, requiredenergys);
+                if (userEnergy < requiredEnergy) {
+                    await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
                     return true;
                 }
                 return false;

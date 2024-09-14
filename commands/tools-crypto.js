@@ -57,12 +57,9 @@ async function coingecko(search) {
     });
 
     try {
-        const response = await axios.get(apiUrl, {
-            headers: {
-                "User-Agent": global.system.userAgent
-            }
-        });
-        const data = response.data;
+        const {
+            data
+        } = await axios.get(apiUrl);
         const result = [];
 
         data.forEach((crypto) => {

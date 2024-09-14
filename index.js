@@ -2,25 +2,18 @@ require("./config.js");
 const pkg = require("./package.json");
 const CFonts = require("cfonts");
 
-console.log("[ckptw-wabot] Memulai...");
-
-// Pengecekan owner.
+// Pengecekan.
 if (global.owner.name === "John Doe" || global.owner.number === "628xxxxxxxxxx") {
     console.error("[ckptw-wabot] Harap tetapkan global.owner dengan benar di config.js!");
     process.exit(1);
 }
-
-// Pengecekan nomor bot saat pairing code digunakan.
 if (global.system.usePairingCode && global.bot.phoneNumber === "628xxxxxxxxxx") {
     console.error("[ckptw-wabot] Harap tetapkan global.bot.phoneNumber dengan benar di config.js!");
     process.exit(1);
 }
 
-// Pengecekan konsistensi antara useEnergy dan usePremium.
-if ((global.system.useEnergy && !global.system.usePremium) || (!global.system.useEnergy && global.system.usePremium)) {
-    console.error("global.system.useEnergy dan global.system.usePremium harus keduanya true atau false.");
-    process.exit(1);
-}
+// Memulai.
+console.log("[ckptw-wabot] Memulai...");
 
 // Tampilkan judul menggunakan CFonts.
 CFonts.say(pkg.name, {

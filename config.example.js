@@ -57,8 +57,6 @@ global.system = {
     cooldown: 10000,
     selfReply: true,
     timeZone: "Asia/Jakarta",
-    useEnergy: true,
     useInteractiveMessage: true,
-    usePairingCode: true,
-    usePremium: true
+    usePairingCode: true
 };

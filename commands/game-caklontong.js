@@ -32,10 +32,7 @@ module.exports = {
 
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}` +
-                (global.system.useenergy ?
-                    "\n" +
-                    `${quote(`+${energy} Energi`)}\n` :
-                    "\n") +
+                `${quote(`+${energy} Energi`)}\n` +
                 `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
                 `${quote('Ketik "hint" untuk bantuan.')}\n` +
                 "\n" +
@@ -52,15 +49,12 @@ module.exports = {
 
                 if (userAnswer === answer) {
                     await session.delete(ctx.id);
-                    if (global.system.useenergy) await global.db.add(`user.${senderNumber}.energy`, energy);
+                    await global.db.add(`user.${senderNumber}.energy`, energy);
                     await ctx.sendMessage(
                         ctx.id, {
                             text: `${quote(`💯 Benar!`)}\n` +
-                                `${data.description}` +
-                                (global.system.useenergy ?
-                                    "\n" +
-                                    quote(`+${energy} Energi`) :
-                                    "")
+                                `${data.description}\n` +
+                                quote(`+${energy} Energi`)
                         }, {
                             quoted: m
                         }

@@ -55,14 +55,11 @@ module.exports = {
 
                 if (userAnswer === answer) {
                     await session.delete(ctx.id);
-                    if (global.system.useenergy) await global.db.add(`user.${senderNumber}.energy`, energy);
+                    await global.db.add(`user.${senderNumber}.energy`, energy);
                     await ctx.sendMessage(
                         ctx.id, {
                             text: quote(`💯 Benar!`) +
-                                (global.system.useenergy ?
-                                    "\n" +
-                                    quote(`+${energy} Energi`) :
-                                    "")
+                                quote(`+${energy} Energi`)
                         }, {
                             quoted: m
                         }
