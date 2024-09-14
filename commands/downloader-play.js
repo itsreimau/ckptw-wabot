@@ -15,24 +15,29 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            coin: 3
+            energy: 10,
+            cooldown: true
         });
+
         if (status) return ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} hikaru utada - one last kiss`)}`)
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss"))
         );
 
-
         try {
-            const search = await ytdl.search(input);
+            const searchApiUrl = global.tools.api.createUrl("agatz", "/api/ytsearch", {
+                message: input
+            });
+            const searchResponse = await axios.get(searchApiUrl);
+            const searchData = searchResponse.data.data[0];
 
-            if (!search.status) return ctx.reply(global.msg.notFound);
+            if (!searchData) return ctx.reply(global.msg.notFound);
 
-            const data = search.data[0];
+            const data = searchData;
 
             await ctx.reply(
                 `${quote(`Judul: ${data.title}`)}\n` +
@@ -42,19 +47,30 @@ module.exports = {
                 global.msg.footer
             );
 
-            const mp3 = await ytdl.mp3(data.url);
+            const getYtdlResponse = async () => {
+                try {
+                    return await youtubedl(searchData.url);
+                } catch {
+                    return await youtubedlv2(searchData.url);
+                }
+            };
 
-            if (!mp3.status) return ctx.reply(global.msg.notFound);
+            const ytdlResponse = await getYtdlResponse();
+            const audioInfo = Object.values(ytdlResponse.audio)[0];
+            const audioUrl = await audioInfo.download();
+
+            if (!audioUrl) return ctx.reply(global.msg.notFound);
 
             return await ctx.reply({
                 audio: {
-                    url: mp3.media
+                    url: audioUrl
                 },
                 mimetype: mime.contentType("mp3"),
                 ptt: false
             });
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
+            if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

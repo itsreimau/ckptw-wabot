@@ -16,7 +16,7 @@ module.exports = {
             const fakeProduct = {
                 key: {
                     fromMe: false,
-                    participant: ctx.sender.jid, // Change it to `0${S_WHATSAPP_NET}` if you want to become an official WhatsApp account.
+                    participant: ctx.sender.jid, // Ubah menjadi `0${S_WHATSAPP_NET}` jika Anda ingin menjadi akun WhatsApp resmi.
                     ...({
                         remoteJid: "status@broadcast"
                     })
@@ -81,7 +81,7 @@ module.exports = {
                 }
             );
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

@@ -2,6 +2,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -14,15 +15,16 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            coin: 3
+            energy: 10,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} en halo!`)}`)
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))
         );
 
         try {
@@ -30,11 +32,13 @@ module.exports = {
                 text: input,
                 speaker: "id_001"
             });
-            const data = await global.tools.fetch.json(apiUrl, {
-
-                "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-
-
+            const {
+                data
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
+                },
+                responseType: "arraybuffer"
             });
 
             return await ctx.reply({
@@ -43,7 +47,7 @@ module.exports = {
                 ptt: true
             });
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }

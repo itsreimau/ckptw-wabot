@@ -23,7 +23,7 @@ module.exports = {
 
             exec(`pm2 restart ckptw-wabot`); // PM2.
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

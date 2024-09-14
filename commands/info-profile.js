@@ -12,14 +12,15 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, {
-            banned: true
+            banned: true,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
         try {
             const senderNumber = ctx.sender.jid.split("@")[0];
-            const [coin, isPremium] = await Promise.all([
-                global.db.get(`user.${senderNumber}.coin`) || "-",
+            const [energy, premium] = await Promise.all([
+                global.db.get(`user.${senderNumber}.energy`) || "-",
                 global.db.get(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak",
             ]);
 
@@ -33,22 +34,15 @@ module.exports = {
                     url: profileUrl,
                 },
                 mimetype: mime.contentType("png"),
-                caption: `${quote(`Nama: ${ctx.sender.pushName}`)}` +
-                    (global.system.usePremium ?
-                        "\n" +
-                        `${quote(`Premium: ${isPremium}`)}\n` :
-                        "\n") +
-                    (global.system.useCoin ?
-                        "\n" +
-                        `${quote(`Koin: ${coin}`)}` :
-                        "\n") +
+                caption: `${quote(`Nama: ${ctx.sender.pushName}`)}\n` +
+                    `${quote(`Premium: ${premium}`)}\n` +
+                    `${quote(`Energi: ${energy}`)}\n` +
                     "\n" +
-                    global.msg.footer
-
+                    global.msg.footer,
             });
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
-    },
+    }
 };

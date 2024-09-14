@@ -12,21 +12,22 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            coin: 3
+            energy: 10,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} halo!`)}`)
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "halo dunia!"))
         );
 
         try {
             ctx.reply(Buffer.from(input, "utf-8").toString("base64"));
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

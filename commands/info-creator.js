@@ -7,6 +7,14 @@ module.exports = {
     aliases: ["creator", "developer"],
     category: "info",
     code: async (ctx) => {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
+            cooldown: true
+        });
+        if (status) return ctx.reply(message);
+
         const vcard = new VCardBuilder()
             .setFullName(global.owner.name)
             .setOrg(global.owner.organization)

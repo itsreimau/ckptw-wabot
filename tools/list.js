@@ -36,7 +36,7 @@ async function get(type, ctx) {
                     }));
 
                 if (categoryCommands.length > 0) {
-                    menuText += `◉ ${bold(tag[category])}\n`;
+                    menuText += `◊ ${bold(tag[category])}\n`;
 
                     categoryCommands.forEach(cmd => {
                         menuText += quote(monospace(`${ctx._used.prefix || "/"}${cmd.name}`));
@@ -53,7 +53,7 @@ async function get(type, ctx) {
             menuText += global.msg.footer;
             return menuText;
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return quote(`⚠ Terjadi kesalahan: ${error.message}`);
         }
     };
@@ -71,7 +71,7 @@ async function get(type, ctx) {
 
                     text += global.msg.footer;
                 } catch (error) {
-                    console.error("Error:", error);
+                    console.error("[ckptw-wabot] Kesalahan:", error);
                     text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
                 }
                 break;
@@ -87,7 +87,7 @@ async function get(type, ctx) {
 
                     text += global.msg.footer;
                 } catch (error) {
-                    console.error("Error:", error);
+                    console.error("[ckptw-wabot] Kesalahan:", error);
                     text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
                 }
                 break;
@@ -100,7 +100,7 @@ async function get(type, ctx) {
                     text += "\n" +
                         global.msg.footer;
                 } catch (error) {
-                    console.error("Error:", error);
+                    console.error("[ckptw-wabot] Kesalahan:", error);
                     text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
                 }
                 break;
@@ -134,13 +134,13 @@ async function get(type, ctx) {
                 break;
             }
             default: {
-                console.error("Error:", error);
+                console.error("[ckptw-wabot] Kesalahan:", error);
                 text = quote(`⚠ Tidak diketahui: ${type}`);
                 break;
             }
         }
     } catch (error) {
-        console.error("Error:", error);
+        console.error("[ckptw-wabot] Kesalahan:", error);
         text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
     }
 

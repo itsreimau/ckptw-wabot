@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const os = require("os");
 
 module.exports = {
@@ -10,7 +11,9 @@ module.exports = {
         const apiUrl = global.tools.api.createUrl("http://ip-api.com", "/json", {});
 
         try {
-            const data = await global.tools.fetch.json(apiUrl);
+            const {
+                data
+            } = await axios.get(apiUrl);
             const startTime = global.system.startTime;
 
             return ctx.reply(
@@ -23,7 +26,7 @@ module.exports = {
                 global.msg.footer
             );
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

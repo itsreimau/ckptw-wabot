@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const FormData = require("form-data");
 const {
     JSDOM
@@ -16,19 +17,20 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, {
-            banned: true
+            banned: true,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
         const quotedMessage = ctx.quoted;
 
-        if (!(await quotedMessage.media.toBuffer())) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
+        if (!(await quotedMessage.media.toBuffer())) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["sticker"])));
 
         try {
             const buffer = await quotedMessage.media.toBuffer()
             const vidUrl = buffer ? await webp2mp4(buffer) : null;
 
-            if (!vidUrl) return ctx.reply(quote(`⚠ Terjadi kesalahan: Media tidak valid.`));
+            if (!vidUrl) return ctx.reply(global.msg.notFound);
 
             return await ctx.reply({
                 video: {
@@ -38,7 +40,7 @@ module.exports = {
                 gifPlayback: ctx._used.command === "togif" ? true : false
             });
         } catch (error) {
-            console.error("Error", error);
+            console.error("[ckptw-wabot] Error", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

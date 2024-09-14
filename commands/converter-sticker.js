@@ -18,13 +18,14 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, {
-            banned: true
+            banned: true,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
         const msgType = ctx.getMessageType();
 
-        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !(await ctx.quoted.media.toBuffer())) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar, GIF, atau video!`));
+        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !(await ctx.quoted.media.toBuffer())) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["image", "gif", "video"])));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
@@ -39,7 +40,7 @@ module.exports = {
 
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
-            console.error("Error", error);
+            console.error("[ckptw-wabot] Error", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

@@ -2,6 +2,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 module.exports = {
     name: "cekkhodam",
@@ -13,20 +14,23 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            coin: 3
+            energy: 5,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} john doe`)}`)
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "john doe"))
         );
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.caliph.my.id", `/khodam.json`, {});
-            const data = await global.tools.fetch.json(apiUrl);
+            const {
+                data
+            } = await axios.get(apiUrl);
             const khodam = global.tools.general.getRandomElement(data);
 
             return ctx.reply(
@@ -36,7 +40,7 @@ module.exports = {
                 global.msg.footer
             );
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return message.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }

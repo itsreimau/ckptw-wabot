@@ -16,14 +16,15 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            coin: 3,
+            energy: 10,
+            cooldown: true,
             private: true
         });
         if (status) return ctx.reply(message);
 
         if (!ctx.args.length) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ${ctx._client.user.id.split(":")[0]} halo!`)}`)
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "halo dunia!"))
         );
 
         try {
@@ -41,7 +42,7 @@ module.exports = {
             const fakeText = {
                 key: {
                     fromMe: false,
-                    participant: numberFormatted + S_WHATSAPP_NET, // Change it to "0S_WHATSAPP_NET" if you want to become an official WhatsApp account.
+                    participant: numberFormatted + S_WHATSAPP_NET,
                     ...({
                         remoteJid: "status@broadcast"
                     })
@@ -83,7 +84,7 @@ module.exports = {
 
             return ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

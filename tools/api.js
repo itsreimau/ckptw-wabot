@@ -1,4 +1,4 @@
-// List of free APIs, use them wisely!
+// Daftar API gratis, gunakan dengan bijak!
 const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"
@@ -14,7 +14,7 @@ const APIs = {
     },
     fasturl: {
         baseURL: "https://fastrestapis.fasturl.cloud",
-        APIKey: "8f03c932-7c66-4194-a245-b3ba83e556a8" // Create your own API key, don't use this one!
+        APIKey: "8f03c932-7c66-4194-a245-b3ba83e556a8" // Buat kunci API Anda sendiri, jangan gunakan yang ini!
     },
     firda: {
         baseURL: "https://api.firda.uz"
@@ -84,7 +84,7 @@ function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
 
         return apiUrl.toString();
     } catch (error) {
-        console.error("Error:", error);
+        console.error("[ckptw-wabot] Kesalahan:", error);
     }
 }
 

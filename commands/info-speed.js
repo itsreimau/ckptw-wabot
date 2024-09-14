@@ -15,7 +15,7 @@ module.exports = {
             const responseTime = (performance.now() - startTime).toFixed(2);
             await ctx.editMessage(testSpeed.key, quote(`Merespon dalam ${responseTime} ms.`));
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

@@ -6,6 +6,15 @@ module.exports = {
     name: "afk",
     category: "main",
     code: async (ctx) => {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
+            banned: true,
+            cooldown: true
+        });
+        if (status) return ctx.reply(message);
+
         const input = ctx.args.join(" ") || null;
 
         try {
@@ -17,7 +26,7 @@ module.exports = {
 
             return ctx.reply(quote(`⚠ Anda sekarang akan AFK dengan alasan ${reason}.`));
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

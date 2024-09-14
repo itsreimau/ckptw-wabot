@@ -1,4 +1,4 @@
-// Required modules and dependencies.
+// Modul dan dependensi yang diperlukan.
 const handler = require("./handler.js");
 const tools = require("./tools/exports.js");
 const {
@@ -24,10 +24,10 @@ const {
     inspect
 } = require("util");
 
-// Connection message.
-console.log("Connecting...");
+// Pesan koneksi.
+console.log("[ckptw-wabot] Menghubungkan...");
 
-// Create a new bot instance.
+// Buat instance bot baru.
 const bot = new Client({
     WAVersion: [2, 3000, 1015901307],
     autoMention: global.system.autoMention,
@@ -39,25 +39,25 @@ const bot = new Client({
     usePairingCode: global.system.usePairingCode
 });
 
-// Create a new database instance.
+// Buat contoh database baru.
 const db = new SimplDB();
 global.db = db;
 
-// Event handling when the bot is ready.
+// Penanganan acara saat bot siap.
 bot.ev.once(Events.ClientReady, async (m) => {
-    console.log(`Ready at ${m.user.id}`);
+    console.log(`Siap di ${m.user.id}`);
     global.system.startTime = Date.now();
 });
 
-// Create command handlers and load commands.
+// Buat penangan perintah dan muat perintah.
 const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
 cmd.load();
 
-// Assign global handler and tools.
+// Tetapkan global pada handler dan tools.
 global.handler = handler;
 global.tools = tools;
 
-// Event handling when a message appears.
+// Penanganan event ketika pesan muncul.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
@@ -66,20 +66,31 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const groupJid = isGroup ? m.key.remoteJid : null;
     const groupNumber = isGroup ? groupJid.split("@")[0] : null;
 
-    // Database for user.
+    // Log pesan masuk
+    if (isGroup) {
+        console.log(`[ckptw-wabot] Pesan masuk dari grup: ${groupNumber}, oleh: ${senderNumber}`);
+    } else {
+        console.log(`[ckptw-wabot] Pesan masuk dari: ${senderNumber}`);
+    }
+
+    // Basis data untuk pengguna.
     const userDb = await db.get(`user.${senderNumber}`);
     if (!userDb) {
         await db.set(`user.${senderNumber}`, {
-            coin: 10,
+            energy: 10,
             isBanned: false,
-            isPremium: false
+            isPremium: false,
+            onCharger: false
         });
     }
 
-    // Auto-typing simulation for commands.
+    // Mengisi energi bagi pengguna yang menggunakan charger.
+    await energyCharger();
+
+    // Simulasi pengetikan otomatis untuk perintah.
     if (tools.general.isCmd(m, ctx)) ctx.simulateTyping();
 
-    // "Did you mean?" for typo commands.
+    // "Did you mean?" untuk perintah salah ketik.
     const prefixRegex = new RegExp(ctx._config.prefix, "i");
     const content = m.content && m.content.trim();
     if (prefixRegex.test(content)) {
@@ -97,7 +108,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (mean && mean !== cmdName) ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
     }
 
-    // AFK handling: Mentioned users.
+    // Penanganan AFK: Pengguna yang disebutkan.
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         for (const mentionJid of mentionJids) {
@@ -114,7 +125,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
     }
 
-    // AFK handling: Leaving from AFK.
+    // Penanganan AFK : Berangkat dari AFK.
     const getAFKMessage = await db.get(`user.${senderNumber}.afk`);
     if (getAFKMessage) {
         const [reason, timeStamp] = await Promise.all([
@@ -127,12 +138,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
     }
 
-    // Owner-only commands.
-    if (tools.general.isOwner(ctx, {
-            id: senderNumber,
-            selfOwner: true
-        }) === 1) {
-        // Eval command: Execute JavaScript code.
+    // Perintah khusus pemilik.
+    if (tools.general.isOwner(ctx, senderNumber, true)) {
+        // Perintah eval: Jalankan kode JavaScript.
         if (m.content && m.content.startsWith && (m.content.startsWith("=>> ") || m.content.startsWith("=> "))) {
             const code = m.content.slice(2);
 
@@ -141,12 +149,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                 await ctx.reply(inspect(result));
             } catch (error) {
-                console.error("Error:", error);
+                console.error("[ckptw-wabot] Kesalahan:", error);
                 ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
             }
         }
 
-        // Exec command: Execute shell commands.
+        // Perintah Exec: Jalankan perintah shell.
         if (m.content && m.content.startsWith && m.content.startsWith("$ ")) {
             const command = m.content.slice(2);
 
@@ -165,28 +173,30 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                 await ctx.reply(output);
             } catch (error) {
-                console.error("Error:", error);
+                console.error("[ckptw-wabot] Kesalahan:", error);
                 ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
             }
         }
     }
 
-    // Group-specific actions.
+    // Grup.
     if (isGroup) {
-        // Antilink handling.
+        // Penanganan antilink.
         const getAntilink = await db.get(`group.${groupNumber}.antilink`);
-        const urlRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)\b/i;
-        if (getAntilink && m.content && urlRegex.test(m.content)) {
-            if ((await tools.general.isAdmin(ctx)) === 1);
+        const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
+        if (getAntilink) {
+            if (m.content && urlRegex.test(m.content)) {
+                if (await tools.general.isAdmin(ctx, senderNumber)) return;
 
-            await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
-            await ctx.deleteMessage(m.key);
+                await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
+                await ctx.deleteMessage(m.key);
+            }
         }
     }
 
-    // Private messages.
+    // Pribadi.
     if (isPrivate) {
-        // Menfess handling.
+        // Penanganan menfess.
         const getMessageDataMenfess = await db.get(`menfess.${senderNumber}`);
         if (getMessageDataMenfess) {
             const [from, text] = await Promise.all([
@@ -200,7 +210,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                     ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
                 } catch (error) {
-                    console.error("Error:", error);
+                    console.error("[ckptw-wabot] Kesalahan:", error);
                     ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
                 }
             }
@@ -208,7 +218,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 });
 
-// Event handling when a user joins or leaves a group
+// Penanganan peristiwa ketika pengguna bergabung atau keluar dari grup
 bot.ev.on(Events.UserJoin, (m) => {
     m.eventsType = "UserJoin";
     handleUserEvent(m);
@@ -220,10 +230,10 @@ bot.ev.on(Events.UserLeave, (m) => {
 });
 
 
-// Launch the bot.
-bot.launch().catch((error) => console.error("Error:", error));
+// Luncurkan bot.
+bot.launch().catch((error) => console.error("[ckptw-wabot] Kesalahan:", error));
 
-// Utility functions
+// Fungsi utilitas.
 async function sendMenfess(ctx, m, senderNumber, from) {
     const fakeText = {
         key: {
@@ -319,9 +329,34 @@ async function handleUserEvent(m) {
             }
         }
     } catch (error) {
-        console.error("Error:", error);
+        console.error("[ckptw-wabot] Kesalahan:", error);
         bot.core.sendMessage(id, {
             text: quote(`⚠ Terjadi kesalahan: ${error.message}`)
         });
     }
+}
+
+async function energyCharger() {
+    setInterval(() => {
+        const users = await db.get("user") || {};
+
+        Object.keys(users).forEach(senderNumber => {
+            const userPath = `user.${senderNumber}`;
+            const user = await db.get(userPath) || {};
+
+            if (user.onCharger) {
+                let energy = await db.get(`${userPath}.energy`) || 0;
+                const maxEnergy = 100;
+
+                if (energy < maxEnergy) {
+                    energy += 1;
+                    await db.set(`${userPath}.energy`, energy);
+                    console.log(`[ckptw-wabot] Energi ${senderNumber} sekarang: ${energy}`);
+                } else {
+                    await db.set(`${userPath}.onCharger`, false);
+                    console.log(`[ckptw-wabot] Energi ${senderNumber} sudah penuh! Pengisian dihentikan.`);
+                }
+            }
+        });
+    }, 60000);
 }

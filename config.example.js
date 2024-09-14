@@ -1,5 +1,6 @@
 const pkg = require("./package.json");
 const {
+    monospace,
     italic,
     quote
 } = require("@mengkodingan/ckptw");
@@ -8,33 +9,30 @@ const {
 global.bot = {
     name: "CKPTW",
     prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
-    phoneNumber: "628xxxxxxxxxx", // Ignore if you use QR code for authentication.
+    phoneNumber: "628xxxxxxxxxx", // Abaikan jika Anda menggunakan kode QR untuk otentikasi.
     thumbnail: "https://e1.pxfuel.com/desktop-wallpaper/943/672/desktop-wallpaper-whatsapp-bot-what-is-it-and-how-to-use-messenger-chatbots-chatbot.jpg",
-    groupChat: "https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs" // Don't forget to join, friends!
+    groupChat: "https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs" // Jangan lupa untuk bergabung ya teman-teman!
 };
 
-// MSG (Message).
+// MSG (Pesan).
 global.msg = {
-    // Command access.
+    // Akses perintah.
     admin: quote("⚠ Perintah hanya dapat diakses oleh admin grup!"),
     banned: quote("⚠ Tidak dapat memproses karena Anda telah dibanned!"),
     botAdmin: quote("⚠ Bot bukan admin, tidak bisa menggunakan perintah!"),
-    coin: quote("⚠ Anda tidak punya cukup koin!"),
+    energy: quote(`⚠ Anda tidak punya cukup energi! Ketik ${monospace("/charger")} untuk mengisi energi.`),
     group: quote("⚠ Perintah hanya dapat diakses dalam grup!"),
     owner: quote("⚠ Perintah hanya dapat diakses Owner!"),
     premium: quote("⚠ Anda bukan pengguna Premium!"),
     private: quote("⚠ Perintah hanya dapat diakses dalam obrolan pribadi!"),
 
-    // Command interface.
+    // Antarmuka perintah.
     watermark: `${pkg.name}@^${pkg.version}`,
     footer: italic("Developed by ItsReimau"),
     readmore: "\u200E".repeat(4001),
 
-    // Command process.
-    argument: "📌 Masukkan argumen!",
+    // Proses perintah.
     wait: "🔄 Tunggu sebentar...",
-
-    // Command process (Error).
     notFound: "❎ Tidak ada yang ditemukan!",
     urlInvalid: "❎ URL tidak valid!"
 };
@@ -47,18 +45,19 @@ global.owner = {
     co: ["628xxxxxxxxxx"]
 };
 
-// Sticker.
+// Stiker.
 global.sticker = {
     packname: "Stiker ini dibuat oleh",
     author: "@ckptw-wabot"
 };
 
-// System.
+// Sistem.
 global.system = {
     autoRead: true,
+    cooldown: 10000,
     selfReply: true,
     timeZone: "Asia/Jakarta",
-    useCoin: true,
+    useEnergy: true,
     useInteractiveMessage: true,
     usePairingCode: true,
     usePremium: true

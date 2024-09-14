@@ -17,6 +17,7 @@ module.exports = {
             admin: true,
             banned: true,
             botAdmin: true,
+            cooldown: true,
             group: true
         });
         if (status) return ctx.reply(message);
@@ -24,8 +25,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input && !isNaN(Number(input))) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} ${ctx._client.user.id.split(":")[0]}`)}`)
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, ctx._client.user.id.split(":")[0]))
         );
 
         try {
@@ -39,7 +40,7 @@ module.exports = {
 
             return ctx.reply(quote(`✅ Berhasil ditambahkan!`));
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

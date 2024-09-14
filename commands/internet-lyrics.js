@@ -2,6 +2,7 @@ const {
     bold,
     monospace
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -14,22 +15,25 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            coin: 3
+            energy: 10,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} hikaru utada - one last kiss`)}`
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"])}\n` +
+            global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss")
         );
 
         try {
             const apiUrl = await global.tools.api.createUrl("ngodingaja", "/api/lirik", {
                 search: input
             });
-            const data = await global.tools.fetch.json(apiUrl);
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             return ctx.reply(
                 `❖ ${bold("Lyrics")}\n` +
@@ -42,7 +46,7 @@ module.exports = {
                 global.msg.footer
             );
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }

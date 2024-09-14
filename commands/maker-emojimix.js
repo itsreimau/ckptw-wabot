@@ -1,7 +1,9 @@
 const {
     bold,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const {
     Sticker,
     StickerTypes
@@ -17,13 +19,14 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            coin: 3
+            energy: 10,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
         if (!ctx.args.length) return ctx.reply(
-            `${global.msg.argument}\n` +
-            `Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 😱 🤓`)}`
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "😱 🤓"))
         );
 
         try {
@@ -39,7 +42,7 @@ module.exports = {
                 collection: "emoji_kitchen_v5",
                 q: `${emoji1}_${emoji2}`
             });
-            const response = await global.tools.fetch.json(apiUrl);
+            const response = await axios.get(apiUrl);
             const data = await response.data;
 
             if (!data.results[0].url) return ctx.reply(global.msg.notFound);
@@ -55,7 +58,7 @@ module.exports = {
 
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
-            console.error("Error", error);
+            console.error("[ckptw-wabot] Error", error);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }

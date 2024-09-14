@@ -2,6 +2,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 module.exports = {
     name: "crypto",
@@ -13,15 +14,16 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            coin: 3
+            energy: 10,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} bitcoin`)}`)
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "bitcoin"))
         );
 
         try {
@@ -42,7 +44,7 @@ module.exports = {
                 global.msg.footer
             );
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
@@ -55,7 +57,7 @@ async function coingecko(search) {
     });
 
     try {
-        const response = await global.tools.fetch.json(apiUrl, {
+        const response = await axios.get(apiUrl, {
             headers: {
                 "User-Agent": global.system.userAgent
             }
@@ -79,7 +81,7 @@ async function coingecko(search) {
 
         return result;
     } catch (error) {
-        console.error("Error:", error);
+        console.error("[ckptw-wabot] Kesalahan:", error);
         return null;
     }
 }

@@ -7,6 +7,14 @@ module.exports = {
     aliases: ["donasi"],
     category: "info",
     code: async (ctx) => {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
+            cooldown: true
+        });
+        if (status) return ctx.reply(message);
+
         return ctx.reply(
             `${quote("083838039693 (DANA)")}\n` +
             `${quote("─────")}\n` +

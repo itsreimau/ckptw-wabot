@@ -37,7 +37,7 @@ module.exports = {
                 mentions: mentions.map((mention) => mention.mention)
             });
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

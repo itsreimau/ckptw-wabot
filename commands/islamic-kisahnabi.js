@@ -2,6 +2,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 module.exports = {
     name: "kisahnabi",
@@ -12,24 +13,27 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            coin: 3
+            energy: 10,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} muhammad`)}`)
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "muhammad"))
         );
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/ZeroChanBot/Api-Freee/master/data/kisahNabi/${input.toLowerCase()}.json`, {});
-            const data = await global.tools.fetch.json(apiUrl);
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             return ctx.reply(
                 `${quote(`Nama: ${data.name}`)}\n` +
-                `${quote(`Tahun kelahiran: ${data.thn_kelahiran}`)}\n` +
+                `${quote(`Tahun kelahiran: ${data.thn_kelahiran} SM`)}\n` +
                 `${quote(`Tempat kelahiran: ${data.tmp}`)}\n` +
                 `${quote(`Usia: ${data.usia}`)}\n` +
                 `${quote("─────")}\n` +
@@ -38,7 +42,7 @@ module.exports = {
                 global.msg.footer
             );
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }

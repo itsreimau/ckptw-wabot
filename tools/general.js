@@ -7,8 +7,8 @@ async function checkAdmin(ctx, id) {
         const members = await ctx.group().members();
         return members.filter((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id == id).length ? true : false;
     } catch (error) {
-        console.error("Error:", error);
-        return false;
+        console.error("[ckptw-wabot] Kesalahan:", error);
+        return null;
     }
 }
 
@@ -17,37 +17,49 @@ function convertMsToDuration(ms) {
         const seconds = Math.floor((ms / 1000) % 60);
         const minutes = Math.floor((ms / (1000 * 60)) % 60);
         const hours = Math.floor(ms / (1000 * 60 * 60));
-        let durationString = "";
-        if (hours > 0) durationString += hours + " jam ";
-        if (minutes > 0) durationString += minutes + " menit ";
-        if (seconds > 0) durationString += seconds + " detik";
+        let durationString = null;
+
+        if (hours > 0) {
+            durationString += hours + " jam ";
+        }
+        if (minutes > 0) {
+            durationString += minutes + " menit ";
+        }
+        if (seconds > 0) {
+            durationString += seconds + " detik";
+        }
+
         return durationString;
     } catch (error) {
-        console.error("Error:", error);
-        return "";
+        console.error("[ckptw-wabot] Kesalahan:", error);
+        return null;
     }
 }
 
 function formatSize(bytes) {
     try {
         const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-        if (bytes === 0) return "0 Byte";
+        if (bytes === 0) {
+            return "0 Byte";
+        }
         const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
         return Math.round(bytes / Math.pow(1024, i), 2) + " " + sizes[i];
     } catch (error) {
-        console.error("Error:", error);
-        return "";
+        console.error("[ckptw-wabot] Kesalahan:", error);
+        return null;
     }
 }
 
 function getRandomElement(arr) {
     try {
-        if (arr.length === 0) return undefined;
+        if (arr.length === 0) {
+            return null;
+        }
         const randomIndex = Math.floor(Math.random() * arr.length);
         return arr[randomIndex];
     } catch (error) {
-        console.error("Error:", error);
-        return undefined;
+        console.error("[ckptw-wabot] Kesalahan:", error);
+        return null;
     }
 }
 
@@ -62,19 +74,19 @@ function isCmd(m, ctx) {
         }
         return false;
     } catch (error) {
-        console.error("Error:", error);
-        return false;
+        console.error("[ckptw-wabot] Kesalahan:", error);
+        return null;
     }
 }
 
-async function isAdmin(ctx, obj) {
+async function isAdmin(ctx, id) {
     try {
-        const id = obj.id || ctx.sender.jid;
+        const id = id || ctx.sender.jid;
         const isAdmin = await checkAdmin(ctx, id);
-        return isAdmin ? 1 : 0;
+        return isAdmin;
     } catch (error) {
-        console.error("Error:", error);
-        return 0;
+        console.error("[ckptw-wabot] Kesalahan:", error);
+        return null;
     }
 }
 
@@ -82,21 +94,21 @@ async function isBotAdmin(ctx) {
     try {
         const id = ctx._client.user.id.split(":")[0] + S_WHATSAPP_NET;
         const isBotAdmin = await checkAdmin(ctx, id);
-        return isBotAdmin ? 1 : 0;
+        return isBotAdmin;
     } catch (error) {
-        console.error("Error:", error);
-        return 0;
+        console.error("[ckptw-wabot] Kesalahan:", error);
+        return null;
     }
 }
 
-function isOwner(ctx, obj) {
+function isOwner(ctx, id, selfOwner) {
     try {
-        const id = obj.id || ctx.sender.jid.replace(/@.*|:.*/g, "");
-        const isOwner = obj.selfOwner ? ctx._client.user.id.split(":")[0] === id || global.owner.number === id || global.owner.co.includes(id) : global.owner.number === id || global.owner.co.includes(id);
-        return isOwner ? 1 : 0;
+        const id = id || ctx.sender.jid.replace(/@.*|:.*/g, null);
+        const isOwner = selfOwner ? ctx._client.user.id.split(":")[0] === id || global.owner.number === id || global.owner.co.includes(id) : global.owner.number === id || global.owner.co.includes(id);
+        return isOwner;
     } catch (error) {
-        console.error("Error:", error);
-        return 0;
+        console.error("[ckptw-wabot] Kesalahan:", error);
+        return null;
     }
 }
 
@@ -104,8 +116,8 @@ function ucword(str) {
     try {
         return str.toLowerCase().replace(/\b(\w)/g, (s) => s.toUpperCase());
     } catch (error) {
-        console.error("Error:", error);
-        return "";
+        console.error("[ckptw-wabot] Kesalahan:", error);
+        return null;
     }
 }
 

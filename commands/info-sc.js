@@ -11,6 +11,6 @@ module.exports = {
             `${quote("https://github.com/itsreimau/ckptw-wabot")}\n` +
             "\n" +
             global.msg.footer
-        ); // If you don't delete this, thank you!
+        ); // Jika Anda tidak menghapus ini, terima kasih!
     }
 };

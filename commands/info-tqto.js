@@ -7,6 +7,14 @@ module.exports = {
     aliases: ["thanksto"],
     category: "info",
     code: async (ctx) => {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
+            cooldown: true
+        });
+        if (status) return ctx.reply(message);
+
         return ctx.reply(
             `${quote("Allah SWT")}\n` +
             `${quote("JastinXyz (https://github.com/JastinXyz)")}\n` +

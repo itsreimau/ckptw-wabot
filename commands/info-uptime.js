@@ -10,7 +10,8 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, {
-            banned: true
+            banned: true,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 

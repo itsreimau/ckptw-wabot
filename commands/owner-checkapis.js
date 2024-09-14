@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 module.exports = {
     name: "checkapis",
@@ -23,7 +24,7 @@ module.exports = {
 
             for (const [name, api] of Object.entries(APIs)) {
                 try {
-                    const response = await global.tools.fetch.json(api.baseURL, {
+                    const response = await axios.get(api.baseURL, {
                         headers: {
                             "User-Agent": global.system.userAgent
                         }
@@ -40,7 +41,7 @@ module.exports = {
                 global.msg.footer
             );
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

@@ -14,6 +14,7 @@ module.exports = {
             admin: true,
             banned: true,
             botAdmin: true,
+            cooldown: true,
             group: true,
         });
         if (status) return ctx.reply(message);
@@ -21,8 +22,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`${global.msg.argument} Argumen yang tersedia adalah open, close, lock, dan unlock.`)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} open`)}`)
+            `${quote(`${global.tools.msg.generateInstruction(["send"], ["text"])} Argumen yang tersedia adalah open, close, lock, dan unlock.`)}\n` +
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "open"))
         );
 
         try {
@@ -45,7 +46,7 @@ module.exports = {
 
             return ctx.reply(quote(`✅ Berhasil mengubah setelan grup!`));
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

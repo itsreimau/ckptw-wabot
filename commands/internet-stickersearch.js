@@ -2,6 +2,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const {
     Sticker,
     StickerTypes
@@ -17,7 +18,8 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            coin: 3,
+            energy: 10,
+            cooldown: true,
             private: true
         });
         if (status) return ctx.reply(message);
@@ -25,15 +27,15 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.msg.argument)}\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} evangelion`)}`)
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "evangelion"))
         );
 
         try {
             const apiUrl = await global.tools.api.createUrl("agatz", "/api/sticker", {
                 message: input
             });
-            const response = await global.tools.fetch.json(apiUrl);
+            const response = await axios.get(apiUrl);
             const {
                 data
             } = response.data;
@@ -59,7 +61,7 @@ module.exports = {
                 await new Promise(resolve => setTimeout(resolve, 3000));
             }
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }

@@ -27,8 +27,8 @@ module.exports = {
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : input + S_WHATSAPP_NET;
 
         if (!input || !user) return ctx.reply({
-            text: `${quote(global.msg.argument)}\n` +
-                quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} @${senderNumber}`)}`),
+            text: `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+                quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderNumber}`)),
             mentions: [senderJid]
         });
 
@@ -43,7 +43,7 @@ module.exports = {
             });
             return ctx.reply(quote(`✅ Berhasil dibanned!`));
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

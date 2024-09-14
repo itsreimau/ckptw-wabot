@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const FormData = require("form-data");
 const {
     JSDOM
@@ -16,19 +17,20 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, {
-            banned: true
+            banned: true,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
         const quotedMessage = ctx.quoted;
 
-        if (!(await quotedMessage.media.toBuffer())) return ctx.reply(quote(`📌 Berikan atau balas media berupa sticker!`));
+        if (!(await quotedMessage.media.toBuffer())) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["sticker"])));
 
         try {
             const buffer = await quotedMessage.media.toBuffer()
             const imgUrl = buffer ? await webp2png(buffer) : null;
 
-            if (!imgUrl) return ctx.reply(quote(`⚠ Terjadi kesalahan: Media tidak valid.`));
+            if (!imgUrl) return ctx.reply(global.msg.notFound);
 
             return await ctx.reply({
                 image: {
@@ -37,7 +39,7 @@ module.exports = {
                 mimetype: mime.contentType("png")
             });
         } catch (error) {
-            console.error("Error", error);
+            console.error("[ckptw-wabot] Error", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
@@ -74,7 +76,7 @@ async function webp2png(source) {
         } = new JSDOM(html2).window;
         return new URL(document2.querySelector("div#output > p.outfile > img").src, res2.request.res.responseUrl).toString();
     } catch (error) {
-        console.error("Error in webp2png function:", error);
+        console.error("[ckptw-wabot] Error in webp2png function:", error);
         return null;
     }
 }

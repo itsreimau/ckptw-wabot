@@ -1,12 +1,17 @@
+const {
+    Cooldown
+} = require("@mengkodingan/ckptw");
+
 async function handler(ctx, options) {
     const senderJid = ctx.sender.jid;
     const senderNumber = senderJid.replace(/@.*|:.*/g, "");
 
+    const isOwner = await global.tools.general.isOwner(ctx, senderNumber, true);
+    const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
+
     const checkOptions = {
         admin: {
-            function: async () => ((await ctx.isGroup()) ? (await global.tools.general.isAdmin(ctx, {
-                id: senderJid
-            })) === 0 : null),
+            function: async () => ctx.isGroup() && !await global.tools.general.isAdmin(ctx, senderJid),
             msg: global.msg.admin
         },
         banned: {
@@ -14,53 +19,38 @@ async function handler(ctx, options) {
             msg: global.msg.banned
         },
         botAdmin: {
-            function: async () => ((await ctx.isGroup()) ? (await global.tools.general.isBotAdmin(ctx)) === 0 : null),
+            function: async () => ctx.isGroup() && !await global.tools.general.isBotAdmin(ctx),
             msg: global.msg.botAdmin
         },
-        coin: {
+        energy: {
             function: async () => {
-                if (global.system.useCoin) {
-                    const getCoin = await global.db.get(`user.${senderNumber}.coin`);
+                if (!global.system.useenergy || isOwner || isPremium) return false;
 
-                    const isOwner = await global.tools.general.isOwner(ctx, {
-                        id: senderNumber,
-                        selfOwner: true
-                    });
-                    const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
-                    if (!ctx._args.length || isOwner === 1 || isPremium) return false;
+                const userenergy = await global.db.get(`user.${senderNumber}.energy`);
+                const requiredenergys = options.energy || 0;
 
-                    const requiredCoins = options.coin || 0;
-                    if (getCoin < requiredCoins) {
-                        await global.db.subtract(`user.${senderNumber}.coin`, requiredCoins);
-                        return true;
-                    }
+                if (userenergy < requiredenergys) {
+                    await global.db.subtract(`user.${senderNumber}.energy`, requiredenergys);
+                    return true;
                 }
+                return false;
             },
-            msg: global.msg.coin
+            msg: global.msg.energy
+        },
+        cooldown: {
+            function: async () => new Cooldown(ctx, global.system.cooldown).onCooldown,
+            msg: global.msg.cooldown
         },
         group: {
-            function: async () => await !ctx.isGroup(),
+            function: async () => !await ctx.isGroup(),
             msg: global.msg.group
         },
         owner: {
-            function: async () => (await global.tools.general.isOwner(ctx, {
-                id: senderNumber,
-                selfOwner: true
-            })) === 0,
+            function: async () => !isOwner,
             msg: global.msg.owner
         },
         premium: {
-            function: async () => {
-                const isOwner = await global.tools.general.isOwner(ctx, {
-                    id: senderNumber,
-                    selfOwner: true
-                });
-                const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
-                if (isOwner === 0 || !isPremium) return true;
-
-                return false;
-
-            },
+            function: async () => !isOwner && !isPremium,
             msg: global.msg.premium
         },
         private: {
@@ -69,21 +59,22 @@ async function handler(ctx, options) {
         }
     };
 
-    let status = false;
-    let message = null;
-
-    for (const option of Object.keys(options)) {
-        const checkOption = checkOptions[option];
-        if (await checkOption.function()) {
-            status = true;
-            message = checkOption.msg;
-            break;
+    for (const [option, checkOption] of Object.entries(options)) {
+        const {
+            function: checkFunction,
+            msg
+        } = checkOptions[option] || {};
+        if (checkFunction && await checkFunction()) {
+            return {
+                status: true,
+                message: msg
+            };
         }
     }
 
     return {
-        status,
-        message
+        status: false,
+        message: null
     };
 }
 

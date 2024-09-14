@@ -15,6 +15,7 @@ module.exports = {
             admin: true,
             banned: true,
             botAdmin: true,
+            cooldown: true,
             group: true
         });
         if (status) return ctx.reply(message);
@@ -22,8 +23,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${global.msg.argument} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
-            quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} welcome`)}`)
+            `${quote(`${global.tools.msg.generateInstruction(["send"], ["text"])} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`)}\n` +
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "welcome"))
         );
 
         if (ctx.args[0] === "list") {
@@ -45,7 +46,7 @@ module.exports = {
                     return ctx.reply(quote(`⚠ Perintah tidak valid. Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`));
             }
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

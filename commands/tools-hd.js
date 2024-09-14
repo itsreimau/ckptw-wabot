@@ -20,13 +20,14 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            coin: 3
+            energy: 10,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
         const msgType = ctx.getMessageType();
 
-        if (msgType !== MessageType.imageMessage && !(await ctx.quoted.media.toBuffer())) return ctx.reply(quote(`📌 Berikan atau balas media berupa gambar!`));
+        if (msgType !== MessageType.imageMessage && !(await ctx.quoted.media.toBuffer())) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["image"])));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
@@ -37,18 +38,18 @@ module.exports = {
                     url: result.image
                 },
                 caption: `${quote(`Anda bisa mengaturnya. Tersedia ukuran 2, 4, 6, 8, dan 16, defaultnya adalah 2. Gunakan ${monospace("anime")} jika gambarnya anime.`)}\n` +
-                    quote(`Contoh: ${monospace(`${ctx._used.prefix + ctx._used.command} 16 anime`)}`),
+                    quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "16 anime")),
                 mimetype: mime.contentType("png")
             });
         } catch (error) {
-            console.error("Error", error);
+            console.error("[ckptw-wabot] Error", error);
             if (error.status !== 200) return ctx.reply(global.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
 
-// Created by https://github.com/ZTRdiamond
+// Dibuat oleh https://github.com/ZTRdiamond
 async function upscale(buffer, size = 2, anime = false) {
     if (!buffer) throw new Error("undefined buffer input!");
     if (!Buffer.isBuffer(buffer)) throw new Error("invalid buffer input");

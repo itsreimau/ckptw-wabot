@@ -15,6 +15,7 @@ module.exports = {
         } = await global.handler(ctx, {
             admin: true,
             banned: true,
+            cooldown: true,
             group: true
         });
         if (status) return ctx.reply(message);
@@ -41,7 +42,7 @@ module.exports = {
                 mentions: mentions.map((mention) => mention.mention)
             });
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

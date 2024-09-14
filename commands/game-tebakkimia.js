@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 
 const session = new Map();
 
@@ -12,17 +13,18 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, {
-            banned: true
+            banned: true,
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
-        if (session.has(ctx.id)) return await ctx.reply(quote(`⚠ Sesi permainan sedang berjalan!`));
+        if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tebakkimia.json`, {});
-            const response = await global.tools.fetch.json(apiUrl);
+            const response = await axios.get(apiUrl);
             const data = global.tools.general.getRandomElement(response.data);
-            const coin = 3;
+            const energy = 10;
             const timeout = 60000;
             const senderNumber = ctx.sender.jid.replace(/@.*|:.*/g, "");
 
@@ -30,9 +32,9 @@ module.exports = {
 
             await ctx.reply(
                 `${quote(`Lambang: ${data.lambang}`)}` +
-                (global.system.useCoin ?
+                (global.system.useenergy ?
                     "\n" +
-                    `${quote(`+${coin} Koin`)}\n` :
+                    `${quote(`+${energy} Energi`)}\n` :
                     "\n") +
                 `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
                 `${quote('Ketik "hint" untuk bantuan.')}\n` +
@@ -50,13 +52,13 @@ module.exports = {
 
                 if (userAnswer === answer) {
                     await session.delete(ctx.id);
-                    if (global.system.useCoin) await global.db.add(`user.${senderNumber}.coin`, coin);
+                    if (global.system.useenergy) await global.db.add(`user.${senderNumber}.energy`, energy);
                     await ctx.sendMessage(
                         ctx.id, {
                             text: quote(`💯 Benar!`) +
-                                (global.system.useCoin ?
+                                (global.system.useenergy ?
                                     "\n" +
-                                    quote(`+${coin} Koin`) :
+                                    quote(`+${energy} Energi`) :
                                     "")
                         }, {
                             quoted: m
@@ -87,7 +89,7 @@ module.exports = {
             });
 
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

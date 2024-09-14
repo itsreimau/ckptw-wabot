@@ -21,7 +21,7 @@ module.exports = {
             const link = await ctx.group().inviteCode();
             return ctx.reply(`https://chat.whatsapp.com/${link}`);
         } catch (error) {
-            console.error("Error:", error);
+            console.error("[ckptw-wabot] Kesalahan:", error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
