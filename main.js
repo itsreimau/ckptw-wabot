@@ -340,7 +340,7 @@ async function energyCharger() {
     setInterval(async () => {
         const users = await db.get("user") || {};
 
-        Object.keys(users).forEach(senderNumber => {
+        for (const senderNumber of Object.keys(users)) {
             const userPath = `user.${senderNumber}`;
             const user = await db.get(userPath) || {};
 
@@ -357,6 +357,6 @@ async function energyCharger() {
                     console.log(`[ckptw-wabot] Energi ${senderNumber} sudah penuh! Pengisian dihentikan.`);
                 }
             }
-        });
+        }
     }, 60000);
 }
