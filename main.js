@@ -337,7 +337,7 @@ async function handleUserEvent(m) {
 }
 
 async function energyCharger() {
-    setInterval(() => {
+    setInterval(async () => {
         const users = await db.get("user") || {};
 
         Object.keys(users).forEach(senderNumber => {
