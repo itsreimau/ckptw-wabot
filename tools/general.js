@@ -81,8 +81,8 @@ function isCmd(m, ctx) {
 
 async function isAdmin(ctx, id) {
     try {
-        const id = id || ctx.sender.jid;
-        const isAdmin = await checkAdmin(ctx, id);
+        const jid = id || ctx.sender.jid;
+        const isAdmin = await checkAdmin(ctx, jid);
         return isAdmin;
     } catch (error) {
         console.error("[ckptw-wabot] Kesalahan:", error);
@@ -103,8 +103,8 @@ async function isBotAdmin(ctx) {
 
 function isOwner(ctx, id, selfOwner) {
     try {
-        const id = id || ctx.sender.jid.replace(/@.*|:.*/g, null);
-        const isOwner = selfOwner ? ctx._client.user.id.split(":")[0] === id || global.owner.number === id || global.owner.co.includes(id) : global.owner.number === id || global.owner.co.includes(id);
+        const jid = id || ctx.sender.jid.replace(/@.*|:.*/g, null);
+        const isOwner = selfOwner ? ctx._client.user.id.split(":")[0] === jid || global.owner.number === jid || global.owner.co.includes(id) : global.owner.number === jid || global.owner.co.includes(id);
         return isOwner;
     } catch (error) {
         console.error("[ckptw-wabot] Kesalahan:", error);
