@@ -42,7 +42,7 @@ module.exports = {
         );
 
         try {
-            const translation = await global.tools.translate.try("auto", langCode, textToTranslate).translation;
+            const translation = await global.tools.translate.call("auto", langCode, textToTranslate).translation;
 
             return ctx.reply(translation);
         } catch (error) {

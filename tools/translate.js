@@ -320,8 +320,7 @@ async function extractTranslation(html) {
     };
 }
 
-async function
-try (from, to, text) {
+async function call(from, to, text) {
     const {
         source,
         target
@@ -347,5 +346,5 @@ try (from, to, text) {
 
 module.exports = {
     languages,
-    try
+    call
 };
