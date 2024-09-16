@@ -7,7 +7,7 @@ const {
 
 module.exports = {
     name: "setchargingspeed",
-    aliases: ["setcs"]
+    aliases: ["setcs"],
     category: "owner",
     code: async (ctx) => {
         const {
