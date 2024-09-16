@@ -3,12 +3,12 @@ const pkg = require("./package.json");
 const CFonts = require("cfonts");
 
 // Pengecekan.
-if (global.owner.name === "John Doe" || global.owner.number === "628xxxxxxxxxx") {
-    console.error("[ckptw-wabot] Harap tetapkan global.owner dengan benar di config.js!");
+if (global.config.owner.name === "John Doe" || global.config.owner.number === "628xxxxxxxxxx") {
+    console.error("[ckptw-wabot] Harap tetapkan global.config.owner dengan benar di config.js!");
     process.exit(1);
 }
-if (global.system.usePairingCode && global.bot.phoneNumber === "628xxxxxxxxxx") {
-    console.error("[ckptw-wabot] Harap tetapkan global.bot.phoneNumber dengan benar di config.js!");
+if (global.config.system.usePairingCode && global.config.bot.phoneNumber === "628xxxxxxxxxx") {
+    console.error("[ckptw-wabot] Harap tetapkan global.config.bot.phoneNumber dengan benar di config.js!");
     process.exit(1);
 }
 

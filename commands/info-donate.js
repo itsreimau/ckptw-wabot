@@ -22,7 +22,7 @@ module.exports = {
             `${quote("https://saweria.co/itsreimau (Saweria)")}\n` +
             `${quote("https://trakteer.id/itsreimau (Trakteer)")}\n` +
             "\n" +
-            global.msg.footer
+            global.config.msg.footer
         );
     }
 };

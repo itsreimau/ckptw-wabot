@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -18,8 +17,9 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            energy: 10,
+            charger: true,
             cooldown: true,
+            energy: 10,
             private: true
         });
         if (status) return ctx.reply(message);
@@ -44,13 +44,13 @@ module.exports = {
                 `${quote(`Judul: ${data.title}`)}\n` +
                 `${quote("Stiker akan dikirim. (Tunda 3 detik untuk menghindari spam)")}\n` +
                 "\n" +
-                global.msg.footer
+                global.config.msg.footer
             );
 
             for (let i = 0; i < data.sticker_url.length; i++) {
                 const sticker = new Sticker(data.sticker_url[i], {
-                    pack: global.sticker.packname,
-                    author: global.sticker.author,
+                    pack: global.config.sticker.packname,
+                    author: global.config.sticker.author,
                     type: StickerTypes.FULL,
                     categories: ["🤩", "🎉"],
                     id: ctx.id,
@@ -62,7 +62,7 @@ module.exports = {
             }
         } catch (error) {
             console.error("[ckptw-wabot] Kesalahan:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

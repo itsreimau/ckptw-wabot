@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -14,31 +13,22 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            energy: 10,
-            cooldown: true
+            charger: true,
+            cooldown: true,
+            energy: 10
         });
         if (status) return ctx.reply(message);
 
         try {
-            const faktaApiUrl = await global.tools.api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
-            const faktaResponse = await axios.get(faktaApiUrl);
-            const faktaText = faktaResponse.data.text;
+            const apiUrl = await global.tools.api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
+            const {
+                data
+            } = await axios.get(apiUrl);
 
-            const translationApiUrl = global.tools.api.createUrl("fasturl", "/tool/translate", {
-                text: faktaText,
-                target: "id"
-            });
-            const translationResponse = await axios.get(translationApiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                }
-            });
-            const translatedText = translationResponse.data.translatedText;
-
-            return ctx.reply(translatedText);
+            return await ctx.reply(await global.tools.translate.try("en", "id", data.text).translation);
         } catch (error) {
             console.error("[ckptw-wabot] Kesalahan:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -14,8 +13,9 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            energy: 10,
-            cooldown: true
+            charger: true,
+            cooldown: true,
+            energy: 10
         });
         if (status) return ctx.reply(message);
 
@@ -27,22 +27,13 @@ module.exports = {
         );
 
         try {
-            const animeApiUrl = await global.tools.api.createUrl("https://api.jikan.moe", "/v4/anime", {
+            const apiUrl = await global.tools.api.createUrl("https://api.jikan.moe", "/v4/anime", {
                 q: input
             });
-            const animeResponse = await axios.get(animeApiUrl);
-            const info = animeResponse.data.data[0];
-
-            const translationApiUrl = global.tools.api.createUrl("fasturl", "/tool/translate", {
-                text: info.synopsis,
-                target: "id"
-            });
-            const translationResponse = await axios.get(translationApiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                }
-            });
-            const synopsisId = translationResponse.data.translatedText || info.synopsis;
+            const {
+                data
+            } = await axios.get(apiUrl);
+            const info = data.data[0];
 
             return await ctx.reply(
                 `${quote(`Judul: ${info.title}`)}\n` +
@@ -51,14 +42,15 @@ module.exports = {
                 `${quote(`Tipe: ${info.type}`)}\n` +
                 `${quote(`Episode: ${info.episodes}`)}\n` +
                 `${quote(`Durasi: ${info.duration}`)}\n` +
-                `${quote(`Ringkasan: ${synopsisId.replace("\n\n", ". ")}`)}\n` +
                 `${quote(`URL: ${info.url}`)}\n` +
+                `${quote("─────")}\n` +
+                `${await global.tools.translate.try("en", "id", info.synopsis).translation}\n` +
                 "\n" +
-                global.msg.footer
+                global.config.msg.footer
             );
         } catch (error) {
             console.error("[ckptw-wabot] Kesalahan:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

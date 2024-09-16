@@ -10,7 +10,7 @@ module.exports = {
         return await ctx.reply(
             `${quote("https://github.com/itsreimau/ckptw-wabot")}\n` +
             "\n" +
-            global.msg.footer
+            global.config.msg.footer
         ); // Jika Anda tidak menghapus ini, terima kasih!
     }
 };

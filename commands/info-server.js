@@ -14,7 +14,7 @@ module.exports = {
             const {
                 data
             } = await axios.get(apiUrl);
-            const startTime = global.system.startTime;
+            const startTime = global.config.system.startTime;
 
             return ctx.reply(
                 `${quote(`OS: ${os.type()} (${os.arch()} / ${os.release()})`)}\n` +
@@ -23,7 +23,7 @@ module.exports = {
                 `${quote(`Waktu aktif: ${global.tools.general.convertMsToDuration(Date.now() - startTime) || "kurang dari satu detik."}`)}\n` +
                 `${quote(`Prosesor: ${os.cpus()[0].model}`)}\n` +
                 "\n" +
-                global.msg.footer
+                global.config.msg.footer
             );
         } catch (error) {
             console.error("[ckptw-wabot] Kesalahan:", error);

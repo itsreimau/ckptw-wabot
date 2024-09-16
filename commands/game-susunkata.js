@@ -14,6 +14,7 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
+            charger: true,
             cooldown: true
         });
         if (status) return ctx.reply(message);
@@ -21,7 +22,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/susunkata.json`, {});
+            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/games/susunkata.json", {});
             const response = await axios.get(apiUrl);
             const data = global.tools.general.getRandomElement(response.data);
             const energy = 10;
@@ -37,7 +38,7 @@ module.exports = {
                 `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
                 `${quote('Ketik "hint" untuk bantuan.')}\n` +
                 "\n" +
-                global.msg.footer
+                global.config.msg.footer
             );
 
             const collector = ctx.MessageCollector({

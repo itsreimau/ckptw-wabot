@@ -23,7 +23,7 @@ module.exports = {
             `${quote("Serv00 (https://serv00.com/)")}\n` +
             `${quote("Dan kepada semua pihak yang telah membantu dalam pengembangan bot ini.")}\n` +
             "\n" +
-            global.msg.footer
+            global.config.msg.footer
         );
     }
 };

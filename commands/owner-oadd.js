@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const {
@@ -15,7 +14,8 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             group: true,
-            owner: true
+            owner: true,
+            restrict: true
         });
         if (status) return ctx.reply(message);
 

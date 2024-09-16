@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const {
@@ -19,7 +18,7 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            await ctx.reply(global.msg.wait);
+            await ctx.reply(global.config.msg.wait);
 
             exec(`pm2 restart ckptw-wabot`); // PM2.
         } catch (error) {

@@ -1,6 +1,5 @@
 const {
     bold,
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -19,8 +18,9 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            energy: 10,
-            cooldown: true
+            charger: true,
+            cooldown: true,
+            energy: 10
         });
         if (status) return ctx.reply(message);
 
@@ -34,7 +34,7 @@ module.exports = {
             const emojiRegex = /\p{Emoji}/gu;
             const emojis = Array.from(emojisString.matchAll(emojiRegex), (match) => match[0]);
             const [emoji1, emoji2] = emojis.slice(0, 2);
-            const apiUrl = global.tools.api.createUrl("https://tenor.googleapis.com", `/v2/featured`, {
+            const apiUrl = global.tools.api.createUrl("https://tenor.googleapis.com", "/v2/featured", {
                 key: "AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ",
                 contentfilter: "high",
                 media_filter: "png_transparent",
@@ -45,11 +45,11 @@ module.exports = {
             const response = await axios.get(apiUrl);
             const data = await response.data;
 
-            if (!data.results[0].url) return ctx.reply(global.msg.notFound);
+            if (!data.results[0].url) return ctx.reply(global.config.msg.notFound);
 
             const sticker = new Sticker(data.results[0].url, {
-                pack: global.sticker.packname,
-                author: global.sticker.author,
+                pack: global.config.sticker.packname,
+                author: global.config.sticker.author,
                 type: StickerTypes.FULL,
                 categories: ["🤩", "🎉"],
                 id: ctx.id,

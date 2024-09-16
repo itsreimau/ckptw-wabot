@@ -30,7 +30,7 @@ module.exports = {
             const buffer = await quotedMessage.media.toBuffer()
             const vidUrl = buffer ? await webp2mp4(buffer) : null;
 
-            if (!vidUrl) return ctx.reply(global.msg.notFound);
+            if (!vidUrl) return ctx.reply(global.config.msg.notFound);
 
             return await ctx.reply({
                 video: {

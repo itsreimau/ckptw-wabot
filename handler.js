@@ -12,15 +12,23 @@ async function handler(ctx, options) {
     const checkOptions = {
         admin: {
             function: async () => ctx.isGroup() && !await global.tools.general.isAdmin(ctx, senderJid),
-            msg: global.msg.admin
+            msg: global.config.msg.admin
         },
         banned: {
             function: async () => await global.db.get(`user.${senderNumber}.isBanned`),
-            msg: global.msg.banned
+            msg: global.config.msg.banned
         },
         botAdmin: {
             function: async () => ctx.isGroup() && !await global.tools.general.isBotAdmin(ctx),
-            msg: global.msg.botAdmin
+            msg: global.config.msg.botAdmin
+        },
+        charger: {
+            function: async () => await global.db.get(`user.${senderNumber}.onCharger`),
+            msg: global.config.msg.onCharger
+        },
+        cooldown: {
+            function: async () => new Cooldown(ctx, global.config.system.cooldown).onCooldown,
+            msg: global.config.msg.cooldown
         },
         energy: {
             function: async () => {
@@ -31,11 +39,6 @@ async function handler(ctx, options) {
                 const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
                 const requiredEnergy = options.energy || 0;
 
-                const isOnCharger = await global.db.get(`user.${senderNumber}.onCharger`);
-                if (isOnCharger) {
-                    return true;
-                }
-
                 if (userEnergy < requiredEnergy) {
                     return true;
                 }
@@ -43,27 +46,27 @@ async function handler(ctx, options) {
                 await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
                 return false;
             },
-            msg: global.msg.energy
-        },
-        cooldown: {
-            function: async () => new Cooldown(ctx, global.system.cooldown).onCooldown,
-            msg: global.msg.cooldown
+            msg: global.config.msg.energy
         },
         group: {
             function: async () => !await ctx.isGroup(),
-            msg: global.msg.group
+            msg: global.config.msg.group
         },
         owner: {
             function: async () => !isOwner,
-            msg: global.msg.owner
+            msg: global.config.msg.owner
         },
         premium: {
             function: async () => !isOwner && !isPremium,
-            msg: global.msg.premium
+            msg: global.config.msg.premium
         },
         private: {
             function: async () => await ctx.isGroup(),
-            msg: global.msg.private
+            msg: global.config.msg.private
+        },
+        restrict: {
+            function: () => global.config.system.restrict,
+            msg: global.config.msg.restrict
         }
     };
 
@@ -73,12 +76,6 @@ async function handler(ctx, options) {
             msg
         } = checkOptions[option] || {};
         if (checkFunction && await checkFunction()) {
-            if (option === "energy" && await global.db.get(`user.${senderNumber}.onCharger`)) {
-                return {
-                    status: true,
-                    message: global.msg.onCharger
-                };
-            }
             return {
                 status: true,
                 message: msg

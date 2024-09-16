@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const {
@@ -16,9 +15,11 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            energy: 10,
+            charger: true,
             cooldown: true,
-            private: true
+            energy: 10,
+            private: true,
+            restrict: true
         });
         if (status) return ctx.reply(message);
 
@@ -37,7 +38,7 @@ module.exports = {
 
             const menfessText =
                 `${text.join(" ")}\n` +
-                `${global.msg.readmore}\n` +
+                `${global.config.msg.readmore}\n` +
                 "Jika Anda ingin membalas, cukup balas pesan ini dan pesan Anda akan terkirim.";
             const fakeText = {
                 key: {
@@ -50,8 +51,8 @@ module.exports = {
                 message: {
                     extendedTextMessage: {
                         text: "Seseorang telah mengirimimu pesan menfess.",
-                        title: global.bot.name,
-                        thumbnailUrl: global.bot.thumbnail
+                        title: global.config.bot.name,
+                        thumbnailUrl: global.config.bot.thumbnail
 
                     }
                 }
@@ -63,12 +64,12 @@ module.exports = {
                     externalAdReply: {
                         mediaType: 1,
                         previewType: 0,
-                        mediaUrl: global.bot.groupChat,
-                        title: global.msg.watermark,
+                        mediaUrl: global.config.bot.groupChat,
+                        title: global.config.msg.watermark,
                         body: null,
                         renderLargerThumbnail: true,
-                        thumbnailUrl: global.bot.thumbnail,
-                        sourceUrl: global.bot.groupChat
+                        thumbnailUrl: global.config.bot.thumbnail,
+                        sourceUrl: global.config.bot.groupChat
                     },
                     forwardingScore: 9999,
                     isForwarded: true

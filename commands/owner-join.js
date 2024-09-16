@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 
@@ -19,11 +18,11 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, global.bot.groupChat))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, global.config.bot.groupChat))
         );
 
         const urlRegex = /chat\.whatsapp\.com\/([0-9A-Za-z]{20,24})/i;
-        if (!input.match(urlRegex)) return ctx.reply(global.msg.urlInvalid);
+        if (!input.match(urlRegex)) return ctx.reply(global.config.msg.urlInvalid);
 
         try {
             const urlCode = match[1];
@@ -32,7 +31,7 @@ module.exports = {
             const participantsIds = members.map(user => user.id);
 
             await ctx.sendMessage(res, {
-                text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${global.bot.name}, dimiliki oleh ${global.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)
+                text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${global.config.bot.name}, dimiliki oleh ${global.config.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)
             }, {
                 mentions: participantsIds
             });

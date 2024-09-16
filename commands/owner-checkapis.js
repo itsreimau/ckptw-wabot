@@ -17,7 +17,7 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            await ctx.reply(global.msg.wait);
+            await ctx.reply(global.config.msg.wait);
 
             const APIs = global.tools.listAPIUrl();
             let result = "";
@@ -34,7 +34,7 @@ module.exports = {
             return ctx.reply(
                 `${result.trim()}\n` +
                 "\n" +
-                global.msg.footer
+                global.config.msg.footer
             );
         } catch (error) {
             console.error("[ckptw-wabot] Kesalahan:", error);

@@ -1,9 +1,7 @@
 const {
-    youtubedl,
-    youtubedlv2
-} = require("@bochilteam/scraper");
+    youtubedl
+} = require("@bochilteam/scraper-sosmed");
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -19,8 +17,9 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            energy: 10,
-            cooldown: true
+            charger: true,
+            cooldown: true,
+            energy: 10
         });
 
         if (status) return ctx.reply(message);
@@ -39,7 +38,7 @@ module.exports = {
             const searchResponse = await axios.get(searchApiUrl);
             const searchData = searchResponse.data.data[0];
 
-            if (!searchData) return ctx.reply(global.msg.notFound);
+            if (!searchData) return ctx.reply(global.config.msg.notFound);
 
             const data = searchData;
 
@@ -48,22 +47,14 @@ module.exports = {
                 `${quote(`Artis: ${data.author.name}`)}\n` +
                 `${quote(`URL: ${data.url}`)}\n` +
                 "\n" +
-                global.msg.footer
+                global.config.msg.footer
             );
 
-            const getYtdlResponse = async () => {
-                try {
-                    return await youtubedl(searchData.url);
-                } catch {
-                    return await youtubedlv2(searchData.url);
-                }
-            };
-
-            const ytdlResponse = await getYtdlResponse();
+            const ytdlResponse = await youtubedl(data.url);
             const audioInfo = Object.values(ytdlResponse.audio)[0];
             const audioUrl = await audioInfo.download();
 
-            if (!audioUrl) return ctx.reply(global.msg.notFound);
+            if (!audioUrl) return ctx.reply(global.config.msg.notFound);
 
             return await ctx.reply({
                 audio: {
@@ -74,7 +65,7 @@ module.exports = {
             });
         } catch (error) {
             console.error("[ckptw-wabot] Kesalahan:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

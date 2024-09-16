@@ -18,14 +18,14 @@ async function get(type, ctx) {
             let menuText =
                 `Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
                 "\n" +
-                `${quote(`Waktu aktif: ${general.convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik."}`)}\n` +
-                `${quote(`Tanggal: ${moment.tz(global.system.timeZone).format("DD/MM/YY")}`)}\n` +
-                `${quote(`Waktu: ${moment.tz(global.system.timeZone).format("HH:mm:ss")}`)}\n` +
+                `${quote(`Waktu aktif: ${general.convertMsToDuration(Date.now() - global.config.system.startTime) || "kurang dari satu detik."}`)}\n` +
+                `${quote(`Tanggal: ${moment.tz(global.config.system.timeZone).format("DD/MM/YY")}`)}\n` +
+                `${quote(`Waktu: ${moment.tz(global.config.system.timeZone).format("HH:mm:ss")}`)}\n` +
                 `${quote(`Versi: ${pkg.version}`)}\n` +
                 `${quote(`Prefix: ${ctx._used.prefix}`)}\n` +
                 "\n" +
                 `${italic("Jangan lupa berdonasi agar bot tetap online!")}\n` +
-                `${global.msg.readmore}\n`;
+                `${global.config.msg.readmore}\n`;
 
             for (const category of Object.keys(tag)) {
                 const categoryCommands = Array.from(cmd.values())
@@ -36,7 +36,7 @@ async function get(type, ctx) {
                     }));
 
                 if (categoryCommands.length > 0) {
-                    menuText += `◊ ${bold(tag[category])}\n`;
+                    menuText += `◆ ${bold(tag[category])}\n`;
 
                     categoryCommands.forEach(cmd => {
                         menuText += quote(monospace(`${ctx._used.prefix || "/"}${cmd.name}`));
@@ -50,7 +50,7 @@ async function get(type, ctx) {
                 }
             }
 
-            menuText += global.msg.footer;
+            menuText += global.config.msg.footer;
             return menuText;
         } catch (error) {
             console.error("[ckptw-wabot] Kesalahan:", error);
@@ -69,7 +69,7 @@ async function get(type, ctx) {
                         `${quote("─────")}\n`
                     ).join("");
 
-                    text += global.msg.footer;
+                    text += global.config.msg.footer;
                 } catch (error) {
                     console.error("[ckptw-wabot] Kesalahan:", error);
                     text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
@@ -85,7 +85,7 @@ async function get(type, ctx) {
                         `${quote("─────")}\n`
                     ).join("");
 
-                    text += global.msg.footer;
+                    text += global.config.msg.footer;
                 } catch (error) {
                     console.error("[ckptw-wabot] Kesalahan:", error);
                     text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
@@ -98,7 +98,7 @@ async function get(type, ctx) {
                     text = deList.map(item => quote(item)).join("\n");
 
                     text += "\n" +
-                        global.msg.footer;
+                        global.config.msg.footer;
                 } catch (error) {
                     console.error("[ckptw-wabot] Kesalahan:", error);
                     text = quote(`⚠ Terjadi kesalahan: ${error.message}`);

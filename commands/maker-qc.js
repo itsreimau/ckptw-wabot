@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -18,8 +17,9 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            energy: 10,
-            cooldown: true
+            charger: true,
+            cooldown: true,
+            energy: 10
         });
         if (status) return ctx.reply(message);
 
@@ -47,8 +47,8 @@ module.exports = {
             });
 
             const sticker = new Sticker(apiUrl, {
-                pack: global.sticker.packname,
-                author: global.sticker.author,
+                pack: global.config.sticker.packname,
+                author: global.config.sticker.author,
                 type: StickerTypes.FULL,
                 categories: ["🤩", "🎉"],
                 id: ctx.id,

@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 
@@ -40,12 +39,12 @@ module.exports = {
                         externalAdReply: {
                             mediaType: 1,
                             previewType: 0,
-                            mediaUrl: global.bot.groupChat,
+                            mediaUrl: global.config.bot.groupChat,
                             title: "B R O A D C A S T",
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: global.bot.thumbnail,
-                            sourceUrl: global.bot.groupChat
+                            thumbnailUrl: global.config.bot.thumbnail,
+                            sourceUrl: global.config.bot.groupChat
                         },
                         forwardingScore: 9999,
                         isForwarded: true

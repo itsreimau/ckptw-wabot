@@ -15,7 +15,7 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const uptime = global.tools.general.convertMsToDuration(Date.now() - global.system.startTime) || "kurang dari satu detik";
+        const uptime = global.tools.general.convertMsToDuration(Date.now() - global.config.system.startTime) || "kurang dari satu detik";
         return ctx.reply(quote(`Bot telah aktif selama ${uptime}.`));
     }
 };

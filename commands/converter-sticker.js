@@ -30,8 +30,8 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const sticker = new Sticker(buffer, {
-                pack: global.sticker.packname,
-                author: global.sticker.author,
+                pack: global.config.sticker.packname,
+                author: global.config.sticker.author,
                 type: StickerTypes.FULL,
                 categories: ["🤩", "🎉"],
                 id: ctx.id,

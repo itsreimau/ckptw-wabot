@@ -30,7 +30,7 @@ module.exports = {
             const buffer = await quotedMessage.media.toBuffer()
             const imgUrl = buffer ? await webp2png(buffer) : null;
 
-            if (!imgUrl) return ctx.reply(global.msg.notFound);
+            if (!imgUrl) return ctx.reply(global.config.msg.notFound);
 
             return await ctx.reply({
                 image: {

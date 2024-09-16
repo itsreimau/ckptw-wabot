@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 
@@ -13,7 +12,8 @@ module.exports = {
         } = await global.handler(ctx, {
             botAdmin: true,
             group: true,
-            owner: true
+            owner: true,
+            restrict: true
         });
         if (status) return ctx.reply(message);
 

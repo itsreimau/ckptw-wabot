@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -15,8 +14,9 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            energy: 10,
-            cooldown: true
+            charger: true,
+            cooldown: true,
+            energy: 10
         });
         if (status) return ctx.reply(message);
 
@@ -28,7 +28,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("chiwa", `/api/ai/cai/generate-image`, {
+            const apiUrl = global.tools.api.createUrl("chiwa", "/api/ai/cai/generate-image", {
                 prompt: input
             });
             const {
@@ -42,11 +42,11 @@ module.exports = {
                 mimetype: mime.contentType("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +
                     "\n" +
-                    global.msg.footer
+                    global.config.msg.footer
             });
         } catch (error) {
             console.error("[ckptw-wabot] Kesalahan:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

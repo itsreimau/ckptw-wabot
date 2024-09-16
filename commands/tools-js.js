@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const {
@@ -16,8 +15,9 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            energy: 10,
-            cooldown: true
+            charger: true,
+            cooldown: true,
+            energy: 10
         });
         if (status) return ctx.reply(message);
 
@@ -25,7 +25,7 @@ module.exports = {
 
         if (!script) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, 'console.log("[ckptw-wabot] Hello World");'))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, 'console.log("Hello, World");'))
         );
 
         try {

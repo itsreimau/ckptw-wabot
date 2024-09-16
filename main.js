@@ -30,13 +30,13 @@ console.log("[ckptw-wabot] Menghubungkan...");
 // Buat instance bot baru.
 const bot = new Client({
     WAVersion: [2, 3000, 1015901307],
-    autoMention: global.system.autoMention,
-    phoneNumber: global.bot.phoneNumber,
-    prefix: global.bot.prefix,
-    readIncommingMsg: global.system.autoRead,
-    printQRInTerminal: !global.system.usePairingCode,
-    selfReply: global.system.selfReply,
-    usePairingCode: global.system.usePairingCode
+    autoMention: global.config.system.autoMention,
+    phoneNumber: global.config.bot.phoneNumber,
+    prefix: global.config.bot.prefix,
+    readIncommingMsg: global.config.system.autoRead,
+    printQRInTerminal: !global.config.system.usePairingCode,
+    selfReply: global.config.system.selfReply,
+    usePairingCode: global.config.system.usePairingCode
 });
 
 // Buat contoh database baru.
@@ -46,7 +46,7 @@ global.db = db;
 // Penanganan acara saat bot siap.
 bot.ev.once(Events.ClientReady, async (m) => {
     console.log(`Siap di ${m.user.id}`);
-    global.system.startTime = Date.now();
+    global.config.system.startTime = Date.now();
 });
 
 // Buat penangan perintah dan muat perintah.
@@ -77,15 +77,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const userDb = await db.get(`user.${senderNumber}`);
     if (!userDb) {
         await db.set(`user.${senderNumber}`, {
-            energy: 50,
-            isBanned: false,
-            isPremium: false,
-            onCharger: false
+            energy: 50
         });
     }
 
     // Mengisi energi bagi pengguna yang menggunakan charger.
-    await energyCharger();
+    await manageEnergy();
 
     // Simulasi pengetikan otomatis untuk perintah.
     if (tools.general.isCmd(m, ctx)) ctx.simulateTyping();
@@ -142,7 +139,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (tools.general.isOwner(ctx, senderNumber, true)) {
         // Perintah eval: Jalankan kode JavaScript.
         if (m.content && m.content.startsWith && (m.content.startsWith("=>> ") || m.content.startsWith("=> "))) {
-            const code = m.content.slice(2);
+            const code = m.content.startsWith("=>> ") ? m.content.slice(4) : m.content.slice(3);
 
             try {
                 const result = await eval(m.content.startsWith("=>> ") ? `(async () => { ${code} })()` : code);
@@ -189,7 +186,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 if (await tools.general.isAdmin(ctx, senderNumber)) return;
 
                 await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
-                await ctx.deleteMessage(m.key);
+                if (!global.config.system.restrict) await ctx.deleteMessage(m.key);
             }
         }
     }
@@ -246,8 +243,8 @@ async function sendMenfess(ctx, m, senderNumber, from) {
         message: {
             extendedTextMessage: {
                 text: `${senderNumber} telah merespons pesan menfess Anda.`,
-                title: global.bot.name,
-                thumbnailUrl: global.bot.thumbnail
+                title: global.config.bot.name,
+                thumbnailUrl: global.config.bot.thumbnail
 
             }
         }
@@ -256,19 +253,19 @@ async function sendMenfess(ctx, m, senderNumber, from) {
     await ctx.sendMessage(
         from + S_WHATSAPP_NET, {
             text: `${m.content}\n` +
-                `${global.msg.readmore}\n` +
+                `${global.config.msg.readmore}\n` +
                 "Jika ingin membalas, Anda harus mengirimkan perintah lagi.",
             contextInfo: {
                 mentionedJid: [senderNumber + S_WHATSAPP_NET],
                 externalAdReply: {
                     mediaType: 1,
                     previewType: 0,
-                    mediaUrl: global.bot.groupChat,
-                    title: global.msg.watermark,
+                    mediaUrl: global.config.bot.groupChat,
+                    title: global.config.msg.watermark,
                     body: null,
                     renderLargerThumbnail: true,
-                    thumbnailUrl: global.bot.thumbnail,
-                    sourceUrl: global.bot.groupChat
+                    thumbnailUrl: global.config.bot.thumbnail,
+                    sourceUrl: global.config.bot.groupChat
                 },
                 forwardingScore: 9999,
                 isForwarded: true
@@ -307,7 +304,7 @@ async function handleUserEvent(m) {
                     text2: m.eventsType === "UserJoin" ? "Selamat datang" : "Selamat tinggal!",
                     text3: metadata.subject,
                     avatar: profileUrl,
-                    background: global.bot.thumbnail
+                    background: global.config.bot.thumbnail
                 });
 
                 await bot.core.sendMessage(id, {
@@ -317,12 +314,12 @@ async function handleUserEvent(m) {
                         externalAdReply: {
                             mediaType: 1,
                             previewType: 0,
-                            mediaUrl: global.bot.groupChat,
+                            mediaUrl: global.config.bot.groupChat,
                             title: m.eventsType === "UserJoin" ? "JOIN" : "LEAVE",
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: card || profileUrl || global.bot.thumbnail,
-                            sourceUrl: global.bot.groupChat
+                            thumbnailUrl: card || profileUrl || global.config.bot.thumbnail,
+                            sourceUrl: global.config.bot.groupChat
                         }
                     }
                 });
@@ -330,34 +327,59 @@ async function handleUserEvent(m) {
         }
     } catch (error) {
         console.error("[ckptw-wabot] Kesalahan:", error);
-        bot.core.sendMessage(id, {
+        await bot.core.sendMessage(id, {
             text: quote(`⚠ Terjadi kesalahan: ${error.message}`)
         });
     }
 }
 
-async function energyCharger() {
+async function manageEnergy() {
+    const chargingInterval = 60000; // 1 menit.
+    const fullChargeTime = 2 * 60 * 60 * 1000; // 2 jam.
+
     setInterval(async () => {
         const users = await db.get("user") || {};
 
-        for (const senderNumber of Object.keys(users)) {
-            const userPath = `user.${senderNumber}`;
+        for (const userNumber of Object.keys(users)) {
+            const userPath = `user.${userNumber}`;
             const user = await db.get(userPath) || {};
 
             if (user.onCharger) {
                 let energy = await db.get(`${userPath}.energy`) || 0;
-                const maxEnergy = 100;
-                const energyIncrement = 5;
+                const chargingSpeed = await db.get(`${userPath}.chargingSpeed`) || 1;
+                const energyIncrement = chargingSpeed;
+                const timeElapsed = Date.now() - (user.lastCharge || 0);
 
-                if (energy < maxEnergy) {
-                    energy = Math.min(energy + energyIncrement, maxEnergy);
-                    await db.set(`${userPath}.energy`, energy);
-                    console.log(`[ckptw-wabot] Energi ${senderNumber} sekarang: ${energy}`);
+                if (timeElapsed >= fullChargeTime) {
+                    energy = 100;
                 } else {
-                    await db.set(`${userPath}.onCharger`, false);
-                    console.log(`[ckptw-wabot] Energi ${senderNumber} sudah penuh! Pengisian dihentikan.`);
+                    const energyReplenished = Math.min(timeElapsed / (fullChargeTime / 100), 100 - energy);
+
+                    energy += energyReplenished;
                 }
+
+                await db.set(`${userPath}.energy`, energy);
+                await db.set(`${userPath}.lastCharge`, Date.now());
+
+                await bot.core.sendMessage(userNumber + S_WHATSAPP_NET, {
+                    text: quote(`⚡ Energi Anda sekarang: ${energy}`)
+                });
             }
         }
-    }, 60000);
+    }, chargingInterval);
+
+    setInterval(async () => {
+        const users = await db.get("user") || {};
+
+        for (const userNumber of Object.keys(users)) {
+            const userPath = `user.${userNumber}`;
+            const user = await db.get(userPath) || {};
+
+            let energy = await db.get(`${userPath}.energy`) || 0;
+
+            if (energy > 100) {
+                await db.set(`${userPath}.energy`, 100);
+            }
+        }
+    }, 1000);
 }

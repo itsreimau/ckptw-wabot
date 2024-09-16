@@ -1,12 +1,10 @@
 const {
     bold,
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const {
-    youtubedl,
-    youtubedlv2
-} = require("@bochilteam/scraper");
+    youtubedl
+} = require("@bochilteam/scraper-sosmed");
 const mime = require("mime-types");
 
 module.exports = {
@@ -19,8 +17,9 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            energy: 10,
-            cooldown: true
+            charger: true,
+            cooldown: true,
+            energy: 10
         });
         if (status) return ctx.reply(message);
 
@@ -32,18 +31,13 @@ module.exports = {
         );
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!urlRegex.test(url)) ctx.reply(global.msg.urlInvalid);
+        if (!urlRegex.test(url)) ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            let ytdl;
-            try {
-                ytdl = await youtubedl(url);
-            } catch (error) {
-                ytdl = await youtubedlv2(url);
-            }
-            const qualityOptions = Object.keys(ytdl.audio);
+            const data = await youtubedl(url);
+            const qualityOptions = Object.keys(data.audio);
 
-            if (global.system.useInteractiveMessage) {
+            if (global.config.system.useInteractiveMessage) {
                 const section1 = new SectionsBuilder().setDisplayText("Select Quality 📌").addSection({
                     title: "Kualitas",
                     rows: qualityOptions.map((quality, index) => ({
@@ -52,23 +46,23 @@ module.exports = {
                     }))
                 }).build();
                 await ctx.replyInteractiveMessage({
-                    body: `${quote(`Judul: ${ytdl.title}`)}\n` +
+                    body: `${quote(`Judul: ${data.title}`)}\n` +
                         `${quote(`URL: ${url}`)}\n` +
                         "\n" +
-                        global.msg.footer,
-                    footer: global.msg.watermark,
+                        global.config.msg.footer,
+                    footer: global.config.msg.watermark,
                     nativeFlowMessage: {
                         buttons: [section1]
                     }
                 });
             } else {
                 await ctx.reply(
-                    `${quote(`Judul: ${ytdl.title}`)}\n` +
+                    `${quote(`Judul: ${data.title}`)}\n` +
                     `${quote(`URL: ${url}`)}\n` +
                     `${quote(`Pilih kualitas:`)}\n` +
                     `${qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n")}\n` +
                     "\n" +
-                    global.msg.footer
+                    global.config.msg.footer
                 );
             }
 
@@ -82,7 +76,7 @@ module.exports = {
 
                 if (!isNaN(selectedNumber) && selectedQualityIndex >= 0 && selectedQualityIndex < qualityOptions.length) {
                     const selectedQuality = qualityOptions[selectedQualityIndex];
-                    const downloadFunction = ytdl.audio[selectedQuality].download;
+                    const downloadFunction = data.audio[selectedQuality].download;
                     ctx.react(ctx.id, "🔄", m.key);
                     const url = await downloadFunction();
                     await ctx.reply({

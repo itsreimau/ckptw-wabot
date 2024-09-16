@@ -42,7 +42,7 @@ module.exports = {
             return ctx.reply({
                 text: `${resultText}` +
                     "\n" +
-                    global.msg.footer,
+                    global.config.msg.footer,
                 mentions: userMentions
             });
         } catch (error) {

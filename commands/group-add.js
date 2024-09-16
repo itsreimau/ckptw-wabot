@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const {
@@ -18,7 +17,8 @@ module.exports = {
             banned: true,
             botAdmin: true,
             cooldown: true,
-            group: true
+            group: true,
+            restrict: true
         });
         if (status) return ctx.reply(message);
 

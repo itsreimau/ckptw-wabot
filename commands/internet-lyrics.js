@@ -1,6 +1,6 @@
 const {
     bold,
-    monospace
+    quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
@@ -15,8 +15,9 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            energy: 10,
-            cooldown: true
+            charger: true,
+            cooldown: true,
+            energy: 10
         });
         if (status) return ctx.reply(message);
 
@@ -36,18 +37,16 @@ module.exports = {
             } = await axios.get(apiUrl);
 
             return ctx.reply(
-                `❖ ${bold("Lyrics")}\n` +
-                "\n" +
-                `➲ Judul: ${data.hasil.judul}\n` +
-                `➲ Artis: ${data.hasil.artis}\n` +
-                "-----\n" +
+                `${quote(`Judul: ${data.hasil.judul}`)}\n` +
+                `${quote(`Artis: ${data.hasil.artis}`)}\n` +
+                `${quote("─────")}\n`
                 `${data.hasil.lirik}\n` +
                 "\n" +
-                global.msg.footer
+                global.config.msg.footer
             );
         } catch (error) {
             console.error("[ckptw-wabot] Kesalahan:", error);
-            if (error.status !== 200) return ctx.reply(global.msg.notFound);
+            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
             return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
         }
     }

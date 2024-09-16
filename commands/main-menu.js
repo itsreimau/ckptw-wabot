@@ -24,11 +24,11 @@ module.exports = {
                 message: {
                     productMessage: {
                         product: {
-                            title: global.bot.name,
+                            title: global.config.bot.name,
                             description: null,
                             currencyCode: "IDR",
                             priceAmount1000: "1000",
-                            retailerId: global.bot.name,
+                            retailerId: global.config.bot.name,
                             productImageCount: 0
                         },
                         businessOwnerJid: ctx.sender.jid
@@ -36,7 +36,7 @@ module.exports = {
                 }
             };
 
-            if (global.system.useInteractiveMessage) {
+            if (global.config.system.useInteractiveMessage) {
                 const button1 = new ButtonBuilder()
                     .setId(`${ctx._used.prefix}owner`)
                     .setDisplayText("Owner 👨‍💻")
@@ -50,7 +50,7 @@ module.exports = {
 
                 return ctx.replyInteractiveMessage({
                     body: text,
-                    footer: global.msg.watermark,
+                    footer: global.config.msg.watermark,
                     nativeFlowMessage: {
                         buttons: [button1, button2]
                     }
@@ -65,12 +65,12 @@ module.exports = {
                         externalAdReply: {
                             mediaType: 1,
                             previewType: 0,
-                            mediaUrl: global.bot.groupChat,
-                            title: global.msg.watermark,
+                            mediaUrl: global.config.bot.groupChat,
+                            title: global.config.msg.watermark,
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: global.bot.thumbnail,
-                            sourceUrl: global.bot.groupChat
+                            thumbnailUrl: global.config.bot.thumbnail,
+                            sourceUrl: global.config.bot.groupChat
                         },
                         forwardingScore: 9999,
                         isForwarded: true

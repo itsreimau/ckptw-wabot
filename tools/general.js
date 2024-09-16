@@ -17,7 +17,7 @@ function convertMsToDuration(ms) {
         const seconds = Math.floor((ms / 1000) % 60);
         const minutes = Math.floor((ms / (1000 * 60)) % 60);
         const hours = Math.floor(ms / (1000 * 60 * 60));
-        let durationString;
+        let durationString = "";
 
         if (hours > 0) {
             durationString += hours + " jam ";
@@ -104,7 +104,7 @@ async function isBotAdmin(ctx) {
 function isOwner(ctx, id, selfOwner) {
     try {
         const jid = id || ctx.sender.jid.replace(/@.*|:.*/g, null);
-        const isOwner = selfOwner ? ctx._client.user.id.split(":")[0] === jid || global.owner.number === jid || global.owner.co.includes(id) : global.owner.number === jid || global.owner.co.includes(id);
+        const isOwner = selfOwner ? ctx._client.user.id.split(":")[0] === jid || global.config.owner.number === jid || global.config.owner.co.includes(id) : global.config.owner.number === jid || global.config.owner.co.includes(id);
         return isOwner;
     } catch (error) {
         console.error("[ckptw-wabot] Kesalahan:", error);

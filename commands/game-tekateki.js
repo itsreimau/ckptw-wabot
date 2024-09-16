@@ -14,6 +14,7 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
+            charger: true,
             cooldown: true
         });
         if (status) return ctx.reply(message);
@@ -21,7 +22,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/ramadhankukuh/database/master/src/games/tekateki.json`, {});
+            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/games/tekateki.json", {});
             const response = await axios.get(apiUrl);
             const data = global.tools.general.getRandomElement(response.data);
             const energy = 10;
@@ -31,12 +32,12 @@ module.exports = {
             await session.set(ctx.id, true);
 
             await ctx.reply(
-                `${quote(`Soal: ${data.soal}`)}` +
+                `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`+${energy} Energi`)}\n` +
                 `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
                 `${quote('Ketik "hint" untuk bantuan.')}\n` +
                 "\n" +
-                global.msg.footer
+                global.config.msg.footer
             );
 
             const collector = ctx.MessageCollector({
@@ -53,7 +54,6 @@ module.exports = {
                     await ctx.sendMessage(
                         ctx.id, {
                             text: `${quote(`💯 Benar!`)}\n` +
-                                `${data.description}\n` +
                                 quote(`+${energy} Energi`)
                         }, {
                             quoted: m
@@ -72,15 +72,13 @@ module.exports = {
 
             collector.on("end", async (collector, reason) => {
                 const answer = data.jawaban;
-                const description = data.dekripsi;
 
                 if (await session.has(ctx.id)) {
                     await session.delete(ctx.id);
 
                     return ctx.reply(
                         `${quote(`⌛ Waktu habis!`)}\n` +
-                        `${quote(quote(`Jawabannya adalah ${answer}.`))}\n` +
-                        quote(description)
+                        quote(`Jawabannya adalah ${answer}.`)
                     );
                 }
             });
