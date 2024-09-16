@@ -52,7 +52,7 @@ module.exports = {
                     await global.db.add(`user.${senderNumber}.energy`, energy);
                     await ctx.sendMessage(
                         ctx.id, {
-                            text: `${quote(`💯 Benar!`)}\n` +
+                            text: `${quote("💯 Benar!")}\n` +
                                 `${quote(data.deskripsi)}\n` +
                                 quote(`+${energy} Energi`)
                         }, {
@@ -78,7 +78,7 @@ module.exports = {
                     await session.delete(ctx.id);
 
                     return ctx.reply(
-                        `${quote(`⌛ Waktu habis!`)}\n` +
+                        `${quote("⌛ Waktu habis!")}\n` +
                         `${quote(`Jawabannya adalah ${answer}.`)}\n` +
                         quote(description)
                     );

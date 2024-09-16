@@ -31,6 +31,7 @@ module.exports = {
         if (lastCharge && Date.now() - lastCharge < 24 * 60 * 60 * 1000) return ctx.reply(quote(`⚡ Anda baru saja mengisi energi. Silakan tunggu sampai besok untuk mengisi energi lagi.`));
 
         global.db.set(`user.${senderNumber}.onCharger`, true);
+        global.db.set(`user.${senderNumber}.lastCharge`, Date.now());
 
         return ctx.reply(quote(`🔌 Sekarang bot akan mengisi energi untuk Anda setiap menit.`));
     }

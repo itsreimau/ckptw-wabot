@@ -115,7 +115,7 @@ function isOwner(ctx, id, selfOwner) {
 }
 
 async function translate(text, to) {
-    const apiUrl = api.createURL("https://api.nyxs.pw", "/tools/translate", {
+    const apiUrl = api.createURL("nyxs", "/tools/translate", {
         text,
         to
     });
@@ -148,5 +148,6 @@ module.exports = {
     isAdmin,
     isBotAdmin,
     isOwner,
+    translate,
     ucword
 };

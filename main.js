@@ -19,6 +19,7 @@ const {
 } = require("child_process");
 const didyoumean = require("didyoumean");
 const path = require("path");
+const cron = require('node-cron');
 const SimplDB = require("simpl.db");
 const {
     inspect
@@ -81,8 +82,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         });
     }
 
-    // Mengisi energi bagi pengguna yang menggunakan charger.
-    await manageEnergy();
+    // Mengelola energi.
+    cron.schedule('*/5 * * * *', manageEnergy); // Setiap 5 menit
 
     // Simulasi pengetikan otomatis untuk perintah.
     if (tools.general.isCmd(m, ctx)) ctx.simulateTyping();
@@ -334,52 +335,29 @@ async function handleUserEvent(m) {
 }
 
 async function manageEnergy() {
-    const chargingInterval = 60000; // 1 menit.
-    const fullChargeTime = 2 * 60 * 60 * 1000; // 2 jam.
+    const users = await db.get("user") || {};
 
-    setInterval(async () => {
-        const users = await db.get("user") || {};
-
-        for (const userNumber of Object.keys(users)) {
+    for (const userNumber of Object.keys(users)) {
+        try {
             const userPath = `user.${userNumber}`;
-            const user = await db.get(userPath) || {};
-
-            if (user.onCharger) {
-                let energy = await db.get(`${userPath}.energy`) || 0;
-                const chargingSpeed = await db.get(`${userPath}.chargingSpeed`) || 1;
-                const energyIncrement = chargingSpeed;
-                const timeElapsed = Date.now() - (user.lastCharge || 0);
-
-                if (timeElapsed >= fullChargeTime) {
-                    energy = 100;
-                } else {
-                    const energyReplenished = Math.min(timeElapsed / (fullChargeTime / 100), 100 - energy);
-
-                    energy += energyReplenished;
-                }
-
-                await db.set(`${userPath}.energy`, energy);
-                await db.set(`${userPath}.lastCharge`, Date.now());
-
-                await bot.core.sendMessage(userNumber + S_WHATSAPP_NET, {
-                    text: quote(`⚡ Energi Anda sekarang: ${energy}`)
-                });
-            }
-        }
-    }, chargingInterval);
-
-    setInterval(async () => {
-        const users = await db.get("user") || {};
-
-        for (const userNumber of Object.keys(users)) {
-            const userPath = `user.${userNumber}`;
-            const user = await db.get(userPath) || {};
-
+            const onCharger = await db.get(`${userPath}.onCharger`) || false;
             let energy = await db.get(`${userPath}.energy`) || 0;
 
-            if (energy > 100) {
-                await db.set(`${userPath}.energy`, 100);
+            if (onCharger) {
+                energy = Math.min(energy + 10, 100);
+
+                if (energy === 100) {
+                    await bot.core.sendMessage(userNumber + S_WHATSAPP_NET, {
+                        text: quote(`⚡ Baterai kamu sudah penuh!`)
+                    });
+                }
             }
+
+            if (energy > 100) energy = 100;
+
+            await db.set(`${userPath}.energy`, energy);
+        } catch (error) {
+            console.error(`[manageEnergy] Error updating user ${userNumber}:`, error);
         }
-    }, 1000);
+    }
 }

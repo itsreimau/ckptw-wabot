@@ -33,7 +33,7 @@ module.exports = {
 
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
-                `${quote(`Tipe: ${data.tipe}`)}` +
+                `${quote(`Tipe: ${data.tipe}`)}\n` +
                 `${quote(`+${energy} Energi`)}\n` +
                 `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
                 `${quote('Ketik "hint" untuk bantuan.')}\n` +
@@ -54,7 +54,7 @@ module.exports = {
                     await global.db.add(`user.${senderNumber}.energy`, energy);
                     await ctx.sendMessage(
                         ctx.id, {
-                            text: quote(`💯 Benar!`) +
+                            text: `${quote("💯 Benar!")}\n` +
                                 quote(`+${energy} Energi`)
                         }, {
                             quoted: m
@@ -83,7 +83,7 @@ module.exports = {
                 if (await session.has(ctx.id)) {
                     await session.delete(ctx.id);
                     return ctx.reply(
-                        `${quote(`⌛ Waktu habis!`)}\n` +
+                        `${quote("⌛ Waktu habis!")}\n` +
                         quote(`Jawabannya adalah ${answer}.`)
                     );
                 }
