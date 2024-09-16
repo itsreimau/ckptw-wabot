@@ -5,7 +5,7 @@ const {
 
 module.exports = {
     name: "readviewonce",
-    aliases: ["owner"],
+    aliases: ["rvo"],
     category: "owner",
     code: async (ctx) => {
         const {
@@ -18,7 +18,7 @@ module.exports = {
 
         const quotedMessage = ctx.quoted;
 
-        if (!(await quotedMessage.media.toBuffer())) return ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["viewOnce"])));
+        if (!quotedMessage?.viewOnceMessageV2?.message) return ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["viewOnce"])));
 
         try {
             const quoted = quotedMessage?.viewOnceMessageV2?.message;
