@@ -115,7 +115,7 @@ function isOwner(ctx, id, selfOwner) {
 }
 
 async function translate(text, to) {
-    const apiUrl = api.createURL("nyxs", "/tools/translate", {
+    const apiUrl = api.createUrl("nyxs", "/tools/translate", {
         text,
         to
     });

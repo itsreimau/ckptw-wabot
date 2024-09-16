@@ -58,6 +58,9 @@ cmd.load();
 global.handler = handler;
 global.tools = tools;
 
+// Mengelola energi.
+setInterval(manageEnergy, 300000);
+
 // Penanganan event ketika pesan muncul.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
@@ -81,9 +84,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             energy: 50
         });
     }
-
-    // Mengelola energi.
-    cron.schedule('*/5 * * * *', manageEnergy); // Setiap 5 menit
 
     // Simulasi pengetikan otomatis untuk perintah.
     if (tools.general.isCmd(m, ctx)) ctx.simulateTyping();
@@ -227,7 +227,6 @@ bot.ev.on(Events.UserLeave, (m) => {
     handleUserEvent(m);
 });
 
-
 // Luncurkan bot.
 bot.launch().catch((error) => console.error("[ckptw-wabot] Kesalahan:", error));
 
@@ -350,6 +349,8 @@ async function manageEnergy() {
                     await bot.core.sendMessage(userNumber + S_WHATSAPP_NET, {
                         text: quote(`⚡ Baterai kamu sudah penuh!`)
                     });
+
+                    await db.set(`${userPath}.onCharger`, false);
                 }
             }
 
@@ -357,7 +358,7 @@ async function manageEnergy() {
 
             await db.set(`${userPath}.energy`, energy);
         } catch (error) {
-            console.error(`[manageEnergy] Error updating user ${userNumber}:`, error);
+            console.error(`[ckptw-wabot] Error:`, error);
         }
     }
 }
