@@ -19,7 +19,6 @@ const {
 } = require("child_process");
 const didyoumean = require("didyoumean");
 const path = require("path");
-const cron = require('node-cron');
 const SimplDB = require("simpl.db");
 const {
     inspect

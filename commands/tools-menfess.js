@@ -19,7 +19,6 @@ module.exports = {
             cooldown: true,
             energy: 10,
             private: true,
-            restrict: true
         });
         if (status) return ctx.reply(message);
 
