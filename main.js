@@ -45,7 +45,7 @@ global.db = db;
 
 // Penanganan acara saat bot siap.
 bot.ev.once(Events.ClientReady, async (m) => {
-    console.log(`Siap di ${m.user.id}`);
+    console.log(`[ckptw-wabot] Siap di ${m.user.id}`);
     global.config.system.startTime = Date.now();
 });
 

@@ -24,7 +24,7 @@ module.exports = {
 
         const quotedMessage = ctx.quoted;
 
-        if (!(await quotedMessage.media.toBuffer())) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["sticker"])));
+        if (!(await quotedMessage.media.toBuffer())) return ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["sticker"])));
 
         try {
             const buffer = await quotedMessage.media.toBuffer()

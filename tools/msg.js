@@ -17,12 +17,25 @@ function generateInstruction(actions, mediaTypes) {
     };
 
     const mediaTypeTranslations = {
-        "text": "teks",
-        "image": "gambar",
+        "audio": "audio",
+        "contact": "kontak",
+        "document": "dokumen",
         "gif": "GIF",
+        "image": "gambar",
+        "liveLocation": "lokasi langsung",
+        "location": "lokasi",
+        "payment": "pembayaran",
+        "poll": "polling",
+        "product": "produk",
+        "ptt": "pesan suara",
+        "reaction": "reaksi",
+        "sticker": "stiker",
+        "templateMessage": "pesan template",
+        "text": "teks",
         "video": "video",
-        "sticker": "stiker"
+        "viewOnce": "sekali lihat"
     };
+
 
     const translatedMediaTypes = mediaTypes.map(type => mediaTypeTranslations[type]);
     let mediaTypesList = translatedMediaTypes.join(", ");
