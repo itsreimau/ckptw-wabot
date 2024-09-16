@@ -58,7 +58,8 @@ global.handler = handler;
 global.tools = tools;
 
 // Mengelola energi.
-setInterval(manageEnergy, 300000);
+setInterval(manageEnergy, 900000);
+
 
 // Penanganan event ketika pesan muncul.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
@@ -342,7 +343,7 @@ async function manageEnergy() {
             let energy = await db.get(`${userPath}.energy`) || 0;
 
             if (onCharger) {
-                energy = Math.min(energy + 10, 100);
+                energy = Math.min(energy + 25, 100);
 
                 if (energy === 100) {
                     await bot.core.sendMessage(userNumber + S_WHATSAPP_NET, {

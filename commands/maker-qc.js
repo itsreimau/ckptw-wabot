@@ -43,7 +43,7 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("ngodingaja", "/api/bubblechat", {
                 text: input,
                 url: profileUrl,
-                nama: ctx.sender.pushName
+                nama: ctx.sender.pushName || "-"
             });
 
             const sticker = new Sticker(apiUrl, {

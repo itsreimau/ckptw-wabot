@@ -36,7 +36,7 @@ module.exports = {
                     url: profileUrl,
                 },
                 mimetype: mime.contentType("png"),
-                caption: `${quote(`Nama: ${ctx.sender.pushName}`)}\n` +
+                caption: `${quote(`Nama: ${ctx.sender.pushName || "-"}`)}\n` +
                     `${quote(`Premium: ${premium}`)}\n` +
                     `${quote(`Energi: ${energy}`)}\n` +
                     `${quote(`Pengisian energi: ${onCharger}`)}\n` +
