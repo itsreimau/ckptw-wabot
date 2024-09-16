@@ -19,14 +19,10 @@ module.exports = {
         const senderNumber = ctx.sender.jid.replace(/@.*|:.*/g, "");
 
         const [userEnergy, isOnCharger, lastCharge] = await Promise.all([
-            global.db.get(`user.${senderNumber}.energy`),
-            global.db.get(`user.${senderNumber}.onCharger`),
-            global.db.get(`user.${senderNumber}.lastCharge`)
+            global.db.get(`user.${senderNumber}.energy`) || 0,
+            global.db.get(`user.${senderNumber}.onCharger`) || false,
+            global.db.get(`user.${senderNumber}.lastCharge`) || 0
         ]);
-
-        userEnergy = userEnergy || 0;
-        isOnCharger = isOnCharger || false;
-        lastCharge = lastCharge || 0;
 
         if (userEnergy >= 100) return ctx.reply(quote(`⚡ Energi Anda sudah penuh. Anda tidak bisa mengisi energi lagi.`));
 

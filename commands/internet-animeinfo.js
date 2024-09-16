@@ -44,7 +44,7 @@ module.exports = {
                 `${quote(`Durasi: ${info.duration}`)}\n` +
                 `${quote(`URL: ${info.url}`)}\n` +
                 `${quote("─────")}\n` +
-                `${await global.tools.translate.call("en", "id", info.synopsis).translation}\n` +
+                `${await global.tools.general.translate(info.synopsis, "id" )}\n` +
                 "\n" +
                 global.config.msg.footer
             );

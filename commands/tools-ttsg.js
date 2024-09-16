@@ -23,11 +23,9 @@ module.exports = {
         let textToSpeech = ctx.args.join(" ") || null;
         let langCode = "id";
 
-        if (ctx.quoted.toBuffer()) {
+        if (ctx.quoted.caption || ctx.quoted.text) {
             const quotedMessage = ctx.quoted;
-            textToSpeech = Object.values(quotedMessage).find(
-                msg => msg.caption || msg.text
-            )?.caption || textToSpeech || null;
+            textToSpeech = Object.values(quotedMessage).find(msg => msg.caption || msg.text)?.caption || textToSpeech || null;
 
             if (ctx.args[0] && ctx.args[0].length === 2) langCode = ctx.args[0];
         } else {

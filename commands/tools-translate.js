@@ -22,11 +22,9 @@ module.exports = {
         let textToTranslate = ctx.args.join(" ") || null;
         let langCode = "id";
 
-        if (ctx.quoted.toBuffer()) {
+        if (ctx.quoted.caption || ctx.quoted.text) {
             const quotedMessage = ctx.quoted;
-            textToTranslate = Object.values(quotedMessage).find(
-                msg => msg.caption || msg.text
-            )?.caption || textToTranslate || null;
+            textToTranslate = Object.values(quotedMessage).find(msg => msg.caption || msg.text)?.caption || textToTranslate || null;
 
             if (ctx.args[0] && ctx.args[0].length === 2) langCode = ctx.args[0];
         } else {
@@ -42,7 +40,7 @@ module.exports = {
         );
 
         try {
-            const translation = await global.tools.translate.call("auto", langCode, textToTranslate).translation;
+            const translation = await global.tools.general.translate(textToTranslate, langCode);
 
             return ctx.reply(translation);
         } catch (error) {

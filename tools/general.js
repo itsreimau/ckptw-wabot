@@ -1,3 +1,5 @@
+const api = require("./api.js");
+const axios = require("axios");
 const {
     S_WHATSAPP_NET
 } = require("@whiskeysockets/baileys");
@@ -106,6 +108,23 @@ function isOwner(ctx, id, selfOwner) {
         const jid = id || ctx.sender.jid.replace(/@.*|:.*/g, null);
         const isOwner = selfOwner ? ctx._client.user.id.split(":")[0] === jid || global.config.owner.number === jid || global.config.owner.co.includes(id) : global.config.owner.number === jid || global.config.owner.co.includes(id);
         return isOwner;
+    } catch (error) {
+        console.error("[ckptw-wabot] Kesalahan:", error);
+        return null;
+    }
+}
+
+async function translate(text, to) {
+    const apiUrl = api.createURL("https://api.nyxs.pw", "/tools/translate", {
+        text,
+        to
+    });
+
+    try {
+        const {
+            data
+        } = await axios.get(apiUrl);
+        return data.result;
     } catch (error) {
         console.error("[ckptw-wabot] Kesalahan:", error);
         return null;

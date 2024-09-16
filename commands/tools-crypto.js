@@ -68,11 +68,10 @@ async function coingecko(search) {
             const priceChange = percentChange >= 0 ? `+${percentChange}%` : `${percentChange}%`;
 
             if (crypto.name.toLowerCase().includes(search.toLowerCase())) {
-                const cryptoResult = {
+                result.push({
                     cryptoName: cryptoName,
                     priceChange: priceChange
-                };
-                result.push(cryptoResult);
+                });
             }
         });
 

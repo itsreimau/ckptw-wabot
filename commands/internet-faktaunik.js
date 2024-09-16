@@ -25,7 +25,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply(await global.tools.translate.call("en", "id", data.text).translation);
+            return await ctx.reply(await global.tools.general.translate(data.text, "id"));
         } catch (error) {
             console.error("[ckptw-wabot] Kesalahan:", error);
             if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
