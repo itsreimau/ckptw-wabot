@@ -14,7 +14,7 @@ module.exports = {
             const {
                 data
             } = await axios.get(apiUrl);
-            const startTime = global.config.system.startTime;
+            const startTime = ctx.readyAt;
 
             return ctx.reply(
                 `${quote(`OS: ${os.type()} (${os.arch()} / ${os.release()})`)}\n` +
@@ -26,7 +26,7 @@ module.exports = {
                 global.config.msg.footer
             );
         } catch (error) {
-            console.error("[ckptw-wabot] Kesalahan:", error);
+            console.error(`[${global.config.pkg.name}] Error:`, error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

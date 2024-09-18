@@ -65,26 +65,28 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
    // commands/test-helloworld.js
 
    module.exports = {
-       name: "helloworld",
-       category: "test",
-       code: async (ctx) => {
+       name: "helloworld", // Nama perintah.
+       category: "test", // Kategori perintah.
+       code: async (ctx) => { // Fungsi yang akan dijalankan ketika perintah ini dieksekusi.
+           // Memanggil fungsi global.handler dengan objek ctx dan konfigurasi sebagai parameter.
            const {
-               status,
-               message
+               status, // Status hasil eksekusi fungsi handler.
+               message // Pesan yang akan dikirim jika status true.
            } = await global.handler(ctx, {
-               admin: Boolean,
-               botAdmin: Boolean,
-               banned: Boolean,
-               energy: Number,
-               cooldown: Number,
-               group: Boolean,
-               owner: Boolean,
-               premium: Boolean,
-               private: Boolean
-           });
-           if (status) return ctx.reply(message);
+               admin: Boolean, // Opsi admin (true atau false)
+               botAdmin: Boolean, // Opsi bot admin (true atau false).
+               banned: Boolean, // Opsi banned (true atau false).
+               energy: String || Number, // Opsi energi (String atau Number).
+               cooldown: Number, // Opsi cooldown (Number).
+               group: Boolean, // Opsi grup (true atau false).
+               owner: Boolean, // Opsi owner (true atau false).
+               premium: Boolean, // Opsi premium (true atau false).
+               private: Boolean // Opsi private (true atau false).
 
-           return ctx.reply("Hello, World!");
+           });
+           if (status) return ctx.reply(message); // Jika status true, maka kirim pesan.
+
+           return ctx.reply("Hello, World!"); // Jika status false, maka kirim pesan "Hello, World!".
        }
    };
    ```

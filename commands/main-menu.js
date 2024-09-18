@@ -11,6 +11,14 @@ module.exports = {
     aliases: ["help", "?"],
     category: "main",
     code: async (ctx) => {
+        const {
+            status,
+            message
+        } = await global.handler(ctx, {
+            banned: true,
+            cooldown: true
+        });
+
         try {
             const text = await global.tools.list.get("menu", ctx);
             const fakeProduct = {
@@ -81,7 +89,7 @@ module.exports = {
                 }
             );
         } catch (error) {
-            console.error("[ckptw-wabot] Kesalahan:", error);
+            console.error(`[${global.config.pkg.name}] Error:`, error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

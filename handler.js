@@ -32,16 +32,16 @@ async function handler(ctx, options) {
         },
         energy: {
             function: async () => {
-                if (isOwner || isPremium) {
-                    return false;
-                }
-
                 const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
                 const requiredEnergy = options.energy || 0;
 
-                if (userEnergy < requiredEnergy) {
-                    return true;
+                if (isOwner || isPremium) return false;
+
+                if (typeof requiredEnergy === 'number' && !ctx.args) {
+                    return false;
                 }
+
+                if (userEnergy < requiredEnergy) return true;
 
                 await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
                 return false;

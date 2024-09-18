@@ -1,5 +1,4 @@
 const {
-    bold,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -20,7 +19,7 @@ module.exports = {
             banned: true,
             charger: true,
             cooldown: true,
-            energy: 10
+            energy: 5
         });
         if (status) return ctx.reply(message);
 
@@ -58,8 +57,8 @@ module.exports = {
 
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
-            console.error("[ckptw-wabot] Error", error);
-            return ctx.reply(`${bold("[ ! ]")} Terjadi kesalahan: ${error.message}`);
+            console.error(`[${global.config.pkg.name}] Error:`, error);
+            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

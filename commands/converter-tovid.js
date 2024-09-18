@@ -40,43 +40,48 @@ module.exports = {
                 gifPlayback: ctx._used.command === "togif" ? true : false
             });
         } catch (error) {
-            console.error("[ckptw-wabot] Error", error);
+            console.error(`[${global.config.pkg.name}] Error:`, error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
 
 async function webp2mp4(source) {
-    const form = new FormData();
-    const isUrl = typeof source === "string" && /https?:\/\//.test(source);
-    const blob = !isUrl && Buffer.isBuffer(source) ? source : Buffer.from(source);
+    try {
+        const isUrl = typeof source === "string" && /https?:\/\//.test(source);
+        const blob = isUrl ? Buffer.from(source) : source;
 
-    form.append("new-image-url", isUrl ? blob : "");
-    form.append("new-image", isUrl ? "" : blob, "image.webp");
+        const form = new FormData();
+        form.append("new-image-url", isUrl ? "" : "");
+        form.append("new-image", blob, "image.webp");
 
-    const res = await axios.post("https://ezgif.com/webp-to-mp4", form, {
-        headers: form.getHeaders()
-    });
+        const res = await axios.post("https://ezgif.com/webp-to-mp4", form, {
+            headers: form.getHeaders()
+        });
 
-    const html = res.data;
-    const {
-        document
-    } = new JSDOM(html).window;
-    const form2 = new FormData();
-    const obj = {};
+        const html = res.data;
+        const {
+            document
+        } = new JSDOM(html).window;
+        const form2 = new FormData();
+        const obj = {};
 
-    for (const input of document.querySelectorAll("form input[name]")) {
-        obj[input.name] = input.value;
-        form2.append(input.name, input.value);
+        for (const input of document.querySelectorAll("form input[name]")) {
+            obj[input.name] = input.value;
+            form2.append(input.name, input.value);
+        }
+
+        const res2 = await axios.post(`https://ezgif.com/webp-to-mp4/${obj.file}`, form2, {
+            headers: form2.getHeaders()
+        });
+
+        const html2 = res2.data;
+        const {
+            document: document2
+        } = new JSDOM(html2).window;
+        return new URL(document2.querySelector("div#output > p.outfile > video > source").src, res2.request.res.responseUrl).toString();
+    } catch (error) {
+        console.error(`[${global.config.pkg.name}] Error:`, error);
+        return null;
     }
-
-    const res2 = await axios.post(`https://ezgif.com/webp-to-mp4/${obj.file}`, form2, {
-        headers: form2.getHeaders()
-    });
-
-    const html2 = res2.data;
-    const {
-        document: document2
-    } = new JSDOM(html2).window;
-    return new URL(document2.querySelector("div#output > p.outfile > video > source").src, res2.request.res.responseUrl).toString();
 }

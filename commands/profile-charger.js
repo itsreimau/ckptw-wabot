@@ -24,15 +24,15 @@ module.exports = {
             global.db.get(`user.${senderNumber}.lastCharge`) || 0
         ]);
 
-        if (userEnergy >= 100) return ctx.reply(quote(`⚡ Energi Anda sudah penuh. Anda tidak bisa mengisi energi lagi.`));
+        if (userEnergy > 15) return ctx.reply(quote(`⚡ Anda masih memiliki cukup energi, tidak perlu mengisinya kembali.`));
 
-        if (isOnCharger) return ctx.reply(quote(`⚡ Anda sudah mengisi energi sebelumnya. Tidak perlu mengisi lagi.`));
+        if (isOnCharger) return ctx.reply(quote(`⚡ Sedang mengisi ulang energi Anda.`));
 
         if (lastCharge && Date.now() - lastCharge < 24 * 60 * 60 * 1000) return ctx.reply(quote(`⚡ Anda baru saja mengisi energi. Silakan tunggu sampai besok untuk mengisi energi lagi.`));
 
         global.db.set(`user.${senderNumber}.onCharger`, true);
         global.db.set(`user.${senderNumber}.lastCharge`, Date.now());
 
-        return ctx.reply(quote(`🔌 Sekarang bot akan mengisi energi untuk Anda setiap menit.`));
+        return ctx.reply(quote(`🔌 Sekarang bot akan mengisi 25 energi setiap 1 menit.`));
     }
 };

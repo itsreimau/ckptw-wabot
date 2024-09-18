@@ -32,7 +32,7 @@ module.exports = {
 
             return ctx.reply(quote(`✅ Berhasil mengubah gambar profil foto grup!`));
         } catch (error) {
-            console.error("[ckptw-wabot] Kesalahan:", error);
+            console.error(`[${global.config.pkg.name}] Error:`, error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

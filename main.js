@@ -25,7 +25,7 @@ const {
 } = require("util");
 
 // Pesan koneksi.
-console.log("[ckptw-wabot] Menghubungkan...");
+console.log(`[${global.config.pkg.name}] Menghubungkan...`);
 
 // Buat instance bot baru.
 const bot = new Client({
@@ -45,8 +45,11 @@ global.db = db;
 
 // Penanganan acara saat bot siap.
 bot.ev.once(Events.ClientReady, async (m) => {
-    console.log(`[ckptw-wabot] Siap di ${m.user.id}`);
-    global.config.system.startTime = Date.now();
+    console.log(`[${global.config.pkg.name}] Siap di ${m.user.id}`);
+    global.config.bot = {
+        number: m.user.id.replace(/@.*|:.*/g, ""),
+        id: m.user.id.replace(/@.*|:.*/g, "") + S_WHATSAPP_NET
+    };
 });
 
 // Buat penangan perintah dan muat perintah.
@@ -60,7 +63,6 @@ global.tools = tools;
 // Mengelola energi.
 setInterval(manageEnergy, 900000);
 
-
 // Penanganan event ketika pesan muncul.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
@@ -72,9 +74,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Log pesan masuk
     if (isGroup) {
-        console.log(`[ckptw-wabot] Pesan masuk dari grup: ${groupNumber}, oleh: ${senderNumber}`);
+        console.log(`[${global.config.pkg.name}] Pesan masuk dari grup: ${groupNumber}, oleh: ${senderNumber}`);
     } else {
-        console.log(`[ckptw-wabot] Pesan masuk dari: ${senderNumber}`);
+        console.log(`[${global.config.pkg.name}] Pesan masuk dari: ${senderNumber}`);
     }
 
     // Basis data untuk pengguna.
@@ -147,7 +149,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                 await ctx.reply(inspect(result));
             } catch (error) {
-                console.error("[ckptw-wabot] Kesalahan:", error);
+                console.error(`[${global.config.pkg.name}] Error:`, error);
                 ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
             }
         }
@@ -171,7 +173,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                 await ctx.reply(output);
             } catch (error) {
-                console.error("[ckptw-wabot] Kesalahan:", error);
+                console.error(`[${global.config.pkg.name}] Error:`, error);
                 ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
             }
         }
@@ -208,7 +210,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                     ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
                 } catch (error) {
-                    console.error("[ckptw-wabot] Kesalahan:", error);
+                    console.error(`[${global.config.pkg.name}] Error:`, error);
                     ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
                 }
             }
@@ -216,7 +218,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 });
 
-// Penanganan peristiwa ketika pengguna bergabung atau keluar dari grup
+// Penanganan peristiwa ketika pengguna bergabung atau keluar dari grup.
 bot.ev.on(Events.UserJoin, (m) => {
     m.eventsType = "UserJoin";
     handleUserEvent(m);
@@ -228,7 +230,7 @@ bot.ev.on(Events.UserLeave, (m) => {
 });
 
 // Luncurkan bot.
-bot.launch().catch((error) => console.error("[ckptw-wabot] Kesalahan:", error));
+bot.launch().catch((error) => console.error(`[${global.config.pkg.name}] Error:`, error));
 
 // Fungsi utilitas.
 async function sendMenfess(ctx, m, senderNumber, from) {
@@ -326,7 +328,7 @@ async function handleUserEvent(m) {
             }
         }
     } catch (error) {
-        console.error("[ckptw-wabot] Kesalahan:", error);
+        console.error(`[${global.config.pkg.name}] Error:`, error);
         await bot.core.sendMessage(id, {
             text: quote(`⚠ Terjadi kesalahan: ${error.message}`)
         });
@@ -347,18 +349,22 @@ async function manageEnergy() {
 
                 if (energy === 100) {
                     await bot.core.sendMessage(userNumber + S_WHATSAPP_NET, {
-                        text: quote(`⚡ Baterai kamu sudah penuh!`)
+                        text: quote(`⚡ Energi kamu sudah penuh!`)
                     });
 
                     await db.set(`${userPath}.onCharger`, false);
                 }
             }
 
+            if (energy < 15) await bot.core.sendMessage(userNumber + S_WHATSAPP_NET, {
+                text: quote(`⚡ Energimu rendah! Silakan isi daya dengan mengetik ${monospace("/charger")}.`)
+            });
+
             if (energy > 100) energy = 100;
 
             await db.set(`${userPath}.energy`, energy);
         } catch (error) {
-            console.error(`[ckptw-wabot] Error:`, error);
+            console.error(`[${global.config.pkg.name}] Error:`, error);
         }
     }
 }

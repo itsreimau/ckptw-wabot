@@ -25,7 +25,7 @@ module.exports = {
             banned: true,
             charger: true,
             cooldown: true,
-            energy: 10
+            energy: "5"
         });
         if (status) return ctx.reply(message);
 
@@ -58,7 +58,7 @@ module.exports = {
 
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
-            console.error("[ckptw-wabot] Error", error);
+            console.error(`[${global.config.pkg.name}] Error:`, error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

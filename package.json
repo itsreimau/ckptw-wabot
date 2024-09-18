@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/itsreimau/ckptw-wabot.git"
+    "url": "git+https://github.com/itsreimau/${global.config.pkg.name}.git"
   },
   "keywords": [
     "whatsapp",
@@ -23,9 +23,9 @@
   "author": "Muhamad Ikbal Maulana | ItsReimau",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/itsreimau/ckptw-wabot/issues"
+    "url": "https://github.com/itsreimau/${global.config.pkg.name}/issues"
   },
-  "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
+  "homepage": "https://github.com/itsreimau/${global.config.pkg.name}#readme",
   "dependencies": {
     "@bochilteam/scraper-sosmed": "^1.0.5",
     "@mengkodingan/ckptw": "^4.3.6",

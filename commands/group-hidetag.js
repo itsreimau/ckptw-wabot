@@ -31,7 +31,7 @@ module.exports = {
                 mentions
             });
         } catch (error) {
-            console.error("[ckptw-wabot] Kesalahan:", error);
+            console.error(`[${global.config.pkg.name}] Error:`, error);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }
     }

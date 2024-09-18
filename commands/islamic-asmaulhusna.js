@@ -14,7 +14,7 @@ module.exports = {
             banned: true,
             charger: true,
             cooldown: true,
-            energy: 10
+            energy: 5
         });
         if (status) return ctx.reply(message);
 
@@ -73,7 +73,7 @@ module.exports = {
                 );
             }
         } catch (error) {
-            console.error("[ckptw-wabot] Kesalahan:", error);
+            console.error(`[${global.config.pkg.name}] Error:`, error);
             if (erroa.status !== 200) return ctx.reply(global.config.msg.notFound);
             return ctx.reply(quote(`⚠ Terjadi kesalahan: ${erroa.message}`));
         }

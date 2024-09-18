@@ -18,7 +18,7 @@ async function get(type, ctx) {
             let menuText =
                 `Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
                 "\n" +
-                `${quote(`Waktu aktif: ${general.convertMsToDuration(Date.now() - global.config.system.startTime) || "kurang dari satu detik."}`)}\n` +
+                `${quote(`Waktu aktif: ${general.convertMsToDuration(Date.now() - ctx.readyAt) || "kurang dari satu detik."}`)}\n` +
                 `${quote(`Tanggal: ${moment.tz(global.config.system.timeZone).format("DD/MM/YY")}`)}\n` +
                 `${quote(`Waktu: ${moment.tz(global.config.system.timeZone).format("HH:mm:ss")}`)}\n` +
                 `${quote(`Versi: ${pkg.version}`)}\n` +
@@ -53,7 +53,7 @@ async function get(type, ctx) {
             menuText += global.config.msg.footer;
             return menuText;
         } catch (error) {
-            console.error("[ckptw-wabot] Kesalahan:", error);
+            console.error(`[${global.config.pkg.name}] Error:`, error);
             return quote(`⚠ Terjadi kesalahan: ${error.message}`);
         }
     };
@@ -71,7 +71,7 @@ async function get(type, ctx) {
 
                     text += global.config.msg.footer;
                 } catch (error) {
-                    console.error("[ckptw-wabot] Kesalahan:", error);
+                    console.error(`[${global.config.pkg.name}] Error:`, error);
                     text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
                 }
                 break;
@@ -87,7 +87,7 @@ async function get(type, ctx) {
 
                     text += global.config.msg.footer;
                 } catch (error) {
-                    console.error("[ckptw-wabot] Kesalahan:", error);
+                    console.error(`[${global.config.pkg.name}] Error:`, error);
                     text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
                 }
                 break;
@@ -100,7 +100,7 @@ async function get(type, ctx) {
                     text += "\n" +
                         global.config.msg.footer;
                 } catch (error) {
-                    console.error("[ckptw-wabot] Kesalahan:", error);
+                    console.error(`[${global.config.pkg.name}] Error:`, error);
                     text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
                 }
                 break;
@@ -134,13 +134,13 @@ async function get(type, ctx) {
                 break;
             }
             default: {
-                console.error("[ckptw-wabot] Kesalahan:", error);
+                console.error(`[${global.config.pkg.name}] Error:`, error);
                 text = quote(`⚠ Tidak diketahui: ${type}`);
                 break;
             }
         }
     } catch (error) {
-        console.error("[ckptw-wabot] Kesalahan:", error);
+        console.error(`[${global.config.pkg.name}] Error:`, error);
         text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
     }
 

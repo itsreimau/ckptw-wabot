@@ -40,7 +40,7 @@ module.exports = {
                 global.config.msg.footer
             );
         } catch (error) {
-            console.error("[ckptw-wabot] Kesalahan:", error);
+            console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
             return message.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
         }

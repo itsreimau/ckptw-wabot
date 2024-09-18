@@ -52,7 +52,7 @@ global.config = {
     // Stiker.
     sticker: {
         packname: "Stiker ini dibuat oleh",
-        author: "@ckptw-wabot"
+        author: "@${global.config.pkg.name}"
     },
 
     // Sistem.

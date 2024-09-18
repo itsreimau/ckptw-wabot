@@ -84,7 +84,7 @@ function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
 
         return apiUrl.toString();
     } catch (error) {
-        console.error("[ckptw-wabot] Kesalahan:", error);
+        console.error(`[${global.config.pkg.name}] Error:`, error);
     }
 }
 

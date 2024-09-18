@@ -9,7 +9,7 @@ async function checkAdmin(ctx, id) {
         const members = await ctx.group().members();
         return members.filter((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id == id).length ? true : false;
     } catch (error) {
-        console.error("[ckptw-wabot] Kesalahan:", error);
+        console.error(`[${global.config.pkg.name}] Error:`, error);
         return null;
     }
 }
@@ -33,7 +33,7 @@ function convertMsToDuration(ms) {
 
         return durationString;
     } catch (error) {
-        console.error("[ckptw-wabot] Kesalahan:", error);
+        console.error(`[${global.config.pkg.name}] Error:`, error);
         return null;
     }
 }
@@ -47,7 +47,7 @@ function formatSize(bytes) {
         const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
         return Math.round(bytes / Math.pow(1024, i), 2) + " " + sizes[i];
     } catch (error) {
-        console.error("[ckptw-wabot] Kesalahan:", error);
+        console.error(`[${global.config.pkg.name}] Error:`, error);
         return null;
     }
 }
@@ -60,7 +60,7 @@ function getRandomElement(arr) {
         const randomIndex = Math.floor(Math.random() * arr.length);
         return arr[randomIndex];
     } catch (error) {
-        console.error("[ckptw-wabot] Kesalahan:", error);
+        console.error(`[${global.config.pkg.name}] Error:`, error);
         return null;
     }
 }
@@ -76,7 +76,7 @@ function isCmd(m, ctx) {
         }
         return false;
     } catch (error) {
-        console.error("[ckptw-wabot] Kesalahan:", error);
+        console.error(`[${global.config.pkg.name}] Error:`, error);
         return null;
     }
 }
@@ -87,7 +87,7 @@ async function isAdmin(ctx, id) {
         const isAdmin = await checkAdmin(ctx, jid);
         return isAdmin;
     } catch (error) {
-        console.error("[ckptw-wabot] Kesalahan:", error);
+        console.error(`[${global.config.pkg.name}] Error:`, error);
         return null;
     }
 }
@@ -98,7 +98,7 @@ async function isBotAdmin(ctx) {
         const isBotAdmin = await checkAdmin(ctx, id);
         return isBotAdmin;
     } catch (error) {
-        console.error("[ckptw-wabot] Kesalahan:", error);
+        console.error(`[${global.config.pkg.name}] Error:`, error);
         return null;
     }
 }
@@ -109,7 +109,7 @@ function isOwner(ctx, id, selfOwner) {
         const isOwner = selfOwner ? ctx._client.user.id.split(":")[0] === jid || global.config.owner.number === jid || global.config.owner.co.includes(id) : global.config.owner.number === jid || global.config.owner.co.includes(id);
         return isOwner;
     } catch (error) {
-        console.error("[ckptw-wabot] Kesalahan:", error);
+        console.error(`[${global.config.pkg.name}] Error:`, error);
         return null;
     }
 }
@@ -126,7 +126,7 @@ async function translate(text, to) {
         } = await axios.get(apiUrl);
         return data.result;
     } catch (error) {
-        console.error("[ckptw-wabot] Kesalahan:", error);
+        console.error(`[${global.config.pkg.name}] Error:`, error);
         return null;
     }
 }
@@ -135,7 +135,7 @@ function ucword(str) {
     try {
         return str.toLowerCase().replace(/\b(\w)/g, (s) => s.toUpperCase());
     } catch (error) {
-        console.error("[ckptw-wabot] Kesalahan:", error);
+        console.error(`[${global.config.pkg.name}] Error:`, error);
         return null;
     }
 }
