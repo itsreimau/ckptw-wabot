@@ -46,7 +46,7 @@ global.db = db;
 bot.ev.once(Events.ClientReady, async (m) => {
     console.log(`[${global.config.pkg.name}] Ready at ${m.user.id}`);
     global.config.bot.number = m.user.id.replace(/@.*|:.*/g, "");
-    global.config.bot id = m.user.id.replace(/@.*|:.*/g, "") + S_WHATSAPP_NET;
+    global.config.bot.id = m.user.id.replace(/@.*|:.*/g, "") + S_WHATSAPP_NET;
 });
 
 // Buat penangan perintah dan muat perintah.
