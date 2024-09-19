@@ -10,13 +10,13 @@ if (global.config.owner.name === "John Doe" || global.config.owner.number === "6
     console.error(`[${pkg.name}] Harap tetapkan global.config.owner dengan benar di config.js!`);
     process.exit(1);
 }
-if (global.config.system.usePairingCode && global.config.bot.phoneNumber === "628xxxxxxxxxx") {
+if (global.config.system.usePairingCode && global.config.bot.phoneNumber === "") {
     console.error(`[${pkg.name}] Harap tetapkan global.config.bot.phoneNumber dengan benar di config.js!`);
     process.exit(1);
 }
 
 // Memulai.
-console.log(`[${pkg.name}] Memulai...`);
+console.log(`[${pkg.name}] Starting...`);
 
 // Tampilkan judul menggunakan CFonts.
 CFonts.say(pkg.name, {

@@ -25,7 +25,7 @@ const {
 } = require("util");
 
 // Pesan koneksi.
-console.log(`[${global.config.pkg.name}] Menghubungkan...`);
+console.log(`[${global.config.pkg.name}] Connecting...`);
 
 // Buat instance bot baru.
 const bot = new Client({
@@ -45,7 +45,7 @@ global.db = db;
 
 // Penanganan acara saat bot siap.
 bot.ev.once(Events.ClientReady, async (m) => {
-    console.log(`[${global.config.pkg.name}] Siap di ${m.user.id}`);
+    console.log(`[${global.config.pkg.name}] Ready at ${m.user.id}`);
     global.config.bot = {
         number: m.user.id.replace(/@.*|:.*/g, ""),
         id: m.user.id.replace(/@.*|:.*/g, "") + S_WHATSAPP_NET
@@ -74,9 +74,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Log pesan masuk
     if (isGroup) {
-        console.log(`[${global.config.pkg.name}] Pesan masuk dari grup: ${groupNumber}, oleh: ${senderNumber}`);
+        console.log(`[${global.config.pkg.name}] Incoming message from group: ${groupNumber}, by: ${senderNumber}`);
     } else {
-        console.log(`[${global.config.pkg.name}] Pesan masuk dari: ${senderNumber}`);
+        console.log(`[${global.config.pkg.name}] Incoming message from: ${senderNumber}`);
     }
 
     // Basis data untuk pengguna.
@@ -105,7 +105,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         const mean = didyoumean(cmdName, listCmd);
 
-        if (mean && mean !== cmdName) ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
+        if (mean && mean !== cmdName) await ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
     }
 
     // Penanganan AFK: Pengguna yang disebutkan.
@@ -120,7 +120,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 ]);
                 const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
 
-                ctx.reply(quote(`🚫 Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
+                await ctx.reply(quote(`🚫 Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
             }
         }
     }
@@ -135,7 +135,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
         await db.delete(`user.${senderNumber}.afk`);
 
-        ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
+        await ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
     }
 
     // Perintah khusus pemilik.
@@ -150,7 +150,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 await ctx.reply(inspect(result));
             } catch (error) {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
-                ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+                await ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
             }
         }
 
@@ -174,7 +174,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 await ctx.reply(output);
             } catch (error) {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
-                ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+                await ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
             }
         }
     }
@@ -208,10 +208,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 try {
                     await sendMenfess(ctx, m, senderNumber, from);
 
-                    ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
+                    await ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
                 } catch (error) {
                     console.error(`[${global.config.pkg.name}] Error:`, error);
-                    ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+                    await ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
                 }
             }
         }

@@ -1,5 +1,6 @@
 const {
-    Cooldown
+    Cooldown,
+    MessageType
 } = require("@mengkodingan/ckptw");
 
 async function handler(ctx, options) {
@@ -11,71 +12,56 @@ async function handler(ctx, options) {
 
     const checkOptions = {
         admin: {
-            function: async () => ctx.isGroup() && !await global.tools.general.isAdmin(ctx, senderJid),
+            check: async () => !(await ctx.isGroup()) || !(await global.tools.general.isAdmin(ctx, senderJid)),
             msg: global.config.msg.admin
         },
         banned: {
-            function: async () => await global.db.get(`user.${senderNumber}.isBanned`),
+            check: async () => await global.db.get(`user.${senderNumber}.isBanned`),
             msg: global.config.msg.banned
         },
         botAdmin: {
-            function: async () => ctx.isGroup() && !await global.tools.general.isBotAdmin(ctx),
+            check: async () => !(await ctx.isGroup()) || !(await global.tools.general.isBotAdmin(ctx)),
             msg: global.config.msg.botAdmin
         },
         charger: {
-            function: async () => await global.db.get(`user.${senderNumber}.onCharger`),
+            check: async () => await global.db.get(`user.${senderNumber}.onCharger`),
             msg: global.config.msg.onCharger
         },
         cooldown: {
-            function: async () => new Cooldown(ctx, global.config.system.cooldown).onCooldown,
+            check: async () => new Cooldown(ctx, global.config.system.cooldown).onCooldown,
             msg: global.config.msg.cooldown
         },
         energy: {
-            function: async () => {
-                const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
-                const requiredEnergy = options.energy || 0;
-
-                if (isOwner || isPremium) return false;
-
-                if (typeof requiredEnergy === 'number' && !ctx.args) {
-                    return false;
-                }
-
-                if (userEnergy < requiredEnergy) return true;
-
-                await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
-                return false;
-            },
+            check: async () => await checkEnergy(ctx, options.energy, senderNumber),
             msg: global.config.msg.energy
         },
         group: {
-            function: async () => !await ctx.isGroup(),
+            check: async () => !(await ctx.isGroup()),
             msg: global.config.msg.group
         },
         owner: {
-            function: async () => !isOwner,
+            check: () => !isOwner,
             msg: global.config.msg.owner
         },
         premium: {
-            function: async () => !isOwner && !isPremium,
+            check: () => !isOwner && !isPremium,
             msg: global.config.msg.premium
         },
         private: {
-            function: async () => await ctx.isGroup(),
+            check: async () => await ctx.isGroup(),
             msg: global.config.msg.private
         },
         restrict: {
-            function: () => global.config.system.restrict,
+            check: () => global.config.system.restrict,
             msg: global.config.msg.restrict
         }
     };
 
-    for (const [option, checkOption] of Object.entries(options)) {
-        const {
-            function: checkFunction,
+    for (const [option, {
+            check,
             msg
-        } = checkOptions[option] || {};
-        if (checkFunction && await checkFunction()) {
+        }] of Object.entries(options)) {
+        if (check && await check()) {
             return {
                 status: true,
                 message: msg
@@ -87,6 +73,87 @@ async function handler(ctx, options) {
         status: false,
         message: null
     };
+}
+
+async function checkEnergy(ctx, energyOptions, senderNumber) {
+    if (typeof energyOptions === 'number') {
+        const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
+        if (userEnergy < energyOptions) return true;
+
+        await global.db.subtract(`user.${senderNumber}.energy`, energyOptions);
+        return false;
+    }
+
+    const [requiredEnergy, requiredMedia, mediaSourceOption] = Array.isArray(energyOptions) ? energyOptions : [energyOptions || 0];
+
+    const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
+    const msgType = ctx.getMessageType();
+    let hasMedia = false;
+
+    if (mediaSourceOption === 1 || mediaSourceOption === 3) {
+        hasMedia = await checkMedia(msgType, requiredMedia, ctx);
+    }
+
+    if ((mediaSourceOption === 2 || mediaSourceOption === 3) && ctx.quoted) {
+        hasMedia = await checkQuotedMedia(ctx.quoted, requiredMedia);
+    }
+
+    if (requiredMedia && !hasMedia) return false;
+    if (userEnergy < requiredEnergy) return true;
+
+    await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
+    return false;
+}
+
+async function checkMedia(msgType, requiredMedia, ctx) {
+    const mediaMap = {
+        audio: "audioMessage",
+        contact: "contactMessage",
+        document: ["documentMessage", "documentWithCaptionMessage"],
+        image: "imageMessage",
+        location: "locationMessage",
+        sticker: "stickerMessage",
+        video: "videoMessage",
+        text: () => ctx.args.length > 0
+    };
+
+    const mediaList = Array.isArray(requiredMedia) ? requiredMedia : [requiredMedia];
+
+    return mediaList.some(media => {
+        if (media === "document") {
+            return mediaMap[media].includes(msgType);
+        } else if (media === "text") {
+            return mediaMap[media]();
+        }
+        return msgType === mediaMap[media];
+    });
+}
+
+async function checkQuotedMedia(quoted, requiredMedia) {
+    const quotedMediaMap = {
+        audio: quoted.audioMessage,
+        contact: quoted.contactMessage,
+        document: quoted.documentMessage || quoted.documentWithCaptionMessage,
+        image: quoted.imageMessage,
+        location: quoted.locationMessage,
+        sticker: quoted.stickerMessage,
+        video: quoted.videoMessage,
+        text: quoted.conversation || quoted.extendedTextMessage?.text
+    };
+
+    const mediaList = Array.isArray(requiredMedia) ? requiredMedia : [requiredMedia];
+
+    return mediaList.some(media => {
+        const mediaContent = quotedMediaMap[media];
+        if (mediaContent) {
+            if (media === "text") {
+                return mediaContent.length > 0;
+            } else if (quoted.media) {
+                return quoted.media.toBuffer().catch(() => null) !== null;
+            }
+        }
+        return false;
+    });
 }
 
 module.exports = handler;
