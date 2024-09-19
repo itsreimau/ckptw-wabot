@@ -51,7 +51,7 @@ module.exports = {
 
             const index = parseInt(input);
 
-            if (isNaN(index) || index < 1 || index > 99) return ctx.reply(quote(`⚠ Nomor Asmaul Husna tidak valid. Harap masukkan nomor antara 1 dan 99 atau ketik "all" untuk melihat semua Asmaul Husna.`));
+            if (isNaN(index) || index < 1 || index > 99) return ctx.reply(quote(`❎ Nomor Asmaul Husna tidak valid. Harap masukkan nomor antara 1 dan 99 atau ketik "all" untuk melihat semua Asmaul Husna.`));
 
             const selectedName = asmaulhusna.find((a) => parseInt(a.number) === index);
 
@@ -74,7 +74,7 @@ module.exports = {
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (erroa.status !== 200) return ctx.reply(global.config.msg.notFound);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${erroa.message}`));
+            return ctx.reply(quote(`❎ Terjadi kesalahan: ${erroa.message}`));
         }
     }
 };

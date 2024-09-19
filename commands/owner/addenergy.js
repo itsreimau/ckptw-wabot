@@ -43,7 +43,7 @@ module.exports = {
             return ctx.reply(quote(`✅ Berhasil menambahkan ${energyAmount} energi kepada pengguna!`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

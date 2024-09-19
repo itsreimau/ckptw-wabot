@@ -40,13 +40,13 @@ module.exports = {
                     await ctx.group().unlock();
                     break;
                 default:
-                    return ctx.reply(quote(`⚠ Argumen yang tersedia adalah open, close, lock, dan unlock.`));
+                    return ctx.reply(quote(`❎ Argumen yang tersedia adalah open, close, lock, dan unlock.`));
             }
 
             return ctx.reply(quote(`✅ Berhasil mengubah setelan grup!`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -17,23 +17,32 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const senderNumber = ctx.sender.jid.split("@")[0];
+            const senderName = ctx.sender.pushName;
+            const senderJid = ctx.sender.jid;
+            const senderNumber = senderJid.replace(/@.*|:.*/g, "");
             const [energy, premium, onCharger] = await Promise.all([
                 global.db.get(`user.${senderNumber}.energy`) || "-",
                 global.db.get(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak",
                 global.db.get(`user.${senderNumber}.onCharger`) ? "Ya" : "Tidak",
             ]);
 
-            let profileUrl;
+            let profilePictureUrl;
             try {
-                profileUrl = await ctx._client.profilePictureUrl(jid, "image");
+                profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image");
             } catch (error) {
-                profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
+                profilePictureUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
+            const card = global.tools.api.createUrl("aggelos_007", "/welcomecard", {
+                username: senderName,
+                xp: energy,
+                maxxp: "100",
+                level: "0",
+                avatar: profilePictureUrl
+            });
 
             return await ctx.reply({
                 image: {
-                    url: profileUrl,
+                    url: card || profilePictureUrl
                 },
                 mimetype: mime.contentType("png"),
                 caption: `${quote(`Nama: ${ctx.sender.pushName || "-"}`)}\n` +
@@ -45,7 +54,7 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

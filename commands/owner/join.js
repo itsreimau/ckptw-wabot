@@ -39,7 +39,7 @@ module.exports = {
             return await ctx.reply(quote(`✅ Berhasil bergabung dengan grup!`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

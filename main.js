@@ -30,7 +30,6 @@ console.log(`[${global.config.pkg.name}] Connecting...`);
 // Buat instance bot baru.
 const bot = new Client({
     WAVersion: [2, 3000, 1015901307],
-    autoMention: global.config.system.autoMention,
     phoneNumber: global.config.bot.phoneNumber,
     prefix: global.config.bot.prefix,
     readIncommingMsg: global.config.system.autoRead,
@@ -46,10 +45,8 @@ global.db = db;
 // Penanganan acara saat bot siap.
 bot.ev.once(Events.ClientReady, async (m) => {
     console.log(`[${global.config.pkg.name}] Ready at ${m.user.id}`);
-    global.config.bot = {
-        number: m.user.id.replace(/@.*|:.*/g, ""),
-        id: m.user.id.replace(/@.*|:.*/g, "") + S_WHATSAPP_NET
-    };
+    global.config.bot.number = m.user.id.replace(/@.*|:.*/g, "");
+    global.config.bot id = m.user.id.replace(/@.*|:.*/g, "") + S_WHATSAPP_NET;
 });
 
 // Buat penangan perintah dan muat perintah.
@@ -120,7 +117,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 ]);
                 const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
 
-                await ctx.reply(quote(`🚫 Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
+                await ctx.reply(quote(`📴 Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
             }
         }
     }
@@ -150,7 +147,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 await ctx.reply(inspect(result));
             } catch (error) {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
-                await ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
             }
         }
 
@@ -174,7 +171,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 await ctx.reply(output);
             } catch (error) {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
-                await ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
             }
         }
     }
@@ -188,7 +185,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             if (m.content && urlRegex.test(m.content)) {
                 if (await tools.general.isAdmin(ctx, senderNumber)) return;
 
-                await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
+                await ctx.reply(quote(`❎ Jangan kirim tautan!`));
                 if (!global.config.system.restrict) await ctx.deleteMessage(m.key);
             }
         }
@@ -211,7 +208,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     await ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
                 } catch (error) {
                     console.error(`[${global.config.pkg.name}] Error:`, error);
-                    await ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+                    await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
                 }
             }
         }
@@ -291,11 +288,11 @@ async function handleUserEvent(m) {
             const metadata = await bot.core.groupMetadata(id);
 
             for (const jid of participants) {
-                let profileUrl;
+                let profilePictureUrl;
                 try {
-                    profileUrl = await bot.core.profilePictureUrl(jid, "image");
+                    profilePictureUrl = await bot.core.profilePictureUrl(jid, "image");
                 } catch (error) {
-                    profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
+                    profilePictureUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
                 }
 
                 const message = m.eventsType === "UserJoin" ?
@@ -305,7 +302,7 @@ async function handleUserEvent(m) {
                     text1: jid.split("@")[0],
                     text2: m.eventsType === "UserJoin" ? "Selamat datang" : "Selamat tinggal!",
                     text3: metadata.subject,
-                    avatar: profileUrl,
+                    avatar: profilePictureUrl,
                     background: global.config.bot.thumbnail
                 });
 
@@ -320,7 +317,7 @@ async function handleUserEvent(m) {
                             title: m.eventsType === "UserJoin" ? "JOIN" : "LEAVE",
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: card || profileUrl || global.config.bot.thumbnail,
+                            thumbnailUrl: card || profilePictureUrl || global.config.bot.thumbnail,
                             sourceUrl: global.config.bot.groupChat
                         }
                     }
@@ -330,7 +327,7 @@ async function handleUserEvent(m) {
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
         await bot.core.sendMessage(id, {
-            text: quote(`⚠ Terjadi kesalahan: ${error.message}`)
+            text: quote(`❎ Terjadi kesalahan: ${error.message}`)
         });
     }
 }

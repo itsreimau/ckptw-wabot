@@ -37,16 +37,16 @@ module.exports = {
             switch (input) {
                 case "antilink":
                     await global.db.set(`group.${groupNumber}.antilink`, true);
-                    return ctx.reply(quote(`⚠ Fitur 'antilink' berhasil diaktifkan!`));
+                    return ctx.reply(quote(`✅ Fitur 'antilink' berhasil diaktifkan!`));
                 case "welcome":
                     await global.db.set(`group.${groupNumber}.welcome`, true);
-                    return ctx.reply(quote(`⚠ Fitur 'welcome' berhasil diaktifkan!`));
+                    return ctx.reply(quote(`✅ Fitur 'welcome' berhasil diaktifkan!`));
                 default:
-                    return ctx.reply(quote(`⚠ Perintah tidak valid. Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`));
+                    return ctx.reply(quote(`❎ Perintah tidak valid. Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`));
             }
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

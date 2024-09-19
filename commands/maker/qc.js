@@ -30,19 +30,19 @@ module.exports = {
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "get in the fucking robot, shinji!"))
         );
 
-        if (input.length > 10000) return ctx.reply(quote(`⚠ Maksimal 50 kata!`));
+        if (input.length > 10000) return ctx.reply(quote(`❎ Maksimal 50 kata!`));
 
         try {
-            let profileUrl;
+            let profilePictureUrl;
             try {
-                profileUrl = await ctx._client.profilePictureUrl(jid, "image");
+                profilePictureUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image");
             } catch (error) {
-                profileUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
+                profilePictureUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
             }
 
             const apiUrl = global.tools.api.createUrl("ngodingaja", "/api/bubblechat", {
                 text: input,
-                url: profileUrl,
+                url: profilePictureUrl,
                 nama: ctx.sender.pushName || "-"
             });
 
@@ -58,7 +58,7 @@ module.exports = {
             return ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

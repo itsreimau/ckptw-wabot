@@ -54,7 +54,7 @@ async function get(type, ctx) {
             return menuText;
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return quote(`⚠ Terjadi kesalahan: ${error.message}`);
+            return quote(`❎ Terjadi kesalahan: ${error.message}`);
         }
     };
 
@@ -72,7 +72,7 @@ async function get(type, ctx) {
                     text += global.config.msg.footer;
                 } catch (error) {
                     console.error(`[${global.config.pkg.name}] Error:`, error);
-                    text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
+                    text = quote(`❎ Terjadi kesalahan: ${error.message}`);
                 }
                 break;
             }
@@ -88,7 +88,7 @@ async function get(type, ctx) {
                     text += global.config.msg.footer;
                 } catch (error) {
                     console.error(`[${global.config.pkg.name}] Error:`, error);
-                    text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
+                    text = quote(`❎ Terjadi kesalahan: ${error.message}`);
                 }
                 break;
             }
@@ -101,7 +101,7 @@ async function get(type, ctx) {
                         global.config.msg.footer;
                 } catch (error) {
                     console.error(`[${global.config.pkg.name}] Error:`, error);
-                    text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
+                    text = quote(`❎ Terjadi kesalahan: ${error.message}`);
                 }
                 break;
             }
@@ -127,7 +127,7 @@ async function get(type, ctx) {
                 };
 
                 if (!cmd || cmd.size === 0) {
-                    text = quote("⚠ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");
+                    text = quote("❎ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");
                 } else {
                     text = generateMenuText(cmd, tag);
                 }
@@ -135,13 +135,13 @@ async function get(type, ctx) {
             }
             default: {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
-                text = quote(`⚠ Tidak diketahui: ${type}`);
+                text = quote(`❎ Tidak diketahui: ${type}`);
                 break;
             }
         }
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
-        text = quote(`⚠ Terjadi kesalahan: ${error.message}`);
+        text = quote(`❎ Terjadi kesalahan: ${error.message}`);
     }
 
     return text;

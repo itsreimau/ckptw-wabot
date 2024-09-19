@@ -30,14 +30,14 @@ module.exports = {
         });
 
         try {
-            if ((await global.tools.general.isAdmin(ctx, account))) return ctx.reply(quote(`⚠ Anggota ini adalah admin grup.`));
+            if ((await global.tools.general.isAdmin(ctx, account))) return ctx.reply(quote(`❎ Anggota ini adalah admin grup.`));
 
             await ctx.group().promote([account]);
 
             return ctx.reply(quote(`✅ Berhasil ditingkatkan dari anggota biasa menjadi admin!`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

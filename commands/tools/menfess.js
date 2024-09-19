@@ -33,7 +33,7 @@ module.exports = {
             const [number, ...text] = ctx.args;
             const numberFormatted = number.replace(/[^\d]/g, "");
 
-            if (numberFormatted === senderNumber) return ctx.reply(quote(`⚠ Tidak dapat digunakan pada diri Anda sendiri.`));
+            if (numberFormatted === senderNumber) return ctx.reply(quote(`❎ Tidak dapat digunakan pada diri Anda sendiri.`));
 
             const menfessText =
                 `${text.join(" ")}\n` +
@@ -85,7 +85,7 @@ module.exports = {
             return ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

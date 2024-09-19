@@ -23,7 +23,7 @@ module.exports = {
             exec(`pm2 restart ${global.config.pkg.name}`); // PM2.
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

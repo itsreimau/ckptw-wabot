@@ -18,17 +18,17 @@ global.config = {
     // MSG (Pesan).
     msg: {
         // Akses perintah.
-        admin: quote("⚠ Perintah hanya dapat diakses oleh admin grup!"),
-        banned: quote("⚠ Tidak dapat memproses karena Anda telah dibanned!"),
-        botAdmin: quote("⚠ Bot bukan admin, tidak bisa menggunakan perintah!"),
-        cooldown: quote("⚠ Perintah ini sedang dalam cooldown, tunggu..."),
-        energy: quote(`⚠ Anda tidak punya cukup energi! Ketik ${monospace("/charger")} untuk mengisi energi.`),
-        group: quote("⚠ Perintah hanya dapat diakses dalam grup!"),
-        onCharger: quote("⚠ Karena sedang mengisi daya, perintah ini tidak dapat digunakan. Tunggu sampai energinya penuh."),
-        owner: quote("⚠ Perintah hanya dapat diakses Owner!"),
-        premium: quote("⚠ Anda bukan pengguna Premium!"),
-        private: quote("⚠ Perintah hanya dapat diakses dalam obrolan pribadi!"),
-        restrict: quote("⚠ Perintah ini telah dibatasi karena alasan keamanan!"),
+        admin: quote("❎ Perintah hanya dapat diakses oleh admin grup!"),
+        banned: quote("❎ Tidak dapat memproses karena Anda telah dibanned!"),
+        botAdmin: quote("❎ Bot bukan admin, tidak bisa menggunakan perintah!"),
+        cooldown: quote("❎ Perintah ini sedang dalam cooldown, tunggu..."),
+        energy: quote(`❎ Anda tidak punya cukup energi! Ketik ${monospace("/charger")} untuk mengisi energi.`),
+        group: quote("❎ Perintah hanya dapat diakses dalam grup!"),
+        onCharger: quote("❎ Karena sedang mengisi daya, perintah ini tidak dapat digunakan. Tunggu sampai energinya penuh."),
+        owner: quote("❎ Perintah hanya dapat diakses Owner!"),
+        premium: quote("❎ Anda bukan pengguna Premium!"),
+        private: quote("❎ Perintah hanya dapat diakses dalam obrolan pribadi!"),
+        restrict: quote("❎ Perintah ini telah dibatasi karena alasan keamanan!"),
 
         // Antarmuka perintah.
         watermark: `${pkg.name}@^${pkg.version}`,

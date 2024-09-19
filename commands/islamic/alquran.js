@@ -35,7 +35,7 @@ module.exports = {
             const suraNumber = parseInt(ctx.args[0]);
             const ayaInput = ctx.args[1];
 
-            if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`⚠ Surah ${suraNumber} tidak ada.`));
+            if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`❎ Surah ${suraNumber} tidak ada.`));
 
             const apiUrl = global.tools.api.createUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
             const response = await axios.get(apiUrl);
@@ -47,10 +47,10 @@ module.exports = {
                 if (ayaInput.includes("-")) {
                     const [startAya, endAya] = ayaInput.split("-").map(num => parseInt(num));
 
-                    if (isNaN(startAya) || isNaN(endAya) || startAya < 1 || endAya < startAya) return ctx.reply(quote(`⚠ Rentang ayat tidak valid.`));
+                    if (isNaN(startAya) || isNaN(endAya) || startAya < 1 || endAya < startAya) return ctx.reply(quote(`❎ Rentang ayat tidak valid.`));
 
                     const verses = data.ayat.filter((d) => d.nomorAyat >= startAya && d.nomorAyat <= endAya);
-                    if (verses.length === 0) return ctx.reply(quote(`⚠ Ayat dalam rentang ${startAya}-${endAya} tidak ada.`));
+                    if (verses.length === 0) return ctx.reply(quote(`❎ Ayat dalam rentang ${startAya}-${endAya} tidak ada.`));
 
                     const versesText = verses.map((d) => {
                         return `${bold(`Ayat ${d.nomorAyat}:`)}\n` +
@@ -69,10 +69,10 @@ module.exports = {
                 } else {
                     const ayaNumber = parseInt(ayaInput);
 
-                    if (isNaN(ayaNumber) || ayaNumber < 1) return ctx.reply(quote(`⚠ Ayat harus lebih dari 0.`));
+                    if (isNaN(ayaNumber) || ayaNumber < 1) return ctx.reply(quote(`❎ Ayat harus lebih dari 0.`));
 
                     const aya = data.ayat.find((d) => d.nomorAyat === ayaNumber);
-                    if (!aya) return ctx.reply(quote(`⚠ Ayat ${ayaNumber} tidak ada.`));
+                    if (!aya) return ctx.reply(quote(`❎ Ayat ${ayaNumber} tidak ada.`));
 
                     return ctx.reply(
                         `${aya.teksArab} (${aya.teksLatin})\n` +
@@ -99,7 +99,7 @@ module.exports = {
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

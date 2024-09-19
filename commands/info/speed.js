@@ -16,7 +16,7 @@ module.exports = {
             await ctx.editMessage(testSpeed.key, quote(`Merespon dalam ${responseTime} ms.`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`⚠ Terjadi kesalahan: ${error.message}`));
+            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
