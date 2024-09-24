@@ -11,7 +11,10 @@ global.config = {
         name: "CKPTW",
         prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
         phoneNumber: "", // Abaikan jika Anda menggunakan kode QR untuk otentikasi.
-        thumbnail: "https://e1.pxfuel.com/desktop-wallpaper/943/672/desktop-wallpaper-whatsapp-bot-what-is-it-and-how-to-use-messenger-chatbots-chatbot.jpg",
+        picture: {
+            thumbnail: "https://e1.pxfuel.com/desktop-wallpaper/943/672/desktop-wallpaper-whatsapp-bot-what-is-it-and-how-to-use-messenger-chatbots-chatbot.jpg",
+            profile: "https://i.ibb.co/3Fh9V6p/avatar-contact.png"
+        },
         groupChat: "https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs" // Jangan lupa untuk bergabung ya teman-teman!
     },
 
@@ -43,10 +46,10 @@ global.config = {
 
     // Owner & CoOwner.
     owner: {
-        name: "John Doe",
-        number: "628xxxxxxxxxx",
-        organization: "jdoe.org",
-        co: ["628xxxxxxxxxx"]
+        name: "",
+        number: "",
+        organization: "",
+        co: [""]
     },
 
     // Stiker.
@@ -57,12 +60,12 @@ global.config = {
 
     // Sistem.
     system: {
-        autoRead: false,
+        autoRead: true,
         cooldown: 5000,
-        restrict: false, // Membatasi beberapa perintah yang akan mengakibatkan banned.
-        selfReply: false,
+        restrict: true, // Membatasi beberapa perintah yang akan mengakibatkan banned.
+        selfReply: true,
         timeZone: "Asia/Jakarta",
-        useInteractiveMessage: false,
-        usePairingCode: false
+        useInteractiveMessage: true,
+        usePairingCode: true
     }
 };

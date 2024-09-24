@@ -20,21 +20,24 @@ module.exports = {
             const senderName = ctx.sender.pushName;
             const senderJid = ctx.sender.jid;
             const senderNumber = senderJid.replace(/@.*|:.*/g, "");
-            const [energy, premium, onCharger] = await Promise.all([
-                global.db.get(`user.${senderNumber}.energy`) || "-",
-                global.db.get(`user.${senderNumber}.isPremium`) ? "Ya" : "Tidak",
-                global.db.get(`user.${senderNumber}.onCharger`) ? "Ya" : "Tidak",
+
+            const [energy, isPremium, onCharger, estimatedTime] = await Promise.all([
+                global.db.get(`user.${senderNumber}.energy`),
+                global.db.get(`user.${senderNumber}.isPremium`),
+                global.db.get(`user.${senderNumber}.onCharger`),
+                global.db.get(`user.${senderNumber}.estimatedTime`)
             ]);
 
             let profilePictureUrl;
             try {
                 profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image");
             } catch (error) {
-                profilePictureUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
+                profilePictureUrl = global.config.bot.picture.profile;
             }
-            const card = global.tools.api.createUrl("aggelos_007", "/welcomecard", {
+
+            const card = global.tools.api.createUrl("aggelos_007", "/rankcard", {
                 username: senderName,
-                xp: energy,
+                xp: isPremium ? 100 : (energy || 0),
                 maxxp: "100",
                 level: "0",
                 avatar: profilePictureUrl
@@ -46,9 +49,9 @@ module.exports = {
                 },
                 mimetype: mime.contentType("png"),
                 caption: `${quote(`Nama: ${ctx.sender.pushName || "-"}`)}\n` +
-                    `${quote(`Premium: ${premium}`)}\n` +
-                    `${quote(`Energi: ${energy}`)}\n` +
-                    `${quote(`Pengisian energi: ${onCharger}`)}\n` +
+                    `${quote(`Premium: ${isPremium ? "Ya" : "Tidak"}`)}\n` +
+                    `${quote(`Energi: ${isPremium ? "Tak terbatas" : (energy || "-")}`)}\n` +
+                    `${quote(`Pengisian energi: ${onCharger ? "Ya" : "Tidak"}`)} (${global.tools.general.convertMsToDuration(estimatedTime)})\n` +
                     "\n" +
                     global.config.msg.footer,
             });

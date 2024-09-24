@@ -37,7 +37,7 @@ module.exports = {
             try {
                 profilePictureUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image");
             } catch (error) {
-                profilePictureUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
+                profilePictureUrl = global.config.bot.picture.profile;
             }
 
             const apiUrl = global.tools.api.createUrl("ngodingaja", "/api/bubblechat", {

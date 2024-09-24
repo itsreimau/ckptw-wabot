@@ -18,6 +18,15 @@ module.exports = {
 
         const senderNumber = ctx.sender.jid.replace(/@.*|:.*/g, "");
 
+        const [isOwner, isPremium] = await Promise.all([
+            tools.general.isOwner(ctx, senderNumber, true),
+            global.db.get(`user.${senderNumber}.isPremium`) || false
+        ]);
+
+        if (isOwner) return ctx.reply(quote(`⚡ Anda adalah Owner, tidak perlu mengisi energi.`));
+
+        if (isPremium) return ctx.reply(quote(`⚡ Anda adalah pengguna premium, energi Anda tidak terbatas!`));
+
         const [userEnergy, isOnCharger, lastCharge] = await Promise.all([
             global.db.get(`user.${senderNumber}.energy`) || 0,
             global.db.get(`user.${senderNumber}.onCharger`) || false,
@@ -30,9 +39,19 @@ module.exports = {
 
         if (lastCharge && Date.now() - lastCharge < 24 * 60 * 60 * 1000) return ctx.reply(quote(`⚡ Anda baru saja mengisi energi. Silakan tunggu sampai besok untuk mengisi energi lagi.`));
 
-        global.db.set(`user.${senderNumber}.onCharger`, true);
-        global.db.set(`user.${senderNumber}.lastCharge`, Date.now());
+        const energyPerInterval = 25; // 25 energi setiap 15 menit.
+        const intervalTime = 15 * 60 * 1000; // 15 menit dalam milidetik.
+        const energyToFull = 100 - userEnergy;
+        const totalIntervals = Math.ceil(energyToFull / energyPerInterval);
+        const totalTime = totalIntervals * intervalTime; // Waktu total dalam milidetik.
+        const estimatedTime = global.tools.general.convertMsToDuration(totalTime);
 
-        return ctx.reply(quote(`🔌 Sekarang bot akan mengisi 25 energi setiap 1 menit.`));
+        await Promise.all([
+            global.db.set(`user.${senderNumber}.onCharger`, true),
+            global.db.set(`user.${senderNumber}.lastCharge`, Date.now()),
+            global.db.set(`user.${senderNumber}.estimatedTime`, totalTime)
+        ]);
+
+        return ctx.reply(quote(`🔌 Sekarang bot akan mengisi energi Anda! Estimasi waktu pengisian penuh: ${estimatedTime}.`));
     }
 };

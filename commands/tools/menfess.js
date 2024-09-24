@@ -51,7 +51,7 @@ module.exports = {
                     extendedTextMessage: {
                         text: "Seseorang telah mengirimimu pesan menfess.",
                         title: global.config.bot.name,
-                        thumbnailUrl: global.config.bot.thumbnail
+                        thumbnailUrl: global.config.bot.picture.thumbnail
 
                     }
                 }
@@ -67,7 +67,7 @@ module.exports = {
                         title: global.config.msg.watermark,
                         body: null,
                         renderLargerThumbnail: true,
-                        thumbnailUrl: global.config.bot.thumbnail,
+                        thumbnailUrl: global.config.bot.picture.thumbnail,
                         sourceUrl: global.config.bot.groupChat
                     },
                     forwardingScore: 9999,

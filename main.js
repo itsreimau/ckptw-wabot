@@ -57,9 +57,6 @@ cmd.load();
 global.handler = handler;
 global.tools = tools;
 
-// Mengelola energi.
-setInterval(manageEnergy, 900000);
-
 // Penanganan event ketika pesan muncul.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
@@ -83,6 +80,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             energy: 50
         });
     }
+
+    // Memulai manajemen energi ketika bot dimulai.
+    startEnergyManagement(ctx);
 
     // Simulasi pengetikan otomatis untuk perintah.
     if (tools.general.isCmd(m, ctx)) ctx.simulateTyping();
@@ -243,7 +243,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
             extendedTextMessage: {
                 text: `${senderNumber} telah merespons pesan menfess Anda.`,
                 title: global.config.bot.name,
-                thumbnailUrl: global.config.bot.thumbnail
+                thumbnailUrl: global.config.bot.picture.thumbnail
 
             }
         }
@@ -263,7 +263,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
                     title: global.config.msg.watermark,
                     body: null,
                     renderLargerThumbnail: true,
-                    thumbnailUrl: global.config.bot.thumbnail,
+                    thumbnailUrl: global.config.bot.picture.thumbnail,
                     sourceUrl: global.config.bot.groupChat
                 },
                 forwardingScore: 9999,
@@ -292,7 +292,7 @@ async function handleUserEvent(m) {
                 try {
                     profilePictureUrl = await bot.core.profilePictureUrl(jid, "image");
                 } catch (error) {
-                    profilePictureUrl = "https://i.ibb.co/3Fh9V6p/avatar-contact.png";
+                    profilePictureUrl = global.config.bot.picture.profile;
                 }
 
                 const message = m.eventsType === "UserJoin" ?
@@ -303,7 +303,7 @@ async function handleUserEvent(m) {
                     text2: m.eventsType === "UserJoin" ? "Selamat datang" : "Selamat tinggal!",
                     text3: metadata.subject,
                     avatar: profilePictureUrl,
-                    background: global.config.bot.thumbnail
+                    background: global.config.bot.picture.thumbnail
                 });
 
                 await bot.core.sendMessage(id, {
@@ -317,7 +317,7 @@ async function handleUserEvent(m) {
                             title: m.eventsType === "UserJoin" ? "JOIN" : "LEAVE",
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: card || profilePictureUrl || global.config.bot.thumbnail,
+                            thumbnailUrl: card || profilePictureUrl || global.config.bot.picture.thumbnail,
                             sourceUrl: global.config.bot.groupChat
                         }
                     }
@@ -332,14 +332,26 @@ async function handleUserEvent(m) {
     }
 }
 
-async function manageEnergy() {
+async function manageEnergy(ctx) {
     const users = await db.get("user") || {};
 
     for (const userNumber of Object.keys(users)) {
         try {
             const userPath = `user.${userNumber}`;
-            const onCharger = await db.get(`${userPath}.onCharger`) || false;
-            let energy = await db.get(`${userPath}.energy`) || 0;
+
+            const [isOwner, isPremium] = await Promise.all([
+                tools.general.isOwner(ctx, userNumber, true),
+                db.get(`${userPath}.isPremium`) || false
+            ]);
+
+            if (isOwner || isPremium) continue;
+
+            const [onCharger, energyStored] = await Promise.all([
+                db.get(`${userPath}.onCharger`) || false,
+                db.get(`${userPath}.energy`) || 0
+            ]);
+
+            let energy = energyStored;
 
             if (onCharger) {
                 energy = Math.min(energy + 25, 100);
@@ -357,11 +369,14 @@ async function manageEnergy() {
                 text: quote(`⚡ Energimu rendah! Silakan isi daya dengan mengetik ${monospace("/charger")}.`)
             });
 
-            if (energy > 100) energy = 100;
+            if (energy !== energyStored) await db.set(`${userPath}.energy`, energy);
 
-            await db.set(`${userPath}.energy`, energy);
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
         }
     }
+}
+
+function startEnergyManagement(ctx) {
+    setInterval(() => manageEnergy(ctx), 900000); // 15 menit.
 }

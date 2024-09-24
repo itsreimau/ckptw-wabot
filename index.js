@@ -6,7 +6,7 @@ const CFonts = require("cfonts");
 global.config.pkg = pkg;
 
 // Pengecekan.
-if (global.config.owner.name === "John Doe" || global.config.owner.number === "628xxxxxxxxxx") {
+if (global.config.owner.name === "" || global.config.owner.number === "") {
     console.error(`[${pkg.name}] Harap tetapkan global.config.owner dengan benar di config.js!`);
     process.exit(1);
 }
