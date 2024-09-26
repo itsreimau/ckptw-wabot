@@ -29,7 +29,7 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await global.tools.general.upload(buffer);
-            const apiUrl = global.tools.api.createUrl("nyxs", "/tool/ocr", {
+            const apiUrl = global.tools.api.createUrl("nyxs", "/tools/ocr", {
                 url: uploadUrl
             });
             const {
