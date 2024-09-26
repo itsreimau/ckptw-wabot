@@ -1,5 +1,10 @@
 const api = require("./api.js");
 const axios = require("axios");
+const cheerio = require("cheerio");
+const FormData = require("form-data");
+const {
+    fromBuffer
+} = require("file-type");
 const {
     S_WHATSAPP_NET
 } = require("@whiskeysockets/baileys");
@@ -140,6 +145,37 @@ function ucword(str) {
     }
 }
 
+async function(buffer) {
+    try {
+        const {
+            ext
+        } = await fromBuffer(buffer);
+        if (!ext) {
+            throw new Error("Could not determine file type from buffer");
+        }
+
+        let form = new FormData();
+        form.append("file", buffer, "tmp." + ext);
+
+        const apiUrl = api.createUrl("https://uploader.nyxs.pw", "/upload", {});
+        const response = await axios.post(apiUrl, form, {
+            headers: {
+                ...form.getHeaders()
+            }
+        });
+
+        const $ = cheerio.load(response.data);
+        const url = $("a").attr("href");
+
+        if (!url) throw new Error("URL not found in response");
+
+        return url;
+    } catch (error) {
+        console.error(`[${global.config.pkg.name}] Error:`, error);
+        return null;
+    }
+}
+
 module.exports = {
     convertMsToDuration,
     formatSize,
@@ -149,5 +185,6 @@ module.exports = {
     isBotAdmin,
     isOwner,
     translate,
-    ucword
+    ucword,
+    upload
 };

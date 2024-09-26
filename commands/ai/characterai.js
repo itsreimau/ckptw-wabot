@@ -2,12 +2,11 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "lyrics",
-    aliases: ["lirik", "lyric"],
-    category: "internet",
+    name: "characterai",
+    aliases: ["rei", "ayanami"],
+    category: "ai",
     code: async (ctx) => {
         const {
             status,
@@ -15,8 +14,7 @@ module.exports = {
         } = await global.handler(ctx, {
             banned: true,
             charger: true,
-            cooldown: true,
-            energy: [5, "text", 1]
+            cooldown: true
         });
         if (status) return ctx.reply(message);
 
@@ -24,24 +22,19 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss")
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu whatsapp"))
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("nyxs", "/tools/lirik", {
-                title: input
+            const apiUrl = global.tools.api.createUrl("nyxs", "/ai/character-ai", {
+                prompt: input,
+                gaya: `Bot WhatsApp bernama ${global.config.bot.name}, dimiliki oleh ${global.config.owner.name}.` // Can be changed according to your wishes.
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            return ctx.reply(
-                `${quote(`Judul: ${global.tools.general.ucword(input)}`)}\n` +
-                `${quote("─────")}\n`
-                `${data.hasil.lirik}\n` +
-                "\n" +
-                global.config.msg.footer
-            );
+            return ctx.reply(data.result);
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return ctx.reply(global.config.msg.notFound);

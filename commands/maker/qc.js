@@ -40,10 +40,10 @@ module.exports = {
                 profilePictureUrl = global.config.bot.picture.profile;
             }
 
-            const apiUrl = global.tools.api.createUrl("ngodingaja", "/api/bubblechat", {
-                text: input,
-                url: profilePictureUrl,
-                nama: ctx.sender.pushName || "-"
+            const apiUrl = global.tools.api.createUrl("widipe", "/quotely", {
+                avatar: profilePictureUrl,
+                name: ctx.sender.pushName || "-",
+                text: input
             });
 
             const sticker = new Sticker(apiUrl, {

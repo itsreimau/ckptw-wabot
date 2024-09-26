@@ -4,10 +4,6 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const mime = require("mime-types");
-const {
-    uploadByBuffer
-} = require("telegraph-uploader");
 const {
     Sticker,
     StickerTypes
@@ -40,12 +36,18 @@ module.exports = {
 
         if (msgType !== MessageType.imageMessage && !(await ctx.quoted.media.toBuffer())) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["image"])));
 
+
         try {
+            let [top, bottom] = input.split("|");
+            if (!bottom) {
+                bottom = top;
+                top = "";
+            }
+
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const [top, bottom] = input.split("|");
-            const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
+            const uploadUrl = await global.tools.general.upload(buffer);
             const result = global.tools.api.createUrl("https://api.memegen.link", `/images/custom/${top || ""}/${bottom || ""}.png`, {
-                background: uplRes.link
+                background: uploadUrl
             });
             const sticker = new Sticker(result, {
                 pack: global.config.sticker.packname,

@@ -68,12 +68,6 @@ module.exports = {
                     }, {
                         quoted: m
                     });
-                } else if (userAnswer.endsWith(answer.split(" ")[1].toLowerCase())) {
-                    await ctx.reply(ctx.id, {
-                        text: "Sedikit lagi!"
-                    }, {
-                        quoted: m
-                    });
                 }
             });
 

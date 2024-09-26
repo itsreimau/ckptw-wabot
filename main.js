@@ -43,10 +43,15 @@ const db = new SimplDB();
 global.db = db;
 
 // Penanganan acara saat bot siap.
-bot.ev.once(Events.ClientReady, async (m) => {
+bot.ev.once(Events.ClientReady, async (m, ctx) => {
     console.log(`[${global.config.pkg.name}] Ready at ${m.user.id}`);
+
+    // Tetapkan global.config pada bot.
     global.config.bot.number = m.user.id.replace(/@.*|:.*/g, "");
     global.config.bot.id = m.user.id.replace(/@.*|:.*/g, "") + S_WHATSAPP_NET;
+
+    // Memulai manajemen energi ketika bot siap.
+    startEnergyManagement(ctx);
 });
 
 // Buat penangan perintah dan muat perintah.
@@ -66,7 +71,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const groupJid = isGroup ? m.key.remoteJid : null;
     const groupNumber = isGroup ? groupJid.split("@")[0] : null;
 
-    // Log pesan masuk
+    // Log pesan masuk.
     if (isGroup) {
         console.log(`[${global.config.pkg.name}] Incoming message from group: ${groupNumber}, by: ${senderNumber}`);
     } else {
@@ -80,9 +85,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             energy: 50
         });
     }
-
-    // Memulai manajemen energi ketika bot dimulai.
-    startEnergyManagement(ctx);
 
     // Simulasi pengetikan otomatis untuk perintah.
     if (tools.general.isCmd(m, ctx)) ctx.simulateTyping();

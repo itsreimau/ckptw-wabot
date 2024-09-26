@@ -6,9 +6,6 @@ const {
 } = require("@mengkodingan/ckptw/lib/Constant");
 const axios = require("axios");
 const mime = require("mime-types");
-const {
-    uploadByBuffer
-} = require("telegraph-uploader");
 
 module.exports = {
     name: "removebg",
@@ -32,9 +29,9 @@ module.exports = {
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
+            const uploadUrl = await global.tools.general.upload(buffer);
             const apiUrl = global.tools.api.createUrl("fasturl", "/tool/removebg", {
-                imageUrl: uplRes.link
+                imageUrl: uploadUrl
             });
             const {
                 data

@@ -6,9 +6,6 @@ const {
 } = require("@mengkodingan/ckptw/lib/Constant");
 const axios = require("axios");
 const mime = require("mime-types");
-const {
-    uploadByBuffer
-} = require("telegraph-uploader");
 
 module.exports = {
     name: "ocr",
@@ -31,20 +28,15 @@ module.exports = {
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const uplRes = await uploadByBuffer(buffer, mime.contentType("png"));
-            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/ocr", {
-                imageUrl: uplRes.link
+            const uploadUrl = await global.tools.general.upload(buffer);
+            const apiUrl = global.tools.api.createUrl("nyxs", "/tool/ocr", {
+                url: uploadUrl
             });
             const {
                 data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                }
-            });
+            } = await axios.get(apiUrl);
 
-            const resultText = data.segments.map(d => d.text).join("\n");
-            return await ctx.reply(resultText.trim());
+            return await ctx.reply(data.result);
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return ctx.reply(global.config.msg.notFound);

@@ -4,6 +4,7 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
+const Jimp = require("jimp");
 
 module.exports = {
     name: "setpp",
@@ -28,7 +29,29 @@ module.exports = {
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            await ctx._client.updateProfilePicture(ctx.id, buffer);
+
+            if (ctx.args[0] === "full") {
+                const {
+                    img
+                } = await cropAndScaleImage(buffer)
+                await ctx._client.query({
+                    tag: "iq",
+                    attrs: {
+                        to: ctx.id,
+                        type: "set",
+                        xmlns: "w:profile:picture"
+                    },
+                    content: [{
+                        tag: "picture",
+                        attrs: {
+                            type: "image"
+                        },
+                        content: img
+                    }]
+                })
+            } else {
+                await ctx._client.updateProfilePicture(ctx.id, buffer);
+            }
 
             return ctx.reply(quote(`✅ Berhasil mengubah gambar profil foto grup!`));
         } catch (error) {
@@ -37,3 +60,22 @@ module.exports = {
         }
     }
 };
+
+async function cropAndScaleImage(buffer) {
+    try {
+        const image = await Jimp.read(buffer);
+
+        const cropped = image.crop(0, 0, image.getWidth(), image.getHeight());
+
+        const img = await cropped.scaleToFit(720, 720).getBufferAsync(Jimp.MIME_JPEG);
+        const preview = await cropped.normalize().getBufferAsync(Jimp.MIME_JPEG);
+
+        return {
+            img,
+            preview
+        };
+    } catch (error) {
+        console.error("Error:", error);
+        return error;
+    }
+}

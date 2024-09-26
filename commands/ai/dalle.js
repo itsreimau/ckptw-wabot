@@ -1,12 +1,10 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "aiimg",
-    aliases: ["diff", "diffusion", "stablediffusion", "sxdl"],
+    name: "dalle",
     category: "ai",
     code: async (ctx) => {
         const {
@@ -28,16 +26,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("chiwa", "/api/ai/cai/generate-image", {
-                prompt: input
+            const apiUrl = global.tools.api.createUrl("widipe", "/dalle", {
+                text: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 image: {
-                    url: data.imageUrl
+                    url: apiUrl
                 },
                 mimetype: mime.contentType("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +

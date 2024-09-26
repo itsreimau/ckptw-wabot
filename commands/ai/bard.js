@@ -8,7 +8,7 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "gemini",
+    name: "bard",
     category: "ai",
     code: async (ctx) => {
         const {
@@ -34,26 +34,26 @@ module.exports = {
 
         try {
             if (msgType !== MessageType.imageMessage || !(await ctx.quoted.media.toBuffer())?.conversation) {
-                const apiUrl = global.tools.api.createUrl("sandipbaruwal", "/gemini", {
-                    prompt: input
+                const apiUrl = global.tools.api.createUrl("widipe", "/bard", {
+                    text: input
                 });
                 const {
                     data
                 } = await axios.get(apiUrl);
 
-                return ctx.reply(data.answer);
+                return ctx.reply(data.result);
             } else {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadUrl = await global.tools.general.upload(buffer);
-                const apiUrl = global.tools.api.createUrl("sandipbaruwal", "/gemini2", {
-                    prompt: input,
-                    url: uploadUrl
+                const apiUrl = global.tools.api.createUrl("widipe", "/bardimg", {
+                    url: uploadUrl,
+                    text: input
                 });
                 const {
                     data
                 } = await axios.get(apiUrl);
 
-                return ctx.reply(data.answer);
+                return ctx.reply(data.result);
             }
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
