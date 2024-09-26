@@ -145,7 +145,7 @@ function ucword(str) {
     }
 }
 
-async function(buffer) {
+async function upload(buffer) {
     try {
         const {
             ext
