@@ -33,7 +33,7 @@ module.exports = {
         const msgType = ctx.getMessageType();
 
         try {
-            if (await global.tools.general.checkMedia(msgType, ["image"], ctx)) || await global.tools.general.checkQuotedMedia(ctx.quoted, ["image"]) {
+            if (await global.tools.general.checkMedia(msgType, ["image"], ctx) || await global.tools.general.checkQuotedMedia(ctx.quoted, ["image"])) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadUrl = await global.tools.general.upload(buffer);
                 const apiUrl = global.tools.api.createUrl("widipe", "/bardimg", {

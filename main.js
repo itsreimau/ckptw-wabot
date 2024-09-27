@@ -63,6 +63,9 @@ cmd.load();
 global.handler = handler;
 global.tools = tools;
 
+// Apakah manajemen energi sudah dimulai? (Belum)
+let energyManagementStarted = false;
+
 // Penanganan event ketika pesan muncul.
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
@@ -71,6 +74,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const senderNumber = senderJid.replace(/@.*|:.*/g, "");
     const groupJid = isGroup ? m.key.remoteJid : null;
     const groupNumber = isGroup ? groupJid.split("@")[0] : null;
+
+    // Mulai manajemen energi hanya sekali, saat pesan pertama muncul.
+    if (!energyManagementStarted) {
+        startEnergyManagement(ctx);
+        energyManagementStarted = true; // Apakah manajemen energi sudah dimulai? (Sudah)
+    }
 
     // Log pesan masuk.
     if (isGroup) {
