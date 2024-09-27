@@ -33,8 +33,11 @@ module.exports = {
         const msgType = ctx.getMessageType();
 
         try {
-            if (msgType !== MessageType.imageMessage || !(await ctx.quoted.media.toBuffer())?.conversation) {
-                const apiUrl = global.tools.api.createUrl("widipe", "/bard", {
+            if (await global.tools.general.checkMedia(msgType, ["image"], ctx)) || await global.tools.general.checkQuotedMedia(ctx.quoted, ["image"]) {
+                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+                const uploadUrl = await global.tools.general.upload(buffer);
+                const apiUrl = global.tools.api.createUrl("widipe", "/bardimg", {
+                    url: uploadUrl,
                     text: input
                 });
                 const {
@@ -43,10 +46,7 @@ module.exports = {
 
                 return ctx.reply(data.result);
             } else {
-                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-                const uploadUrl = await global.tools.general.upload(buffer);
-                const apiUrl = global.tools.api.createUrl("widipe", "/bardimg", {
-                    url: uploadUrl,
+                const apiUrl = global.tools.api.createUrl("widipe", "/bard", {
                     text: input
                 });
                 const {

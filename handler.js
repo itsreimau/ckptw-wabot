@@ -91,11 +91,11 @@ async function checkEnergy(ctx, energyOptions, senderNumber) {
     let hasMedia = false;
 
     if (mediaSourceOption === 1 || mediaSourceOption === 3) {
-        hasMedia = await checkMedia(msgType, requiredMedia, ctx);
+        hasMedia = await global.tools.general.checkMedia(msgType, requiredMedia, ctx);
     }
 
     if ((mediaSourceOption === 2 || mediaSourceOption === 3) && ctx.quoted) {
-        hasMedia = await checkQuotedMedia(ctx.quoted, requiredMedia);
+        hasMedia = await global.tools.general.checkQuotedMedia(ctx.quoted, requiredMedia);
     }
 
     if (requiredMedia && !hasMedia) return false;
@@ -103,57 +103,6 @@ async function checkEnergy(ctx, energyOptions, senderNumber) {
 
     await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
     return false;
-}
-
-async function checkMedia(msgType, requiredMedia, ctx) {
-    const mediaMap = {
-        audio: "audioMessage",
-        contact: "contactMessage",
-        document: ["documentMessage", "documentWithCaptionMessage"],
-        image: "imageMessage",
-        location: "locationMessage",
-        sticker: "stickerMessage",
-        video: "videoMessage",
-        text: () => ctx.args.length > 0
-    };
-
-    const mediaList = Array.isArray(requiredMedia) ? requiredMedia : [requiredMedia];
-
-    return mediaList.some(media => {
-        if (media === "document") {
-            return mediaMap[media].includes(msgType);
-        } else if (media === "text") {
-            return mediaMap[media]();
-        }
-        return msgType === mediaMap[media];
-    });
-}
-
-async function checkQuotedMedia(quoted, requiredMedia) {
-    const quotedMediaMap = {
-        audio: quoted.audioMessage,
-        contact: quoted.contactMessage,
-        document: quoted.documentMessage || quoted.documentWithCaptionMessage,
-        image: quoted.imageMessage,
-        location: quoted.locationMessage,
-        sticker: quoted.stickerMessage,
-        video: quoted.videoMessage,
-        text: quoted.conversation || quoted.extendedTextMessage?.text
-    };
-
-    const mediaList = Array.isArray(requiredMedia) ? requiredMedia : [requiredMedia];
-
-    return mediaList.some(media => {
-        const mediaContent = quotedMediaMap[media];
-        if (mediaContent) {
-            if (media === "text") {
-                return mediaContent.length > 0;
-            } else if (quoted.media) {
-                return quoted.media.toBuffer().catch(() => null) !== null;
-            }
-        }
-        return false;
-    });
 }
 
 module.exports = handler;

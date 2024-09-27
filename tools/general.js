@@ -19,6 +19,73 @@ async function checkAdmin(ctx, id) {
     }
 }
 
+async function checkMedia(msgType, requiredMedia, ctx) {
+    const mediaMap = {
+        audio: "audioMessage",
+        contact: "contactMessage",
+        document: ["documentMessage", "documentWithCaptionMessage"],
+        gif: "videoMessage",
+        image: "imageMessage",
+        liveLocation: "liveLocationMessage",
+        location: "locationMessage",
+        payment: "paymentMessage",
+        poll: "pollMessage",
+        product: "productMessage",
+        ptt: "audioMessage",
+        reaction: "reactionMessage",
+        sticker: "stickerMessage",
+        text: () => ctx.args.length > 0 ? "teks" : null,
+        video: "videoMessage",
+        viewOnce: "viewOnceMessageV2"
+    };
+
+    const mediaList = Array.isArray(requiredMedia) ? requiredMedia : [requiredMedia];
+
+    return mediaList.some(media => {
+        if (media === "document") {
+            return mediaMap[media].includes(msgType);
+        } else if (media === "text") {
+            return mediaMap[media]();
+        }
+        return msgType === mediaMap[media];
+    });
+}
+
+async function checkQuotedMedia(quoted, requiredMedia) {
+    const quotedMediaMap = {
+        audio: quoted.audioMessage,
+        contact: quoted.contactMessage,
+        document: quoted.documentMessage || quoted.documentWithCaptionMessage,
+        gif: quoted.videoMessage,
+        image: quoted.imageMessage,
+        liveLocation: quoted.liveLocationMessage,
+        location: quoted.locationMessage,
+        payment: quoted.paymentMessage,
+        poll: quoted.pollMessage,
+        product: quoted.productMessage,
+        ptt: quoted.audioMessage,
+        reaction: quoted.reactionMessage,
+        sticker: quoted.stickerMessage,
+        text: quoted.conversation || quoted.extendedTextMessage?.text,
+        video: quoted.videoMessage,
+        viewOnce: quoted.viewOnceMessageV2
+    };
+
+    const mediaList = Array.isArray(requiredMedia) ? requiredMedia : [requiredMedia];
+
+    return mediaList.some(media => {
+        const mediaContent = quotedMediaMap[media];
+        if (mediaContent) {
+            if (media === "text") {
+                return mediaContent.length > 0;
+            } else if (quoted.media) {
+                return quoted.media.toBuffer().catch(() => null) !== null;
+            }
+        }
+        return false;
+    });
+}
+
 function convertMsToDuration(ms) {
     try {
         const seconds = Math.floor((ms / 1000) % 60);
@@ -177,6 +244,8 @@ async function upload(buffer) {
 }
 
 module.exports = {
+    checkMedia,
+    checkQuotedMedia,
     convertMsToDuration,
     formatSize,
     getRandomElement,

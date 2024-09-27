@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "characterai",
-    aliases: ["rei", "ayanami"],
+    aliases: ["cai"],
     category: "ai",
     code: async (ctx) => {
         const {
@@ -28,7 +28,7 @@ module.exports = {
         try {
             const apiUrl = global.tools.api.createUrl("nyxs", "/ai/character-ai", {
                 prompt: input,
-                gaya: `Bot WhatsApp bernama ${global.config.bot.name}, dimiliki oleh ${global.config.owner.name}.` // Can be changed according to your wishes.
+                gaya: `Bot WhatsApp bernama ${global.config.bot.name}, dimiliki oleh ${global.config.owner.name}.` // Dapat diubah sesuai keinginan Anda.
             });
             const {
                 data

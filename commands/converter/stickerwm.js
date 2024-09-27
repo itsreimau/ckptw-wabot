@@ -26,13 +26,11 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(global.tools.msg.generateInstruction(["send", "reply"], ["text", "sticker"]))}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "i want to be a cat|just meow meow"))
         );
 
-        const msgType = ctx.getMessageType();
-
-        if (msgType !== MessageType.stickerMessage && !(await ctx.quoted.media.toBuffer())) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["sticker"])));
+        if (!(await global.tools.general.checkQuotedMedia(ctx.quoted, ["sticker"]))) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["sticker"])));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();

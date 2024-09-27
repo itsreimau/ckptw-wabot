@@ -24,7 +24,7 @@ module.exports = {
 
         const msgType = ctx.getMessageType();
 
-        if (msgType !== MessageType.imageMessage && msgType !== MessageType.videoMessage && !(await ctx.quoted.media.toBuffer())) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["image"])));
+        if (!(await global.tools.general.checkMedia(msgType, ["image"], ctx)) || !(await global.tools.general.checkQuotedMedia(ctx.quoted, ["image"]))) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["image"])));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();

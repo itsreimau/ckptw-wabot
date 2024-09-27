@@ -33,9 +33,12 @@ module.exports = {
         const msgType = ctx.getMessageType();
 
         try {
-            if (msgType !== MessageType.imageMessage || !(await ctx.quoted.media.toBuffer())?.conversation) {
-                const apiUrl = global.tools.api.createUrl("sandipbaruwal", "/gemini", {
-                    prompt: input
+            if (await global.tools.general.checkMedia(msgType, ["image"], ctx)) || await global.tools.general.checkQuotedMedia(ctx.quoted, ["image"]) {
+                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+                const uploadUrl = await global.tools.general.upload(buffer);
+                const apiUrl = global.tools.api.createUrl("sandipbaruwal", "/gemini2", {
+                    prompt: input,
+                    url: uploadUrl
                 });
                 const {
                     data
@@ -43,11 +46,8 @@ module.exports = {
 
                 return ctx.reply(data.answer);
             } else {
-                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-                const uploadUrl = await global.tools.general.upload(buffer);
-                const apiUrl = global.tools.api.createUrl("sandipbaruwal", "/gemini2", {
-                    prompt: input,
-                    url: uploadUrl
+                const apiUrl = global.tools.api.createUrl("sandipbaruwal", "/gemini", {
+                    prompt: input
                 });
                 const {
                     data

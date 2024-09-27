@@ -18,7 +18,7 @@ async function get(type, ctx) {
             let menuText =
                 `Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
                 "\n" +
-                `${quote(`Waktu aktif: ${general.convertMsToDuration(Date.now() - ctx.readyAt) || "kurang dari satu detik."}`)}\n` +
+                `${quote(`Waktu aktif: ${general.convertMsToDuration(Date.now() - global.config.bot.readyAt) || "kurang dari satu detik."}`)}\n` +
                 `${quote(`Tanggal: ${moment.tz(global.config.system.timeZone).format("DD/MM/YY")}`)}\n` +
                 `${quote(`Waktu: ${moment.tz(global.config.system.timeZone).format("HH:mm:ss")}`)}\n` +
                 `${quote(`Versi: ${pkg.version}`)}\n` +

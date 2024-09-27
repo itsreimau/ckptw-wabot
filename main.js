@@ -49,6 +49,7 @@ bot.ev.once(Events.ClientReady, async (m, ctx) => {
     // Tetapkan global.config pada bot.
     global.config.bot.number = m.user.id.replace(/@.*|:.*/g, "");
     global.config.bot.id = m.user.id.replace(/@.*|:.*/g, "") + S_WHATSAPP_NET;
+    global.config.bot.readyAt = bot.readyAt;
 
     // Memulai manajemen energi ketika bot siap.
     startEnergyManagement(ctx);
@@ -336,6 +337,39 @@ async function handleUserEvent(m) {
 
 async function manageEnergy(ctx) {
     const users = await db.get("user") || {};
+    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    let validUsersCount = 0;
+    let index = 0;
+
+    for (const userNumber of Object.keys(users)) {
+        const userPath = `user.${userNumber}`;
+
+        const [isOwner, isPremium] = await Promise.all([
+            tools.general.isOwner(ctx, userNumber, true),
+            db.get(`${userPath}.isPremium`) || false
+        ]);
+
+        if (isOwner || isPremium) continue;
+
+        const [onCharger, energyStored] = await Promise.all([
+            db.get(`${userPath}.onCharger`) || false,
+            db.get(`${userPath}.energy`) || 0
+        ]);
+
+        if (onCharger || energyStored < 15) {
+            validUsersCount++;
+        }
+    }
+
+    const calculateDelay = (index) => {
+        const minDelay = 1000; // 1 detik.
+        const maxDelay = 10000; // 10 detik.
+
+        // Semakin banyak user, semakin panjang delay secara proporsional.
+        const delayRange = maxDelay - minDelay;
+        return minDelay + Math.floor((index / validUsersCount) * delayRange);
+    };
 
     for (const userNumber of Object.keys(users)) {
         try {
@@ -359,6 +393,9 @@ async function manageEnergy(ctx) {
                 energy = Math.min(energy + 25, 100);
 
                 if (energy === 100) {
+                    const fullEnergyDelay = calculateDelay(index++);
+                    await delay(fullEnergyDelay);
+
                     await bot.core.sendMessage(userNumber + S_WHATSAPP_NET, {
                         text: quote(`⚡ Energi kamu sudah penuh!`)
                     });
@@ -367,9 +404,14 @@ async function manageEnergy(ctx) {
                 }
             }
 
-            if (energy < 15) await bot.core.sendMessage(userNumber + S_WHATSAPP_NET, {
-                text: quote(`⚡ Energimu rendah! Silakan isi daya dengan mengetik ${monospace("/charger")}.`)
-            });
+            if (energy < 15) {
+                const lowEnergyDelay = calculateDelay(index++);
+                await delay(lowEnergyDelay);
+
+                await bot.core.sendMessage(userNumber + S_WHATSAPP_NET, {
+                    text: quote(`⚡ Energimu rendah! Silakan isi daya dengan mengetik ${monospace("/charger")}.`)
+                });
+            }
 
             if (energy !== energyStored) await db.set(`${userPath}.energy`, energy);
 

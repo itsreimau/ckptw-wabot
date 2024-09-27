@@ -18,7 +18,7 @@ module.exports = {
 
         const quotedMessage = ctx.quoted;
 
-        if (!quotedMessage?.viewOnceMessageV2?.message) return ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["viewOnce"])));
+        if (!(await global.tools.general.checkQuotedMedia(ctx.quoted, ["viewOnce"]))) return ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["viewOnce"])));
 
         try {
             const quoted = quotedMessage?.viewOnceMessageV2?.message;

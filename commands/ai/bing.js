@@ -25,7 +25,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("widipe", "/bing", {
+            const apiUrl = global.tools.api.createUrl("widipe", "/bingai", {
                 text: input
             });
             const {

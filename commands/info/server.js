@@ -14,7 +14,7 @@ module.exports = {
             const {
                 data
             } = await axios.get(apiUrl);
-            const startTime = ctx.readyAt;
+            const startTime = global.config.bot.readyAt;
 
             return ctx.reply(
                 `${quote(`OS: ${os.type()} (${os.arch()} / ${os.release()})`)}\n` +
