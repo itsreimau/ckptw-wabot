@@ -33,8 +33,12 @@ module.exports = {
         );
 
         const msgType = ctx.getMessageType();
+        const [checkMedia, checkQuotedMedia] = await Promise.all([
+            global.tools.general.checkMedia(msgType, "image", ctx),
+            global.tools.general.checkQuotedMedia(ctx.quoted, "image")
+        ]);
 
-        if (!(await global.tools.general.checkMedia(msgType, ["image"], ctx)) || !(await global.tools.general.checkQuotedMedia(ctx.quoted, ["image"]))) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["image"])));
+        if (!checkMedia || !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], "image")));
 
         try {
             let [top, bottom] = input.split("|");

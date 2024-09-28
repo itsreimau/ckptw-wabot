@@ -31,9 +31,13 @@ module.exports = {
         );
 
         const msgType = ctx.getMessageType();
+        const [checkMedia, checkQuotedMedia] = await Promise.all([
+            global.tools.general.checkMedia(msgType, "image", ctx),
+            global.tools.general.checkQuotedMedia(ctx.quoted, "image")
+        ]);
 
         try {
-            if (await global.tools.general.checkMedia(msgType, ["image"], ctx) || await global.tools.general.checkQuotedMedia(ctx.quoted, ["image"])) {
+            if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadUrl = await global.tools.general.upload(buffer);
                 const apiUrl = global.tools.api.createUrl("sandipbaruwal", "/gemini2", {

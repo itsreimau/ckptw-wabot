@@ -42,14 +42,14 @@ module.exports = {
             for (const download of data.downloads) {
                 const mimeType = mime.contentType(download.extension);
 
-                if (mimeType.startsWith('image/')) {
+                if (mimeType.startsWith("image/")) {
                     await ctx.reply({
                         image: {
                             url: download.url
                         },
                         mimetype: mimeType
                     });
-                } else if (mimeType.startsWith('video/')) {
+                } else if (mimeType.startsWith("video/")) {
                     await ctx.reply({
                         video: {
                             url: download.url

@@ -76,7 +76,7 @@ async function handler(ctx, options) {
 }
 
 async function checkEnergy(ctx, energyOptions, senderNumber) {
-    if (typeof energyOptions === 'number') {
+    if (typeof energyOptions === "number") {
         const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
         if (userEnergy < energyOptions) return true;
 

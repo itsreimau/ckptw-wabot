@@ -7,14 +7,14 @@ function generateInstruction(actions, mediaTypes) {
         throw new Error("Necessary actions must be determined.");
     }
 
-    if (!mediaTypes || !mediaTypes.length) {
-        throw new Error("Media type must be specified.");
+    let translatedMediaTypes;
+    if (typeof mediaTypes === "string") {
+        translatedMediaTypes = [mediaTypes];
+    } else if (Array.isArray(mediaTypes)) {
+        translatedMediaTypes = mediaTypes;
+    } else {
+        throw new Error("Media type must be a string or an array of strings.");
     }
-
-    const actionTranslations = {
-        "send": "Kirim",
-        "reply": "Balas"
-    };
 
     const mediaTypeTranslations = {
         "audio": "audio",
@@ -36,19 +36,25 @@ function generateInstruction(actions, mediaTypes) {
         "viewOnce": "sekali lihat"
     };
 
+    const translatedMediaTypeList = translatedMediaTypes.map(type => mediaTypeTranslations[type]);
 
-    const translatedMediaTypes = mediaTypes.map(type => mediaTypeTranslations[type]);
-    let mediaTypesList = translatedMediaTypes.join(", ");
-
-    if (translatedMediaTypes.length > 2) {
-        const lastMediaType = translatedMediaTypes[translatedMediaTypes.length - 1];
-        mediaTypesList = translatedMediaTypes.slice(0, -1).join(", ") + `, atau ${lastMediaType}`;
+    let mediaTypesList;
+    if (translatedMediaTypeList.length > 1) {
+        const lastMediaType = translatedMediaTypeList[translatedMediaTypeList.length - 1];
+        mediaTypesList = translatedMediaTypeList.slice(0, -1).join(", ") + `, atau ${lastMediaType}`;
+    } else {
+        mediaTypesList = translatedMediaTypeList[0];
     }
+
+    const actionTranslations = {
+        "send": "Kirim",
+        "reply": "Balas"
+    };
 
     const instructions = actions.map(action => `${actionTranslations[action]}`);
     const actionList = instructions.join(actions.length > 1 ? " atau " : "");
 
-    return `📌 ${actionList} ${mediaTypesList}!`;
+    return ` ${actionList} ${mediaTypesList}!`;
 }
 
 function generateCommandExample(command, args) {

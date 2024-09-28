@@ -25,24 +25,24 @@ module.exports = {
 
         if (!script) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, 'console.log("Hello, World");'))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `console.log("Hello, World!");`))
         );
 
         try {
             const restricted = ["require", "eval", "Function", "global"];
             for (const w of restricted) {
                 if (script.includes(w)) {
-                    return ctx.reply(quote(` Penggunaan ${w} tidak diperbolehkan dalam kode.`));
+                    return ctx.reply(quote(`❎ Penggunaan ${w} tidak diperbolehkan dalam kode.`));
                 }
             }
 
             const output = await new Promise((resolve) => {
                 const childProcess = spawn("node", ["-e", script]);
 
-                let outputData = '';
-                let errorData = '';
+                let outputData = "";
+                let errorData = "";
 
-                childProcess.stdout.on('data', (chunk) => {
+                childProcess.stdout.on("data", (chunk) => {
                     if (outputData.length >= 1024 * 1024) {
                         resolve(quote(`❎ Kode mencapai batas penggunaan memori.`));
                         childProcess.kill();
@@ -50,7 +50,7 @@ module.exports = {
                     outputData += chunk.toString();
                 });
 
-                childProcess.stderr.on('data', (chunk) => {
+                childProcess.stderr.on("data", (chunk) => {
                     errorData += chunk.toString();
                 });
 
