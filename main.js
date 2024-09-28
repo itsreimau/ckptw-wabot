@@ -1,6 +1,4 @@
 // Modul dan dependensi yang diperlukan.
-const handler = require("./handler.js");
-const tools = require("./tools/exports.js");
 const {
     Client,
     CommandHandler,
@@ -19,7 +17,7 @@ const {
 } = require("child_process");
 const didyoumean = require("didyoumean");
 const path = require("path");
-const SimplDB = require("simpl.db");
+
 const {
     inspect
 } = require("util");
@@ -38,10 +36,6 @@ const bot = new Client({
     usePairingCode: global.config.system.usePairingCode
 });
 
-// Buat contoh database baru.
-const db = new SimplDB();
-global.db = db;
-
 // Penanganan acara saat bot siap.
 bot.ev.once(Events.ClientReady, async (m, ctx) => {
     console.log(`[${global.config.pkg.name}] Ready at ${m.user.id}`);
@@ -58,10 +52,6 @@ bot.ev.once(Events.ClientReady, async (m, ctx) => {
 // Buat penangan perintah dan muat perintah.
 const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
 cmd.load();
-
-// Tetapkan global pada handler dan tools.
-global.handler = handler;
-global.tools = tools;
 
 // Apakah manajemen energi sudah dimulai? (Belum)
 let energyManagementStarted = false;
@@ -89,15 +79,15 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // Basis data untuk pengguna.
-    const userDb = await db.get(`user.${senderNumber}`);
+    const userDb = await global.db.get(`user.${senderNumber}`);
     if (!userDb) {
-        await db.set(`user.${senderNumber}`, {
+        await global.db.set(`user.${senderNumber}`, {
             energy: 50
         });
     }
 
     // Simulasi pengetikan otomatis untuk perintah.
-    if (tools.general.isCmd(m, ctx)) ctx.simulateTyping();
+    if (global.tools.general.isCmd(m, ctx)) ctx.simulateTyping();
 
     // "Did you mean?" untuk perintah salah ketik.
     const prefixRegex = new RegExp(ctx._config.prefix, "i");
@@ -121,13 +111,13 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         for (const mentionJid of mentionJids) {
-            const getAFKMention = db.get(`user.${mentionJid.split("@")[0]}.afk`);
+            const getAFKMention = global.db.get(`user.${mentionJid.split("@")[0]}.afk`);
             if (getAFKMention) {
                 const [reason, timeStamp] = await Promise.all([
-                    db.get(`user.${mentionJid.split("@")[0]}.afk.reason`),
-                    db.get(`user.${mentionJid.split("@")[0]}.afk.timeStamp`)
+                    global.db.get(`user.${mentionJid.split("@")[0]}.afk.reason`),
+                    global.db.get(`user.${mentionJid.split("@")[0]}.afk.timeStamp`)
                 ]);
-                const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
+                const timeAgo = global.tools.general.convertMsToDuration(Date.now() - timeStamp);
 
                 await ctx.reply(quote(`📴 Dia AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
             }
@@ -135,20 +125,20 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // Penanganan AFK : Berangkat dari AFK.
-    const getAFKMessage = await db.get(`user.${senderNumber}.afk`);
+    const getAFKMessage = await global.db.get(`user.${senderNumber}.afk`);
     if (getAFKMessage) {
         const [reason, timeStamp] = await Promise.all([
-            db.get(`user.${senderNumber}.afk.reason`),
-            db.get(`user.${senderNumber}.afk.timeStamp`)
+            global.db.get(`user.${senderNumber}.afk.reason`),
+            global.db.get(`user.${senderNumber}.afk.timeStamp`)
         ]);
-        const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
-        await db.delete(`user.${senderNumber}.afk`);
+        const timeAgo = global.tools.general.convertMsToDuration(Date.now() - timeStamp);
+        await global.db.delete(`user.${senderNumber}.afk`);
 
         await ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo || "kurang dari satu detik."}.`));
     }
 
     // Perintah khusus pemilik.
-    if (tools.general.isOwner(ctx, senderNumber, true)) {
+    if (global.tools.general.isOwner(ctx, senderNumber, true)) {
         // Perintah eval: Jalankan kode JavaScript.
         if (m.content && m.content.startsWith && (m.content.startsWith("=>> ") || m.content.startsWith("=> "))) {
             const code = m.content.startsWith("=>> ") ? m.content.slice(4) : m.content.slice(3);
@@ -191,11 +181,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Grup.
     if (isGroup) {
         // Penanganan antilink.
-        const getAntilink = await db.get(`group.${groupNumber}.antilink`);
+        const getAntilink = await global.db.get(`group.${groupNumber}.antilink`);
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
         if (getAntilink) {
             if (m.content && urlRegex.test(m.content)) {
-                if (await tools.general.isAdmin(ctx, senderNumber)) return;
+                if (await global.tools.general.isAdmin(ctx, senderNumber)) return;
 
                 await ctx.reply(quote(`❎ Jangan kirim tautan!`));
                 if (!global.config.system.restrict) await ctx.deleteMessage(m.key);
@@ -206,11 +196,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Pribadi.
     if (isPrivate) {
         // Penanganan menfess.
-        const getMessageDataMenfess = await db.get(`menfess.${senderNumber}`);
+        const getMessageDataMenfess = await global.db.get(`menfess.${senderNumber}`);
         if (getMessageDataMenfess) {
             const [from, text] = await Promise.all([
-                db.get(`menfess.${senderNumber}.from`),
-                db.get(`menfess.${senderNumber}.text`)
+                global.db.get(`menfess.${senderNumber}.from`),
+                global.db.get(`menfess.${senderNumber}.text`)
             ]);
 
             if (ctx.quoted?.extendedTextMessage?.text === text) {
@@ -295,7 +285,7 @@ async function handleUserEvent(m) {
     } = m;
 
     try {
-        const getWelcome = await db.get(`group.${id.split("@")[0]}.welcome`);
+        const getWelcome = await global.db.get(`group.${id.split("@")[0]}.welcome`);
         if (getWelcome) {
             const metadata = await bot.core.groupMetadata(id);
 
@@ -310,7 +300,7 @@ async function handleUserEvent(m) {
                 const message = m.eventsType === "UserJoin" ?
                     quote(`👋 Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`) :
                     quote(`👋 @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
-                const card = tools.api.createUrl("aggelos_007", "/welcomecard", {
+                const card = global.tools.api.createUrl("aggelos_007", "/welcomecard", {
                     text1: jid.split("@")[0],
                     text2: m.eventsType === "UserJoin" ? "Selamat datang" : "Selamat tinggal!",
                     text3: metadata.subject,
@@ -345,7 +335,7 @@ async function handleUserEvent(m) {
 }
 
 async function manageEnergy(ctx) {
-    const users = await db.get("user") || {};
+    const users = await global.db.get("user") || {};
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
     let validUsersCount = 0;
@@ -355,15 +345,15 @@ async function manageEnergy(ctx) {
         const userPath = `user.${userNumber}`;
 
         const [isOwner, isPremium] = await Promise.all([
-            tools.general.isOwner(ctx, userNumber, true),
-            db.get(`${userPath}.isPremium`) || false
+            global.tools.general.isOwner(ctx, userNumber, true),
+            global.db.get(`${userPath}.isPremium`) || false
         ]);
 
         if (isOwner || isPremium) continue;
 
         const [onCharger, energyStored] = await Promise.all([
-            db.get(`${userPath}.onCharger`) || false,
-            db.get(`${userPath}.energy`) || 0
+            global.db.get(`${userPath}.onCharger`) || false,
+            global.db.get(`${userPath}.energy`) || 0
         ]);
 
         if (onCharger || energyStored < 15) {
@@ -385,15 +375,15 @@ async function manageEnergy(ctx) {
             const userPath = `user.${userNumber}`;
 
             const [isOwner, isPremium] = await Promise.all([
-                tools.general.isOwner(ctx, userNumber, true),
-                db.get(`${userPath}.isPremium`) || false
+                global.tools.general.isOwner(ctx, userNumber, true),
+                global.db.get(`${userPath}.isPremium`) || false
             ]);
 
             if (isOwner || isPremium) continue;
 
             const [onCharger, energyStored] = await Promise.all([
-                db.get(`${userPath}.onCharger`) || false,
-                db.get(`${userPath}.energy`) || 0
+                global.db.get(`${userPath}.onCharger`) || false,
+                global.db.get(`${userPath}.energy`) || 0
             ]);
 
             let energy = energyStored;
@@ -409,7 +399,7 @@ async function manageEnergy(ctx) {
                         text: quote(`⚡ Energi kamu sudah penuh!`)
                     });
 
-                    await db.set(`${userPath}.onCharger`, false);
+                    await global.db.set(`${userPath}.onCharger`, false);
                 }
             }
 
@@ -422,7 +412,7 @@ async function manageEnergy(ctx) {
                 });
             }
 
-            if (energy !== energyStored) await db.set(`${userPath}.energy`, energy);
+            if (energy !== energyStored) await global.db.set(`${userPath}.energy`, energy);
 
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);

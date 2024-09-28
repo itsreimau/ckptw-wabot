@@ -1,9 +1,18 @@
 require("./config.js");
+const handler = require("./handler.js");
 const pkg = require("./package.json");
+const tools = require("./tools/exports.js");
 const CFonts = require("cfonts");
+const SimplDB = require("SimplDB");
 
-// Mendefinisikan.
+// Buat database.
+const db = new SimplDB();
+
+// Tetapkan global.
 global.config.pkg = pkg;
+global.handler = handler;
+global.tools = tools;
+global.db = db;
 
 // Pengecekan.
 if (global.config.owner.name === "" || global.config.owner.number === "") {
