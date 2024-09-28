@@ -1,6 +1,5 @@
 const {
-    Cooldown,
-    MessageType
+    Cooldown
 } = require("@mengkodingan/ckptw");
 
 async function handler(ctx, options) {
@@ -14,7 +13,7 @@ async function handler(ctx, options) {
 
     const checkOptions = {
         admin: {
-            check: async () => !(await ctx.isGroup()) || !(await global.tools.general.isAdmin(ctx, senderJid)),
+            check: async () => (await ctx.isGroup()) && !(await global.tools.general.isAdmin(ctx, senderJid)),
             msg: global.config.msg.admin
         },
         banned: {
@@ -22,7 +21,7 @@ async function handler(ctx, options) {
             msg: global.config.msg.banned
         },
         botAdmin: {
-            check: async () => !(await ctx.isGroup()) || !(await global.tools.general.isBotAdmin(ctx)),
+            check: async () => (await ctx.isGroup()) && !(await global.tools.general.isBotAdmin(ctx)),
             msg: global.config.msg.botAdmin
         },
         charger: {
@@ -62,10 +61,8 @@ async function handler(ctx, options) {
     for (const [option, {
             check,
             msg
-        }] of Object.entries(options)) {
-        const result = await check();
-
-        if (result) {
+        }] of Object.entries(checkOptions)) {
+        if (options[option] && typeof check === "function" && await check()) {
             return {
                 status: true,
                 message: msg
@@ -77,6 +74,35 @@ async function handler(ctx, options) {
         status: false,
         message: null
     };
+}
+
+async function checkEnergy(ctx, energyOptions, senderNumber) {
+    if (typeof energyOptions === "number") {
+        const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
+        if (userEnergy < energyOptions) return true;
+
+        await global.db.subtract(`user.${senderNumber}.energy`, energyOptions);
+        return false;
+    }
+
+    const [requiredEnergy, requiredMedia, mediaSourceOption] = Array.isArray(energyOptions) ? energyOptions : [energyOptions || 0];
+    const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
+    const msgType = ctx.getMessageType();
+    let hasMedia = false;
+
+    if (mediaSourceOption === 1 || mediaSourceOption === 3) {
+        hasMedia = await global.tools.general.checkMedia(msgType, requiredMedia, ctx);
+    }
+
+    if ((mediaSourceOption === 2 || mediaSourceOption === 3) && ctx.quoted) {
+        hasMedia = await global.tools.general.checkQuotedMedia(ctx.quoted, requiredMedia);
+    }
+
+    if (requiredMedia && !hasMedia) return false;
+    if (userEnergy < requiredEnergy) return true;
+
+    await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
+    return false;
 }
 
 module.exports = handler;
