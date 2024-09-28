@@ -42,14 +42,12 @@ module.exports = {
 
         try {
             let [top, bottom] = input.split("|");
-            if (!bottom) {
-                bottom = top;
-                top = "";
-            }
+            top = top?.trim() || " ";
+            bottom = bottom || top;
 
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await global.tools.general.upload(buffer);
-            const result = global.tools.api.createUrl("https://api.memegen.link", `/images/custom/${top || ""}/${bottom || ""}.png`, {
+            const result = global.tools.api.createUrl("https://api.memegen.link", `/images/custom/${top}/${bottom}.png`, {
                 background: uploadUrl
             });
             const sticker = new Sticker(result, {

@@ -38,7 +38,7 @@ module.exports = {
             return ctx.reply(
                 `${quote(`Judul: ${global.tools.general.ucword(input)}`)}\n` +
                 `${quote("─────")}\n`
-                `${data.hasil.lirik}\n` +
+                `${data.result}\n` +
                 "\n" +
                 global.config.msg.footer
             );

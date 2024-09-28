@@ -27,11 +27,12 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("https://raw.caliph.my.id", "/khodam.json", {});
+            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", `/SazumiVicky/cek-khodam/main/khodam/list.txt`, {});
             const {
                 data
             } = await axios.get(apiUrl);
-            const khodam = global.tools.general.getRandomElement(data);
+            const list = data.split('\n').filter(l => l.trim().length > 0);
+            const khodam = list[Math.floor(Math.random() * list.length)];
 
             return ctx.reply(
                 `${quote(`Nama: ${input}`)}\n` +

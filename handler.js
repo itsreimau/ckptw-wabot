@@ -77,11 +77,19 @@ async function handler(ctx, options) {
 }
 
 async function checkEnergy(ctx, energyOptions, senderNumber) {
+    const [isOwner, isPremium] = await Promise.all([
+        global.tools.general.isOwner(ctx, senderNumber, true),
+        global.db.get(`user.${senderNumber}.isPremium`)
+    ]);
+
     if (typeof energyOptions === "number") {
         const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
         if (userEnergy < energyOptions) return true;
 
-        await global.db.subtract(`user.${senderNumber}.energy`, energyOptions);
+        if (!isOwner && !isPremium) {
+            await global.db.subtract(`user.${senderNumber}.energy`, energyOptions);
+        }
+
         return false;
     }
 
@@ -99,10 +107,15 @@ async function checkEnergy(ctx, energyOptions, senderNumber) {
     }
 
     if (requiredMedia && !hasMedia) return false;
+
     if (userEnergy < requiredEnergy) return true;
 
-    await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
+    if (!isOwner && !isPremium && (!requiredMedia || hasMedia)) {
+        await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
+    }
+
     return false;
 }
+
 
 module.exports = handler;

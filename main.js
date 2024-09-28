@@ -17,7 +17,6 @@ const {
 } = require("child_process");
 const didyoumean = require("didyoumean");
 const path = require("path");
-
 const {
     inspect
 } = require("util");
@@ -82,7 +81,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const userDb = await global.db.get(`user.${senderNumber}`);
     if (!userDb) {
         await global.db.set(`user.${senderNumber}`, {
-            energy: 50
+            energy: 100
         });
     }
 
@@ -349,15 +348,15 @@ async function manageEnergy(ctx) {
             global.db.get(`${userPath}.isPremium`) || false
         ]);
 
-        if (isOwner || isPremium) continue;
+        const energyStored = await global.db.get(`${userPath}.energy`) || 0;
 
-        const [onCharger, energyStored] = await Promise.all([
-            global.db.get(`${userPath}.onCharger`) || false,
-            global.db.get(`${userPath}.energy`) || 0
-        ]);
-
-        if (onCharger || energyStored < 15) {
+        if ((isOwner || isPremium) && energyStored < 100) {
             validUsersCount++;
+        } else if (!isOwner && !isPremium) {
+            const onCharger = await global.db.get(`${userPath}.onCharger`) || false;
+            if (onCharger || energyStored < 15) {
+                validUsersCount++;
+            }
         }
     }
 
@@ -379,14 +378,17 @@ async function manageEnergy(ctx) {
                 global.db.get(`${userPath}.isPremium`) || false
             ]);
 
-            if (isOwner || isPremium) continue;
+            let energy = await global.db.get(`${userPath}.energy`) || 0;
 
-            const [onCharger, energyStored] = await Promise.all([
+            if ((isOwner || isPremium) && energy < 100) {
+                energy = 100;
+                await global.db.set(`${userPath}.energy`, 100);
+                continue;
+            }
+
+            const [onCharger] = await Promise.all([
                 global.db.get(`${userPath}.onCharger`) || false,
-                global.db.get(`${userPath}.energy`) || 0
             ]);
-
-            let energy = energyStored;
 
             if (onCharger) {
                 energy = Math.min(energy + 25, 100);
@@ -412,7 +414,9 @@ async function manageEnergy(ctx) {
                 });
             }
 
-            if (energy !== energyStored) await global.db.set(`${userPath}.energy`, energy);
+            if (energy !== (await global.db.get(`${userPath}.energy`))) {
+                await global.db.set(`${userPath}.energy`, energy);
+            }
 
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);

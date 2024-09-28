@@ -21,12 +21,15 @@ module.exports = {
             const senderJid = ctx.sender.jid;
             const senderNumber = senderJid.replace(/@.*|:.*/g, "");
 
-            const [energy, isPremium, onCharger, estimatedTime] = await Promise.all([
+            const [energy, isPremium, onCharger, estimatedTime, isOwner] = await Promise.all([
                 global.db.get(`user.${senderNumber}.energy`),
                 global.db.get(`user.${senderNumber}.isPremium`),
                 global.db.get(`user.${senderNumber}.onCharger`),
-                global.db.get(`user.${senderNumber}.estimatedTime`)
+                global.db.get(`user.${senderNumber}.estimatedTime`),
+                global.tools.general.isOwner(ctx, senderNumber, true)
             ]);
+
+            const isPremiumOrOwner = isOwner || isPremium;
 
             let profilePictureUrl;
             try {
@@ -37,23 +40,27 @@ module.exports = {
 
             const card = global.tools.api.createUrl("aggelos_007", "/rankcard", {
                 username: senderName,
-                xp: isPremium ? 100 : (energy || 0),
+                xp: isPremiumOrOwner ? 100 : (energy || 0),
                 maxxp: "100",
                 level: "0",
                 avatar: profilePictureUrl
             });
+
+            let energyStatus = isPremiumOrOwner ? "Tak terbatas" : (energy || "-");
+            let chargerStatus = onCharger ? "Ya" : "Tidak";
+            let estimatedTimeText = estimatedTime ? global.tools.general.convertMsToDuration(estimatedTime) : "";
 
             return await ctx.reply({
                 image: {
                     url: card || profilePictureUrl
                 },
                 mimetype: mime.contentType("png"),
-                caption: `${quote(`Nama: ${ctx.sender.pushName || "-"}`)}\n` +
-                    `${quote(`Premium: ${isPremium ? "Ya" : "Tidak"}`)}\n` +
-                    `${quote(`Energi: ${isPremium ? "Tak terbatas" : (energy || "-")}`)}\n` +
-                    `${quote(`Pengisian energi: ${onCharger ? "Ya" : "Tidak"}`)} (${global.tools.general.convertMsToDuration(estimatedTime)})\n` +
+                caption: `${quote(`Nama: ${senderName || "-"}`)}\n` +
+                    `${quote(`Premium: ${isPremiumOrOwner ? "Ya" : "Tidak"}`)}\n` +
+                    `${quote(`Energi: ${energyStatus}`)}\n` +
+                    `${quote(`Pengisian energi: ${chargerStatus}`)}${estimatedTimeText ? ` (${estimatedTimeText})` : ""}\n` +
                     "\n" +
-                    global.config.msg.footer,
+                    global.config.msg.footer
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
