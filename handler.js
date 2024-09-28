@@ -42,17 +42,11 @@ async function handler(ctx, options) {
             msg: global.config.msg.group
         },
         owner: {
-            check: () => {
-                console.log("Checking owner:", isOwner);
-                return !isOwner;
-            },
+            check: () => !isOwner,
             msg: global.config.msg.owner
         },
         premium: {
-            check: () => {
-                console.log("Checking premium:", isOwner, isPremium);
-                return !isOwner && !isPremium;
-            },
+            check: () => !isOwner && !isPremium,
             msg: global.config.msg.premium
         },
         private: {
@@ -70,10 +64,8 @@ async function handler(ctx, options) {
             msg
         }] of Object.entries(options)) {
         const result = await check();
-        console.log(`Option: ${option}, Result: ${result}`);
 
         if (result) {
-            console.log(`Option ${option} triggered with message: ${msg}`);
             return {
                 status: true,
                 message: msg
@@ -86,3 +78,5 @@ async function handler(ctx, options) {
         message: null
     };
 }
+
+module.exports = handler;
