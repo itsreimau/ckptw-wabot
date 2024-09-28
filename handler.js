@@ -42,11 +42,17 @@ async function handler(ctx, options) {
             msg: global.config.msg.group
         },
         owner: {
-            check: () => !isOwner,
+            check: () => {
+                console.log("Checking owner:", isOwner);
+                return !isOwner;
+            },
             msg: global.config.msg.owner
         },
         premium: {
-            check: () => !isOwner && !isPremium,
+            check: () => {
+                console.log("Checking premium:", isOwner, isPremium);
+                return !isOwner && !isPremium;
+            },
             msg: global.config.msg.premium
         },
         private: {
@@ -63,7 +69,11 @@ async function handler(ctx, options) {
             check,
             msg
         }] of Object.entries(options)) {
-        if (check && await check()) {
+        const result = await check();
+        console.log(`Option: ${option}, Result: ${result}`);
+
+        if (result) {
+            console.log(`Option ${option} triggered with message: ${msg}`);
             return {
                 status: true,
                 message: msg
@@ -76,35 +86,3 @@ async function handler(ctx, options) {
         message: null
     };
 }
-
-async function checkEnergy(ctx, energyOptions, senderNumber) {
-    if (typeof energyOptions === "number") {
-        const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
-        if (userEnergy < energyOptions) return true;
-
-        await global.db.subtract(`user.${senderNumber}.energy`, energyOptions);
-        return false;
-    }
-
-    const [requiredEnergy, requiredMedia, mediaSourceOption] = Array.isArray(energyOptions) ? energyOptions : [energyOptions || 0];
-
-    const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
-    const msgType = ctx.getMessageType();
-    let hasMedia = false;
-
-    if (mediaSourceOption === 1 || mediaSourceOption === 3) {
-        hasMedia = await global.tools.general.checkMedia(msgType, requiredMedia, ctx);
-    }
-
-    if ((mediaSourceOption === 2 || mediaSourceOption === 3) && ctx.quoted) {
-        hasMedia = await global.tools.general.checkQuotedMedia(ctx.quoted, requiredMedia);
-    }
-
-    if (requiredMedia && !hasMedia) return false;
-    if (userEnergy < requiredEnergy) return true;
-
-    await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
-    return false;
-}
-
-module.exports = handler;

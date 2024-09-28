@@ -7,11 +7,11 @@ global.config.pkg = pkg;
 
 // Pengecekan.
 if (global.config.owner.name === "" || global.config.owner.number === "") {
-    console.error(`[${pkg.name}] Harap tetapkan global.config.owner dengan benar di config.js!`);
+    console.error(`[${pkg.name}] Please set 'global.config.owner' correctly in config.js!`);
     process.exit(1);
 }
 if (global.config.system.usePairingCode && global.config.bot.phoneNumber === "") {
-    console.error(`[${pkg.name}] Harap tetapkan global.config.bot.phoneNumber dengan benar di config.js!`);
+    console.error(`[${pkg.name}] Please set 'global.config.bot.phoneNumber' correctly in config.js!`);
     process.exit(1);
 }
 
@@ -29,7 +29,7 @@ CFonts.say(pkg.name, {
 const authorName = pkg.author.name || pkg.author;
 CFonts.say(
     `'${pkg.description}'\n` +
-    `Oleh ${authorName}`, {
+    `By ${authorName}`, {
         font: "console",
         align: "center",
         gradient: ["red", "magenta"]
