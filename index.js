@@ -3,7 +3,7 @@ const handler = require("./handler.js");
 const pkg = require("./package.json");
 const tools = require("./tools/exports.js");
 const CFonts = require("cfonts");
-const SimplDB = require("SimplDB");
+const SimplDB = require("simpl.db");
 
 // Buat database.
 const db = new SimplDB();
