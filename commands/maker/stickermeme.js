@@ -38,7 +38,7 @@ module.exports = {
             global.tools.general.checkQuotedMedia(ctx.quoted, "image")
         ]);
 
-        if (!checkMedia || !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], "image")));
+        if (!checkMedia && !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], "image")));
 
         try {
             let [top, bottom] = input.split("|");

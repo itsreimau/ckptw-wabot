@@ -12,10 +12,10 @@ const {
 async function checkAdmin(ctx, id) {
     try {
         const members = await ctx.group().members();
-        return members.filter((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id == id).length ? true : false;
+        return members.some((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id === id);
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
-        return null;
+        return false;
     }
 }
 
@@ -149,40 +149,39 @@ function isCmd(m, ctx) {
         return false;
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
-        return null;
+        return false;
     }
 }
 
 async function isAdmin(ctx, id) {
     try {
         const jid = id || ctx.sender.jid;
-        const isAdmin = await checkAdmin(ctx, jid);
-        return isAdmin;
+        return await checkAdmin(ctx, jid);
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
-        return null;
+        return false;
     }
 }
 
 async function isBotAdmin(ctx) {
     try {
         const id = ctx._client.user.id.split(":")[0] + S_WHATSAPP_NET;
-        const isBotAdmin = await checkAdmin(ctx, id);
-        return isBotAdmin;
+        return await checkAdmin(ctx, id);
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
-        return null;
+        return false;
     }
 }
 
 function isOwner(ctx, id, selfOwner) {
     try {
-        const jid = id || ctx.sender.jid.replace(/@.*|:.*/g, null);
-        const isOwner = selfOwner ? ctx._client.user.id.split(":")[0] === jid || global.config.owner.number === jid || global.config.owner.co.includes(id) : global.config.owner.number === jid || global.config.owner.co.includes(id);
-        return isOwner;
+        const jid = id || ctx.sender.jid.replace(/@.*|:.*/g, "");
+        return selfOwner ?
+            ctx._client.user.id.split(":")[0] === jid || global.config.owner.number === jid || global.config.owner.co.includes(id) :
+            global.config.owner.number === jid || global.config.owner.co.includes(id);
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
-        return null;
+        return false;
     }
 }
 

@@ -29,7 +29,7 @@ module.exports = {
             global.tools.general.checkQuotedMedia(ctx.quoted, ["image", "gif", "video"])
         ]);
 
-        if (!checkMedia || !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["image", "gif", "video"])));
+        if (!checkMedia && !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["image", "gif", "video"])));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();

@@ -54,7 +54,7 @@ function generateInstruction(actions, mediaTypes) {
     const instructions = actions.map(action => `${actionTranslations[action]}`);
     const actionList = instructions.join(actions.length > 1 ? " atau " : "");
 
-    return ` ${actionList} ${mediaTypesList}!`;
+    return `📌 ${actionList} ${mediaTypesList}!`;
 }
 
 function generateCommandExample(command, args) {

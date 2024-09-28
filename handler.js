@@ -7,8 +7,10 @@ async function handler(ctx, options) {
     const senderJid = ctx.sender.jid;
     const senderNumber = senderJid.replace(/@.*|:.*/g, "");
 
-    const isOwner = await global.tools.general.isOwner(ctx, senderNumber, true);
-    const isPremium = await global.db.get(`user.${senderNumber}.isPremium`);
+    const [isOwner, isPremium] = await Promise.all([
+        global.tools.general.isOwner(ctx, senderNumber, true),
+        global.db.get(`user.${senderNumber}.isPremium`)
+    ]);
 
     const checkOptions = {
         admin: {
