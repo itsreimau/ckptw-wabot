@@ -1,3 +1,4 @@
+// Modul dan dependensi yang diperlukan.
 require("./config.js");
 const handler = require("./handler.js");
 const pkg = require("./package.json");
@@ -5,16 +6,16 @@ const tools = require("./tools/exports.js");
 const CFonts = require("cfonts");
 const SimplDB = require("simpl.db");
 
-// Buat database.
+// Buat basis data.
 const db = new SimplDB();
 
-// Tetapkan global.
+// Atur konfigurasi ke global.
 global.config.pkg = pkg;
 global.handler = handler;
 global.tools = tools;
 global.db = db;
 
-// Pengecekan.
+// Pemeriksaan konfigurasi tidak lengkap.
 if (global.config.owner.name === "" || global.config.owner.number === "") {
     console.error(`[${pkg.name}] Please set 'global.config.owner' correctly in config.js!`);
     process.exit(1);

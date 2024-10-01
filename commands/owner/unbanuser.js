@@ -25,7 +25,7 @@ module.exports = {
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : input + S_WHATSAPP_NET;
 
-        if (!input || !user) return ctx.reply({
+        if (!input && !user) return ctx.reply({
             text: `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
                 quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderNumber}`)),
             mentions: [senderJid]

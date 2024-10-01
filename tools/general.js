@@ -88,11 +88,32 @@ async function checkQuotedMedia(quoted, requiredMedia) {
 
 function convertMsToDuration(ms) {
     try {
-        const seconds = Math.floor((ms / 1000) % 60);
+        if (ms < 1000) {
+            return "kurang satu detik";
+        }
+
+        const years = Math.floor(ms / (1000 * 60 * 60 * 24 * 365.25));
+        const months = Math.floor((ms / (1000 * 60 * 60 * 24 * 30.44)) % 12);
+        const weeks = Math.floor((ms / (1000 * 60 * 60 * 24 * 7)) % 4.345);
+        const days = Math.floor((ms / (1000 * 60 * 60 * 24)) % 7);
+        const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
         const minutes = Math.floor((ms / (1000 * 60)) % 60);
-        const hours = Math.floor(ms / (1000 * 60 * 60));
+        const seconds = Math.floor((ms / 1000) % 60);
+
         let durationString = "";
 
+        if (years > 0) {
+            durationString += years + " tahun ";
+        }
+        if (months > 0) {
+            durationString += months + " bulan ";
+        }
+        if (weeks > 0) {
+            durationString += weeks + " minggu ";
+        }
+        if (days > 0) {
+            durationString += days + " hari ";
+        }
         if (hours > 0) {
             durationString += hours + " jam ";
         }
@@ -103,7 +124,7 @@ function convertMsToDuration(ms) {
             durationString += seconds + " detik";
         }
 
-        return durationString;
+        return durationString.trim();
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
         return null;

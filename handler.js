@@ -24,17 +24,13 @@ async function handler(ctx, options) {
             check: async () => (await ctx.isGroup()) && !(await global.tools.general.isBotAdmin(ctx)),
             msg: global.config.msg.botAdmin
         },
-        charger: {
-            check: async () => await global.db.get(`user.${senderNumber}.onCharger`),
-            msg: global.config.msg.onCharger
-        },
         cooldown: {
             check: async () => new Cooldown(ctx, global.config.system.cooldown).onCooldown,
             msg: global.config.msg.cooldown
         },
-        energy: {
-            check: async () => await checkEnergy(ctx, options.energy, senderNumber),
-            msg: global.config.msg.energy
+        coin: {
+            check: async () => await checkCoin(ctx, options.coin, senderNumber),
+            msg: global.config.msg.coin
         },
         group: {
             check: async () => !(await ctx.isGroup()),
@@ -76,25 +72,25 @@ async function handler(ctx, options) {
     };
 }
 
-async function checkEnergy(ctx, energyOptions, senderNumber) {
+async function checkCoin(ctx, coinOptions, senderNumber) {
     const [isOwner, isPremium] = await Promise.all([
         global.tools.general.isOwner(ctx, senderNumber, true),
         global.db.get(`user.${senderNumber}.isPremium`)
     ]);
 
-    if (typeof energyOptions === "number") {
-        const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
-        if (userEnergy < energyOptions) return true;
+    if (typeof coinOptions === "number") {
+        const userCoin = await global.db.get(`user.${senderNumber}.coin`);
+        if (userCoin < coinOptions) return true;
 
         if (!isOwner && !isPremium) {
-            await global.db.subtract(`user.${senderNumber}.energy`, energyOptions);
+            await global.db.subtract(`user.${senderNumber}.coin`, coinOptions);
         }
 
         return false;
     }
 
-    const [requiredEnergy, requiredMedia, mediaSourceOption] = Array.isArray(energyOptions) ? energyOptions : [energyOptions || 0];
-    const userEnergy = await global.db.get(`user.${senderNumber}.energy`);
+    const [requiredCoin, requiredMedia, mediaSourceOption] = Array.isArray(coinOptions) ? coinOptions : [coinOptions || 0];
+    const userCoin = await global.db.get(`user.${senderNumber}.coin`);
     const msgType = ctx.getMessageType();
     let hasMedia = false;
 
@@ -108,10 +104,10 @@ async function checkEnergy(ctx, energyOptions, senderNumber) {
 
     if (requiredMedia && !hasMedia) return false;
 
-    if (userEnergy < requiredEnergy) return true;
+    if (userCoin < requiredCoin) return true;
 
     if (!isOwner && !isPremium && (!requiredMedia || hasMedia)) {
-        await global.db.subtract(`user.${senderNumber}.energy`, requiredEnergy);
+        await global.db.subtract(`user.${senderNumber}.coin`, requiredCoin);
     }
 
     return false;

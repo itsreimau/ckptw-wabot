@@ -18,7 +18,7 @@ async function get(type, ctx) {
             let menuText =
                 `Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
                 "\n" +
-                `${quote(`Waktu aktif: ${general.convertMsToDuration(Date.now() - global.config.bot.readyAt) || "kurang dari satu detik."}`)}\n` +
+                `${quote(`Waktu aktif: ${general.convertMsToDuration(Date.now() - global.config.bot.readyAt)}`)}\n` +
                 `${quote(`Tanggal: ${moment.tz(global.config.system.timeZone).format("DD/MM/YY")}`)}\n` +
                 `${quote(`Waktu: ${moment.tz(global.config.system.timeZone).format("HH:mm:ss")}`)}\n` +
                 `${quote(`Versi: ${pkg.version}`)}\n` +
@@ -40,7 +40,7 @@ async function get(type, ctx) {
 
                     categoryCommands.forEach(cmd => {
                         menuText += quote(monospace(`${ctx._used.prefix || "/"}${cmd.name}`));
-                        if (category === "main" && cmd.aliases && cmd.aliases.length > 0) {
+                        if (category === "general" && cmd.aliases && cmd.aliases.length > 0) {
                             menuText += `\n` + cmd.aliases.map(alias => quote(monospace(`${ctx._used.prefix || "/"}${alias}`))).join("\n");
                         }
                         menuText += "\n";
@@ -110,21 +110,20 @@ async function get(type, ctx) {
                     cmd
                 } = ctx._config;
                 const tag = {
-                    main: "Main",
+                    general: "General",
                     ai: "AI",
-                    game: "Game",
                     converter: "Converter",
                     downloader: "Downloader",
-                    fun: "Fun",
+                    entertainment: "Entertainment",
                     group: "Group",
                     islamic: "Islamic",
-                    internet: "Internet",
                     maker: "Maker",
-                    tools: "Tools",
                     owner: "Owner",
-                    info: "Info",
-                    "": "No Category"
+                    web_tools: "Web Tools",
+                    info: "Information",
+                    misc: "Miscellaneous"
                 };
+
 
                 if (!cmd || cmd.size === 0) {
                     text = quote("❎ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");

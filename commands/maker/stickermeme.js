@@ -21,7 +21,7 @@ module.exports = {
             banned: true,
             charger: true,
             cooldown: true,
-            energy: "5"
+            coin: "5"
         });
         if (status) return ctx.reply(message);
 

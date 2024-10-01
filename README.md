@@ -76,7 +76,7 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
                admin: Boolean, // Opsi admin (true atau false)
                botAdmin: Boolean, // Opsi bot admin (true atau false).
                banned: Boolean, // Opsi banned (true atau false).
-               energy: String || Number, // Opsi energi (String atau Number).
+               coin: String || Number, // Opsi koin (String atau Number).
                cooldown: Number, // Opsi cooldown (Number).
                group: Boolean, // Opsi grup (true atau false).
                owner: Boolean, // Opsi owner (true atau false).
