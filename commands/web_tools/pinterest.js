@@ -55,7 +55,7 @@ module.exports = {
 
                     const imagesMediaAttachment = await ctx.prepareWAMessageMedia({
                         image: {
-                            imagesUrl
+                            url: imagesUrl
                         }
                     }, {
                         upload: ctx._client.waUploadToServer
