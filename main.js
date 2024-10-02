@@ -79,14 +79,15 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (global.tools.general.isCmd(m, ctx)) {
         ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah.
 
-        // Penanganan XP & Level untuk pengguna.
-        const xpGain = 10;
-        const xpToLevelUp = 100;
+        let xpToLevelUp = 100; // Ubah ke 'let' agar bisa diubah.
 
         const [userXp, userLevel] = await Promise.all([
             global.db.get(`user.${senderNumber}.xp`),
             global.db.get(`user.${senderNumber}.level`)
         ]);
+
+        // Menyesuaikan xpGain berdasarkan level pengguna.
+        const xpGain = Math.max(5, 10 - Math.floor(userLevel / 10)); // Minimal XP Gain adalah 5.
 
         let newUserXp = userXp + xpGain;
 
@@ -94,7 +95,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             let newUserLevel = userLevel + 1;
             newUserXp -= xpToLevelUp;
 
-            xpToLevelUp = Math.floor(xpToLevelUp * 1.2);
+            xpToLevelUp = Math.floor(xpToLevelUp * 1.2); // Meningkatkan XP yang dibutuhkan untuk level berikutnya.
 
             let profilePictureUrl;
             try {
