@@ -231,9 +231,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const getAntilink = await global.db.get(`group.${groupNumber}.antilink`);
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
         if (getAntilink) {
-            if (m.content && urlRegex.test(m.content)) {
-                if (await global.tools.general.isAdmin(ctx, senderNumber)) return;
-
+            if (m.content && urlRegex.test(m.content) && !(await global.tools.general.isAdmin(ctx, senderNumber))) {
                 await ctx.reply(quote(`❎ Jangan kirim tautan!`));
                 await ctx.deleteMessage(m.key);
                 if (!global.config.system.restrict) await ctx.group().kick([senderJid]);
