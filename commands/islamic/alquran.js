@@ -16,7 +16,6 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            charger: true,
             cooldown: true
         });
         if (status) return ctx.reply(message);

@@ -13,7 +13,6 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            charger: true,
             cooldown: true
         });
         if (status) return ctx.reply(message);
@@ -28,7 +27,7 @@ module.exports = {
         try {
             const apiUrl = global.tools.api.createUrl("nyxs", "/ai/character-ai", {
                 prompt: input,
-                gaya: `Bot WhatsApp bernama ${global.config.bot.name}, dimiliki oleh ${global.config.owner.name}.` // Dapat diubah sesuai keinginan Anda.
+                gaya: `Anda adalah bot WhatsApp bernama ${global.config.bot.name}, dimiliki oleh ${global.config.owner.name}. Jika nama Anda mirip dengan sebuah karakter dari anime, game, tokoh publik, atau media lainnya, maka kepribadian Anda harus menyesuaikan dengan kepribadian karakter tersebut. Namun, jika nama Anda tidak memiliki kemiripan dengan karakter lain, Anda akan tetap ramah, informatif, dan siap membantu dengan respons cepat dan akurat.` // Dapat diubah sesuai keinginan Anda. 
             });
             const {
                 data

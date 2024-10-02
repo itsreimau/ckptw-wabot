@@ -99,7 +99,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             let profilePictureUrl;
             try {
                 profilePictureUrl = await bot.core.profilePictureUrl(jid, "image");
-            } catch (error) {
+            } catch {
                 profilePictureUrl = global.config.bot.picture.profile;
             }
             const card = global.tools.api.createUrl("aggelos_007", "/levelup", {
@@ -184,11 +184,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Perintah khusus pemilik.
     if (global.tools.general.isOwner(ctx, senderNumber, true)) {
         // Perintah eval: Jalankan kode JavaScript.
-        if (m.content && m.content.startsWith && (m.content.startsWith("=>> ") || m.content.startsWith("=> "))) {
-            const code = m.content.startsWith("=>> ") ? m.content.slice(4) : m.content.slice(3);
+        if (m.content && m.content.startsWith && (m.content.startsWith("==> ") || m.content.startsWith("=> "))) {
+            const code = m.content.startsWith("==> ") ? m.content.slice(4) : m.content.slice(3);
 
             try {
-                const result = await eval(m.content.startsWith("=>> ") ? `(async () => { ${code} })()` : code);
+                const result = await eval(m.content.startsWith("==> ") ? `(async () => { ${code} })()` : code);
 
                 await ctx.reply(inspect(result));
             } catch (error) {

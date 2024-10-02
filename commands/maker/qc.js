@@ -17,9 +17,8 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            charger: true,
             cooldown: true,
-            coin: [5, "text", 1]
+            coin: [10, "text", 1]
         });
         if (status) return ctx.reply(message);
 
@@ -36,7 +35,7 @@ module.exports = {
             let profilePictureUrl;
             try {
                 profilePictureUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image");
-            } catch (error) {
+            } catch {
                 profilePictureUrl = global.config.bot.picture.profile;
             }
 
