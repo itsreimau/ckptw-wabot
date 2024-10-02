@@ -33,10 +33,9 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("agatz", "/api/threads", {
                 url
             });
-            const response = await axios.get(apiUrl);
             const {
                 data
-            } = response.data;
+            } = (await axios.get(apiUrl)).data;
 
             if (data.image_urls && data.image_urls.length > 0) {
                 for (const imageUrl of data.image_urls) {

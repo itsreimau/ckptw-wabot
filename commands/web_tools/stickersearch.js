@@ -34,10 +34,9 @@ module.exports = {
             const apiUrl = await global.tools.api.createUrl("agatz", "/api/sticker", {
                 message: input
             });
-            const response = await axios.get(apiUrl);
             const {
                 data
-            } = response.data;
+            } = (await axios.get(apiUrl)).data;
 
             await ctx.reply(
                 `${quote(`Judul: ${data.title}`)}\n` +

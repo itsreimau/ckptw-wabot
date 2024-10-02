@@ -35,14 +35,14 @@ module.exports = {
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const result = await upscale(buffer, ctx.args[0], ctx.args[1] === "anime" ? true : false);
+            const result = await upscale(buffer, ctx.args[0], ctx.args[1] === "-a" ? true : false);
 
             return await ctx.reply({
                 image: {
                     url: result.image
                 },
-                caption: `${quote(`Anda bisa mengaturnya. Tersedia ukuran 2, 4, 6, 8, dan 16, defaultnya adalah 2. Gunakan ${monospace("anime")} jika gambarnya anime.`)}\n` +
-                    quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "16 anime")),
+                caption: `${quote(`Anda bisa mengaturnya. Tersedia ukuran 2, 4, 6, 8, dan 16, defaultnya adalah 2. Gunakan ${monospace("-a")} jika gambarnya anime.`)}\n` +
+                    quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "16 -a")),
                 mimetype: mime.contentType("png")
             });
         } catch (error) {

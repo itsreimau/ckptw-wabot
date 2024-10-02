@@ -33,10 +33,9 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("vkrdownloader", "/server", {
                 vkr: url
             });
-            const response = await axios.get(apiUrl);
             const {
                 data
-            } = response.data;
+            } = (await axios.get(apiUrl)).data;
 
             for (const download of data.downloads) {
                 const mimeType = mime.contentType(download.extension);

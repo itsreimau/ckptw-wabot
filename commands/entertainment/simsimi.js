@@ -29,10 +29,9 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("agatz", "/api/simsimi", {
                 message: input
             });
-            const response = await axios.get(apiUrl);
             const {
                 data
-            } = response.data;
+            } = (await axios.get(apiUrl)).data;
 
             return ctx.reply(data);
         } catch (error) {

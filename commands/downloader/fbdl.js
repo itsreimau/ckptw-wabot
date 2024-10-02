@@ -33,10 +33,9 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("vkrdownloader", "/server", {
                 vkr: url
             });
-            const response = await axios.get(apiUrl);
             const {
                 data
-            } = response.data;
+            } = (await axios.get(apiUrl)).data;
             const downloadUrl = data.downloads.find(d => d.format_id === "hd")?.url || data.downloads.find(d => d.format_id === "sd")?.url;
 
             return await ctx.reply({

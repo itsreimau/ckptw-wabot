@@ -33,10 +33,9 @@ module.exports = {
 
         try {
             const apiUrl = await global.tools.api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {});
-            const response = await axios.get(apiUrl);
             const {
                 data
-            } = response.data;
+            } = (await axios.get(apiUrl)).data;
 
             const resultText = data.verses.map((d) =>
                 `${quote(`Ayat: ${d.verse}`)}\n` +

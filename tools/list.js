@@ -61,48 +61,33 @@ async function get(type, ctx) {
     try {
         switch (type) {
             case "alkitab": {
-                try {
-                    const alKitabResponse = await axios.get(api.createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
-                    text = alKitabResponse.data.data.map(b =>
-                        `${quote(`Buku: ${b.name} (${b.abbr})`)}\n` +
-                        `${quote(`Jumlah Bab: ${b.chapter}`)}\n` +
-                        `${quote("─────")}\n`
-                    ).join("");
+                const alKitabResponse = await axios.get(api.createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}));
+                text = alKitabResponse.data.data.map(b =>
+                    `${quote(`Buku: ${b.name} (${b.abbr})`)}\n` +
+                    `${quote(`Jumlah Bab: ${b.chapter}`)}\n` +
+                    `${quote("─────")}\n`
+                ).join("");
 
-                    text += global.config.msg.footer;
-                } catch (error) {
-                    console.error(`[${global.config.pkg.name}] Error:`, error);
-                    text = quote(`❎ Terjadi kesalahan: ${error.message}`);
-                }
+                text += global.config.msg.footer;
                 break;
             }
             case "alquran": {
-                try {
-                    const alquranResponse = await axios.get(api.createUrl("https://equran.id", "/api/v2/surat", {}));
-                    text = alquranResponse.data.data.map(s =>
-                        `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
-                        `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n` +
-                        `${quote("─────")}\n`
-                    ).join("");
+                const alquranResponse = await axios.get(api.createUrl("https://equran.id", "/api/v2/surat", {}));
+                text = alquranResponse.data.data.map(s =>
+                    `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
+                    `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n` +
+                    `${quote("─────")}\n`
+                ).join("");
 
-                    text += global.config.msg.footer;
-                } catch (error) {
-                    console.error(`[${global.config.pkg.name}] Error:`, error);
-                    text = quote(`❎ Terjadi kesalahan: ${error.message}`);
-                }
+                text += global.config.msg.footer;
                 break;
             }
             case "disable_enable": {
-                try {
-                    const deList = ["antilink", "welcome"];
-                    text = deList.map(item => quote(item)).join("\n");
+                const deList = ["antilink", "welcome"];
+                text = deList.map(item => quote(item)).join("\n");
 
-                    text += "\n" +
-                        global.config.msg.footer;
-                } catch (error) {
-                    console.error(`[${global.config.pkg.name}] Error:`, error);
-                    text = quote(`❎ Terjadi kesalahan: ${error.message}`);
-                }
+                text += "\n" +
+                    global.config.msg.footer;
                 break;
             }
             case "menu": {
@@ -118,12 +103,11 @@ async function get(type, ctx) {
                     group: "Group",
                     islamic: "Islamic",
                     maker: "Maker",
-                    owner: "Owner",
                     web_tools: "Web Tools",
-                    info: "Information",
+                    owner: "Owner",
+                    information: "Information",
                     misc: "Miscellaneous"
                 };
-
 
                 if (!cmd || cmd.size === 0) {
                     text = quote("❎ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");

@@ -21,10 +21,9 @@ module.exports = {
         const apiUrl = global.tools.api.createUrl("https://candaan-api.vercel.app", "/api/image/random", {});
 
         try {
-            const response = await axios.get(apiUrl);
             const {
                 data
-            } = response.data;
+            } = (await axios.get(apiUrl)).data;
 
             return ctx.reply({
                 image: {

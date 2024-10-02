@@ -30,10 +30,9 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("agatz", "/api/tiktoksearch", {
                 message: input
             });
-            const response = await axios.get(apiUrl);
             const {
                 data
-            } = response.data;
+            } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply({
                 video: {

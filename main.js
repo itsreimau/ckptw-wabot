@@ -79,15 +79,14 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (global.tools.general.isCmd(m, ctx)) {
         ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah.
 
-        let xpToLevelUp = 100; // Ubah ke 'let' agar bisa diubah.
+        // Penanganan XP & Level untuk pengguna.
+        const xpGain = 5;
+        let xpToLevelUp = 100;
 
         const [userXp, userLevel] = await Promise.all([
-            global.db.get(`user.${senderNumber}.xp`),
-            global.db.get(`user.${senderNumber}.level`)
+            global.db.get(`user.${senderNumber}.xp`) || 0,
+            global.db.get(`user.${senderNumber}.level`) || 1
         ]);
-
-        // Menyesuaikan xpGain berdasarkan level pengguna.
-        const xpGain = Math.max(5, 10 - Math.floor(userLevel / 10)); // Minimal XP Gain adalah 5.
 
         let newUserXp = userXp + xpGain;
 
@@ -95,7 +94,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             let newUserLevel = userLevel + 1;
             newUserXp -= xpToLevelUp;
 
-            xpToLevelUp = Math.floor(xpToLevelUp * 1.2); // Meningkatkan XP yang dibutuhkan untuk level berikutnya.
+            xpToLevelUp = Math.floor(xpToLevelUp * 1.2);
 
             let profilePictureUrl;
             try {
@@ -103,6 +102,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             } catch {
                 profilePictureUrl = global.config.bot.picture.profile;
             }
+
             const card = global.tools.api.createUrl("aggelos_007", "/levelup", {
                 avatar: profilePictureUrl,
                 level: newUserLevel
