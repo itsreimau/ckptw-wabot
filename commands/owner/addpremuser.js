@@ -18,14 +18,14 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx.args.join(" ") || null;
+        const userId = ctx.args[0];
 
         const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.replace(/@.*|:.*/g, "");
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : userId + S_WHATSAPP_NET;
 
-        if (!input && !user) return ctx.reply({
+        if (!ctx.args.length && !user) return ctx.reply({
             text: `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
                 quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderNumber}`)),
             mentions: [senderJid]

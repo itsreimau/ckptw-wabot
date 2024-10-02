@@ -225,6 +225,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Grup.
     if (isGroup) {
+        if (m.key.fromMe) return;
+
         // Penanganan antilink.
         const getAntilink = await global.db.get(`group.${groupNumber}.antilink`);
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
@@ -233,7 +235,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 if (await global.tools.general.isAdmin(ctx, senderNumber)) return;
 
                 await ctx.reply(quote(`❎ Jangan kirim tautan!`));
-                if (!global.config.system.restrict) await ctx.deleteMessage(m.key);
+                await ctx.deleteMessage(m.key);
+                if (!global.config.system.restrict) await ctx.group().kick([senderJid]);
             }
         }
     }
