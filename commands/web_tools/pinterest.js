@@ -62,9 +62,7 @@ module.exports = {
                     });
 
                     cards.addCard({
-                        body: `${quote(`Kueri: ${input}`)}\n` +
-                            "\n" +
-                            global.config.msg.footer,
+                        body: global.config.msg.footer,
                         footer: global.config.msg.watermark,
                         header: {
                             title: "Pinterest",
@@ -78,7 +76,9 @@ module.exports = {
                 }
 
                 return ctx.replyInteractiveMessage({
-                    body: global.config.msg.footer,
+                    body: `${quote(`Kueri: ${input}`)}\n` +
+                        "\n" +
+                        global.config.msg.footer,
                     footer: global.config.msg.watermark,
                     carouselMessage: {
                         cards: cards.build()
@@ -89,12 +89,12 @@ module.exports = {
             const result = global.tools.general.getRandomElement(data);
             return await ctx.reply({
                 image: {
-                    imagesUrl: result.imagesUrl
+                    url: result.images_url
                 },
                 mimetype: mime.contentType("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +
                     `${quote(`Gunakan ${monospace("-s")} jika Anda ingin gambarnya berupa slide.`)}\n` +
-                    `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "cat -a"))}\n` +
+                    `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "cat -s"))}\n` +
                     "\n" +
                     global.config.msg.footer
             });
