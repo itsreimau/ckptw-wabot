@@ -98,7 +98,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
             let profilePictureUrl;
             try {
-                profilePictureUrl = await bot.core.profilePictureUrl(jid, "image");
+                profilePictureUrl = await bot.core.profilePictureUrl(senderJid, "image");
             } catch {
                 profilePictureUrl = global.config.bot.picture.profile;
             }
@@ -111,7 +111,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             await ctx.reply({
                 text: quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`),
                 contextInfo: {
-                    mentionedJid: [jid],
+                    mentionedJid: [senderJid],
                     externalAdReply: {
                         mediaType: 1,
                         previewType: 0,
