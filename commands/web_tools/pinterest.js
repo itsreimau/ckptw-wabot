@@ -44,7 +44,7 @@ module.exports = {
                 const cards = new CarouselBuilder();
 
                 for (let i = 0; i < randomResults.length; i++) {
-                    const imagesUrl = randomResults[i].images_imagesUrl;
+                    const imagesUrl = randomResults[i].images_url;
                     const button = new ButtonBuilder()
                         .setId(`id${i}`)
                         .setDisplayText("Image URL 🌐")
