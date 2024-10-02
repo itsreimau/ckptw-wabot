@@ -1,7 +1,8 @@
 const {
-    quote,
     ButtonBuilder,
     CarouselBuilder
+    monospace,
+    quote,
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
