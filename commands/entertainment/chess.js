@@ -1,7 +1,9 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const jsChessEngine = require('js-chess-engine');
+const {
+    Chess
+} = require('chess.js');
 
 const session = new Map();
 
@@ -75,7 +77,7 @@ async function startGame(m, ctx, senderJid, opponentJid) {
     try {
         await ctx.reply(quote("🎉 Permainan dimulai!"));
 
-        const game = new jsChessEngine.Game();
+        const game = new Chess();
         const gameSession = {
             chess: game,
             currentTurn: "w",
@@ -100,7 +102,9 @@ async function startGame(m, ctx, senderJid, opponentJid) {
             session.set(ctx.id, gameSession);
 
             if (game.isCheckmate()) {
-                await endGame(m, ctx, moveSenderJid, `${quote("🏆 Skakmat! Anda menang!")}\n` + quote(`+50 Koin`));
+                await endGame(m, ctx, moveSenderJid, `${quote("🏆 Skakmat! Anda menang!")}\n` +
+                    quote(`+50 Koin`)
+                );
             } else if (game.isDraw()) {
                 await endGame(m, ctx, null, quote("Permainan berakhir dengan remis!"));
             } else {
@@ -122,7 +126,7 @@ async function startGame(m, ctx, senderJid, opponentJid) {
 
 async function sendBoard(m, ctx, game, caption) {
     const fenUrl = global.tools.api.createUrl("https://fen2png.com", "/api/", {
-        fen: game.exportFEN(),
+        fen: game.fen(),
         raw: true
     });
 
