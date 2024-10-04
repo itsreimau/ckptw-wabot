@@ -1,9 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    Chess
-} = require("chess.js");
+const jsChessEngine = require('js-chess-engine');
 
 const session = new Map();
 
@@ -32,112 +30,145 @@ module.exports = {
             mentions: [senderJid]
         });
 
-        await ctx.reply(
-            quote(`🕹️ Apakah Anda ingin bermain catur dengan @${opponentJid.replace(/@.*|:.*/g, "")}? Ketik Y untuk setuju atau N untuk menolak.`), {
-                mentions: [opponentJid]
-            }
-        );
-
-        const collector = ctx.MessageCollector({
-            time: 30000 // 30 detik.
+        await ctx.reply({
+            text: quote(`🕹️ Apakah Anda ingin bermain catur dengan @${opponentJid.replace(/@.*|:.*/g, "")}? Ketik Y untuk setuju atau N untuk menolak.`),
+            mentions: [opponentJid]
         });
 
-        collector.on("collect", async (m) => {
-            const response = m.content.trim().toUpperCase();
-            const participantJid = m.key.participant;
+        try {
+            let starting = false;
+            const collector = ctx.MessageCollector({
+                time: 30000 // 30 detik.
+            });
 
-            if (participantJid !== senderJid && participantJid !== opponentJid) return;
+            collector.on("collect", async (m) => {
+                const response = m.content.trim().toUpperCase();
+                const participantJid = m.key.participant;
 
-            if (participantJid === opponentJid) {
-                if (response === "Y") {
-                    await ctx.reply(quote("🎉 Permainan dimulai!"));
+                if (![senderJid, opponentJid].includes(participantJid)) return;
 
-                    const chessGame = new Chess();
-                    const gameSession = {
-                        chess: chessGame,
-                        currentTurn: "w",
-                        turnTimeout: null
-                    };
-
-                    session.set(ctx.id, gameSession);
-
-                    await ctx.reply(
-                        `${quote("Papan catur:")}\n` +
-                        `${chessGame.ascii()}\n` +
-                        `${quote(`Giliran Putih untuk bergerak.`)}\n` +
-                        "\n" +
-                        global.config.msg.footer
-                    );
-
-                    const startTurnTimer = (turnTime) => {
-                        gameSession.turnTimeout = setTimeout(async () => {
-                            session.delete(ctx.id);
-                            await ctx.reply(quote("⏳ Waktu habis! Permainan berakhir."));
-                        }, turnTime);
-                    };
-
-                    const playerTurn = async () => {
-                        await ctx.reply(quote(`Giliran ${chessGame.turn() === "w" ? "Putih" : "Hitam"} untuk bergerak.`));
-                        startTurnTimer(60000); // 60 detik.
-                    };
-
-                    playerTurn();
-
-                    collector.on("collect", async (m) => {
-                        const move = m.content.trim().toLowerCase();
-                        const moveSenderJid = m.key.participant;
-
-                        if (moveSenderJid !== senderJid && moveSenderJid !== opponentJid) return;
-
-                        clearTimeout(gameSession.turnTimeout);
-
-                        const result = chessGame.move(move);
-
-                        if (!result) return await ctx.reply(quote("Gerakan tidak valid! Gunakan notasi standar catur (contoh: e4, Nf3)."));
-
-                        if (chessGame.in_checkmate()) {
-                            session.delete(ctx.id);
-                            await Promise.all([
-                                global.db.add(`user.${moveSenderJid === senderJid ? senderJid : opponentJid}.coin`, coin),
-                                global.db.add(`user.${moveSenderJid === senderJid ? senderJid : opponentJid}.winGame`, 1)
-                            ]);
-                            return await ctx.reply(quote(`Skakmat! ${moveSenderJid === senderJid ? "Anda" : "Lawan"} menang!`));
-                        } else if (chessGame.in_draw()) {
-                            session.delete(ctx.id);
-                            return await ctx.reply(quote("Permainan berakhir dengan remis!"));
-                        }
-
-                        gameSession.currentTurn = chessGame.turn();
-                        session.set(ctx.id, gameSession);
-
-                        await ctx.reply(
-                            `${quote(`Gerakan dimainkan: ${result.san}`)}\n` +
-                            `${quote("Papan saat ini:")}\n` +
-                            `${chessGame.ascii()}\n` +
-                            `${quote(`Giliran ${chessGame.turn() === "w" ? "Putih" : "Hitam"} untuk bergerak.`)}\n` +
-                            "\n" +
-                            global.config.msg.footer
-                        );
-
-                        playerTurn();
-                    });
-
-                    collector.on("end", async () => {
-                        session.delete(ctx.id);
-                        await ctx.reply(quote("⏳ Waktu habis! Permainan berakhir."));
-                    });
-
-                } else if (response === "N") {
-                    await ctx.reply(quote("❌ Permainan dibatalkan."));
-                    collector.stop();
-                } else {
-                    await ctx.reply(quote("❌ Mohon ketik Y untuk setuju atau N untuk menolak."));
+                if (participantJid === opponentJid) {
+                    if (response === "Y") {
+                        starting = true;
+                        await startGame(m, ctx, senderJid, opponentJid);
+                        collector.stop();
+                    } else if (response === "N") {
+                        await ctx.reply(quote("❌ Permainan dibatalkan."));
+                        collector.stop();
+                    } else {
+                        await ctx.reply(quote("❌ Mohon ketik Y untuk setuju atau N untuk menolak."));
+                    }
                 }
-            }
-        });
+            });
 
-        collector.on("end", async () => {
-            await ctx.reply(quote("⏳ Waktu menunggu habis! Permainan dibatalkan."));
-        });
+            collector.on("end", () => {
+                if (!starting) return ctx.reply(quote("⏳ Waktu menunggu habis! Permainan dibatalkan."));
+            });
+        } catch (error) {
+            console.error(error);
+            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+        }
     }
 };
+
+async function startGame(m, ctx, senderJid, opponentJid) {
+    try {
+        await ctx.reply(quote("🎉 Permainan dimulai!"));
+
+        const game = new jsChessEngine.Game();
+        const gameSession = {
+            chess: game,
+            currentTurn: "w",
+            turnTimeout: null
+        };
+        session.set(ctx.id, gameSession);
+
+        await sendBoard(m, ctx, game, "Giliran Putih untuk bergerak.");
+
+        const turnHandler = async (m) => {
+            const moveSenderJid = m.key.participant;
+            const move = m.content.trim().toLowerCase();
+
+            if (![senderJid, opponentJid].includes(moveSenderJid)) return;
+
+            clearTimeout(gameSession.turnTimeout);
+            const isValidMove = handleMove(ctx, gameSession, game, move);
+
+            if (!isValidMove) await ctx.reply(quote("Gerakan tidak valid! Gunakan notasi standar catur (contoh: e4, Nf3)."));
+
+            gameSession.currentTurn = game.turn();
+            session.set(ctx.id, gameSession);
+
+            if (game.isCheckmate()) {
+                await endGame(m, ctx, moveSenderJid,
+                    `${quote("🏆 Skakmat! Anda menang!")}\n` +
+                    quote(`+50 Koin`)
+                );
+            } else if (game.isDraw()) {
+                await endGame(m, ctx, null, quote("Permainan berakhir dengan remis!"));
+            } else {
+                await sendBoard(m, ctx, game, quote(`Giliran ${game.turn() === "w" ? "Putih" : "Hitam"} untuk bergerak.`));
+                startTurnTimer(m, ctx, gameSession, 60000); // 60 detik.
+            }
+        };
+
+        ctx.MessageCollector({
+            time: 30000
+        }).on("collect", turnHandler);
+        startTurnTimer(ctx, gameSession, 60000); // 60 detik.
+    } catch (error) {
+        console.error(error);
+        await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+    }
+}
+
+async function sendBoard(m, ctx, game, caption) {
+    const fenUrl = global.tools.api.createUrl("https://fen2png.com", "/api/", {
+        fen: game.exportFEN(),
+        raw: true
+    });
+
+    await ctx.sendMessage(ctx.id, {
+        image: {
+            url: fenUrl
+        },
+        caption: caption
+    }, {
+        quoted: m
+    });
+}
+
+async function handleMove(ctx, gameSession, game, move) {
+    try {
+        const result = game.move(move);
+        return !!result;
+    } catch {
+        return false;
+    }
+}
+
+async function startTurnTimer(m, ctx, gameSession, turnTime) {
+    gameSession.turnTimeout = setTimeout(async () => {
+        session.delete(ctx.id);
+        await ctx.sendMessage(ctx.id, {
+            text: quote("⏳ Waktu habis! Permainan berakhir.")
+        }, {
+            quoted: m
+        });
+    }, turnTime);
+}
+
+async function endGame(m, ctx, winnerJid, message) {
+    session.delete(ctx.id);
+    if (winnerJid) {
+        await Promise.all([
+            global.db.add(`user.${winnerJid}.coin`, 50),
+            global.db.add(`user.${winnerJid}.winGame`, 1)
+        ]);
+    }
+    await ctx.sendMessage(ctx.id, {
+        text: message
+    }, {
+        quoted: m
+    });
+}

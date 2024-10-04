@@ -1,6 +1,6 @@
 {
   "name": "ckptw-wabot",
-  "version": "1.36.00",
+  "version": "1.36.3",
   "description": "WhatsApp Bot with @mengkodingan/ckptw.",
   "main": "index.js",
   "directories": {
@@ -32,11 +32,11 @@
     "axios": "1.7.7",
     "cfonts": "^3.3.0",
     "cheerio": "^1.0.0",
-    "chess.js": "^1.0.0-beta.8",
     "didyoumean": "^1.2.2",
     "file-type": "^16.5.4",
     "form-data": "^4.0.0",
     "jimp": "^0.16.1",
+    "js-chess-engine": "^1.0.2",
     "jsdom": "^25.0.0",
     "link-preview-js": "^3.0.5",
     "mime-types": "^2.1.35",
