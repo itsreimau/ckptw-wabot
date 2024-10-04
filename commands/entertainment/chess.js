@@ -77,11 +77,11 @@ module.exports = {
 
                     ctx.MessageCollector({
                         time: 30000
-                    }).on("collect", async (m: moveMessage) => {
+                    }).on("collect", async (moveMessage) => {
                         const moveSenderJid = moveMessage.key.participant;
                         const move = moveMessage.content.trim().toLowerCase();
 
-                        if (![senderJid, opponentJid].includes(participantJid)) return;
+                        if (![senderJid, opponentJid].includes(moveSenderJid)) return;
 
                         if ((gameSession.currentTurn === "w" && moveSenderJid !== senderJid) ||
                             (gameSession.currentTurn === "b" && moveSenderJid !== opponentJid)) {
