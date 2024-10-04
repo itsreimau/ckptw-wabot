@@ -96,18 +96,16 @@ async function startGame(m, ctx, senderJid, opponentJid) {
 
             if (!isValidMove) await ctx.reply(quote("Gerakan tidak valid! Gunakan notasi standar catur (contoh: e4, Nf3)."));
 
-            gameSession.currentTurn = game.turn();
+            gameSession.currentTurn = gameSession.currentTurn === "w" ? "b" : "w";
             session.set(ctx.id, gameSession);
 
             if (game.isCheckmate()) {
-                await endGame(m, ctx, moveSenderJid,
-                    `${quote("🏆 Skakmat! Anda menang!")}\n` +
-                    quote(`+50 Koin`)
-                );
+                await endGame(m, ctx, moveSenderJid, `${quote("🏆 Skakmat! Anda menang!")}\n` + quote(`+50 Koin`));
             } else if (game.isDraw()) {
                 await endGame(m, ctx, null, quote("Permainan berakhir dengan remis!"));
             } else {
-                await sendBoard(m, ctx, game, quote(`Giliran ${game.turn() === "w" ? "Putih" : "Hitam"} untuk bergerak.`));
+                const nextTurn = gameSession.currentTurn === "w" ? "Putih" : "Hitam";
+                await sendBoard(m, ctx, game, quote(`Giliran ${nextTurn} untuk bergerak.`));
                 startTurnTimer(m, ctx, gameSession, 60000); // 60 detik.
             }
         };
