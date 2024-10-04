@@ -2,12 +2,11 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "lyrics",
-    aliases: ["lirik", "lyric"],
-    category: "web_tools",
+    name: "mangainfo",
+    aliases: ["manga"],
+    category: "tools",
     code: async (ctx) => {
         const {
             status,
@@ -23,21 +22,28 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss")
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "neon genesis evangelion"))
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("nyxs", "/tools/lirik", {
-                title: input
+            const apiUrl = await global.tools.api.createUrl("https://api.jikan.moe", "/v4/manga", {
+                q: input
             });
             const {
                 data
             } = await axios.get(apiUrl);
+            const info = data.data[0];
 
-            return ctx.reply(
-                `${quote(`Judul: ${global.tools.general.ucword(input)}`)}\n` +
-                `${quote("─────")}\n`
-                `${data.result}\n` +
+            return await ctx.reply(
+                `${quote(`Judul: ${info.title}`)}\n` +
+                `${quote(`Judul (Inggris): ${info.title_english}`)}\n` +
+                `${quote(`Judul (Jepang): ${info.title_japanese}`)}\n` +
+                `${quote(`Tipe: ${info.type}`)}\n` +
+                `${quote(`Bab: ${info.chapters}`)}\n` +
+                `${quote(`Volume: ${info.volumes}`)}\n` +
+                `${quote(`URL: ${info.url}`)}\n` +
+                `${quote("─────")}\n` +
+                `${await global.tools.general.translate(info.synopsis, "id", ).translation}\n` +
                 "\n" +
                 global.config.msg.footer
             );

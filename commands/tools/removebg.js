@@ -8,8 +8,9 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "facebeauty",
-    category: "web_tools",
+    name: "removebg",
+    aliases: ["rbg"],
+    category: "tools",
     code: async (ctx) => {
         const {
             status,
@@ -32,20 +33,17 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await global.tools.general.upload(buffer);
-            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/facebeauty", {
-                faceUrl: uploadUrl
+            const apiUrl = global.tools.api.createUrl("nyxs", "/tools/removebg", {
+                url: uploadUrl
             });
             const {
                 data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                },
-                responseType: "arraybuffer"
-            });
+            } = await axios.get(apiUrl);
 
             return await ctx.reply({
-                image: data,
+                image: {
+                    url: data.result
+                },
                 mimetype: mime.contentType("png")
             });
         } catch (error) {

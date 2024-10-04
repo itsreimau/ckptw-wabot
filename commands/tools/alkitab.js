@@ -7,7 +7,7 @@ const axios = require("axios");
 module.exports = {
     name: "alkitab",
     aliases: ["injil"],
-    category: "web_tools",
+    category: "tools",
     code: async (ctx) => {
         const {
             status,

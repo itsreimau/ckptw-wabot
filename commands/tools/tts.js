@@ -5,9 +5,9 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "ttsg",
-    aliases: ["texttospeechgoogle", "tts", "ttsgoogle"],
-    category: "web_tools",
+    name: "tts",
+    aliases: ["texttospeechgoogle", "ttsgoogle"],
+    category: "tools",
     code: async (ctx) => {
         const {
             status,
@@ -26,11 +26,16 @@ module.exports = {
             const quotedMessage = ctx.quoted;
             textToSpeech = Object.values(quotedMessage).find(msg => msg.caption || msg.text)?.caption || textToSpeech || null;
 
-            if (ctx.args[0] && ctx.args[0].length === 2) langCode = ctx.args[0];
+            if (ctx.args[0] && ctx.args[0].length === 2) {
+                langCode = ctx.args[0];
+                textToSpeech = ctx.args.slice(1).join(" ") || textToSpeech;
+            }
         } else {
             if (ctx.args[0] && ctx.args[0].length === 2) {
                 langCode = ctx.args[0];
-                textToSpeech = textToSpeech ? textToSpeech : ctx.args.slice(1).join(" ");
+                textToSpeech = ctx.args.slice(1).join(" ");
+            } else {
+                textToSpeech = ctx.args.join(" ");
             }
         }
 
@@ -40,21 +45,18 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/tts/google", {
+            const apiUrl = global.tools.api.createUrl("nyxs", "tools/tts", {
                 text: textToSpeech,
-                speaker: langCode
+                to: langCode
             });
             const {
                 data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                },
-                responseType: "arraybuffer"
-            });
+            } = await axios.get(apiUrl);
 
             return await ctx.reply({
-                audio: data,
+                audio: {
+                    url: data.result
+                },
                 mimetype: mime.contentType("mp3"),
                 ptt: true
             });

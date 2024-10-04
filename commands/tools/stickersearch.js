@@ -10,7 +10,7 @@ const {
 module.exports = {
     name: "stickersearch",
     aliases: ["ssearch"],
-    category: "web_tools",
+    category: "tools",
     code: async (ctx) => {
         const {
             status,

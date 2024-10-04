@@ -8,7 +8,7 @@ const {
 module.exports = {
     name: "menfess",
     aliases: ["conf", "confes", "confess", "menf", "menfes"],
-    category: "web_tools",
+    category: "tools",
     code: async (ctx) => {
         const {
             status,

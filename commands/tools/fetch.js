@@ -10,7 +10,7 @@ const {
 module.exports = {
     name: "fetch",
     aliases: ["get"],
-    category: "web_tools",
+    category: "tools",
     code: async (ctx) => {
         const {
             status,

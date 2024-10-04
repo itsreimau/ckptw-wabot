@@ -7,7 +7,7 @@ const mime = require("mime-types");
 module.exports = {
     name: "ppcouple",
     aliases: ["ppcp"],
-    category: "web_tools",
+    category: "tools",
     code: async (ctx) => {
         const {
             status,

@@ -10,7 +10,7 @@ const mime = require("mime-types");
 module.exports = {
     name: "pinterest",
     aliases: ["pin", "pint"],
-    category: "web_tools",
+    category: "tools",
     code: async (ctx) => {
         const {
             status,

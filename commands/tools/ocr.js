@@ -9,7 +9,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "ocr",
-    category: "web_tools",
+    category: "tools",
     code: async (ctx) => {
         const {
             status,

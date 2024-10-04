@@ -1,12 +1,12 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "qr",
-    category: "web_tools",
+    name: "generateqr",
+    aliases: ["gqr"],
+    category: "tools",
     code: async (ctx) => {
         const {
             status,
@@ -18,33 +18,24 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const url = ctx.args[0] || null;
+        const input = ctx.args.join(" ") || null;
 
-        if (!url) return ctx.reply(
+        if (!input) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "halo dunia!"))
         );
 
-        const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!urlRegex.test(url)) return ctx.reply(global.config.msg.urlInvalid);
-
         try {
-            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/qr", {
-                url
-            });
-            const {
-                data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                },
-                responseType: "arraybuffer"
+            const apiUrl = global.tools.api.createUrl("https://api.qrserver.com", "/v1/create-qr-code/", {
+                data: input
             });
 
             return await ctx.reply({
-                image: data,
+                image: {
+                    url: apiUrl
+                },
                 mimetype: mime.contentType("png"),
-                caption: `${quote(`URL: ${url}`)}\n` +
+                caption: `${quote(`Input: ${url}`)}\n` +
                     "\n" +
                     global.config.msg.footer
             });

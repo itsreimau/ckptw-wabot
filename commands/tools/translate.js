@@ -6,7 +6,7 @@ const axios = require("axios");
 module.exports = {
     name: "translate",
     aliases: ["tr"],
-    category: "web_tools",
+    category: "tools",
     code: async (ctx) => {
         const {
             status,
@@ -25,11 +25,16 @@ module.exports = {
             const quotedMessage = ctx.quoted;
             textToTranslate = Object.values(quotedMessage).find(msg => msg.caption || msg.text)?.caption || textToTranslate || null;
 
-            if (ctx.args[0] && ctx.args[0].length === 2) langCode = ctx.args[0];
+            if (ctx.args[0] && ctx.args[0].length === 2) {
+                langCode = ctx.args[0];
+                textToTranslate = ctx.args.slice(1).join(" ") || textToTranslate;
+            }
         } else {
             if (ctx.args[0] && ctx.args[0].length === 2) {
                 langCode = ctx.args[0];
-                textToTranslate = textToTranslate ? textToTranslate : ctx.args.slice(1).join(" ");
+                textToTranslate = ctx.args.slice(1).join(" ");
+            } else {
+                textToTranslate = ctx.args.join(" ");
             }
         }
 

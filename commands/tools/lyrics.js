@@ -5,9 +5,9 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "ttst",
-    aliases: ["texttospeechtiktok", "ttstiktok"],
-    category: "web_tools",
+    name: "lyrics",
+    aliases: ["lirik", "lyric"],
+    category: "tools",
     code: async (ctx) => {
         const {
             status,
@@ -23,28 +23,24 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss"))
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("fasturl", "/tool/tts/tiktok", {
-                text: input,
-                speaker: "id_001"
+            const apiUrl = await global.tools.api.createUrl("nyxs", "/tools/lirik", {
+                title: input
             });
             const {
                 data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "x-api-key": global.tools.listAPIUrl().fasturl.APIKey
-                },
-                responseType: "arraybuffer"
-            });
+            } = await axios.get(apiUrl);
 
-            return await ctx.reply({
-                audio: data,
-                mimetype: mime.contentType("mp3"),
-                ptt: true
-            });
+            return ctx.reply(
+                `${quote(`Judul: ${global.tools.general.ucword(input)}`)}\n` +
+                `${quote("─────")}\n` +
+                `${data.result}\n` +
+                "\n" +
+                global.config.msg.footer
+            );
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return ctx.reply(global.config.msg.notFound);

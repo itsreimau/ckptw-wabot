@@ -6,7 +6,7 @@ const axios = require("axios");
 module.exports = {
     name: "animeinfo",
     aliases: ["anime"],
-    category: "web_tools",
+    category: "tools",
     code: async (ctx) => {
         const {
             status,

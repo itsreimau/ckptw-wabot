@@ -30,15 +30,17 @@ module.exports = {
         const timePassed = currentTime - lastClaimTime;
         const remainingTime = claimRewards[input].cooldown - timePassed;
 
-        if (remainingTime > 0) return ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input} Anda. Harap tunggu ${general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
+        if (remainingTime > 0) return ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input} Anda. Harap tunggu ${global.tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
 
         try {
             const userKey = `user.${senderJid}.coin`;
             const currentCoins = global.db.get(userKey) || 0;
             const newBalance = currentCoins + claimRewards[input].reward;
 
-            global.db.set(userKey, newBalance);
-            global.db.set(`user.${senderJid}.lastClaim.${input}`, currentTime);
+            await Promise.all([
+                global.db.set(userKey, newBalance),
+                global.db.set(`user.${senderJid}.lastClaim.${input}`, currentTime)
+            ]);
 
             return ctx.reply(quote(`✅ Anda telah berhasil mengklaim hadiah ${input} sebesar ${claimRewards[input].reward} koin! Saldo baru Anda adalah ${newBalance} koin.`));
         } catch (error) {

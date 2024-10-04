@@ -4,12 +4,13 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const Jimp = require("jimp");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "blur",
-    category: "web_tools",
+    name: "readqr",
+    aliases: ["rqr"],
+    category: "tools",
     code: async (ctx) => {
         const {
             status,
@@ -27,23 +28,22 @@ module.exports = {
             global.tools.general.checkQuotedMedia(ctx.quoted, "image")
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], "image")));;
+        if (!checkMedia && !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], "image")));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            let level = ctx.args[0] || "5";
-            let img = await Jimp.read(buffer);
-            img.blur(isNaN(level) ? 5 : parseInt(level));
-            img.getBuffer(Jimp.MIME_JPEG, async (err, buffer) => {
-                if (error) return ctx.reply(quote(`❎ Tidak dapat mengaburkan gambar!`));
-
-                return await ctx.reply({
-                    image: buffer,
-                    mimetype: mime.contentType("jpeg")
-                });
+            const uploadUrl = await global.tools.general.upload(buffer);
+            const apiUrl = global.tools.api.createUrl("https://api.qrserver.com", "/v1/read-qr-code/", {
+                fileurl: uploadUrl
             });
+            const {
+                data
+            } = await axios.get(apiUrl);
+
+            return await ctx.reply(data.symbol[0].data);
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
+            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
             return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

@@ -1,13 +1,11 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "ttsearch",
-    aliases: ["tiktoksearch", "vtsearch"],
-    category: "web_tools",
+    name: "ssweb",
+    category: "tools",
     code: async (ctx) => {
         const {
             status,
@@ -19,27 +17,29 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const input = ctx.args.join(" ") || null;
+        const url = ctx.args[0] || null;
 
-        if (!input) return ctx.reply(
+        if (!url) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "evangelion"))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
+        const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
+        if (!urlRegex.test(url)) return ctx.reply(global.config.msg.urlInvalid);
+
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/tiktoksearch", {
-                message: input
+            const apiUrl = global.tools.api.createUrl("chiwa", "/api/ssweb", {
+                url
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply({
-                video: {
-                    url: data.no_watermark
+                image: {
+                    url: apiUrl
                 },
-                mimetype: mime.contentType("mp4"),
-                gifPlayback: false
+                mimetype: mime.contentType("png"),
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    global.config.msg.footer
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);

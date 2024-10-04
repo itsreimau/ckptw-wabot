@@ -10,7 +10,7 @@ const mime = require("mime-types");
 module.exports = {
     name: "googleimage",
     aliases: ["gimage"],
-    category: "web_tools",
+    category: "tools",
     code: async (ctx) => {
         const {
             status,

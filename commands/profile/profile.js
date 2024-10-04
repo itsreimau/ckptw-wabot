@@ -55,7 +55,8 @@ module.exports = {
                     `${quote(`XP: ${userXp}`)}\n` +
                     `${quote(`Level: ${userLevel}`)}\n` +
                     `${quote(`Premium: ${isPremium ? "Ya" : "Tidak"}`)}\n` +
-                    `${quote(`Owner: ${isOwner ? "Ya" : "Tidak"}`)}\n\n` +
+                    `${quote(`Owner: ${isOwner ? "Ya" : "Tidak"}`)}\n` +
+                    "\n" +
                     global.config.msg.footer,
             });
         } catch (error) {

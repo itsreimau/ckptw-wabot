@@ -8,7 +8,7 @@ const {
 module.exports = {
     name: "js",
     aliases: ["javascript"],
-    category: "web_tools",
+    category: "tools",
     code: async (ctx) => {
         const {
             status,
@@ -24,7 +24,7 @@ module.exports = {
 
         if (!script) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `console.log("Hello, World!");`))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `console.log("halo dunia!");`))
         );
 
         try {

@@ -1,14 +1,12 @@
 const {
-    bold,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "ytsearch",
-    aliases: ["yts"],
-    category: "web_tools",
+    name: "googlesearch",
+    aliases: ["google", "gsearch"],
+    category: "tools",
     code: async (ctx) => {
         const {
             status,
@@ -24,30 +22,22 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "neon genesis evangelion"))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu whatsapp"))
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/ytsearch", {
+            const apiUrl = await global.tools.api.createUrl("agatz", "/api/google", {
                 message: input
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            const resultText = data.map((d) => {
-                switch (d.type) {
-                    case "video":
-                        return `${bold(`${d.title} (${d.url})`)}\n` +
-                            `${quote(`Durasi: ${d.timestamp}`)}\n` +
-                            `${quote(`Diunggah: ${d.ago}`)}\n` +
-                            `${quote(`Dilihat: ${d.views}`)}`;
-                    case "channel":
-                        return `${bold(`${d.name} (${d.url})`)}\n` +
-                            `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
-                            `${quote(`Jumlah video: ${d.videoCount}`)}`;
-                }
-            }).filter((d) => d).join(
+            const resultText = data.map((d) =>
+                `${quote(`Judul: ${d.title}`)}\n` +
+                `${quote(`Deskripsi: ${d.snippet}`)}\n` +
+                `${quote(`URL: ${d.link}`)}`
+            ).join(
                 "\n" +
                 `${quote("─────")}\n`
             );
