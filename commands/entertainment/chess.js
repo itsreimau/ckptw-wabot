@@ -77,11 +77,16 @@ module.exports = {
 
                     ctx.MessageCollector({
                         time: 30000
-                    }).on("collect", async (moveMessage) => {
+                    }).on("collect", async (m: moveMessage) => {
                         const moveSenderJid = moveMessage.key.participant;
                         const move = moveMessage.content.trim().toLowerCase();
 
-                        if ((gameSession.currentTurn === "w" && moveSenderJid !== senderJid) || (gameSession.currentTurn === "b" && moveSenderJid !== opponentJid)) return;
+                        if (![senderJid, opponentJid].includes(participantJid)) return;
+
+                        if ((gameSession.currentTurn === "w" && moveSenderJid !== senderJid) ||
+                            (gameSession.currentTurn === "b" && moveSenderJid !== opponentJid)) {
+                            return;
+                        }
 
                         clearTimeout(gameSession.turnTimeout);
                         const result = game.move(move);
@@ -96,7 +101,7 @@ module.exports = {
                                 await ctx.sendMessage(ctx.id, {
                                     text: quote("🏆 Skakmat! Anda menang!")
                                 }, {
-                                    quoted: m
+                                    quoted: moveMessage
                                 });
 
                                 await global.db.add(`user.${moveSenderJid}.coin`, 50);
@@ -107,7 +112,7 @@ module.exports = {
                                 await ctx.sendMessage(ctx.id, {
                                     text: quote("Permainan berakhir dengan remis!")
                                 }, {
-                                    quoted: m
+                                    quoted: moveMessage
                                 });
                                 session.delete(ctx.id);
                             } else {
@@ -122,7 +127,7 @@ module.exports = {
                                     },
                                     caption: quote(`Giliran ${nextTurn} untuk bergerak.`)
                                 }, {
-                                    quoted: m
+                                    quoted: moveMessage
                                 });
 
                                 gameSession.turnTimeout = setTimeout(async () => {
@@ -130,17 +135,15 @@ module.exports = {
                                     await ctx.sendMessage(ctx.id, {
                                         text: quote("⏳ Waktu habis! Permainan berakhir.")
                                     }, {
-                                        quoted: m
+                                        quoted: moveMessage
                                     });
-                                }, 60000); // 60 detik.
+                                }, 60000);
                             }
                         }
                     });
                 } else if (response === "N") {
                     await ctx.reply(quote("❌ Permainan dibatalkan."));
                     collector.stop();
-                } else {
-                    await ctx.reply(quote("❌ Mohon ketik Y untuk setuju atau N untuk menolak."));
                 }
             }
         });
