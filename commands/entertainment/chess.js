@@ -42,9 +42,9 @@ module.exports = {
             time: 30000
         });
 
-        collector.on("collect", async (m) => {
-            const response = m.content.trim().toUpperCase();
-            const participantJid = m.key.participant;
+        collector.on("collect", async (moveMessage) => {
+            const response = moveMessage.content.trim().toUpperCase();
+            const participantJid = moveMessage.key.participant;
 
             if (![senderJid, opponentJid].includes(participantJid)) return;
 
@@ -72,7 +72,7 @@ module.exports = {
                         },
                         caption: quote("Giliran Putih untuk bergerak.")
                     }, {
-                        quoted: m
+                        quoted: moveMessage
                     });
 
                     ctx.MessageCollector({
@@ -97,16 +97,29 @@ module.exports = {
                             gameSession.currentTurn = gameSession.currentTurn === "w" ? "b" : "w";
                             session.set(ctx.id, gameSession);
 
+                            const nextTurn = gameSession.currentTurn === "w" ? "Putih" : "Hitam";
+                            const fenUrl = global.tools.api.createUrl("https://fen2png.com", "/api/", {
+                                fen: game.fen(),
+                                raw: true
+                            });
+
+                            await ctx.sendMessage(ctx.id, {
+                                image: {
+                                    url: fenUrl
+                                },
+                                caption: quote(`Giliran ${nextTurn} untuk bergerak.`)
+                            }, {
+                                quoted: moveMessage
+                            });
+
                             if (game.isCheckmate()) {
                                 await ctx.sendMessage(ctx.id, {
                                     text: quote("🏆 Skakmat! Anda menang!")
                                 }, {
                                     quoted: moveMessage
                                 });
-
                                 await global.db.add(`user.${moveSenderJid}.coin`, 50);
                                 await global.db.add(`user.${moveSenderJid}.winGame`, 1);
-
                                 session.delete(ctx.id);
                             } else if (game.isDraw()) {
                                 await ctx.sendMessage(ctx.id, {
@@ -116,20 +129,6 @@ module.exports = {
                                 });
                                 session.delete(ctx.id);
                             } else {
-                                const nextTurn = gameSession.currentTurn === "w" ? "Putih" : "Hitam";
-                                const fenUrl = global.tools.api.createUrl("https://fen2png.com", "/api/", {
-                                    fen: game.fen(),
-                                    raw: true
-                                });
-                                await ctx.sendMessage(ctx.id, {
-                                    image: {
-                                        url: fenUrl
-                                    },
-                                    caption: quote(`Giliran ${nextTurn} untuk bergerak.`)
-                                }, {
-                                    quoted: moveMessage
-                                });
-
                                 gameSession.turnTimeout = setTimeout(async () => {
                                     session.delete(ctx.id);
                                     await ctx.sendMessage(ctx.id, {
