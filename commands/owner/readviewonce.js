@@ -16,12 +16,10 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const quotedMessage = ctx.quoted;
-
         if (!(await global.tools.general.checkQuotedMedia(ctx.quoted, ["viewOnce"]))) return ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["viewOnce"])));
 
         try {
-            const quoted = quotedMessage?.viewOnceMessageV2?.message;
+            const quoted = ctx.quoted?.viewOnceMessageV2?.message;
             const messageType = Object.keys(quoted)[0];
             const media = await ctx.downloadContentFromMessage(quoted[messageType], messageType.slice(0, -7));
 

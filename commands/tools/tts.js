@@ -22,7 +22,7 @@ module.exports = {
         let textToSpeech = ctx.args.join(" ") || null;
         let langCode = "id";
 
-        if (ctx.quoted.caption || ctx.quoted.text) {
+        if (global.tools.general.checkQuotedMedia(ctx.quoted, "text")) {
             const quotedMessage = ctx.quoted;
             textToSpeech = Object.values(quotedMessage).find(msg => msg.caption || msg.text)?.caption || textToSpeech || null;
 

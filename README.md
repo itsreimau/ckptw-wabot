@@ -62,7 +62,7 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
 1. Buat file JavaScript baru di folder `commands` dengan fungsionalitas yang diinginkan, misalnya `test-helloworld.js`:
 
    ```javascript
-   // commands/test-helloworld.js
+   // commands/test/helloworld.js
 
    module.exports = {
        name: "helloworld", // Nama perintah.
@@ -76,13 +76,12 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
                admin: Boolean, // Opsi admin (true atau false)
                botAdmin: Boolean, // Opsi bot admin (true atau false).
                banned: Boolean, // Opsi banned (true atau false).
-               coin: String || Number, // Opsi koin (String atau Number).
+               coin: Array || Number, // Opsi koin (Array atau Number).
                cooldown: Number, // Opsi cooldown (Number).
                group: Boolean, // Opsi grup (true atau false).
                owner: Boolean, // Opsi owner (true atau false).
                premium: Boolean, // Opsi premium (true atau false).
                private: Boolean // Opsi private (true atau false).
-
            });
            if (status) return ctx.reply(message); // Jika status true, maka kirim pesan.
 

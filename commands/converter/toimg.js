@@ -22,12 +22,10 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        const quotedMessage = ctx.quoted;
-
-        if (!(await quotedMessage.media.toBuffer())) return ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["sticker"])));
+        if (!(global.tools.general.checkQuotedMedia(ctx.quoted, "sticker"))) return ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["sticker"])));
 
         try {
-            const buffer = await quotedMessage.media.toBuffer()
+            const buffer = await ctx.quoted.media.toBuffer()
             const imgUrl = buffer ? await webp2png(buffer) : null;
 
             if (!imgUrl) return ctx.reply(global.config.msg.notFound);

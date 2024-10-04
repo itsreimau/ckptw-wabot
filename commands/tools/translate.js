@@ -21,7 +21,7 @@ module.exports = {
         let textToTranslate = ctx.args.join(" ") || null;
         let langCode = "id";
 
-        if (ctx.quoted.caption || ctx.quoted.text) {
+        if (global.tools.general.checkQuotedMedia(ctx.quoted, "text")) {
             const quotedMessage = ctx.quoted;
             textToTranslate = Object.values(quotedMessage).find(msg => msg.caption || msg.text)?.caption || textToTranslate || null;
 

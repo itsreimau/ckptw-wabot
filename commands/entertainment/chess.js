@@ -43,7 +43,7 @@ module.exports = {
         });
 
         collector.on("collect", async (m) => {
-            const response = m.body.trim().toUpperCase();
+            const response = m.content.trim().toUpperCase();
             const participantJid = m.key.participant;
 
             if (participantJid !== senderJid && participantJid !== opponentJid) return;
@@ -84,7 +84,7 @@ module.exports = {
                     playerTurn();
 
                     collector.on("collect", async (m) => {
-                        const move = m.body.trim().toLowerCase();
+                        const move = m.content.trim().toLowerCase();
                         const moveSenderJid = m.key.participant;
 
                         if (moveSenderJid !== senderJid && moveSenderJid !== opponentJid) return;
