@@ -18,24 +18,24 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
-        if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan Family 100 sedang berjalan!`));
+        if (session.has(ctx.id)) return ctx.reply(quote(`🎮 Sesi permainan Family 100 sedang berjalan!`));
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/games/family100.json", {});
             const response = await axios.get(apiUrl);
             const data = response.data[Math.floor(Math.random() * response.data.length)];
+
             const timeout = 60000;
             const remainingAnswers = new Set(data.jawaban.map(j => j.toLowerCase()));
             const participants = new Set();
             const senderNumber = ctx.sender.jid.replace(/@.*|:.*/g, "");
 
-            await session.set(ctx.id, true);
+            session.set(ctx.id, true);
 
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
-                `${quote(`Jawablah sebanyak-banyaknya hingga semuanya terjawab hingga waktu habis!`)}\n` +
-                `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
-                "\n" +
+                `${quote(`Jawablah sebanyak-banyaknya hingga semuanya terjawab atau waktu habis!`)}\n` +
+                `${quote(`Batas waktu: ${(timeout / 1000).toFixed(2)} detik.`)}\n\n` +
                 global.config.msg.footer
             );
 
@@ -59,7 +59,7 @@ module.exports = {
                     });
 
                     if (remainingAnswers.size === 0) {
-                        await session.delete(ctx.id);
+                        session.delete(ctx.id);
                         for (const participant of participants) {
                             await global.db.add(`user.${participant}.coin`, 10);
                             await global.db.add(`user.${participant}.winGame`, 1);
@@ -71,13 +71,13 @@ module.exports = {
             });
 
             collector.on("end", async () => {
-                const remaining = remainingAnswers.map(global.tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ' dan $1');
+                const remaining = [...remainingAnswers].map(global.tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ' dan $1');
 
-                if (await session.has(ctx.id)) {
-                    await session.delete(ctx.id);
-                    return ctx.reply(
+                if (session.has(ctx.id)) {
+                    session.delete(ctx.id);
+                    await ctx.reply(
                         `${quote("⌛ Waktu habis!")}\n` +
-                        quote(`Jawaban yang belum terjawab adalah ${remaining}`)
+                        quote(`Jawaban yang belum terjawab adalah: ${remaining}`)
                     );
                 }
             });

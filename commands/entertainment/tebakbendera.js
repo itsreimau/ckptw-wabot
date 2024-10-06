@@ -29,7 +29,7 @@ module.exports = {
             const timeout = 60000;
             const senderNumber = ctx.sender.jid.replace(/@.*|:.*/g, "");
 
-            await session.set(ctx.id, true);
+            session.set(ctx.id, true);
 
             await ctx.reply({
                 image: {
@@ -52,7 +52,7 @@ module.exports = {
                 const answer = data.name.toLowerCase();
 
                 if (userAnswer === answer) {
-                    await session.delete(ctx.id);
+                    session.delete(ctx.id);
                     await Promise.all([
                         await global.db.add(`user.${senderNumber}.coin`, coin),
                         await global.db.add(`user.${senderNumber}.winGame`, 1)
@@ -79,8 +79,8 @@ module.exports = {
             collector.on("end", async (collector, reason) => {
                 const answer = data.name;
 
-                if (await session.has(ctx.id)) {
-                    await session.delete(ctx.id);
+                if (session.has(ctx.id)) {
+                    session.delete(ctx.id);
 
                     return ctx.reply(
                         `${quote("⌛ Waktu habis!")}\n` +

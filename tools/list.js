@@ -85,7 +85,7 @@ async function get(type, ctx) {
                 const data = (await axios.get(api.createUrl("nyxs", "/tools/translate", {})).catch(err => err.response?.data?.available_languange)) || [];
                 text = data.map(l =>
                         `${quote(`Kode: ${l.code}`)}\n` +
-                        `${quote(`Bahasa: ${l["bahasa negara"]}`)}\n`
+                        `${quote(`Bahasa: ${l.bahasa}`)}\n`
                     ).join("─────\n") +
                     "\n" +
                     global.config.msg.footer;
