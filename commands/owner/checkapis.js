@@ -19,7 +19,7 @@ module.exports = {
         try {
             await ctx.reply(global.config.msg.wait);
 
-            const APIs = global.tools.listAPIUrl();
+            const APIs = global.tools.api.listUrl();
             let result = "";
 
             for (const [name, api] of Object.entries(APIs)) {
