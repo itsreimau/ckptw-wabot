@@ -38,13 +38,13 @@ module.exports = {
         });
 
         let starting = false;
-        const collector = ctx.MessageCollector({
+        const initialCollector = ctx.MessageCollector({
             time: 30000
         });
 
-        collector.on("collect", async (moveMessage) => {
-            const response = moveMessage.content.trim().toUpperCase();
-            const participantJid = moveMessage.key.participant;
+        initialCollector.on("collect", async (m = initialMessage) => {
+            const response = initialMessage.content.trim().toUpperCase();
+            const participantJid = initialMessage.key.participant;
 
             if (![senderJid, opponentJid].includes(participantJid)) return;
 
@@ -54,12 +54,11 @@ module.exports = {
                     await ctx.reply(quote("🎉 Permainan dimulai!"));
 
                     const game = new Chess();
-                    const gameSession = {
+                    session.set(ctx.id, {
                         chess: game,
                         currentTurn: "w",
                         turnTimeout: null
-                    };
-                    session.set(ctx.id, gameSession);
+                    });
 
                     const fenUrl = global.tools.api.createUrl("https://fen2png.com", "/api/", {
                         fen: game.fen(),
@@ -72,21 +71,21 @@ module.exports = {
                         },
                         caption: quote("Giliran Putih untuk bergerak.")
                     }, {
-                        quoted: moveMessage
+                        quoted: initialMessage
                     });
 
-                    ctx.MessageCollector({
+                    const gameCollector = ctx.MessageCollector({
                         time: 30000
-                    }).on("collect", async (moveMessage) => {
-                        const moveSenderJid = moveMessage.key.participant;
-                        const move = moveMessage.content.trim().toLowerCase();
+                    });
+
+                    gameCollector.on("collect", async (m = gameMessage) => {
+                        const moveSenderJid = gameMessage.key.participant;
+                        const move = gameMessage.content.trim().toLowerCase();
+                        const gameSession = session.get(ctx.id);
 
                         if (![senderJid, opponentJid].includes(moveSenderJid)) return;
 
-                        if ((gameSession.currentTurn === "w" && moveSenderJid !== senderJid) ||
-                            (gameSession.currentTurn === "b" && moveSenderJid !== opponentJid)) {
-                            return;
-                        }
+                        if ((gameSession.currentTurn === "w" && moveSenderJid !== senderJid) || (gameSession.currentTurn === "b" && moveSenderJid !== opponentJid)) return;
 
                         clearTimeout(gameSession.turnTimeout);
                         const result = game.move(move);
@@ -109,45 +108,50 @@ module.exports = {
                                 },
                                 caption: quote(`Giliran ${nextTurn} untuk bergerak.`)
                             }, {
-                                quoted: moveMessage
+                                quoted: gameMessage
                             });
 
                             if (game.isCheckmate()) {
                                 await ctx.sendMessage(ctx.id, {
                                     text: quote("🏆 Skakmat! Anda menang!")
                                 }, {
-                                    quoted: moveMessage
+                                    quoted: gameMessage
                                 });
-                                await global.db.add(`user.${moveSenderJid}.coin`, 50);
-                                await global.db.add(`user.${moveSenderJid}.winGame`, 1);
                                 session.delete(ctx.id);
+                                await Promise.all([
+                                    await global.db.add(`user.${moveSenderJid}.coin`, 50),
+                                    await global.db.add(`user.${moveSenderJid}.winGame`, 1)
+                                ]);
+                                return gameCollector.stop();
                             } else if (game.isDraw()) {
                                 await ctx.sendMessage(ctx.id, {
                                     text: quote("Permainan berakhir dengan remis!")
                                 }, {
-                                    quoted: moveMessage
+                                    quoted: gameMessage
                                 });
                                 session.delete(ctx.id);
+                                return gameCollector.stop();
                             } else {
                                 gameSession.turnTimeout = setTimeout(async () => {
-                                    session.delete(ctx.id);
                                     await ctx.sendMessage(ctx.id, {
                                         text: quote("⏳ Waktu habis! Permainan berakhir.")
                                     }, {
-                                        quoted: moveMessage
+                                        quoted: gameMessage
                                     });
+                                    session.delete(ctx.id);
+                                    return gameCollector.stop();
                                 }, 60000);
                             }
                         }
                     });
                 } else if (response === "N") {
                     await ctx.reply(quote("❌ Permainan dibatalkan."));
-                    collector.stop();
+                    initialCollector.stop();
                 }
             }
         });
 
-        collector.on("end", () => {
+        initialCollector.on("end", () => {
             if (!starting) return ctx.reply(quote("⏳ Waktu menunggu habis! Permainan dibatalkan."));
         });
     }

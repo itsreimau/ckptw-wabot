@@ -45,7 +45,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toLowerCase();
-                const answer = data.answer.toLowerCase();
+                const answer = data.jawaban.toLowerCase();
 
                 if (userAnswer === answer) {
                     await session.delete(ctx.id);

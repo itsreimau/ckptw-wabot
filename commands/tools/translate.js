@@ -39,9 +39,14 @@ module.exports = {
         }
 
         if (!textToTranslate) return ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))
         );
+
+        if (ctx.args[0] === "list") {
+            const listText = await global.tools.list.get("translate");
+            return ctx.reply(listText);
+        }
 
         try {
             const translation = await global.tools.general.translate(textToTranslate, langCode);
