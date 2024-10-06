@@ -34,7 +34,7 @@ module.exports = {
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`Jawablah sebanyak-banyaknya hingga semuanya terjawab hingga waktu habis!`)}\n` +
-                `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}` +
+                `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
                 "\n" +
                 global.config.msg.footer
             );
@@ -45,15 +45,16 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toLowerCase();
-                const participantJid = m.key.participant;
+                const participantJid = m.jid;
+                const participantNumber = participantJid.replace(/@.*|:.*/g, "");
 
                 if (remainingAnswers.has(userAnswer)) {
                     remainingAnswers.delete(userAnswer);
-                    participants.add(participantJid);
+                    participants.add(participantNumber);
 
-                    await global.db.add(`user.${participantJid}.coin`, 1);
+                    await global.db.add(`user.${participantNumber}.coin`, 1);
                     await ctx.sendMessage(ctx.id, {
-                        text: quote(`✅ ${userAnswer.toUpperCase()} benar! Jawaban tersisa: ${remainingAnswers.size}`),
+                        text: quote(`✅ ${global.tools.general.ucword(userAnswer)} benar! Jawaban tersisa: ${remainingAnswers.size}`),
                         quoted: m
                     });
 
@@ -70,18 +71,16 @@ module.exports = {
             });
 
             collector.on("end", async () => {
-                const remaining = [...remainingAnswers].join(", ");
+                const remaining = remainingAnswers.map(global.tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ' dan $1');
 
                 if (await session.has(ctx.id)) {
                     await session.delete(ctx.id);
-
                     return ctx.reply(
                         `${quote("⌛ Waktu habis!")}\n` +
-                        quote(`Jawaban yang belum terjawab adalah: ${remaining}`)
+                        quote(`Jawaban yang belum terjawab adalah ${remaining}`)
                     );
                 }
             });
-
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));

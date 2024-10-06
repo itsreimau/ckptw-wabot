@@ -42,9 +42,9 @@ module.exports = {
             time: 30000
         });
 
-        initialCollector.on("collect", async (m = initialMessage) => {
+        initialCollector.on("collect", async (initialMessage) => {
             const response = initialMessage.content.trim().toUpperCase();
-            const participantJid = initialMessage.key.participant;
+            const participantJid = initialMessage.jid;
 
             if (![senderJid, opponentJid].includes(participantJid)) return;
 
@@ -78,7 +78,7 @@ module.exports = {
                         time: 30000
                     });
 
-                    gameCollector.on("collect", async (m = gameMessage) => {
+                    gameCollector.on("collect", async (gameMessage) => {
                         const moveSenderJid = gameMessage.key.participant;
                         const move = gameMessage.content.trim().toLowerCase();
                         const gameSession = session.get(ctx.id);

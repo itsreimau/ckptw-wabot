@@ -67,33 +67,37 @@ async function get(type, ctx) {
             case "alquran": {
                 const data = (await axios.get(api.createUrl("https://equran.id", "/api/v2/surat", {}))).data.data;
                 text = data.map(s =>
-                        `Surah: ${s.namaLatin} (${s.nomor})\n` +
-                        `Jumlah Ayat: ${s.jumlahAyat}\n`
+                        `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
+                        `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n`
                     ).join("─────\n") +
+                    "\n" +
                     global.config.msg.footer;
                 break;
             }
             case "disable_enable": {
                 const data = ["antilink", "welcome"];
                 text = quote(data).join("\n") +
+                    "\n" +
                     global.config.msg.footer;
                 break;
             }
             case "translate": {
-                const data = (await axios.get(api.createUrl("nyxs", "/tools/translate", {}))).data.available_languange;
+                const data = (await axios.get(api.createUrl("nyxs", "/tools/translate", {})).catch(err => err.response?.data?.available_languange)) || [];
                 text = data.map(l =>
-                        `Kode: ${l.code}\n` +
-                        `Bahasa: ${l["bahasa negara"]}\n`
+                        `${quote(`Kode: ${l.code}`)}\n` +
+                        `${quote(`Bahasa: ${l["bahasa negara"]}`)}\n`
                     ).join("─────\n") +
+                    "\n" +
                     global.config.msg.footer;
                 break;
             }
             case "tts": {
                 const data = (await axios.get(api.createUrl("nyxs", "/tools/tts", {}))).data.available_languange;
                 text = data.map(l =>
-                        `Kode: ${l.code}\n` +
-                        `Bahasa: ${l["bahasa negara"]}\n`
+                        `${quote(`Kode: ${l.code}`)}\n` +
+                        `${quote(`Bahasa: ${l["bahasa negara"]}`)}\n`
                     ).join("─────\n") +
+                    "\n" +
                     global.config.msg.footer;
                 break;
             }
@@ -108,7 +112,6 @@ async function get(type, ctx) {
                     downloader: "Downloader",
                     entertainment: "Entertainment",
                     group: "Group",
-                    islamic: "Islamic",
                     maker: "Maker",
                     tools: "Tools",
                     owner: "Owner",
