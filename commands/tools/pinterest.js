@@ -31,16 +31,15 @@ module.exports = {
 
         try {
             const apiUrl = global.tools.api.createUrl("agatz", "/api/pinsearch", {
-                message: input
+                message: input.includes("-s") && global.config.system.useInteractiveMessage ? input.replace("-s", "").replace(/\s+/g, " ").trim() : input
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
 
             if (input.includes("-s") && global.config.system.useInteractiveMessage) {
-                const randomResults = Array.from({
-                    length: 5
-                }, () => global.tools.general.getRandomElement(data));
+                const randomResults = data.sort(() => 0.5 - Math.random()).slice(0, 5);
+
                 const cards = new CarouselBuilder();
 
                 for (let i = 0; i < randomResults.length; i++) {
@@ -50,8 +49,7 @@ module.exports = {
                         .setDisplayText("Image URL 🌐")
                         .setType("cta_url")
                         .setURL(randomResults[i].pin)
-                        .setMerchantURL("https://www.google.ca")
-                        .build();
+                        .setMerchantURL("https://www.google.ca").build();
 
                     const imagesMediaAttachment = await ctx.prepareWAMessageMedia({
                         image: {
@@ -76,7 +74,7 @@ module.exports = {
                 }
 
                 return ctx.replyInteractiveMessage({
-                    body: `${quote(`Kueri: ${input}`)}\n` +
+                    body: `${quote(`Kueri: ${input.replace("-s", "").replace(/\s+/g, " ").trim()}`)}\n` +
                         "\n" +
                         global.config.msg.footer,
                     footer: global.config.msg.watermark,

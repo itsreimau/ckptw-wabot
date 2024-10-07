@@ -35,7 +35,7 @@ module.exports = {
             let profilePictureUrl;
             try {
                 profilePictureUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image");
-            } catch {
+            } catch (error) {
                 profilePictureUrl = global.config.bot.picture.profile;
             }
 

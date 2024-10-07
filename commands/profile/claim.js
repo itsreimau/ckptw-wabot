@@ -1,4 +1,5 @@
 const {
+    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 
@@ -18,11 +19,16 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "daily"))
         );
 
-        if (!claimRewards[input]) return ctx.reply(quote(`❎ Jenis klaim tidak valid. Silakan pilih salah satu dari berikut ini: daily, weekly, monthly, atau yearly.`));
+        if (ctx.args[0] === "list") {
+            const listText = await global.tools.list.get("claim");
+            return ctx.reply(listText);
+        }
+
+        if (!claimRewards[input]) return ctx.reply(quote(`❎ Teks tidak valid. Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`));
 
         const senderJid = ctx.sender.jid.split("@")[0];
         const lastClaimTime = global.db.get(`user.${senderJid}.lastClaim.${input}`) || 0;
@@ -42,7 +48,7 @@ module.exports = {
                 global.db.set(`user.${senderJid}.lastClaim.${input}`, currentTime)
             ]);
 
-            return ctx.reply(quote(`✅ Anda telah berhasil mengklaim hadiah ${input} sebesar ${claimRewards[input].reward} koin! Saldo baru Anda adalah ${newBalance} koin.`));
+            return ctx.reply(quote(`✅ Anda telah berhasil mengklaim hadiah ${input} sebesar ${claimRewards[input].reward} koin! Sekarang Anda memiliki koin ${newBalance}.`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));

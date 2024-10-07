@@ -34,7 +34,7 @@ module.exports = {
             let profilePictureUrl;
             try {
                 profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image");
-            } catch {
+            } catch (error) {
                 profilePictureUrl = global.config.bot.picture.profile;
             }
             const card = global.tools.api.createUrl("aggelos_007", "/rankcard", {

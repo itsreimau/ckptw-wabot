@@ -74,8 +74,22 @@ async function get(type, ctx) {
                     global.config.msg.footer;
                 break;
             }
+            case "claim": {
+                const data = ["daily", "weekly", "monthly", "yearly"];
+                text = quote(data).join("\n") +
+                    "\n" +
+                    global.config.msg.footer;
+                break;
+            }
             case "disable_enable": {
                 const data = ["antilink", "welcome"];
+                text = quote(data).join("\n") +
+                    "\n" +
+                    global.config.msg.footer;
+                break;
+            }
+            case "group": {
+                const data = ["open", "close", "lock", "unlock"];
                 text = quote(data).join("\n") +
                     "\n" +
                     global.config.msg.footer;

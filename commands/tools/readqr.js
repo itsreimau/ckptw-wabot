@@ -33,7 +33,7 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await global.tools.general.upload(buffer);
-            const apiUrl = global.tools.api.createUrl("https://api.qrserver.com", "/v1/read-qr-code/", {
+            const apiUrl = global.tools.api.createUrl("https://api.qrserver.com", "/v1/read-qr-code", {
                 fileurl: uploadUrl
             });
             const {

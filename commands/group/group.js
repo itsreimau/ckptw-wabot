@@ -1,4 +1,5 @@
 const {
+    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 
@@ -21,9 +22,14 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`${global.tools.msg.generateInstruction(["send"], ["text"])} Argumen yang tersedia adalah open, close, lock, dan unlock.`)}\n` +
+            `${quote(`${global.tools.msg.generateInstruction(["send"], ["text"])} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`)}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "open"))
         );
+
+        if (ctx.args[0] === "list") {
+            const listText = await global.tools.list.get("group");
+            return ctx.reply(listText);
+        }
 
         try {
             switch (input) {
@@ -40,7 +46,7 @@ module.exports = {
                     await ctx.group().unlock();
                     break;
                 default:
-                    return ctx.reply(quote(`❎ Argumen yang tersedia adalah open, close, lock, dan unlock.`));
+                    return ctx.reply(quote(`❎ Teks tidak valid. Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`));
             }
 
             return ctx.reply(quote(`✅ Berhasil mengubah setelan grup!`));

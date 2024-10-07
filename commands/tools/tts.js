@@ -1,4 +1,5 @@
 const {
+    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -24,7 +25,12 @@ module.exports = {
 
         if (global.tools.general.checkQuotedMedia(ctx.quoted, "text")) {
             const quotedMessage = ctx.quoted;
-            textToSpeech = Object.values(quotedMessage).find(msg => msg.caption || msg.text)?.caption || textToSpeech || null;
+
+            if (quotedMessage.conversation) {
+                textToSpeech = quotedMessage.conversation;
+            } else {
+                textToSpeech = Object.values(quotedMessage).find(msg => msg?.caption || msg?.text)?.caption || quotedMessage?.extendedTextMessage?.text || textToSpeech || null;
+            }
 
             if (ctx.args[0] && ctx.args[0].length === 2) {
                 langCode = ctx.args[0];

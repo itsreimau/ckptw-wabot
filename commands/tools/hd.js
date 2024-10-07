@@ -35,14 +35,18 @@ module.exports = {
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const result = await upscale(buffer, ctx.args[0], ctx.args[1] === "-a" ? true : false);
+
+            // Gabungkan args array menjadi string terlebih dahulu
+            const argsString = ctx.args.join(" ");
+            const args = parseArgs(argsString);
+            const result = await upscale(buffer, args.quality, args.anime);
 
             return await ctx.reply({
                 image: {
                     url: result.image
                 },
-                caption: `${quote(`Anda bisa mengaturnya. Tersedia ukuran 2, 4, 6, 8, dan 16, defaultnya adalah 2. Gunakan ${monospace("-a")} jika gambarnya anime.`)}\n` +
-                    quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "16 -a")),
+                caption: `${quote(`Anda bisa mengaturnya. Kualitas yang tersedia adalah 2, 4, 6, 8, dan 16, defaultnya adalah 2. Gunakan ${monospace("-a")} jika gambarnya anime.`)}\n` +
+                    quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "-q 16 -a")),
                 mimetype: mime.contentType("png")
             });
         } catch (error) {
@@ -52,6 +56,28 @@ module.exports = {
         }
     }
 };
+
+function parseArgs(argsString) {
+    let quality = 2;
+    let anime = false;
+
+    const args = argsString.split(" ");
+    args.forEach(arg => {
+        if (arg.startsWith("-q")) {
+            const size = parseInt(arg.replace("-q", "").trim(), 10);
+            if (/^(2|4|6|8|16)$/.test(size)) {
+                quality = size;
+            }
+        } else if (arg === "-a") {
+            anime = true;
+        }
+    });
+
+    return {
+        quality,
+        anime
+    };
+}
 
 // Dibuat oleh ZTRdiamond.
 async function upscale(buffer, size = 2, anime = false) {

@@ -99,7 +99,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             let profilePictureUrl;
             try {
                 profilePictureUrl = await bot.core.profilePictureUrl(senderJid, "image");
-            } catch {
+            } catch (error) {
                 profilePictureUrl = global.config.bot.picture.profile;
             }
 
@@ -254,6 +254,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     await sendMenfess(ctx, m, senderNumber, from);
 
                     await ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
+                    await global.db.delete(`menfess.${senderNumber}.from`),
                 } catch (error) {
                     console.error(`[${global.config.pkg.name}] Error:`, error);
                     await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
@@ -282,7 +283,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
     const fakeText = {
         key: {
             fromMe: false,
-            participant: senderNumber + S_WHATSAPP_NET,
+            participant: from + S_WHATSAPP_NET,
             ...({
                 remoteJid: "status@broadcast"
             })
