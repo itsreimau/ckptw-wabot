@@ -206,6 +206,44 @@ function isOwner(ctx, id, selfOwner) {
     }
 }
 
+function parseArgs(argsString, customRules = {}) {
+    const options = {};
+    let input = [];
+
+    const args = argsString.split(" ");
+
+    for (let i = 0; i < args.length; i++) {
+        const arg = args[i];
+        let isFlag = false;
+
+        for (const flag in customRules) {
+            if (arg === flag) {
+                const rule = customRules[flag];
+                isFlag = true;
+
+                if (rule.type === "value") {
+                    const value = args[i + 1];
+                    if (value && rule.validator(value)) {
+                        options[rule.key] = rule.parser(value);
+                        i++;
+                    }
+                } else if (rule.type === "boolean") {
+                    options[rule.key] = true;
+                }
+                break;
+            }
+        }
+
+        if (!isFlag) {
+            input.push(arg);
+        }
+    }
+
+    options.input = input.join(" ");
+
+    return options;
+}
+
 async function translate(text, to) {
     const apiUrl = api.createUrl("nyxs", "/tools/translate", {
         text,
@@ -273,6 +311,7 @@ module.exports = {
     isAdmin,
     isBotAdmin,
     isOwner,
+    parseArgs,
     translate,
     ucword,
     upload

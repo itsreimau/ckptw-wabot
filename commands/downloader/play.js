@@ -30,33 +30,75 @@ module.exports = {
         );
 
         try {
-            const searchApiUrl = global.tools.api.createUrl("agatz", "/api/ytsearch", {
-                message: input
+            const args = parseArgs(input, {
+                "-s": {
+                    type: "value",
+                    key: "source",
+                    validator: (val) => val === "spotify",
+                    parser: (val) => val
+                },
+                "-i": {
+                    type: "value",
+                    key: "index",
+                    validator: (val) => !isNaN(val) && parseInt(val) >= 0,
+                    parser: (val) => parseInt(val)
+                }
             });
-            const searchResponse = await axios.get(searchApiUrl);
-            const searchData = searchResponse.data.data[0];
 
-            if (!searchData) return ctx.reply(global.config.msg.notFound);
+            const searchIndex = args.index || 0;
+            const query = args.input;
 
-            const data = searchData;
+            if (args.source === "spotify") {
+                const searchApiUrl = global.tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/search/tracks", {
+                    q: query
+                });
+                const searchData = (await axios.get(searchApiUrl)).data;
+                const data = searchData[searchIndex];
+
+                await ctx.reply(
+                    `${quote(`Judul: ${data.title}`)}\n` +
+                    `${quote(`Artis: ${data.artist}`)}\n` +
+                    `${quote(`URL: ${data.url}`)}\n` +
+                    -"\n" +
+                    global.config.msg.footer
+                );
+
+                const downloadApiUrl = global.tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/download/tracks", {
+                    url: data.url,
+                });
+
+                return await ctx.reply({
+                    audio: {
+                        url: downloadApiUrl
+                    },
+                    mimetype: mime.contentType("mp3"),
+                    ptt: false
+                });
+            }
+
+            const searchApiUrl = global.tools.api.createUrl("agatz", "/api/ytsearch", {
+                message: query
+            });
+            const searchData = (await axios.get(searchApiUrl)).data.data;
+            const data = searchData[searchIndex];
 
             await ctx.reply(
                 `${quote(`Judul: ${data.title}`)}\n` +
                 `${quote(`Artis: ${data.author.name}`)}\n` +
                 `${quote(`URL: ${data.url}`)}\n` +
-                "\n" +
+                -"\n" +
                 global.config.msg.footer
             );
 
-            const ytdlResponse = await youtubedl(data.url);
-            const audioInfo = Object.values(ytdlResponse.audio)[0];
-            const audioUrl = await audioInfo.download();
+            const downloadResponse = await youtubedl(data.url);
+            const downloadData = Object.values(downloadResponse.audio)[0];
+            const downloadUrl = await downloadData.download();
 
-            if (!audioUrl) return ctx.reply(global.config.msg.notFound);
+            if (!downloadUrl) return ctx.reply(global.config.msg.notFound);
 
             return await ctx.reply({
                 audio: {
-                    url: audioUrl
+                    url: downloadUrl
                 },
                 mimetype: mime.contentType("mp3"),
                 ptt: false

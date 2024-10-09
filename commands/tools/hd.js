@@ -25,6 +25,8 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
+        const input = ctx.args.join(" ") || null;
+
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
             global.tools.general.checkMedia(msgType, "image", ctx),
@@ -34,11 +36,20 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], "image")));
 
         try {
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+            const args = parseArgs(input, {
+                "-q": {
+                    type: "value",
+                    key: "quality",
+                    validator: (val) => !isNaN(val) && /^[2|4|6|8|16]$/.test(val),
+                    parser: (val) => parseInt(val, 10)
+                },
+                "-a": {
+                    type: "boolean",
+                    key: "anime"
+                }
+            });
 
-            // Gabungkan args array menjadi string terlebih dahulu
-            const argsString = ctx.args.join(" ");
-            const args = parseArgs(argsString);
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const result = await upscale(buffer, args.quality, args.anime);
 
             return await ctx.reply({
@@ -56,28 +67,6 @@ module.exports = {
         }
     }
 };
-
-function parseArgs(argsString) {
-    let quality = 2;
-    let anime = false;
-
-    const args = argsString.split(" ");
-    args.forEach(arg => {
-        if (arg.startsWith("-q")) {
-            const size = parseInt(arg.replace("-q", "").trim(), 10);
-            if (/^(2|4|6|8|16)$/.test(size)) {
-                quality = size;
-            }
-        } else if (arg === "-a") {
-            anime = true;
-        }
-    });
-
-    return {
-        quality,
-        anime
-    };
-}
 
 // Dibuat oleh ZTRdiamond.
 async function upscale(buffer, size = 2, anime = false) {

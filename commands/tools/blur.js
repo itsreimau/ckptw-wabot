@@ -30,8 +30,17 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], "image")));;
 
         try {
+            const args = parseArgs(input, {
+                "-l": {
+                    type: "value",
+                    key: "level",
+                    validator: (val) => !isNaN(val) && /^[2|4|6|8|16]$/.test(val),
+                    parser: (val) => parseInt(val, 10)
+                }
+            });
+
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            let level = ctx.args[0] || "5";
+            let level = args.level || "5";
             let img = await Jimp.read(buffer);
             img.blur(isNaN(level) ? 5 : parseInt(level));
             img.getBuffer(Jimp.MIME_JPEG, async (err, buffer) => {
@@ -40,7 +49,7 @@ module.exports = {
                 return await ctx.reply({
                     image: buffer,
                     caption: `${quote("Anda bisa mengaturnya. Semua level tersedia, defaultnya adalah 5.")}\n` +
-                        quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "10")),
+                        quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "-l 10")),
                     mimetype: mime.contentType("jpeg")
                 });
             });

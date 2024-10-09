@@ -30,14 +30,21 @@ module.exports = {
         );
 
         try {
+            const args = parseArgs(input, {
+                "-s": {
+                    type: "boolean",
+                    key: "slide"
+                }
+            });
+
             const apiUrl = global.tools.api.createUrl("agatz", "/api/pinsearch", {
-                message: input.includes("-s") && global.config.system.useInteractiveMessage ? input.replace("-s", "").replace(/\s+/g, " ").trim() : input
+                message: args.input
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            if (input.includes("-s") && global.config.system.useInteractiveMessage) {
+            if (args.slide && global.config.system.useInteractiveMessage) {
                 const randomResults = data.sort(() => 0.5 - Math.random()).slice(0, 5);
 
                 const cards = new CarouselBuilder();
