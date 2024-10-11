@@ -21,7 +21,7 @@ module.exports = {
         const userId = ctx.args[0];
 
         const senderJid = ctx.sender.jid;
-        const senderNumber = senderJid.replace(/@.*|:.*/g, "");
+        const senderNumber = senderJid.split("@")[0];
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : userId + S_WHATSAPP_NET;
 
@@ -35,7 +35,7 @@ module.exports = {
             const [result] = await ctx._client.onWhatsApp(user);
             if (!result.exists) return ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
 
-            await global.db.set(`user.${user.replace(/@.*|:.*/g, "")[0]}.isPremium`, true);
+            await global.db.set(`user.${user.split("@")[0]}.isPremium`, true);
 
             ctx.sendMessage(user, {
                 text: quote(`🎉 Anda telah ditambahkan sebagai pengguna Premium oleh Owner!`)

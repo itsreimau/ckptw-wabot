@@ -34,7 +34,7 @@ module.exports = {
             });
 
             return await ctx.reply({
-                video: {
+                audio: {
                     url: apiUrl
                 },
                 mimetype: mime.contentType("mp4"),

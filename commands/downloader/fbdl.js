@@ -30,17 +30,16 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.api.createUrl("vkrdownloader", "/server", {
-                vkr: url
+            const apiUrl = global.tools.api.createUrl("agatz", "/api/facebook", {
+                url
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
-            const downloadUrl = data.downloads.find(d => d.format_id === "hd")?.url || data.downloads.find(d => d.format_id === "sd")?.url;
 
             return await ctx.reply({
                 video: {
-                    url: downloadUrl
+                    url: data.high || data.low
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +

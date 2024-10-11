@@ -1,4 +1,5 @@
 const {
+    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -28,7 +29,7 @@ module.exports = {
             const timeout = 60000;
             const remainingAnswers = new Set(data.jawaban.map(j => j.toLowerCase()));
             const participants = new Set();
-            const senderNumber = ctx.sender.jid.replace(/@.*|:.*/g, "");
+            const senderNumber = ctx.sender.jid.split("@")[0];
 
             session.set(ctx.id, true);
 
@@ -46,7 +47,7 @@ module.exports = {
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toLowerCase();
                 const participantJid = m.jid;
-                const participantNumber = participantJid.replace(/@.*|:.*/g, "");
+                const participantNumber = participantJid.split("@")[0];
 
                 if (remainingAnswers.has(userAnswer)) {
                     remainingAnswers.delete(userAnswer);

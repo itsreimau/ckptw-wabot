@@ -40,8 +40,8 @@ bot.ev.once(Events.ClientReady, async (m) => {
     console.log(`[${global.config.pkg.name}] Ready at ${m.user.id}`);
 
     // Tetapkan global.config pada bot.
-    global.config.bot.number = m.user.id.replace(/@.*|:.*/g, "");
-    global.config.bot.id = m.user.id.replace(/@.*|:.*/g, "") + S_WHATSAPP_NET;
+    global.config.bot.number = m.user.id.split(":")[0];
+    global.config.bot.id = m.user.id.split(":")[0] + S_WHATSAPP_NET;
     global.config.bot.readyAt = bot.readyAt;
 });
 
@@ -54,9 +54,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
     const senderJid = ctx.sender.jid;
-    const senderNumber = senderJid.replace(/@.*|:.*/g, "");
+    const senderNumber = senderJid.split("@")[0];
     const groupJid = isGroup ? m.key.remoteJid : null;
-    const groupNumber = isGroup ? groupJid.split("@") : null;
+    const groupNumber = isGroup ? groupJid.split("@")[0] : null;
 
     // Log pesan masuk.
     if (isGroup) {
@@ -77,8 +77,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Penanganan untuk perintah.
     if (global.tools.general.isCmd(m, ctx)) {
-        if (global.config.system.autoTypingOnCmd) ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah.
-        if (global.config.system.autoReactOnCmd) ctx.react(ctx.id, global.config.system.autoReactOnCmd); // Simulasi pemuatan otomatis untuk perintah.
+        if (global.config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah.
+        if (global.config.system.autoReactOnCmd) await ctx.react(ctx.id, global.config.system.autoReactOnCmd); // Simulasi pemuatan otomatis untuk perintah.
 
         // Penanganan XP & Level untuk pengguna.
         const xpGain = 5;
@@ -157,11 +157,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         for (const mentionJid of mentionJids) {
-            const getAFKMention = global.db.get(`user.${mentionJid.replace(/@.*|:.*/g, "")[0]}.afk`);
+            const getAFKMention = global.db.get(`user.${mentionJid.split("@")[0]}.afk`);
             if (getAFKMention) {
                 const [reason, timeStamp] = await Promise.all([
-                    global.db.get(`user.${mentionJid.replace(/@.*|:.*/g, "")[0]}.afk.reason`),
-                    global.db.get(`user.${mentionJid.replace(/@.*|:.*/g, "")[0]}.afk.timeStamp`)
+                    global.db.get(`user.${mentionJid.split("@")[0]}.afk.reason`),
+                    global.db.get(`user.${mentionJid.split("@")[0]}.afk.timeStamp`)
                 ]);
                 const timeAgo = global.tools.general.convertMsToDuration(Date.now() - timeStamp);
 
@@ -333,7 +333,7 @@ async function handleUserEvent(m) {
     } = m;
 
     try {
-        const getWelcome = await global.db.get(`group.${id.split("@")}.welcome`);
+        const getWelcome = await global.db.get(`group.${id.split("@")[0]}.welcome`);
         if (getWelcome) {
             const metadata = await bot.core.groupMetadata(id);
 
@@ -346,10 +346,10 @@ async function handleUserEvent(m) {
                 }
 
                 const message = m.eventsType === "UserJoin" ?
-                    quote(`👋 Selamat datang @${jid.replace(/@.*|:.*/g, "")[0]} di grup ${metadata.subject}!`) :
-                    quote(`👋 @${jid.replace(/@.*|:.*/g, "")[0]} keluar dari grup ${metadata.subject}.`);
+                    quote(`👋 Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`) :
+                    quote(`👋 @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
                 const card = global.tools.api.createUrl("aggelos_007", "/welcomecard", {
-                    text1: jid.replace(/@.*|:.*/g, "")[0],
+                    text1: jid.split("@")[0],
                     text2: m.eventsType === "UserJoin" ? "Selamat datang!" : "Selamat tinggal!",
                     text3: metadata.subject,
                     avatar: profilePictureUrl,

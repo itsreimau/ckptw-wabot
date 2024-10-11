@@ -15,7 +15,8 @@ module.exports = {
         } = await global.handler(ctx, {
             banned: true,
             cooldown: true,
-            coin: [10, "text", 1]
+            coin: [10, "text", 1],
+            premium: true
         });
         if (status) return ctx.reply(message);
 
@@ -30,13 +31,10 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/facebook", {
+            const apiUrl = global.tools.api.createUrl("agatz", "/api/mediafire", {
                 url
             });
-            const response = await axios.get(apiUrl);
-            const {
-                data
-            } = response.data[0];
+            const data = (await axios.get(apiUrl)).data.data[0];
 
             return ctx.reply({
                 document: {

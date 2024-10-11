@@ -28,7 +28,7 @@ module.exports = {
 
         try {
             const senderJid = ctx.sender.jid;
-            const senderNumber = senderJid.replace(/@.*|:.*/g, "");
+            const senderNumber = senderJid.split("@")[0];
             const [number, ...text] = ctx.args;
             const numberFormatted = number.replace(/[^\d]/g, "");
 

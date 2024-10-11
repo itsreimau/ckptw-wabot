@@ -6,7 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "gempa",
-    aliases: ["gempabumi"],
+    aliases: ["gempabumi", "Infogempa"],
     category: "tools",
     code: async (ctx) => {
         const {

@@ -30,29 +30,31 @@ module.exports = {
         if (!urlRegex.test(url)) return ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.api.createUrl("vkrdownloader", "/server", {
-                vkr: url
+            const apiUrl = global.tools.api.createUrl("agatz", "/api/instagram", {
+                url
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            for (const download of data.downloads) {
-                const mimeType = mime.contentType(download.extension);
-
-                if (mimeType.startsWith("image/")) {
+            if (data.image && data.image.length > 0) {
+                for (const img of data.image) {
                     await ctx.reply({
                         image: {
-                            url: download.url
+                            url: img
                         },
-                        mimetype: mimeType
+                        mimetype: mime.contentType("jpg")
                     });
-                } else if (mimeType.startsWith("video/")) {
+                }
+            }
+
+            if (data.video && data.video.length > 0) {
+                for (const vid of data.video) {
                     await ctx.reply({
                         video: {
-                            url: download.url
+                            url: vid.video
                         },
-                        mimetype: mimeType
+                        mimetype: mime.contentType("mp4")
                     });
                 }
             }

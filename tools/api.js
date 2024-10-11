@@ -9,17 +9,8 @@ const APIs = {
     chiwa: {
         baseURL: "https://api.chiwa.my.id"
     },
-    deku: {
-        baseURL: "https://deku-rest-api.gleeze.com"
-    },
     firda: {
         baseURL: "https://api.firda.uz"
-    },
-    helixia: {
-        baseURL: "https://api.helixia.xyz"
-    },
-    hercai: {
-        baseURL: "https://hercai.onrender.com"
     },
     imphnen_ai: {
         baseURL: "https://imphnen-ai.vercel.app"
@@ -27,14 +18,8 @@ const APIs = {
     itzpire: {
         baseURL: "https://itzpire.site"
     },
-    kyuurzy: {
-        baseURL: "https://api.kyuurzy.site"
-    },
     lolhuman: {
         baseURL: "https://api.lolhuman.xyz"
-    },
-    manaxu_seven: {
-        baseURL: "https://manaxu-seven.vercel.app"
     },
     matbasing: {
         baseURL: "https://matbasing.glitch.me"
@@ -50,9 +35,6 @@ const APIs = {
     },
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com"
-    },
-    ssa: {
-        baseURL: "https://ssa-api.vercel.app"
     },
     vkrdownloader: {
         baseURL: "https://vkrdownloader.vercel.app"

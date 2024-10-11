@@ -1,4 +1,5 @@
 const {
+    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -26,7 +27,7 @@ module.exports = {
             const data = global.tools.general.getRandomElement(response.data);
             const coin = 3;
             const timeout = 60000;
-            const senderNumber = ctx.sender.jid.replace(/@.*|:.*/g, "");
+            const senderNumber = ctx.sender.jid.split("@")[0];
 
             session.set(ctx.id, true);
 
@@ -65,7 +66,7 @@ module.exports = {
                 } else if (userAnswer === "hint") {
                     const clue = answer.replace(/[AIUEOaiueo]/g, "_");
                     await ctx.sendMessage(ctx.id, {
-                        text: clue.toUpperCase()
+                        text: monospace(clue.toUpperCase())
                     }, {
                         quoted: m
                     });

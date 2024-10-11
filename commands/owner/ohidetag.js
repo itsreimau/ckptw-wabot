@@ -26,7 +26,7 @@ module.exports = {
             const len = data.length;
             const mentions = [];
             for (let i = 0; i < len; i++) {
-                const serialized = data[i].id.replace(/@.*|:.*/g, "")[0];
+                const serialized = data[i].id.split("@")[0];
                 mentions.push({
                     mention: serialized + S_WHATSAPP_NET
                 });

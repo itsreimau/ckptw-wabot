@@ -4,7 +4,7 @@ const {
 
 async function handler(ctx, options) {
     const senderJid = ctx.sender.jid;
-    const senderNumber = senderJid.replace(/@.*|:.*/g, "");
+    const senderNumber = senderJid.split("@")[0];
 
     const [isOwner, isPremium] = await Promise.all([
         global.tools.general.isOwner(ctx, senderNumber, true),

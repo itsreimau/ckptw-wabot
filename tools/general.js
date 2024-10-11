@@ -186,7 +186,7 @@ async function isAdmin(ctx, id) {
 
 async function isBotAdmin(ctx) {
     try {
-        const id = ctx._client.user.id.split(":")[0] + S_WHATSAPP_NET;
+        const id = ctx._client.user.id.split(":")[0][0] + S_WHATSAPP_NET;
         return await checkAdmin(ctx, id);
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
@@ -196,7 +196,7 @@ async function isBotAdmin(ctx) {
 
 function isOwner(ctx, id, selfOwner) {
     try {
-        const jid = id || ctx.sender.jid.replace(/@.*|:.*/g, "");
+        const jid = id || ctx.sender.jid.split("@")[0];
         return selfOwner ?
             ctx._client.user.id.split(":")[0] === jid || global.config.owner.number === jid || global.config.owner.co.includes(id) :
             global.config.owner.number === jid || global.config.owner.co.includes(id);

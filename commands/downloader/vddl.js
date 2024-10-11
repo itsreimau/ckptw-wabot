@@ -14,7 +14,8 @@ module.exports = {
         } = await global.handler(ctx, {
             banned: true,
             cooldown: true,
-            coin: [10, "text", 1]
+            coin: [10, "text", 1],
+            premium: true
         });
         if (status) return ctx.reply(message);
 

@@ -19,7 +19,7 @@ module.exports = {
         try {
             const senderName = ctx.sender.pushName || "-";
             const senderJid = ctx.sender.jid;
-            const senderNumber = senderJid.replace(/@.*|:.*/g, "");
+            const senderNumber = senderJid.split("@")[0];
 
             const [userCoin = 0, isPremium, userXp = 0, userLevel = 1, isOwner] = await Promise.all([
                 global.db.get(`user.${senderNumber}.coin`),
