@@ -5,6 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "ssweb",
+    aliases: ["ss"],
     category: "tools",
     code: async (ctx) => {
         const {
