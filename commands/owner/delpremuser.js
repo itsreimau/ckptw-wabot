@@ -35,7 +35,7 @@ module.exports = {
             const [result] = await ctx._client.onWhatsApp(user);
             if (!result.exists) return ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
 
-            await global.db.set(`user.${user.split("@")[0]}.isPremium`, false);
+            await global.db.set(`user.${user.replace(/@.*|:.*/g, "")[0]}.isPremium`, false);
 
             ctx.sendMessage(user, {
                 text: quote(`🎉 Anda telah dihapus sebagai pengguna Premium oleh Owner!`)

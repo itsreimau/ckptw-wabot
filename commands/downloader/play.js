@@ -30,7 +30,7 @@ module.exports = {
         );
 
         try {
-            const args = parseArgs(input, {
+            const args = global.tools.general.parseArgs(input, {
                 "-s": {
                     type: "value",
                     key: "source",

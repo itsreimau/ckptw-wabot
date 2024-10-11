@@ -19,7 +19,7 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const senderJid = ctx.sender.jid.split("@")[0];
+            const senderJid = ctx.sender.jid.replace(/@.*|:.*/g, "")[0];
             const databaseJSON = JSON.stringify(global.db);
             const parsedDB = JSON.parse(databaseJSON);
             const users = parsedDB.user;

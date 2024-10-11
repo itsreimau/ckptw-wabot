@@ -56,7 +56,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const senderJid = ctx.sender.jid;
     const senderNumber = senderJid.replace(/@.*|:.*/g, "");
     const groupJid = isGroup ? m.key.remoteJid : null;
-    const groupNumber = isGroup ? groupJid.split("@")[0] : null;
+    const groupNumber = isGroup ? groupJid.replace(/@.*|:.*/g, "")[0] : null;
 
     // Log pesan masuk.
     if (isGroup) {
@@ -156,11 +156,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         for (const mentionJid of mentionJids) {
-            const getAFKMention = global.db.get(`user.${mentionJid.split("@")[0]}.afk`);
+            const getAFKMention = global.db.get(`user.${mentionJid.replace(/@.*|:.*/g, "")[0]}.afk`);
             if (getAFKMention) {
                 const [reason, timeStamp] = await Promise.all([
-                    global.db.get(`user.${mentionJid.split("@")[0]}.afk.reason`),
-                    global.db.get(`user.${mentionJid.split("@")[0]}.afk.timeStamp`)
+                    global.db.get(`user.${mentionJid.replace(/@.*|:.*/g, "")[0]}.afk.reason`),
+                    global.db.get(`user.${mentionJid.replace(/@.*|:.*/g, "")[0]}.afk.timeStamp`)
                 ]);
                 const timeAgo = global.tools.general.convertMsToDuration(Date.now() - timeStamp);
 
@@ -332,7 +332,7 @@ async function handleUserEvent(m) {
     } = m;
 
     try {
-        const getWelcome = await global.db.get(`group.${id.split("@")[0]}.welcome`);
+        const getWelcome = await global.db.get(`group.${id.replace(/@.*|:.*/g, "")[0]}.welcome`);
         if (getWelcome) {
             const metadata = await bot.core.groupMetadata(id);
 
@@ -345,10 +345,10 @@ async function handleUserEvent(m) {
                 }
 
                 const message = m.eventsType === "UserJoin" ?
-                    quote(`👋 Selamat datang @${jid.split("@")[0]} di grup ${metadata.subject}!`) :
-                    quote(`👋 @${jid.split("@")[0]} keluar dari grup ${metadata.subject}.`);
+                    quote(`👋 Selamat datang @${jid.replace(/@.*|:.*/g, "")[0]} di grup ${metadata.subject}!`) :
+                    quote(`👋 @${jid.replace(/@.*|:.*/g, "")[0]} keluar dari grup ${metadata.subject}.`);
                 const card = global.tools.api.createUrl("aggelos_007", "/welcomecard", {
-                    text1: jid.split("@")[0],
+                    text1: jid.replace(/@.*|:.*/g, "")[0],
                     text2: m.eventsType === "UserJoin" ? "Selamat datang!" : "Selamat tinggal!",
                     text3: metadata.subject,
                     avatar: profilePictureUrl,

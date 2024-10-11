@@ -30,7 +30,7 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], "image")));;
 
         try {
-            const args = parseArgs(input, {
+            const args = global.tools.general.parseArgs(input, {
                 "-l": {
                     type: "value",
                     key: "level",
