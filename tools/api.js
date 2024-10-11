@@ -45,7 +45,7 @@ const APIs = {
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },
-    ryuzindesu: {
+    ryzendesu: {
         baseURL: "https://api.ryzendesu.vip"
     },
     sandipbaruwal: {
