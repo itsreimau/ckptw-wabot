@@ -26,11 +26,14 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "cat")
+            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "cat"))}\n` +
+            quote(global.tools.msg.generatesFlagInformation({
+                "-s <boolean>": "Atur jenis pesan slide (carousel)."
+            }))
         );
 
         try {
-            const args = global.tools.general.parseArgs(input, {
+            const flag = global.tools.general.parseFlag(input, {
                 "-s": {
                     type: "boolean",
                     key: "slide"
@@ -38,13 +41,13 @@ module.exports = {
             });
 
             const apiUrl = global.tools.api.createUrl("agatz", "/api/gimage", {
-                message: args.input
+                message: flag.input
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            if (args.slide && global.config.system.useInteractiveMessage) {
+            if (flag.slide && global.config.system.useInteractiveMessage) {
                 const randomResults = data.sort(() => 0.5 - Math.random()).slice(0, 5);
 
                 const cards = new CarouselBuilder();

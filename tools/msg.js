@@ -1,5 +1,6 @@
 const {
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 
 function generateInstruction(actions, mediaTypes) {
@@ -70,7 +71,35 @@ function generateCommandExample(command, args) {
     return commandMessage;
 }
 
+function generatesFlagInformation(flags) {
+    if (typeof flags !== "object" || !flags) {
+        throw new Error("Flags must be provided as an object.");
+    }
+
+    const flagInfo = "Flag:\n" +
+        Object.entries(flags).map(([flag, description]) =>
+            quote(`- ${monospace(flag)}: ${description}`)
+        ).join("\n");
+
+    return flagInfo;
+}
+
+function generateNotes(notes) {
+    if (!Array.isArray(notes)) {
+        throw new Error("Notes must be an array of strings.");
+    }
+
+    const notesInfo = "Catatan:\n" +
+        notes.map(note =>
+            quote(`- ${note}`)
+        ).join("\n");
+
+    return notesInfo;
+}
+
 module.exports = {
     generateInstruction,
-    generateCommandExample
+    generateCommandExample,
+    generatesFlagInformation,
+    generateNotes
 };

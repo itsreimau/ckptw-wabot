@@ -1,11 +1,13 @@
 const {
+    bold,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "googlesearch",
-    aliases: ["google", "gsearch"],
+    name: "spotifysearch",
+    aliases: ["stsearch"],
     category: "tools",
     code: async (ctx) => {
         const {
@@ -22,22 +24,23 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu whatsapp"))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "neon genesis evangelion"))
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("ryzendesu", "/api/search/google", {
-                query: input
+            const apiUrl = global.tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/search/tracks", {
+                q: input
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            const resultText = data.map((d) =>
-                `${quote(`Judul: ${d.title}`)}\n` +
-                `${quote(`Deskripsi: ${d.description}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
-            ).join(
+            const resultText = data.map((d) => {
+                return `${quote(bold(`${d.title} (${d.url})`))}\n` +
+                    `${quote(`Artis: ${d.artist}`)}\n` +
+                    `${quote(`Album: ${d.album}`)}\n` +
+                    `${quote(`Durasi: ${d.string}`)}`;
+            }).join(
                 "\n" +
                 `${quote("─────")}\n`
             );

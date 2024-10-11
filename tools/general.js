@@ -206,7 +206,7 @@ function isOwner(ctx, id, selfOwner) {
     }
 }
 
-function parseArgs(argsString, customRules = {}) {
+function parseFlag(argsString, customRules = {}) {
     const options = {};
     let input = [];
 
@@ -311,7 +311,7 @@ module.exports = {
     isAdmin,
     isBotAdmin,
     isOwner,
-    parseArgs,
+    parseFlag,
     translate,
     ucword,
     upload

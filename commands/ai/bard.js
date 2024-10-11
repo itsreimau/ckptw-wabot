@@ -26,7 +26,7 @@ module.exports = {
         if (!input) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text", "image"]))}\n` +
             `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu whatsapp"))}\n` +
-            quote("Catatan: AI ini dapat melihat gambar dan menjawab pertanyaan tentangnya. Kirim gambar dan tanyakan apa saja!")
+            quote(global.tools.msg.generateNotes(["AI ini dapat melihat gambar dan menjawab pertanyaan tentangnya. Kirim gambar dan tanyakan apa saja!"]))
         );
 
         const msgType = ctx.getMessageType();

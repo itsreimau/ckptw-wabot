@@ -77,8 +77,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Penanganan untuk perintah.
     if (global.tools.general.isCmd(m, ctx)) {
-        ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah.
-        ctx.react(ctx.id, "🔃"); // Simulasi pemuatana otomatis untuk perintah.
+        if (global.config.system.autoTypingOnCmd) ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah.
+        if (global.config.system.autoReactOnCmd) ctx.react(ctx.id, global.config.system.autoReactOnCmd); // Simulasi pemuatan otomatis untuk perintah.
 
         // Penanganan XP & Level untuk pengguna.
         const xpGain = 5;

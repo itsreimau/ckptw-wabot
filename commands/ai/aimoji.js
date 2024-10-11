@@ -1,11 +1,10 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "characterai",
-    aliases: ["cai"],
+    name: "aimoji",
     category: "ai",
     code: async (ctx) => {
         const {
@@ -13,7 +12,8 @@ module.exports = {
             message
         } = await global.handler(ctx, {
             banned: true,
-            cooldown: true
+            cooldown: true,
+            coin: [10, "text", 1]
         });
         if (status) return ctx.reply(message);
 
@@ -21,19 +21,23 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu whatsapp"))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "cat"))
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("nyxs", "/ai/character-ai", {
-                prompt: input,
-                gaya: `Anda adalah bot WhatsApp bernama ${global.config.bot.name} yang dimiliki oleh ${global.config.owner.name}. Jika nama Anda mirip dengan tokoh di media, sesuaikan kepribadian Anda dengan nama tersebut. Jika tidak, tetaplah ramah, informatif, dan responsif.` // Dapat diubah sesuai keinginan Anda. 
+            const apiUrl = global.tools.api.createUrl("ryzendesu", "/api/ai/aimoji", {
+                prompt: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
 
-            return ctx.reply(data.result);
+            return await ctx.reply({
+                image: {
+                    url: apiUrl
+                },
+                mimetype: mime.contentType("png"),
+                caption: `${quote(`Prompt: ${input}`)}\n` +
+                    "\n" +
+                    global.config.msg.footer
+            });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return ctx.reply(global.config.msg.notFound);

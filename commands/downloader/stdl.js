@@ -4,8 +4,8 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "vddl",
-    aliases: ["vd", "videy", "videydl"],
+    name: "stdl",
+    aliases: ["st", "spotifydl"],
     category: "downloader",
     code: async (ctx) => {
         const {
@@ -25,17 +25,17 @@ module.exports = {
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
-        const urlRegex = /^(https?:\/\/)?(www\.)?videy\.co\/v\?id=([a-zA-Z0-9]+)/i;
-        const match = urlRegex.exec(url);
-        if (!match) return ctx.reply(global.config.msg.urlInvalid);
+        const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
+        if (!urlRegex.test(url)) return ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            const videoId = match[3];
-            const videoUrl = `https://cdn.videy.co/${videoId}.mp4`;
+            const apiUrl = global.tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/download/track", {
+                url: url
+            });
 
             return await ctx.reply({
                 video: {
-                    url: videoUrl
+                    url: apiUrl
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +

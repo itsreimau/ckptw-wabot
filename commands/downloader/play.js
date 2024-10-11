@@ -26,11 +26,15 @@ module.exports = {
 
         if (!input) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss"))
+            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss"))}\n` +
+            quote(global.tools.msg.generatesFlagInformation({
+                "-s <text>": "Atur sumber (tersedia: spotify, default: youtube).",
+                "-i <number>": "Tetapkan data indeks."
+            }))
         );
 
         try {
-            const args = global.tools.general.parseArgs(input, {
+            const flag = global.tools.general.parseFlag(input, {
                 "-s": {
                     type: "value",
                     key: "source",
@@ -40,15 +44,15 @@ module.exports = {
                 "-i": {
                     type: "value",
                     key: "index",
-                    validator: (val) => !isNaN(val) && parseInt(val) >= 0,
-                    parser: (val) => parseInt(val)
+                    validator: (val) => !isNaN(val) && parseInt(val) > 0,
+                    parser: (val) => parseInt(val) - 1
                 }
             });
 
-            const searchIndex = args.index || 0;
-            const query = args.input;
+            const searchIndex = flag.index || 0;
+            const query = flag.input;
 
-            if (args.source === "spotify") {
+            if (flag.source === "spotify") {
                 const searchApiUrl = global.tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/search/tracks", {
                     q: query
                 });
@@ -59,12 +63,12 @@ module.exports = {
                     `${quote(`Judul: ${data.title}`)}\n` +
                     `${quote(`Artis: ${data.artist}`)}\n` +
                     `${quote(`URL: ${data.url}`)}\n` +
-                    -"\n" +
+                    "\n" +
                     global.config.msg.footer
                 );
 
-                const downloadApiUrl = global.tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/download/tracks", {
-                    url: data.url,
+                const downloadApiUrl = global.tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/download/track", {
+                    url: data.url
                 });
 
                 return await ctx.reply({
@@ -86,7 +90,7 @@ module.exports = {
                 `${quote(`Judul: ${data.title}`)}\n` +
                 `${quote(`Artis: ${data.author.name}`)}\n` +
                 `${quote(`URL: ${data.url}`)}\n` +
-                -"\n" +
+                "\n" +
                 global.config.msg.footer
             );
 

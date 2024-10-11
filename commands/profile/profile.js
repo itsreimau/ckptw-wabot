@@ -29,7 +29,7 @@ module.exports = {
                 global.tools.general.isOwner(ctx, senderNumber, true),
             ]);
 
-            const isPremiumOrOwner = isOwner || isPremium;
+            const userStatus = isOwner ? "Owner" : (isPremium ? "Premium" : "Freemium");
 
             let profilePictureUrl;
             try {
@@ -51,11 +51,10 @@ module.exports = {
                 },
                 mimetype: mime.contentType("png"),
                 caption: `${quote(`Nama: ${senderName}`)}\n` +
-                    `${quote(`Koin: ${isPremiumOrOwner ? "Tak terbatas" : (userCoin || "-")}`)}\n` +
-                    `${quote(`XP: ${userXp}`)}\n` +
+                    `${quote(`Status: ${userStatus}`)}\n` +
                     `${quote(`Level: ${userLevel}`)}\n` +
-                    `${quote(`Premium: ${isPremium ? "Ya" : "Tidak"}`)}\n` +
-                    `${quote(`Owner: ${isOwner ? "Ya" : "Tidak"}`)}\n` +
+                    `${quote(`Koin: ${userCoin || "-"}`)}\n` +
+                    `${quote(`XP: ${userXp}`)}\n` +
                     "\n" +
                     global.config.msg.footer,
             });

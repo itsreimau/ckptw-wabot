@@ -21,16 +21,23 @@ module.exports = {
         });
         if (status) return ctx.reply(message);
 
+        const input = ctx.args.join(" ") || null;
+
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
             global.tools.general.checkMedia(msgType, "image", ctx),
             global.tools.general.checkQuotedMedia(ctx.quoted, "image")
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], "image")));;
+        if (!checkMedia && !checkQuotedMedia) return ctx.reply(
+            `${quote(global.tools.msg.generateInstruction(["send", "reply"], "image"))}\n` +
+            quote(global.tools.msg.generatesFlagInformation({
+                "-l <number>": "Atur tingkat keburaman."
+            }))
+        );
 
         try {
-            const args = global.tools.general.parseArgs(input, {
+            const flag = global.tools.general.parseFlag(input, {
                 "-l": {
                     type: "value",
                     key: "level",
@@ -40,7 +47,7 @@ module.exports = {
             });
 
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            let level = args.level || "5";
+            let level = flag.level || "5";
             let img = await Jimp.read(buffer);
             img.blur(isNaN(level) ? 5 : parseInt(level));
             img.getBuffer(Jimp.MIME_JPEG, async (err, buffer) => {
@@ -48,8 +55,7 @@ module.exports = {
 
                 return await ctx.reply({
                     image: buffer,
-                    caption: `${quote("Anda bisa mengaturnya. Semua level tersedia, defaultnya adalah 5.")}\n` +
-                        quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "-l 10")),
+                    caption: null,
                     mimetype: mime.contentType("jpeg")
                 });
             });

@@ -59,7 +59,9 @@ global.config = {
 
     // Sistem.
     system: {
+        autoReactOnCmd: "🔄",
         autoRead: true,
+        autoTypingOnCmd: true,
         cooldown: 5000,
         restrict: true, // Membatasi beberapa perintah yang akan mengakibatkan banned.
         selfReply: true,

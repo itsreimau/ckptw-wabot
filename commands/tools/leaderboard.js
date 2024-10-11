@@ -28,13 +28,11 @@ module.exports = {
                 .map(userId => ({
                     userId,
                     level: users[userId].level || 0,
-                    winGame: users[userId].winGame || 0,
-                    coin: users[userId].coin || 0
+                    winGame: users[userId].winGame || 0
                 }))
                 .sort((a, b) => {
-                    if (b.level !== a.level) return b.level - a.level;
                     if (b.winGame !== a.winGame) return b.winGame - a.winGame;
-                    return b.coin - a.coin;
+                    return b.level - a.level;
                 });
 
             const userRank = leaderboardData.findIndex(user => user.userId === senderJid) + 1;
@@ -43,20 +41,19 @@ module.exports = {
 
             let resultText = "";
             topUsers.forEach((user, index) => {
-                resultText += quote(`${index + 1}. @${user.userId} - Level: ${user.level}, Menang: ${user.winGame}, Koin: ${user.coin}\n`);
+                resultText += quote(`${index + 1}. @${user.userId} - Menang: ${user.winGame}, Level: ${user.level}\n`);
             });
 
             if (userRank > 9) {
                 const userStats = leaderboardData[userRank - 1];
-                resultText += "\n" +
-                    quote(`${userRank}. @${senderJid} - Level: ${userStats.level}, Menang: ${userStats.winGame}, Koin: ${userStats.coin}`);
+                resultText += quote(`${userRank}. @${senderJid} - Menang: ${userStats.winGame}, Level: ${userStats.level}`);
             }
 
             const userMentions = topUsers.map(user => user.userId + S_WHATSAPP_NET);
             if (userRank > 9) userMentions.push(senderJid + S_WHATSAPP_NET);
 
             return ctx.reply({
-                text: `${resultText}\n` +
+                text: `${resultText.trim()}\n` +
                     "\n" +
                     global.config.msg.footer,
                 mentions: userMentions

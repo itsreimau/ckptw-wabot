@@ -33,10 +33,16 @@ module.exports = {
             global.tools.general.checkQuotedMedia(ctx.quoted, "image")
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], "image")));
+        if (!checkMedia && !checkQuotedMedia) return ctx.reply(
+            `${quote(global.tools.msg.generateInstruction(["send", "reply"], "image"))}\n` +
+            quote(global.tools.msg.generatesFlagInformation({
+                "-q <number>": "Atur tingkat kualitas.",
+                "-a": "Atur jika gambar anime."
+            }))
+        );
 
         try {
-            const args = global.tools.general.parseArgs(input, {
+            const flag = global.tools.general.parseFlag(input, {
                 "-q": {
                     type: "value",
                     key: "quality",
@@ -50,7 +56,7 @@ module.exports = {
             });
 
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const result = await upscale(buffer, args.quality, args.anime);
+            const result = await upscale(buffer, flag.quality, flag.anime);
 
             return await ctx.reply({
                 image: {
