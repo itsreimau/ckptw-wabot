@@ -17,7 +17,7 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const wait await ctx.reply(global.config.msg.wait);
+            const wait = await ctx.reply(global.config.msg.wait);
 
             const APIs = global.tools.api.listUrl();
             let result = "";
