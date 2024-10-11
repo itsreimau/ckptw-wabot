@@ -56,7 +56,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const senderJid = ctx.sender.jid;
     const senderNumber = senderJid.replace(/@.*|:.*/g, "");
     const groupJid = isGroup ? m.key.remoteJid : null;
-    const groupNumber = isGroup ? groupJid.replace(/@.*|:.*/g, "")[0] : null;
+    const groupNumber = isGroup ? groupJid.split("@") : null;
 
     // Log pesan masuk.
     if (isGroup) {
@@ -78,6 +78,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Penanganan untuk perintah.
     if (global.tools.general.isCmd(m, ctx)) {
         ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah.
+        ctx.react(ctx.id, "🔃"); // Simulasi pemuatana otomatis untuk perintah.
 
         // Penanganan XP & Level untuk pengguna.
         const xpGain = 5;
@@ -332,7 +333,7 @@ async function handleUserEvent(m) {
     } = m;
 
     try {
-        const getWelcome = await global.db.get(`group.${id.replace(/@.*|:.*/g, "")[0]}.welcome`);
+        const getWelcome = await global.db.get(`group.${id.split("@")}.welcome`);
         if (getWelcome) {
             const metadata = await bot.core.groupMetadata(id);
 
