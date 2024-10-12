@@ -84,213 +84,222 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Simulasi pemuatan otomatis untuk perintah.
         if (global.config.system.autoReactOnCmd) {
-            await ctx.react(ctx.id, global.config.system.autoReactOnCmd, m.key.id);
+            const {
+                id: ctxId
+            } = ctx;
+            const {
+                key,
+                fromMe
+            } = m;
+
+            await ctx.react(ctxId, global.config.system.autoReactOnCmd, key);
 
             reactMessages.push({
-                ctxId: ctx.id,
-                messageId: m.key.id
+                ctxId,
+                key
             });
 
-            if (m.key.fromMe && reactMessages.some(rm => rm.ctxId === m.key.remoteJid)) {
-                const reactToRemove = reactMessages.filter(rm => rm.ctxId === m.key.remoteJid);
-
-                for (const rm of reactToRemove) {
-                    await ctx.react(rm.ctxId, "", rm.messageId);
-                }
-
-                reactMessages = reactMessages.filter(rm => rm.ctxId !== m.key.remoteJid);
-            }
-        }
-
-        // Penanganan XP & Level untuk pengguna.
-        const xpGain = 5;
-        let xpToLevelUp = 100;
-
-        const [userXp, userLevel] = await Promise.all([
-            global.db.get(`user.${senderNumber}.xp`) || 0,
-            global.db.get(`user.${senderNumber}.level`) || 1
-        ]);
-
-        let newUserXp = userXp + xpGain;
-
-        if (newUserXp >= xpToLevelUp) {
-            let newUserLevel = userLevel + 1;
-            newUserXp -= xpToLevelUp;
-
-            xpToLevelUp = Math.floor(xpToLevelUp * 1.2);
-
-            let profilePictureUrl;
-            try {
-                profilePictureUrl = await bot.core.profilePictureUrl(senderJid, "image");
-            } catch (error) {
-                profilePictureUrl = global.config.bot.picture.profile;
-            }
-
-            const card = global.tools.api.createUrl("aggelos_007", "/levelup", {
-                avatar: profilePictureUrl,
-                level: newUserLevel
-            });
-
-            await ctx.reply({
-                text: quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`),
-                contextInfo: {
-                    mentionedJid: [senderJid],
-                    externalAdReply: {
-                        mediaType: 1,
-                        previewType: 0,
-                        mediaUrl: global.config.bot.groupChat,
-                        title: "LEVEL UP",
-                        body: null,
-                        renderLargerThumbnail: true,
-                        thumbnailUrl: card || profilePictureUrl || global.config.bot.picture.thumbnail,
-                        sourceUrl: global.config.bot.groupChat
+            if (fromMe) {
+                reactMessages = reactMessages.filter(async (rm) => {
+                    if (rm.ctxId === ctxId) {
+                        await ctx.react(rm.ctxId, "", rm.key);
+                        return false;
                     }
-                }
-            });
-
-            await Promise.all([
-                global.db.set(`user.${senderNumber}.xp`, newUserXp),
-                global.db.set(`user.${senderNumber}.level`, newUserLevel)
-            ]);
-        } else {
-            await global.db.set(`user.${senderNumber}.xp`, newUserXp);
+                    return true;
+                });
+            }
         }
     }
 
-    // "Did you mean?" untuk perintah salah ketik.
-    const prefixRegex = new RegExp(ctx._config.prefix, "i");
-    const content = m.content && m.content.trim();
-    if (prefixRegex.test(content)) {
-        const prefix = content.charAt(0);
+    // Penanganan XP & Level untuk pengguna.
+    const xpGain = 5;
+    let xpToLevelUp = 100;
 
-        const [cmdName] = content.slice(1).trim().toLowerCase().split(/\s+/);
-        const cmd = ctx._config.cmd;
-        const listCmd = Array.from(cmd.values()).flatMap(command => {
-            const aliases = Array.isArray(command.aliases) ? command.aliases : [];
-            return [command.name, ...aliases];
+    const [userXp, userLevel] = await Promise.all([
+        global.db.get(`user.${senderNumber}.xp`) || 0,
+        global.db.get(`user.${senderNumber}.level`) || 1
+    ]);
+
+    let newUserXp = userXp + xpGain;
+
+    if (newUserXp >= xpToLevelUp) {
+        let newUserLevel = userLevel + 1;
+        newUserXp -= xpToLevelUp;
+
+        xpToLevelUp = Math.floor(xpToLevelUp * 1.2);
+
+        let profilePictureUrl;
+        try {
+            profilePictureUrl = await bot.core.profilePictureUrl(senderJid, "image");
+        } catch (error) {
+            profilePictureUrl = global.config.bot.picture.profile;
+        }
+
+        const card = global.tools.api.createUrl("aggelos_007", "/levelup", {
+            avatar: profilePictureUrl,
+            level: newUserLevel
         });
 
-        const mean = didyoumean(cmdName, listCmd);
-
-        if (mean && mean !== cmdName) await ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
-    }
-
-    // Perintah khusus Owner.
-    if (global.tools.general.isOwner(ctx, senderNumber, true)) {
-        // Perintah eval: Jalankan kode JavaScript.
-        if (m.content && m.content.startsWith && (m.content.startsWith("==> ") || m.content.startsWith("=> "))) {
-            const code = m.content.startsWith("==> ") ? m.content.slice(4) : m.content.slice(3);
-
-            try {
-                const result = await eval(m.content.startsWith("==> ") ? `(async () => { ${code} })()` : code);
-
-                await ctx.reply(inspect(result));
-            } catch (error) {
-                console.error(`[${global.config.pkg.name}] Error:`, error);
-                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
-            }
-        }
-
-        // Perintah Exec: Jalankan perintah shell.
-        if (m.content && m.content.startsWith && m.content.startsWith("$ ")) {
-            const command = m.content.slice(2);
-
-            try {
-                const output = await new Promise((resolve, reject) => {
-                    exec(command, (error, stdout, stderr) => {
-                        if (error) {
-                            reject(new Error(`Error: ${error.message}`));
-                        } else if (stderr) {
-                            reject(new Error(stderr));
-                        } else {
-                            resolve(stdout);
-                        }
-                    });
-                });
-
-                await ctx.reply(output);
-            } catch (error) {
-                console.error(`[${global.config.pkg.name}] Error:`, error);
-                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
-            }
-        }
-    }
-
-    // Penanganan AFK: Pengguna yang disebutkan.
-    const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-    if (mentionJids && mentionJids.length > 0) {
-        for (const mentionJid of mentionJids) {
-            const getAFKMention = global.db.get(`user.${mentionJid.split("@")[0]}.afk`);
-            if (getAFKMention) {
-                const [reason, timeStamp] = await Promise.all([
-                    global.db.get(`user.${mentionJid.split("@")[0]}.afk.reason`),
-                    global.db.get(`user.${mentionJid.split("@")[0]}.afk.timeStamp`)
-                ]);
-                const timeAgo = global.tools.general.convertMsToDuration(Date.now() - timeStamp);
-
-                await ctx.reply(quote(`📴 Dia AFK dengan alasan ${reason} selama ${timeAgo}.`));
-            }
-        }
-    }
-
-    // Penanganan AFK : Berangkat dari AFK.
-    const getAFKMessage = await global.db.get(`user.${senderNumber}.afk`);
-    if (getAFKMessage) {
-        const [reason, timeStamp] = await Promise.all([
-            global.db.get(`user.${senderNumber}.afk.reason`),
-            global.db.get(`user.${senderNumber}.afk.timeStamp`)
-        ]);
-
-        const currentTime = Date.now();
-        const timeElapsed = currentTime - timeStamp;
-
-        if (timeElapsed > 3000) {
-            const timeAgo = global.tools.general.convertMsToDuration(timeElapsed);
-            await global.db.delete(`user.${senderNumber}.afk`);
-
-            await ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`));
-        }
-    }
-
-    // Grup.
-    if (isGroup) {
-        if (m.key.fromMe) return;
-
-        // Penanganan antilink.
-        const getAntilink = await global.db.get(`group.${groupNumber}.antilink`);
-        const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (getAntilink) {
-            if (m.content && urlRegex.test(m.content) && !(await global.tools.general.isAdmin(ctx, senderNumber))) {
-                await ctx.reply(quote(`❎ Jangan kirim tautan!`));
-                await ctx.deleteMessage(m.key);
-                if (!global.config.system.restrict) await ctx.group().kick([senderJid]);
-            }
-        }
-    }
-
-    // Pribadi.
-    if (isPrivate) {
-        // Penanganan menfess.
-        const getMessageDataMenfess = await global.db.get(`menfess.${senderNumber}`);
-        if (getMessageDataMenfess) {
-            const [from, text] = await Promise.all([
-                global.db.get(`menfess.${senderNumber}.from`),
-                global.db.get(`menfess.${senderNumber}.text`)
-            ]);
-
-            if (ctx.quoted?.extendedTextMessage?.text === text) {
-                try {
-                    await sendMenfess(ctx, m, senderNumber, from);
-
-                    await ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
-                    await global.db.delete(`menfess.${senderNumber}.from`);
-                } catch (error) {
-                    console.error(`[${global.config.pkg.name}] Error:`, error);
-                    await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+        await ctx.reply({
+            text: quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`),
+            contextInfo: {
+                mentionedJid: [senderJid],
+                externalAdReply: {
+                    mediaType: 1,
+                    previewType: 0,
+                    mediaUrl: global.config.bot.groupChat,
+                    title: "LEVEL UP",
+                    body: null,
+                    renderLargerThumbnail: true,
+                    thumbnailUrl: card || profilePictureUrl || global.config.bot.picture.thumbnail,
+                    sourceUrl: global.config.bot.groupChat
                 }
             }
+        });
+
+        await Promise.all([
+            global.db.set(`user.${senderNumber}.xp`, newUserXp),
+            global.db.set(`user.${senderNumber}.level`, newUserLevel)
+        ]);
+    } else {
+        await global.db.set(`user.${senderNumber}.xp`, newUserXp);
+    }
+}
+
+// "Did you mean?" untuk perintah salah ketik.
+const prefixRegex = new RegExp(ctx._config.prefix, "i");
+const content = m.content && m.content.trim();
+if (prefixRegex.test(content)) {
+    const prefix = content.charAt(0);
+
+    const [cmdName] = content.slice(1).trim().toLowerCase().split(/\s+/);
+    const cmd = ctx._config.cmd;
+    const listCmd = Array.from(cmd.values()).flatMap(command => {
+        const aliases = Array.isArray(command.aliases) ? command.aliases : [];
+        return [command.name, ...aliases];
+    });
+
+    const mean = didyoumean(cmdName, listCmd);
+
+    if (mean && mean !== cmdName) await ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
+}
+
+// Perintah khusus Owner.
+if (global.tools.general.isOwner(ctx, senderNumber, true)) {
+    // Perintah eval: Jalankan kode JavaScript.
+    if (m.content && m.content.startsWith && (m.content.startsWith("==> ") || m.content.startsWith("=> "))) {
+        const code = m.content.startsWith("==> ") ? m.content.slice(4) : m.content.slice(3);
+
+        try {
+            const result = await eval(m.content.startsWith("==> ") ? `(async () => { ${code} })()` : code);
+
+            await ctx.reply(inspect(result));
+        } catch (error) {
+            console.error(`[${global.config.pkg.name}] Error:`, error);
+            await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
+
+    // Perintah Exec: Jalankan perintah shell.
+    if (m.content && m.content.startsWith && m.content.startsWith("$ ")) {
+        const command = m.content.slice(2);
+
+        try {
+            const output = await new Promise((resolve, reject) => {
+                exec(command, (error, stdout, stderr) => {
+                    if (error) {
+                        reject(new Error(`Error: ${error.message}`));
+                    } else if (stderr) {
+                        reject(new Error(stderr));
+                    } else {
+                        resolve(stdout);
+                    }
+                });
+            });
+
+            await ctx.reply(output);
+        } catch (error) {
+            console.error(`[${global.config.pkg.name}] Error:`, error);
+            await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+        }
+    }
+}
+
+// Penanganan AFK: Pengguna yang disebutkan.
+const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+if (mentionJids && mentionJids.length > 0) {
+    for (const mentionJid of mentionJids) {
+        const getAFKMention = global.db.get(`user.${mentionJid.split("@")[0]}.afk`);
+        if (getAFKMention) {
+            const [reason, timeStamp] = await Promise.all([
+                global.db.get(`user.${mentionJid.split("@")[0]}.afk.reason`),
+                global.db.get(`user.${mentionJid.split("@")[0]}.afk.timeStamp`)
+            ]);
+            const timeAgo = global.tools.general.convertMsToDuration(Date.now() - timeStamp);
+
+            await ctx.reply(quote(`📴 Dia AFK dengan alasan ${reason} selama ${timeAgo}.`));
+        }
+    }
+}
+
+// Penanganan AFK : Berangkat dari AFK.
+const getAFKMessage = await global.db.get(`user.${senderNumber}.afk`);
+if (getAFKMessage) {
+    const [reason, timeStamp] = await Promise.all([
+        global.db.get(`user.${senderNumber}.afk.reason`),
+        global.db.get(`user.${senderNumber}.afk.timeStamp`)
+    ]);
+
+    const currentTime = Date.now();
+    const timeElapsed = currentTime - timeStamp;
+
+    if (timeElapsed > 3000) {
+        const timeAgo = global.tools.general.convertMsToDuration(timeElapsed);
+        await global.db.delete(`user.${senderNumber}.afk`);
+
+        await ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`));
+    }
+}
+
+// Grup.
+if (isGroup) {
+    if (m.key.fromMe) return;
+
+    // Penanganan antilink.
+    const getAntilink = await global.db.get(`group.${groupNumber}.antilink`);
+    const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
+    if (getAntilink) {
+        if (m.content && urlRegex.test(m.content) && !(await global.tools.general.isAdmin(ctx, senderNumber))) {
+            await ctx.reply(quote(`❎ Jangan kirim tautan!`));
+            await ctx.deleteMessage(m.key);
+            if (!global.config.system.restrict) await ctx.group().kick([senderJid]);
+        }
+    }
+}
+
+// Pribadi.
+if (isPrivate) {
+    // Penanganan menfess.
+    const getMessageDataMenfess = await global.db.get(`menfess.${senderNumber}`);
+    if (getMessageDataMenfess) {
+        const [from, text] = await Promise.all([
+            global.db.get(`menfess.${senderNumber}.from`),
+            global.db.get(`menfess.${senderNumber}.text`)
+        ]);
+
+        if (ctx.quoted?.extendedTextMessage?.text === text) {
+            try {
+                await sendMenfess(ctx, m, senderNumber, from);
+
+                await ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
+                await global.db.delete(`menfess.${senderNumber}.from`);
+            } catch (error) {
+                console.error(`[${global.config.pkg.name}] Error:`, error);
+                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            }
+        }
+    }
+}
 });
 
 // Penanganan peristiwa ketika pengguna bergabung atau keluar dari grup.
