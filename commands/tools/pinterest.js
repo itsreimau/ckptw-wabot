@@ -86,7 +86,7 @@ module.exports = {
                 }
 
                 return ctx.replyInteractiveMessage({
-                    body: `${quote(`Kueri: ${input.replace("-s", "").replace(/\s+/g, " ").trim()}`)}\n` +
+                    body: `${quote(`Kueri: ${input}`)}\n` +
                         "\n" +
                         global.config.msg.footer,
                     footer: global.config.msg.watermark,

@@ -43,7 +43,7 @@ module.exports = {
                 document: {
                     url: data.download
                 },
-                filename: data.name,
+                fileName: data.name,
                 mimetype: data.mime_type || "application/octet-stream"
             });
         } catch (error) {

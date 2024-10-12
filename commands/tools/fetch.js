@@ -41,7 +41,7 @@ module.exports = {
             const contentType = response?.headers?.["content-type"];
 
             if (/image/.test(contentType)) {
-                let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
+                let fileName = /fileName/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/fileName=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return ctx.reply({
                     image: response?.data,
                     mimetype: mime.contentType(contentType)
@@ -49,7 +49,7 @@ module.exports = {
             }
 
             if (/video/.test(contentType)) {
-                let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
+                let fileName = /fileName/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/fileName=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return ctx.reply({
                     video: response?.data,
                     mimetype: mime.contentType(contentType)
@@ -57,7 +57,7 @@ module.exports = {
             }
 
             if (/audio/.test(contentType)) {
-                let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
+                let fileName = /fileName/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/fileName=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return ctx.reply({
                     audio: response?.data,
                     mimetype: mime.contentType(contentType)
@@ -69,7 +69,7 @@ module.exports = {
             });
 
             if (!/utf-8|json|html|plain/.test(contentType)) {
-                let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
+                let fileName = /fileName/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/fileName=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return ctx.reply({
                     document: response?.data,
                     fileName,

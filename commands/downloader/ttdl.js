@@ -53,7 +53,6 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
-            // Jika tipe media audio
             if (mediaType === "audio") {
                 return await ctx.reply({
                     audio: {
@@ -63,9 +62,7 @@ module.exports = {
                 });
             }
 
-            // Jika tipe media video atau image
             if (mediaType === "video_image") {
-                // Kirim video jika ada
                 if (data.video?.noWatermark) {
                     return await ctx.reply({
                         video: {

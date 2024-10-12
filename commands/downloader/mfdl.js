@@ -42,7 +42,7 @@ module.exports = {
                 document: {
                     url: data.link
                 },
-                filename: data.nama,
+                fileName: data.nama,
                 mimetype: mime.lookup(data.mime) || "application/octet-stream"
             });
         } catch (error) {

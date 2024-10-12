@@ -40,9 +40,10 @@ module.exports = {
             const {
                 data
             } = await axios.get(apiUrl);
+            const imageBuffer = Buffer.from(data.result.data);
 
             return await ctx.reply({
-                image: data.result.data,
+                image: imageBuffer,
                 caption: null,
                 mimetype: mime.contentType("png")
             });
