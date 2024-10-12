@@ -13,7 +13,7 @@ module.exports = {
     handler: {
         banned: true,
         cooldown: true
-    }.
+    },
     code: async (ctx) => {
         global.handler(ctx, module.exports.handler).then(({
             status,
