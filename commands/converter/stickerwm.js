@@ -13,15 +13,15 @@ module.exports = {
     name: "stickerwm",
     aliases: ["swm", "stikerwm"],
     category: "converter",
+    handler: {
+        banned: true,
+        cooldown: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const input = ctx.args.join(" ") || null;
 

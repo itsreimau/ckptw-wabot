@@ -6,16 +6,16 @@ const axios = require("axios");
 module.exports = {
     name: "iqtest",
     category: "entertainment",
+    handler: {
+        banned: true,
+        cooldown: true,
+        coin: 10
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true,
-            coin: 10
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const senderNumber = ctx.sender.jid.split("@")[0];
         const winGame = await global.db.get(`user.${senderNumber}.winGame`);

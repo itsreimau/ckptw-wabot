@@ -8,17 +8,17 @@ const {
 module.exports = {
     name: "tagall",
     category: "group",
+    handler: {
+        admin: true,
+        banned: true,
+        cooldown: true,
+        group: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            admin: true,
-            banned: true,
-            cooldown: true,
-            group: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const input = ctx.args.join(" ") || null;
 

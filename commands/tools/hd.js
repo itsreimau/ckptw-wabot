@@ -14,16 +14,16 @@ module.exports = {
     name: "hd",
     aliases: ["enhance", "enhancer", "hd", "hdr", "remini", "upscale", "upscaler"],
     category: "tools",
+    handler: {
+        banned: true,
+        cooldown: true,
+        coin: [10, "image", 3]
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true,
-            coin: [10, "image", 3]
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const input = ctx.args.join(" ") || null;
 

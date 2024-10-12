@@ -8,7 +8,15 @@ const {
 module.exports = {
     name: "speed",
     category: "information",
+    handler: {
+        cooldown: true
+    },
     code: async (ctx) => {
+        global.handler(ctx, module.exports.handler).then(({
+            status,
+            message
+        }) => status && ctx.reply(message));
+
         try {
             const startTime = performance.now();
             const testSpeed = await ctx.reply(quote("Menguji kecepatan..."));

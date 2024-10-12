@@ -10,15 +10,20 @@ module.exports = {
     name: "alquran",
     aliases: ["quran"],
     category: "tools",
+    handler: {
+        banned: true,
+        cooldown: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
+
+        const [suraNumber, ayaInput] = await Promise.all([
+            parseInt(ctx.args[0]),
+            ctx.args[1]
+        ]);
 
         if (!ctx.args.length) return ctx.reply(
             `${quote(`${global.tools.msg.generateInstruction(["send"], ["text"])} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`)}\n` +
@@ -31,9 +36,6 @@ module.exports = {
         }
 
         try {
-            const suraNumber = parseInt(ctx.args[0]);
-            const ayaInput = ctx.args[1];
-
             if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`❎ Surah ${suraNumber} tidak ada.`));
 
             const apiUrl = global.tools.api.createUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);

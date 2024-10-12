@@ -7,14 +7,14 @@ module.exports = {
     name: "readviewonce",
     aliases: ["rvo"],
     category: "owner",
+    handler: {
+        owner: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            owner: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         if (!(await global.tools.general.checkQuotedMedia(ctx.quoted, ["viewOnce"]))) return ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["viewOnce"])));
 

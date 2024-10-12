@@ -8,16 +8,16 @@ module.exports = {
     name: "gempa",
     aliases: ["gempabumi", "Infogempa"],
     category: "tools",
+    handler: {
+        banned: true,
+        cooldown: true,
+        coin: 10
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true,
-            coin: 10
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const apiUrl = await global.tools.api.createUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json", {});
 

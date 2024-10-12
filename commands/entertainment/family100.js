@@ -9,17 +9,17 @@ const session = new Map();
 module.exports = {
     name: "family100",
     category: "entertainment",
+    handler: {
+        banned: true,
+        cooldown: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
-        if (session.has(ctx.id)) return ctx.reply(quote(`🎮 Sesi permainan Family 100 sedang berjalan!`));
+        if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/games/family100.json", {});

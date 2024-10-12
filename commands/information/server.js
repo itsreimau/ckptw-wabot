@@ -7,7 +7,15 @@ const os = require("os");
 module.exports = {
     name: "server",
     category: "information",
+    handler: {
+        cooldown: true
+    },
     code: async (ctx) => {
+        global.handler(ctx, module.exports.handler).then(({
+            status,
+            message
+        }) => status && ctx.reply(message));
+
         const apiUrl = global.tools.api.createUrl("http://ip-api.com", "/json", {});
 
         try {

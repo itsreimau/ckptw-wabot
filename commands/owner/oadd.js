@@ -8,16 +8,17 @@ const {
 module.exports = {
     name: "oadd",
     category: "owner",
+    handler: {
+        botAdmin: true,
+        group: true,
+        owner: true,
+        restrict: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            group: true,
-            owner: true,
-            restrict: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const input = ctx.args.join(" ") || null;
 

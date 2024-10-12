@@ -5,16 +5,16 @@ const {
 module.exports = {
     name: "opromote",
     category: "owner",
+    handler: {
+        botAdmin: true,
+        group: true,
+        owner: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            botAdmin: true,
-            group: true,
-            owner: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.split("@")[0];

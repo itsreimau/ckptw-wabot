@@ -5,19 +5,19 @@ const {
 module.exports = {
     name: "kick",
     category: "group",
+    handler: {
+        admin: true,
+        banned: true,
+        botAdmin: true,
+        cooldown: true,
+        group: true,
+        restrict: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            admin: true,
-            banned: true,
-            botAdmin: true,
-            cooldown: true,
-            group: true,
-            restrict: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.split("@")[0];

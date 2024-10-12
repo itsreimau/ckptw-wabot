@@ -5,16 +5,16 @@ const {
 module.exports = {
     name: "tagme",
     category: "group",
+    handler: {
+        banned: true,
+        group: true,
+        cooldown: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            group: true,
-            cooldown: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         try {
             const senderJid = ctx.sender.jid;

@@ -9,18 +9,18 @@ module.exports = {
     name: "setpp",
     aliases: ["seticon", "setprofile"],
     category: "group",
+    handler: {
+        admin: true,
+        banned: true,
+        botAdmin: true,
+        cooldown: true,
+        group: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            admin: true,
-            banned: true,
-            botAdmin: true,
-            cooldown: true,
-            group: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([

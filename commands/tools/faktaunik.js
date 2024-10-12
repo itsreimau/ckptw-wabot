@@ -7,16 +7,16 @@ module.exports = {
     name: "faktaunik",
     aliases: ["fakta"],
     category: "tools",
+    handler: {
+        banned: true,
+        cooldown: true,
+        coin: 10
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true,
-            coin: 10
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         try {
             const apiUrl = await global.tools.api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});

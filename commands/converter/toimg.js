@@ -12,15 +12,15 @@ module.exports = {
     name: "toimg",
     aliases: ["topng", "toimage"],
     category: "converter",
+    handler: {
+        banned: true,
+        cooldown: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         if (!(global.tools.general.checkQuotedMedia(ctx.quoted, "sticker"))) return ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["sticker"])));
 

@@ -8,16 +8,16 @@ module.exports = {
     name: "ppcouple",
     aliases: ["ppcp"],
     category: "tools",
+    handler: {
+        banned: true,
+        cooldown: true,
+        coin: 10
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true,
-            coin: 10
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/lainnya/ppcouple.json", {});

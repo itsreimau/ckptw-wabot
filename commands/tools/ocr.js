@@ -10,16 +10,16 @@ const mime = require("mime-types");
 module.exports = {
     name: "ocr",
     category: "tools",
+    handler: {
+        banned: true,
+        cooldown: true,
+        coin: [10, "image", 3]
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true,
-            coin: [10, "image", 3]
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([

@@ -8,14 +8,14 @@ const {
 module.exports = {
     name: "restart",
     category: "owner",
+    handler: {
+        owner: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            owner: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         try {
             await ctx.reply(global.config.msg.wait);

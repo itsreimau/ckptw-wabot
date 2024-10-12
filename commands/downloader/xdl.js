@@ -8,17 +8,17 @@ module.exports = {
     name: "xdl",
     aliases: ["twit", "twitdl", "twitter", "twitterdl", "x"],
     category: "downloader",
+    handler: {
+        banned: true,
+        cooldown: true,
+        coin: [10, "text", 1],
+        premium: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true,
-            coin: [10, "text", 1],
-            premium: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const url = ctx.args[0] || null;
 

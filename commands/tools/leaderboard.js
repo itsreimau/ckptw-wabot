@@ -10,14 +10,6 @@ module.exports = {
     aliases: ["lb"],
     category: "tools",
     code: async (ctx) => {
-        const {
-            status,
-            message
-        } = await global.handler(ctx, {
-            owner: false
-        });
-        if (status) return ctx.reply(message);
-
         try {
             const senderJid = ctx.sender.jid.split("@")[0];
             const databaseJSON = JSON.stringify(global.db);

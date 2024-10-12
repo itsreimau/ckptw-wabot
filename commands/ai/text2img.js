@@ -6,16 +6,16 @@ const mime = require("mime-types");
 module.exports = {
     name: "text2img",
     category: "ai",
+    handler: {
+        banned: true,
+        cooldown: true,
+        coin: [10, "text", 1]
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true,
-            coin: [10, "text", 1]
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         let input = ctx.args.join(" ") || null;
 

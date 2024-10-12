@@ -7,16 +7,16 @@ const mime = require("mime-types");
 module.exports = {
     name: "meme",
     category: "entertainment",
+    handler: {
+        banned: true,
+        cooldown: true,
+        coin: 10
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true,
-            coin: 10
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const apiUrl = global.tools.api.createUrl("https://candaan-api.vercel.app", "/api/image/random", {});
 

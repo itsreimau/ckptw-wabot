@@ -64,28 +64,28 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
    ```javascript
    // commands/test/helloworld.js
 
-   module.exports = {
-       name: "helloworld", // Nama perintah.
-       category: "test", // Kategori perintah.
+   module.exports = { // Module yang diekspor berisi konfigurasi dan fungsi untuk perintah "helloworld".
+       name: "helloworld", // Nama perintah yang akan dipanggil oleh pengguna.
+       category: "test", // Kategori perintah yang berguna untuk pengelompokan atau filter perintah.
+       handler: { // Bagian handler ini berisi pengaturan opsi khusus untuk perintah.
+           admin: Boolean, // Apakah perintah hanya dapat digunakan oleh admin grup (true/false).
+           botAdmin: Boolean, // Apakah bot harus menjadi admin untuk menjalankan perintah ini (true/false).
+           banned: Boolean, // Apakah pengguna yang dilarang (banned) tidak bisa menggunakan perintah ini (true/false).
+           coin: Array || Number, // Opsi untuk menentukan penggunaan koin, bisa berupa array atau jumlah tertentu (Array atau Number).
+           cooldown: Number, // Waktu cooldown untuk mencegah perintah digunakan secara berulang dalam waktu singkat (dalam hitungan detik).
+           group: Boolean, // Apakah perintah ini hanya bisa digunakan di dalam grup (true/false).
+           owner: Boolean, // Apakah hanya pemilik bot yang bisa menggunakan perintah ini (true/false).
+           premium: Boolean, // Apakah perintah ini hanya bisa digunakan oleh pengguna premium (true/false).
+           private: Boolean // Apakah perintah ini hanya bisa digunakan dalam chat privat (true/false).
+       },
        code: async (ctx) => { // Fungsi yang akan dijalankan ketika perintah ini dieksekusi.
-           // Memanggil fungsi global.handler dengan objek ctx dan konfigurasi sebagai parameter.
-           const {
-               status, // Status hasil eksekusi fungsi handler.
-               message // Pesan yang akan dikirim jika status true.
-           } = await global.handler(ctx, {
-               admin: Boolean, // Opsi admin (true atau false)
-               botAdmin: Boolean, // Opsi bot admin (true atau false).
-               banned: Boolean, // Opsi banned (true atau false).
-               coin: Array || Number, // Opsi koin (Array atau Number).
-               cooldown: Number, // Opsi cooldown (Number).
-               group: Boolean, // Opsi grup (true atau false).
-               owner: Boolean, // Opsi owner (true atau false).
-               premium: Boolean, // Opsi premium (true atau false).
-               private: Boolean // Opsi private (true atau false).
-           });
-           if (status) return ctx.reply(message); // Jika status true, maka kirim pesan.
+           global.handler(ctx, module.exports.handler).then(({ // Memanggil fungsi handler global untuk memeriksa syarat-syarat dalam handler.
 
-           return ctx.reply("Hello, World!"); // Jika status false, maka kirim pesan "Hello, World!".
+               status,
+               message
+           }) => status && ctx.reply(message)); // Jika status yang dikembalikan true, pesan dari handler akan dikirim ke pengguna.
+
+           return ctx.reply("Hello, World!"); // Jika handler mengembalikan status false atau handler tidak dicek, maka kirimkan pesan "Hello, World!".
        }
    };
    ```

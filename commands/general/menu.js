@@ -10,14 +10,15 @@ module.exports = {
     name: "menu",
     aliases: ["help", "?"],
     category: "general",
+    handler: {
+        banned: true,
+        cooldown: true
+    }.
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true
-        });
+        }) => status && ctx.reply(message));
 
         try {
             const text = await global.tools.list.get("menu", ctx);

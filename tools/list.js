@@ -31,14 +31,23 @@ async function get(type, ctx) {
                 .filter(command => command.category === category)
                 .map(command => ({
                     name: command.name,
-                    aliases: command.aliases
+                    aliases: command.aliases,
+                    handler: command.handler || {}
                 }));
 
             if (categoryCommands.length > 0) {
                 menuText += `◆ ${bold(tag[category])}\n`;
 
                 categoryCommands.forEach(cmd => {
-                    menuText += quote(monospace(`${ctx._used.prefix || "/"}${cmd.name}`));
+                    let handlerText = '';
+                    if (cmd.handler.coin) handlerText += 'ⓒ';
+                    if (cmd.handler.group) handlerText += 'Ⓖ';
+                    if (cmd.handler.owner) handlerText += 'Ⓞ';
+                    if (cmd.handler.premium) handlerText += 'Ⓟ';
+                    if (cmd.handler.private) handlerText += 'ⓟ';
+
+                    menuText += quote(monospace(`${ctx._used.prefix || "/"}${cmd.name} ${handlerText}`));
+
                     if (category === "general" && cmd.aliases && cmd.aliases.length > 0) {
                         menuText += `\n` + cmd.aliases.map(alias => quote(monospace(`${ctx._used.prefix || "/"}${alias}`))).join("\n");
                     }
@@ -48,6 +57,7 @@ async function get(type, ctx) {
                 menuText += "\n";
             }
         }
+
 
         menuText += global.config.msg.footer;
         return menuText;

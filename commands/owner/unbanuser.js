@@ -9,14 +9,14 @@ module.exports = {
     name: "unban",
     aliases: ["unbanuser"],
     category: "owner",
+    handler: {
+        owner: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            owner: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const input = ctx.args.join(" ") || null;
 

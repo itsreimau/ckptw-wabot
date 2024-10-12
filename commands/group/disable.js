@@ -7,18 +7,18 @@ module.exports = {
     name: "disable",
     aliases: ["off"],
     category: "owner",
+    handler: {
+        admin: true,
+        banned: true,
+        botAdmin: true,
+        cooldown: true,
+        group: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            admin: true,
-            banned: true,
-            botAdmin: true,
-            cooldown: true,
-            group: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const input = ctx.args.join(" ") || null;
 

@@ -9,19 +9,18 @@ module.exports = {
     name: "hidetag",
     aliases: ["ht"],
     category: "group",
+    handler: {
+        admin: true,
+        banned: true,
+        group: true
+    },
     code: async (ctx) => {
+        global.handler(ctx, module.exports.handler).then(({
+            status,
+            message
+        }) => status && ctx.reply(message));
+
         try {
-            const {
-                status,
-                message
-            } = await global.handler(ctx, {
-                admin: true,
-                banned: true,
-                group: true
-            });
-
-            if (status) return ctx.reply(message);
-
             const input = ctx.args.join(" ") || "@everyone";
             const data = await ctx.group().members();
             const mentions = data.map(member => `${member.id.split("@")[0]}S_WHATSAPP_NET`);

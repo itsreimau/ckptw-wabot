@@ -5,15 +5,15 @@ const {
 module.exports = {
     name: "uptime",
     category: "information",
+    handler: {
+        banned: true,
+        cooldown: true
+    },
     code: async (ctx) => {
-        const {
+        global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        } = await global.handler(ctx, {
-            banned: true,
-            cooldown: true
-        });
-        if (status) return ctx.reply(message);
+        }) => status && ctx.reply(message));
 
         const uptime = global.tools.general.convertMsToDuration(Date.now() - global.config.bot.readyAt);
         return ctx.reply(quote(`Bot telah aktif selama ${uptime}.`));
