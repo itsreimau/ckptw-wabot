@@ -42,11 +42,12 @@ module.exports = {
         );
 
         try {
+            const type = ["modelx2", "modelx2 25 JXL", "modelx4", "minecraft_modelx4"];
             const flag = global.tools.general.parseFlag(input, {
                 "-t": {
                     type: "value",
                     key: "type",
-                    validator: (val) => ["modelx2", "modelx2 25 JXL", "modelx4", "minecraft_modelx4"].includes(val),
+                    validator: (val) => type.includes(val),
                     parser: (val) => val
                 }
             });
@@ -55,7 +56,7 @@ module.exports = {
             const uploadUrl = await global.tools.general.upload(buffer);
             const apiUrl = global.tools.api.createUrl("itzpire", "/tools/enhance", {
                 url: uploadUrl,
-                type: flag.type
+                type: flag.type || global.tools.general.getRandomElement(type)
             });
             const {
                 data

@@ -207,6 +207,10 @@ function isOwner(ctx, id, selfOwner) {
 }
 
 function parseFlag(argsString, customRules = {}) {
+    if (!argsString || argsString.trim() === "") {
+        return false;
+    }
+
     const options = {};
     let input = [];
 
