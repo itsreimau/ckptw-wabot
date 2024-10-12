@@ -16,7 +16,7 @@ const APIs = {
         baseURL: "https://imphnen-ai.vercel.app"
     },
     itzpire: {
-        baseURL: "https://itzpire.site"
+        baseURL: "https://itzpire.com"
     },
     lolhuman: {
         baseURL: "https://api.lolhuman.xyz"
