@@ -4,17 +4,16 @@ const {
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
+const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "setpp",
-    aliases: ["seticon", "setprofile"],
-    category: "group",
+    name: "remini",
+    category: "tools",
     handler: {
-        admin: true,
         banned: true,
-        botAdmin: true,
         cooldown: true,
-        group: true
+        coin: [10, "image", 3]
     },
     code: async (ctx) => {
         global.handler(ctx, module.exports.handler).then(({
@@ -34,11 +33,22 @@ module.exports = {
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            await ctx._client.updateProfilePicture(ctx.id, buffer);
+            const uploadUrl = await global.tools.general.upload(buffer);
+            const apiUrl = global.tools.api.createUrl("itzpire", "/tools/remini2", {
+                url: uploadUrl
+            });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
-            return ctx.reply(quote(`✅ Berhasil mengubah gambar profil foto grup!`));
+            return await ctx.reply({
+                image: data.result.data,
+                caption: null,
+                mimetype: mime.contentType("png")
+            });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
+            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
             return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

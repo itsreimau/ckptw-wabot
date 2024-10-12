@@ -17,7 +17,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 

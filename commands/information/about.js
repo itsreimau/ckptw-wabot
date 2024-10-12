@@ -12,7 +12,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         return ctx.reply(
             `Halo! Saya adalah Bot WhatsApp bernama ${global.config.bot.name}, dimiliki oleh ${global.config.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`

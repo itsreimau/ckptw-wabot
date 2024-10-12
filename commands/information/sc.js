@@ -13,7 +13,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         return await ctx.reply(
             `${quote("https://github.com/itsreimau/ckptw-wabot")}\n` +

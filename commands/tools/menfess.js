@@ -19,16 +19,19 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
+
+        const senderJid = ctx.sender.jid;
+        const senderNumber = senderJid.split("@")[0];
 
         if (!ctx.args.length) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "halo dunia!"))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `${senderNumber} halo dunia!`))
         );
 
         try {
-            const senderJid = ctx.sender.jid;
-            const senderNumber = senderJid.split("@")[0];
             const [number, ...text] = ctx.args;
             const numberFormatted = number.replace(/[^\d]/g, "");
 

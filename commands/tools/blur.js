@@ -19,7 +19,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         const input = ctx.args.join(" ") || null;
 
@@ -32,7 +34,7 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send", "reply"], "image"))}\n` +
             quote(global.tools.msg.generatesFlagInformation({
-                "-l <number>": "Atur tingkat keburaman."
+                "-l <number>": "Tingkat keburaman."
             }))
         );
 

@@ -1,4 +1,6 @@
 const {
+    ButtonBuilder,
+    CarouselBuilder,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -17,14 +19,25 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
-        const url = ctx.args[0] || null;
+        const input = ctx.args.join(" ") || null;
 
-        if (!url) return ctx.reply(
+        if (!input) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
+
+        const flag = global.tools.general.parseFlag(input, {
+            "-s": {
+                type: "boolean",
+                key: "slide"
+            }
+        });
+
+        const url = flag.input || null;
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
         if (!urlRegex.test(url)) return ctx.reply(global.config.msg.urlInvalid);
@@ -40,6 +53,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
+            // Jika tipe media audio
             if (mediaType === "audio") {
                 return await ctx.reply({
                     audio: {
@@ -49,7 +63,9 @@ module.exports = {
                 });
             }
 
+            // Jika tipe media video atau image
             if (mediaType === "video_image") {
+                // Kirim video jika ada
                 if (data.video?.noWatermark) {
                     return await ctx.reply({
                         video: {
@@ -64,6 +80,53 @@ module.exports = {
                 }
 
                 if (data.images && data.images.length > 0) {
+                    if (flag.slide && global.config.system.useInteractiveMessage) {
+                        const cards = new CarouselBuilder();
+
+                        for (let i = 0; i < data.images.length; i++) {
+                            const imageUrl = data.images[i].url;
+                            const button = new ButtonBuilder()
+                                .setId(`img${i}`)
+                                .setDisplayText("Image URL 🌐")
+                                .setType("cta_url")
+                                .setURL(imageUrl)
+                                .build();
+
+                            const imagesMediaAttachment = await ctx.prepareWAMessageMedia({
+                                image: {
+                                    url: imageUrl
+                                }
+                            }, {
+                                upload: ctx._client.waUploadToServer
+                            });
+
+                            cards.addCard({
+                                body: global.config.msg.footer,
+                                footer: global.config.msg.watermark,
+                                header: {
+                                    title: "TikTok Image",
+                                    hasMediaAttachment: true,
+                                    ...imagesMediaAttachment
+                                },
+                                nativeFlowMessage: {
+                                    buttons: [button]
+                                }
+                            });
+                        }
+
+                        return ctx.replyInteractiveMessage({
+                            body: `${quote(`Kueri: ${url}`)}\n` +
+                                "\n" +
+                                global.config.msg.footer,
+                            footer: global.config.msg.watermark,
+                            carouselMessage: {
+                                cards: cards.build()
+                            }
+                        });
+                    }
+
+                    if (flag.slide && !global.config.system.useInteractiveMessage) ctx.reply(global.config.msg.useInteractiveMessage);
+
                     for (const image of data.images) {
                         await ctx.reply({
                             image: {

@@ -15,7 +15,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         const senderNumber = ctx.sender.jid.split("@")[0];
         const winGame = await global.db.get(`user.${senderNumber}.winGame`);

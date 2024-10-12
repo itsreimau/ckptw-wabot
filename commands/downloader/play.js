@@ -20,7 +20,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         const input = ctx.args.join(" ") || null;
 
@@ -28,8 +30,8 @@ module.exports = {
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss"))}\n` +
             quote(global.tools.msg.generatesFlagInformation({
-                "-s <text>": "Atur sumber (tersedia: spotify, default: youtube).",
-                "-i <number>": "Tetapkan data indeks."
+                "-s <text>": "Sumber untuk memutar lagu (tersedia: spotify, default: youtube).",
+                "-i <number>": "Pilihan pada data indeks."
             }))
         );
 

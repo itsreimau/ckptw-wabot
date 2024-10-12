@@ -15,7 +15,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         const userId = ctx.args[0];
         const coinAmount = parseInt(ctx.args[1], 10);

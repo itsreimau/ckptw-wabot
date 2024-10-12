@@ -20,7 +20,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         if (!(global.tools.general.checkQuotedMedia(ctx.quoted, "sticker"))) return ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["sticker"])));
 

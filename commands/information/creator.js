@@ -13,7 +13,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         const vcard = new VCardBuilder()
             .setFullName(global.config.owner.name)

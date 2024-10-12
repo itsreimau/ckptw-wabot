@@ -18,7 +18,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         const input = ctx.args.join(" ") || null;
 
@@ -39,7 +41,7 @@ module.exports = {
                 return `${quote(bold(`${d.title} (${d.url})`))}\n` +
                     `${quote(`Artis: ${d.artist}`)}\n` +
                     `${quote(`Album: ${d.album}`)}\n` +
-                    `${quote(`Durasi: ${d.string}`)}`;
+                    `${quote(`Durasi: ${d.duration}`)}`;
             }).join(
                 "\n" +
                 `${quote("─────")}\n`

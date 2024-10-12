@@ -13,7 +13,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         const uptime = global.tools.general.convertMsToDuration(Date.now() - global.config.bot.readyAt);
         return ctx.reply(quote(`Bot telah aktif selama ${uptime}.`));

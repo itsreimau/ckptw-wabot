@@ -16,7 +16,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         const input = ctx.args.join(" ") || null;
 
@@ -26,8 +28,9 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("chiwa", "/api/ai/blackbox", {
-                prompt: input
+            const apiUrl = global.tools.api.createUrl("nyxs", "/ai/blackbox", {
+                prompt: input,
+                gaya: `Anda adalah bot WhatsApp bernama ${global.config.bot.name} yang dimiliki oleh ${global.config.owner.name}. Jika nama Anda mirip dengan tokoh di media, sesuaikan kepribadian Anda dengan nama tersebut. Jika tidak, tetaplah ramah, informatif, dan responsif.` // Dapat diubah sesuai keinginan Anda. 
             });
             const {
                 data

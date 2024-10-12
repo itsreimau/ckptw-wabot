@@ -13,7 +13,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         const input = ctx.args.join(" ") || null;
 
@@ -25,34 +27,71 @@ module.exports = {
         try {
             const delay = (time) => new Promise((res) => setTimeout(res, time));
             const getGroups = await ctx._client.groupFetchAllParticipating();
-            const groups = Object.entries(getGroups).slice(0).map((entry) => entry[1]);
+            const groups = Object.entries(getGroups).map((entry) => entry[1]);
             const anu = groups.map((a) => a.id);
 
-            ctx.reply(quote(`🔄 Mengirim siaran ke ${anu.length} obrolan grup, perkiraan waktu penyelesaian adalah ${(anu.length * 0, 5)} detik.`));
+            ctx.reply(quote(`🔄 Mengirim siaran ke ${anu.length} obrolan grup, perkiraan waktu penyelesaian adalah ${(anu.length * 0.5)} detik.`));
+
+            const failedGroups = [];
 
             for (let i of anu) {
                 await delay(500);
 
-                await ctx.sendMessage(i, {
-                    text: input,
-                    contextInfo: {
-                        externalAdReply: {
-                            mediaType: 1,
-                            previewType: 0,
-                            mediaUrl: global.config.bot.groupChat,
-                            title: "B R O A D C A S T",
-                            body: null,
-                            renderLargerThumbnail: true,
-                            thumbnailUrl: global.config.bot.picture.thumbnail,
-                            sourceUrl: global.config.bot.groupChat
-                        },
-                        forwardingScore: 9999,
-                        isForwarded: true
-                    }
-                });
+                try {
+                    await ctx.sendMessage(i, {
+                        text: input,
+                        contextInfo: {
+                            externalAdReply: {
+                                mediaType: 1,
+                                previewType: 0,
+                                mediaUrl: global.config.bot.groupChat,
+                                title: "BROADCAST",
+                                body: null,
+                                renderLargerThumbnail: true,
+                                thumbnailUrl: global.config.bot.picture.thumbnail,
+                                sourceUrl: global.config.bot.groupChat
+                            },
+                            forwardingScore: 9999,
+                            isForwarded: true
+                        }
+                    });
+                } catch (error) {
+                    console.error(`[${global.config.pkg.name}] Error:`, error);
+                    failedGroups.push(i);
+                }
             }
 
-            return ctx.reply(quote(`✅ Berhasil mengirimkan siaran ke ${anu.length} obrolan grup.`));
+            if (failedGroups.length > 0) {
+                ctx.reply(quote(`⚠️ Tidak dapat mengirimkan siaran ke ${failedGroups.length} grup. Akan mencoba ulang dalam beberapa detik...`));
+
+                for (let i of failedGroups) {
+                    await delay(1000);
+
+                    try {
+                        await ctx.sendMessage(i, {
+                            text: input,
+                            contextInfo: {
+                                externalAdReply: {
+                                    mediaType: 1,
+                                    previewType: 0,
+                                    mediaUrl: global.config.bot.groupChat,
+                                    title: "BROADCAST - Ulang",
+                                    body: null,
+                                    renderLargerThumbnail: true,
+                                    thumbnailUrl: global.config.bot.picture.thumbnail,
+                                    sourceUrl: global.config.bot.groupChat
+                                },
+                                forwardingScore: 9999,
+                                isForwarded: true
+                            }
+                        });
+                    } catch (retryError) {
+                        console.error(`[${global.config.pkg.name}] Error:`, error);
+                    }
+                }
+            }
+
+            return ctx.reply(quote(`✅ Berhasil mengirimkan siaran ke ${anu.length - failedGroups.length} obrolan grup. ${failedGroups.length > 0 ? `Beberapa grup gagal dikirimi: ${failedGroups.length} grup.` : ''}`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));

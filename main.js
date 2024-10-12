@@ -75,10 +75,32 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         });
     }
 
+    // Objek untuk menyimpan kombinasi ctx.id dan messageId.
+    let reactMessages = [];
+
     // Penanganan untuk perintah.
     if (global.tools.general.isCmd(m, ctx)) {
         if (global.config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah.
-        if (global.config.system.autoReactOnCmd) await ctx.react(ctx.id, global.config.system.autoReactOnCmd); // Simulasi pemuatan otomatis untuk perintah.
+
+        // Simulasi pemuatan otomatis untuk perintah.
+        if (global.config.system.autoReactOnCmd) {
+            await ctx.react(ctx.id, global.config.system.autoReactOnCmd, m.key.id);
+
+            reactMessages.push({
+                ctxId: ctx.id,
+                messageId: m.key.id
+            });
+
+            if (m.key.fromMe && reactMessages.some(rm => rm.ctxId === m.key.remoteJid)) {
+                const reactToRemove = reactMessages.filter(rm => rm.ctxId === m.key.remoteJid);
+
+                for (const rm of reactToRemove) {
+                    await ctx.react(rm.ctxId, "", rm.messageId);
+                }
+
+                reactMessages = reactMessages.filter(rm => rm.ctxId !== m.key.remoteJid);
+            }
+        }
 
         // Penanganan XP & Level untuk pengguna.
         const xpGain = 5;
@@ -153,37 +175,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (mean && mean !== cmdName) await ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
     }
 
-    // Penanganan AFK: Pengguna yang disebutkan.
-    const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-    if (mentionJids && mentionJids.length > 0) {
-        for (const mentionJid of mentionJids) {
-            const getAFKMention = global.db.get(`user.${mentionJid.split("@")[0]}.afk`);
-            if (getAFKMention) {
-                const [reason, timeStamp] = await Promise.all([
-                    global.db.get(`user.${mentionJid.split("@")[0]}.afk.reason`),
-                    global.db.get(`user.${mentionJid.split("@")[0]}.afk.timeStamp`)
-                ]);
-                const timeAgo = global.tools.general.convertMsToDuration(Date.now() - timeStamp);
-
-                await ctx.reply(quote(`📴 Dia AFK dengan alasan ${reason} selama ${timeAgo}.`));
-            }
-        }
-    }
-
-    // Penanganan AFK : Berangkat dari AFK.
-    const getAFKMessage = await global.db.get(`user.${senderNumber}.afk`);
-    if (getAFKMessage) {
-        const [reason, timeStamp] = await Promise.all([
-            global.db.get(`user.${senderNumber}.afk.reason`),
-            global.db.get(`user.${senderNumber}.afk.timeStamp`)
-        ]);
-        const timeAgo = global.tools.general.convertMsToDuration(Date.now() - timeStamp);
-        await global.db.delete(`user.${senderNumber}.afk`);
-
-        await ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`));
-    }
-
-    // Perintah khusus pemilik.
+    // Perintah khusus Owner.
     if (global.tools.general.isOwner(ctx, senderNumber, true)) {
         // Perintah eval: Jalankan kode JavaScript.
         if (m.content && m.content.startsWith && (m.content.startsWith("==> ") || m.content.startsWith("=> "))) {
@@ -221,6 +213,42 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
                 await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
             }
+        }
+    }
+
+    // Penanganan AFK: Pengguna yang disebutkan.
+    const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+    if (mentionJids && mentionJids.length > 0) {
+        for (const mentionJid of mentionJids) {
+            const getAFKMention = global.db.get(`user.${mentionJid.split("@")[0]}.afk`);
+            if (getAFKMention) {
+                const [reason, timeStamp] = await Promise.all([
+                    global.db.get(`user.${mentionJid.split("@")[0]}.afk.reason`),
+                    global.db.get(`user.${mentionJid.split("@")[0]}.afk.timeStamp`)
+                ]);
+                const timeAgo = global.tools.general.convertMsToDuration(Date.now() - timeStamp);
+
+                await ctx.reply(quote(`📴 Dia AFK dengan alasan ${reason} selama ${timeAgo}.`));
+            }
+        }
+    }
+
+    // Penanganan AFK : Berangkat dari AFK.
+    const getAFKMessage = await global.db.get(`user.${senderNumber}.afk`);
+    if (getAFKMessage) {
+        const [reason, timeStamp] = await Promise.all([
+            global.db.get(`user.${senderNumber}.afk.reason`),
+            global.db.get(`user.${senderNumber}.afk.timeStamp`)
+        ]);
+
+        const currentTime = Date.now();
+        const timeElapsed = currentTime - timeStamp;
+
+        if (timeElapsed > 3000) {
+            const timeAgo = global.tools.general.convertMsToDuration(timeElapsed);
+            await global.db.delete(`user.${senderNumber}.afk`);
+
+            await ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`));
         }
     }
 

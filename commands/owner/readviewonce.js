@@ -14,7 +14,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         if (!(await global.tools.general.checkQuotedMedia(ctx.quoted, ["viewOnce"]))) return ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["viewOnce"])));
 

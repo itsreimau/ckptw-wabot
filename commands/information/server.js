@@ -14,7 +14,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         const apiUrl = global.tools.api.createUrl("http://ip-api.com", "/json", {});
 

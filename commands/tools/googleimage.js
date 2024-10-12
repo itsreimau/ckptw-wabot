@@ -20,7 +20,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         const input = ctx.args.join(" ") || null;
 
@@ -28,7 +30,7 @@ module.exports = {
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "cat"))}\n` +
             quote(global.tools.msg.generatesFlagInformation({
-                "-s <boolean>": "Atur jenis pesan slide (carousel)."
+                "-s <boolean>": "Jenis pesan slide (carousel)."
             }))
         );
 
@@ -94,6 +96,8 @@ module.exports = {
                     }
                 });
             }
+
+            if (flag.slide && !global.config.system.useInteractiveMessage) ctx.reply(global.config.msg.useInteractiveMessage);
 
             const result = global.tools.general.getRandomElement(data);
             return await ctx.reply({

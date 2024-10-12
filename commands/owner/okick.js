@@ -15,7 +15,9 @@ module.exports = {
         global.handler(ctx, module.exports.handler).then(({
             status,
             message
-        }) => status && ctx.reply(message));
+        }) => {
+            if (status) return ctx.reply(message);
+        });
 
         const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.split("@")[0];
