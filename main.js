@@ -75,40 +75,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         });
     }
 
-    // Objek untuk menyimpan kombinasi ctx.id dan messageId.
-    let reactMessages = [];
 
     // Penanganan untuk perintah.
     if (global.tools.general.isCmd(m, ctx)) {
         if (global.config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah.
 
-        // Simulasi pemuatan otomatis untuk perintah.
-        if (global.config.system.autoReactOnCmd) {
-            const {
-                id: ctxId
-            } = ctx;
-            const {
-                key,
-                fromMe
-            } = m;
-
-            await ctx.react(ctxId, global.config.system.autoReactOnCmd, key);
-
-            reactMessages.push({
-                ctxId,
-                key
-            });
-
-            if (fromMe) {
-                reactMessages = reactMessages.filter(async (rm) => {
-                    if (rm.ctxId === ctxId) {
-                        await ctx.react(rm.ctxId, "", rm.key);
-                        return false;
-                    }
-                    return true;
-                });
-            }
-        }
+        if (global.config.system.autoReactOnCmd) await ctx.react(ctxId, global.config.system.autoReactOnCmd); // Simulasi pemuatan otomatis untuk perintah.
 
         // Penanganan XP & Level untuk pengguna.
         const xpGain = 5;
