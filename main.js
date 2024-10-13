@@ -163,7 +163,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     body: quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`),
                     footer: global.config.msg.watermark,
                     nativeFlowMessage: {
-                        buttons: [button, button2, button3]
+                        buttons: [button]
                     }
                 })
             } else if (!global.config.system.useInteractiveMessage) {
