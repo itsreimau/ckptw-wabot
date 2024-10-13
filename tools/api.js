@@ -19,7 +19,7 @@ const APIs = {
         baseURL: "https://itzpire.com"
     },
     lenwy: {
-        baseURL: "hhttps://api-lenwy.vercel.app"
+        baseURL: "https://api-lenwy.vercel.app"
     },
     lolhuman: {
         baseURL: "https://api.lolhuman.xyz"
