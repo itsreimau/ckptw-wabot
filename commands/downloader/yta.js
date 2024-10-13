@@ -77,7 +77,7 @@ module.exports = {
                 if (!isNaN(selectedNumber) && selectedQualityIndex >= 0 && selectedQualityIndex < qualityOptions.length) {
                     const selectedQuality = qualityOptions[selectedQualityIndex];
                     const downloadFunction = data.audio[selectedQuality].download;
-                    ctx.react(ctx.id, "🔄", m.key);
+                    if (global.config.system.autoTypingOnCmd) ctx.simulateTyping();
                     const url = await downloadFunction();
                     await ctx.reply({
                         audio: {

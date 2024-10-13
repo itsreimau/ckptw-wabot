@@ -77,12 +77,15 @@ module.exports = {
                 if (!isNaN(selectedNumber) && selectedQualityIndex >= 0 && selectedQualityIndex < qualityOptions.length) {
                     const selectedQuality = qualityOptions[selectedQualityIndex];
                     const downloadFunction = data.video[selectedQuality].download;
-                    ctx.react(ctx.id, "🔄", m.key);
+                    if (global.config.system.autoTypingOnCmd) ctx.simulateTyping();
                     const url = await downloadFunction();
                     await ctx.reply({
                         video: {
                             url: url,
                         },
+                        caption: `${quote(`Kualitas: ${selectedQuality}`)}\n` +
+                            "\n" +
+                            global.config.msg.footer,
                         mimetype: mime.contentType("mp4"),
                         ptt: false
                     });

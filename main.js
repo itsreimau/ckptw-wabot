@@ -6,6 +6,7 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const {
+    ButtonBuilder,
     Events,
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
@@ -151,7 +152,24 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         const mean = didyoumean(cmdName, listCmd);
 
-        if (mean && mean !== cmdName) await ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
+        if (mean && mean !== cmdName) {
+            if (global.config.system.useInteractiveMessage) {
+                let button = new ButtonBuilder()
+                    .setId(prefix + mean)
+                    .setDisplayText("✅ Ya!")
+                    .setType("quick_reply").build();
+
+                await ctx.replyInteractiveMessage({
+                    body: quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`),
+                    footer: global.config.msg.watermark,
+                    nativeFlowMessage: {
+                        buttons: [button, button2, button3]
+                    }
+                })
+            } else if (!global.config.system.useInteractiveMessage) {
+                ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
+            }
+        }
     }
 
     // Perintah khusus Owner
@@ -306,31 +324,29 @@ async function sendMenfess(ctx, m, senderNumber, from) {
         }
     }
 
-    await ctx.sendMessage(
-        from + S_WHATSAPP_NET, {
-            text: `${m.content}\n` +
-                `${global.config.msg.readmore}\n` +
-                "Jika ingin membalas, Anda harus mengirimkan perintah lagi.",
-            contextInfo: {
-                mentionedJid: [senderNumber + S_WHATSAPP_NET],
-                externalAdReply: {
-                    mediaType: 1,
-                    previewType: 0,
-                    mediaUrl: global.config.bot.groupChat,
-                    title: global.config.msg.watermark,
-                    body: null,
-                    renderLargerThumbnail: true,
-                    thumbnailUrl: global.config.bot.picture.thumbnail,
-                    sourceUrl: global.config.bot.groupChat
-                },
-                forwardingScore: 9999,
-                isForwarded: true
+    await ctx.sendMessage(from + S_WHATSAPP_NET, {
+        text: `${m.content}\n` +
+            `${global.config.msg.readmore}\n` +
+            "Jika ingin membalas, Anda harus mengirimkan perintah lagi.",
+        contextInfo: {
+            mentionedJid: [senderNumber + S_WHATSAPP_NET],
+            externalAdReply: {
+                mediaType: 1,
+                previewType: 0,
+                mediaUrl: global.config.bot.groupChat,
+                title: global.config.msg.watermark,
+                body: null,
+                renderLargerThumbnail: true,
+                thumbnailUrl: global.config.bot.picture.thumbnail,
+                sourceUrl: global.config.bot.groupChat
             },
-            mentions: [senderNumber + S_WHATSAPP_NET]
-        }, {
-            quoted: fakeText
-        }
-    );
+            forwardingScore: 9999,
+            isForwarded: true
+        },
+        mentions: [senderNumber + S_WHATSAPP_NET]
+    }, {
+        quoted: fakeText
+    });
 }
 
 async function handleUserEvent(m) {

@@ -67,29 +67,27 @@ module.exports = {
                 })
             }
 
-            return ctx.sendMessage(
-                ctx.id, {
-                    text: text,
-                    contextInfo: {
-                        mentionedJid: [ctx.sender.jid],
-                        externalAdReply: {
-                            mediaType: 1,
-                            previewType: 0,
-                            mediaUrl: global.config.bot.groupChat,
-                            title: global.config.msg.watermark,
-                            body: null,
-                            renderLargerThumbnail: true,
-                            thumbnailUrl: global.config.bot.picture.thumbnail,
-                            sourceUrl: global.config.bot.groupChat
-                        },
-                        forwardingScore: 9999,
-                        isForwarded: true
+            return ctx.sendMessage(ctx.id, {
+                text: text,
+                contextInfo: {
+                    mentionedJid: [ctx.sender.jid],
+                    externalAdReply: {
+                        mediaType: 1,
+                        previewType: 0,
+                        mediaUrl: global.config.bot.groupChat,
+                        title: global.config.msg.watermark,
+                        body: null,
+                        renderLargerThumbnail: true,
+                        thumbnailUrl: global.config.bot.picture.thumbnail,
+                        sourceUrl: global.config.bot.groupChat
                     },
-                    mentions: [ctx.sender.jid]
-                }, {
-                    quoted: fakeProduct
-                }
-            );
+                    forwardingScore: 9999,
+                    isForwarded: true
+                },
+                mentions: [ctx.sender.jid]
+            }, {
+                quoted: fakeProduct
+            });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
