@@ -78,7 +78,7 @@ function generatesFlagInformation(flags) {
 
     const flagInfo = "Flag:\n" +
         Object.entries(flags).map(([flag, description]) =>
-            quote(`- ${monospace(flag)}: ${description}`)
+            quote(`◆ ${monospace(flag)}: ${description}`)
         ).join("\n");
 
     return flagInfo;
@@ -91,7 +91,7 @@ function generateNotes(notes) {
 
     const notesInfo = "Catatan:\n" +
         notes.map(note =>
-            quote(`- ${note}`)
+            quote(`◆ ${note}`)
         ).join("\n");
 
     return notesInfo;

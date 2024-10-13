@@ -14,18 +14,18 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        await global.handler(ctx, module.exports.handler).then(({
+        const {
             status,
             message
-        }) => {
-            if (status) return ctx.reply(message);
-        });
+        } = await global.handler(ctx, module.exports.handler);
+        if (status) return ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(`${global.tools.msg.generateInstruction(["send"], ["text"])} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`)}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "open"))
+            `${quote(`${global.tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
+            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "open"))}\n` +
+            quote(global.tools.msg.generateNotes(["Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar."]))
         );
 
         if (ctx.args[0] === "list") {
@@ -48,7 +48,7 @@ module.exports = {
                     await ctx.group().unlock();
                     break;
                 default:
-                    return ctx.reply(quote(`❎ Teks tidak valid. Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`));
+                    return ctx.reply(quote(`❎ Teks tidak valid.`));
             }
 
             return ctx.reply(quote(`✅ Berhasil mengubah setelan grup!`));

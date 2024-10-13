@@ -11,18 +11,18 @@ module.exports = {
         cooldown: true
     },
     code: async (ctx) => {
-        await global.handler(ctx, module.exports.handler).then(({
+        const {
             status,
             message
-        }) => {
-            if (status) return ctx.reply(message);
-        });
+        } = await global.handler(ctx, module.exports.handler);
+        if (status) return ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "daily"))
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "daily"))}\n` +
+            quote(global.tools.msg.generateNotes(["Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar."]))
         );
 
         if (ctx.args[0] === "list") {
@@ -30,7 +30,7 @@ module.exports = {
             return ctx.reply(listText);
         }
 
-        if (!claimRewards[input]) return ctx.reply(quote(`❎ Teks tidak valid. Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`));
+        if (!claimRewards[input]) return ctx.reply(quote(`❎ Teks tidak valid.`));
 
         const senderJid = ctx.sender.jid.split("@")[0];
         const lastClaimTime = global.db.get(`user.${senderJid}.lastClaim.${input}`) || 0;

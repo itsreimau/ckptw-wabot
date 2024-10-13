@@ -15,12 +15,11 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        await global.handler(ctx, module.exports.handler).then(({
+        const {
             status,
             message
-        }) => {
-            if (status) return ctx.reply(message);
-        });
+        } = await global.handler(ctx, module.exports.handler);
+        if (status) return ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 

@@ -79,11 +79,11 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
            private: Boolean // Apakah perintah ini hanya bisa digunakan dalam chat privat (true/false).
        },
        code: async (ctx) => { // Fungsi yang akan dijalankan ketika perintah ini dieksekusi.
-           global.handler(ctx, module.exports.handler).then(({ // Memanggil fungsi handler global untuk memeriksa syarat-syarat dalam handler.
-
-               status,
-               message
-           }) => status && ctx.reply(message)); // Jika status yang dikembalikan true, pesan dari handler akan dikirim ke pengguna.
+           const {
+               status, // Status hasil eksekusi fungsi handler.
+               message // Pesan yang akan dikirim jika status true.
+           } = await global.handler(ctx, module.exports.handler); // Memanggil fungsi handler global untuk memeriksa syarat-syarat dalam handler.
+           if (status) return ctx.reply(message); // Jika status true, maka kirim pesan.
 
            return ctx.reply("Hello, World!"); // Jika handler mengembalikan status false atau handler tidak dicek, maka kirimkan pesan "Hello, World!".
        }

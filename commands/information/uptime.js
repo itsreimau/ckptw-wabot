@@ -10,12 +10,11 @@ module.exports = {
         cooldown: true
     },
     code: async (ctx) => {
-        await global.handler(ctx, module.exports.handler).then(({
+        const {
             status,
             message
-        }) => {
-            if (status) return ctx.reply(message);
-        });
+        } = await global.handler(ctx, module.exports.handler);
+        if (status) return ctx.reply(message);
 
         const uptime = global.tools.general.convertMsToDuration(Date.now() - global.config.bot.readyAt);
         return ctx.reply(quote(`Bot telah aktif selama ${uptime}.`));

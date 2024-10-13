@@ -14,12 +14,11 @@ module.exports = {
         coin: [10, "text", 1]
     },
     code: async (ctx) => {
-        await global.handler(ctx, module.exports.handler).then(({
+        const {
             status,
             message
-        }) => {
-            if (status) return ctx.reply(message);
-        });
+        } = await global.handler(ctx, module.exports.handler);
+        if (status) return ctx.reply(message);
 
         let textToTranslate = ctx.args.join(" ") || null;
         let langCode = "id";
@@ -47,8 +46,9 @@ module.exports = {
         }
 
         if (!textToTranslate) return ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))} Bingung? Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))
+            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))}\n` +
+            quote(global.tools.msg.generateNotes(["Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar."]))
         );
 
         if (ctx.args[0] === "list") {
