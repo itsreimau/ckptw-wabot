@@ -29,24 +29,24 @@ module.exports = {
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss"))}\n` +
             quote(global.tools.msg.generatesFlagInformation({
-                "-s <text>": "Sumber untuk memutar lagu (tersedia: spotify, default: youtube).",
-                "-i <number>": "Pilihan pada data indeks."
+                "-i <number>": "Pilihan pada data indeks.",
+                "-s <text>": "Sumber untuk memutar lagu (tersedia: spotify, default: youtube)."
             }))
         );
 
         try {
             const flag = global.tools.general.parseFlag(input, {
-                "-s": {
-                    type: "value",
-                    key: "source",
-                    validator: (val) => val === "spotify",
-                    parser: (val) => val
-                },
                 "-i": {
                     type: "value",
                     key: "index",
                     validator: (val) => !isNaN(val) && parseInt(val) > 0,
                     parser: (val) => parseInt(val) - 1
+                },
+                "-s": {
+                    type: "value",
+                    key: "source",
+                    validator: (val) => val === "spotify",
+                    parser: (val) => val
                 }
             });
 

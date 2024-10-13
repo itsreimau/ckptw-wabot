@@ -85,7 +85,7 @@ module.exports = {
                 }
 
                 return ctx.replyInteractiveMessage({
-                    body: `${quote(`Kueri: ${input}`)}\n` +
+                    body: `${quote(`Kueri: ${flag.input}`)}\n` +
                         "\n" +
                         global.config.msg.footer,
                     footer: global.config.msg.watermark,

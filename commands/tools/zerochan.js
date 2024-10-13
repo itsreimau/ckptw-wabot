@@ -8,8 +8,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "googleimage",
-    aliases: ["gimage"],
+    name: "zerochan",
+    aliases: ["zc"],
     category: "tools",
     handler: {
         banned: true,
@@ -41,15 +41,15 @@ module.exports = {
                 }
             });
 
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/gimage", {
-                message: flag.input
+            const apiUrl = global.tools.api.createUrl("lenwy", "/zerochan", {
+                search: flag.input
             });
             const {
-                data
+                images
             } = (await axios.get(apiUrl)).data;
 
             if (flag.slide && global.config.system.useInteractiveMessage) {
-                const randomResults = data.sort(() => 0.5 - Math.random()).slice(0, 5);
+                const randomResults = images.sort(() => 0.5 - Math.random()).slice(0, 5);
 
                 const cards = new CarouselBuilder();
 
@@ -75,7 +75,7 @@ module.exports = {
                         body: global.config.msg.footer,
                         footer: global.config.msg.watermark,
                         header: {
-                            title: "Google Image",
+                            title: "Zerochan",
                             hasMediaAttachment: true,
                             ...imageMediaAttachment
                         },
@@ -98,7 +98,7 @@ module.exports = {
 
             if (flag.slide && !global.config.system.useInteractiveMessage) ctx.reply(global.config.msg.useInteractiveMessage);
 
-            const result = global.tools.general.getRandomElement(data);
+            const result = global.tools.general.getRandomElement(images);
             return await ctx.reply({
                 image: {
                     url: result.url
