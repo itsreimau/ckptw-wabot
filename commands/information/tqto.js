@@ -26,6 +26,6 @@ module.exports = {
             `${quote("Dan kepada semua pihak yang telah membantu dalam pengembangan bot ini.")}\n` +
             "\n" +
             global.config.msg.footer
-        );
+        ); // Jika Anda tidak menghapus ini, terima kasih!
     }
 };

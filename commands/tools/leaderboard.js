@@ -12,9 +12,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const senderJid = ctx.sender.jid.split("@")[0];
-            const databaseJSON = JSON.stringify(global.db);
-            const parsedDB = JSON.parse(databaseJSON);
-            const users = parsedDB.user;
+            const users = (await global.db.toJSON).user;
 
             const leaderboardData = Object.keys(users)
                 .map(userId => ({
@@ -38,7 +36,7 @@ module.exports = {
 
             if (userRank > 9) {
                 const userStats = leaderboardData[userRank - 1];
-                resultText += quote(`${userRank}. @${senderJid} - Menang: ${userStats.winGame}, Level: ${userStats.level}`);
+                resultText += quote(`10. @${senderJid} - Menang: ${userStats.winGame}, Level: ${userStats.level}`);
             }
 
             const userMentions = topUsers.map(user => user.userId + S_WHATSAPP_NET);

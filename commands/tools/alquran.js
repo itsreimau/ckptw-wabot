@@ -29,7 +29,7 @@ module.exports = {
         if (!ctx.args.length) return ctx.reply(
             `${quote(`${global.tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
             `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "21 35"))}\n` +
-            quote(global.tools.msg.generateNotes(["Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar."]))
+            quote(global.tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (ctx.args[0] === "list") {

@@ -20,9 +20,7 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const databaseJSON = JSON.stringify(global.db);
-            const parsedDB = JSON.parse(databaseJSON);
-            const users = parsedDB.user;
+            const users = (await global.db.toJSON).user;
             const bannedUsers = [];
 
             for (const userId in users) {

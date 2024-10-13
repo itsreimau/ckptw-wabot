@@ -70,7 +70,7 @@ async function get(type, ctx) {
                 text = data.map(b =>
                         `Buku: ${b.name} (${b.abbr})\n` +
                         `Jumlah Bab: ${b.chapter}\n`
-                    ).join("─────\n") +
+                    ).join(`${quote("─────")}\n`) +
                     global.config.msg.footer;
                 break;
             }
@@ -79,28 +79,28 @@ async function get(type, ctx) {
                 text = data.map(s =>
                         `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
                         `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n`
-                    ).join("─────\n") +
+                    ).join(`${quote("─────")}\n`) +
                     "\n" +
                     global.config.msg.footer;
                 break;
             }
             case "claim": {
                 const data = ["daily", "weekly", "monthly", "yearly"];
-                text = data.map(quote).join("\n") +
+                text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     global.config.msg.footer;
                 break;
             }
             case "disable_enable": {
                 const data = ["antilink", "welcome"];
-                text = data.map(quote).join("\n") +
+                text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     global.config.msg.footer;
                 break;
             }
             case "group": {
                 const data = ["open", "close", "lock", "unlock"];
-                text = data.map(quote).join("\n") +
+                text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     global.config.msg.footer;
                 break;
@@ -110,7 +110,7 @@ async function get(type, ctx) {
                 text = data.map(l =>
                         `${quote(`Kode: ${l.code}`)}\n` +
                         `${quote(`Bahasa: ${l.bahasa}`)}\n`
-                    ).join("─────\n") +
+                    ).join(`${quote("─────")}\n`) +
                     "\n" +
                     global.config.msg.footer;
                 break;
@@ -120,7 +120,7 @@ async function get(type, ctx) {
                 text = data.map(l =>
                         `${quote(`Kode: ${l.code}`)}\n` +
                         `${quote(`Bahasa: ${l["bahasa negara"]}`)}\n`
-                    ).join("─────\n") +
+                    ).join(`${quote("─────")}\n`) +
                     "\n" +
                     global.config.msg.footer;
                 break;

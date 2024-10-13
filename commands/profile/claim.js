@@ -22,7 +22,7 @@ module.exports = {
         if (!input) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "daily"))}\n` +
-            quote(global.tools.msg.generateNotes(["Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar."]))
+            quote(global.tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (ctx.args[0] === "list") {
@@ -58,21 +58,22 @@ module.exports = {
     }
 };
 
+// Dapat diubah sesuai keinginan Anda
 const claimRewards = {
     daily: {
         reward: 100,
-        cooldown: 24 * 60 * 60 * 1000 // 24 jam.
+        cooldown: 24 * 60 * 60 * 1000 // 24 jam (100 koin)
     },
     weekly: {
         reward: 500,
-        cooldown: 7 * 24 * 60 * 60 * 1000 // 7 hari.
+        cooldown: 7 * 24 * 60 * 60 * 1000 // 7 hari (500 koin)
     },
     monthly: {
         reward: 2000,
-        cooldown: 30 * 24 * 60 * 60 * 1000 // 30 hari.
+        cooldown: 30 * 24 * 60 * 60 * 1000 // 30 hari (2000 koin)
     },
     yearly: {
         reward: 10000,
-        cooldown: 365 * 24 * 60 * 60 * 1000 // 365 hari.
+        cooldown: 365 * 24 * 60 * 60 * 1000 // 365 hari (10000 koin)
     }
 };

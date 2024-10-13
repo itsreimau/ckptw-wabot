@@ -67,7 +67,7 @@ module.exports = {
             }
 
             const col = ctx.MessageCollector({
-                time: 60000 // 1 menit.
+                time: 60000
             });
 
             col.on("collect", async (m) => {
@@ -90,9 +90,7 @@ module.exports = {
                 }
             });
 
-            col.on("end", async (collector, r) => {
-                // Tidak ada respons ketika kolektor berakhir.
-            });
+            col.on("end", async (collector, r) => {});
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));

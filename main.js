@@ -1,4 +1,4 @@
-// Modul dan dependensi yang diperlukan.
+// Modul dan dependensi yang diperlukan
 const {
     Client,
     CommandHandler,
@@ -21,10 +21,10 @@ const {
     inspect
 } = require("util");
 
-// Pesan koneksi.
+// Pesan koneksi
 console.log(`[${global.config.pkg.name}] Connecting...`);
 
-// Buat instance bot baru.
+// Buat instance bot baru
 const bot = new Client({
     WAVersion: [2, 3000, 1015901307],
     phoneNumber: global.config.bot.phoneNumber,
@@ -35,21 +35,21 @@ const bot = new Client({
     usePairingCode: global.config.system.usePairingCode
 });
 
-// Penanganan acara saat bot siap.
+// Penanganan acara saat bot siap
 bot.ev.once(Events.ClientReady, async (m) => {
     console.log(`[${global.config.pkg.name}] Ready at ${m.user.id}`);
 
-    // Tetapkan global.config pada bot.
+    // Tetapkan global.config pada bot
     global.config.bot.number = m.user.id.split(":")[0];
     global.config.bot.id = m.user.id.split(":")[0] + S_WHATSAPP_NET;
     global.config.bot.readyAt = bot.readyAt;
 });
 
-// Buat penangan perintah dan muat perintah.
+// Buat penangan perintah dan muat perintah
 const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
 cmd.load();
 
-// Penanganan event ketika pesan muncul.
+// Penanganan event ketika pesan muncul
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
@@ -58,14 +58,14 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const groupJid = isGroup ? m.key.remoteJid : null;
     const groupNumber = isGroup ? groupJid.split("@")[0] : null;
 
-    // Log pesan masuk.
+    // Log pesan masuk
     if (isGroup) {
         console.log(`[${global.config.pkg.name}] Incoming message from group: ${groupNumber}, by: ${senderNumber}`);
     } else {
         console.log(`[${global.config.pkg.name}] Incoming message from: ${senderNumber}`);
     }
 
-    // Basis data untuk pengguna.
+    // Basis data untuk pengguna
     const userDb = await global.db.get(`user.${senderNumber}`);
     if (!userDb) {
         await global.db.set(`user.${senderNumber}`, {
@@ -76,11 +76,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
 
-    // Penanganan untuk perintah.
+    // Penanganan untuk perintah
     if (global.tools.general.isCmd(m, ctx)) {
-        if (global.config.system.autoTypingOnCmd) ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah.
+        await global.db.set(`user.${senderNumber}.lastUse`, Date.now());
+        if (global.config.system.autoTypingOnCmd) ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah
 
-        // Penanganan XP & Level untuk pengguna.
+        // Penanganan XP & Level untuk pengguna
         const xpGain = 5;
         let xpToLevelUp = 100;
 
@@ -135,7 +136,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
     }
 
-    // "Did you mean?" untuk perintah salah ketik.
+    // "Did you mean?" untuk perintah salah ketik
     const prefixRegex = new RegExp(ctx._config.prefix, "i");
     const content = m.content && m.content.trim();
     if (prefixRegex.test(content)) {
@@ -153,9 +154,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (mean && mean !== cmdName) await ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
     }
 
-    // Perintah khusus Owner.
+    // Perintah khusus Owner
     if (global.tools.general.isOwner(ctx, senderNumber, true)) {
-        // Perintah eval: Jalankan kode JavaScript.
+        // Perintah eval: Jalankan kode JavaScript
         if (m.content && m.content.startsWith && (m.content.startsWith("==> ") || m.content.startsWith("=> "))) {
             const code = m.content.startsWith("==> ") ? m.content.slice(4) : m.content.slice(3);
 
@@ -169,7 +170,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             }
         }
 
-        // Perintah Exec: Jalankan perintah shell.
+        // Perintah Exec: Jalankan perintah shell
         if (m.content && m.content.startsWith && m.content.startsWith("$ ")) {
             const command = m.content.slice(2);
 
@@ -194,7 +195,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
     }
 
-    // Penanganan AFK: Pengguna yang disebutkan.
+    // Penanganan AFK: Pengguna yang disebutkan
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         for (const mentionJid of mentionJids) {
@@ -211,7 +212,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
     }
 
-    // Penanganan AFK : Berangkat dari AFK.
+    // Penanganan AFK : Berangkat dari AFK
     const getAFKMessage = await global.db.get(`user.${senderNumber}.afk`);
     if (getAFKMessage) {
         const [reason, timeStamp] = await Promise.all([
@@ -230,11 +231,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
     }
 
-    // Grup.
+    // Grup
     if (isGroup) {
         if (m.key.fromMe) return;
 
-        // Penanganan antilink.
+        // Penanganan antilink
         const getAntilink = await global.db.get(`group.${groupNumber}.antilink`);
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
         if (getAntilink) {
@@ -246,9 +247,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
     }
 
-    // Pribadi.
+    // Pribadi
     if (isPrivate) {
-        // Penanganan menfess.
+        // Penanganan menfess
         const getMessageDataMenfess = await global.db.get(`menfess.${senderNumber}`);
         if (getMessageDataMenfess) {
             const [from, text] = await Promise.all([
@@ -271,7 +272,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 });
 
-// Penanganan peristiwa ketika pengguna bergabung atau keluar dari grup.
+// Penanganan peristiwa ketika pengguna bergabung atau keluar dari grup
 bot.ev.on(Events.UserJoin, (m) => {
     m.eventsType = "UserJoin";
     handleUserEvent(m);
@@ -282,10 +283,10 @@ bot.ev.on(Events.UserLeave, (m) => {
     handleUserEvent(m);
 });
 
-// Luncurkan bot.
+// Luncurkan bot
 bot.launch().catch((error) => console.error(`[${global.config.pkg.name}] Error:`, error));
 
-// Fungsi utilitas.
+// Fungsi utilitas
 async function sendMenfess(ctx, m, senderNumber, from) {
     const fakeText = {
         key: {

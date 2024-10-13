@@ -26,7 +26,7 @@ module.exports = {
             const fakeProduct = {
                 key: {
                     fromMe: false,
-                    participant: ctx.sender.jid, // Ubah menjadi `0${S_WHATSAPP_NET}` jika Anda ingin menjadi akun WhatsApp resmi.
+                    participant: ctx.sender.jid, // Ubah menjadi `0${S_WHATSAPP_NET}` jika Anda ingin menjadi akun WhatsApp resmi
                     ...({
                         remoteJid: "status@broadcast"
                     })

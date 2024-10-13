@@ -49,7 +49,7 @@ module.exports = {
         if (!textToSpeech) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))}\n` +
-            quote(global.tools.msg.generateNotes(["Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar."]))
+            quote(global.tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (ctx.args[0] === "list") {
