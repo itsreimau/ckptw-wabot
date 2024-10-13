@@ -1,12 +1,12 @@
 // Modul dan dependensi yang diperlukan
 const {
+    ButtonBuilder,
     Client,
     CommandHandler,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const {
-    ButtonBuilder,
     Events,
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
