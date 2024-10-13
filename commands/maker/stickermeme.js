@@ -21,7 +21,7 @@ module.exports = {
     code: async (ctx) => {
         status,
         message
-        global.handler(ctx, module.exports.handler).then(({
+        await global.handler(ctx, module.exports.handler).then(({
             status,
             message
         }) => {

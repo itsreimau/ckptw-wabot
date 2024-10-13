@@ -14,7 +14,7 @@ module.exports = {
         premium: true
     },
     code: async (ctx) => {
-        global.handler(ctx, module.exports.handler).then(({
+        await global.handler(ctx, module.exports.handler).then(({
             status,
             message
         }) => {

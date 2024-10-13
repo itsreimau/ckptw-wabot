@@ -36,9 +36,6 @@ const APIs = {
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com"
     },
-    vkrdownloader: {
-        baseURL: "https://vkrdownloader.vercel.app"
-    },
     widipe: {
         baseURL: "https://widipe.com"
     }

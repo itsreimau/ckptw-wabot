@@ -16,7 +16,7 @@ module.exports = {
         coin: [10, "image", 3]
     },
     code: async (ctx) => {
-        global.handler(ctx, module.exports.handler).then(({
+        await global.handler(ctx, module.exports.handler).then(({
             status,
             message
         }) => {
@@ -57,7 +57,6 @@ module.exports = {
 
                 return await ctx.reply({
                     image: buffer,
-                    caption: null,
                     mimetype: mime.contentType("jpeg")
                 });
             });

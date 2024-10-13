@@ -12,7 +12,7 @@ module.exports = {
         coin: [10, "text", 1]
     },
     code: async (ctx) => {
-        global.handler(ctx, module.exports.handler).then(({
+        await global.handler(ctx, module.exports.handler).then(({
             status,
             message
         }) => {

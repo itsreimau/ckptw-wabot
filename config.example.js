@@ -60,7 +60,6 @@ global.config = {
 
     // Sistem.
     system: {
-        autoReactOnCmd: "🔃",
         autoRead: true,
         autoTypingOnCmd: true,
         cooldown: 5000,
