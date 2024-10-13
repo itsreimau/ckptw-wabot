@@ -43,9 +43,8 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], "image")));
 
         try {
-            let [top, bottom] = input.split("|");
-            top = top?.trim() || " ";
-            bottom = bottom || top;
+            let [top, bottom] = input.split("|").map(str => str.trim());
+            [top, bottom] = bottom ? [top || "_", bottom] : ["_", top || "_"];
 
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await global.tools.general.upload(buffer);
