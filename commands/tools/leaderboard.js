@@ -12,7 +12,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const senderJid = ctx.sender.jid.split("@")[0];
-            const users = (await global.db.toJSON).user;
+            const users = (await global.db.toJSON()).user;
 
             const leaderboardData = Object.keys(users)
                 .map(userId => ({

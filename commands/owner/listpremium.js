@@ -20,7 +20,7 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const users = (await global.db.toJSON).user;
+            const users = (await global.db.toJSON()).user;
             const premiumUsers = [];
 
             for (const userId in users) {
