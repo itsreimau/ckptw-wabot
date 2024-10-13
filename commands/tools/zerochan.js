@@ -54,7 +54,7 @@ module.exports = {
                 const cards = new CarouselBuilder();
 
                 for (let i = 0; i < randomResults.length; i++) {
-                    const url = randomResults[i].url;
+                    const url = randomResults[i];
                     const button = new ButtonBuilder()
                         .setId(`id${i}`)
                         .setDisplayText("Image URL 🌐")
@@ -101,10 +101,10 @@ module.exports = {
             const result = global.tools.general.getRandomElement(images);
             return await ctx.reply({
                 image: {
-                    url: result.url
+                    url: result
                 },
                 mimetype: mime.contentType("png"),
-                caption: `${quote(`Kueri: ${input}`)}\n` +
+                caption: `${quote(`Kueri: ${flag.input}`)}\n` +
                     `${quote(`Gunakan ${monospace("-s")} jika Anda ingin gambarnya berupa slide.`)}\n` +
                     `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "cat -s"))}\n` +
                     "\n" +
