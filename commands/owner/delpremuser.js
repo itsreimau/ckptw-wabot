@@ -2,6 +2,8 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const {
+    jidDecode,
+    jidEncode,
     S_WHATSAPP_NET
 } = require("@whiskeysockets/baileys");
 
@@ -21,10 +23,11 @@ module.exports = {
 
         const userId = ctx.args[0];
 
-        const senderJid = ctx.sender.jid;
-        const senderNumber = senderJid.split("@")[0];
+        const senderJidDecode = await jidDecode(ctx.sender.jid);
+        const senderJid = await jidEncode(senderJidDecode.user, senderJidDecode.server);
+        const senderNumber = senderJidDecode.user;
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-        const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : userId + S_WHATSAPP_NET;
+        const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : jidEncode(userId, S_WHATSAPP_NET);
 
         if (!ctx.args.length && !user) return ctx.reply({
             text: `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
@@ -36,7 +39,8 @@ module.exports = {
             const [result] = await ctx._client.onWhatsApp(user);
             if (!result.exists) return ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
 
-            await global.db.set(`user.${user.split("@")[0]}.isPremium`, false);
+            const userDecode = await jidDecode(user);
+            await global.db.set(`user.${jidDecode.user}.isPremium`, false);
 
             ctx.sendMessage(user, {
                 text: quote(`🎉 Anda telah dihapus sebagai pengguna Premium oleh Owner!`)

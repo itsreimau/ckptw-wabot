@@ -2,9 +2,10 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const {
+    jidDecode
+} = require("@whiskeysockets/baileys");
 const axios = require("axios");
-
-const session = new Map();
 
 module.exports = {
     name: "family100",
@@ -26,11 +27,11 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/games/family100.json", {});
             const response = await axios.get(apiUrl);
             const data = response.data[Math.floor(Math.random() * response.data.length)];
-
             const timeout = 60000;
             const remainingAnswers = new Set(data.jawaban.map(j => j.toLowerCase()));
             const participants = new Set();
-            const senderNumber = ctx.sender.jid.split("@")[0];
+            const senderJidDecode = await jidDecode(ctx.sender.jid);
+            const senderNumber = senderJidDecode.user;
 
             session.set(ctx.id, true);
 

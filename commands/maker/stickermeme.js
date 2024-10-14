@@ -19,8 +19,6 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        status,
-        message
         const {
             status,
             message

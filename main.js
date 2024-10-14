@@ -11,12 +11,13 @@ const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
 const {
+    jidDecode,
+    jidEncode,
     S_WHATSAPP_NET
 } = require("@whiskeysockets/baileys");
 const {
     exec
 } = require("child_process");
-const didyoumean = require("didyoumean");
 const path = require("path");
 const {
     inspect
@@ -41,9 +42,12 @@ bot.ev.once(Events.ClientReady, async (m) => {
     console.log(`[${global.config.pkg.name}] Ready at ${m.user.id}`);
 
     // Tetapkan global.config pada bot
-    global.config.bot.number = m.user.id.split(":")[0];
-    global.config.bot.id = m.user.id.split(":")[0] + S_WHATSAPP_NET;
-    global.config.bot.readyAt = bot.readyAt;
+    const jidDecode = await jidDecode(jid);
+    await Promise.all([
+        global.config.bot.jid = jidDecode.user + jidDecode.server,
+        global.config.bot.number = jidDecode.user,
+        global.config.bot.readyAt = bot.readyAt
+    ]);
 });
 
 // Buat penangan perintah dan muat perintah
@@ -54,10 +58,12 @@ cmd.load();
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
-    const senderJid = ctx.sender.jid;
-    const senderNumber = senderJid.split("@")[0];
-    const groupJid = isGroup ? m.key.remoteJid : null;
-    const groupNumber = isGroup ? groupJid.split("@")[0] : null;
+    const senderJidDecode = await jidDecode(ctx.sender.jid);
+    const senderJid = senderJidDecode.user + senderJidDecode.server;
+    const senderNumber = senderJidDecode.user;
+    const groupJidDecode = await jidDecode(ctx.id);
+    const groupJid = isGroup ? jidEncode(groupJidDecode.user, groupJidDecode.server);
+    const groupNumber = isGroup ? groupJidDecode.user;
 
     // Log pesan masuk
     if (isGroup) {
@@ -78,9 +84,33 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
 
     // Penanganan untuk perintah
-    if (global.tools.general.isCmd(m, ctx)) {
+    const isCmd = global.tools.general.isCmd(m, ctx);
+    if (isCmd) {
         await global.db.set(`user.${senderNumber}.lastUse`, Date.now());
         if (global.config.system.autoTypingOnCmd) ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah
+
+        const mean = isCmd.didyoumean;
+        if (mean) {
+            const prefix = isCmd.prefix;
+            const input = isCmd.input;
+
+            if (global.config.system.useInteractiveMessage) {
+                let button = new ButtonBuilder()
+                    .setId(prefix + mean + input)
+                    .setDisplayText("✅ Ya!")
+                    .setType("quick_reply").build();
+
+                ctx.replyInteractiveMessage({
+                    body: quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`),
+                    footer: global.config.msg.watermark,
+                    nativeFlowMessage: {
+                        buttons: [button]
+                    }
+                })
+            } else if (!global.config.system.useInteractiveMessage) {
+                ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
+            }
+        }
 
         // Penanganan XP & Level untuk pengguna
         const xpGain = 5;
@@ -111,7 +141,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 level: newUserLevel
             });
 
-            await ctx.reply({
+            ctx.reply({
                 text: quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`),
                 contextInfo: {
                     mentionedJid: [senderJid],
@@ -137,41 +167,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
     }
 
-    // "Did you mean?" untuk perintah salah ketik
-    const prefixRegex = new RegExp(ctx._config.prefix, "i");
-    const content = m.content && m.content.trim();
-    if (prefixRegex.test(content)) {
-        const prefix = content.charAt(0);
-
-        const [cmdName] = content.slice(1).trim().toLowerCase().split(/\s+/);
-        const cmd = ctx._config.cmd;
-        const listCmd = Array.from(cmd.values()).flatMap(command => {
-            const aliases = Array.isArray(command.aliases) ? command.aliases : [];
-            return [command.name, ...aliases];
-        });
-
-        const mean = didyoumean(cmdName, listCmd);
-
-        if (mean && mean !== cmdName) {
-            if (global.config.system.useInteractiveMessage) {
-                let button = new ButtonBuilder()
-                    .setId(prefix + mean)
-                    .setDisplayText("✅ Ya!")
-                    .setType("quick_reply").build();
-
-                await ctx.replyInteractiveMessage({
-                    body: quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`),
-                    footer: global.config.msg.watermark,
-                    nativeFlowMessage: {
-                        buttons: [button]
-                    }
-                })
-            } else if (!global.config.system.useInteractiveMessage) {
-                ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
-            }
-        }
-    }
-
     // Perintah khusus Owner
     if (global.tools.general.isOwner(ctx, senderNumber, true)) {
         // Perintah eval: Jalankan kode JavaScript
@@ -181,10 +176,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             try {
                 const result = await eval(m.content.startsWith("==> ") ? `(async () => { ${code} })()` : code);
 
-                await ctx.reply(inspect(result));
+                ctx.reply(inspect(result));
             } catch (error) {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
-                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+                ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
             }
         }
 
@@ -205,10 +200,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     });
                 });
 
-                await ctx.reply(output);
+                ctx.reply(output);
             } catch (error) {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
-                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+                ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
             }
         }
     }
@@ -225,7 +220,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 ]);
                 const timeAgo = global.tools.general.convertMsToDuration(Date.now() - timeStamp);
 
-                await ctx.reply(quote(`📴 Dia AFK dengan alasan ${reason} selama ${timeAgo}.`));
+                ctx.reply(quote(`📴 Dia AFK dengan alasan ${reason} selama ${timeAgo}.`));
             }
         }
     }
@@ -245,7 +240,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const timeAgo = global.tools.general.convertMsToDuration(timeElapsed);
             await global.db.delete(`user.${senderNumber}.afk`);
 
-            await ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`));
+            ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`));
         }
     }
 
@@ -258,7 +253,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
         if (getAntilink) {
             if (m.content && urlRegex.test(m.content) && !(await global.tools.general.isAdmin(ctx, senderNumber))) {
-                await ctx.reply(quote(`❎ Jangan kirim tautan!`));
+                ctx.reply(quote(`❎ Jangan kirim tautan!`));
                 await ctx.deleteMessage(m.key);
                 if (!global.config.system.restrict) await ctx.group().kick([senderJid]);
             }
@@ -279,11 +274,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 try {
                     await sendMenfess(ctx, m, senderNumber, from);
 
-                    await ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
+                    ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
                     await global.db.delete(`menfess.${senderNumber}.from`);
                 } catch (error) {
                     console.error(`[${global.config.pkg.name}] Error:`, error);
-                    await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+                    ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
                 }
             }
         }
@@ -329,7 +324,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
             `${global.config.msg.readmore}\n` +
             "Jika ingin membalas, Anda harus mengirimkan perintah lagi.",
         contextInfo: {
-            mentionedJid: [senderNumber + S_WHATSAPP_NET],
+            mentionedJid: [jidEncode(senderNumber, S_WHATSAPP_NET)],
             externalAdReply: {
                 mediaType: 1,
                 previewType: 0,
@@ -343,7 +338,7 @@ async function sendMenfess(ctx, m, senderNumber, from) {
             forwardingScore: 9999,
             isForwarded: true
         },
-        mentions: [senderNumber + S_WHATSAPP_NET]
+        mentions: [jidEncode(senderNumber, S_WHATSAPP_NET)]
     }, {
         quoted: fakeText
     });
@@ -356,7 +351,8 @@ async function handleUserEvent(m) {
     } = m;
 
     try {
-        const getWelcome = await global.db.get(`group.${id.split("@")[0]}.welcome`);
+        const idDecode = await jidDecode(id);
+        const getWelcome = await global.db.get(`group.${idDecode.user}.welcome`);
         if (getWelcome) {
             const metadata = await bot.core.groupMetadata(id);
 

@@ -2,6 +2,7 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const {
+    jidEncode,
     S_WHATSAPP_NET
 } = require("@whiskeysockets/baileys");
 
@@ -35,7 +36,7 @@ module.exports = {
             });
 
             premiumUsers.forEach((userId) => {
-                userMentions.push(userId + S_WHATSAPP_NET);
+                userMentions.push(jidEncode(userId, S_WHATSAPP_NET));
             });
 
             return ctx.reply({

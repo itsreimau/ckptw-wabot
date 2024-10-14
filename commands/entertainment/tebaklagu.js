@@ -29,7 +29,8 @@ module.exports = {
             const data = global.tools.general.getRandomElement(response.data);
             const coin = 3;
             const timeout = 60000;
-            const senderNumber = ctx.sender.jid.split("@")[0];
+            const senderJidDecode = await jidDecode(ctx.sender.jid);
+            const senderNumber = senderJidDecode.user;
 
             session.set(ctx.id, true);
 

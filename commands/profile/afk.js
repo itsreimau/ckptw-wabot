@@ -20,7 +20,9 @@ module.exports = {
 
         try {
             const reason = input || "tanpa alasan";
-            global.db.set(`user.${ctx.sender.jid.split("@")[0]}.afk`, {
+            const senderJidDecode = await jidDecode(ctx.sender.jid);
+            const senderNumber = senderJidDecode.user;
+            global.db.set(`user.${senderNumber}.afk`, {
                 reason: reason,
                 timeStamp: Date.now()
             });

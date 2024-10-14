@@ -1,12 +1,14 @@
 const api = require("./api.js");
 const axios = require("axios");
 const cheerio = require("cheerio");
+const didyoumean = require("didyoumean");
 const FormData = require("form-data");
 const {
     fromBuffer
 } = require("file-type");
 const {
-    S_WHATSAPP_NET
+    jidDecode,
+    jidEncode
 } = require("@whiskeysockets/baileys");
 
 async function checkAdmin(ctx, id) {
@@ -159,15 +161,41 @@ function getRandomElement(arr) {
 }
 
 function isCmd(m, ctx) {
+    const prefixRegex = new RegExp(ctx._config.prefix, "i");
+    const content = m.content && m.content.trim();
+
+    if (!prefixRegex.test(content)) return false;
+
     try {
-        const prefixRegex = new RegExp(ctx._config.prefix, "i");
-        const content = m.content && m.content.trim();
-        if (!prefixRegex.test(content)) return false;
-        const [cmdName] = content.slice(1).trim().toLowerCase().split(/\s+/);
-        for (const cmd of ctx._config.cmd.values()) {
-            if (cmd.name === cmdName || (cmd.aliases && cmd.aliases.includes(cmdName))) return true;
+        const prefix = content.charAt(0);
+        const [cmdName, ...inputArray] = content.slice(1).trim().toLowerCase().split(/\s+/);
+        const input = inputArray.join(" ");
+
+        const cmd = ctx._config.cmd;
+        const listCmd = Array.from(cmd.values()).flatMap(command => {
+            const aliases = Array.isArray(command.aliases) ? command.aliases : [];
+            return [command.name, ...aliases];
+        });
+
+        const matchedCmd = cmd.get(cmdName) || Array.from(cmd.values()).find(c => c.aliases && c.aliases.includes(cmdName));
+
+        if (matchedCmd) {
+            return {
+                msg: content,
+                prefix,
+                cmd: cmdName,
+                input
+            };
+        } else {
+            const mean = didyoumean(cmdName, listCmd);
+            return {
+                msg: content,
+                prefix,
+                cmd: cmdName,
+                input,
+                didyoumean: mean || null
+            };
         }
-        return false;
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
         return false;
@@ -176,7 +204,8 @@ function isCmd(m, ctx) {
 
 async function isAdmin(ctx, id) {
     try {
-        const jid = id || ctx.sender.jid;
+        const senderJidDecode = await jidDecode(ctx.sender.jid);
+        const senderJid = id || await jidEncode(senderJidDecode.user, senderJidDecode.server);
         return await checkAdmin(ctx, jid);
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
@@ -186,8 +215,8 @@ async function isAdmin(ctx, id) {
 
 async function isBotAdmin(ctx) {
     try {
-        const id = ctx._client.user.id.split(":")[0][0] + S_WHATSAPP_NET;
-        return await checkAdmin(ctx, id);
+        const jid = global.config.bot.jid;
+        return await checkAdmin(ctx, jid);
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
         return false;
@@ -196,10 +225,11 @@ async function isBotAdmin(ctx) {
 
 function isOwner(ctx, id, selfOwner) {
     try {
-        const jid = id || ctx.sender.jid.split("@")[0];
+        const jidDecode = await jidDecode(ctx.sender.jid);
+        const jid = id || await jidEncode(jidDecode.user, jidDecode.server);
         return selfOwner ?
-            ctx._client.user.id.split(":")[0] === jid || global.config.owner.number === jid || global.config.owner.co.includes(id) :
-            global.config.owner.number === jid || global.config.owner.co.includes(id);
+            global.bot.config.bot.jid === jid || global.config.owner.number === jid || global.config.owner.co.includes(id) :
+            global.config.owner.number === jid || global.config.owner.co.includes(jid);
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
         return false;

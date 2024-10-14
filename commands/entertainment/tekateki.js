@@ -2,9 +2,10 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const {
+    jidDecode
+} = require("@whiskeysockets/baileys");
 const axios = require("axios");
-
-const session = new Map();
 
 module.exports = {
     name: "tekateki",
