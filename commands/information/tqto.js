@@ -18,9 +18,10 @@ module.exports = {
 
         return ctx.reply(
             `${quote("Allah SWT")}\n` +
+            `${quote("ItsReimau (https://github.com/itsreimau)")}\n` +
+            `${quote("JastinXyz (https://github.com/JastinXyz)")}\n` +
             `${quote("JastinXyz (https://github.com/JastinXyz)")}\n` +
             `${quote("Idul (https://github.com/aidulcandra)")}\n` +
-            `${quote("ZTRdiamond (https://github.com/ZTRdiamond)")}\n` +
             `${quote("Nyx Altair (https://github.com/NyxAltair)")}\n` +
             `${quote("Serv00 (https://serv00.com/)")}\n` +
             `${quote("Dan kepada semua pihak yang telah membantu dalam pengembangan bot ini.")}\n` +
