@@ -42,7 +42,7 @@ bot.ev.once(Events.ClientReady, async (m) => {
     console.log(`[${global.config.pkg.name}] Ready at ${m.user.id}`);
 
     // Tetapkan global.config pada bot
-    const jidDecode = jidDecode(jid);
+    const jidDecode = jidDecode(m.user.id);
     await Promise.all([
         global.config.bot.jid = jidDecode.user + jidDecode.server,
         global.config.bot.number = jidDecode.user,
