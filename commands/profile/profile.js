@@ -22,11 +22,10 @@ module.exports = {
             const senderJid = ctx.sender.jid;
             const senderNumber = senderJid.split(/[:@]/)[0];
 
-            const [userCoin = 0, isOwner, isPremium, userLastClaim, userLevel = 1, userXp = 0] = await Promise.all([
+            const [userCoin = 0, isOwner, isPremium, userLevel = 1, userXp = 0] = await Promise.all([
                 global.db.get(`user.${senderNumber}.coin`),
                 global.tools.general.isOwner(ctx, senderNumber, true),
                 global.db.get(`user.${senderNumber}.isPremium`),
-                global.db.get(`user.${senderNumber}.lastClaim`),
                 global.db.get(`user.${senderNumber}.level`),
                 global.db.get(`user.${senderNumber}.xp`),
             ]);
@@ -57,7 +56,6 @@ module.exports = {
                     `${quote(`Level: ${userLevel}`)}\n` +
                     `${quote(`Koin: ${userCoin || "-"}`)}\n` +
                     `${quote(`XP: ${userXp}`)}\n` +
-                    `${quote(`Diklaim: ${global.tools.general.ucword(Object.keys(userLastClaim).join(", "))}`)}\n` +
                     "\n" +
                     global.config.msg.footer,
             });
