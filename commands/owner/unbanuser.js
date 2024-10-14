@@ -3,7 +3,7 @@ const {
 } = require("@mengkodingan/ckptw");
 const {
     jidDecode,
-    jidEncode
+    jidEncode,
     S_WHATSAPP_NET
 } = require("@whiskeysockets/baileys");
 
