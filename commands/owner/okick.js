@@ -1,10 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    jidDecode,
-    jidEncode
-} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "okick",
@@ -22,9 +18,8 @@ module.exports = {
         } = await global.handler(ctx, module.exports.handler);
         if (status) return ctx.reply(message);
 
-        const senderJidDecode = jidDecode(ctx.sender.jid);
-        const senderJid = jidEncode(senderJidDecode.user, senderJidDecode.server);
-        const senderNumber = senderJidDecode.user;
+        const senderJid = ctx.sender.jid;
+        const senderNumber = senderJid.split(/[:@]/)[0];
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const account = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : null;
 

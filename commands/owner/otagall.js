@@ -2,9 +2,7 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const {
-    jidDecode,
-    jidEncode,
-    _WHATSAPP_NET
+    S_WHATSAPP_NET
 } = require("@whiskeysockets/baileys");
 
 module.exports = {
@@ -28,12 +26,10 @@ module.exports = {
             const len = data.length;
             const mentions = [];
             for (let i = 0; i < len; i++) {
-                const idDecode = jidDecode(data[i].id);
-                const tag = idDecode.user;
-                const mention = jidEncode(idDecode.user + idDecode.server);
+                const serialized = data[i].id.split(/[:@]/)[0];
                 mentions.push({
-                    tag,
-                    mention
+                    tag: `@${serialized}`,
+                    mention: serialized + S_WHATSAPP_NET
                 });
             }
             const mentionText = mentions.map((mention) => mention.tag).join(" ");

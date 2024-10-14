@@ -2,10 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    jidDecode,
-    jidEncode
-} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "claim",
@@ -36,9 +32,7 @@ module.exports = {
 
         if (!claimRewards[input]) return ctx.reply(quote(`❎ Teks tidak valid.`));
 
-        const senderJidDecode = jidDecode(ctx.sender.jid);
-        const senderJid = jidEncode(senderJidDecode.user, senderJidDecode.server);
-        const senderNumber = senderJidDecode.user;
+        const senderJid = ctx.sender.jid.split(/[:@]/)[0];
         const lastClaimTime = global.db.get(`user.${senderJid}.lastClaim.${input}`) || 0;
         const currentTime = Date.now();
         const timePassed = currentTime - lastClaimTime;

@@ -25,7 +25,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply(await global.tools.general.translate(data.text, "id"));
+            return ctx.reply(await global.tools.general.translate(data.text, "id"));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return ctx.reply(global.config.msg.notFound);

@@ -1,10 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    jidDecode,
-    jidEncode
-} = require("@whiskeysockets/baileys");
 const mime = require("mime-types");
 
 module.exports = {
@@ -22,10 +18,9 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const senderJidDecode = jidDecode(ctx.sender.jid);
-            const senderJid = jidEncode(senderJidDecode.user, senderJidDecode.server);
-            const senderNumber = senderJidDecode.user;
             const senderName = ctx.sender.pushName || "-";
+            const senderJid = ctx.sender.jid;
+            const senderNumber = senderJid.split(/[:@]/)[0];
 
             const [userCoin = 0, isPremium, userXp = 0, userLevel = 1, isOwner] = await Promise.all([
                 global.db.get(`user.${senderNumber}.coin`),
@@ -51,7 +46,7 @@ module.exports = {
                 avatar: profilePictureUrl,
             });
 
-            return await ctx.reply({
+            return ctx.reply({
                 image: {
                     url: card || profilePictureUrl,
                 },

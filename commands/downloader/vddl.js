@@ -35,7 +35,7 @@ module.exports = {
             const videoId = match[3];
             const videoUrl = `https://cdn.videy.co/${videoId}.mp4`;
 
-            return await ctx.reply({
+            return ctx.reply({
                 video: {
                     url: videoUrl
                 },

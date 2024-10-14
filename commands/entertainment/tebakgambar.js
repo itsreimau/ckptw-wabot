@@ -21,7 +21,7 @@ module.exports = {
         } = await global.handler(ctx, module.exports.handler);
         if (status) return ctx.reply(message);
 
-        if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
+        if (session.has(ctx.id)) return ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/games/tebakgambar.json", {});
@@ -29,12 +29,11 @@ module.exports = {
             const data = global.tools.general.getRandomElement(response.data);
             const coin = 3;
             const timeout = 60000;
-            const senderJidDecode = jidDecode(ctx.sender.jid);
-            const senderNumber = senderJidDecode.user;
+            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
 
             session.set(ctx.id, true);
 
-            await ctx.reply({
+            ctx.reply({
                 image: {
                     url: data.img
                 },

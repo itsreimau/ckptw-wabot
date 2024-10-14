@@ -34,7 +34,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply({
+            return ctx.reply({
                 image: {
                     url: global.tools.general.getRandomElement(data.result)
                 },

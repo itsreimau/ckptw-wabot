@@ -2,8 +2,6 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const {
-    jidDecode,
-    jidEncode,
     S_WHATSAPP_NET
 } = require("@whiskeysockets/baileys");
 
@@ -13,8 +11,7 @@ module.exports = {
     category: "tools",
     code: async (ctx) => {
         try {
-            const senderNumberDecode = jidDecode(ctx.sender.jid);
-            const senderNumber = senderNumberDecode.user;
+            const senderJid = ctx.sender.jid.split(/[:@]/)[0];
             const users = (await global.db.toJSON()).user;
 
             const leaderboardData = Object.keys(users)
@@ -28,7 +25,7 @@ module.exports = {
                     return b.level - a.level;
                 });
 
-            const userRank = leaderboardData.findIndex(user => user.userId === senderNumber) + 1;
+            const userRank = leaderboardData.findIndex(user => user.userId === senderJid) + 1;
 
             const topUsers = leaderboardData.slice(0, 9);
 
@@ -39,11 +36,11 @@ module.exports = {
 
             if (userRank > 9) {
                 const userStats = leaderboardData[userRank - 1];
-                resultText += quote(`10. @${senderNumber} - Menang: ${userStats.winGame}, Level: ${userStats.level}`);
+                resultText += quote(`10. @${senderJid} - Menang: ${userStats.winGame}, Level: ${userStats.level}`);
             }
 
-            const userMentions = topUsers.map(user => user.jidEncode(userId, S_WHATSAPP_NET));
-            if (userRank > 9) userMentions.push(jidEncode(senderNumber, S_WHATSAPP_NET));
+            const userMentions = topUsers.map(user => user.userId + S_WHATSAPP_NET);
+            if (userRank > 9) userMentions.push(senderJid + S_WHATSAPP_NET);
 
             return ctx.reply({
                 text: `${resultText.trim()}\n` +

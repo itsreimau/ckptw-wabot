@@ -34,7 +34,7 @@ module.exports = {
                 url: url
             });
 
-            return await ctx.reply({
+            return ctx.reply({
                 audio: {
                     url: apiUrl
                 },

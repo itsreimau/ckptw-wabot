@@ -40,7 +40,7 @@ module.exports = {
 
             if (data.image_urls && data.image_urls.length > 0) {
                 for (const imageUrl of data.image_urls) {
-                    await ctx.reply({
+                    ctx.reply({
                         image: {
                             url: imageUrl
                         },
@@ -51,7 +51,7 @@ module.exports = {
 
             if (data.video_urls && data.video_urls.length > 0) {
                 for (const videoUrl of data.video_urls) {
-                    await ctx.reply({
+                    ctx.reply({
                         video: {
                             url: videoUrl
                         },

@@ -2,10 +2,9 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    jidDecode
-} = require("@whiskeysockets/baileys");
 const axios = require("axios");
+
+const session = new Map();
 
 module.exports = {
     name: "siapakahaku",
@@ -21,7 +20,7 @@ module.exports = {
         } = await global.handler(ctx, module.exports.handler);
         if (status) return ctx.reply(message);
 
-        if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
+        if (session.has(ctx.id)) return ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/games/siapakahaku.json", {});
@@ -29,12 +28,11 @@ module.exports = {
             const data = global.tools.general.getRandomElement(response.data);
             const coin = 3;
             const timeout = 60000;
-            const senderJidDecode = jidDecode(ctx.sender.jid);
-            const senderNumber = senderJidDecode.user;
+            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
 
             session.set(ctx.id, true);
 
-            await ctx.reply(
+            ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`+${coin} Koin`)}\n` +
                 `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
@@ -81,7 +79,7 @@ module.exports = {
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
-                    await ctx.reply(
+                    ctx.reply(
                         `${quote("⌛ Waktu habis!")}\n` +
                         quote(`Jawabannya adalah ${answer}.`)
                     );

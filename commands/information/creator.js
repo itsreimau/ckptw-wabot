@@ -21,7 +21,7 @@ module.exports = {
             .setOrg(global.config.owner.organization)
             .setNumber(global.config.owner.number).build();
 
-        return await ctx.reply({
+        return ctx.reply({
             contacts: {
                 displayName: global.config.owner.name,
                 contacts: [{

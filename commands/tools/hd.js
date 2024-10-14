@@ -61,7 +61,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply({
+            return ctx.reply({
                 image: {
                     url: data.result.img
                 },

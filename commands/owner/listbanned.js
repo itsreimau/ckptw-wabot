@@ -2,7 +2,6 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const {
-    jidEncode,
     S_WHATSAPP_NET
 } = require("@whiskeysockets/baileys");
 
@@ -36,7 +35,7 @@ module.exports = {
             });
 
             bannedUsers.forEach((userId) => {
-                userMentions.push(jidEncode(userId, S_WHATSAPP_NET));
+                userMentions.push(userId + S_WHATSAPP_NET);
             });
 
             return ctx.reply({

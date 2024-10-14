@@ -1,10 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    jidDecode,
-    jidEncode
-} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "tagme",
@@ -22,9 +18,8 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const senderJidDecode = jidDecode(ctx.sender.jid);
-            const senderJid = jidEncode(senderJidDecode.user, senderJidDecode.server);
-            const senderNumber = senderJidDecode.user;
+            const senderJid = ctx.sender.jid;
+            const senderNumber = senderJid.split(/[:@]/)[0];
 
             return ctx.reply({
                 text: `@${senderNumber}`,

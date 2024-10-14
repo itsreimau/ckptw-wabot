@@ -31,7 +31,7 @@ module.exports = {
 
             if (!imgUrl) return ctx.reply(global.config.msg.notFound);
 
-            return await ctx.reply({
+            return ctx.reply({
                 image: {
                     url: imgUrl
                 },

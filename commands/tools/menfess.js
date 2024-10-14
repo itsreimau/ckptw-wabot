@@ -2,7 +2,6 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const {
-    jidDecode,
     S_WHATSAPP_NET
 } = require("@whiskeysockets/baileys");
 
@@ -23,8 +22,8 @@ module.exports = {
         } = await global.handler(ctx, module.exports.handler);
         if (status) return ctx.reply(message);
 
-        const senderJidDecode = jidDecode(ctx.sender.jid);
-        const senderNumber = senderJidDecode.user;
+        const senderJid = ctx.sender.jid;
+        const senderNumber = senderJid.split(/[:@]/)[0];
 
         if (!ctx.args.length) return ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +

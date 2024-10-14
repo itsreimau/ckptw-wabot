@@ -99,7 +99,7 @@ module.exports = {
             if (flag.slide && !global.config.system.useInteractiveMessage) ctx.reply(global.config.msg.useInteractiveMessage);
 
             const result = global.tools.general.getRandomElement(images);
-            return await ctx.reply({
+            return ctx.reply({
                 image: {
                     url: result
                 },

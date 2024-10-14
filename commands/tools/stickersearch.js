@@ -39,7 +39,7 @@ module.exports = {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            await ctx.reply(
+            ctx.reply(
                 `${quote(`Judul: ${data.title}`)}\n` +
                 `${quote("Stiker akan dikirim. (Tunda 3 detik untuk menghindari spam)")}\n` +
                 "\n" +
@@ -56,7 +56,7 @@ module.exports = {
                     quality: 50,
                 });
 
-                await ctx.reply(await sticker.toMessage());
+                ctx.reply(await sticker.toMessage());
                 await new Promise(resolve => setTimeout(resolve, 3000));
             }
         } catch (error) {

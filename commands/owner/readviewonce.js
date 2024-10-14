@@ -30,11 +30,11 @@ module.exports = {
             }
 
             if (messageType === MessageType.imageMessage) {
-                await ctx.reply({
+                ctx.reply({
                     image: buffer
                 });
             } else if (messageType === MessageType.videoMessage) {
-                await ctx.reply({
+                ctx.reply({
                     video: buffer
                 });
             }

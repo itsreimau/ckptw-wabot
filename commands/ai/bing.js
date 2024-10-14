@@ -8,8 +8,7 @@ module.exports = {
     category: "ai",
     handler: {
         banned: true,
-        cooldown: true,
-        coin: [10, "text", 1]
+        cooldown: true
     },
     code: async (ctx) => {
         const {

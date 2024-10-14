@@ -45,7 +45,7 @@ module.exports = {
                         id: index + 1
                     }))
                 }).build();
-                await ctx.replyInteractiveMessage({
+                ctx.replyInteractiveMessage({
                     body: `${quote(`Judul: ${data.title}`)}\n` +
                         `${quote(`URL: ${url}`)}\n` +
                         "\n" +
@@ -56,7 +56,7 @@ module.exports = {
                     }
                 });
             } else {
-                await ctx.reply(
+                ctx.reply(
                     `${quote(`Judul: ${data.title}`)}\n` +
                     `${quote(`URL: ${url}`)}\n` +
                     `${quote(`Pilih kualitas:`)}\n` +
@@ -79,7 +79,7 @@ module.exports = {
                     const downloadFunction = data.audio[selectedQuality].download;
                     if (global.config.system.autoTypingOnCmd) ctx.simulateTyping();
                     const url = await downloadFunction();
-                    await ctx.reply({
+                    ctx.reply({
                         audio: {
                             url: url,
                         },

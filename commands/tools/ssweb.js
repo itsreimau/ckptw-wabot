@@ -34,7 +34,7 @@ module.exports = {
                 url
             });
 
-            return await ctx.reply({
+            return ctx.reply({
                 image: {
                     url: apiUrl
                 },

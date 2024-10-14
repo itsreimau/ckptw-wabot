@@ -19,7 +19,7 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            await ctx.reply(global.config.msg.wait);
+            ctx.reply(global.config.msg.wait);
 
             exec(`pm2 restart ${global.config.pkg.name}`); // PM2
         } catch (error) {

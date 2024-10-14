@@ -7,8 +7,7 @@ const {
     fromBuffer
 } = require("file-type");
 const {
-    jidDecode,
-    jidEncode
+    S_WHATSAPP_NET
 } = require("@whiskeysockets/baileys");
 
 async function checkAdmin(ctx, id) {
@@ -204,8 +203,7 @@ function isCmd(m, ctx) {
 
 async function isAdmin(ctx, id) {
     try {
-        const senderJidDecode = jidDecode(ctx.sender.jid);
-        const senderJid = id || jidEncode(senderJidDecode.user, senderJidDecode.server);
+        const jid = id || ctx.sender.jid;
         return await checkAdmin(ctx, jid);
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
@@ -215,8 +213,8 @@ async function isAdmin(ctx, id) {
 
 async function isBotAdmin(ctx) {
     try {
-        const jid = global.config.bot.jid;
-        return await checkAdmin(ctx, jid);
+        const id = global.config.bot.id;
+        return await checkAdmin(ctx, id);
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
         return false;
@@ -225,11 +223,10 @@ async function isBotAdmin(ctx) {
 
 function isOwner(ctx, id, selfOwner) {
     try {
-        const jidDecode = jidDecode(ctx.sender.jid);
-        const jid = id || jidEncode(jidDecode.user, jidDecode.server);
+        const jid = id || ctx.sender.jid.split(/[:@]/)[0];
         return selfOwner ?
-            global.bot.config.bot.jid === jid || global.config.owner.number === jid || global.config.owner.co.includes(id) :
-            global.config.owner.number === jid || global.config.owner.co.includes(jid);
+            ctx._client.user.id.split(/[:@]/)[0] === jid || global.config.owner.number === jid || global.config.owner.co.includes(id) :
+            global.config.owner.number === jid || global.config.owner.co.includes(id);
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
         return false;

@@ -20,7 +20,7 @@ module.exports = {
 
         try {
             const startTime = performance.now();
-            const testSpeed = await ctx.reply(quote("Menguji kecepatan..."));
+            const testSpeed = ctx.reply(quote("Menguji kecepatan..."));
             const responseTime = (performance.now() - startTime).toFixed(2);
             await ctx.editMessage(testSpeed.key, quote(`Merespon dalam ${responseTime} ms.`));
         } catch (error) {

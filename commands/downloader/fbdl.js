@@ -39,7 +39,7 @@ module.exports = {
             } = (await axios.get(apiUrl)).data;
             const downloadUrl = data.downloads.find(d => d.format_id === "hd")?.url || data.downloads.find(d => d.format_id === "sd")?.url;
 
-            return await ctx.reply({
+            return ctx.reply({
                 video: {
                     url: downloadUrl
                 },

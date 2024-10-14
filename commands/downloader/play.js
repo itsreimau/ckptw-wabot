@@ -60,7 +60,7 @@ module.exports = {
                 const searchData = (await axios.get(searchApiUrl)).data;
                 const data = searchData[searchIndex];
 
-                await ctx.reply(
+                ctx.reply(
                     `${quote(`Judul: ${data.title}`)}\n` +
                     `${quote(`Artis: ${data.artist}`)}\n` +
                     `${quote(`URL: ${data.url}`)}\n` +
@@ -72,7 +72,7 @@ module.exports = {
                     url: data.url
                 });
 
-                return await ctx.reply({
+                return ctx.reply({
                     audio: {
                         url: downloadApiUrl
                     },
@@ -87,7 +87,7 @@ module.exports = {
             const searchData = (await axios.get(searchApiUrl)).data.data;
             const data = searchData[searchIndex];
 
-            await ctx.reply(
+            ctx.reply(
                 `${quote(`Judul: ${data.title}`)}\n` +
                 `${quote(`Artis: ${data.author.name}`)}\n` +
                 `${quote(`URL: ${data.url}`)}\n` +
@@ -101,7 +101,7 @@ module.exports = {
 
             if (!downloadUrl) return ctx.reply(global.config.msg.notFound);
 
-            return await ctx.reply({
+            return ctx.reply({
                 audio: {
                     url: downloadUrl
                 },

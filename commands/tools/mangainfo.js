@@ -35,7 +35,7 @@ module.exports = {
             } = await axios.get(apiUrl);
             const info = data.data[0];
 
-            return await ctx.reply(
+            return ctx.reply(
                 `${quote(`Judul: ${info.title}`)}\n` +
                 `${quote(`Judul (Inggris): ${info.title_english}`)}\n` +
                 `${quote(`Judul (Jepang): ${info.title_japanese}`)}\n` +

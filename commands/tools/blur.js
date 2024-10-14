@@ -54,7 +54,7 @@ module.exports = {
             img.getBuffer(Jimp.MIME_JPEG, async (err, buffer) => {
                 if (error) return ctx.reply(quote(`❎ Tidak dapat mengaburkan gambar!`));
 
-                return await ctx.reply({
+                return ctx.reply({
                     image: buffer,
                     mimetype: mime.contentType("jpeg")
                 });

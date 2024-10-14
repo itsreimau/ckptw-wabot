@@ -2,9 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    jidDecode
-} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "disable",
@@ -38,8 +35,7 @@ module.exports = {
         }
 
         try {
-            const groupJidDecode = jidDecode(ctx.id);
-            const groupNumber = ctx.isGroup() ? groupJidDecode.user : null;
+            const groupNumber = ctx.isGroup() ? ctx.msg.key.remoteJid.split(/[:@]/)[0] : null;
 
             switch (input) {
                 case "antilink":

@@ -53,7 +53,7 @@ module.exports = {
             } = await axios.get(apiUrl);
 
             if (mediaType === "audio") {
-                return await ctx.reply({
+                return ctx.reply({
                     audio: {
                         url: data.music.play_url
                     },
@@ -63,7 +63,7 @@ module.exports = {
 
             if (mediaType === "video_image") {
                 if (data.video?.noWatermark) {
-                    return await ctx.reply({
+                    return ctx.reply({
                         video: {
                             url: data.video.noWatermark
                         },
@@ -124,7 +124,7 @@ module.exports = {
                     if (flag.slide && !global.config.system.useInteractiveMessage) ctx.reply(global.config.msg.useInteractiveMessage);
 
                     for (const image of data.images) {
-                        await ctx.reply({
+                        ctx.reply({
                             image: {
                                 url: image.url
                             },

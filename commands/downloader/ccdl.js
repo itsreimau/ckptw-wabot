@@ -38,7 +38,7 @@ module.exports = {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            return await ctx.reply({
+            return ctx.reply({
                 video: {
                     url: data.url
                 },

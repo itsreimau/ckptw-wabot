@@ -21,7 +21,7 @@ module.exports = {
         } = await global.handler(ctx, module.exports.handler);
         if (status) return ctx.reply(message);
 
-        if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
+        if (session.has(ctx.id)) return ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/games/tebaklagu.json", {});
@@ -29,19 +29,18 @@ module.exports = {
             const data = global.tools.general.getRandomElement(response.data);
             const coin = 3;
             const timeout = 60000;
-            const senderJidDecode = jidDecode(ctx.sender.jid);
-            const senderNumber = senderJidDecode.user;
+            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
 
             session.set(ctx.id, true);
 
-            await ctx.reply({
+            ctx.reply({
                 audio: {
                     url: data.link_song
                 },
                 mimetype: mime.contentType("mp3"),
                 ptt: false
             });
-            await ctx.reply(
+            ctx.reply(
                 `${quote(`Artis: ${data.artist}`)}\n` +
                 `${quote(`+${coin} Koin`)}\n` +
                 `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +

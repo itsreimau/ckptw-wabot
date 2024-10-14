@@ -2,8 +2,7 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const {
-    jidDecode,
-    jidEncode
+    S_WHATSAPP_NET
 } = require("@whiskeysockets/baileys");
 
 module.exports = {
@@ -23,20 +22,13 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
+            const input = ctx.args.join(" ") || "@everyone";
             const data = await ctx.group().members();
-            const len = data.length;
-            const mentions = [];
-            for (let i = 0; i < len; i++) {
-                const idDecode = jidDecode(data[i].id);
-                const mention = jidEncode(idDecode.user + idDecode.server);
-                mentions.push({
-                    mention
-                });
-            }
+            const mentions = data.map(member => `${member.id.split(/[:@]/)[0];}S_WHATSAPP_NET`);
 
             return ctx.reply({
-                text: input || "@everyone",
-                mentions: mentions.map((mention) => mention.mention)
+                text: input,
+                mentions
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
