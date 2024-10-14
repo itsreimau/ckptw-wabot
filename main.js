@@ -63,7 +63,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const senderNumber = senderJidDecode.user;
     const groupJidDecode = jidDecode(ctx.id);
     const groupJid = isGroup ? jidEncode(groupJidDecode.user, groupJidDecode.server) : null;
-    const groupNumber = isGroup ? groupJidDecode.user;
+    const groupNumber = isGroup ? groupJidDecode.user : null;
 
     // Log pesan masuk
     if (isGroup) {
