@@ -204,7 +204,7 @@ function isCmd(m, ctx) {
 
 async function isAdmin(ctx, id) {
     try {
-        const senderJidDecode = await jidDecode(ctx.sender.jid);
+        const senderJidDecode = jidDecode(ctx.sender.jid);
         const senderJid = id || await jidEncode(senderJidDecode.user, senderJidDecode.server);
         return await checkAdmin(ctx, jid);
     } catch (error) {
@@ -225,7 +225,7 @@ async function isBotAdmin(ctx) {
 
 function isOwner(ctx, id, selfOwner) {
     try {
-        const jidDecode = await jidDecode(ctx.sender.jid);
+        const jidDecode = jidDecode(ctx.sender.jid);
         const jid = id || await jidEncode(jidDecode.user, jidDecode.server);
         return selfOwner ?
             global.bot.config.bot.jid === jid || global.config.owner.number === jid || global.config.owner.co.includes(id) :

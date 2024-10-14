@@ -22,8 +22,8 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const senderJidDecode = await jidDecode(ctx.sender.jid);
-            const senderJid = await jidEncode(senderJidDecode.user, senderJidDecode.server);
+            const senderJidDecode = jidDecode(ctx.sender.jid);
+            const senderJid = jidEncode(senderJidDecode.user, senderJidDecode.server);
             const senderNumber = senderJidDecode.user;
             const senderName = ctx.sender.pushName || "-";
 

@@ -27,7 +27,7 @@ module.exports = {
             const len = data.length;
             const mentions = [];
             for (let i = 0; i < len; i++) {
-                const idDecode = await jidDecode(data[i].id);
+                const idDecode = jidDecode(data[i].id);
                 const mention = jidEncode(idDecode.user + idDecode.server);
                 mentions.push({
                     mention

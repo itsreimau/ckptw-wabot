@@ -30,7 +30,7 @@ module.exports = {
             const timeout = 60000;
             const remainingAnswers = new Set(data.jawaban.map(j => j.toLowerCase()));
             const participants = new Set();
-            const senderJidDecode = await jidDecode(ctx.sender.jid);
+            const senderJidDecode = jidDecode(ctx.sender.jid);
             const senderNumber = senderJidDecode.user;
 
             session.set(ctx.id, true);

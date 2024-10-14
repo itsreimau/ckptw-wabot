@@ -23,8 +23,8 @@ module.exports = {
 
         const userId = ctx.args.join(" ") || null;
 
-        const senderJidDecode = await jidDecode(ctx.sender.jid);
-        const senderJid = await jidEncode(senderJidDecode.user, senderJidDecode.server);
+        const senderJidDecode = jidDecode(ctx.sender.jid);
+        const senderJid = jidEncode(senderJidDecode.user, senderJidDecode.server);
         const senderNumber = senderJidDecode.user;
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : jidEncode(userId, S_WHATSAPP_NET);
@@ -39,7 +39,7 @@ module.exports = {
             const [result] = await ctx._client.onWhatsApp(user);
             if (!result.exists) return ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
 
-            const userDecode = await jidDecode(user);
+            const userDecode = jidDecode(user);
             await global.db.set(`user.${userDecode.user}.isBanned`, true);
 
             ctx.sendMessage(user, {

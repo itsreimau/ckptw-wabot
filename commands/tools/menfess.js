@@ -23,7 +23,7 @@ module.exports = {
         } = await global.handler(ctx, module.exports.handler);
         if (status) return ctx.reply(message);
 
-        const senderJidDecode = await jidDecode(ctx.sender.jid);
+        const senderJidDecode = jidDecode(ctx.sender.jid);
         const senderNumber = senderJidDecode.user;
 
         if (!ctx.args.length) return ctx.reply(

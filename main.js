@@ -42,7 +42,7 @@ bot.ev.once(Events.ClientReady, async (m) => {
     console.log(`[${global.config.pkg.name}] Ready at ${m.user.id}`);
 
     // Tetapkan global.config pada bot
-    const jidDecode = await jidDecode(jid);
+    const jidDecode = jidDecode(jid);
     await Promise.all([
         global.config.bot.jid = jidDecode.user + jidDecode.server,
         global.config.bot.number = jidDecode.user,
@@ -58,10 +58,10 @@ cmd.load();
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
-    const senderJidDecode = await jidDecode(ctx.sender.jid);
+    const senderJidDecode = jidDecode(ctx.sender.jid);
     const senderJid = senderJidDecode.user + senderJidDecode.server;
     const senderNumber = senderJidDecode.user;
-    const groupJidDecode = await jidDecode(ctx.id);
+    const groupJidDecode = jidDecode(ctx.id);
     const groupJid = isGroup ? jidEncode(groupJidDecode.user, groupJidDecode.server);
     const groupNumber = isGroup ? groupJidDecode.user;
 
@@ -351,7 +351,7 @@ async function handleUserEvent(m) {
     } = m;
 
     try {
-        const idDecode = await jidDecode(id);
+        const idDecode = jidDecode(id);
         const getWelcome = await global.db.get(`group.${idDecode.user}.welcome`);
         if (getWelcome) {
             const metadata = await bot.core.groupMetadata(id);

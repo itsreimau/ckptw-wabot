@@ -13,7 +13,7 @@ module.exports = {
     category: "tools",
     code: async (ctx) => {
         try {
-            const senderNumberDecode = await jidDecode(ctx.sender.jid);
+            const senderNumberDecode = jidDecode(ctx.sender.jid);
             const senderNumber = senderNumberDecode.user;
             const users = (await global.db.toJSON()).user;
 

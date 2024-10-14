@@ -23,8 +23,8 @@ module.exports = {
         } = await global.handler(ctx, module.exports.handler);
         if (status) return ctx.reply(message);
 
-        const senderJidDecode = await jidDecode(ctx.sender.jid);
-        const senderJid = await jidEncode(senderJidDecode.user, senderJidDecode.server);
+        const senderJidDecode = jidDecode(ctx.sender.jid);
+        const senderJid = jidEncode(senderJidDecode.user, senderJidDecode.server);
         const senderNumber = senderJidDecode.user;
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const account = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : null;

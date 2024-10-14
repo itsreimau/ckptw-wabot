@@ -38,7 +38,7 @@ module.exports = {
         }
 
         try {
-            const groupJidDecode = await jidDecode(ctx.id);
+            const groupJidDecode = jidDecode(ctx.id);
             const groupNumber = ctx.isGroup() ? groupJidDecode.user;
 
             switch (input) {

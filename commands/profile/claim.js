@@ -36,8 +36,8 @@ module.exports = {
 
         if (!claimRewards[input]) return ctx.reply(quote(`❎ Teks tidak valid.`));
 
-        const senderJidDecode = await jidDecode(ctx.sender.jid);
-        const senderJid = await jidEncode(senderJidDecode.user, senderJidDecode.server);
+        const senderJidDecode = jidDecode(ctx.sender.jid);
+        const senderJid = jidEncode(senderJidDecode.user, senderJidDecode.server);
         const senderNumber = senderJidDecode.user;
         const lastClaimTime = global.db.get(`user.${senderJid}.lastClaim.${input}`) || 0;
         const currentTime = Date.now();
