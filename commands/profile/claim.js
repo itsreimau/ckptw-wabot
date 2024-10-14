@@ -40,9 +40,9 @@ module.exports = {
 
         if (remainingTime > 0) return ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input} Anda. Harap tunggu ${global.tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
 
-        const [isPremium, isOwner] = await Promise.all([
-            global.db.get(`user.${senderNumber}.isPremium`),
+        const [isOwner, isPremium] = await Promise.all([
             global.tools.general.isOwner(ctx, senderNumber, true),
+            global.db.get(`user.${senderNumber}.isPremium`)
         ]);
 
         if (isPremium || isOwner) return ctx.reply(quote("❎ Koin Anda tidak terbatas sehingga tidak perlu mengklaim koin lagi."));

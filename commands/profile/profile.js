@@ -57,7 +57,7 @@ module.exports = {
                     `${quote(`Level: ${userLevel}`)}\n` +
                     `${quote(`Koin: ${userCoin || "-"}`)}\n` +
                     `${quote(`XP: ${userXp}`)}\n` +
-                    `${quote(`Diklaim: ${Object.keys(userLastClaim).join(" & ")}`)}\n` +
+                    `${quote(`Diklaim: ${global.tools.general.ucword(Object.keys(userLastClaim).join(", "))}`)}\n` +
                     "\n" +
                     global.config.msg.footer,
             });
