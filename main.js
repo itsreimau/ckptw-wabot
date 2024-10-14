@@ -58,7 +58,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const senderJid = ctx.sender.jid;
             const senderNumber = senderJid.split(/[:@]/)[0];
             const groupJid = isGroup ? m.key.remoteJid : null;
-            const groupNumber = isGroup ? groupJid.split(/[:@]/)[0];: null;
+            const groupNumber = isGroup ? groupJid.split(/[:@]/)[0]: null;
 
             // Log pesan masuk
             if (isGroup) {

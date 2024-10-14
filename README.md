@@ -1,21 +1,22 @@
 # ckptw-wabot - WhatsApp Bot dengan @mengkodingan/ckptw
 
-> **Catatan:** Script ini telah diperbarui dengan berbagai fitur modern.
+> **Catatan:** Script ini telah diperbarui.
 
 ## Gambaran Umum
 
-`ckptw-wabot` adalah solusi bot WhatsApp yang dibangun menggunakan [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/). Dengan dukungan arsitektur modular, bot ini mampu mengotomatisasi berbagai tugas di WhatsApp sekaligus memungkinkan ekspansi melalui sistem perintah (command).
+`ckptw-wabot` adalah bot WhatsApp yang dibangun menggunakan library [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/). Bot ini memungkinkan Anda untuk mengotomatisasi berbagai tugas di WhatsApp, serta mendukung arsitektur modular melalui sistem perintah (command).
 
 ## Fitur Utama
 
-- **Penanganan Pesan Cerdas:** Bot merespons pesan sesuai dengan perintah yang diberikan.
-- **Respon Dinamis & Interaktif:** Tanggapan yang diberikan sangat fleksibel, cocok untuk berbagai kebutuhan.
+- **Penanganan Pesan:** Bot dapat menangani pesan yang masuk dan merespons sesuai kebutuhan.
+- **Penerjemah Perintah:** Memahami perintah yang dikirim pengguna dan menjalankan tindakan sesuai perintah tersebut.
+- **Respon Interaktif:** Bot memberikan tanggapan interaktif dan dinamis terhadap pertanyaan atau perintah pengguna.
 - **Penanganan Media:** Mendukung pengiriman dan penerimaan media seperti gambar, video, dan dokumen.
-- **Sistem Perintah Fleksibel:** Bot mudah diperluas dan dimodifikasi sesuai kebutuhan Anda.
+- **Sistem Perintah:** Bot mudah diperluas dengan menambahkan perintah baru yang sesuai dengan kebutuhan Anda.
 
 ## Cara Memulai
 
-Untuk memulai menggunakan `ckptw-wabot`, ikuti langkah-langkah di bawah ini:
+Ikuti langkah-langkah berikut untuk mengatur dan menjalankan `ckptw-wabot`:
 
 1. **Kloning Repositori:**
    ```bash
@@ -29,7 +30,7 @@ Untuk memulai menggunakan `ckptw-wabot`, ikuti langkah-langkah di bawah ini:
    ```
 
 3. **Konfigurasi:**
-   Ganti nama file `config.example.js` menjadi `config.js`, dan sesuaikan konfigurasi seperti nama bot, pesan khusus, nomor pemilik, dan lain-lain.
+   Ganti nama file `config.example.js` menjadi `config.js`, lalu perbarui nilai konfigurasi seperti nama bot, beberapa pesan, nomor pemilik (Owner), dll.
 
 4. **Menjalankan Bot:**
    ```bash
@@ -37,62 +38,67 @@ Untuk memulai menggunakan `ckptw-wabot`, ikuti langkah-langkah di bawah ini:
    ```
 
 5. **Autentikasi WhatsApp:**
-   Ada dua metode autentikasi yang dapat Anda pilih:
+   Ada dua metode autentikasi yang dapat digunakan untuk menghubungkan bot ke akun WhatsApp Anda:
 
    - **Menggunakan Kode Pairing:**
-     - Setelah bot dijalankan, kode pairing akan muncul di terminal.
-     - Tautkan perangkat WhatsApp Anda dengan memasukkan kode pairing yang ditampilkan.
+     - Setelah bot dijalankan, kode pairing akan ditampilkan di terminal.
+     - Buka aplikasi WhatsApp di ponsel, pilih menu **Perangkat Tertaut**, lalu ketuk **Tautkan Perangkat**.
+     - Masukkan kode pairing yang ditampilkan untuk menautkan akun WhatsApp dengan bot.
 
    - **Menggunakan Kode QR:**
-     - Pindai kode QR di aplikasi WhatsApp untuk menautkan perangkat.
+     - Setelah bot dijalankan, kode QR akan muncul di terminal.
+     - Buka aplikasi WhatsApp di ponsel, pilih menu **Perangkat Tertaut**, lalu ketuk **Tautkan Perangkat**.
+     - Pindai kode QR yang muncul untuk menautkan akun WhatsApp dengan bot.
 
-6. **Interaksi:**
-   Setelah proses autentikasi berhasil, bot siap menerima dan merespons pesan sesuai perintah.
+6. **Mulai Berinteraksi:**
+   Setelah proses autentikasi berhasil, bot siap menerima dan merespon pesan sesuai perintah yang dikirimkan.
 
 ## Kustomisasi
 
 ### Menambahkan Perintah Baru
 
-Untuk menambah perintah baru, ikuti langkah-langkah ini:
+Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
 
-1. Buat file JavaScript baru di dalam folder `commands` dengan fungsionalitas yang diinginkan. Contoh perintah sederhana:
+1. Buat file JavaScript baru di folder `commands` dengan fungsionalitas yang diinginkan, misalnya `test-helloworld.js`:
 
    ```javascript
    // commands/test/helloworld.js
-   module.exports = {
-       name: "helloworld",
-       category: "test",
-       handler: {
-           admin: false,
-           botAdmin: false,
-           banned: false,
-           coin: 0,
-           cooldown: 0,
-           group: false,
-           owner: false,
-           premium: false,
-           private: false
+
+   module.exports = { // Module yang diekspor berisi konfigurasi dan fungsi untuk perintah "helloworld".
+       name: "helloworld", // Nama perintah yang akan dipanggil oleh pengguna.
+       category: "test", // Kategori perintah yang berguna untuk pengelompokan atau filter perintah.
+       handler: { // Bagian handler ini berisi pengaturan opsi khusus untuk perintah.
+           admin: Boolean, // Apakah perintah hanya dapat digunakan oleh admin grup (true/false).
+           botAdmin: Boolean, // Apakah bot harus menjadi admin untuk menjalankan perintah ini (true/false).
+           banned: Boolean, // Apakah pengguna yang dilarang (banned) tidak bisa menggunakan perintah ini (true/false).
+           coin: Array || Number, // Opsi untuk menentukan penggunaan koin, bisa berupa array atau jumlah tertentu (Array atau Number).
+           cooldown: Number, // Waktu cooldown untuk mencegah perintah digunakan secara berulang dalam waktu singkat (dalam hitungan detik).
+           group: Boolean, // Apakah perintah ini hanya bisa digunakan di dalam grup (true/false).
+           owner: Boolean, // Apakah hanya pemilik bot yang bisa menggunakan perintah ini (true/false).
+           premium: Boolean, // Apakah perintah ini hanya bisa digunakan oleh pengguna premium (true/false).
+           private: Boolean // Apakah perintah ini hanya bisa digunakan dalam chat privat (true/false).
        },
-       code: async (ctx) => {
-           return ctx.reply("Hello, World!");
+       code: async (ctx) => { // Fungsi yang akan dijalankan ketika perintah ini dieksekusi.
+           const {
+               status, // Status hasil eksekusi fungsi handler.
+               message // Pesan yang akan dikirim jika status true.
+           } = await global.handler(ctx, module.exports.handler); // Memanggil fungsi handler global untuk memeriksa syarat-syarat dalam handler.
+           if (status) return ctx.reply(message); // Jika status true, maka kirim pesan.
+
+           return ctx.reply("Hello, World!"); // Jika handler mengembalikan status false atau handler tidak dicek, maka kirimkan pesan "Hello, World!".
        }
    };
    ```
 
-2. Setelah perintah baru ditambahkan, Anda dapat memanggilnya dengan mengirimkan `/helloworld` di chat.
+2. Perintah baru ini bisa dipicu dengan mengirimkan `/helloworld` di chat.
 
 ### [Baca Dokumentasi @mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/)
 
-Untuk detail lebih lanjut tentang penggunaan library ini, kunjungi [dokumentasi resmi](https://ckptw.mengkodingan.my.id/).
+Untuk informasi lebih lanjut tentang penggunaan library ini, kunjungi [dokumentasi ckptw](https://ckptw.mengkodingan.my.id/).
 
 ## Kontribusi
 
-<a href="https://github.com/itsreimau"><img src="https://avatars.githubusercontent.com/u/90613431?v=4" width="100" height="100"></a> | <a href="https://github.com/JastinXyz"><img src="https://avatars.githubusercontent.com/u/73673322?v=4" width="100" height="100"></a> | <a href="https://github.com/WhiskeySockets"><img src="https://avatars.githubusercontent.com/u/131354555?s=200&v=4" width="100" height="100"></a> | <a href="https://github.com/aidulcandra"><img src="https://avatars.githubusercontent.com/u/84653497?v=4" width="100" height="100"></a> | <a href="https://github.com/NyxAltair"><img src="https://avatars.githubusercontent.com/u/170422885?v=4" width="100" height="100"></a>
-----|----|----|----|----
-[ItsReimau](https://github.com/itsreimau) | [JastinXyz](https://github.com/JastinXyz) | [WhiskeySockets](https://github.com/WhiskeySockets) | [Aidul Candra](https://github.com/aidulcandra) | [Nyx Altair](https://github.com/NyxAltair)
-Pendiri & Pengembang Utama | Pencipta @mengkodingan/ckptw | Pencipta @whiskeysockets/baileys | Penolong Saat Error | Penyedia Sumber Daya
-
-Kami menyambut semua bentuk kontribusi! Jika Anda menemukan bug atau memiliki ide fitur baru, jangan ragu untuk membuka issue atau mengirimkan pull request. 
+Kami sangat terbuka untuk kontribusi! Jika Anda menemukan bug atau memiliki ide untuk fitur baru, jangan ragu untuk membuka issue atau mengirimkan pull request.
 
 ## Lisensi
 
@@ -100,4 +106,4 @@ Proyek ini dilisensikan di bawah [Lisensi MIT](LICENSE).
 
 ---
 
-**`ckptw-wabot`**: Eksplorasi, modifikasi, dan kembangkan bot WhatsApp yang cerdas dan mudah digunakan ini sesuai kebutuhan Anda. Selamat mencoba dan terus berkreasi!
+Jelajahi, modifikasi, dan tingkatkan `ckptw-wabot` sesuai kebutuhan Anda. Selamat mencoba dan semoga sukses!
