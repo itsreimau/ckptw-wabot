@@ -35,7 +35,7 @@ module.exports = {
         }
 
         try {
-            const groupNumber = ctx.isGroup() ? ctx.msg.key.remoteJid.split(/[:@]/)[0] : null;
+            const groupNumber = ctx.isGroup() ? ctx.id.split("@")[0] : null;
 
             switch (input) {
                 case "antilink":

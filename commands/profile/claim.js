@@ -32,22 +32,29 @@ module.exports = {
 
         if (!claimRewards[input]) return ctx.reply(quote(`❎ Teks tidak valid.`));
 
-        const senderJid = ctx.sender.jid.split(/[:@]/)[0]
-        const lastClaimTime = global.db.get(`user.${senderJid}.lastClaim.${input}`) || 0;
+        const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+        const lastClaimTime = global.db.get(`user.${senderNumber}.lastClaim.${input}`) || 0;
         const currentTime = Date.now();
         const timePassed = currentTime - lastClaimTime;
         const remainingTime = claimRewards[input].cooldown - timePassed;
 
         if (remainingTime > 0) return ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input} Anda. Harap tunggu ${global.tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
 
+        const [isPremium, isOwner] = await Promise.all([
+            global.db.get(`user.${senderNumber}.isPremium`),
+            global.tools.general.isOwner(ctx, senderNumber, true),
+        ]);
+
+        if (isPremium || isOwner) return ctx.reply(quote("❎ Koin Anda tidak terbatas sehingga tidak perlu mengklaim koin lagi."));
+
         try {
-            const userKey = `user.${senderJid}.coin`;
+            const userKey = `user.${senderNumber}.coin`;
             const currentCoins = global.db.get(userKey) || 0;
             const newBalance = currentCoins + claimRewards[input].reward;
 
             await Promise.all([
                 global.db.set(userKey, newBalance),
-                global.db.set(`user.${senderJid}.lastClaim.${input}`, currentTime)
+                global.db.set(`user.${senderNumber}.lastClaim.${input}`, currentTime)
             ]);
 
             return ctx.reply(quote(`✅ Anda telah berhasil mengklaim hadiah ${input} sebesar ${claimRewards[input].reward} koin! Sekarang Anda memiliki koin ${newBalance}.`));

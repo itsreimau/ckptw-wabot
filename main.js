@@ -57,8 +57,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isPrivate = !isGroup;
     const senderJid = ctx.sender.jid;
     const senderNumber = senderJid.split(/[:@]/)[0];
-    const groupJid = isGroup ? m.key.remoteJid : null;
-    const groupNumber = isGroup ? groupJid.split(/[:@]/)[0] : null;
+    const groupJid = isGroup ? ctx.id : null;
+    const groupNumber = isGroup ? groupJid.split("@")[0] : null;
 
     // Log pesan masuk
     if (isGroup) {
@@ -68,15 +68,20 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // Basis data untuk pengguna
-    const userDb = await global.db.get(`user.${senderNumber}`);
+    const [userDb, userPremium] = await Promise.all([
+        global.db.get(`user.${senderNumber}`),
+        global.db.get(`user.${senderNumber}`)
+    ]);
+
     if (!userDb) {
         await global.db.set(`user.${senderNumber}`, {
-            coin: 100,
+            coin: 50,
             level: 1,
             xp: 0
         });
     }
 
+    if (userPremium) await global.db.set(`user.${senderNumber}.isPremium`, userDb);
 
     // Penanganan untuk perintah
     const isCmd = global.tools.general.isCmd(m, ctx);
@@ -91,7 +96,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
             if (global.config.system.useInteractiveMessage) {
                 let button = new ButtonBuilder()
-                    .setId(prefix + mean + input)
+                    .setId(`${prefix + mean} ${input}`)
                     .setDisplayText("✅ Ya!")
                     .setType("quick_reply").build();
 
