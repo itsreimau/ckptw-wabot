@@ -39,7 +39,7 @@ module.exports = {
 
         try {
             const groupJidDecode = jidDecode(ctx.id);
-            const groupNumber = ctx.isGroup() ? groupJidDecode.user;
+            const groupNumber = ctx.isGroup() ? groupJidDecode.user : null;
 
             switch (input) {
                 case "antilink":
