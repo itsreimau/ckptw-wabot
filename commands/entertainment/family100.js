@@ -48,7 +48,7 @@ module.exports = {
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toLowerCase();
                 const participantJid = m.jid;
-                const participantNumber = participantJid.split(/[:@]/)[0];
+                const participantNumber = participantJid.split(/[:@]/)[0]
 
                 if (remainingAnswers.has(userAnswer)) {
                     remainingAnswers.delete(userAnswer);

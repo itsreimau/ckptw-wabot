@@ -32,7 +32,7 @@ module.exports = {
 
         if (!claimRewards[input]) return ctx.reply(quote(`❎ Teks tidak valid.`));
 
-        const senderJid = ctx.sender.jid.split(/[:@]/)[0];
+        const senderJid = ctx.sender.jid.split(/[:@]/)[0]
         const lastClaimTime = global.db.get(`user.${senderJid}.lastClaim.${input}`) || 0;
         const currentTime = Date.now();
         const timePassed = currentTime - lastClaimTime;

@@ -24,7 +24,7 @@ module.exports = {
         try {
             const input = ctx.args.join(" ") || "@everyone";
             const data = await ctx.group().members();
-            const mentions = data.map(member => `${member.id.split(/[:@]/)[0];}S_WHATSAPP_NET`);
+            const mentions = data.map(member => `${member.id.split(/[:@]/)[0]}S_WHATSAPP_NET`);
 
             return ctx.reply({
                 text: input,

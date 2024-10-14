@@ -223,7 +223,7 @@ async function isBotAdmin(ctx) {
 
 function isOwner(ctx, id, selfOwner) {
     try {
-        const jid = id || ctx.sender.jid.split(/[:@]/)[0];
+        const jid = id || ctx.sender.jid.split(/[:@]/)[0]
         return selfOwner ?
             ctx._client.user.id.split(/[:@]/)[0] === jid || global.config.owner.number === jid || global.config.owner.co.includes(id) :
             global.config.owner.number === jid || global.config.owner.co.includes(id);
