@@ -279,7 +279,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Penanganan menfess
-        const allMenfessData = await global.db.getAll("menfess");
+        const allMenfessData = await global.db.get("menfess");
         const menfessEntries = Object.entries(allMenfessData);
 
         for (const [conversationId, menfessData] of menfessEntries) {
