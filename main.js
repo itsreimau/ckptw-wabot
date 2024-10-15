@@ -76,7 +76,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (!userDb) {
         await global.db.set(`user.${senderNumber}`, {
             coin: 50,
-            level: 1,
+            level: 0,
             xp: 0
         });
     }
@@ -110,6 +110,60 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             } else if (!global.config.system.useInteractiveMessage) {
                 ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
             }
+        }
+
+        // Penanganan XP & Level untuk pengguna
+        const xpGain = 5;
+        let xpToLevelUp = 100;
+
+        const [userXp, userLevel] = await Promise.all([
+            global.db.get(`user.${senderNumber}.xp`) || 0,
+            global.db.get(`user.${senderNumber}.level`) || 1
+        ]);
+
+        let newUserXp = userXp + xpGain;
+
+        if (newUserXp >= xpToLevelUp) {
+            let newUserLevel = userLevel + 1;
+            newUserXp -= xpToLevelUp;
+
+            xpToLevelUp = Math.floor(xpToLevelUp * 1.2);
+
+            let profilePictureUrl;
+            try {
+                profilePictureUrl = await bot.core.profilePictureUrl(senderJid, "image");
+            } catch (error) {
+                profilePictureUrl = global.config.bot.picture.profile;
+            }
+
+            const card = global.tools.api.createUrl("aggelos_007", "/levelup", {
+                avatar: profilePictureUrl,
+                level: newUserLevel
+            });
+
+            await ctx.reply({
+                text: quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`),
+                contextInfo: {
+                    mentionedJid: [senderJid],
+                    externalAdReply: {
+                        mediaType: 1,
+                        previewType: 0,
+                        mediaUrl: global.config.bot.groupChat,
+                        title: "LEVEL UP",
+                        body: null,
+                        renderLargerThumbnail: true,
+                        thumbnailUrl: card || profilePictureUrl || global.config.bot.picture.thumbnail,
+                        sourceUrl: global.config.bot.groupChat
+                    }
+                }
+            });
+
+            await Promise.all([
+                global.db.set(`user.${senderNumber}.xp`, newUserXp),
+                global.db.set(`user.${senderNumber}.level`, newUserLevel)
+            ]);
+        } else {
+            await global.db.set(`user.${senderNumber}.xp`, newUserXp);
         }
     }
 
@@ -198,7 +252,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const getAntilink = await global.db.get(`group.${groupNumber}.antilink`);
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
         if (getAntilink) {
-            if (m.content && urlRegex.test(m.content) && !(await global.tools.general.isAdmin(ctx, senderNumber))) {
+            if (m.content && urlRegex.test(m.content) && !(await global.tools.general.isAdmin(ctx, senderJid))) {
                 ctx.reply(quote(`❎ Jangan kirim tautan!`));
                 await ctx.deleteMessage(m.key);
                 if (!global.config.system.restrict) await ctx.group().kick([senderJid]);
@@ -208,24 +262,63 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Pribadi
     if (isPrivate) {
+        // Penanganan anonChat
+        const anonChatPartnerData = await global.db.get(`anonChat.${senderNumber}.partner`);
+
+        if (anonChatPartnerData) {
+            const partnerId = anonChatPartnerData + S_WHATSAPP_NET;
+
+            try {
+                ctx._client.sendMessage(partnerId, {
+                    forward: m
+                });
+            } catch (error) {
+                console.error(`[${global.config.pkg.name}] Error:`, error);
+                ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            }
+        }
+
         // Penanganan menfess
-        const getMessageDataMenfess = await global.db.get(`menfess.${senderNumber}`);
-        if (getMessageDataMenfess) {
-            const [from, text] = await Promise.all([
-                global.db.get(`menfess.${senderNumber}.from`),
-                global.db.get(`menfess.${senderNumber}.text`)
-            ]);
+        const allMenfessData = await global.db.getAll("menfess");
+        const menfessEntries = Object.entries(allMenfessData);
 
-            if (ctx.quoted?.extendedTextMessage?.text === text) {
-                try {
-                    await sendMenfess(ctx, m, senderNumber, from);
+        for (const [conversationId, menfessData] of menfessEntries) {
+            const {
+                from,
+                to
+            } = menfessData;
 
-                    ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
-                    await global.db.delete(`menfess.${senderNumber}.from`);
-                } catch (error) {
-                    console.error(`[${global.config.pkg.name}] Error:`, error);
-                    ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            if (m.content && /delete|stop/i.test(m.content)) {
+                const senderInConversation = senderNumber === from || senderNumber === to;
+
+                if (senderInConversation) {
+                    await global.db.delete(`menfess.${conversationId}`);
+
+                    const targetNumber = senderNumber === from ? to : from;
+
+                    ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
+                    ctx.replyWithJid(targetNumber + S_WHATSAPP_NET, quote("✅ Pesan menfess telah dihapus!"));
                 }
+            }
+
+            try {
+                const senderInConversation = senderNumber === from || senderNumber === to;
+
+                if (senderInConversation) {
+                    const targetId = (senderNumber === from) ? to + S_WHATSAPP_NET : from + S_WHATSAPP_NET;
+
+                    ctx._client.sendMessage(targetId, {
+                        forward: m
+                    });
+
+                    ctx.reply(quote(`✅ Pesan berhasil diteruskan ke ${targetId}!`));
+                    await global.db.set(`menfess.${conversationId}.lastMsg`, Date.now());
+
+                    break;
+                }
+            } catch (error) {
+                console.error(`[${global.config.pkg.name}] Error:`, error);
+                ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
             }
         }
     }
@@ -246,50 +339,6 @@ bot.ev.on(Events.UserLeave, (m) => {
 bot.launch().catch((error) => console.error(`[${global.config.pkg.name}] Error:`, error));
 
 // Fungsi utilitas
-async function sendMenfess(ctx, m, senderNumber, from) {
-    const fakeText = {
-        key: {
-            fromMe: false,
-            participant: from + S_WHATSAPP_NET,
-            ...({
-                remoteJid: "status@broadcast"
-            })
-        },
-        message: {
-            extendedTextMessage: {
-                text: `${senderNumber} telah merespons pesan menfess Anda.`,
-                title: global.config.bot.name,
-                thumbnailUrl: global.config.bot.picture.thumbnail
-
-            }
-        }
-    }
-
-    await ctx.sendMessage(from + S_WHATSAPP_NET, {
-        text: `${m.content}\n` +
-            `${global.config.msg.readmore}\n` +
-            "Jika ingin membalas, Anda harus mengirimkan perintah lagi.",
-        contextInfo: {
-            mentionedJid: [senderNumber + S_WHATSAPP_NET],
-            externalAdReply: {
-                mediaType: 1,
-                previewType: 0,
-                mediaUrl: global.config.bot.groupChat,
-                title: global.config.msg.watermark,
-                body: null,
-                renderLargerThumbnail: true,
-                thumbnailUrl: global.config.bot.picture.thumbnail,
-                sourceUrl: global.config.bot.groupChat
-            },
-            forwardingScore: 9999,
-            isForwarded: true
-        },
-        mentions: [senderNumber + S_WHATSAPP_NET]
-    }, {
-        quoted: fakeText
-    });
-}
-
 async function handleUserEvent(m) {
     const {
         id,
@@ -320,7 +369,7 @@ async function handleUserEvent(m) {
                     background: global.config.bot.picture.thumbnail
                 });
 
-                await bot.core.sendMessage(id, {
+                bot.core.sendMessage(id, {
                     text: message,
                     contextInfo: {
                         mentionedJid: [jid],
@@ -340,7 +389,7 @@ async function handleUserEvent(m) {
         }
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
-        await bot.core.sendMessage(id, {
+        bot.core.sendMessage(id, {
             text: quote(`❎ Terjadi kesalahan: ${error.message}`)
         });
     }

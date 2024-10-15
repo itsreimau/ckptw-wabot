@@ -30,9 +30,25 @@ module.exports = {
             return ctx.reply(listText);
         }
 
+        const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+        const userLevel = global.db.get(`user.${senderNumber}.level`) || 0;
+
+        if (input === "premium") {
+            if (userLevel <= 100) return ctx.reply(quote(`❎ Anda harus memiliki level lebih dari 100 untuk mengklaim status premium. Level Anda saat ini adalah ${userLevel}.`));
+
+            const isPremium = global.db.get(`user.${senderNumber}.isPremium`) || false;
+            if (isPremium) return ctx.reply(quote(`❎ Anda sudah memiliki Premium.`));
+
+            await global.db.set(`user.${senderNumber}.isPremium`, true);
+            return ctx.reply(quote(`🎉 Selamat! Anda telah berhasil mengklaim Premium!`));
+        }
+
         if (!claimRewards[input]) return ctx.reply(quote(`❎ Teks tidak valid.`));
 
-        const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+        const requiredLevel = claimRewards[input].level || 0;
+
+        if (userLevel < requiredLevel) return ctx.reply(quote(`❎ Anda perlu mencapai level ${requiredLevel} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userLevel}.`));
+
         const lastClaimTime = global.db.get(`user.${senderNumber}.lastClaim.${input}`) || 0;
         const currentTime = Date.now();
         const timePassed = currentTime - lastClaimTime;
@@ -69,18 +85,22 @@ module.exports = {
 const claimRewards = {
     daily: {
         reward: 100,
-        cooldown: 24 * 60 * 60 * 1000 // 24 jam (100 koin)
+        cooldown: 24 * 60 * 60 * 1000, // 24 jam (100 koin)
+        level: 1 // Level 1 untuk klaim daily
     },
     weekly: {
         reward: 500,
-        cooldown: 7 * 24 * 60 * 60 * 1000 // 7 hari (500 koin)
+        cooldown: 7 * 24 * 60 * 60 * 1000, // 7 hari (500 koin)
+        level: 15 // Level 15 untuk klaim weekly
     },
     monthly: {
         reward: 2000,
-        cooldown: 30 * 24 * 60 * 60 * 1000 // 30 hari (2000 koin)
+        cooldown: 30 * 24 * 60 * 60 * 1000, // 30 hari (2000 koin)
+        level: 50 // Level 50 untuk klaim monthly
     },
     yearly: {
         reward: 10000,
-        cooldown: 365 * 24 * 60 * 60 * 1000 // 365 hari (10000 koin)
+        cooldown: 365 * 24 * 60 * 60 * 1000, // 365 hari (10000 koin)
+        level: 75 // Level 75 untuk klaim yearly
     }
 };

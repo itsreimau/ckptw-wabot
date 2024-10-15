@@ -36,27 +36,21 @@ module.exports = {
 
             if (numberFormatted === senderNumber) return ctx.reply(quote(`❎ Tidak dapat digunakan pada diri Anda sendiri.`));
 
-            const menfessText =
-                `${text.join(" ")}\n` +
-                `${global.config.msg.readmore}\n` +
-                "Jika Anda ingin membalas, cukup balas pesan ini dan pesan Anda akan terkirim.";
             const fakeText = {
                 key: {
                     fromMe: false,
                     participant: numberFormatted + S_WHATSAPP_NET,
-                    ...({
-                        remoteJid: "status@broadcast"
-                    })
+                    remoteJid: "status@broadcast"
                 },
                 message: {
                     extendedTextMessage: {
                         text: "Seseorang telah mengirimimu pesan menfess.",
                         title: global.config.bot.name,
                         thumbnailUrl: global.config.bot.picture.thumbnail
-
                     }
                 }
-            }
+            };
+            const menfessText = text.join(" ");
             await ctx.sendMessage(numberFormatted + S_WHATSAPP_NET, {
                 text: menfessText,
                 contextInfo: {
@@ -78,9 +72,14 @@ module.exports = {
             }, {
                 quoted: fakeText
             });
-            global.db.set(`menfess.${numberFormatted}`, {
+
+            const conversationId = `${senderNumber}_${numberFormatted}_${Date.now()}`;
+            global.db.set(`menfess.${conversationId}`, {
                 from: senderNumber,
-                text: menfessText
+                to: numberFormatted,
+                text: menfessText,
+                status: "sent",
+                lastMsg: Date.now()
             });
 
             return ctx.reply(quote(`✅ Pesan berhasil terkirim!`));

@@ -59,7 +59,7 @@ module.exports = {
                         await global.db.add(`user.${senderNumber}.coin`, coin),
                         await global.db.add(`user.${senderNumber}.winGame`, 1)
                     ]);
-                    await ctx.sendMessage(
+                    ctx.sendMessage(
                         ctx.id, {
                             text: `${quote("💯 Benar!")}\n` +
                                 quote(`+${coin} Koin`)
@@ -70,7 +70,7 @@ module.exports = {
                     return collector.stop();
                 } else if (userAnswer === "hint") {
                     const clue = answer.replace(/[AIUEOaiueo]/g, "_");
-                    await ctx.sendMessage(ctx.id, {
+                    ctx.sendMessage(ctx.id, {
                         text: monospace(clue.toUpperCase())
                     }, {
                         quoted: m

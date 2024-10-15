@@ -85,7 +85,7 @@ async function get(type, ctx) {
                 break;
             }
             case "claim": {
-                const data = ["daily", "weekly", "monthly", "yearly"];
+                const data = ["daily", "weekly", "monthly", "yearly", "premium"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     global.config.msg.footer;
@@ -132,6 +132,7 @@ async function get(type, ctx) {
                 const tag = {
                     general: "General",
                     ai: "AI",
+                    anonymous_chat: "Anonymous Chat",
                     converter: "Converter",
                     downloader: "Downloader",
                     entertainment: "Entertainment",

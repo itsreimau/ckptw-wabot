@@ -78,14 +78,13 @@ async function checkCoin(ctx, coinOptions, senderNumber) {
         global.db.get(`user.${senderNumber}.isPremium`)
     ]);
 
+    if (isOwner || isPremium) return false;
+
     if (typeof coinOptions === "number") {
         const userCoin = await global.db.get(`user.${senderNumber}.coin`);
         if (userCoin < coinOptions) return true;
 
-        if (!isOwner && !isPremium) {
-            await global.db.subtract(`user.${senderNumber}.coin`, coinOptions);
-        }
-
+        await global.db.subtract(`user.${senderNumber}.coin`, coinOptions);
         return false;
     }
 
@@ -94,24 +93,19 @@ async function checkCoin(ctx, coinOptions, senderNumber) {
     const msgType = ctx.getMessageType();
     let hasMedia = false;
 
-    if (mediaSourceOption === 1 || mediaSourceOption === 3) {
-        hasMedia = await global.tools.general.checkMedia(msgType, requiredMedia, ctx);
-    }
+    if (mediaSourceOption === 1 || mediaSourceOption === 3) hasMedia = await global.tools.general.checkMedia(msgType, requiredMedia, ctx);
 
-    if ((mediaSourceOption === 2 || mediaSourceOption === 3) && ctx.quoted) {
-        hasMedia = await global.tools.general.checkQuotedMedia(ctx.quoted, requiredMedia);
-    }
+    if ((mediaSourceOption === 2 || mediaSourceOption === 3) && ctx.quoted) hasMedia = await global.tools.general.checkQuotedMedia(ctx.quoted, requiredMedia);
 
     if (requiredMedia && !hasMedia) return false;
 
     if (userCoin < requiredCoin) return true;
 
-    if (!isOwner && !isPremium && (!requiredMedia || hasMedia)) {
-        await global.db.subtract(`user.${senderNumber}.coin`, requiredCoin);
-    }
+    await global.db.subtract(`user.${senderNumber}.coin`, requiredCoin);
 
     return false;
 }
+
 
 
 module.exports = handler;

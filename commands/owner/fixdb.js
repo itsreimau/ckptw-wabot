@@ -7,7 +7,7 @@ module.exports = {
     aliases: ["fixdatabase"],
     category: "owner",
     handler: {
-        owner: true,
+        owner: true
     },
     code: async (ctx) => {
         const {
@@ -17,34 +17,33 @@ module.exports = {
         if (status) return ctx.reply(message);
 
         try {
-            const now = new Date();
-            const oneYearAgo = new Date(now.setFullYear(now.getFullYear() - 1));
+            const oneMonthAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
+            const dbJSON = await global.db.toJSON();
+            const {
+                user = {}, group = {}, menfess = {}
+            } = dbJSON;
 
-            const dbJSON = global.db.toJSON();
-            const users = dbJSON.user || {};
-            const groups = dbJSON.group || {};
-
-            const isValidNumber = (number) => {
-                return /^[0-9]{10,15}$/.test(number);
-            };
-
-            const isOldLastUse = (lastUse) => {
-                const lastUseDate = new Date(lastUse);
-                return lastUseDate < oneYearAgo;
-            };
-
-            Object.keys(users).forEach((user) => {
-                const userData = users[user];
-                if (!isValidNumber(user)) {
-                    global.db.delete(`user.${user}`);
-                } else if (isOldLastUse(userData.lastUse)) {
-                    global.db.delete(`user.${user}`);
+            Object.keys(user).forEach((userId) => {
+                const {
+                    lastUse
+                } = user[userId] || {};
+                if (!/^[0-9]{10,15}$/.test(userId) || new Date(lastUse).getTime() < oneMonthAgo) {
+                    global.db.delete(`user.${userId}`);
                 }
             });
 
-            Object.keys(groups).forEach((group) => {
-                if (!isValidNumber(group)) {
-                    global.db.delete(`group.${group}`);
+            Object.keys(group).forEach((groupId) => {
+                if (!/^[0-9]{10,15}$/.test(groupId)) {
+                    global.db.delete(`group.${groupId}`);
+                }
+            });
+
+            Object.keys(menfess).forEach((conversationId) => {
+                const {
+                    lastMsg
+                } = menfess[conversationId] || {};
+                if (new Date(lastMsg).getTime() < oneMonthAgo) {
+                    global.db.delete(`menfess.${conversationId}`);
                 }
             });
 
@@ -53,5 +52,5 @@ module.exports = {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
-    },
+    }
 };

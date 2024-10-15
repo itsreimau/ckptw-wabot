@@ -32,7 +32,7 @@ module.exports = {
             const members = await ctx.group().members();
             const participantsIds = members.map(user => user.id);
 
-            await ctx.sendMessage(res, {
+            ctx.sendMessage(res, {
                 text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${global.config.bot.name}, dimiliki oleh ${global.config.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)
             }, {
                 mentions: participantsIds

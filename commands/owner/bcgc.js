@@ -37,7 +37,7 @@ module.exports = {
                 await delay(500);
 
                 try {
-                    await ctx.sendMessage(i, {
+                    ctx.sendMessage(i, {
                         text: input,
                         contextInfo: {
                             externalAdReply: {
@@ -67,7 +67,7 @@ module.exports = {
                     await delay(1000);
 
                     try {
-                        await ctx.sendMessage(i, {
+                        ctx.sendMessage(i, {
                             text: input,
                             contextInfo: {
                                 externalAdReply: {

@@ -40,7 +40,7 @@ module.exports = {
                 text: input
             });
 
-            return await ctx.reply({
+            return ctx.reply({
                 image: {
                     url: apiUrl
                 },
