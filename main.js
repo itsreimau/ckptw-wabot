@@ -81,7 +81,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         });
     }
 
-    if (userPremium) await global.db.set(`user.${senderNumber}.isPremium`, userDb);
+    if (userPremium) await global.db.set(`user.${senderNumber}.coin`, 0);
 
     // Penanganan untuk perintah
     const isCmd = global.tools.general.isCmd(m, ctx);
