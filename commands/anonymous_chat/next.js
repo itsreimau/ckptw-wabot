@@ -39,14 +39,14 @@ module.exports = {
             await global.db.set(`anonChat.${partnerNumber}.partner`, senderNumber);
             await global.db.set("anonChatQueue", chatQueue);
 
-            await ctx.reply(quote(`✅ Kamu telah terhubung dengan partner baru. Ketik ${ctx._used.prefix}next untuk mencari yang lain, atau ${ctx._used.prefix}stop untuk berhenti.`));
             await ctx.sendMessage(partnerNumber + S_WHATSAPP_NET, {
                 text: quote(`✅ Kamu telah terhubung dengan partner. Ketik ${ctx._used.prefix}next untuk mencari yang lain, atau ${ctx._used.prefix}stop untuk berhenti.`)
             });
+            return await ctx.reply(quote(`✅ Kamu telah terhubung dengan partner baru. Ketik ${ctx._used.prefix}next untuk mencari yang lain, atau ${ctx._used.prefix}stop untuk berhenti.`));
         } else {
             chatQueue.push(senderNumber);
             await global.db.set("anonChatQueue", chatQueue);
-            await ctx.reply(quote(`🔄 Sedang mencari partner baru... Tunggu hingga ada orang lain yang mencari.`));
+            return await ctx.reply(quote(`🔄 Sedang mencari partner baru... Tunggu hingga ada orang lain yang mencari.`));
         }
     }
 };

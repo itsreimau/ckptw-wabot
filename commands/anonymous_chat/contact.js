@@ -40,6 +40,6 @@ module.exports = {
                 }]
             }
         });
-        await ctx.reply(quote(`✅ Kontak telah dikirim ke partner.`));
+        return await ctx.reply(quote(`✅ Kontak telah dikirim ke partner.`));
     }
 };

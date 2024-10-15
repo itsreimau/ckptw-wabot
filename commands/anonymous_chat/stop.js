@@ -37,6 +37,6 @@ module.exports = {
 
         await global.db.delete(`anonChat.${senderNumber}`);
 
-        await ctx.reply(quote(`✅ Kamu telah keluar dari chat dan antrian.`));
+        return await ctx.reply(quote(`✅ Kamu telah keluar dari chat dan antrian.`));
     }
 };
