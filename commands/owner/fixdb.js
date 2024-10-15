@@ -14,7 +14,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         try {
             const oneMonthAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
@@ -47,10 +47,10 @@ module.exports = {
                 }
             });
 
-            return ctx.reply(quote(`✅ Basis data berhasil diperbaiki!`));
+            return await ctx.reply(quote(`✅ Basis data berhasil diperbaiki!`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

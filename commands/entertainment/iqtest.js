@@ -16,7 +16,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
         const winGame = await global.db.get(`user.${senderNumber}.winGame`);
@@ -24,7 +24,7 @@ module.exports = {
         const iqScore = getIqScore(winGame);
         const feedback = getFeedback(iqScore, winGame);
 
-        return ctx.reply(quote(`IQ Anda sebesar: ${iqScore}. ${feedback}`));
+        return await ctx.reply(quote(`IQ Anda sebesar: ${iqScore}. ${feedback}`));
     }
 };
 

@@ -14,9 +14,9 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
-        return ctx.reply(
+        return await ctx.reply(
             `${quote("083838039693 (DANA)")}\n` +
             `${quote("─────")}\n` +
             `${quote("https://paypal.me/itsreimau (PayPal)")}\n` +

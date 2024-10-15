@@ -20,19 +20,19 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
         const currentPartner = await global.db.get(`anonChat.${senderNumber}.partner`);
 
-        if (!currentPartner) return ctx.reply(quote(`❎ Kamu tidak sedang dalam chat. Gunakan ${ctx._used.prefix}search untuk mencari partner.`));
+        if (!currentPartner) return await ctx.reply(quote(`❎ Kamu tidak sedang dalam chat. Gunakan ${ctx._used.prefix}search untuk mencari partner.`));
 
         const vcard = new VCardBuilder()
             .setFullName(ctx.sender.pushName)
             .setOrg(global.config.owner.organization)
             .setNumber(senderNumber).build();
 
-        ctx.sendMessage(currentPartner + S_WHATSAPP_NET, {
+        await ctx.sendMessage(currentPartner + S_WHATSAPP_NET, {
             contacts: {
                 displayName: ctx.sender.pushName,
                 contacts: [{
@@ -40,6 +40,6 @@ module.exports = {
                 }]
             }
         });
-        ctx.reply(quote(`✅ Kontak telah dikirim ke partner.`));
+        await ctx.reply(quote(`✅ Kontak telah dikirim ke partner.`));
     }
 };

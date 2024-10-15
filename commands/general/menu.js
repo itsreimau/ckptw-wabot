@@ -19,7 +19,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         try {
             const text = await global.tools.list.get("menu", ctx);
@@ -58,7 +58,7 @@ module.exports = {
                     .setURL("https://itsreimau.is-a.dev/rei-ayanami")
                     .setMerchantURL("https://www.google.ca").build();
 
-                return ctx.replyInteractiveMessage({
+                return await ctx.replyInteractiveMessage({
                     body: text,
                     footer: global.config.msg.watermark,
                     nativeFlowMessage: {
@@ -67,7 +67,7 @@ module.exports = {
                 })
             }
 
-            return ctx.sendMessage(ctx.id, {
+            return await ctx.sendMessage(ctx.id, {
                 text: text,
                 contextInfo: {
                     mentionedJid: [ctx.sender.jid],
@@ -90,7 +90,7 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

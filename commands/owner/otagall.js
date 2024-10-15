@@ -17,7 +17,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
@@ -34,7 +34,7 @@ module.exports = {
             }
             const mentionText = mentions.map((mention) => mention.tag).join(" ");
 
-            return ctx.reply({
+            return await ctx.reply({
                 text: `${input || "Hai!"}\n` +
                     `-----\n` +
                     `${mentionText}`,
@@ -42,7 +42,7 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

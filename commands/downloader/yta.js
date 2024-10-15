@@ -21,17 +21,17 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const url = ctx.args[0] || null;
 
-        if (!url) return ctx.reply(
+        if (!url) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!urlRegex.test(url)) ctx.reply(global.config.msg.urlInvalid);
+        if (!urlRegex.test(url)) await ctx.reply(global.config.msg.urlInvalid);
 
         try {
             const data = await youtubedl(url);
@@ -45,7 +45,7 @@ module.exports = {
                         id: index + 1
                     }))
                 }).build();
-                ctx.replyInteractiveMessage({
+                await ctx.replyInteractiveMessage({
                     body: `${quote(`Judul: ${data.title}`)}\n` +
                         `${quote(`URL: ${url}`)}\n` +
                         "\n" +
@@ -56,7 +56,7 @@ module.exports = {
                     }
                 });
             } else {
-                ctx.reply(
+                await ctx.reply(
                     `${quote(`Judul: ${data.title}`)}\n` +
                     `${quote(`URL: ${url}`)}\n` +
                     `${quote(`Pilih kualitas:`)}\n` +
@@ -79,7 +79,7 @@ module.exports = {
                     const downloadFunction = data.audio[selectedQuality].download;
                     if (global.config.system.autoTypingOnCmd) ctx.simulateTyping();
                     const url = await downloadFunction();
-                    ctx.reply({
+                    await ctx.reply({
                         audio: {
                             url: url,
                         },
@@ -93,7 +93,7 @@ module.exports = {
             col.on("end", async (collector, r) => {});
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

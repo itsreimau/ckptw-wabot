@@ -18,9 +18,9 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
-        if (session.has(ctx.id)) return ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
+        if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/games/siapakahaku.json", {});
@@ -32,7 +32,7 @@ module.exports = {
 
             session.set(ctx.id, true);
 
-            ctx.reply(
+            await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`+${coin} Koin`)}\n` +
                 `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
@@ -55,7 +55,7 @@ module.exports = {
                         await global.db.add(`user.${senderNumber}.coin`, coin),
                         await global.db.add(`user.${senderNumber}.winGame`, 1)
                     ]);
-                    ctx.sendMessage(
+                    await ctx.sendMessage(
                         ctx.id, {
                             text: `${quote("💯 Benar!")}\n` +
                                 quote(`+${coin} Koin`)
@@ -66,7 +66,7 @@ module.exports = {
                     return collector.stop();
                 } else if (userAnswer === "hint") {
                     const clue = answer.replace(/[AIUEOaiueo]/g, "_");
-                    ctx.sendMessage(ctx.id, {
+                    await ctx.sendMessage(ctx.id, {
                         text: monospace(clue.toUpperCase())
                     }, {
                         quoted: m
@@ -79,7 +79,7 @@ module.exports = {
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
-                    ctx.reply(
+                    await ctx.reply(
                         `${quote("⌛ Waktu habis!")}\n` +
                         quote(`Jawabannya adalah ${answer}.`)
                     );
@@ -88,7 +88,7 @@ module.exports = {
 
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -16,7 +16,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const userId = ctx.args[0];
         const coinAmount = parseInt(ctx.args[1], 10);
@@ -26,7 +26,7 @@ module.exports = {
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : userId + S_WHATSAPP_NET;
 
-        if (!ctx.args.length && !user && !isNaN(coinAmount)) return ctx.reply({
+        if (!ctx.args.length && !user && !isNaN(coinAmount)) return await ctx.reply({
             text: `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
                 quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderNumber} 4`)),
             mentions: [senderJid]
@@ -34,17 +34,17 @@ module.exports = {
 
         try {
             const [result] = await ctx._client.onWhatsApp(user);
-            if (!result.exists) return ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
+            if (!result.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
 
             await global.db.add(`user.${user.split(/[:@]/)[0]}.coin`, coinAmount);
 
-            ctx.sendMessage(user, {
+            await ctx.sendMessage(user, {
                 text: quote(`🎉 Anda telah menerima ${coinAmount} koin dari Owner!`)
             });
-            return ctx.reply(quote(`✅ Berhasil menambahkan ${coinAmount} koin kepada pengguna!`));
+            return await ctx.reply(quote(`✅ Berhasil menambahkan ${coinAmount} koin kepada pengguna!`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -19,20 +19,20 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         try {
             const input = ctx.args.join(" ") || "@everyone";
             const data = await ctx.group().members();
             const mentions = data.map(member => `${member.id.split(/[:@]/)[0]}S_WHATSAPP_NET`);
 
-            return ctx.reply({
+            return await ctx.reply({
                 text: input,
                 mentions
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

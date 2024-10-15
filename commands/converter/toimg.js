@@ -21,17 +21,17 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
-        if (!(global.tools.general.checkQuotedMedia(ctx.quoted, "sticker"))) return ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["sticker"])));
+        if (!(global.tools.general.checkQuotedMedia(ctx.quoted, "sticker"))) return await ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["sticker"])));
 
         try {
             const buffer = await ctx.quoted.media.toBuffer()
             const imgUrl = buffer ? await webp2png(buffer) : null;
 
-            if (!imgUrl) return ctx.reply(global.config.msg.notFound);
+            if (!imgUrl) return await ctx.reply(global.config.msg.notFound);
 
-            return ctx.reply({
+            return await ctx.reply({
                 image: {
                     url: imgUrl
                 },
@@ -39,7 +39,7 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

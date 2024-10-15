@@ -18,7 +18,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const apiUrl = await global.tools.api.createUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json", {});
 
@@ -28,7 +28,7 @@ module.exports = {
             } = await axios.get(apiUrl);
             const gempa = data.Infogempa.gempa;
 
-            return ctx.reply({
+            return await ctx.reply({
                 image: {
                     url: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`
                 },
@@ -46,8 +46,8 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -10,8 +10,8 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
-        return ctx.reply("Pong!");
+        return await ctx.reply("Pong!");
     }
 };

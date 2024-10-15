@@ -19,11 +19,11 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const script = ctx.args.join(" ") || null;
 
-        if (!script) return ctx.reply(
+        if (!script) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `console.log("halo dunia!");`))
         );
@@ -32,7 +32,7 @@ module.exports = {
             const restricted = ["require", "eval", "Function", "global"];
             for (const w of restricted) {
                 if (script.includes(w)) {
-                    return ctx.reply(quote(`❎ Penggunaan ${w} tidak diperbolehkan dalam kode.`));
+                    return await ctx.reply(quote(`❎ Penggunaan ${w} tidak diperbolehkan dalam kode.`));
                 }
             }
 
@@ -71,10 +71,10 @@ module.exports = {
                 }, 10000);
             });
 
-            ctx.reply(output);
+            await ctx.reply(output);
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

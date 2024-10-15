@@ -21,11 +21,11 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
-        if (!input) return ctx.reply(
+        if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss"))}\n` +
             quote(global.tools.msg.generatesFlagInformation({
@@ -60,7 +60,7 @@ module.exports = {
                 const searchData = (await axios.get(searchApiUrl)).data;
                 const data = searchData[searchIndex];
 
-                ctx.reply(
+                await ctx.reply(
                     `${quote(`Judul: ${data.title}`)}\n` +
                     `${quote(`Artis: ${data.artist}`)}\n` +
                     `${quote(`URL: ${data.url}`)}\n` +
@@ -72,7 +72,7 @@ module.exports = {
                     url: data.url
                 });
 
-                return ctx.reply({
+                return await ctx.reply({
                     audio: {
                         url: downloadApiUrl
                     },
@@ -87,7 +87,7 @@ module.exports = {
             const searchData = (await axios.get(searchApiUrl)).data.data;
             const data = searchData[searchIndex];
 
-            ctx.reply(
+            await ctx.reply(
                 `${quote(`Judul: ${data.title}`)}\n` +
                 `${quote(`Artis: ${data.author.name}`)}\n` +
                 `${quote(`URL: ${data.url}`)}\n` +
@@ -99,9 +99,9 @@ module.exports = {
             const downloadData = Object.values(downloadResponse.audio)[0];
             const downloadUrl = await downloadData.download();
 
-            if (!downloadUrl) return ctx.reply(global.config.msg.notFound);
+            if (!downloadUrl) return await ctx.reply(global.config.msg.notFound);
 
-            return ctx.reply({
+            return await ctx.reply({
                 audio: {
                     url: downloadUrl
                 },
@@ -110,8 +110,8 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

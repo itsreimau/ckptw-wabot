@@ -17,11 +17,11 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
-        if (!input) return ctx.reply(
+        if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "by itsreimau"))
         );
@@ -29,10 +29,10 @@ module.exports = {
         try {
             await ctx.group().updateDescription(input);
 
-            return ctx.reply(quote(`✅ Berhasil mengubah deskripsi grup!`));
+            return await ctx.reply(quote(`✅ Berhasil mengubah deskripsi grup!`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

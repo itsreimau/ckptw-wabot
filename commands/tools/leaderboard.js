@@ -42,7 +42,7 @@ module.exports = {
             const userMentions = topUsers.map(user => user.userId + S_WHATSAPP_NET);
             if (userRank > 9) userMentions.push(senderJid + S_WHATSAPP_NET);
 
-            return ctx.reply({
+            return await ctx.reply({
                 text: `${resultText.trim()}\n` +
                     "\n" +
                     global.config.msg.footer,
@@ -50,7 +50,7 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

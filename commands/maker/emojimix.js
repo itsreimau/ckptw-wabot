@@ -21,9 +21,9 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
-        if (!ctx.args.length) return ctx.reply(
+        if (!ctx.args.length) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "😱 🤓"))
         );
@@ -44,7 +44,7 @@ module.exports = {
             const response = await axios.get(apiUrl);
             const data = await response.data;
 
-            if (!data.results[0].url) return ctx.reply(global.config.msg.notFound);
+            if (!data.results[0].url) return await ctx.reply(global.config.msg.notFound);
 
             const sticker = new Sticker(data.results[0].url, {
                 pack: global.config.sticker.packname,
@@ -55,10 +55,10 @@ module.exports = {
                 quality: 50
             });
 
-            return ctx.reply(await sticker.toMessage());
+            return await ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

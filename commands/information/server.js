@@ -15,7 +15,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const apiUrl = global.tools.api.createUrl("http://ip-api.com", "/json", {});
 
@@ -25,7 +25,7 @@ module.exports = {
             } = await axios.get(apiUrl);
             const startTime = global.config.bot.readyAt;
 
-            return ctx.reply(
+            return await ctx.reply(
                 `${quote(`OS: ${os.type()} (${os.arch()} / ${os.release()})`)}\n` +
                 `${quote(`RAM: ${global.tools.general.formatSize(process.memoryUsage().rss)} / ${global.tools.general.formatSize(os.totalmem())}`)}\n` +
                 Object.entries(data).map(([key, value]) => `${quote(`${global.tools.general.ucword(key)}: ${value}`)}\n`).join("") +
@@ -36,7 +36,7 @@ module.exports = {
             );
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

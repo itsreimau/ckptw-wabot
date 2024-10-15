@@ -20,12 +20,12 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.split(/[:@]/)[0];
 
-        if (!ctx.args.length) return ctx.reply(
+        if (!ctx.args.length) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `${senderNumber} halo dunia!`))
         );
@@ -34,7 +34,7 @@ module.exports = {
             const [number, ...text] = ctx.args;
             const numberFormatted = number.replace(/[^\d]/g, "");
 
-            if (numberFormatted === senderNumber) return ctx.reply(quote(`❎ Tidak dapat digunakan pada diri Anda sendiri.`));
+            if (numberFormatted === senderNumber) return await ctx.reply(quote(`❎ Tidak dapat digunakan pada diri Anda sendiri.`));
 
             const fakeText = {
                 key: {
@@ -82,10 +82,10 @@ module.exports = {
                 lastMsg: Date.now()
             });
 
-            return ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
+            return await ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

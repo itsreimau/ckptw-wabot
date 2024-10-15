@@ -19,7 +19,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         let textToSpeech = ctx.args.join(" ") || null;
         let langCode = "id";
@@ -46,7 +46,7 @@ module.exports = {
             }
         }
 
-        if (!textToSpeech) return ctx.reply(
+        if (!textToSpeech) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))}\n` +
             quote(global.tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
@@ -54,7 +54,7 @@ module.exports = {
 
         if (ctx.args[0] === "list") {
             const listText = await global.tools.list.get("tts");
-            return ctx.reply(listText);
+            return await ctx.reply(listText);
         }
 
         try {
@@ -66,7 +66,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
-            return ctx.reply({
+            return await ctx.reply({
                 audio: {
                     url: data.result
                 },
@@ -75,8 +75,8 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

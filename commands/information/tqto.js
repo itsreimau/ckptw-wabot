@@ -14,9 +14,9 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
-        return ctx.reply(
+        return await ctx.reply(
             `${quote("Allah SWT")}\n` +
             `${quote("ItsReimau (https://github.com/itsreimau)")}\n` +
             `${quote("JastinXyz (https://github.com/JastinXyz)")}\n` +

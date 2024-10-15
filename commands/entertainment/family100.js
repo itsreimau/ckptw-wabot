@@ -18,9 +18,9 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
-        if (session.has(ctx.id)) return ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
+        if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/games/family100.json", {});
@@ -34,7 +34,7 @@ module.exports = {
 
             session.set(ctx.id, true);
 
-            ctx.reply(
+            await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`Jawablah sebanyak-banyaknya hingga semuanya terjawab atau waktu habis!`)}\n` +
                 `${quote(`Batas waktu: ${(timeout / 1000).toFixed(2)} detik.`)}\n\n` +
@@ -55,7 +55,7 @@ module.exports = {
                     participants.add(participantNumber);
 
                     await global.db.add(`user.${participantNumber}.coin`, 1);
-                    ctx.sendMessage(ctx.id, {
+                    await ctx.sendMessage(ctx.id, {
                         text: quote(`✅ ${global.tools.general.ucword(userAnswer)} benar! Jawaban tersisa: ${remainingAnswers.size}`),
                         quoted: m
                     });
@@ -66,7 +66,7 @@ module.exports = {
                             await global.db.add(`user.${participant}.coin`, 10);
                             await global.db.add(`user.${participant}.winGame`, 1);
                         }
-                        ctx.reply(quote(`🎉 Selamat! Semua jawaban telah ditemukan! Setiap peserta yang menjawab mendapat 10 koin.`));
+                        await ctx.reply(quote(`🎉 Selamat! Semua jawaban telah ditemukan! Setiap peserta yang menjawab mendapat 10 koin.`));
                         return collector.stop();
                     }
                 }
@@ -77,7 +77,7 @@ module.exports = {
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
-                    ctx.reply(
+                    await ctx.reply(
                         `${quote("⌛ Waktu habis!")}\n` +
                         quote(`Jawaban yang belum terjawab adalah: ${remaining}`)
                     );
@@ -85,7 +85,7 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

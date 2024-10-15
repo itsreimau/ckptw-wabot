@@ -14,14 +14,14 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const vcard = new VCardBuilder()
             .setFullName(global.config.owner.name)
             .setOrg(global.config.owner.organization)
             .setNumber(global.config.owner.number).build();
 
-        return ctx.reply({
+        return await ctx.reply({
             contacts: {
                 displayName: global.config.owner.name,
                 contacts: [{

@@ -19,14 +19,14 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const [suraNumber, ayaInput] = await Promise.all([
             parseInt(ctx.args[0]),
             ctx.args[1]
         ]);
 
-        if (!ctx.args.length) return ctx.reply(
+        if (!ctx.args.length) return await ctx.reply(
             `${quote(`${global.tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
             `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "21 35"))}\n` +
             quote(global.tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
@@ -34,11 +34,11 @@ module.exports = {
 
         if (ctx.args[0] === "list") {
             const listText = await global.tools.list.get("alquran");
-            return ctx.reply(listText);
+            return await ctx.reply(listText);
         }
 
         try {
-            if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return ctx.reply(quote(`❎ Surah ${suraNumber} tidak ada.`));
+            if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return await ctx.reply(quote(`❎ Surah ${suraNumber} tidak ada.`));
 
             const apiUrl = global.tools.api.createUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
             const {
@@ -49,10 +49,10 @@ module.exports = {
                 if (ayaInput.includes("-")) {
                     const [startAya, endAya] = ayaInput.split("-").map(num => parseInt(num));
 
-                    if (isNaN(startAya) || isNaN(endAya) || startAya < 1 || endAya < startAya) return ctx.reply(quote(`❎ Rentang ayat tidak valid.`));
+                    if (isNaN(startAya) || isNaN(endAya) || startAya < 1 || endAya < startAya) return await ctx.reply(quote(`❎ Rentang ayat tidak valid.`));
 
                     const verses = data.ayat.filter((d) => d.nomorAyat >= startAya && d.nomorAyat <= endAya);
-                    if (verses.length === 0) return ctx.reply(quote(`❎ Ayat dalam rentang ${startAya}-${endAya} tidak ada.`));
+                    if (verses.length === 0) return await ctx.reply(quote(`❎ Ayat dalam rentang ${startAya}-${endAya} tidak ada.`));
 
                     const versesText = verses.map((d) => {
                         return `${bold(`Ayat ${d.nomorAyat}:`)}\n` +
@@ -60,7 +60,7 @@ module.exports = {
                             `${italic(d.teksIndonesia)}`;
                     }).join("\n");
 
-                    return ctx.reply(
+                    return await ctx.reply(
                         `${bold(`Surah ${data.namaLatin}`)}\n` +
                         `${quote(`${data.arti}`)}\n` +
                         `${quote("─────")}\n` +
@@ -71,12 +71,12 @@ module.exports = {
                 } else {
                     const ayaNumber = parseInt(ayaInput);
 
-                    if (isNaN(ayaNumber) || ayaNumber < 1) return ctx.reply(quote(`❎ Ayat harus lebih dari 0.`));
+                    if (isNaN(ayaNumber) || ayaNumber < 1) return await ctx.reply(quote(`❎ Ayat harus lebih dari 0.`));
 
                     const aya = data.ayat.find((d) => d.nomorAyat === ayaNumber);
-                    if (!aya) return ctx.reply(quote(`❎ Ayat ${ayaNumber} tidak ada.`));
+                    if (!aya) return await ctx.reply(quote(`❎ Ayat ${ayaNumber} tidak ada.`));
 
-                    return ctx.reply(
+                    return await ctx.reply(
                         `${aya.teksArab} (${aya.teksLatin})\n` +
                         `${italic(aya.teksIndonesia)}\n` +
                         "\n" +
@@ -89,7 +89,7 @@ module.exports = {
                         `${d.teksArab} (${d.teksLatin})\n` +
                         `${italic(d.teksIndonesia)}`;
                 }).join("\n");
-                return ctx.reply(
+                return await ctx.reply(
                     `${bold(`Surah ${data.namaLatin}`)}\n` +
                     `${quote(`${data.arti}`)}\n` +
                     `${quote("─────")}\n` +
@@ -100,8 +100,8 @@ module.exports = {
             }
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -16,14 +16,14 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         try {
             const link = await ctx.group().inviteCode();
-            return ctx.reply(`https://chat.whatsapp.com/${link}`);
+            return await ctx.reply(`https://chat.whatsapp.com/${link}`);
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

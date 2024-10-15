@@ -14,9 +14,9 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
-        return ctx.reply(
+        return await ctx.reply(
             `${quote("https://github.com/itsreimau/ckptw-wabot")}\n` +
             "\n" +
             global.config.msg.footer

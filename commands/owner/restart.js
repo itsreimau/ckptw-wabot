@@ -16,15 +16,15 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         try {
-            ctx.reply(global.config.msg.wait);
+            await ctx.reply(global.config.msg.wait);
 
             exec(`pm2 restart ${global.config.pkg.name}`); // PM2
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -100,7 +100,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     .setDisplayText("✅ Ya!")
                     .setType("quick_reply").build();
 
-                ctx.replyInteractiveMessage({
+                await ctx.replyInteractiveMessage({
                     body: quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`),
                     footer: global.config.msg.watermark,
                     nativeFlowMessage: {
@@ -108,7 +108,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     }
                 })
             } else if (!global.config.system.useInteractiveMessage) {
-                ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
+                await ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
             }
         }
 
@@ -176,10 +176,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             try {
                 const result = await eval(m.content.startsWith("==> ") ? `(async () => { ${code} })()` : code);
 
-                ctx.reply(inspect(result));
+                await ctx.reply(inspect(result));
             } catch (error) {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
-                ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
             }
         }
 
@@ -200,10 +200,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     });
                 });
 
-                ctx.reply(output);
+                await ctx.reply(output);
             } catch (error) {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
-                ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
             }
         }
     }
@@ -220,7 +220,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 ]);
                 const timeAgo = global.tools.general.convertMsToDuration(Date.now() - timeStamp);
 
-                ctx.reply(quote(`📴 Dia AFK dengan alasan ${reason} selama ${timeAgo}.`));
+                await ctx.reply(quote(`📴 Dia AFK dengan alasan ${reason} selama ${timeAgo}.`));
             }
         }
     }
@@ -240,7 +240,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const timeAgo = global.tools.general.convertMsToDuration(timeElapsed);
             await global.db.delete(`user.${senderNumber}.afk`);
 
-            ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`));
+            await ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`));
         }
     }
 
@@ -253,7 +253,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
         if (getAntilink) {
             if (m.content && urlRegex.test(m.content) && !(await global.tools.general.isAdmin(ctx, senderJid))) {
-                ctx.reply(quote(`❎ Jangan kirim tautan!`));
+                await ctx.reply(quote(`❎ Jangan kirim tautan!`));
                 await ctx.deleteMessage(m.key);
                 if (!global.config.system.restrict) await ctx.group().kick([senderJid]);
             }
@@ -269,12 +269,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const partnerId = anonChatPartnerData + S_WHATSAPP_NET;
 
             try {
-                ctx._client.sendMessage(partnerId, {
+                ctx.sendMessage(partnerId, {
                     forward: m
                 });
             } catch (error) {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
-                ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
             }
         }
 
@@ -296,8 +296,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                     const targetNumber = senderNumber === from ? to : from;
 
-                    ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
-                    ctx.replyWithJid(targetNumber + S_WHATSAPP_NET, quote("✅ Pesan menfess telah dihapus!"));
+                    await ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
+                    await ctx.replyWithJid(targetNumber + S_WHATSAPP_NET, quote("✅ Pesan menfess telah dihapus!"));
                 }
             }
 
@@ -311,14 +311,14 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                         forward: m
                     });
 
-                    ctx.reply(quote(`✅ Pesan berhasil diteruskan ke ${targetId}!`));
+                    await ctx.reply(quote(`✅ Pesan berhasil diteruskan ke ${targetId}!`));
                     await global.db.set(`menfess.${conversationId}.lastMsg`, Date.now());
 
                     break;
                 }
             } catch (error) {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
-                ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
             }
         }
     }
@@ -369,7 +369,7 @@ async function handleUserEvent(m) {
                     background: global.config.bot.picture.thumbnail
                 });
 
-                bot.core.sendMessage(id, {
+                await bot.core.sendMessage(id, {
                     text: message,
                     contextInfo: {
                         mentionedJid: [jid],
@@ -389,7 +389,7 @@ async function handleUserEvent(m) {
         }
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
-        bot.core.sendMessage(id, {
+        await bot.core.sendMessage(id, {
             text: quote(`❎ Terjadi kesalahan: ${error.message}`)
         });
     }

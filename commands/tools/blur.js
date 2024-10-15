@@ -20,7 +20,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
@@ -30,7 +30,7 @@ module.exports = {
             global.tools.general.checkQuotedMedia(ctx.quoted, "image")
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return ctx.reply(
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send", "reply"], "image"))}\n` +
             quote(global.tools.msg.generatesFlagInformation({
                 "-l <number>": "Tingkat keburaman."
@@ -52,16 +52,16 @@ module.exports = {
             let img = await Jimp.read(buffer);
             img.blur(isNaN(level) ? 5 : parseInt(level));
             img.getBuffer(Jimp.MIME_JPEG, async (err, buffer) => {
-                if (error) return ctx.reply(quote(`❎ Tidak dapat mengaburkan gambar!`));
+                if (error) return await ctx.reply(quote(`❎ Tidak dapat mengaburkan gambar!`));
 
-                return ctx.reply({
+                return await ctx.reply({
                     image: buffer,
                     mimetype: mime.contentType("jpeg")
                 });
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

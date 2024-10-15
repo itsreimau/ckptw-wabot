@@ -15,10 +15,10 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         try {
-            const wait = ctx.reply(global.config.msg.wait);
+            const wait = await ctx.reply(global.config.msg.wait);
 
             const APIs = global.tools.api.listUrl();
             let result = "";
@@ -39,7 +39,7 @@ module.exports = {
             );
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -19,13 +19,13 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
         const currentPartner = await global.db.get(`anonChat.${senderNumber}.partner`);
 
         if (currentPartner) {
-            ctx.sendMessage(partner + S_WHATSAPP_NET, {
+            await ctx.sendMessage(partner + S_WHATSAPP_NET, {
                 text: quote(`❎ Partner kamu telah menghentikan chat.`)
             });
             await global.db.delete(`anonChat.${currentPartner}`);
@@ -37,6 +37,6 @@ module.exports = {
 
         await global.db.delete(`anonChat.${senderNumber}`);
 
-        ctx.reply(quote(`✅ Kamu telah keluar dari chat dan antrian.`));
+        await ctx.reply(quote(`✅ Kamu telah keluar dari chat dan antrian.`));
     }
 };

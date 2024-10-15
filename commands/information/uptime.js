@@ -14,9 +14,9 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const uptime = global.tools.general.convertMsToDuration(Date.now() - global.config.bot.readyAt);
-        return ctx.reply(quote(`Bot telah aktif selama ${uptime}.`));
+        return await ctx.reply(quote(`Bot telah aktif selama ${uptime}.`));
     }
 };

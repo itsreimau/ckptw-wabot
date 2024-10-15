@@ -21,16 +21,16 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
-        if (!input) return ctx.reply(
+        if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "get in the fucking robot, shinji!"))
         );
 
-        if (input.length > 10000) return ctx.reply(quote(`❎ Maksimal 50 kata!`));
+        if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 50 kata!`));
 
         try {
             let profilePictureUrl;
@@ -55,10 +55,10 @@ module.exports = {
                 quality: 50
             });
 
-            return ctx.reply(await sticker.toMessage());
+            return await ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -17,7 +17,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
@@ -26,7 +26,7 @@ module.exports = {
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : input + S_WHATSAPP_NET;
 
-        if (!input && !user) return ctx.reply({
+        if (!input && !user) return await ctx.reply({
             text: `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
                 quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderNumber}`)),
             mentions: [senderJid]
@@ -34,17 +34,17 @@ module.exports = {
 
         try {
             const [result] = await ctx._client.onWhatsApp(user);
-            if (!result.exists) return ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
+            if (!result.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
 
             await global.db.set(`user.${user.split(/[:@]/)[0]}.isBanned`, true);
 
-            ctx.sendMessage(user, {
+            await ctx.sendMessage(user, {
                 text: quote(`🎉 Anda telah dibanned oleh Owner!`)
             });
-            return ctx.reply(quote(`✅ Berhasil dibanned!`));
+            return await ctx.reply(quote(`✅ Berhasil dibanned!`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

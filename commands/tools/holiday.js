@@ -18,7 +18,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         try {
             const month = new Date().getMonth() + 1;
@@ -44,15 +44,15 @@ module.exports = {
                 "\n" +
                 `${quote("─────")}\n`
             );
-            return ctx.reply(
+            return await ctx.reply(
                 `${resultText}\n` +
                 "\n" +
                 global.config.msg.footer
             );
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

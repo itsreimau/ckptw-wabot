@@ -17,7 +17,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         try {
             const users = (await global.db.toJSON()).user;
@@ -38,7 +38,7 @@ module.exports = {
                 userMentions.push(userId + S_WHATSAPP_NET);
             });
 
-            return ctx.reply({
+            return await ctx.reply({
                 text: `${resultText}` +
                     "\n" +
                     global.config.msg.footer,
@@ -46,7 +46,7 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

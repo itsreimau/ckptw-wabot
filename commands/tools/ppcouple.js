@@ -18,7 +18,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         try {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/lainnya/ppcouple.json", {});
@@ -28,13 +28,13 @@ module.exports = {
             const result = global.tools.general.getRandomElement(data);
 
             await Promise.all([
-                ctx.reply({
+                await ctx.reply({
                     image: {
                         url: result.male
                     },
                     mimetype: mime.contentType("png"),
                 }),
-                ctx.reply({
+                await ctx.reply({
                     image: {
                         url: result.female
                     },
@@ -43,8 +43,8 @@ module.exports = {
             ]);
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

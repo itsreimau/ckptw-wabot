@@ -17,11 +17,11 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
-        if (!input) return ctx.reply(
+        if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "bitcoin"))
         );
@@ -29,7 +29,7 @@ module.exports = {
         try {
             const result = await coingecko(input);
 
-            if (!result) return ctx.reply(global.config.msg.notFound);
+            if (!result) return await ctx.reply(global.config.msg.notFound);
 
             const resultText = result.map((r) =>
                 `${quote(`${r.cryptoName}`)}\n` +
@@ -38,14 +38,14 @@ module.exports = {
                 "\n" +
                 `${quote("─────")}\n`
             );
-            return ctx.reply(
+            return await ctx.reply(
                 `${resultText}\n` +
                 "\n" +
                 global.config.msg.footer
             );
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

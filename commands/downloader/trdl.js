@@ -18,17 +18,17 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const url = ctx.args[0] || null;
 
-        if (!url) return ctx.reply(
+        if (!url) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!urlRegex.test(url)) return ctx.reply(global.config.msg.urlInvalid);
+        if (!urlRegex.test(url)) return await ctx.reply(global.config.msg.urlInvalid);
 
         try {
             const apiUrl = global.tools.api.createUrl("agatz", "/api/threads", {
@@ -40,7 +40,7 @@ module.exports = {
 
             if (data.image_urls && data.image_urls.length > 0) {
                 for (const imageUrl of data.image_urls) {
-                    ctx.reply({
+                    await ctx.reply({
                         image: {
                             url: imageUrl
                         },
@@ -51,7 +51,7 @@ module.exports = {
 
             if (data.video_urls && data.video_urls.length > 0) {
                 for (const videoUrl of data.video_urls) {
-                    ctx.reply({
+                    await ctx.reply({
                         video: {
                             url: videoUrl
                         },
@@ -62,8 +62,8 @@ module.exports = {
             }
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -22,7 +22,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
@@ -30,7 +30,7 @@ module.exports = {
             global.tools.general.checkQuotedMedia(ctx.quoted, ["image", "gif", "video"])
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["image", "gif", "video"])));
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["image", "gif", "video"])));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
@@ -43,10 +43,10 @@ module.exports = {
                 quality: 50,
             });
 
-            return ctx.reply(await sticker.toMessage());
+            return await ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -23,7 +23,7 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
         const msgType = ctx.getMessageType();
@@ -33,7 +33,7 @@ module.exports = {
             global.tools.general.checkQuotedMedia(ctx.quoted, "image")
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return ctx.reply(
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send", "reply"], "image"))}\n` +
             quote(global.tools.msg.generatesFlagInformation({
                 "-t <text>": "Jenis pemrosesan gambar (tersedia: modelx2, modelx2 25 JXL, modelx4, minecraft_modelx4).",
@@ -61,7 +61,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
-            return ctx.reply({
+            return await ctx.reply({
                 image: {
                     url: data.result.img
                 },
@@ -69,8 +69,8 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return ctx.reply(global.config.msg.notFound);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -18,24 +18,24 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const url = ctx.args[0] || null;
 
-        if (!url) return ctx.reply(
+        if (!url) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
         const urlRegex = /^(https?:\/\/)?(www\.)?videy\.co\/v\?id=([a-zA-Z0-9]+)/i;
         const match = urlRegex.exec(url);
-        if (!match) return ctx.reply(global.config.msg.urlInvalid);
+        if (!match) return await ctx.reply(global.config.msg.urlInvalid);
 
         try {
             const videoId = match[3];
             const videoUrl = `https://cdn.videy.co/${videoId}.mp4`;
 
-            return ctx.reply({
+            return await ctx.reply({
                 video: {
                     url: videoUrl
                 },
@@ -47,7 +47,7 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

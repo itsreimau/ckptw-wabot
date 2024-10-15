@@ -14,11 +14,11 @@ module.exports = {
             status,
             message
         } = await global.handler(ctx, module.exports.handler);
-        if (status) return ctx.reply(message);
+        if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
-        if (!input) return ctx.reply(
+        if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "halo dunia!"))
         );
@@ -29,7 +29,7 @@ module.exports = {
             const groups = Object.entries(getGroups).map((entry) => entry[1]);
             const anu = groups.map((a) => a.id);
 
-            ctx.reply(quote(`🔄 Mengirim siaran ke ${anu.length} obrolan grup, perkiraan waktu penyelesaian adalah ${(anu.length * 0.5)} detik.`));
+            await ctx.reply(quote(`🔄 Mengirim siaran ke ${anu.length} obrolan grup, perkiraan waktu penyelesaian adalah ${(anu.length * 0.5)} detik.`));
 
             const failedGroups = [];
 
@@ -37,7 +37,7 @@ module.exports = {
                 await delay(500);
 
                 try {
-                    ctx.sendMessage(i, {
+                    await ctx.sendMessage(i, {
                         text: input,
                         contextInfo: {
                             externalAdReply: {
@@ -61,13 +61,13 @@ module.exports = {
             }
 
             if (failedGroups.length > 0) {
-                ctx.reply(quote(`⚠️ Tidak dapat mengirimkan siaran ke ${failedGroups.length} grup. Akan mencoba ulang dalam beberapa detik...`));
+                await ctx.reply(quote(`⚠️ Tidak dapat mengirimkan siaran ke ${failedGroups.length} grup. Akan mencoba ulang dalam beberapa detik...`));
 
                 for (let i of failedGroups) {
                     await delay(1000);
 
                     try {
-                        ctx.sendMessage(i, {
+                        await ctx.sendMessage(i, {
                             text: input,
                             contextInfo: {
                                 externalAdReply: {
@@ -90,10 +90,10 @@ module.exports = {
                 }
             }
 
-            return ctx.reply(quote(`✅ Berhasil mengirimkan siaran ke ${anu.length - failedGroups.length} obrolan grup. ${failedGroups.length > 0 ? `Beberapa grup gagal dikirimi: ${failedGroups.length} grup.` : ''}`));
+            return await ctx.reply(quote(`✅ Berhasil mengirimkan siaran ke ${anu.length - failedGroups.length} obrolan grup. ${failedGroups.length > 0 ? `Beberapa grup gagal dikirimi: ${failedGroups.length} grup.` : ''}`));
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            return ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
