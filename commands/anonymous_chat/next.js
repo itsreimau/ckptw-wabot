@@ -34,19 +34,25 @@ module.exports = {
         const chatQueue = await global.db.get("anonymous_chat.queue") || [];
 
         if (chatQueue.length > 0) {
-            const partnerNumber = chatQueue.shift();
-            await global.db.set(`anonymous_chat.conversation.${senderNumber}.partner`, partnerNumber);
-            await global.db.set(`anonymous_chat.conversation.${partnerNumber}.partner`, senderNumber);
-            await global.db.set("anonymous_chat.queue", chatQueue);
+            let partnerNumber;
+            do {
+                partnerNumber = chatQueue.shift();
+            } while (partnerNumber === senderNumber && chatQueue.length > 0);
 
-            await ctx.sendMessage(partnerNumber + S_WHATSAPP_NET, {
-                text: quote(`✅ Kamu telah terhubung dengan partner. Ketik ${ctx._used.prefix}next untuk mencari yang lain, atau ${ctx._used.prefix}stop untuk berhenti.`)
-            });
-            return await ctx.reply(quote(`✅ Kamu telah terhubung dengan partner baru. Ketik ${ctx._used.prefix}next untuk mencari yang lain, atau ${ctx._used.prefix}stop untuk berhenti.`));
-        } else {
-            chatQueue.push(senderNumber);
-            await global.db.set("anonymous_chat.queue", chatQueue);
-            return await ctx.reply(quote(`🔄 Sedang mencari partner baru... Tunggu hingga ada orang lain yang mencari.`));
+            if (partnerNumber && partnerNumber !== senderNumber) {
+                await global.db.set(`anonymous_chat.conversation.${senderNumber}.partner`, partnerNumber);
+                await global.db.set(`anonymous_chat.conversation.${partnerNumber}.partner`, senderNumber);
+                await global.db.set("anonymous_chat.queue", chatQueue);
+
+                await ctx.sendMessage(partnerNumber + S_WHATSAPP_NET, {
+                    text: quote(`✅ Kamu telah terhubung dengan partner. Ketik ${ctx._used.prefix}next untuk mencari yang lain, atau ${ctx._used.prefix}stop untuk berhenti.`)
+                });
+                return await ctx.reply(quote(`✅ Kamu telah terhubung dengan partner baru. Ketik ${ctx._used.prefix}next untuk mencari yang lain, atau ${ctx._used.prefix}stop untuk berhenti.`));
+            }
         }
+
+        chatQueue.push(senderNumber);
+        await global.db.set("anonymous_chat.queue", chatQueue);
+        return await ctx.reply(quote(`🔄 Sedang mencari partner baru... Tunggu hingga ada orang lain yang mencari.`));
     }
 };
