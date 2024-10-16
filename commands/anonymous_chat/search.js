@@ -22,21 +22,20 @@ module.exports = {
         if (status) return await ctx.reply(message);
 
         const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+        const botNumber = global.config.bot.number;
         const currentPartner = await global.db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
 
         if (currentPartner) return await ctx.reply(quote(`❎ Kamu sudah terhubung dengan partner anonim lain. Gunakan ${ctx._used.prefix}next untuk mencari partner baru.`));
 
         let chatQueue = await global.db.get("anonymous_chat.queue") || [];
-        chatQueue.push(senderNumber);
-        await global.db.set("anonymous_chat.queue", chatQueue);
 
-        if (chatQueue.length > 1) {
+        if (chatQueue.length > 0) {
             let partnerNumber;
             do {
                 partnerNumber = chatQueue.shift();
-            } while (partnerNumber === senderNumber && chatQueue.length > 0);
+            } while ((partnerNumber === senderNumber || partnerNumber === botNumber) && chatQueue.length > 0);
 
-            if (partnerNumber && partnerNumber !== senderNumber) {
+            if (partnerNumber && partnerNumber !== senderNumber && partnerNumber !== botNumber) {
                 await global.db.set(`anonymous_chat.conversation.${senderNumber}.partner`, partnerNumber);
                 await global.db.set(`anonymous_chat.conversation.${partnerNumber}.partner`, senderNumber);
                 await global.db.set("anonymous_chat.queue", chatQueue);
@@ -46,8 +45,10 @@ module.exports = {
                 });
                 return await ctx.reply(quote(`✅ Kamu telah terhubung dengan partner. Ketik ${ctx._used.prefix}next untuk mencari yang lain, atau ${ctx._used.prefix}stop untuk berhenti.`));
             }
-        } else {
-            return await ctx.reply(quote(`🔄 Sedang mencari partner chat... Tunggu hingga ada orang lain yang mencari.`));
         }
+
+        chatQueue.push(senderNumber);
+        await global.db.set("anonymous_chat.queue", chatQueue);
+        return await ctx.reply(quote(`🔄 Sedang mencari partner chat... Tunggu hingga ada orang lain yang mencari.`));
     }
 };
