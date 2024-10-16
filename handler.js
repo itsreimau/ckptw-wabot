@@ -1,4 +1,4 @@
-const {
+handler;const {
     Cooldown
 } = require("@mengkodingan/ckptw");
 
@@ -81,7 +81,7 @@ async function checkCoin(ctx, coinOptions, senderNumber) {
     if (isOwner || isPremium) return false;
 
     if (typeof coinOptions === "number") {
-        const userCoin = await global.db.get(`user.${senderNumber}.coin`);
+        const userCoin = await global.db.get(`user.${senderNumber}.coin`) || 0;
         if (userCoin < coinOptions) return true;
 
         await global.db.subtract(`user.${senderNumber}.coin`, coinOptions);
@@ -89,12 +89,11 @@ async function checkCoin(ctx, coinOptions, senderNumber) {
     }
 
     const [requiredCoin, requiredMedia, mediaSourceOption] = Array.isArray(coinOptions) ? coinOptions : [coinOptions || 0];
-    const userCoin = await global.db.get(`user.${senderNumber}.coin`);
+    const userCoin = await global.db.get(`user.${senderNumber}.coin`) || 0;
     const msgType = ctx.getMessageType();
     let hasMedia = false;
 
     if (mediaSourceOption === 1 || mediaSourceOption === 3) hasMedia = await global.tools.general.checkMedia(msgType, requiredMedia, ctx);
-
     if ((mediaSourceOption === 2 || mediaSourceOption === 3) && ctx.quoted) hasMedia = await global.tools.general.checkQuotedMedia(ctx.quoted, requiredMedia);
 
     if (requiredMedia && !hasMedia) return false;
@@ -105,7 +104,5 @@ async function checkCoin(ctx, coinOptions, senderNumber) {
 
     return false;
 }
-
-
 
 module.exports = handler;
