@@ -75,13 +75,13 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     if (!userDb) {
         await global.db.set(`user.${senderNumber}`, {
-            coin: 50,
+            coin: 1000,
             level: 0,
             xp: 0
         });
     }
 
-    if (userPremium) await global.db.set(`user.${senderNumber}.coin`, 0);
+    if (userPremium) await global.db.delete(`user.${senderNumber}.coin`);
 
     // Penanganan untuk perintah
     const isCmd = global.tools.general.isCmd(m, ctx);
