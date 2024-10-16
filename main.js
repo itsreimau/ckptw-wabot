@@ -272,7 +272,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
             try {
                 await ctx.sendMessage(partnerId, {
-                    forward: ctx.message
+                    forward: m
                 });
             } catch (error) {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
