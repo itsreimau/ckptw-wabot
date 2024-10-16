@@ -300,7 +300,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                     await ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
                     await ctx.sendMessage(targetNumber + S_WHATSAPP_NET, {
-                        quote("✅ Pesan menfess telah dihapus!")
+                        text: quote("✅ Pesan menfess telah dihapus!")
                     });
                 }
             }
