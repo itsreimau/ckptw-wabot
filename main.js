@@ -270,13 +270,17 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (anonymousChatPartnerData) {
             const partnerId = anonymousChatPartnerData + S_WHATSAPP_NET;
 
-            try {
-                await ctx.sendMessage(partnerId, {
-                    forward: m
-                });
-            } catch (error) {
-                console.error(`[${global.config.pkg.name}] Error:`, error);
-                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            if (!["stop", "search", "next", "contact"].includes(isCmd?.cmd)) {
+                try {
+                    await ctx.sendMessage(partnerId, {
+                        forward: m
+                    });
+                } catch (error) {
+                    console.error(`[${global.config.pkg.name}] Error:`, error);
+                    await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+                }
+            } else {
+                await ctx.reply(quote(`⚠️ Perintah "${isCmd?.cmd}" tidak dapat diteruskan.`));
             }
         }
 
@@ -304,6 +308,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                         await ctx.sendMessage(targetNumber + S_WHATSAPP_NET, {
                             text: quote("✅ Pesan menfess telah dihapus!")
                         });
+
+                        continue;
                     }
                 }
 
@@ -313,7 +319,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     if (senderInConversation) {
                         const targetId = (senderNumber === from) ? to + S_WHATSAPP_NET : from + S_WHATSAPP_NET;
 
-                        ctx._client.sendMessage(targetId, {
+                        await ctx._client.sendMessage(targetId, {
                             forward: m
                         });
 

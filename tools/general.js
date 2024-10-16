@@ -171,23 +171,25 @@ function isCmd(m, ctx) {
 
         const matchedCmd = cmd.get(cmdName) || Array.from(cmd.values()).find(c => c.aliases && c.aliases.includes(cmdName));
 
-        if (matchedCmd) {
-            return {
-                msg: content,
-                prefix,
-                cmd: cmdName,
-                input
-            };
-        } else {
-            const mean = didyoumean(cmdName, listCmd);
-            return {
-                msg: content,
-                prefix,
-                cmd: cmdName,
-                input,
-                didyoumean: mean || null
-            };
-        }
+        if (matchedCmd) return {
+            msg: content,
+            prefix,
+            cmd: cmdName,
+            input
+        };
+
+        const mean = didyoumean(cmdName, listCmd);
+
+        if (mean) return {
+            msg: content,
+            prefix,
+            cmd: cmdName,
+            input,
+            didyoumean: mean
+        };
+
+        return false;
+
     } catch (error) {
         console.error(`[${global.config.pkg.name}] Error:`, error);
         return false;
