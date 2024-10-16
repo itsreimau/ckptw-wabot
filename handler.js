@@ -98,3 +98,5 @@ async function checkCoin(ctx, coinOptions, senderNumber) {
     await global.db.subtract(`user.${senderNumber}.coin`, requiredCoin);
     return false;
 }
+
+module.exports = handler;

@@ -265,10 +265,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (m.key.fromMe) return;
 
         // Penanganan anonymous_chat
-        const anonymous_chatPartnerData = await global.db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
+        const anonymousChatPartnerData = await global.db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
 
-        if (anonymous_chatPartnerData) {
-            const partnerId = anonymous_chatPartnerData + S_WHATSAPP_NET;
+        if (anonymousChatPartnerData) {
+            const partnerId = anonymousChatPartnerData + S_WHATSAPP_NET;
 
             try {
                 await ctx.sendMessage(partnerId, {
@@ -282,47 +282,50 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Penanganan menfess
         const allMenfessData = await global.db.get("menfess");
-        const menfessEntries = Object.entries(allMenfessData);
 
-        for (const [conversationId, menfessData] of menfessEntries) {
-            const {
-                from,
-                to
-            } = menfessData;
+        if (allMenfessData && typeof allMenfessData === "object" && Object.keys(allMenfessData).length > 0) {
+            const menfessEntries = Object.entries(allMenfessData);
 
-            if (m.content && /delete|stop/i.test(m.content)) {
-                const senderInConversation = senderNumber === from || senderNumber === to;
+            for (const [conversationId, menfessData] of menfessEntries) {
+                const {
+                    from,
+                    to
+                } = menfessData;
 
-                if (senderInConversation) {
-                    await global.db.delete(`menfess.${conversationId}`);
+                if (m.content && /delete|stop/i.test(m.content)) {
+                    const senderInConversation = senderNumber === from || senderNumber === to;
 
-                    const targetNumber = senderNumber === from ? to : from;
+                    if (senderInConversation) {
+                        await global.db.delete(`menfess.${conversationId}`);
 
-                    await ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
-                    await ctx.sendMessage(targetNumber + S_WHATSAPP_NET, {
-                        text: quote("✅ Pesan menfess telah dihapus!")
-                    });
+                        const targetNumber = senderNumber === from ? to : from;
+
+                        await ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
+                        await ctx.sendMessage(targetNumber + S_WHATSAPP_NET, {
+                            text: quote("✅ Pesan menfess telah dihapus!")
+                        });
+                    }
                 }
-            }
 
-            try {
-                const senderInConversation = senderNumber === from || senderNumber === to;
+                try {
+                    const senderInConversation = senderNumber === from || senderNumber === to;
 
-                if (senderInConversation) {
-                    const targetId = (senderNumber === from) ? to + S_WHATSAPP_NET : from + S_WHATSAPP_NET;
+                    if (senderInConversation) {
+                        const targetId = (senderNumber === from) ? to + S_WHATSAPP_NET : from + S_WHATSAPP_NET;
 
-                    ctx._client.sendMessage(targetId, {
-                        forward: m
-                    });
+                        ctx._client.sendMessage(targetId, {
+                            forward: m
+                        });
 
-                    await ctx.reply(quote(`✅ Pesan berhasil diteruskan ke ${targetId}!`));
-                    await global.db.set(`menfess.${conversationId}.lastMsg`, Date.now());
+                        await ctx.reply(quote(`✅ Pesan berhasil diteruskan ke ${targetId}!`));
+                        await global.db.set(`menfess.${conversationId}.lastMsg`, Date.now());
 
-                    break;
+                        break;
+                    }
+                } catch (error) {
+                    console.error(`[${global.config.pkg.name}] Error:`, error);
+                    await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
                 }
-            } catch (error) {
-                console.error(`[${global.config.pkg.name}] Error:`, error);
-                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
             }
         }
     }

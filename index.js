@@ -15,16 +15,6 @@ global.handler = handler;
 global.tools = tools;
 global.db = db;
 
-// Pemeriksaan konfigurasi tidak lengkap
-if (global.config.owner.name === "" || global.config.owner.number === "") {
-    console.error(`[${pkg.name}] Please set 'global.config.owner' correctly in config.js!`);
-    process.exit(1);
-}
-if (global.config.system.usePairingCode && global.config.bot.phoneNumber === "") {
-    console.error(`[${pkg.name}] Please set 'global.config.bot.phoneNumber' correctly in config.js!`);
-    process.exit(1);
-}
-
 // Memulai
 console.log(`[${pkg.name}] Stating...`);
 
