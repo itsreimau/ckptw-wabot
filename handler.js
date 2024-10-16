@@ -87,8 +87,8 @@ async function checkCoin(ctx, coinOptions, senderNumber) {
         const msgType = ctx.getMessageType();
         let hasMedia = false;
 
-        if (mediaSourceOption === 1 || mediaSourceOption === 3) hasMedia = await checkMedia(msgType, requiredMedia, ctx);
-        if ((mediaSourceOption === 2 || mediaSourceOption === 3) && ctx.quoted) hasMedia = await checkQuotedMedia(ctx.quoted, requiredMedia);
+        if (mediaSourceOption === 1 || mediaSourceOption === 3) hasMedia = await global.tools.general.checkMedia(msgType, requiredMedia, ctx);
+        if ((mediaSourceOption === 2 || mediaSourceOption === 3) && ctx.quoted) hasMedia = await global.tools.general.checkQuotedMedia(ctx.quoted, requiredMedia);
 
         if (!hasMedia) return true;
     }
