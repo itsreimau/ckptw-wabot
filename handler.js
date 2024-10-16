@@ -96,12 +96,11 @@ async function checkCoin(ctx, coinOptions, senderNumber) {
     if (mediaSourceOption === 1 || mediaSourceOption === 3) hasMedia = await global.tools.general.checkMedia(msgType, requiredMedia, ctx);
     if ((mediaSourceOption === 2 || mediaSourceOption === 3) && ctx.quoted) hasMedia = await global.tools.general.checkQuotedMedia(ctx.quoted, requiredMedia);
 
-    if (requiredMedia && !hasMedia) return false;
+    if (requiredMedia && !hasMedia) return true;
 
     if (userCoin < requiredCoin) return true;
 
     await global.db.subtract(`user.${senderNumber}.coin`, requiredCoin);
-
     return false;
 }
 
