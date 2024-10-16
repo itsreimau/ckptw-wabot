@@ -70,7 +70,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Basis data untuk pengguna
     const [userDb, userPremium] = await Promise.all([
         global.db.get(`user.${senderNumber}`),
-        global.db.get(`user.${senderNumber}`)
+        global.db.get(`user.${senderNumber}.premium`)
     ]);
 
     if (!userDb) {
