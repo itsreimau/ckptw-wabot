@@ -80,28 +80,21 @@ async function checkCoin(ctx, coinOptions, senderNumber) {
 
     if (isOwner || isPremium) return false;
 
-    if (typeof coinOptions === "number") {
-        const userCoin = await global.db.get(`user.${senderNumber}.coin`) || 0;
-        if (userCoin < coinOptions) return true;
-
-        await global.db.subtract(`user.${senderNumber}.coin`, coinOptions);
-        return false;
-    }
-
-    const [requiredCoin, requiredMedia, mediaSourceOption] = Array.isArray(coinOptions) ? coinOptions : [coinOptions || 0];
     const userCoin = await global.db.get(`user.${senderNumber}.coin`) || 0;
-    const msgType = ctx.getMessageType();
-    let hasMedia = false;
+    const [requiredCoin = 0, requiredMedia = null, mediaSourceOption = null] = Array.isArray(coinOptions) ? coinOptions : [coinOptions];
 
-    if (mediaSourceOption === 1 || mediaSourceOption === 3) hasMedia = await global.tools.general.checkMedia(msgType, requiredMedia, ctx);
-    if ((mediaSourceOption === 2 || mediaSourceOption === 3) && ctx.quoted) hasMedia = await global.tools.general.checkQuotedMedia(ctx.quoted, requiredMedia);
+    if (requiredMedia) {
+        const msgType = ctx.getMessageType();
+        let hasMedia = false;
 
-    if (requiredMedia && !hasMedia) return true;
+        if (mediaSourceOption === 1 || mediaSourceOption === 3) hasMedia = await checkMedia(msgType, requiredMedia, ctx);
+        if ((mediaSourceOption === 2 || mediaSourceOption === 3) && ctx.quoted) hasMedia = await checkQuotedMedia(ctx.quoted, requiredMedia);
+
+        if (!hasMedia) return true;
+    }
 
     if (userCoin < requiredCoin) return true;
 
     await global.db.subtract(`user.${senderNumber}.coin`, requiredCoin);
     return false;
 }
-
-module.exports = handler;

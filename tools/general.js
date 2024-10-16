@@ -76,14 +76,7 @@ async function checkQuotedMedia(quoted, requiredMedia) {
 
     return mediaList.some(media => {
         const mediaContent = quotedMediaMap[media];
-        if (mediaContent) {
-            if (media === "text") {
-                return mediaContent.length > 0;
-            } else if (quoted.media) {
-                return quoted.media.toBuffer().catch(() => null) !== null;
-            }
-        }
-        return false;
+        return media === "text" ? mediaContent && mediaContent.length > 0 : mediaContent;
     });
 }
 
