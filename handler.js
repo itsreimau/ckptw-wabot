@@ -1,4 +1,4 @@
-handler;const {
+const {
     Cooldown
 } = require("@mengkodingan/ckptw");
 
