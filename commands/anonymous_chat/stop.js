@@ -22,20 +22,20 @@ module.exports = {
         if (status) return await ctx.reply(message);
 
         const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
-        const currentPartner = await global.db.get(`anonChat.${senderNumber}.partner`);
+        const currentPartner = await global.db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
 
         if (currentPartner) {
-            await ctx.sendMessage(partner + S_WHATSAPP_NET, {
+            await ctx.sendMessage(currentPartner + S_WHATSAPP_NET, {
                 text: quote(`❎ Partner kamu telah menghentikan chat.`)
             });
-            await global.db.delete(`anonChat.${currentPartner}`);
+            await global.db.delete(`anonymous_chat.conversation.${currentPartner}`);
         }
 
-        const chatQueue = await global.db.get("anonChatQueue") || [];
+        const chatQueue = await global.db.get("anonymous_chat.queue") || [];
         const updatedQueue = chatQueue.filter((num) => num !== senderNumber);
-        await global.db.set("anonChatQueue", updatedQueue);
+        await global.db.set("anonymous_chat.queue", updatedQueue);
 
-        await global.db.delete(`anonChat.${senderNumber}`);
+        await global.db.delete(`anonymous_chat.conversation.${senderNumber}`);
 
         return await ctx.reply(quote(`✅ Kamu telah keluar dari chat dan antrian.`));
     }

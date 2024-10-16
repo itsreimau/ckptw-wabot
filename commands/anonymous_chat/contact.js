@@ -23,7 +23,7 @@ module.exports = {
         if (status) return await ctx.reply(message);
 
         const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
-        const currentPartner = await global.db.get(`anonChat.${senderNumber}.partner`);
+        const currentPartner = await global.db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
 
         if (!currentPartner) return await ctx.reply(quote(`❎ Kamu tidak sedang dalam chat. Gunakan ${ctx._used.prefix}search untuk mencari partner.`));
 

@@ -77,8 +77,6 @@ module.exports = {
             global.db.set(`menfess.${conversationId}`, {
                 from: senderNumber,
                 to: numberFormatted,
-                text: menfessText,
-                status: "sent",
                 lastMsg: Date.now()
             });
 

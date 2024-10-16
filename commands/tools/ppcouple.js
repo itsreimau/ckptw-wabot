@@ -28,13 +28,13 @@ module.exports = {
             const result = global.tools.general.getRandomElement(data);
 
             await Promise.all([
-                await ctx.reply({
+                ctx.reply({
                     image: {
                         url: result.male
                     },
                     mimetype: mime.contentType("png"),
                 }),
-                await ctx.reply({
+                ctx.reply({
                     image: {
                         url: result.female
                     },

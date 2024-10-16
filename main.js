@@ -113,7 +113,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Penanganan XP & Level untuk pengguna
-        const xpGain = 5;
+        const xpGain = 10;
         let xpToLevelUp = 100;
 
         const [userXp, userLevel] = await Promise.all([
@@ -262,15 +262,17 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Pribadi
     if (isPrivate) {
-        // Penanganan anonChat
-        const anonChatPartnerData = await global.db.get(`anonChat.${senderNumber}.partner`);
+        if (m.key.fromMe) return;
 
-        if (anonChatPartnerData) {
-            const partnerId = anonChatPartnerData + S_WHATSAPP_NET;
+        // Penanganan anonymous_chat
+        const anonymous_chatPartnerData = await global.db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
+
+        if (anonymous_chatPartnerData) {
+            const partnerId = anonymous_chatPartnerData + S_WHATSAPP_NET;
 
             try {
-                ctx.sendMessage(partnerId, {
-                    forward: m
+                await ctx.sendMessage(partnerId, {
+                    forward: ctx.message
                 });
             } catch (error) {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
@@ -297,7 +299,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     const targetNumber = senderNumber === from ? to : from;
 
                     await ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
-                    await ctx.replyWithJid(targetNumber + S_WHATSAPP_NET, quote("✅ Pesan menfess telah dihapus!"));
+                    await ctx.sendMessage(targetNumber + S_WHATSAPP_NET, {
+                        quote("✅ Pesan menfess telah dihapus!")
+                    });
                 }
             }
 
