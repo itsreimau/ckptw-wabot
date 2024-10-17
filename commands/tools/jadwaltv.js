@@ -40,7 +40,7 @@ module.exports = {
             } = await axios.get(apiUrl);
 
             const resultText = data.result.result.map((d) =>
-                `${quote(`${d.date} - ${d.event}`)}\n`
+                `${quote(`${d.date} - ${d.event}`)}`
             ).join("\n");
             return await ctx.reply(
                 `${quote(`Kanal: ${data.result.channel}`)}\n` +
