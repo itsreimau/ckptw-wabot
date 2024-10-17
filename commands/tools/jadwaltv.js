@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "jadwaltv",
-    category: "search",
+    category: "tools",
     handler: {
         banned: true,
         cooldown: true,
@@ -33,7 +33,7 @@ module.exports = {
 
         try {
             const apiUrl = await global.tools.api.createUrl("widipe", "/jadwaltv", {
-                text: input
+                tv: input
             });
             const {
                 data
