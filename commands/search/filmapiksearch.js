@@ -34,7 +34,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
-            const resultText = data.result.map((d) =>
+            const resultText = data.result.data.map((d) =>
                 `${quote(`Judul: ${d.title}`)}\n` +
                 `${quote(`Sinopsi: ${d.synopsis || "-"}`)}\n` +
                 `${quote(`Penilaian: ${d.rating}`)}\n` +
