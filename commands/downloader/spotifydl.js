@@ -1,12 +1,10 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "pddl",
-    aliases: ["pd", "pixeldrain", "pixeldraindl"],
+    name: "spotifydl",
     category: "downloader",
     handler: {
         banned: true,
@@ -31,23 +29,22 @@ module.exports = {
         if (!urlRegex.test(url)) return await ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/pixeldrain", {
-                url
+            const apiUrl = global.tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/download/track", {
+                url: url
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply({
-                document: {
-                    url: data.download
+                audio: {
+                    url: apiUrl
                 },
-                fileName: data.name,
-                mimetype: data.mime_type || "application/octet-stream"
+                mimetype: mime.contentType("mp4"),
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    global.config.msg.footer,
+                gifPlayback: false
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

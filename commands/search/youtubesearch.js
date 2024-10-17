@@ -1,12 +1,14 @@
 const {
+    bold,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "mangainfo",
-    aliases: ["manga"],
-    category: "tools",
+    name: "youtubesearch",
+    aliases: ["ytsearch", "yts"],
+    category: "search",
     handler: {
         banned: true,
         cooldown: true,
@@ -27,24 +29,31 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("https://api.jikan.moe", "/v4/manga", {
-                q: input
+            const apiUrl = global.tools.api.createUrl("agatz", "/api/ytsearch", {
+                message: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
-            const info = data.data[0];
+            } = (await axios.get(apiUrl)).data;
 
+            const resultText = data.map((d) => {
+                switch (d.type) {
+                    case "video":
+                        return `${quote(bold(`${d.title} (${d.url})`))}\n` +
+                            `${quote(`Durasi: ${d.timestamp}`)}\n` +
+                            `${quote(`Diunggah: ${d.ago}`)}\n` +
+                            `${quote(`Dilihat: ${d.views}`)}`;
+                    case "channel":
+                        return `${quote(bold(`${d.name} (${d.url})`))}\n` +
+                            `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
+                            `${quote(`Jumlah video: ${d.videoCount}`)}`;
+                }
+            }).filter((d) => d).join(
+                "\n" +
+                `${quote("─────")}\n`
+            );
             return await ctx.reply(
-                `${quote(`Judul: ${info.title}`)}\n` +
-                `${quote(`Judul (Inggris): ${info.title_english}`)}\n` +
-                `${quote(`Judul (Jepang): ${info.title_japanese}`)}\n` +
-                `${quote(`Tipe: ${info.type}`)}\n` +
-                `${quote(`Bab: ${info.chapters}`)}\n` +
-                `${quote(`Volume: ${info.volumes}`)}\n` +
-                `${quote(`URL: ${info.url}`)}\n` +
-                `${quote("─────")}\n` +
-                `${await global.tools.general.translate(info.synopsis, "id", ).translation}\n` +
+                `${resultText}\n` +
                 "\n" +
                 global.config.msg.footer
             );

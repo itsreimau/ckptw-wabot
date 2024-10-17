@@ -10,7 +10,7 @@ const {
 module.exports = {
     name: "stickersearch",
     aliases: ["ssearch"],
-    category: "tools",
+    category: "search",
     handler: {
         banned: true,
         cooldown: true,

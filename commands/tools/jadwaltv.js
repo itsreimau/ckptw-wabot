@@ -4,9 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "characterai",
-    aliases: ["cai"],
-    category: "ai",
+    name: "jadwaltv",
+    category: "search",
     handler: {
         banned: true,
         cooldown: true,
@@ -23,19 +22,32 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))
+            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "tvri"))}\n` +
+            quote(global.tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
+        if (ctx.args[0] === "list") {
+            const listText = await global.tools.list.get("jadwaltv");
+            return await ctx.reply(listText);
+        }
+
         try {
-            const apiUrl = global.tools.api.createUrl("nyxs", "/ai/character-ai", {
-                prompt: input,
-                gaya: `Anda adalah bot WhatsApp bernama ${global.config.bot.name} yang dimiliki oleh ${global.config.owner.name}. Jika nama Anda mirip dengan tokoh di media, sesuaikan kepribadian Anda dengan nama tersebut. Jika tidak, tetaplah ramah, informatif, dan responsif.` // Dapat diubah sesuai keinginan Anda
+            const apiUrl = await global.tools.api.createUrl("widipe", "/jadwaltv", {
+                text: input
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.result);
+            const resultText = data.result.result.map((d) =>
+                `${quote(`${d.date} - ${d.event}`)}\n`
+            ).join("\n");
+            return await ctx.reply(
+                `${quote(`Kanal: ${data.result.channel}`)}\n` +
+                `${resultText}\n` +
+                "\n" +
+                global.config.msg.footer
+            );
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);

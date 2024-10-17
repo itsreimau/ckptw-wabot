@@ -1,11 +1,12 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "stdl",
-    aliases: ["st", "spotifydl"],
+    name: "facebookdl",
+    aliases: ["fb", "fbdl", "facebook"],
     category: "downloader",
     handler: {
         banned: true,
@@ -30,13 +31,17 @@ module.exports = {
         if (!urlRegex.test(url)) return await ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/download/track", {
-                url: url
+            const apiUrl = global.tools.api.createUrl("https://vkrdownloader.vercel.app", "/server", {
+                vkr: url
             });
+            const {
+                data
+            } = (await axios.get(apiUrl)).data;
+            const downloadUrl = data.downloads.find(d => d.format_id === "hd")?.url || data.downloads.find(d => d.format_id === "sd")?.url;
 
             return await ctx.reply({
-                audio: {
-                    url: apiUrl
+                video: {
+                    url: downloadUrl
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
@@ -46,6 +51,7 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
+            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

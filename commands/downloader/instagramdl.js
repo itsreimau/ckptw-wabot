@@ -5,8 +5,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "trdl",
-    aliases: ["threads", "threadsdl"],
+    name: "instagramdl",
+    aliases: ["ig", "igdl", "instagram"],
     category: "downloader",
     handler: {
         banned: true,
@@ -31,32 +31,31 @@ module.exports = {
         if (!urlRegex.test(url)) return await ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/threads", {
+            const apiUrl = global.tools.api.createUrl("agatz", "/api/instagram", {
                 url
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            if (data.image_urls && data.image_urls.length > 0) {
-                for (const imageUrl of data.image_urls) {
+            if (data.image && data.image.length > 0) {
+                for (const img of data.image) {
                     await ctx.reply({
                         image: {
-                            url: imageUrl
+                            url: img
                         },
-                        mimetype: mime.contentType("png"),
+                        mimetype: mime.contentType("jpg")
                     });
                 }
             }
 
-            if (data.video_urls && data.video_urls.length > 0) {
-                for (const videoUrl of data.video_urls) {
+            if (data.video && data.video.length > 0) {
+                for (const vid of data.video) {
                     await ctx.reply({
                         video: {
-                            url: videoUrl
+                            url: vid.video
                         },
-                        mimetype: mime.contentType("mp4"),
-                        gifPlayback: false
+                        mimetype: mime.contentType("mp4")
                     });
                 }
             }

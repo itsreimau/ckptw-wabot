@@ -1,13 +1,14 @@
 const {
+    SectionsBuilder,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "ttsearch",
-    aliases: ["tiktoksearch", "vtsearch"],
-    category: "tools",
+    name: "youtubeaudio",
+    aliases: ["yta", "ytaudio", "ytmp3"],
+    category: "downloader",
     handler: {
         banned: true,
         cooldown: true,
@@ -20,31 +21,36 @@ module.exports = {
         } = await global.handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
-        const input = ctx.args.join(" ") || null;
+        const url = ctx.args[0] || null;
 
-        if (!input) return await ctx.reply(
+        if (!url) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "evangelion"))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
+        const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
+        if (!urlRegex.test(url)) await ctx.reply(global.config.msg.urlInvalid);
+
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/tiktoksearch", {
-                message: input
+            const apiUrl = global.tools.api.createUrl("widipe", "/download/ytdl", {
+                url: url
             });
             const {
-                data
+                result
             } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply({
                 video: {
-                    url: data.no_watermark
+                    url: result.mp3
                 },
-                mimetype: mime.contentType("mp4"),
-                gifPlayback: false
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    global.config.msg.footer,
+                mimetype: mime.contentType("mp3"),
+                ptt: false
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

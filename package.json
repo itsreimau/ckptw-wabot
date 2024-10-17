@@ -1,6 +1,6 @@
 {
   "name": "ckptw-wabot",
-  "version": "1.38.0",
+  "version": "1.38.5",
   "description": "WhatsApp Bot with @mengkodingan/ckptw.",
   "main": "index.js",
   "directories": {
@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
   "dependencies": {
-    "@bochilteam/scraper-sosmed": "^1.0.5",
     "@mengkodingan/ckptw": "^4.3.6",
     "axios": "1.7.7",
     "cfonts": "^3.3.0",

@@ -4,9 +4,9 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "googlesearch",
-    aliases: ["google", "gsearch"],
-    category: "tools",
+    name: "happymodsearch",
+    aliases: ["happymods"],
+    category: "search",
     handler: {
         banned: true,
         cooldown: true,
@@ -23,20 +23,20 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu whatsapp"))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "evangelion"))
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("ryzendesu", "/api/search/google", {
+            const apiUrl = await global.tools.api.createUrl("widipe", "/happymod", {
                 query: input
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            const resultText = data.map((d) =>
+            const resultText = data.result.map((d) =>
                 `${quote(`Judul: ${d.title}`)}\n` +
-                `${quote(`Deskripsi: ${d.description}`)}\n` +
+                `${quote(`Penilaian: ${d.rating}`)}\n` +
                 `${quote(`URL: ${d.link}`)}`
             ).join(
                 "\n" +

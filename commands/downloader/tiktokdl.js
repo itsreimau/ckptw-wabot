@@ -7,8 +7,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "ttdl",
-    aliases: ["tiktokdl", "tiktokmp3", "tiktoknowm", "tt", "tta", "ttaudio", "ttmp3", "ttmusic", "ttmusik", "vt", "vta", "vtaudio", "vtdltiktok", "vtmp3", "vtmusic", "vtmusik", "vtnowm"],
+    name: "tiktokdl",
+    aliases: ["tiktoknowm", "tt", "ttdl", "vt", "vtdltiktok", "vtnowm"],
     category: "downloader",
     handler: {
         banned: true,
@@ -26,13 +26,21 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
+            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))}\n` +
+            quote(global.tools.msg.generatesFlagInformation({
+                "-s": "Jenis pesan slide (carousel).",
+                "-a": "Otomatis kirim audio."
+            }))
         );
 
         const flag = global.tools.general.parseFlag(input, {
             "-s": {
                 type: "boolean",
                 key: "slide"
+            },
+            "-a": {
+                type: "boolean",
+                key: "audio"
             }
         });
 
@@ -42,8 +50,7 @@ module.exports = {
         if (!urlRegex.test(url)) return await ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            const audioCommands = ["tiktokmp3", "tta", "ttaudio", "ttmp3", "ttmusic", "ttmusik", "vta", "vtaudio", "vtmp3", "vtmusic", "vtmusik"];
-            const mediaType = audioCommands.includes(ctx._used.command) ? "audio" : "video_image";
+            const mediaType = flag.audio ? "audio" : "video_image";
 
             const apiUrl = global.tools.api.createUrl("https://api.tiklydown.eu.org", "/api/download", {
                 url
@@ -82,7 +89,7 @@ module.exports = {
                         for (let i = 0; i < data.images.length; i++) {
                             const imageUrl = data.images[i].url;
                             const button = new ButtonBuilder()
-                                .setId(`img${i}`)
+                                .setId(`id${i}`)
                                 .setDisplayText("Image URL 🌐")
                                 .setType("cta_url")
                                 .setURL(imageUrl)

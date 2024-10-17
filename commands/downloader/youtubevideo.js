@@ -1,12 +1,14 @@
 const {
+    SectionsBuilder,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+
 const mime = require("mime-types");
 
 module.exports = {
-    name: "igdl",
-    aliases: ["ig", "instagram", "instagramdl"],
+    name: "youtubevideo",
+    aliases: ["ytmp4", "ytv", "ytvideo"],
     category: "downloader",
     handler: {
         banned: true,
@@ -28,40 +30,28 @@ module.exports = {
         );
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!urlRegex.test(url)) return await ctx.reply(global.config.msg.urlInvalid);
+        if (!urlRegex.test(url)) await ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/instagram", {
-                url
+            const apiUrl = global.tools.api.createUrl("widipe", "/download/ytdl", {
+                url: url
             });
             const {
-                data
+                result
             } = (await axios.get(apiUrl)).data;
 
-            if (data.image && data.image.length > 0) {
-                for (const img of data.image) {
-                    await ctx.reply({
-                        image: {
-                            url: img
-                        },
-                        mimetype: mime.contentType("jpg")
-                    });
-                }
-            }
-
-            if (data.video && data.video.length > 0) {
-                for (const vid of data.video) {
-                    await ctx.reply({
-                        video: {
-                            url: vid.video
-                        },
-                        mimetype: mime.contentType("mp4")
-                    });
-                }
-            }
+            return await ctx.reply({
+                video: {
+                    url: result.mp4
+                },
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    global.config.msg.footer,
+                mimetype: mime.contentType("mp4"),
+                ptt: false
+            });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

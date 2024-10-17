@@ -30,16 +30,16 @@ module.exports = {
             } = await axios.get(apiUrl);
 
             const resultText = data.reverse().map((h) => {
-                const d = new Date(h.holiday_date);
+                const dt = new Date(d.holiday_date);
                 const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
                 const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
-                const day = days[d.getDay()];
-                const mon = months[d.getMonth()];
-                const year = d.getFullYear();
+                const day = days[dt.getDay()];
+                const mon = months[dt.getMonth()];
+                const year = dt.getFullYear();
 
-                return `${bold(h.holiday_name)}\n` +
-                    `${quote(`${day}, ${d.getDate()} ${mon} ${year}`)}`;
+                return `${bold(d.holiday_name)}\n` +
+                    `${quote(`${day}, ${dt.getDate()} ${mon} ${year}`)}`;
             }).join(
                 "\n" +
                 `${quote("─────")}\n`

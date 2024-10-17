@@ -67,18 +67,18 @@ async function get(type, ctx) {
         switch (type) {
             case "alkitab": {
                 const data = (await axios.get(api.createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}))).data.data;
-                text = data.map(b =>
-                        `Buku: ${b.name} (${b.abbr})\n` +
-                        `Jumlah Bab: ${b.chapter}\n`
+                text = data.map(d =>
+                        `Buku: ${d.name} (${d.abbr})\n` +
+                        `Jumlah Bab: ${d.chapter}\n`
                     ).join(`${quote("─────")}\n`) +
                     global.config.msg.footer;
                 break;
             }
             case "alquran": {
                 const data = (await axios.get(api.createUrl("https://equran.id", "/api/v2/surat", {}))).data.data;
-                text = data.map(s =>
-                        `${quote(`Surah: ${s.namaLatin} (${s.nomor})`)}\n` +
-                        `${quote(`Jumlah Ayat: ${s.jumlahAyat}`)}\n`
+                text = data.map(d =>
+                        `${quote(`Surah: ${d.namaLatin} (${d.nomor})`)}\n` +
+                        `${quote(`Jumlah Ayat: ${d.jumlahAyat}`)}\n`
                     ).join(`${quote("─────")}\n`) +
                     "\n" +
                     global.config.msg.footer;
@@ -105,11 +105,18 @@ async function get(type, ctx) {
                     global.config.msg.footer;
                 break;
             }
+            case "jadwaltv": {
+                const data = (await axios.get(api.createUrl("widipe", "/jadwaltv", {}))).data.message.split("Berikut list tv yang tersedia: ")[1].split(", ");
+                text = `${data.map(quote).join("\n")}\n` +
+                    "\n" +
+                    global.config.msg.footer;
+                break;
+            }
             case "translate": {
                 const data = (await axios.get(api.createUrl("nyxs", "/tools/translate", {})).catch(err => err.response?.data?.available_languange)) || [];
-                text = data.map(l =>
-                        `${quote(`Kode: ${l.code}`)}\n` +
-                        `${quote(`Bahasa: ${l.bahasa}`)}\n`
+                text = data.map(d =>
+                        `${quote(`Kode: ${d.code}`)}\n` +
+                        `${quote(`Bahasa: ${d.bahasa}`)}\n`
                     ).join(`${quote("─────")}\n`) +
                     "\n" +
                     global.config.msg.footer;
@@ -117,9 +124,9 @@ async function get(type, ctx) {
             }
             case "tts": {
                 const data = (await axios.get(api.createUrl("nyxs", "/tools/tts", {}))).data.available_languange;
-                text = data.map(l =>
-                        `${quote(`Kode: ${l.code}`)}\n` +
-                        `${quote(`Bahasa: ${l["bahasa negara"]}`)}\n`
+                text = data.map(d =>
+                        `${quote(`Kode: ${d.code}`)}\n` +
+                        `${quote(`Bahasa: ${d["bahasa negara"]}`)}\n`
                     ).join(`${quote("─────")}\n`) +
                     "\n" +
                     global.config.msg.footer;
@@ -138,6 +145,8 @@ async function get(type, ctx) {
                     entertainment: "Entertainment",
                     group: "Group",
                     maker: "Maker",
+                    stalk: "Stalk",
+                    search: "search",
                     tools: "Tools",
                     owner: "Owner",
                     information: "Information",

@@ -4,9 +4,9 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "characterai",
-    aliases: ["cai"],
-    category: "ai",
+    name: "filmapiksearch",
+    aliases: ["filmapiks"],
+    category: "search",
     handler: {
         banned: true,
         cooldown: true,
@@ -23,19 +23,31 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "evangelion"))
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("nyxs", "/ai/character-ai", {
-                prompt: input,
-                gaya: `Anda adalah bot WhatsApp bernama ${global.config.bot.name} yang dimiliki oleh ${global.config.owner.name}. Jika nama Anda mirip dengan tokoh di media, sesuaikan kepribadian Anda dengan nama tersebut. Jika tidak, tetaplah ramah, informatif, dan responsif.` // Dapat diubah sesuai keinginan Anda
+            const apiUrl = await global.tools.api.createUrl("widipe", "/filmapiksearch", {
+                query: input
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.result);
+            const resultText = data.result.map((d) =>
+                `${quote(`Judul: ${d.title}`)}\n` +
+                `${quote(`Sinopsi: ${d.synopsis || "-"}`)}\n` +
+                `${quote(`Penilaian: ${d.rating}`)}\n` +
+                `${quote(`URL: ${d.url}`)}`
+            ).join(
+                "\n" +
+                `${quote("─────")}\n`
+            );
+            return await ctx.reply(
+                `${resultText}\n` +
+                "\n" +
+                global.config.msg.footer
+            );
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);

@@ -5,8 +5,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "ccdl",
-    aliases: ["cc", "capcut", "capcutdl"],
+    name: "capcutdl",
+    aliases: ["cc", "ccdl", "capcut"],
     category: "downloader",
     handler: {
         banned: true,

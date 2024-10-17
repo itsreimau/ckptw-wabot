@@ -1,11 +1,12 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "vddl",
-    aliases: ["vd", "videy", "videydl"],
+    name: "mediafiredl",
+    aliases: ["mf", "mfdl", "mediafire"],
     category: "downloader",
     handler: {
         banned: true,
@@ -27,26 +28,28 @@ module.exports = {
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
-        const urlRegex = /^(https?:\/\/)?(www\.)?videy\.co\/v\?id=([a-zA-Z0-9]+)/i;
-        const match = urlRegex.exec(url);
-        if (!match) return await ctx.reply(global.config.msg.urlInvalid);
+        const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
+        if (!urlRegex.test(url)) return await ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            const videoId = match[3];
-            const videoUrl = `https://cdn.videy.co/${videoId}.mp4`;
+            const apiUrl = global.tools.api.createUrl("agatz", "/api/mediafire", {
+                url
+            });
+            const data = (await axios.get(apiUrl)).data.data[0];
 
             return await ctx.reply({
-                video: {
-                    url: videoUrl
+                document: {
+                    url: data.link
                 },
-                mimetype: mime.contentType("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     global.config.msg.footer,
-                gifPlayback: false
+                fileName: data.nama,
+                mimetype: mime.lookup(data.mime) || "application/octet-stream"
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
+            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

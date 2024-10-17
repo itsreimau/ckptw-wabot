@@ -1,7 +1,4 @@
 const {
-    youtubedl
-} = require("@bochilteam/scraper-sosmed");
-const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -95,15 +92,14 @@ module.exports = {
                 global.config.msg.footer
             );
 
-            const downloadResponse = await youtubedl(data.url);
-            const downloadData = Object.values(downloadResponse.audio)[0];
-            const downloadUrl = await downloadData.download();
-
-            if (!downloadUrl) return await ctx.reply(global.config.msg.notFound);
+            const downloadApiUrl = global.tools.api.createUrl("widipe", "/download/ytdl", {
+                url: data.url
+            });
+            const downloadData = (await axios.get(downloadApiUrl)).data;
 
             return await ctx.reply({
                 audio: {
-                    url: downloadUrl
+                    url: downloadData.result.mp3
                 },
                 mimetype: mime.contentType("mp3"),
                 ptt: false

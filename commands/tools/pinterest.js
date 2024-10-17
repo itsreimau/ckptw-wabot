@@ -27,9 +27,9 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "cat"))}\n` +
+            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon"))}\n` +
             quote(global.tools.msg.generatesFlagInformation({
-                "-s <boolean>": "Jenis pesan slide (carousel)."
+                "-s": "Jenis pesan slide (carousel)."
             }))
         );
 

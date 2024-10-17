@@ -1,14 +1,12 @@
 const {
-    bold,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "ytsearch",
-    aliases: ["yts"],
-    category: "tools",
+    name: "bukalapaksearch",
+    aliases: ["bukalapak", "bukalapaks"],
+    category: "search",
     handler: {
         banned: true,
         cooldown: true,
@@ -25,30 +23,25 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "neon genesis evangelion"))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "evangelion"))
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/ytsearch", {
-                message: input
+            const apiUrl = await global.tools.api.createUrl("widipe", "/bukalapak", {
+                text: input
             });
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
 
-            const resultText = data.map((d) => {
-                switch (d.type) {
-                    case "video":
-                        return `${quote(bold(`${d.title} (${d.url})`))}\n` +
-                            `${quote(`Durasi: ${d.timestamp}`)}\n` +
-                            `${quote(`Diunggah: ${d.ago}`)}\n` +
-                            `${quote(`Dilihat: ${d.views}`)}`;
-                    case "channel":
-                        return `${quote(bold(`${d.name} (${d.url})`))}\n` +
-                            `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
-                            `${quote(`Jumlah video: ${d.videoCount}`)}`;
-                }
-            }).filter((d) => d).join(
+            const resultText = data.result.map((d) =>
+                `${quote(`Nama: ${d.title}`)}\n` +
+                `${quote(`Penilaian: ${d.rating}`)}\n` +
+                `${quote(`Terjual: ${d.terjual}`)}\n` +
+                `${quote(`Harga: ${d.harga}`)}\n` +
+                `${quote(`Toko: ${d.store.nama} - ${d.store.lokasi} (${d.store.link})`)}\n` +
+                `${quote(`URL: ${d.link}`)}`
+            ).join(
                 "\n" +
                 `${quote("─────")}\n`
             );
