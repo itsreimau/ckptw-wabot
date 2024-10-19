@@ -56,7 +56,7 @@ module.exports = {
 
                 return await ctx.reply({
                     image: buffer,
-                    mimetype: mime.contentType("jpeg")
+                    mimetype: mime.lookup("jpeg")
                 });
             });
         } catch (error) {

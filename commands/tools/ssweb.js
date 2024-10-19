@@ -38,7 +38,7 @@ module.exports = {
                 image: {
                     url: apiUrl
                 },
-                mimetype: mime.contentType("png"),
+                mimetype: mime.lookup("png"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     global.config.msg.footer

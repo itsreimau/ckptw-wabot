@@ -103,7 +103,7 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.contentType("png"),
+                mimetype: mime.lookup("png"),
                 caption: `${quote(`Kueri: ${flag.input}`)}\n` +
                     `${quote(`Gunakan ${monospace("-s")} jika Anda ingin gambarnya berupa slide.`)}\n` +
                     `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "cat -s"))}\n` +

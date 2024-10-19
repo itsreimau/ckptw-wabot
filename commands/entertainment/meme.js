@@ -30,7 +30,7 @@ module.exports = {
                 image: {
                     url: data.url
                 },
-                mimetype: mime.contentType("png"),
+                mimetype: mime.lookup("png"),
                 caption: `${quote(`Sumber: ${data.source}`)}\n` +
                     "\n" +
                     global.config.msg.footer

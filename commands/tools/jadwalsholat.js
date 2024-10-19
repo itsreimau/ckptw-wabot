@@ -26,19 +26,18 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/jadwalsholat", {
-                kota: input
-            });
+            const apiUrl = global.tools.api.createUrl("chiwa", `/api/jadwal-sholat/${input}`);
             const {
-                data
+                results
             } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply(
-                `${quote(`Subuh: ${data.subuh}`)}\n` +
-                `${quote(`Dhuhur: ${data.dhuhur}`)}\n` +
-                `${quote(`Ashar: ${data.ashar}`)}\n` +
-                `${quote(`Maghrib: ${data.maghrib}`)}\n` +
-                `${quote(`Isya: ${data.isya}`)}\n` +
+                `${quote(`Subuh: ${data.Subuh}`)}\n` +
+                `${quote(`Terbit: ${data.Terbit}`)}\n` +
+                `${quote(`Zuhur: ${data.Zuhur}`)}\n` +
+                `${quote(`Asar: ${data.Asar}`)}\n` +
+                `${quote(`Magrib: ${data.Magrib}`)}\n` +
+                `${quote(`Isya: ${data.Isya}`)}\n` +
                 "\n" +
                 global.config.msg.footer
             );

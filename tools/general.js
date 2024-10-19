@@ -35,7 +35,7 @@ async function checkMedia(msgType, requiredMedia, ctx) {
         ptt: "audioMessage",
         reaction: "reactionMessage",
         sticker: "stickerMessage",
-        text: () => ctx.args.length > 0 ? "teks" : null,
+        text: () => ctx.args && ctx.args.length > 0,
         video: "videoMessage",
         viewOnce: "viewOnceMessageV2"
     };

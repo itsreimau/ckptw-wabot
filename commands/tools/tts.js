@@ -70,7 +70,7 @@ module.exports = {
                 audio: {
                     url: data.result
                 },
-                mimetype: mime.contentType("mp3"),
+                mimetype: mime.lookup("mp3"),
                 ptt: true
             });
         } catch (error) {

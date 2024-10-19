@@ -43,7 +43,7 @@ module.exports = {
                 let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return await ctx.reply({
                     image: response?.data,
-                    mimetype: mime.contentType(contentType)
+                    mimetype: mime.lookup(contentType)
                 });
             }
 
@@ -51,7 +51,7 @@ module.exports = {
                 let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return await ctx.reply({
                     video: response?.data,
-                    mimetype: mime.contentType(contentType)
+                    mimetype: mime.lookup(contentType)
                 });
             }
 
@@ -59,7 +59,7 @@ module.exports = {
                 let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return await ctx.reply({
                     audio: response?.data,
-                    mimetype: mime.contentType(contentType)
+                    mimetype: mime.lookup(contentType)
                 });
             }
 
@@ -72,7 +72,7 @@ module.exports = {
                 return await ctx.reply({
                     document: response?.data,
                     fileName,
-                    mimetype: mime.contentType(contentType)
+                    mimetype: mime.lookup(contentType)
                 });
             }
 

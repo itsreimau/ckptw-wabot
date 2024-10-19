@@ -31,32 +31,32 @@ module.exports = {
         if (!urlRegex.test(url)) return await ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/instagram", {
-                url
+            const apiUrl = global.tools.api.createUrl("https://vkrdownloader.vercel.app", "/server", {
+                vkr: url
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            if (data.image && data.image.length > 0) {
-                for (const img of data.image) {
-                    await ctx.reply({
-                        image: {
-                            url: img
-                        },
-                        mimetype: mime.contentType("jpg")
-                    });
-                }
-            }
+            if (data.downloads && data.downloads.length > 0) {
+                for (const download of data.downloads) {
+                    const fileType = mime.lookup(download.extension);
 
-            if (data.video && data.video.length > 0) {
-                for (const vid of data.video) {
-                    await ctx.reply({
-                        video: {
-                            url: vid.video
-                        },
-                        mimetype: mime.contentType("mp4")
-                    });
+                    if (fileType.startsWith("video")) {
+                        await ctx.reply({
+                            video: {
+                                url: download.url
+                            },
+                            mimetype: fileType
+                        });
+                    } else if (fileType.startsWith("image")) {
+                        await ctx.reply({
+                            image: {
+                                url: download.url
+                            },
+                            mimetype: fileType
+                        });
+                    }
                 }
             }
         } catch (error) {

@@ -73,13 +73,13 @@ module.exports = {
                     audio: {
                         url: downloadApiUrl
                     },
-                    mimetype: mime.contentType("mp3"),
+                    mimetype: mime.lookup("mp3"),
                     ptt: false
                 });
             }
 
-            const searchApiUrl = global.tools.api.createUrl("agatz", "/api/ytsearch", {
-                message: query
+            const searchApiUrl = global.tools.api.createUrl("itzpire", "/search/youtube", {
+                query: query
             });
             const searchData = (await axios.get(searchApiUrl)).data.data;
             const data = searchData[searchIndex];
@@ -101,7 +101,7 @@ module.exports = {
                 audio: {
                     url: downloadData.result.mp3
                 },
-                mimetype: mime.contentType("mp3"),
+                mimetype: mime.lookup("mp3"),
                 ptt: false
             });
         } catch (error) {

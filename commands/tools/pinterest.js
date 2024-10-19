@@ -41,12 +41,10 @@ module.exports = {
                 }
             });
 
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/pinsearch", {
-                message: flag.input
+            const apiUrl = global.tools.api.createUrl("ryzendesu", "/api/search/pinterest", {
+                query: flag.input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const data = (await axios.get(apiUrl)).data;
 
             if (flag.slide && global.config.system.useInteractiveMessage) {
                 const randomResults = data.sort(() => 0.5 - Math.random()).slice(0, 5);
@@ -102,7 +100,7 @@ module.exports = {
                 image: {
                     url: result.images_url
                 },
-                mimetype: mime.contentType("png"),
+                mimetype: mime.lookup("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +
                     `${quote(`Gunakan ${monospace("-s")} jika Anda ingin gambarnya berupa slide.`)}\n` +
                     `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "cat -s"))}\n` +

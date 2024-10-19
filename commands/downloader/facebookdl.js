@@ -43,7 +43,7 @@ module.exports = {
                 video: {
                     url: downloadUrl
                 },
-                mimetype: mime.contentType("mp4"),
+                mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     global.config.msg.footer,

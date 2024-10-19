@@ -6,7 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "gempa",
-    aliases: ["gempabumi", "Infogempa"],
+    aliases: ["gempabumi", "infogempa"],
     category: "tools",
     handler: {
         banned: true,
@@ -32,7 +32,7 @@ module.exports = {
                 image: {
                     url: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`
                 },
-                mimetype: mime.contentType("png"),
+                mimetype: mime.lookup("png"),
                 caption: `${quote(gempa.Wilayah)}\n` +
                     `${quote("─────")}\n` +
                     `${quote(`Tanggal: ${gempa.Tanggal}`)}\n` +

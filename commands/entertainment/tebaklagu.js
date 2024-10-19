@@ -37,7 +37,7 @@ module.exports = {
                 audio: {
                     url: data.link_song
                 },
-                mimetype: mime.contentType("mp3"),
+                mimetype: mime.lookup("mp3"),
                 ptt: false
             });
             await ctx.reply(

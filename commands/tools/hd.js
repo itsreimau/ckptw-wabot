@@ -65,7 +65,7 @@ module.exports = {
                 image: {
                     url: data.result.img
                 },
-                mimetype: mime.contentType("png")
+                mimetype: mime.lookup("png")
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);

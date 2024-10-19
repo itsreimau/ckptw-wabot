@@ -29,7 +29,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/ytsearch", {
+            const apiUrl = global.tools.api.createUrl("itzpire", "/search/youtube", {
                 message: input
             });
             const {

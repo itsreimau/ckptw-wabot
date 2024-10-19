@@ -28,18 +28,19 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/tiktoksearch", {
-                message: input
+            const apiUrl = global.tools.api.createUrl("widipe", "/tiktoksearch", {
+                text: input
             });
             const {
-                data
+                result
             } = (await axios.get(apiUrl)).data;
+            const data = global.tools.general.getRandomElement(result.data);
 
             return await ctx.reply({
                 video: {
-                    url: data.no_watermark
+                    url: data.play
                 },
-                mimetype: mime.contentType("mp4"),
+                mimetype: mime.lookup("mp4"),
                 gifPlayback: false
             });
         } catch (error) {

@@ -38,7 +38,7 @@ module.exports = {
                 image: {
                     url: global.tools.general.getRandomElement(data.result)
                 },
-                mimetype: mime.contentType("png"),
+                mimetype: mime.lookup("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     global.config.msg.footer

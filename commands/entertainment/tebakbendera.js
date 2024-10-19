@@ -37,7 +37,7 @@ module.exports = {
                 image: {
                     url: data.img
                 },
-                mimetype: mime.contentType("png"),
+                mimetype: mime.lookup("png"),
                 caption: `${quote(`+${coin} Koin`)}\n` +
                     `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
                     `${quote('Ketik "hint" untuk bantuan.')}\n` +

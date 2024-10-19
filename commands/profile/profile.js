@@ -50,7 +50,7 @@ module.exports = {
                 image: {
                     url: card || profilePictureUrl,
                 },
-                mimetype: mime.contentType("png"),
+                mimetype: mime.lookup("png"),
                 caption: `${quote(`Nama: ${senderName}`)}\n` +
                     `${quote(`Status: ${userStatus}`)}\n` +
                     `${quote(`Level: ${userLevel}`)}\n` +

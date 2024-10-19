@@ -38,7 +38,7 @@ module.exports = {
                 video: {
                     url: videoUrl
                 },
-                mimetype: mime.contentType("mp4"),
+                mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     global.config.msg.footer,
@@ -46,6 +46,7 @@ module.exports = {
             });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
+            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

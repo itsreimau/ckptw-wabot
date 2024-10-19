@@ -32,23 +32,36 @@ module.exports = {
         if (!urlRegex.test(url)) return await ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.api.createUrl("agatz", "/api/twitter", {
+            const apiUrl = global.tools.api.createUrl("ryzendesu", "/api/downloader/twitter", {
                 url
             });
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
 
-            return await ctx.reply({
-                video: {
-                    url: data.video_hd || data.video_sd
-                },
-                mimetype: mime.contentType("mp4"),
-                caption: `${quote(`URL: ${url}`)}\n` +
-                    "\n" +
-                    global.config.msg.footer,
-                gifPlayback: false
-            });
+            if (data.status && data.type === "image" && data.media.length > 0) {
+                for (let i = 0; i < data.media.length; i++) {
+                    await ctx.reply({
+                        image: {
+                            url: data.media[i]
+                        },
+                        mimetype: mime.lookup("png")
+                    });
+                }
+            }
+
+            if (data.status && data.type === "video" && data.media.length > 0) {
+                for (let i = 0; i < data.media.length; i++) {
+                    const videoData = data.media[i];
+                    await ctx.reply({
+                        video: {
+                            url: videoData.url
+                        },
+                        mimetype: mime.lookup("mp4"),
+                        gifPlayback: false
+                    });
+                }
+            }
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);

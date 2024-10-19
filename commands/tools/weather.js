@@ -27,20 +27,21 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("agatz", "/api/cuaca", {
-                message: input
+            const apiUrl = await global.tools.api.createUrl("widipe", "/weather", {
+                text: input
             });
-            const response = await axios.get(apiUrl);
-            const data = response.data.data;
+            const {
+                result
+            } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply(
-                `${quote(`Tempat: ${data.location.name}, ${data.location.region}, ${data.location.country}`)}\n` +
-                `${quote(`Cuaca: ${await global.tools.general.translate(data.current.condition.text, "id")}`)}\n` +
-                `${quote(`Kelembapan: ${data.current.humidity} %`)}\n` +
-                `${quote(`Angin: ${data.current.wind_kph} km/jam (${data.current.wind_dir})`)}\n` +
-                `${quote(`Suhu saat ini: ${data.current.temp_c} °C`)}\n` +
-                `${quote(`Terasa seperti: ${data.current.feelslike_c} °C`)}\n` +
-                `${quote(`Kecepatan angin: ${data.current.gust_kph} km/jam`)}\n` +
+                `${quote(`Tempat: ${result.location}, ${result.location.country}`)}\n` +
+                `${quote(`Cuaca: ${await global.tools.general.translate(result.weather, "id")}`)}\n` +
+                `${quote(`Suhu saat ini: ${result.currentTemp}`)}\n` +
+                `${quote(`Suhu maksimal: ${result.maxTemp}`)}\n` +
+                `${quote(`Suhu minimal: ${result.minTemp}`)}\n` +
+                `${quote(`Kelembaban: ${result.humidity}`)}\n` +
+                `${quote(`Kecepatan angin: ${result.windSpeed}`)}\n` +
                 "\n" +
                 global.config.msg.footer
             );
