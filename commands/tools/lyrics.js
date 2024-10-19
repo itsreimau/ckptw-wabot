@@ -39,7 +39,7 @@ module.exports = {
                 `${quote(`Judul: ${result.title}`)}\n` +
                 `${quote(`Artis: ${result.artist}`)}\n` +
                 `${quote("─────")}\n` +
-                `${data.result}\n` +
+                `${result.lyrics}\n` +
                 "\n" +
                 global.config.msg.footer
             );

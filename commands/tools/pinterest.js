@@ -105,7 +105,7 @@ module.exports = {
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +
                     `${quote(`Gunakan ${monospace("-s")} jika Anda ingin gambarnya berupa slide.`)}\n` +
-                    `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "cat -s"))}\n` +
+                    `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon -s"))}\n` +
                     "\n" +
                     global.config.msg.footer
             });
