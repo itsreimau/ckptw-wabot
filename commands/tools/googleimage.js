@@ -44,12 +44,10 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("widipe", "/googleimage", {
                 query: flag.input
             });
-            const {
-                result
-            } = (await axios.get(apiUrl)).data;
+            const data = (await axios.get(apiUrl)).data.result;
 
             if (flag.slide && global.config.system.useInteractiveMessage) {
-                const randomResults = result.sort(() => 0.5 - Math.random()).slice(0, 5);
+                const randomResults = data.sort(() => 0.5 - Math.random()).slice(0, 5);
 
                 const cards = new CarouselBuilder();
 
@@ -98,7 +96,7 @@ module.exports = {
 
             if (flag.slide && !global.config.system.useInteractiveMessage) await ctx.reply(global.config.msg.useInteractiveMessage);
 
-            const result = global.tools.general.getRandomElement(result);
+            const result = global.tools.general.getRandomElement(data);
             return await ctx.reply({
                 image: {
                     url: result.url
