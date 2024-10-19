@@ -5,9 +5,11 @@ const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
 const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "ocr",
+    name: "whatanime",
+    aliases: ["wait"],
     category: "tools",
     handler: {
         banned: true,
@@ -32,14 +34,25 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await global.tools.general.upload(buffer);
-            const apiUrl = global.tools.api.createUrl("nyxs", "/tools/ocr", {
+            const apiUrl = global.tools.api.createUrl("ryzendesu", "/api/weebs/whatanime", {
                 url: uploadUrl
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.result);
+            return await ctx.reply({
+                video: {
+                    url: data.videoURL
+                },
+                mimetype: mime.lookup("mp4"),
+                caption: `${quote(`Judul: ${data.judul}`)}\n` +
+                    `${quote(`Episode: ${data.episode}`)}\n` +
+                    `${quote(`Kesamaan: ${data.similarity}%`)}\n` +
+                    "\n" +
+                    global.config.msg.footer,
+                gifPlayback: false
+            });
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);

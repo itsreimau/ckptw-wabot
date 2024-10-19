@@ -25,10 +25,26 @@ module.exports = {
 
             for (const [name, api] of Object.entries(APIs)) {
                 try {
-                    const response = await axios.get(api.baseURL);
-                    result += quote(`${api.baseURL} 🟢\n`);
+                    const response = await axios.get(api.baseURL, {
+                        timeout: 5000,
+                        headers: {
+                            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+                        }
+                    });
+
+                    if (response.status >= 200 && response.status < 500) {
+                        result += quote(`${api.baseURL} 🟢 (${response.status})\n`);
+                    } else {
+                        result += quote(`${api.baseURL} 🔴 (${response.status})\n`);
+                    }
                 } catch (error) {
-                    result += quote(`${api.baseURL} 🔴\n`);
+                    if (error.response) {
+                        result += quote(`${api.baseURL} 🔴 (${error.response.status})\n`);
+                    } else if (error.request) {
+                        result += quote(`${api.baseURL} 🔴 (Tidak ada respon)\n`);
+                    } else {
+                        result += quote(`${api.baseURL} 🔴 (Kesalahan: ${error.message})\n`);
+                    }
                 }
             }
 

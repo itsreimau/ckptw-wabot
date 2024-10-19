@@ -41,10 +41,12 @@ module.exports = {
                 }
             });
 
-            const apiUrl = global.tools.api.createUrl("widipe", "/googleimage", {
+            const apiUrl = global.tools.api.createUrl("ryzendesu", "/api/search/gimage", {
                 query: flag.input
             });
-            const data = (await axios.get(apiUrl)).data.result;
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             if (flag.slide && global.config.system.useInteractiveMessage) {
                 const randomResults = data.sort(() => 0.5 - Math.random()).slice(0, 5);
@@ -99,7 +101,7 @@ module.exports = {
             const result = global.tools.general.getRandomElement(data);
             return await ctx.reply({
                 image: {
-                    url: result.url
+                    url: result
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +
