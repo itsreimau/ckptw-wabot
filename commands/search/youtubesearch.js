@@ -30,7 +30,7 @@ module.exports = {
 
         try {
             const apiUrl = global.tools.api.createUrl("itzpire", "/search/youtube", {
-                message: input
+                query: input
             });
             const {
                 data
