@@ -26,15 +26,15 @@ module.exports = {
         );
 
         try {
-            const apiUrl = global.tools.api.createUrl("ryzendesu", "/api/ai/chatgpt", {
-                text: input,
-                prompt: `Anda adalah bot WhatsApp bernama ${global.config.bot.name} yang dimiliki oleh ${global.config.owner.name}. Jika nama Anda mirip dengan tokoh di media, sesuaikan kepribadian Anda dengan nama tersebut. Jika tidak, tetaplah ramah, informatif, dan responsif.` // Dapat diubah sesuai keinginan Anda
+            const apiUrl = global.tools.api.createUrl("ryzendesu", "/prompt/gpt", {
+                prompt: `Anda adalah bot WhatsApp bernama ${global.config.bot.name} yang dimiliki oleh ${global.config.owner.name}. Jika nama Anda mirip dengan tokoh di media, sesuaikan kepribadian Anda dengan nama tersebut. Jika tidak, tetaplah ramah, informatif, dan responsif.`, // Dapat diubah sesuai keinginan Anda
+                text: input
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.response);
+            return await ctx.reply(data.result);
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);

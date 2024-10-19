@@ -1,16 +1,11 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    MessageType
-} = require("@mengkodingan/ckptw/lib/Constant");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "removebg",
-    aliases: ["rbg"],
-    category: "tools",
+    name: "remini",
+    category: "ai",
     handler: {
         banned: true,
         cooldown: true,
@@ -34,19 +29,18 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await global.tools.general.upload(buffer);
-            const apiUrl = global.tools.api.createUrl("nyxs", "/tools/removebg", {
-                url: uploadUrl
+            const apiUrl = global.tools.api.createUrl("ryzendesu", "/api/ai/remini", {
+                url: uploadUrl,
+                method: "enhance"
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 image: {
-                    url: data.result
+                    url: apiUrl
                 },
                 mimetype: mime.lookup("png")
             });
+            sdafaknsaf
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);

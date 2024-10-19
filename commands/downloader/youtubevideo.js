@@ -1,5 +1,4 @@
 const {
-    SectionsBuilder,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -29,78 +28,22 @@ module.exports = {
         );
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!urlRegex.test(url)) await ctx.reply(global.config.msg.urlInvalid);
+        if (!urlRegex.test(url)) return await ctx.reply(global.config.msg.urlInvalid);
 
         try {
-            const apiUrl = global.tools.api.createUrl("ryzendesu", "/api/downloader/ytdl", {
+            const apiUrl = global.tools.api.createUrl("widipe", "/download/ytdl", {
                 url
             });
             const {
-                data
-            } = await axios.get(apiUrl);
+                result
+            } = (await axios.get(apiUrl)).data;
 
-            const qualityOptions = data.resultUrl.video.map(item => `${item.quality} (${item.size || "-"})`);
-
-            if (global.config.system.useInteractiveMessage) {
-                const section1 = new SectionsBuilder()
-                    .setDisplayText("Select Quality 📌")
-                    .addSection({
-                        title: "Kualitas",
-                        rows: qualityOptions.map((quality, index) => ({
-                            title: quality,
-                            id: index + 1
-                        }))
-                    })
-                    .build();
-
-                ctx.replyInteractiveMessage({
-                    body: `${quote(`Judul: ${data.result.title}`)}\n` +
-                        `${quote(`URL: ${url}`)}\n` +
-                        "\n" +
-                        global.config.msg.footer,
-                    footer: global.config.msg.watermark,
-                    nativeFlowMessage: {
-                        buttons: [section1]
-                    }
-                });
-            } else {
-                ctx.reply(
-                    `${quote(`Judul: ${data.result.title}`)}\n` +
-                    `${quote(`URL: ${url}`)}\n` +
-                    `${quote(`Pilih kualitas:`)}\n` +
-                    qualityOptions.map((quality, index) => `${index + 1}. ${quality}`).join("\n") +
-                    "\n" +
-                    global.config.msg.footer
-                );
-            }
-
-            const col = ctx.MessageCollector({
-                time: 60000
+            return await ctx.reply({
+                video: {
+                    url: result.mp4
+                },
+                mimetype: mime.lookup("mp4")
             });
-
-            col.on("collect", async (m) => {
-                const selectedNumber = parseInt(m.content.trim());
-                const selectedQualityIndex = selectedNumber - 1;
-
-                if (!isNaN(selectedNumber) && selectedQualityIndex >= 0 && selectedQualityIndex < qualityOptions.length) {
-                    const selectedQuality = data.resultUrl.video[selectedQualityIndex];
-                    const downloadUrl = selectedQuality.download;
-
-                    if (global.config.system.autoTypingOnCmd) ctx.simulateTyping();
-
-                    await ctx.reply({
-                        video: {
-                            url: downloadUrl
-                        },
-                        mimetype: mime.lookup("mp4"),
-                        ptt: false
-                    });
-
-                    return col.stop();
-                }
-            });
-
-            col.on("end", async () => {});
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);

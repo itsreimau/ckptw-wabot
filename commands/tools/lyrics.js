@@ -28,15 +28,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("nyxs", "/tools/lirik", {
-                title: input
+            const apiUrl = await global.tools.api.createUrl("widipe", "/lirik", {
+                text: input
             });
             const {
-                data
-            } = await axios.get(apiUrl);
+                result
+            } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply(
-                `${quote(`Judul: ${global.tools.general.ucword(input)}`)}\n` +
+                `${quote(`Judul: ${result.title}`)}\n` +
+                `${quote(`Artis: ${result.artist}`)}\n` +
                 `${quote("─────")}\n` +
                 `${data.result}\n` +
                 "\n" +

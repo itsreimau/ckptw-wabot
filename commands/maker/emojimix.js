@@ -41,8 +41,9 @@ module.exports = {
                 collection: "emoji_kitchen_v5",
                 q: `${emoji1}_${emoji2}`
             });
-            const response = await axios.get(apiUrl);
-            const data = await response.data;
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             if (!data.results[0].url) return await ctx.reply(global.config.msg.notFound);
 
