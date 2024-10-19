@@ -32,7 +32,7 @@ module.exports = {
 
         try {
             const apiUrl = global.tools.api.createUrl("ryzendesu", "/api/search/pixiv", {
-                query: flag.input
+                query: input
             });
             const {
                 Media
