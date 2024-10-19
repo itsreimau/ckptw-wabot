@@ -134,7 +134,7 @@ async function get(type, ctx) {
             }
             case "waifudiffusion": {
                 const data = ["Cute-Anime", "Studio-Ghibli", "Anime", "Waifu", "Vintage-Anime", "Soft-Anime"];
-                text = `${data.map((item, index) => `${item} (${index + 1})`).join("\n")}\n` +
+                text = `${data.map((item, index) => quote(`${item} (${index + 1})`)).join("\n")}\n` +
                     "\n" +
                     global.config.msg.footer;
                 break;

@@ -9,7 +9,8 @@ module.exports = {
     category: "ai",
     handler: {
         banned: true,
-        cooldown: true
+        cooldown: true,
+        coin: [10, "image", 3]
     },
     code: async (ctx) => {
         const {
@@ -22,7 +23,10 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon"))}\n` +
+            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon -s 5"))}\n` +
+            `${quote(global.tools.msg.generatesFlagInformation({
+                "-s <number>": "Jenis gaya."
+            }))}\n` +
             quote(global.tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 

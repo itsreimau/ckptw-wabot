@@ -24,7 +24,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss"))}\n` +
+            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss -i 8 -s spotify"))}\n` +
             quote(global.tools.msg.generatesFlagInformation({
                 "-i <number>": "Pilihan pada data indeks.",
                 "-s <text>": "Sumber untuk memutar lagu (tersedia: spotify, default: youtube)."

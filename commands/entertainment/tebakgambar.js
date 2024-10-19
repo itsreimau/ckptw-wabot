@@ -27,7 +27,7 @@ module.exports = {
             const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/games/tebakgambar.json", {});
             const response = await axios.get(apiUrl);
             const data = global.tools.general.getRandomElement(response.data);
-            const coin = 3;
+            const coin = 5;
             const timeout = 60000;
             const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
 

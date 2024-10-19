@@ -5,6 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "removebg",
+    aliases: ["rbg"],
     category: "ai",
     handler: {
         banned: true,
