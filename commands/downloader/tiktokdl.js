@@ -118,7 +118,7 @@ module.exports = {
                         }
 
                         return await ctx.replyInteractiveMessage({
-                            body: `${quote(`Kueri: ${url}`)}\n` +
+                            body: `${quote(`URL: ${url}`)}\n` +
                                 "\n" +
                                 global.config.msg.footer,
                             footer: global.config.msg.watermark,

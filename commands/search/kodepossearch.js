@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "bukalapaksearch",
-    aliases: ["bukalapak", "bukalapaks"],
+    name: "kodepossearch",
+    aliases: ["kodepos", "kodeposs"],
     category: "search",
     handler: {
         banned: true,
@@ -23,24 +23,28 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "evangelion"))
+            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "bogor"))
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("widipe", "/bukalapak", {
-                text: input
+            const apiUrl = await global.tools.api.createUrl("agatz", "/api/kodepos", {
+                message: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
             const resultText = data.result.map((d) =>
-                `${quote(`Nama: ${d.title}`)}\n` +
-                `${quote(`Rating: ${d.rating}`)}\n` +
-                `${quote(`Terjual: ${d.terjual}`)}\n` +
-                `${quote(`Harga: ${d.harga}`)}\n` +
-                `${quote(`Toko: ${d.store.nama} - ${d.store.lokasi} (${d.store.link})`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
+                `${quote(`ID: ${d.id}`)}\n` +
+                `${quote(`Kode Kemendagri: ${d.kode_kemendagri}`)}\n` +
+                `${quote(`Kode Pos: ${d.kode_pos}`)}\n` +
+                `${quote(`Kelurahan: ${d.kelurahan}`)}\n` +
+                `${quote(`Kecamatan: ${d.kecamatan}`)}\n` +
+                `${quote(`Kota: ${d.kota}`)}\n` +
+                `${quote(`Zona Waktu: ${d.zona_waktu}`)}\n` +
+                `${quote(`Lintang: ${d.lintang}`)}\n` +
+                `${quote(`Bujur: ${d.bujur}`)}\n` +
+                `${quote(`Elevasi: ${d.elevasi}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

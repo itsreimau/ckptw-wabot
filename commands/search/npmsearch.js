@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "bukalapaksearch",
-    aliases: ["bukalapak", "bukalapaks"],
+    name: "npmsearch",
+    aliases: ["npms"],
     category: "search",
     handler: {
         banned: true,
@@ -27,20 +27,19 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("widipe", "/bukalapak", {
-                text: input
+            const apiUrl = await global.tools.api.createUrl("agatz", "/api/npm", {
+                message: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
             const resultText = data.result.map((d) =>
-                `${quote(`Nama: ${d.title}`)}\n` +
-                `${quote(`Rating: ${d.rating}`)}\n` +
-                `${quote(`Terjual: ${d.terjual}`)}\n` +
-                `${quote(`Harga: ${d.harga}`)}\n` +
-                `${quote(`Toko: ${d.store.nama} - ${d.store.lokasi} (${d.store.link})`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
+                `${quote(`Nama: ${d.name}`)}\n` +
+                `${quote(`Versi: ${d.version}`)}\n` +
+                `${quote(`Dekripsi: ${d.description}`)}\n` +
+                `${quote(`Author: ${d.author}`)}\n` +
+                `${quote(`URL: ${d.npmLink}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

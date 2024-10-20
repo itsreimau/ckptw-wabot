@@ -20,12 +20,21 @@ module.exports = {
         } = await global.handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
-        const url = ctx.args[0] || null;
+        const input = ctx.args[0] || null;
 
-        if (!url) return await ctx.reply(
+        if (!input) return await ctx.reply(
             `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
+
+        const flag = global.tools.general.parseFlag(input, {
+            "-s": {
+                type: "boolean",
+                key: "slide"
+            }
+        });
+
+        const url = flag.input || null;
 
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
         if (!urlRegex.test(url)) return await ctx.reply(global.config.msg.urlInvalid);
@@ -37,6 +46,70 @@ module.exports = {
             const {
                 data
             } = (await axios.get(apiUrl)).data;
+
+            if (flag.slide && global.config.system.useInteractiveMessage) {
+                const cards = new CarouselBuilder();
+
+                for (let i = 0; i < data.downloads.length; i++) {
+                    const download = data.downloads[i];
+                    const fileType = mime.lookup(download.extension);
+
+                    let mediaType = null;
+                    let mediaOptions = null;
+
+                    if (fileType.startsWith("image")) {
+                        mediaType = "image";
+                        mediaOptions = {
+                            image: {
+                                url: download.url
+                            }
+                        };
+                    } else if (fileType.startsWith("video")) {
+                        mediaType = "video";
+                        mediaOptions = {
+                            video: {
+                                url: download.url
+                            }
+                        };
+                    }
+
+                    const mediaAttachment = await ctx.prepareWAMessageMedia(mediaOptions, {
+                        upload: ctx._client.waUploadToServer
+                    });
+
+                    const button = new ButtonBuilder()
+                        .setId(`id${i}`)
+                        .setDisplayText(mediaType === "image" ? "Image URL 🌐" : "Video URL 🌐")
+                        .setType("cta_url")
+                        .setURL(download.url)
+                        .build();
+
+                    cards.addCard({
+                        body: global.config.msg.footer,
+                        footer: global.config.msg.watermark,
+                        header: {
+                            title: mediaType === "image" ? "Instagram Image" : "Instagram Video",
+                            hasMediaAttachment: true,
+                            ...mediaAttachment
+                        },
+                        nativeFlowMessage: {
+                            buttons: [button]
+                        }
+                    });
+                }
+
+                return await ctx.replyInteractiveMessage({
+                    body: `${quote(`URL: ${url}`)}\n` +
+                        "\n" +
+                        global.config.msg.footer,
+                    footer: global.config.msg.watermark,
+                    carouselMessage: {
+                        cards: cards.build()
+                    }
+                });
+            }
+
+            if (flag.slide && !global.config.system.useInteractiveMessage) await ctx.reply(global.config.msg.useInteractiveMessage);
 
             if (data.downloads && data.downloads.length > 0) {
                 for (const download of data.downloads) {

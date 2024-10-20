@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "bukalapaksearch",
-    aliases: ["bukalapak", "bukalapaks"],
+    name: "githubsearch",
+    aliases: ["githubs"],
     category: "search",
     handler: {
         banned: true,
@@ -27,20 +27,21 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("widipe", "/bukalapak", {
-                text: input
+            const apiUrl = await global.tools.api.createUrl("agatz", "/api/github", {
+                message: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
             const resultText = data.result.map((d) =>
-                `${quote(`Nama: ${d.title}`)}\n` +
-                `${quote(`Rating: ${d.rating}`)}\n` +
-                `${quote(`Terjual: ${d.terjual}`)}\n` +
-                `${quote(`Harga: ${d.harga}`)}\n` +
-                `${quote(`Toko: ${d.store.nama} - ${d.store.lokasi} (${d.store.link})`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
+                `${quote(`Nama: ${d.fullName}`)}\n` +
+                `${quote(`Deskripsi: ${d.description}`)}\n` +
+                `${quote(`Watchers: ${d.watchers}`)}\n` +
+                `${quote(`Jumlah Stargazers: ${d.stargazersCount}`)}\n` +
+                `${quote(`Issues terbuka: ${d.openIssues}`)}\n` +
+                `${quote(`Forks: ${d.forks}`)}\n` +
+                `${quote(`URL: ${d.htmlUrl}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

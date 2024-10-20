@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "bukalapaksearch",
-    aliases: ["bukalapak", "bukalapaks"],
+    name: "steamsearch",
+    aliases: ["steams"],
     category: "search",
     handler: {
         banned: true,
@@ -27,19 +27,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await global.tools.api.createUrl("widipe", "/bukalapak", {
-                text: input
+            const apiUrl = await global.tools.api.createUrl("agatz", "/api/steams", {
+                message: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
             const resultText = data.result.map((d) =>
-                `${quote(`Nama: ${d.title}`)}\n` +
-                `${quote(`Rating: ${d.rating}`)}\n` +
-                `${quote(`Terjual: ${d.terjual}`)}\n` +
-                `${quote(`Harga: ${d.harga}`)}\n` +
-                `${quote(`Toko: ${d.store.nama} - ${d.store.lokasi} (${d.store.link})`)}\n` +
+                `${quote(`Nama: ${d.judul}`)}\n` +
+                `${quote(`Rilis: ${d.rilis.trim()}`)}\n` +
+                `${quote(`Rating: ${await global.tools.general.translate(d.rating, "id")}`)}\n` +
                 `${quote(`URL: ${d.link}`)}`
             ).join(
                 "\n" +
