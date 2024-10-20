@@ -34,12 +34,11 @@ module.exports = {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            const resultText = data.result.map((d) =>
+            const resultText = (await Promise.all(data.result.map(async (d) =>
                 `${quote(`Nama: ${d.judul}`)}\n` +
                 `${quote(`Rilis: ${d.rilis.trim()}`)}\n` +
                 `${quote(`Rating: ${await global.tools.general.translate(d.rating, "id")}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
-            ).join(
+                `${quote(`URL: ${d.link}`)}`))).join(
                 "\n" +
                 `${quote("─────")}\n`
             );
