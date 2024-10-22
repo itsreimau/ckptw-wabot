@@ -12,7 +12,8 @@ module.exports = {
     handler: {
         banned: true,
         cooldown: true,
-        private: true
+        private: true,
+        restrict: true
     },
     code: async (ctx) => {
         const {

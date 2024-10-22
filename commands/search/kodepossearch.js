@@ -32,9 +32,9 @@ module.exports = {
             });
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
 
-            const resultText = data.result.map((d) =>
+            const resultText = data.map((d) =>
                 `${quote(`ID: ${d.id}`)}\n` +
                 `${quote(`Kode Kemendagri: ${d.kode_kemendagri}`)}\n` +
                 `${quote(`Kode Pos: ${d.kode_pos}`)}\n` +

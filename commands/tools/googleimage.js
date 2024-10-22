@@ -60,8 +60,7 @@ module.exports = {
                         .setDisplayText("Image URL 🌐")
                         .setType("cta_url")
                         .setURL(url)
-                        .setMerchantURL("https://www.google.ca")
-                        .build();
+                        .setMerchantURL("https://www.google.ca").build();
 
                     const imageMediaAttachment = await ctx.prepareWAMessageMedia({
                         image: {
@@ -96,7 +95,7 @@ module.exports = {
                 });
             }
 
-            if (flag.slide && !global.config.system.useInteractiveMessage) await ctx.reply(global.config.msg.useInteractiveMessage);
+            if (flag.slide) await ctx.reply(global.config.msg.useInteractiveMessage);
 
             const result = global.tools.general.getRandomElement(data);
             return await ctx.reply({

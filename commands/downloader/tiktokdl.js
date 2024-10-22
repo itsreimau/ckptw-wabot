@@ -92,8 +92,7 @@ module.exports = {
                                 .setId(`id${i}`)
                                 .setDisplayText("Image URL 🌐")
                                 .setType("cta_url")
-                                .setURL(imageUrl)
-                                .build();
+                                .setURL(imageUrl).build();
 
                             const imagesMediaAttachment = await ctx.prepareWAMessageMedia({
                                 image: {
@@ -128,7 +127,7 @@ module.exports = {
                         });
                     }
 
-                    if (flag.slide && !global.config.system.useInteractiveMessage) await ctx.reply(global.config.msg.useInteractiveMessage);
+                    if (flag.slide) await ctx.reply(global.config.msg.useInteractiveMessage);
 
                     for (const image of data.images) {
                         await ctx.reply({

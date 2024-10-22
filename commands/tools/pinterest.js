@@ -95,7 +95,7 @@ module.exports = {
                 });
             }
 
-            if (flag.slide && !global.config.system.useInteractiveMessage) await ctx.reply(global.config.msg.useInteractiveMessage);
+            if (flag.slide) await ctx.reply(global.config.msg.useInteractiveMessage);
 
             const result = global.tools.general.getRandomElement(data);
             return await ctx.reply({

@@ -30,9 +30,7 @@ module.exports = {
             const apiUrl = await global.tools.api.createUrl("widipe", "/bukalapak", {
                 text: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const data = (await axios.get(apiUrl)).data.result;
 
             const resultText = data.result.map((d) =>
                 `${quote(`Nama: ${d.title}`)}\n` +

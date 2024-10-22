@@ -267,7 +267,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Penanganan anonymous_chat
         const anonymousChatPartnerData = await global.db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
 
-        if (anonymousChatPartnerData) {
+        if (anonymousChatPartnerData || !global.config.system.restrict) {
             const partnerId = anonymousChatPartnerData + S_WHATSAPP_NET;
 
             if (!["stop", "search", "next", "contact"].includes(isCmd?.cmd)) {

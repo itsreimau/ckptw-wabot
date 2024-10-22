@@ -30,11 +30,9 @@ module.exports = {
             const apiUrl = await global.tools.api.createUrl("agatz", "/api/github", {
                 message: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const data = (await axios.get(apiUrl)).data.result;
 
-            const resultText = data.result.map((d) =>
+            const resultText = data.map((d) =>
                 `${quote(`Nama: ${d.fullName}`)}\n` +
                 `${quote(`Deskripsi: ${d.description}`)}\n` +
                 `${quote(`Watchers: ${d.watchers}`)}\n` +

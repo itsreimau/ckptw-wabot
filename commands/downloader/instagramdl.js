@@ -81,8 +81,7 @@ module.exports = {
                         .setId(`id${i}`)
                         .setDisplayText(mediaType === "image" ? "Image URL 🌐" : "Video URL 🌐")
                         .setType("cta_url")
-                        .setURL(download.url)
-                        .build();
+                        .setURL(download.url).build();
 
                     cards.addCard({
                         body: global.config.msg.footer,
@@ -109,7 +108,7 @@ module.exports = {
                 });
             }
 
-            if (flag.slide && !global.config.system.useInteractiveMessage) await ctx.reply(global.config.msg.useInteractiveMessage);
+            if (flag.slide) await ctx.reply(global.config.msg.useInteractiveMessage);
 
             if (data.downloads && data.downloads.length > 0) {
                 for (const download of data.downloads) {

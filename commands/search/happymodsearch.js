@@ -30,11 +30,9 @@ module.exports = {
             const apiUrl = await global.tools.api.createUrl("widipe", "/happymod", {
                 query: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const data = (await axios.get(apiUrl)).data.hsl;
 
-            const resultText = data.result.map((d) =>
+            const resultText = data.map((d) =>
                 `${quote(`Judul: ${d.title}`)}\n` +
                 `${quote(`Rating: ${d.rating}`)}\n` +
                 `${quote(`URL: ${d.link}`)}`

@@ -30,11 +30,9 @@ module.exports = {
             const apiUrl = await global.tools.api.createUrl("widipe", "/filmapiksearch", {
                 query: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const data = (await axios.get(apiUrl)).data.result.data;
 
-            const resultText = data.result.data.map((d) =>
+            const resultText = data.map((d) =>
                 `${quote(`Judul: ${d.title}`)}\n` +
                 `${quote(`Sinopsis: ${d.synopsis || "-"}`)}\n` +
                 `${quote(`Rating: ${d.rating}`)}\n` +

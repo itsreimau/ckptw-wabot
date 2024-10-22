@@ -32,9 +32,9 @@ module.exports = {
             });
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
 
-            const resultText = data.result.map((d) =>
+            const resultText = data.map((d) =>
                 `${quote(`Nama: ${d.name}`)}\n` +
                 `${quote(`Versi: ${d.version}`)}\n` +
                 `${quote(`Dekripsi: ${d.description}`)}\n` +

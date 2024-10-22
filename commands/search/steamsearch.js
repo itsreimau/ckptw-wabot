@@ -32,9 +32,9 @@ module.exports = {
             });
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
 
-            const resultText = (await Promise.all(data.result.map(async (d) =>
+            const resultText = (await Promise.all(data.map(async (d) =>
                 `${quote(`Nama: ${d.judul}`)}\n` +
                 `${quote(`Rilis: ${d.rilis.trim()}`)}\n` +
                 `${quote(`Rating: ${await global.tools.general.translate(d.rating, "id")}`)}\n` +
