@@ -24,7 +24,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/games/family100.json", {});
+            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/master/games/family100.json", {});
             const response = await axios.get(apiUrl);
             const data = response.data[Math.floor(Math.random() * response.data.length)];
             const coin = {

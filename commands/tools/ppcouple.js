@@ -21,7 +21,7 @@ module.exports = {
         if (status) return await ctx.reply(message);
 
         try {
-            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/ramadhankukuh/database/master/src/lainnya/ppcouple.json", {});
+            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/master/lainnya/ppcouple.json", {});
             const {
                 data
             } = await axios.get(apiUrl);

@@ -32,7 +32,7 @@ module.exports = {
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
             const resultText = (await Promise.all(data.map(async (d) =>
                 `${quote(`Nama: ${d.judul}`)}\n` +
