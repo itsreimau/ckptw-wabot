@@ -17,9 +17,7 @@ const {
     exec
 } = require("child_process");
 const path = require("path");
-const {
-    inspect
-} = require("util");
+const util = require("util");
 
 // Pesan koneksi
 console.log(`[${global.config.pkg.name}] Connecting...`);
@@ -144,14 +142,13 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             await ctx.reply({
                 text: quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`),
                 contextInfo: {
-                    mentionedJid: [senderJid],
                     externalAdReply: {
-                        mediaType: 1,
-                        previewType: 0,
-                        mediaUrl: global.config.bot.groupChat,
+                        showAdAttribution: true,
                         title: "LEVEL UP",
                         body: null,
-                        renderLargerThumbnail: true,
+                        mediaUrl: global.config.bot.groupChat,
+                        description: null,
+                        previewType: "PHOTO",
                         thumbnailUrl: card || profilePictureUrl || global.config.bot.picture.thumbnail,
                         sourceUrl: global.config.bot.groupChat
                     }
@@ -171,12 +168,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (global.tools.general.isOwner(ctx, senderNumber, true)) {
         // Perintah eval: Jalankan kode JavaScript
         if (m.content && m.content.startsWith && (m.content.startsWith("==> ") || m.content.startsWith("=> "))) {
-            const code = m.content.startsWith("==> ") ? m.content.slice(4) : m.content.slice(3);
+            const code = m.content.slice(m.content.startsWith("==> ") ? 4 : 3);
 
             try {
                 const result = await eval(m.content.startsWith("==> ") ? `(async () => { ${code} })()` : code);
 
-                await ctx.reply(inspect(result));
+                await ctx.reply(util.inspect(result));
             } catch (error) {
                 console.error(`[${global.config.pkg.name}] Error:`, error);
                 await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
@@ -188,17 +185,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const command = m.content.slice(2);
 
             try {
-                const output = await new Promise((resolve, reject) => {
-                    exec(command, (error, stdout, stderr) => {
-                        if (error) {
-                            reject(new Error(`Error: ${error.message}`));
-                        } else if (stderr) {
-                            reject(new Error(stderr));
-                        } else {
-                            resolve(stdout);
-                        }
-                    });
-                });
+                const output = await util.promisify(exec)(code);
 
                 await ctx.reply(output);
             } catch (error) {
@@ -279,8 +266,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     console.error(`[${global.config.pkg.name}] Error:`, error);
                     await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
                 }
-            } else {
-                await ctx.reply(quote(`⚠️ Perintah "${isCmd?.cmd}" tidak dapat diteruskan.`));
             }
         }
 
