@@ -40,7 +40,6 @@ module.exports = {
             const contentType = response?.headers?.["content-type"];
 
             if (/image/.test(contentType)) {
-                let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return await ctx.reply({
                     image: response?.data,
                     mimetype: mime.lookup(contentType)
@@ -48,7 +47,6 @@ module.exports = {
             }
 
             if (/video/.test(contentType)) {
-                let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return await ctx.reply({
                     video: response?.data,
                     mimetype: mime.lookup(contentType)
@@ -56,7 +54,6 @@ module.exports = {
             }
 
             if (/audio/.test(contentType)) {
-                let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return await ctx.reply({
                     audio: response?.data,
                     mimetype: mime.lookup(contentType)

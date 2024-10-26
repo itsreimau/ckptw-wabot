@@ -30,14 +30,14 @@ module.exports = {
 
         try {
             const apiUrl = tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/download/track", {
-                url: url
+                url
             });
 
             return await ctx.reply({
                 audio: {
                     url: apiUrl
                 },
-                mimetype: mime.lookup("mp4"),
+                mimetype: mime.lookup("mp3"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer,
