@@ -29,17 +29,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("ryzendesu", "/api/search/gimage", {
-                query: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/gimage", {
+                message: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
             const result = tools.general.getRandomElement(data);
 
             return await ctx.reply({
                 image: {
-                    url: result
+                    url: result.url
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +

@@ -21,10 +21,11 @@ module.exports = {
         } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
+        const input = ctx.args.join(" ") || "@everyone";
+
         try {
-            const input = ctx.args.join(" ") || "@everyone";
-            const data = await ctx.group().members();
-            const mentions = data.map(member => `${member.id.split(/[:@]/)[0]}S_WHATSAPP_NET`);
+            const members = await ctx.group().members();
+            const mentions = members.map(member => member.id.split(/[:@]/)[0] + S_WHATSAPP_NET);
 
             return await ctx.reply({
                 text: input,

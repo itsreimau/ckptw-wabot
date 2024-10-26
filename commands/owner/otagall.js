@@ -19,26 +19,24 @@ module.exports = {
         } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
-        const input = ctx.args.join(" ") || null;
+        const input = ctx.args.join(" ") || "Hai!";
 
         try {
-            const data = await ctx.group().members();
-            const len = data.length;
-            const mentions = [];
-            for (let i = 0; i < len; i++) {
-                const serialized = data[i].id.split(/[:@]/)[0];
-                mentions.push({
+            const members = await ctx.group().members();
+            const mentions = members.map(member => {
+                const serialized = member.id.split(/[:@]/)[0];
+                return {
                     tag: `@${serialized}`,
                     mention: serialized + S_WHATSAPP_NET
-                });
-            }
-            const mentionText = mentions.map((mention) => mention.tag).join(" ");
+                };
+            });
 
+            const mentionText = mentions.map(m => m.tag).join(" ");
             return await ctx.reply({
-                text: `${input || "Hai!"}\n` +
-                    `-----\n` +
+                text: `${input}\n` +
+                    `${config.msg.readmore}─────\n` +
                     `${mentionText}`,
-                mentions: mentions.map((mention) => mention.mention)
+                mentions: mentions.map(m => m.mention)
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);

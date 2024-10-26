@@ -20,22 +20,15 @@ module.exports = {
         } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
-        const input = ctx.args.join(" ") || null;
+        const input = ctx.args.join(" ") || "@everyone";
 
         try {
-            const data = await ctx.group().members();
-            const len = data.length;
-            const mentions = [];
-            for (let i = 0; i < len; i++) {
-                const serialized = data[i].id.split(/[:@]/)[0];
-                mentions.push({
-                    mention: serialized + S_WHATSAPP_NET
-                });
-            }
+            const members = await ctx.group().members();
+            const mentions = members.map(member => member.id.split(/[:@]/)[0] + S_WHATSAPP_NET);
 
             return await ctx.reply({
-                text: `${input || "@everyone"}`,
-                mentions: mentions.map((mention) => mention.mention)
+                text: input,
+                mentions
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);

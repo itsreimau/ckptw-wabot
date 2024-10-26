@@ -53,14 +53,49 @@ module.exports = {
     }
 };
 
-function wrapText(context, text, maxWidth) {
+async function bratGenerator(text) {
+    const width = 500;
+    const height = 500;
+    const image = new Jimp(width, height, 0xFFFFFFFF);
+
+    let fontSize = 64;
+    let font;
+    const maxLines = 10;
+
+    while (true) {
+        try {
+            font = await Jimp.loadFont(Jimp[`FONT_SANS_${fontSize}_BLACK`]);
+            const estimatedHeight = Math.ceil((text.length / 10) * (fontSize + 10));
+
+            if (estimatedHeight <= height || fontSize <= 16) break;
+            fontSize -= 8;
+        } catch (error) {
+            console.error(`[${config.pkg.name}] Font error:`, error);
+            fontSize -= 8;
+            if (fontSize < 16) throw new Error("Tidak bisa memuat font yang sesuai.");
+        }
+    }
+
+    const lines = wrapText(text, width - 40, fontSize);
+    let yOffset = (height - lines.length * fontSize) / 2;
+
+    lines.forEach((line) => {
+        image.print(font, 20, yOffset, line, width - 40);
+        yOffset += fontSize + 10;
+    });
+
+    return await image.getBufferAsync(Jimp.MIME_PNG);
+}
+
+function wrapText(text, maxWidth, fontSize) {
     const words = text.split(" ");
     let lines = [];
     let currentLine = words[0];
 
     for (let i = 1; i < words.length; i++) {
         const word = words[i];
-        const width = context.measureText(currentLine + " " + word).width;
+        const width = (currentLine + " " + word).length * (fontSize / 2);
+
         if (width < maxWidth) {
             currentLine += " " + word;
         } else {
@@ -70,23 +105,4 @@ function wrapText(context, text, maxWidth) {
     }
     lines.push(currentLine);
     return lines;
-}
-
-async function bratGenerator(text) {
-    const width = 500;
-    const height = 500;
-    const image = new Jimp(width, height, 0xFFFFFFFF);
-
-    const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
-
-    const context = Jimp.create(width, height);
-    const lines = wrapText(context, text, width - 40);
-
-    let yOffset = 40;
-    lines.forEach((line, index) => {
-        image.print(font, 20, yOffset, line, width - 40);
-        yOffset += 40;
-    });
-
-    return await image.getBufferAsync(Jimp.MIME_PNG);
 }
