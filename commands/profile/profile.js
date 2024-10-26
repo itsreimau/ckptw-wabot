@@ -30,7 +30,7 @@ module.exports = {
                 db.get(`user.${senderNumber}.xp`),
             ]);
 
-            const userStatus = isOwner ? "Owner" : (isPremium ? "Premium" : "Freemium");
+            const userStatus = isOwner ? "Owner" : (isPremium === "freetrial" ? "Premium (Free Trial)" : (isPremium ? "Premium" : "Freemium"));
 
             let profilePictureUrl;
             try {
