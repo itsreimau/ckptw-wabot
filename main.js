@@ -166,7 +166,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Perintah Exec: Jalankan perintah shell
         if (m.content && m.content.startsWith && m.content.startsWith("$ ")) {
-            const command = m.content.slice(2);
+            const code = m.content.slice(2);
 
             try {
                 const output = await util.promisify(exec)(code);

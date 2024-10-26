@@ -5,66 +5,59 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 
-// Bot
+// Config untuk Bot CKPTW
 config = {
     bot: {
-        name: "CKPTW",
-        prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
-        phoneNumber: "", // Abaikan jika Anda menggunakan kode QR untuk otentikasi
+        name: "CKPTW", // Nama bot
+        prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i, // Karakter awalan perintah yang diizinkan
+        phoneNumber: "", // Nomor telepon bot (opsional jika menggunakan QR code)
         picture: {
-            thumbnail: "https://e1.pxfuel.com/desktop-wallpaper/943/672/desktop-wallpaper-whatsapp-bot-what-is-it-and-how-to-use-messenger-chatbots-chatbot.jpg",
-            profile: "https://i.ibb.co/3Fh9V6p/avatar-contact.png"
+            thumbnail: "https://e1.pxfuel.com/desktop-wallpaper/943/672/desktop-wallpaper-whatsapp-bot-what-is-it-and-how-to-use-messenger-chatbots-chatbot.jpg", // Gambar thumbnail bot
+            profile: "https://i.ibb.co/3Fh9V6p/avatar-contact.png" // Foto profil bot
         },
-        groupChat: "https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs" // Jangan lupa untuk bergabung ya teman-teman!
+        groupChat: "https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs" // Link untuk grup WhatsApp bot
     },
 
-    // MSG (Pesan)
     msg: {
-        // Akses perintah
-        admin: quote("❎ Perintah hanya dapat diakses oleh admin grup!"),
-        banned: quote("❎ Tidak dapat memproses karena Anda telah dibanned!"),
-        botAdmin: quote("❎ Bot bukan admin, tidak bisa menggunakan perintah!"),
-        cooldown: quote("❎ Perintah ini sedang dalam cooldown, tunggu..."),
-        coin: quote("❎ Anda tidak punya cukup koin!"),
-        group: quote("❎ Perintah hanya dapat diakses dalam grup!"),
-        owner: quote("❎ Perintah hanya dapat diakses Owner!"),
-        premium: quote("❎ Anda bukan pengguna Premium!"),
-        private: quote("❎ Perintah hanya dapat diakses dalam obrolan pribadi!"),
-        restrict: quote("❎ Perintah ini telah dibatasi karena alasan keamanan!"),
+        admin: quote("❎ Perintah hanya dapat diakses oleh admin grup!"), // Pesan ketika perintah hanya untuk admin
+        banned: quote("❎ Tidak dapat memproses karena Anda telah dibanned!"), // Pesan untuk pengguna yang dibanned
+        botAdmin: quote("❎ Bot bukan admin, tidak bisa menggunakan perintah!"), // Pesan jika bot bukan admin di grup
+        cooldown: quote("❎ Perintah ini sedang dalam cooldown, tunggu..."), // Pesan saat cooldown perintah
+        coin: quote("❎ Anda tidak punya cukup koin!"), // Pesan ketika koin tidak cukup
+        group: quote("❎ Perintah hanya dapat diakses dalam grup!"), // Pesan untuk perintah grup
+        owner: quote("❎ Perintah hanya dapat diakses Owner!"), // Pesan untuk perintah yang hanya owner bisa akses
+        premium: quote("❎ Anda bukan pengguna Premium!"), // Pesan jika pengguna bukan Premium
+        private: quote("❎ Perintah hanya dapat diakses dalam obrolan pribadi!"), // Pesan untuk perintah obrolan pribadi
+        restrict: quote("❎ Perintah ini telah dibatasi karena alasan keamanan!"), // Pesan pembatasan perintah
 
-        // Antarmuka perintah
-        watermark: `${pkg.name}@^${pkg.version}`,
-        footer: italic("Developed by ItsReimau"),
-        readmore: "\u200E".repeat(4001),
+        watermark: `${pkg.name}@^${pkg.version}`, // Watermark versi bot
+        footer: italic("Developed by ItsReimau"), // Footer di pesan bot
+        readmore: "\u200E".repeat(4001), // String read more
 
-        // Proses perintah
-        wait: quote("🔄 Tunggu sebentar..."),
-        notFound: quote("❎ Tidak ada yang ditemukan!"),
-        urlInvalid: quote("❎ URL tidak valid!")
+        wait: quote("🔄 Tunggu sebentar..."), // Pesan loading
+        notFound: quote("❎ Tidak ada yang ditemukan! Coba lagi nanti."), // Pesan item tidak ditemukan
+        urlInvalid: quote("❎ URL tidak valid!") // Pesan jika URL tidak valid
     },
 
-    // Owner & CoOwner
     owner: {
-        name: "",
-        number: "",
-        organization: "",
-        co: [""]
+        name: "", // Nama owner bot
+        number: "", // Nomor telepon owner bot
+        organization: "", // Nama organisasi owner bot
+        co: [""] // Nomor co-owner bot
     },
 
-    // Stiker
     sticker: {
-        packname: "Stiker ini dibuat oleh",
-        author: "@ckptw-wabot"
+        packname: "Stiker ini dibuat oleh", // Nama paket stiker
+        author: "@ckptw-wabot" // Pembuat stiker
     },
 
-    // Sistem
     system: {
-        autoRead: true,
-        autoTypingOnCmd: true,
-        cooldown: 5000,
-        restrict: true, // Membatasi beberapa perintah yang akan mengakibatkan banned
-        selfReply: true,
-        timeZone: "Asia/Jakarta",
-        usePairingCode: true
+        autoRead: true, // Apakah bot otomatis membaca pesan masuk
+        autoTypingOnCmd: true, // Aktifkan status mengetik ketika memproses perintah
+        cooldown: 5000, // Waktu cooldown antar perintah dalam milidetik
+        restrict: true, // Membatasi perintah tertentu untuk keamanan
+        selfReply: true, // Apakah bot merespon pesan yang dikirim bot sendiri
+        timeZone: "Asia/Jakarta", // Zona waktu bot
+        usePairingCode: true // Menggunakan kode pairing untuk fitur tertentu
     }
 };

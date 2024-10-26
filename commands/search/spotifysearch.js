@@ -7,7 +7,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "spotifysearch",
-    aliases: ["stsearch"],
+    aliases: ["spotis", "spotisearch"],
     category: "search",
     handler: {
         banned: true,
