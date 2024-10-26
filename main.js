@@ -171,7 +171,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             try {
                 const output = await util.promisify(exec)(code);
 
-                await ctx.reply(output);
+                await ctx.reply(output.stdout || output.stderr);
             } catch (error) {
                 console.error(`[${config.pkg.name}] Error:`, error);
                 await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
