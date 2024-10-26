@@ -18,7 +18,7 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const [suraNumber, ayaInput] = await Promise.all([
@@ -27,20 +27,20 @@ module.exports = {
         ]);
 
         if (!ctx.args.length) return await ctx.reply(
-            `${quote(`${global.tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
-            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "21 35"))}\n` +
-            quote(global.tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
+            `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "21 35"))}\n` +
+            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (ctx.args[0] === "list") {
-            const listText = await global.tools.list.get("alquran");
+            const listText = await tools.list.get("alquran");
             return await ctx.reply(listText);
         }
 
         try {
             if (isNaN(suraNumber) || suraNumber < 1 || suraNumber > 114) return await ctx.reply(quote(`❎ Surah ${suraNumber} tidak ada.`));
 
-            const apiUrl = global.tools.api.createUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
+            const apiUrl = tools.api.createUrl("https://equran.id", `/api/v2/surat/${suraNumber}`);
             const {
                 data
             } = (await axios.get(apiUrl)).data;
@@ -66,7 +66,7 @@ module.exports = {
                         `${quote("─────")}\n` +
                         `${versesText}\n` +
                         "\n" +
-                        global.config.msg.footer
+                        config.msg.footer
                     );
                 } else {
                     const ayaNumber = parseInt(ayaInput);
@@ -80,7 +80,7 @@ module.exports = {
                         `${aya.teksArab} (${aya.teksLatin})\n` +
                         `${italic(aya.teksIndonesia)}\n` +
                         "\n" +
-                        global.config.msg.footer
+                        config.msg.footer
                     );
                 }
             } else {
@@ -95,12 +95,12 @@ module.exports = {
                     `${quote("─────")}\n` +
                     `${versesText}\n` +
                     "\n" +
-                    global.config.msg.footer
+                    config.msg.footer
                 );
             }
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            console.error(`[${config.pkg.name}] Error:`, error);
+            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

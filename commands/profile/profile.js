@@ -14,7 +14,7 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         try {
@@ -23,11 +23,11 @@ module.exports = {
             const senderNumber = senderJid.split(/[:@]/)[0];
 
             const [userCoin = 0, isOwner, isPremium, userLevel = 1, userXp = 0] = await Promise.all([
-                global.db.get(`user.${senderNumber}.coin`),
-                global.tools.general.isOwner(ctx, senderNumber, true),
-                global.db.get(`user.${senderNumber}.isPremium`),
-                global.db.get(`user.${senderNumber}.level`),
-                global.db.get(`user.${senderNumber}.xp`),
+                db.get(`user.${senderNumber}.coin`),
+                tools.general.isOwner(ctx, senderNumber, true),
+                db.get(`user.${senderNumber}.isPremium`),
+                db.get(`user.${senderNumber}.level`),
+                db.get(`user.${senderNumber}.xp`),
             ]);
 
             const userStatus = isOwner ? "Owner" : (isPremium ? "Premium" : "Freemium");
@@ -36,9 +36,9 @@ module.exports = {
             try {
                 profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image");
             } catch (error) {
-                profilePictureUrl = global.config.bot.picture.profile;
+                profilePictureUrl = config.bot.picture.profile;
             }
-            const card = global.tools.api.createUrl("aggelos_007", "/rankcard", {
+            const card = tools.api.createUrl("aggelos_007", "/rankcard", {
                 username: senderName,
                 xp: userXp,
                 maxxp: "100",
@@ -57,10 +57,10 @@ module.exports = {
                     `${quote(`Koin: ${userCoin || "-"}`)}\n` +
                     `${quote(`XP: ${userXp}`)}\n` +
                     "\n" +
-                    global.config.msg.footer,
+                    config.msg.footer,
             });
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     },

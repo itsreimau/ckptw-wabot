@@ -6,7 +6,7 @@ const {
 } = require("@mengkodingan/ckptw");
 
 // Bot
-global.config = {
+config = {
     bot: {
         name: "CKPTW",
         prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i,
@@ -31,7 +31,6 @@ global.config = {
         premium: quote("❎ Anda bukan pengguna Premium!"),
         private: quote("❎ Perintah hanya dapat diakses dalam obrolan pribadi!"),
         restrict: quote("❎ Perintah ini telah dibatasi karena alasan keamanan!"),
-        useInteractiveMessage: quote("❎ Karena Owner menonaktifkan 'useInteractiveMessage' maka bot tidak dapat mengabulkan permintaan Anda."),
 
         // Antarmuka perintah
         watermark: `${pkg.name}@^${pkg.version}`,
@@ -66,7 +65,6 @@ global.config = {
         restrict: true, // Membatasi beberapa perintah yang akan mengakibatkan banned
         selfReply: true,
         timeZone: "Asia/Jakarta",
-        useInteractiveMessage: true,
         usePairingCode: true
     }
 };

@@ -15,11 +15,11 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
-        const winGame = await global.db.get(`user.${senderNumber}.winGame`);
+        const winGame = await db.get(`user.${senderNumber}.winGame`);
 
         const iqScore = getIqScore(winGame);
         const feedback = getFeedback(iqScore, winGame);

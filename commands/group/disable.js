@@ -18,19 +18,19 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(`${global.tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
-            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "welcome"))}\n` +
-            quote(global.tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
+            `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "welcome"))}\n` +
+            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (ctx.args[0] === "list") {
-            const listText = await global.tools.list.get("disable_enable");
+            const listText = await tools.list.get("disable_enable");
             return await ctx.reply(listText);
         }
 
@@ -39,16 +39,16 @@ module.exports = {
 
             switch (input) {
                 case "antilink":
-                    await global.db.set(`group.${groupNumber}.antilink`, false);
+                    await db.set(`group.${groupNumber}.antilink`, false);
                     return await ctx.reply(quote(`✅ Fitur 'antilink' berhasil dinonaktifkan!`));
                 case "welcome":
-                    await global.db.set(`group.${groupNumber}.welcome`, false);
+                    await db.set(`group.${groupNumber}.welcome`, false);
                     return await ctx.reply(quote(`✅ Fitur 'welcome' berhasil dinonaktifkan!`));
                 default:
                     return await ctx.reply(quote(`❎ Teks tidak valid.`));
             }
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

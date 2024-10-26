@@ -13,17 +13,17 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const vcard = new VCardBuilder()
-            .setFullName(global.config.owner.name)
-            .setOrg(global.config.owner.organization)
-            .setNumber(global.config.owner.number).build();
+            .setFullName(config.owner.name)
+            .setOrg(config.owner.organization)
+            .setNumber(config.owner.number).build();
 
         return await ctx.reply({
             contacts: {
-                displayName: global.config.owner.name,
+                displayName: config.owner.name,
                 contacts: [{
                     vcard
                 }]

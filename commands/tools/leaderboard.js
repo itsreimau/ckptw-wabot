@@ -12,7 +12,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const senderJid = ctx.sender.jid.split(/[:@]/)[0]
-            const users = (await global.db.toJSON()).user;
+            const users = (await db.toJSON()).user;
 
             const leaderboardData = Object.keys(users)
                 .map(userId => ({
@@ -45,11 +45,11 @@ module.exports = {
             return await ctx.reply({
                 text: `${resultText.trim()}\n` +
                     "\n" +
-                    global.config.msg.footer,
+                    config.msg.footer,
                 mentions: userMentions
             });
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

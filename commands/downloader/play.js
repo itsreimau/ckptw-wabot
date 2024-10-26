@@ -17,22 +17,22 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss -i 8 -s spotify"))}\n` +
-            quote(global.tools.msg.generatesFlagInformation({
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss -i 8 -s spotify"))}\n` +
+            quote(tools.msg.generatesFlagInformation({
                 "-i <number>": "Pilihan pada data indeks.",
                 "-s <text>": "Sumber untuk memutar lagu (tersedia: spotify, default: youtube)."
             }))
         );
 
         try {
-            const flag = global.tools.general.parseFlag(input, {
+            const flag = tools.general.parseFlag(input, {
                 "-i": {
                     type: "value",
                     key: "index",
@@ -51,7 +51,7 @@ module.exports = {
             const query = flag.input;
 
             if (flag.source === "spotify") {
-                const searchApiUrl = global.tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/search/tracks", {
+                const searchApiUrl = tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/search/tracks", {
                     q: query
                 });
                 const searchData = (await axios.get(searchApiUrl)).data;
@@ -62,10 +62,10 @@ module.exports = {
                     `${quote(`Artis: ${data.artist}`)}\n` +
                     `${quote(`URL: ${data.url}`)}\n` +
                     "\n" +
-                    global.config.msg.footer
+                    config.msg.footer
                 );
 
-                const downloadApiUrl = global.tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/download/track", {
+                const downloadApiUrl = tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/download/track", {
                     url: data.url
                 });
 
@@ -78,7 +78,7 @@ module.exports = {
                 });
             }
 
-            const searchApiUrl = global.tools.api.createUrl("itzpire", "/search/youtube", {
+            const searchApiUrl = tools.api.createUrl("itzpire", "/search/youtube", {
                 query: query
             });
             const searchData = (await axios.get(searchApiUrl)).data.data;
@@ -89,10 +89,10 @@ module.exports = {
                 `${quote(`Artis: ${data.author.name}`)}\n` +
                 `${quote(`URL: ${data.url}`)}\n` +
                 "\n" +
-                global.config.msg.footer
+                config.msg.footer
             );
 
-            const downloadApiUrl = global.tools.api.createUrl("widipe", "/download/ytdl", {
+            const downloadApiUrl = tools.api.createUrl("widipe", "/download/ytdl", {
                 url: data.url
             });
             const downloadData = (await axios.get(downloadApiUrl)).data;
@@ -105,8 +105,8 @@ module.exports = {
                 ptt: false
             });
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            console.error(`[${config.pkg.name}] Error:`, error);
+            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

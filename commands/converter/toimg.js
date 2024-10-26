@@ -20,25 +20,25 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
-        if (!(global.tools.general.checkQuotedMedia(ctx.quoted, "sticker"))) return await ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["sticker"])));
+        if (!(tools.general.checkQuotedMedia(ctx.quoted, "sticker"))) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
 
         try {
             const buffer = await ctx.quoted.media.toBuffer()
-            const imgUrl = buffer ? await webp2png(buffer) : null;
+            const result = buffer ? await webp2png(buffer) : null;
 
-            if (!imgUrl) return await ctx.reply(global.config.msg.notFound);
+            if (!result) return await ctx.reply(config.msg.notFound);
 
             return await ctx.reply({
                 image: {
-                    url: imgUrl
+                    url: result
                 },
                 mimetype: mime.lookup("png")
             });
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
@@ -79,7 +79,7 @@ async function webp2png(source) {
         } = new JSDOM(html2).window;
         return new URL(document2.querySelector("div#output > p.outfile > img").src, res2.request.res.responseUrl).toString();
     } catch (error) {
-        console.error(`[${global.config.pkg.name}] Error:`, error);
+        console.error(`[${config.pkg.name}] Error:`, error);
         return null;
     }
 }

@@ -20,16 +20,16 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            global.tools.general.checkMedia(msgType, "image", ctx),
-            global.tools.general.checkQuotedMedia(ctx.quoted, "image")
+            tools.general.checkMedia(msgType, "image", ctx),
+            tools.general.checkQuotedMedia(ctx.quoted, "image")
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], "image")));
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], "image")));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
@@ -37,7 +37,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Berhasil mengubah gambar profil foto grup!`));
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

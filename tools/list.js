@@ -17,14 +17,14 @@ async function get(type, ctx) {
         let menuText =
             `Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
             "\n" +
-            `${quote(`Waktu aktif: ${general.convertMsToDuration(Date.now() - global.config.bot.readyAt)}`)}\n` +
-            `${quote(`Tanggal: ${moment.tz(global.config.system.timeZone).format("DD/MM/YY")}`)}\n` +
-            `${quote(`Waktu: ${moment.tz(global.config.system.timeZone).format("HH:mm:ss")}`)}\n` +
+            `${quote(`Waktu aktif: ${general.convertMsToDuration(Date.now() - config.bot.readyAt)}`)}\n` +
+            `${quote(`Tanggal: ${moment.tz(config.system.timeZone).format("DD/MM/YY")}`)}\n` +
+            `${quote(`Waktu: ${moment.tz(config.system.timeZone).format("HH:mm:ss")}`)}\n` +
             `${quote(`Versi: ${pkg.version}`)}\n` +
             `${quote(`Prefix: ${ctx._used.prefix}`)}\n` +
             "\n" +
             `${italic("Jangan lupa berdonasi agar bot tetap online!")}\n` +
-            `${global.config.msg.readmore}\n`;
+            `${config.msg.readmore}\n`;
 
         for (const category of Object.keys(tag)) {
             const categoryCommands = Array.from(cmd.values())
@@ -59,7 +59,7 @@ async function get(type, ctx) {
         }
 
 
-        menuText += global.config.msg.footer;
+        menuText += config.msg.footer;
         return menuText;
     };
 
@@ -71,7 +71,7 @@ async function get(type, ctx) {
                         `Buku: ${d.name} (${d.abbr})\n` +
                         `Jumlah Bab: ${d.chapter}\n`
                     ).join(`${quote("─────")}\n`) +
-                    global.config.msg.footer;
+                    config.msg.footer;
                 break;
             }
             case "alquran": {
@@ -81,35 +81,35 @@ async function get(type, ctx) {
                         `${quote(`Jumlah Ayat: ${d.jumlahAyat}`)}\n`
                     ).join(`${quote("─────")}\n`) +
                     "\n" +
-                    global.config.msg.footer;
+                    config.msg.footer;
                 break;
             }
             case "claim": {
                 const data = ["daily", "weekly", "monthly", "yearly", "premium"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
-                    global.config.msg.footer;
+                    config.msg.footer;
                 break;
             }
             case "disable_enable": {
                 const data = ["antilink", "welcome"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
-                    global.config.msg.footer;
+                    config.msg.footer;
                 break;
             }
             case "group": {
                 const data = ["open", "close", "lock", "unlock"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
-                    global.config.msg.footer;
+                    config.msg.footer;
                 break;
             }
             case "jadwaltv": {
                 const data = (await axios.get(api.createUrl("widipe", "/jadwaltv", {}))).data.message.split("Berikut list tv yang tersedia: ")[1].split(", ");
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
-                    global.config.msg.footer;
+                    config.msg.footer;
                 break;
             }
             case "translate": {
@@ -119,7 +119,7 @@ async function get(type, ctx) {
                         `${quote(`Bahasa: ${d.bahasa}`)}\n`
                     ).join(`${quote("─────")}\n`) +
                     "\n" +
-                    global.config.msg.footer;
+                    config.msg.footer;
                 break;
             }
             case "tts": {
@@ -129,14 +129,14 @@ async function get(type, ctx) {
                         `${quote(`Bahasa: ${d["bahasa negara"]}`)}\n`
                     ).join(`${quote("─────")}\n`) +
                     "\n" +
-                    global.config.msg.footer;
+                    config.msg.footer;
                 break;
             }
             case "waifudiffusion": {
                 const data = ["Cute-Anime", "Studio-Ghibli", "Anime", "Waifu", "Vintage-Anime", "Soft-Anime"];
                 text = `${data.map((item, index) => quote(`${item} (${index + 1})`)).join("\n")}\n` +
                     "\n" +
-                    global.config.msg.footer;
+                    config.msg.footer;
                 break;
             }
             case "menu": {
@@ -167,13 +167,13 @@ async function get(type, ctx) {
                 break;
             }
             default: {
-                console.error(`[${global.config.pkg.name}] Error:`, error);
+                console.error(`[${config.pkg.name}] Error:`, error);
                 text = quote(`❎ Tidak diketahui: ${type}`);
                 break;
             }
         }
     } catch (error) {
-        console.error(`[${global.config.pkg.name}] Error:`, error);
+        console.error(`[${config.pkg.name}] Error:`, error);
         text = quote(`❎ Terjadi kesalahan: ${error.message}`);
     }
 

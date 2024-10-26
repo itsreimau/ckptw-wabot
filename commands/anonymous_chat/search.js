@@ -19,16 +19,16 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
-        const botNumber = global.config.bot.number;
-        const currentPartner = await global.db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
+        const botNumber = config.bot.number;
+        const currentPartner = await db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
 
         if (currentPartner) return await ctx.reply(quote(`❎ Kamu sudah terhubung dengan partner anonim lain. Gunakan ${ctx._used.prefix}next untuk mencari partner baru.`));
 
-        let chatQueue = await global.db.get("anonymous_chat.queue") || [];
+        let chatQueue = await db.get("anonymous_chat.queue") || [];
 
         if (chatQueue.length > 0) {
             let partnerNumber;
@@ -37,9 +37,9 @@ module.exports = {
             } while ((partnerNumber === senderNumber || partnerNumber === botNumber) && chatQueue.length > 0);
 
             if (partnerNumber && partnerNumber !== senderNumber && partnerNumber !== botNumber) {
-                await global.db.set(`anonymous_chat.conversation.${senderNumber}.partner`, partnerNumber);
-                await global.db.set(`anonymous_chat.conversation.${partnerNumber}.partner`, senderNumber);
-                await global.db.set("anonymous_chat.queue", chatQueue);
+                await db.set(`anonymous_chat.conversation.${senderNumber}.partner`, partnerNumber);
+                await db.set(`anonymous_chat.conversation.${partnerNumber}.partner`, senderNumber);
+                await db.set("anonymous_chat.queue", chatQueue);
 
                 await ctx.sendMessage(partnerNumber + S_WHATSAPP_NET, {
                     text: quote(`✅ Kamu telah terhubung dengan partner. Ketik ${ctx._used.prefix}next untuk mencari yang lain, atau ${ctx._used.prefix}stop untuk berhenti.`)
@@ -49,7 +49,7 @@ module.exports = {
         }
 
         chatQueue.push(senderNumber);
-        await global.db.set("anonymous_chat.queue", chatQueue);
+        await db.set("anonymous_chat.queue", chatQueue);
         return await ctx.reply(quote(`🔄 Sedang mencari partner chat... Tunggu hingga ada orang lain yang mencari.`));
     }
 };

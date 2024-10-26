@@ -19,15 +19,15 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.split(/[:@]/)[0];
 
         if (!ctx.args.length) return await ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `${senderNumber} halo dunia!`))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `${senderNumber} halo dunia!`))
         );
 
         try {
@@ -45,8 +45,8 @@ module.exports = {
                 message: {
                     extendedTextMessage: {
                         text: "Seseorang telah mengirimimu pesan menfess.",
-                        title: global.config.bot.name,
-                        thumbnailUrl: global.config.bot.picture.thumbnail
+                        title: config.bot.name,
+                        thumbnailUrl: config.bot.picture.thumbnail
                     }
                 }
             };
@@ -58,12 +58,12 @@ module.exports = {
                     externalAdReply: {
                         mediaType: 1,
                         previewType: 0,
-                        mediaUrl: global.config.bot.groupChat,
-                        title: global.config.msg.watermark,
+                        mediaUrl: config.bot.groupChat,
+                        title: config.msg.watermark,
                         body: null,
                         renderLargerThumbnail: true,
-                        thumbnailUrl: global.config.bot.picture.thumbnail,
-                        sourceUrl: global.config.bot.groupChat
+                        thumbnailUrl: config.bot.picture.thumbnail,
+                        sourceUrl: config.bot.groupChat
                     },
                     forwardingScore: 9999,
                     isForwarded: true
@@ -74,7 +74,7 @@ module.exports = {
             });
 
             const conversationId = `${senderNumber}_${numberFormatted}_${Date.now()}`;
-            global.db.set(`menfess.${conversationId}`, {
+            db.set(`menfess.${conversationId}`, {
                 from: senderNumber,
                 to: numberFormatted,
                 lastMsg: Date.now()
@@ -82,7 +82,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Pesan berhasil terkirim!`));
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

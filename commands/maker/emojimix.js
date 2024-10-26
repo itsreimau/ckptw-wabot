@@ -20,12 +20,12 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         if (!ctx.args.length) return await ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "😱 🤓"))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "😱 🤓"))
         );
 
         try {
@@ -33,7 +33,7 @@ module.exports = {
             const emojiRegex = /\p{Emoji}/gu;
             const emojis = Array.from(emojisString.matchAll(emojiRegex), (match) => match[0]);
             const [emoji1, emoji2] = emojis.slice(0, 2);
-            const apiUrl = global.tools.api.createUrl("https://tenor.googleapis.com", "/v2/featured", {
+            const apiUrl = tools.api.createUrl("https://tenor.googleapis.com", "/v2/featured", {
                 key: "AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ",
                 contentfilter: "high",
                 media_filter: "png_transparent",
@@ -45,11 +45,11 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
-            if (!data.results[0].url) return await ctx.reply(global.config.msg.notFound);
+            if (!data.results[0].url) return await ctx.reply(config.msg.notFound);
 
             const sticker = new Sticker(data.results[0].url, {
-                pack: global.config.sticker.packname,
-                author: global.config.sticker.author,
+                pack: config.sticker.packname,
+                author: config.sticker.author,
                 type: StickerTypes.FULL,
                 categories: ["🤩", "🎉"],
                 id: ctx.id,
@@ -58,7 +58,7 @@ module.exports = {
 
             return await ctx.reply(await sticker.toMessage());
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

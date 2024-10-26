@@ -16,19 +16,19 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const url = ctx.args[0] || null;
 
         if (!url) return await ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
         const urlRegex = /^(https?:\/\/)?(www\.)?videy\.co\/v\?id=([a-zA-Z0-9]+)/i;
         const match = urlRegex.exec(url);
-        if (!match) return await ctx.reply(global.config.msg.urlInvalid);
+        if (!match) return await ctx.reply(config.msg.urlInvalid);
 
         try {
             const videoId = match[3];
@@ -41,12 +41,12 @@ module.exports = {
                 mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
-                    global.config.msg.footer,
+                    config.msg.footer,
                 gifPlayback: false
             });
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            console.error(`[${config.pkg.name}] Error:`, error);
+            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

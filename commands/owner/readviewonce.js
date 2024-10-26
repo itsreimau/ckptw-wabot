@@ -14,10 +14,10 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
-        if (!(await global.tools.general.checkQuotedMedia(ctx.quoted, ["viewOnce"]))) return await ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["viewOnce"])));
+        if (!(await tools.general.checkQuotedMedia(ctx.quoted, ["viewOnce"]))) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["viewOnce"])));
 
         try {
             const quoted = ctx.quoted?.viewOnceMessageV2?.message;
@@ -39,7 +39,7 @@ module.exports = {
                 });
             }
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

@@ -16,10 +16,10 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
-        const apiUrl = global.tools.api.createUrl("ryzendesu", "/api/weebs/sfw-waifu", {});
+        const apiUrl = tools.api.createUrl("ryzendesu", "/api/weebs/sfw-waifu", {});
 
         try {
             const {
@@ -33,8 +33,8 @@ module.exports = {
                 mimetype: mime.lookup("png")
             });
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            console.error(`[${config.pkg.name}] Error:`, error);
+            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

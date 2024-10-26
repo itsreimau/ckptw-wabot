@@ -14,32 +14,32 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "daily"))}\n` +
-            quote(global.tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "daily"))}\n` +
+            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (ctx.args[0] === "list") {
-            const listText = await global.tools.list.get("claim");
+            const listText = await tools.list.get("claim");
             return await ctx.reply(listText);
         }
 
         const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
-        const userLevel = global.db.get(`user.${senderNumber}.level`) || 0;
+        const userLevel = db.get(`user.${senderNumber}.level`) || 0;
 
         if (input === "premium") {
             if (userLevel <= 100) return await ctx.reply(quote(`❎ Anda harus memiliki level lebih dari 100 untuk mengklaim status premium. Level Anda saat ini adalah ${userLevel}.`));
 
-            const isPremium = global.db.get(`user.${senderNumber}.isPremium`) || false;
+            const isPremium = db.get(`user.${senderNumber}.isPremium`) || false;
             if (isPremium) return await ctx.reply(quote(`❎ Anda sudah memiliki Premium.`));
 
-            await global.db.set(`user.${senderNumber}.isPremium`, true);
+            await db.set(`user.${senderNumber}.isPremium`, true);
             return await ctx.reply(quote(`🎉 Selamat! Anda telah berhasil mengklaim Premium!`));
         }
 
@@ -49,33 +49,33 @@ module.exports = {
 
         if (userLevel < requiredLevel) return await ctx.reply(quote(`❎ Anda perlu mencapai level ${requiredLevel} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userLevel}.`));
 
-        const lastClaimTime = global.db.get(`user.${senderNumber}.lastClaim.${input}`) || 0;
+        const lastClaimTime = db.get(`user.${senderNumber}.lastClaim.${input}`) || 0;
         const currentTime = Date.now();
         const timePassed = currentTime - lastClaimTime;
         const remainingTime = claimRewards[input].cooldown - timePassed;
 
-        if (remainingTime > 0) return await ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input} Anda. Harap tunggu ${global.tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
+        if (remainingTime > 0) return await ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input} Anda. Harap tunggu ${tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
 
         const [isOwner, isPremium] = await Promise.all([
-            global.tools.general.isOwner(ctx, senderNumber, true),
-            global.db.get(`user.${senderNumber}.isPremium`)
+            tools.general.isOwner(ctx, senderNumber, true),
+            db.get(`user.${senderNumber}.isPremium`)
         ]);
 
         if (isPremium || isOwner) return await ctx.reply(quote("❎ Koin Anda tidak terbatas sehingga tidak perlu mengklaim koin lagi."));
 
         try {
             const userKey = `user.${senderNumber}.coin`;
-            const currentCoins = global.db.get(userKey) || 0;
+            const currentCoins = db.get(userKey) || 0;
             const newBalance = currentCoins + claimRewards[input].reward;
 
             await Promise.all([
-                global.db.set(userKey, newBalance),
-                global.db.set(`user.${senderNumber}.lastClaim.${input}`, currentTime)
+                db.set(userKey, newBalance),
+                db.set(`user.${senderNumber}.lastClaim.${input}`, currentTime)
             ]);
 
             return await ctx.reply(quote(`✅ Anda telah berhasil mengklaim hadiah ${input} sebesar ${claimRewards[input].reward} koin! Sekarang Anda memiliki koin ${newBalance}.`));
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

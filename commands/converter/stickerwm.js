@@ -21,17 +21,17 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send", "reply"], ["text", "sticker"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "i want to be a cat|just meow meow"))
+            `${quote(tools.msg.generateInstruction(["send", "reply"], ["text", "sticker"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "i want to be a cat|just meow meow"))
         );
 
-        if (!(await global.tools.general.checkQuotedMedia(ctx.quoted, ["sticker"]))) return await ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["sticker"])));
+        if (!(await tools.general.checkQuotedMedia(ctx.quoted, ["sticker"]))) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], ["sticker"])));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
@@ -47,7 +47,7 @@ module.exports = {
 
             return await ctx.reply(await sticker.toMessage());
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

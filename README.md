@@ -82,7 +82,7 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
            const {
                status, // Status hasil eksekusi fungsi handler.
                message // Pesan yang akan dikirim jika status true.
-           } = await global.handler(ctx, module.exports.handler); // Memanggil fungsi handler global untuk memeriksa syarat-syarat dalam handler.
+           } = await handler(ctx, module.exports.handler); // Memanggil fungsi handler global untuk memeriksa syarat-syarat dalam handler.
            if (status) return await ctx.reply(message); // Jika status true, maka kirim pesan.
 
            return await ctx.reply("Hello, World!"); // Jika handler mengembalikan status false atau handler tidak dicek, maka kirimkan pesan "Hello, World!".

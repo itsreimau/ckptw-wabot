@@ -13,14 +13,14 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "halo dunia!"))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "halo dunia!"))
         );
 
         try {
@@ -43,19 +43,19 @@ module.exports = {
                             externalAdReply: {
                                 mediaType: 1,
                                 previewType: 0,
-                                mediaUrl: global.config.bot.groupChat,
+                                mediaUrl: config.bot.groupChat,
                                 title: "BROADCAST",
                                 body: null,
                                 renderLargerThumbnail: true,
-                                thumbnailUrl: global.config.bot.picture.thumbnail,
-                                sourceUrl: global.config.bot.groupChat
+                                thumbnailUrl: config.bot.picture.thumbnail,
+                                sourceUrl: config.bot.groupChat
                             },
                             forwardingScore: 9999,
                             isForwarded: true
                         }
                     });
                 } catch (error) {
-                    console.error(`[${global.config.pkg.name}] Error:`, error);
+                    console.error(`[${config.pkg.name}] Error:`, error);
                     failedGroups.push(i);
                 }
             }
@@ -73,26 +73,26 @@ module.exports = {
                                 externalAdReply: {
                                     mediaType: 1,
                                     previewType: 0,
-                                    mediaUrl: global.config.bot.groupChat,
+                                    mediaUrl: config.bot.groupChat,
                                     title: "BROADCAST - Ulang",
                                     body: null,
                                     renderLargerThumbnail: true,
-                                    thumbnailUrl: global.config.bot.picture.thumbnail,
-                                    sourceUrl: global.config.bot.groupChat
+                                    thumbnailUrl: config.bot.picture.thumbnail,
+                                    sourceUrl: config.bot.groupChat
                                 },
                                 forwardingScore: 9999,
                                 isForwarded: true
                             }
                         });
                     } catch (retryError) {
-                        console.error(`[${global.config.pkg.name}] Error:`, error);
+                        console.error(`[${config.pkg.name}] Error:`, error);
                     }
                 }
             }
 
             return await ctx.reply(quote(`✅ Berhasil mengirimkan siaran ke ${anu.length - failedGroups.length} obrolan grup. ${failedGroups.length > 0 ? `Beberapa grup gagal dikirimi: ${failedGroups.length} grup.` : ''}`));
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

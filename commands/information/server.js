@@ -14,28 +14,28 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
-        const apiUrl = global.tools.api.createUrl("http://ip-api.com", "/json", {});
+        const apiUrl = tools.api.createUrl("http://ip-api.com", "/json", {});
 
         try {
             const {
                 data
             } = await axios.get(apiUrl);
-            const startTime = global.config.bot.readyAt;
+            const startTime = config.bot.readyAt;
 
             return await ctx.reply(
                 `${quote(`OS: ${os.type()} (${os.arch()} / ${os.release()})`)}\n` +
-                `${quote(`RAM: ${global.tools.general.formatSize(process.memoryUsage().rss)} / ${global.tools.general.formatSize(os.totalmem())}`)}\n` +
-                Object.entries(data).map(([key, value]) => `${quote(`${global.tools.general.ucword(key)}: ${value}`)}\n`).join("") +
-                `${quote(`Waktu aktif: ${global.tools.general.convertMsToDuration(Date.now() - startTime)}`)}\n` +
+                `${quote(`RAM: ${tools.general.formatSize(process.memoryUsage().rss)} / ${tools.general.formatSize(os.totalmem())}`)}\n` +
+                Object.entries(data).map(([key, value]) => `${quote(`${tools.general.ucword(key)}: ${value}`)}\n`).join("") +
+                `${quote(`Waktu aktif: ${tools.general.convertMsToDuration(Date.now() - startTime)}`)}\n` +
                 `${quote(`Prosesor: ${os.cpus()[0].model}`)}\n` +
                 "\n" +
-                global.config.msg.footer
+                config.msg.footer
             );
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

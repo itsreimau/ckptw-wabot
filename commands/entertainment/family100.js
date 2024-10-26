@@ -18,13 +18,13 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/master/games/family100.json", {});
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/family100.json", {});
             const response = await axios.get(apiUrl);
             const data = response.data[Math.floor(Math.random() * response.data.length)];
             const coin = {
@@ -42,7 +42,7 @@ module.exports = {
                 `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`Jumlah jawaban: ${remainingAnswers.size}`)}\n` +
                 `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n\n` +
-                global.config.msg.footer
+                config.msg.footer
             );
 
             const collector = ctx.MessageCollector({
@@ -58,17 +58,17 @@ module.exports = {
                     remainingAnswers.delete(userAnswer);
                     participants.add(participantNumber);
 
-                    await global.db.add(`user.${participantNumber}.coin`, coin.answered);
+                    await db.add(`user.${participantNumber}.coin`, coin.answered);
                     await ctx.sendMessage(ctx.id, {
-                        text: quote(`✅ ${global.tools.general.ucword(userAnswer)} benar! Jawaban tersisa: ${remainingAnswers.size}`),
+                        text: quote(`✅ ${tools.general.ucword(userAnswer)} benar! Jawaban tersisa: ${remainingAnswers.size}`),
                         quoted: m
                     });
 
                     if (remainingAnswers.size === 0) {
                         session.delete(ctx.id);
                         for (const participant of participants) {
-                            await global.db.add(`user.${participant}.coin`, coin.allAnswered);
-                            await global.db.add(`user.${participant}.winGame`, 1);
+                            await db.add(`user.${participant}.coin`, coin.allAnswered);
+                            await db.add(`user.${participant}.winGame`, 1);
                         }
                         await ctx.reply(quote(`🎉 Selamat! Semua jawaban telah ditemukan! Setiap peserta yang menjawab mendapat 10 koin.`));
                         return collector.stop();
@@ -77,7 +77,7 @@ module.exports = {
             });
 
             collector.on("end", async () => {
-                const remaining = [...remainingAnswers].map(global.tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1");
+                const remaining = [...remainingAnswers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1");
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
@@ -88,7 +88,7 @@ module.exports = {
                 }
             });
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

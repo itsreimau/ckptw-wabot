@@ -13,7 +13,7 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         return await ctx.reply(
@@ -26,7 +26,7 @@ module.exports = {
             `${quote("Serv00 (https://serv00.com/)")}\n` +
             `${quote("Dan kepada semua pihak yang telah membantu dalam pengembangan bot ini.")}\n` +
             "\n" +
-            global.config.msg.footer
+            config.msg.footer
         ); // Jika Anda tidak menghapus ini, terima kasih!
     }
 };

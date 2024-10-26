@@ -17,7 +17,7 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const senderJid = ctx.sender.jid;
@@ -26,19 +26,19 @@ module.exports = {
         const account = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : null;
 
         if (!account) return await ctx.reply({
-            text: `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderNumber}`)),
+            text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+                quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderNumber}`)),
             mentions: [senderJid]
         });
 
         try {
-            if (await global.tools.general.isAdmin(ctx, account)) return await ctx.reply(quote(`❎ Anggota ini adalah admin grup.`));
+            if (await tools.general.isAdmin(ctx, account)) return await ctx.reply(quote(`❎ Anggota ini adalah admin grup.`));
 
             await ctx.group().kick([account]);
 
             return await ctx.reply(quote(`✅ Berhasil dikeluarkan!`));
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

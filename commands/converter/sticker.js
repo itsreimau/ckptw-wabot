@@ -21,22 +21,22 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            global.tools.general.checkMedia(msgType, ["image", "gif", "video"], ctx),
-            global.tools.general.checkQuotedMedia(ctx.quoted, ["image", "gif", "video"])
+            tools.general.checkMedia(msgType, ["image", "gif", "video"], ctx),
+            tools.general.checkQuotedMedia(ctx.quoted, ["image", "gif", "video"])
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(global.tools.msg.generateInstruction(["send", "reply"], ["image", "gif", "video"])));
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], ["image", "gif", "video"])));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const sticker = new Sticker(buffer, {
-                pack: global.config.sticker.packname,
-                author: global.config.sticker.author,
+                pack: config.sticker.packname,
+                author: config.sticker.author,
                 type: StickerTypes.FULL,
                 categories: ["🤩", "🎉"],
                 id: ctx.id,
@@ -45,7 +45,7 @@ module.exports = {
 
             return await ctx.reply(await sticker.toMessage());
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

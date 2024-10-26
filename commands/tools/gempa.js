@@ -17,10 +17,10 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
-        const apiUrl = await global.tools.api.createUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json", {});
+        const apiUrl = await tools.api.createUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json", {});
 
         try {
             const {
@@ -42,11 +42,11 @@ module.exports = {
                     `${quote(`Koordinat: ${gempa.Coordinates}`)}\n` +
                     `${quote(`Dirasakan: ${gempa.Dirasakan}`)}\n` +
                     "\n" +
-                    global.config.msg.footer
+                    config.msg.footer
             });
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            console.error(`[${config.pkg.name}] Error:`, error);
+            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

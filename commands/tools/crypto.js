@@ -16,20 +16,20 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "bitcoin"))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "bitcoin"))
         );
 
         try {
             const result = await coingecko(input);
 
-            if (!result) return await ctx.reply(global.config.msg.notFound);
+            if (!result) return await ctx.reply(config.msg.notFound);
 
             const resultText = result.map((r) =>
                 `${quote(`${r.cryptoName}`)}\n` +
@@ -41,10 +41,10 @@ module.exports = {
             return await ctx.reply(
                 `${resultText}\n` +
                 "\n" +
-                global.config.msg.footer
+                config.msg.footer
             );
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
@@ -52,7 +52,7 @@ module.exports = {
 
 
 async function coingecko(search) {
-    const apiUrl = global.tools.api.createUrl("https://api.coingecko.com", "/api/v3/coins/markets", {
+    const apiUrl = tools.api.createUrl("https://api.coingecko.com", "/api/v3/coins/markets", {
         vs_currency: "usd",
     });
 
@@ -77,7 +77,7 @@ async function coingecko(search) {
 
         return result;
     } catch (error) {
-        console.error(`[${global.config.pkg.name}] Error:`, error);
+        console.error(`[${config.pkg.name}] Error:`, error);
         return null;
     }
 }

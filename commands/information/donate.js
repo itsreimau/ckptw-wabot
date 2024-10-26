@@ -13,7 +13,7 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         return await ctx.reply(
@@ -23,7 +23,7 @@ module.exports = {
             `${quote("https://saweria.co/itsreimau (Saweria)")}\n` +
             `${quote("https://trakteer.id/itsreimau (Trakteer)")}\n` +
             "\n" +
-            global.config.msg.footer
+            config.msg.footer
         );
     }
 };

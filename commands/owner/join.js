@@ -12,19 +12,19 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(global.tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, global.config.bot.groupChat))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, config.bot.groupChat))
         );
 
         const urlRegex = /chat\.whatsapp\.com\/([0-9A-Za-z]{20,24})/i;
         const match = input.match(urlRegex);
-        if (!match) return await ctx.reply(global.config.msg.urlInvalid);
+        if (!match) return await ctx.reply(config.msg.urlInvalid);
 
         try {
             const urlCode = match[1];
@@ -33,14 +33,14 @@ module.exports = {
             const participantsIds = members.map(user => user.id);
 
             await ctx.sendMessage(res, {
-                text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${global.config.bot.name}, dimiliki oleh ${global.config.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)
+                text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${config.bot.name}, dimiliki oleh ${config.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)
             }, {
                 mentions: participantsIds
             });
 
             return await ctx.reply(quote(`✅ Berhasil bergabung dengan grup!`));
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

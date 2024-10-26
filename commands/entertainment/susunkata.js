@@ -17,15 +17,15 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = global.tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/master/games/susunkata.json", {});
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/susunkata.json", {});
             const response = await axios.get(apiUrl);
-            const data = global.tools.general.getRandomElement(response.data);
+            const data = tools.general.getRandomElement(response.data);
             const coin = 5;
             const timeout = 60000;
             const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
@@ -39,7 +39,7 @@ module.exports = {
                 `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
                 `${quote('Ketik "hint" untuk bantuan.')}\n` +
                 "\n" +
-                global.config.msg.footer
+                config.msg.footer
             );
 
             const collector = ctx.MessageCollector({
@@ -53,8 +53,8 @@ module.exports = {
                 if (userAnswer === answer) {
                     session.delete(ctx.id);
                     await Promise.all([
-                        await global.db.add(`user.${senderNumber}.coin`, coin),
-                        await global.db.add(`user.${senderNumber}.winGame`, 1)
+                        await db.add(`user.${senderNumber}.coin`, coin),
+                        await db.add(`user.${senderNumber}.winGame`, 1)
                     ]);
                     await ctx.sendMessage(
                         ctx.id, {
@@ -88,7 +88,7 @@ module.exports = {
             });
 
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

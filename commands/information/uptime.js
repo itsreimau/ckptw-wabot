@@ -13,10 +13,10 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
-        const uptime = global.tools.general.convertMsToDuration(Date.now() - global.config.bot.readyAt);
+        const uptime = tools.general.convertMsToDuration(Date.now() - config.bot.readyAt);
         return await ctx.reply(quote(`Bot telah aktif selama ${uptime}.`));
     }
 };

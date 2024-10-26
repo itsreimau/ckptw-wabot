@@ -20,16 +20,16 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
-        if (!(global.tools.general.checkQuotedMedia(ctx.quoted, "sticker"))) return await ctx.reply(quote(global.tools.msg.generateInstruction(["reply"], ["sticker"])));
+        if (!(tools.general.checkQuotedMedia(ctx.quoted, "sticker"))) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
 
         try {
             const buffer = await ctx.quoted.media.toBuffer()
             const vidUrl = buffer ? await webp2mp4(buffer) : null;
 
-            if (!vidUrl) return await ctx.reply(global.config.msg.notFound);
+            if (!vidUrl) return await ctx.reply(config.msg.notFound);
 
             return await ctx.reply({
                 video: {
@@ -39,7 +39,7 @@ module.exports = {
                 gifPlayback: ctx._used.command === "togif" ? true : false
             });
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
@@ -80,7 +80,7 @@ async function webp2mp4(source) {
         } = new JSDOM(html2).window;
         return new URL(document2.querySelector("div#output > p.outfile > video > source").src, res2.request.res.responseUrl).toString();
     } catch (error) {
-        console.error(`[${global.config.pkg.name}] Error:`, error);
+        console.error(`[${config.pkg.name}] Error:`, error);
         return null;
     }
 }

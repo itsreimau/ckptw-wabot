@@ -1,6 +1,5 @@
 // Modul dan dependensi yang diperlukan
 const {
-    ButtonBuilder,
     Client,
     CommandHandler,
     monospace,
@@ -20,28 +19,28 @@ const path = require("path");
 const util = require("util");
 
 // Pesan koneksi
-console.log(`[${global.config.pkg.name}] Connecting...`);
+console.log(`[${config.pkg.name}] Connecting...`);
 
 // Buat instance bot baru
 const bot = new Client({
     WAVersion: [2, 3000, 1015901307],
-    phoneNumber: global.config.bot.phoneNumber,
-    prefix: global.config.bot.prefix,
-    readIncommingMsg: global.config.system.autoRead,
-    printQRInTerminal: !global.config.system.usePairingCode,
-    selfReply: global.config.system.selfReply,
-    usePairingCode: global.config.system.usePairingCode
+    phoneNumber: config.bot.phoneNumber,
+    prefix: config.bot.prefix,
+    readIncommingMsg: config.system.autoRead,
+    printQRInTerminal: !config.system.usePairingCode,
+    selfReply: config.system.selfReply,
+    usePairingCode: config.system.usePairingCode
 });
 
 // Penanganan acara saat bot siap
 bot.ev.once(Events.ClientReady, async (m) => {
-    console.log(`[${global.config.pkg.name}] Ready at ${m.user.id}`);
+    console.log(`[${config.pkg.name}] Ready at ${m.user.id}`);
 
-    // Tetapkan global.config pada bot
+    // Tetapkan config pada bot
     await Promise.all([
-        global.config.bot.number = m.user.id.split(/[:@]/)[0],
-        global.config.bot.id = m.user.id.split(/[:@]/)[0] + S_WHATSAPP_NET,
-        global.config.bot.readyAt = bot.readyAt
+        config.bot.number = m.user.id.split(/[:@]/)[0],
+        config.bot.id = m.user.id.split(/[:@]/)[0] + S_WHATSAPP_NET,
+        config.bot.readyAt = bot.readyAt
     ]);
 });
 
@@ -60,63 +59,47 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Log pesan masuk
     if (isGroup) {
-        console.log(`[${global.config.pkg.name}] Incoming message from group: ${groupNumber}, by: ${senderNumber}`);
+        console.log(`[${config.pkg.name}] Incoming message from group: ${groupNumber}, by: ${senderNumber}`);
     } else {
-        console.log(`[${global.config.pkg.name}] Incoming message from: ${senderNumber}`);
+        console.log(`[${config.pkg.name}] Incoming message from: ${senderNumber}`);
     }
 
     // Basis data untuk pengguna
     const [userDb, userPremium] = await Promise.all([
-        global.db.get(`user.${senderNumber}`),
-        global.db.get(`user.${senderNumber}.premium`)
+        db.get(`user.${senderNumber}`),
+        db.get(`user.${senderNumber}.premium`)
     ]);
 
     if (!userDb) {
-        await global.db.set(`user.${senderNumber}`, {
+        await db.set(`user.${senderNumber}`, {
             coin: 1000,
             level: 0,
             xp: 0
         });
     }
 
-    if (userPremium) await global.db.delete(`user.${senderNumber}.coin`);
+    if (userPremium) await db.delete(`user.${senderNumber}.coin`);
 
     // Penanganan untuk perintah
-    const isCmd = global.tools.general.isCmd(m, ctx);
+    const isCmd = tools.general.isCmd(m, ctx);
     if (isCmd) {
-        await global.db.set(`user.${senderNumber}.lastUse`, Date.now());
-        if (global.config.system.autoTypingOnCmd) ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah
+        await db.set(`user.${senderNumber}.lastUse`, Date.now());
+        if (config.system.autoTypingOnCmd) ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah
 
+        // Did you mean?
         const mean = isCmd.didyoumean;
-        if (mean) {
-            const prefix = isCmd.prefix;
-            const input = isCmd.input;
+        const prefix = isCmd.prefix;
+        const input = isCmd.input;
 
-            if (global.config.system.useInteractiveMessage) {
-                let button = new ButtonBuilder()
-                    .setId(`${prefix + mean} ${input}`)
-                    .setDisplayText("✅ Ya!")
-                    .setType("quick_reply").build();
-
-                await ctx.replyInteractiveMessage({
-                    body: quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`),
-                    footer: global.config.msg.watermark,
-                    nativeFlowMessage: {
-                        buttons: [button]
-                    }
-                })
-            } else if (!global.config.system.useInteractiveMessage) {
-                await ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
-            }
-        }
+        if (mean) await ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
 
         // Penanganan XP & Level untuk pengguna
         const xpGain = 10;
         let xpToLevelUp = 100;
 
         const [userXp, userLevel] = await Promise.all([
-            global.db.get(`user.${senderNumber}.xp`) || 0,
-            global.db.get(`user.${senderNumber}.level`) || 1
+            db.get(`user.${senderNumber}.xp`) || 0,
+            db.get(`user.${senderNumber}.level`) || 1
         ]);
 
         let newUserXp = userXp + xpGain;
@@ -131,10 +114,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             try {
                 profilePictureUrl = await bot.core.profilePictureUrl(senderJid, "image");
             } catch (error) {
-                profilePictureUrl = global.config.bot.picture.profile;
+                profilePictureUrl = config.bot.picture.profile;
             }
 
-            const card = global.tools.api.createUrl("aggelos_007", "/levelup", {
+            const card = tools.api.createUrl("aggelos_007", "/levelup", {
                 avatar: profilePictureUrl,
                 level: newUserLevel
             });
@@ -142,30 +125,31 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             await ctx.reply({
                 text: quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`),
                 contextInfo: {
+                    mentionedJid: [senderJid],
                     externalAdReply: {
-                        showAdAttribution: true,
+                        mediaType: 1,
+                        previewType: 0,
+                        mediaUrl: config.bot.groupChat,
                         title: "LEVEL UP",
                         body: null,
-                        mediaUrl: global.config.bot.groupChat,
-                        description: null,
-                        previewType: "PHOTO",
-                        thumbnailUrl: card || profilePictureUrl || global.config.bot.picture.thumbnail,
-                        sourceUrl: global.config.bot.groupChat
+                        renderLargerThumbnail: true,
+                        thumbnailUrl: card || profilePictureUrl || config.bot.picture.thumbnail,
+                        sourceUrl: config.bot.groupChat
                     }
                 }
             });
 
             await Promise.all([
-                global.db.set(`user.${senderNumber}.xp`, newUserXp),
-                global.db.set(`user.${senderNumber}.level`, newUserLevel)
+                db.set(`user.${senderNumber}.xp`, newUserXp),
+                db.set(`user.${senderNumber}.level`, newUserLevel)
             ]);
         } else {
-            await global.db.set(`user.${senderNumber}.xp`, newUserXp);
+            await db.set(`user.${senderNumber}.xp`, newUserXp);
         }
     }
 
     // Perintah khusus Owner
-    if (global.tools.general.isOwner(ctx, senderNumber, true)) {
+    if (tools.general.isOwner(ctx, senderNumber, true)) {
         // Perintah eval: Jalankan kode JavaScript
         if (m.content && m.content.startsWith && (m.content.startsWith("==> ") || m.content.startsWith("=> "))) {
             const code = m.content.slice(m.content.startsWith("==> ") ? 4 : 3);
@@ -175,7 +159,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                 await ctx.reply(util.inspect(result));
             } catch (error) {
-                console.error(`[${global.config.pkg.name}] Error:`, error);
+                console.error(`[${config.pkg.name}] Error:`, error);
                 await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
             }
         }
@@ -189,7 +173,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                 await ctx.reply(output);
             } catch (error) {
-                console.error(`[${global.config.pkg.name}] Error:`, error);
+                console.error(`[${config.pkg.name}] Error:`, error);
                 await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
             }
         }
@@ -199,13 +183,13 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
     if (mentionJids && mentionJids.length > 0) {
         for (const mentionJid of mentionJids) {
-            const getAFKMention = global.db.get(`user.${mentionJid.split(/[:@]/)[0]}.afk`);
+            const getAFKMention = db.get(`user.${mentionJid.split(/[:@]/)[0]}.afk`);
             if (getAFKMention) {
                 const [reason, timeStamp] = await Promise.all([
-                    global.db.get(`user.${mentionJid.split(/[:@]/)[0]}.afk.reason`),
-                    global.db.get(`user.${mentionJid.split(/[:@]/)[0]}.afk.timeStamp`)
+                    db.get(`user.${mentionJid.split(/[:@]/)[0]}.afk.reason`),
+                    db.get(`user.${mentionJid.split(/[:@]/)[0]}.afk.timeStamp`)
                 ]);
-                const timeAgo = global.tools.general.convertMsToDuration(Date.now() - timeStamp);
+                const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
 
                 await ctx.reply(quote(`📴 Dia AFK dengan alasan ${reason} selama ${timeAgo}.`));
             }
@@ -213,19 +197,19 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // Penanganan AFK : Berangkat dari AFK
-    const getAFKMessage = await global.db.get(`user.${senderNumber}.afk`);
+    const getAFKMessage = await db.get(`user.${senderNumber}.afk`);
     if (getAFKMessage) {
         const [reason, timeStamp] = await Promise.all([
-            global.db.get(`user.${senderNumber}.afk.reason`),
-            global.db.get(`user.${senderNumber}.afk.timeStamp`)
+            db.get(`user.${senderNumber}.afk.reason`),
+            db.get(`user.${senderNumber}.afk.timeStamp`)
         ]);
 
         const currentTime = Date.now();
         const timeElapsed = currentTime - timeStamp;
 
         if (timeElapsed > 3000) {
-            const timeAgo = global.tools.general.convertMsToDuration(timeElapsed);
-            await global.db.delete(`user.${senderNumber}.afk`);
+            const timeAgo = tools.general.convertMsToDuration(timeElapsed);
+            await db.delete(`user.${senderNumber}.afk`);
 
             await ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`));
         }
@@ -236,13 +220,13 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (m.key.fromMe) return;
 
         // Penanganan antilink
-        const getAntilink = await global.db.get(`group.${groupNumber}.antilink`);
+        const getAntilink = await db.get(`group.${groupNumber}.antilink`);
         const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
         if (getAntilink) {
-            if (m.content && urlRegex.test(m.content) && !(await global.tools.general.isAdmin(ctx, senderJid))) {
+            if (m.content && urlRegex.test(m.content) && !(await tools.general.isAdmin(ctx, senderJid))) {
                 await ctx.reply(quote(`❎ Jangan kirim tautan!`));
                 await ctx.deleteMessage(m.key);
-                if (!global.config.system.restrict) await ctx.group().kick([senderJid]);
+                if (!config.system.restrict) await ctx.group().kick([senderJid]);
             }
         }
     }
@@ -252,9 +236,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (m.key.fromMe) return;
 
         // Penanganan anonymous_chat
-        const anonymousChatPartnerData = await global.db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
+        const anonymousChatPartnerData = await db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
 
-        if (anonymousChatPartnerData || !global.config.system.restrict) {
+        if (anonymousChatPartnerData || !config.system.restrict) {
             const partnerId = anonymousChatPartnerData + S_WHATSAPP_NET;
 
             if (!["stop", "search", "next", "contact"].includes(isCmd?.cmd)) {
@@ -263,14 +247,14 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                         forward: m
                     });
                 } catch (error) {
-                    console.error(`[${global.config.pkg.name}] Error:`, error);
+                    console.error(`[${config.pkg.name}] Error:`, error);
                     await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
                 }
             }
         }
 
         // Penanganan menfess
-        const allMenfessData = await global.db.get("menfess");
+        const allMenfessData = await db.get("menfess");
 
         if (allMenfessData && typeof allMenfessData === "object" && Object.keys(allMenfessData).length > 0) {
             const menfessEntries = Object.entries(allMenfessData);
@@ -285,7 +269,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     const senderInConversation = senderNumber === from || senderNumber === to;
 
                     if (senderInConversation) {
-                        await global.db.delete(`menfess.${conversationId}`);
+                        await db.delete(`menfess.${conversationId}`);
 
                         const targetNumber = senderNumber === from ? to : from;
 
@@ -308,13 +292,13 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                             forward: m
                         });
 
-                        await ctx.reply(quote(`✅ Pesan berhasil diteruskan ke ${targetId}!`));
-                        await global.db.set(`menfess.${conversationId}.lastMsg`, Date.now());
+                        await ctx.reply(quote(`✅ Pesan berhasil diteruskan!`));
+                        await db.set(`menfess.${conversationId}.lastMsg`, Date.now());
 
                         break;
                     }
                 } catch (error) {
-                    console.error(`[${global.config.pkg.name}] Error:`, error);
+                    console.error(`[${config.pkg.name}] Error:`, error);
                     await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
                 }
             }
@@ -334,7 +318,7 @@ bot.ev.on(Events.UserLeave, (m) => {
 });
 
 // Luncurkan bot
-bot.launch().catch((error) => console.error(`[${global.config.pkg.name}] Error:`, error));
+bot.launch().catch((error) => console.error(`[${config.pkg.name}] Error:`, error));
 
 // Fungsi utilitas
 async function handleUserEvent(m) {
@@ -344,7 +328,7 @@ async function handleUserEvent(m) {
     } = m;
 
     try {
-        const getWelcome = await global.db.get(`group.${id.split(/[:@]/)[0]}.welcome`);
+        const getWelcome = await db.get(`group.${id.split(/[:@]/)[0]}.welcome`);
         if (getWelcome) {
             const metadata = await bot.core.groupMetadata(id);
 
@@ -353,18 +337,18 @@ async function handleUserEvent(m) {
                 try {
                     profilePictureUrl = await bot.core.profilePictureUrl(jid, "image");
                 } catch (error) {
-                    profilePictureUrl = global.config.bot.picture.profile;
+                    profilePictureUrl = config.bot.picture.profile;
                 }
 
                 const message = m.eventsType === "UserJoin" ?
                     quote(`👋 Selamat datang @${jid.split(/[:@]/)[0]} di grup ${metadata.subject}!`) :
                     quote(`👋 @${jid.split(/[:@]/)[0]} keluar dari grup ${metadata.subject}.`);
-                const card = global.tools.api.createUrl("aggelos_007", "/welcomecard", {
+                const card = tools.api.createUrl("aggelos_007", "/welcomecard", {
                     text1: jid.split(/[:@]/)[0],
                     text2: m.eventsType === "UserJoin" ? "Selamat datang!" : "Selamat tinggal!",
                     text3: metadata.subject,
                     avatar: profilePictureUrl,
-                    background: global.config.bot.picture.thumbnail
+                    background: config.bot.picture.thumbnail
                 });
 
                 await bot.core.sendMessage(id, {
@@ -374,19 +358,19 @@ async function handleUserEvent(m) {
                         externalAdReply: {
                             mediaType: 1,
                             previewType: 0,
-                            mediaUrl: global.config.bot.groupChat,
+                            mediaUrl: config.bot.groupChat,
                             title: m.eventsType === "UserJoin" ? "JOIN" : "LEAVE",
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: card || profilePictureUrl || global.config.bot.picture.thumbnail,
-                            sourceUrl: global.config.bot.groupChat
+                            thumbnailUrl: card || profilePictureUrl || config.bot.picture.thumbnail,
+                            sourceUrl: config.bot.groupChat
                         }
                     }
                 });
             }
         }
     } catch (error) {
-        console.error(`[${global.config.pkg.name}] Error:`, error);
+        console.error(`[${config.pkg.name}] Error:`, error);
         await bot.core.sendMessage(id, {
             text: quote(`❎ Terjadi kesalahan: ${error.message}`)
         });

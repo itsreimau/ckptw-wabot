@@ -15,10 +15,10 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
-        const apiUrl = global.tools.api.createUrl("https://candaan-api.vercel.app", "/api/text/random", {});
+        const apiUrl = tools.api.createUrl("https://candaan-api.vercel.app", "/api/text/random", {});
 
         try {
             const {
@@ -27,8 +27,8 @@ module.exports = {
 
             return await ctx.reply(data);
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            console.error(`[${config.pkg.name}] Error:`, error);
+            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
             return message.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

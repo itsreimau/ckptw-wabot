@@ -13,12 +13,12 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         try {
             const oneMonthAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
-            const dbJSON = await global.db.toJSON();
+            const dbJSON = await db.toJSON();
             const {
                 user = {}, group = {}, menfess = {}
             } = dbJSON;
@@ -28,13 +28,13 @@ module.exports = {
                     lastUse
                 } = user[userId] || {};
                 if (!/^[0-9]{10,15}$/.test(userId) || new Date(lastUse).getTime() < oneMonthAgo) {
-                    global.db.delete(`user.${userId}`);
+                    db.delete(`user.${userId}`);
                 }
             });
 
             Object.keys(group).forEach((groupId) => {
                 if (!/^[0-9]{10,15}$/.test(groupId)) {
-                    global.db.delete(`group.${groupId}`);
+                    db.delete(`group.${groupId}`);
                 }
             });
 
@@ -43,13 +43,13 @@ module.exports = {
                     lastMsg
                 } = menfess[conversationId] || {};
                 if (new Date(lastMsg).getTime() < oneMonthAgo) {
-                    global.db.delete(`menfess.${conversationId}`);
+                    db.delete(`menfess.${conversationId}`);
                 }
             });
 
             return await ctx.reply(quote(`✅ Basis data berhasil diperbaiki!`));
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }

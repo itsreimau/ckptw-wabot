@@ -14,13 +14,13 @@ module.exports = {
         const {
             status,
             message
-        } = await global.handler(ctx, module.exports.handler);
+        } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
         try {
-            const wait = await ctx.reply(global.config.msg.wait);
+            const wait = await ctx.reply(config.msg.wait);
 
-            const APIs = global.tools.api.listUrl();
+            const APIs = tools.api.listUrl();
             let result = "";
 
             for (const [name, api] of Object.entries(APIs)) {
@@ -51,10 +51,10 @@ module.exports = {
             await ctx.editMessage(wait.key,
                 `${result.trim()}\n` +
                 "\n" +
-                global.config.msg.footer
+                config.msg.footer
             );
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
+            console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
         }
     }
