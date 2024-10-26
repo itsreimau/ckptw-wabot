@@ -23,12 +23,22 @@ module.exports = {
                 user = {}, group = {}, menfess = {}
             } = dbJSON;
 
+            const importantKeys = ["coin", "level", "isPremium", "lastClaim", "winGame", "isBanned", "lastUse", "xp", "afk"];
+
             Object.keys(user).forEach((userId) => {
                 const {
-                    lastUse
+                    lastUse,
+                    ...userData
                 } = user[userId] || {};
-                if (!/^[0-9]{10,15}$/.test(userId) || new Date(lastUse).getTime() < oneMonthAgo) {
+
+                if (!/^[0-9]{10,15}$/.test(userId) || (lastUse && new Date(lastUse).getTime() < oneMonthAgo)) {
                     db.delete(`user.${userId}`);
+                } else {
+                    const filteredData = Object.fromEntries(Object.entries(userData).filter(([key]) => importantKeys.includes(key)));
+                    db.set(`user.${userId}`, {
+                        ...filteredData,
+                        lastUse
+                    });
                 }
             });
 
@@ -42,7 +52,7 @@ module.exports = {
                 const {
                     lastMsg
                 } = menfess[conversationId] || {};
-                if (new Date(lastMsg).getTime() < oneMonthAgo) {
+                if (lastMsg && new Date(lastMsg).getTime() < oneMonthAgo) {
                     db.delete(`menfess.${conversationId}`);
                 }
             });

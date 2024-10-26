@@ -65,10 +65,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // Basis data untuk pengguna
-    const [userDb, userPremium, freetrialClaim] = await Promise.all([
+    const [userDb, userPremium, lastClaimFreetrial] = await Promise.all([
         db.get(`user.${senderNumber}`),
         db.get(`user.${senderNumber}.isPremium`),
-        db.get(`user.${senderNumber}.freetrialClaim`)
+        db.get(`user.${senderNumber}.lastClaim.freetrial`)
     ]);
 
     if (!userDb) {
@@ -81,7 +81,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     const currentTime = Date.now();
     const freetrialDuration = 7 * 24 * 60 * 60 * 1000;
-    if (userPremium === "freetrial" && (currentTime - freetrialClaim > freetrialDuration)) {
+    if (userPremium === "freetrial" && (currentTime - lastClaimFreeTrial > freetrialDuration)) {
         await db.set(`user.${senderNumber}.isPremium`, false);
         await db.set(`user.${senderNumber}.lastClaim.freetrial`, "expired");
 
