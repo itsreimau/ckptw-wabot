@@ -65,9 +65,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // Basis data untuk pengguna
-    const [userDb, userPremium] = await Promise.all([
+    const [userDb, userPremium, freetrialClaim] = await Promise.all([
         db.get(`user.${senderNumber}`),
-        db.get(`user.${senderNumber}.premium`)
+        db.get(`user.${senderNumber}.premium`),
+        db.get(`user.${senderNumber}.freetrialClaim`)
     ]);
 
     if (!userDb) {
@@ -77,6 +78,16 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             xp: 0
         });
     }
+
+    const currentTime = Date.now();
+    const freetrialDuration = 7 * 24 * 60 * 60 * 1000;
+    if (userPremium === "freetrial" && (currentTime - freetrialClaim > freetrialDuration)) {
+        await db.set(`user.${senderNumber}.premium`, false);
+        await db.set(`user.${senderNumber}.lastClaim.freetrial`, "expired");
+
+        await ctx.reply(quote(`❎ Masa percobaan Free Trial Anda sudah habis. Jika Anda ingin melanjutkan akses Premium, silakan hubungi Owner.`));
+    }
+
 
     if (userPremium) await db.delete(`user.${senderNumber}.coin`);
 

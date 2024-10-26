@@ -25,55 +25,66 @@ module.exports = {
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
-        if (ctx.args[0] === "list") {
+        const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+        const [userLevel, isPremium, lastClaimFreetrial, lastClaim, currentCoins] = await Promise.all([
+            db.get(`user.${senderNumber}.level`) || 0,
+            db.get(`user.${senderNumber}.isPremium`) || false,
+            db.get(`user.${senderNumber}.lastClaim.freetrial`) || null,
+            db.get(`user.${senderNumber}.lastClaim`) || {},
+            db.get(`user.${senderNumber}.coin`) || 0
+        ]);
+
+        if (input === "list") {
             const listText = await tools.list.get("claim");
             return await ctx.reply(listText);
         }
 
-        const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
-        const userLevel = db.get(`user.${senderNumber}.level`) || 0;
-
         if (input === "premium") {
             if (userLevel <= 100) return await ctx.reply(quote(`❎ Anda harus memiliki level lebih dari 100 untuk mengklaim status premium. Level Anda saat ini adalah ${userLevel}.`));
-
-            const isPremium = db.get(`user.${senderNumber}.isPremium`) || false;
-            if (isPremium) return await ctx.reply(quote(`❎ Anda sudah memiliki Premium.`));
+            if (isPremium === true) return await ctx.reply(quote(`❎ Anda sudah memiliki Premium.`));
 
             await db.set(`user.${senderNumber}.isPremium`, true);
             return await ctx.reply(quote(`🎉 Selamat! Anda telah berhasil mengklaim Premium!`));
         }
 
+        if (input === "freetrial") {
+            const trialPeriod = 7 * 24 * 60 * 60 * 1000;
+            const currentTime = Date.now();
+
+            if (lastClaimFreetrial === "expired") return await ctx.reply(quote(`❎ Free Trial hanya bisa diambil satu kali per pengguna. Jika Anda ingin mendapatkan akses Premium, silakan hubungi Owner.`));
+            if (lastClaimFreetrial && (currentTime - lastClaimFreetrial < trialPeriod)) return await ctx.reply(quote(`❎ Anda telah mengklaim Free Trial sebelumnya dan belum habis masa tunggunya.`));
+            if (isPremium === true) return await ctx.reply(quote(`❎ Anda sudah memiliki Premium.`));
+
+            await Promise.all([
+                db.set(`user.${senderNumber}.isPremium`, "freetrial"),
+                db.set(`user.${senderNumber}.lastClaim.freetrial`, currentTime)
+            ]);
+
+            return await ctx.reply(quote(`🎉 Selamat! Anda telah berhasil mengklaim Free Trial Premium selama 7 hari!`));
+        }
+
         if (!claimRewards[input]) return await ctx.reply(quote(`❎ Teks tidak valid.`));
 
         const requiredLevel = claimRewards[input].level || 0;
-
         if (userLevel < requiredLevel) return await ctx.reply(quote(`❎ Anda perlu mencapai level ${requiredLevel} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userLevel}.`));
 
-        const lastClaimTime = db.get(`user.${senderNumber}.lastClaim.${input}`) || 0;
+        const lastClaimTime = lastClaim[input] || 0;
         const currentTime = Date.now();
         const timePassed = currentTime - lastClaimTime;
         const remainingTime = claimRewards[input].cooldown - timePassed;
 
-        if (remainingTime > 0) return await ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input} Anda. Harap tunggu ${tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
-
-        const [isOwner, isPremium] = await Promise.all([
-            tools.general.isOwner(ctx, senderNumber, true),
-            db.get(`user.${senderNumber}.isPremium`)
-        ]);
-
-        if (isPremium || isOwner) return await ctx.reply(quote("❎ Koin Anda tidak terbatas sehingga tidak perlu mengklaim koin lagi."));
+        if (remainingTime > 0) return await ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input}. Tunggu ${tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
+        if (isPremium === true) return await ctx.reply(quote("❎ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
 
         try {
-            const userKey = `user.${senderNumber}.coin`;
-            const currentCoins = db.get(userKey) || 0;
             const newBalance = currentCoins + claimRewards[input].reward;
 
             await Promise.all([
-                db.set(userKey, newBalance),
+                db.set(`user.${senderNumber}.coin`, newBalance),
                 db.set(`user.${senderNumber}.lastClaim.${input}`, currentTime)
             ]);
 
-            return await ctx.reply(quote(`✅ Anda telah berhasil mengklaim hadiah ${input} sebesar ${claimRewards[input].reward} koin! Sekarang Anda memiliki koin ${newBalance}.`));
+            return await ctx.reply(quote(`✅ Anda berhasil mengklaim hadiah ${input} sebesar ${claimRewards[input].reward} koin! Koin saat ini: ${newBalance}.`));
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));

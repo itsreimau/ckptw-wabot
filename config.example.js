@@ -58,6 +58,6 @@ config = {
         restrict: true, // Membatasi perintah tertentu untuk keamanan
         selfReply: true, // Apakah bot merespon pesan yang dikirim bot sendiri
         timeZone: "Asia/Jakarta", // Zona waktu bot
-        usePairingCode: true // Menggunakan kode pairing untuk fitur tertentu
+        usePairingCode: true // Menggunakan kode pairing untuk koneksi
     }
 };

@@ -85,7 +85,7 @@ async function get(type, ctx) {
                 break;
             }
             case "claim": {
-                const data = ["daily", "weekly", "monthly", "yearly", "premium"];
+                const data = ["daily", "weekly", "monthly", "yearly", "premium", "freetrial"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;
