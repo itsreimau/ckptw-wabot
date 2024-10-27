@@ -1,4 +1,5 @@
 const {
+    monospace
     quote
 } = require("@mengkodingan/ckptw");
 const mime = require("mime-types");
