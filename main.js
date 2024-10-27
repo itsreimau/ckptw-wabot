@@ -132,7 +132,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 level: newUserLevel
             });
 
-            await ctx.reply({
+            await ctx.replyWithJid(senderJid, {
                 text: quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`),
                 contextInfo: {
                     mentionedJid: [senderJid],

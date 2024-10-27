@@ -30,7 +30,7 @@ module.exports = {
             const apiUrl = await tools.api.createUrl("agatz", "/api/happymod", {
                 message: input
             });
-            const data = (await axios.get(apiUrl)).data.hsl;
+            const data = (await axios.get(apiUrl)).data.data.hsl;
 
             const resultText = data.map((d) =>
                 `${quote(`Judul: ${d.title}`)}\n` +

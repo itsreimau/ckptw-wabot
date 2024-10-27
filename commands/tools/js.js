@@ -57,10 +57,10 @@ module.exports = {
 
                 childProcess.on("close", (code) => {
                     if (code !== 0) {
-                        resolve(quote(
-                            `❎ Keluar dari proses dengan kode: ${code}\n` +
+                        resolve(
+                            `${quote(`❎ Keluar dari proses dengan kode: ${code}`)}\n` +
                             errorData.trim()
-                        ));
+                        );
                     } else {
                         resolve(outputData.trim());
                     }
