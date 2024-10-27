@@ -6,7 +6,6 @@ const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
 const axios = require("axios");
-const Jimp = require("jimp");
 const mime = require("mime-types");
 
 module.exports = {
@@ -36,18 +35,18 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send", "reply"], "image"))}\n` +
             quote(tools.msg.generatesFlagInformation({
-                "-t <text>": "Jenis pemrosesan gambar (tersedia: modelx2, modelx2 25 JXL, modelx4, minecraft_modelx4).",
+                "-t <number>": "Jenis pemrosesan gambar (1: modelx2, 2: modelx2 25 JXL, 3: modelx4, 4: minecraft_modelx4)."
             }))
         );
 
         try {
-            const type = ["modelx2", "modelx2 25 JXL", "modelx4", "minecraft_modelx4"];
+            const types = ["modelx2", "modelx2 25 JXL", "modelx4", "minecraft_modelx4"];
             const flag = tools.general.parseFlag(input, {
                 "-t": {
                     type: "value",
                     key: "type",
-                    validator: (val) => type.includes(val),
-                    parser: (val) => val
+                    validator: (val) => !isNaN(val) && parseInt(val) > 0 && parseInt(val) <= types.length,
+                    parser: (val) => types[parseInt(val) - 1]
                 }
             });
 
@@ -55,7 +54,7 @@ module.exports = {
             const uploadUrl = await tools.general.upload(buffer);
             const apiUrl = tools.api.createUrl("itzpire", "/tools/enhance", {
                 url: uploadUrl,
-                type: flag.type || tools.general.getRandomElement(type)
+                type: flag.type || tools.general.getRandomElement(types)
             });
             const {
                 data

@@ -1,4 +1,5 @@
 const {
+    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const {
@@ -71,7 +72,7 @@ module.exports = {
                 }, 10000);
             });
 
-            await ctx.reply(output);
+            await ctx.reply(monospace(output));
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));

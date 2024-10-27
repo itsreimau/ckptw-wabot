@@ -81,13 +81,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     const currentTime = Date.now();
     const freetrialDuration = 7 * 24 * 60 * 60 * 1000;
-    if (userPremium === "freetrial" && (currentTime - lastClaimFreeTrial > freetrialDuration)) {
+    if (userPremium === "freetrial" && (currentTime - lastClaimFreetrial > freetrialDuration)) {
         await db.set(`user.${senderNumber}.isPremium`, false);
         await db.set(`user.${senderNumber}.lastClaim.freetrial`, "expired");
 
         await ctx.reply(quote(`❎ Masa percobaan Free Trial Anda sudah habis. Jika Anda ingin melanjutkan akses Premium, silakan hubungi Owner.`));
     }
-
 
     if (userPremium) await db.delete(`user.${senderNumber}.coin`);
 
@@ -168,7 +167,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             try {
                 const result = await eval(m.content.startsWith("==> ") ? `(async () => { ${code} })()` : code);
 
-                await ctx.reply(util.inspect(result));
+                await ctx.reply(monospace(util.inspect(result)));
             } catch (error) {
                 console.error(`[${config.pkg.name}] Error:`, error);
                 await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
@@ -182,7 +181,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             try {
                 const output = await util.promisify(exec)(code);
 
-                await ctx.reply(output.stdout || output.stderr);
+                await ctx.reply(monospace(output.stdout || output.stderr));
             } catch (error) {
                 console.error(`[${config.pkg.name}] Error:`, error);
                 await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));

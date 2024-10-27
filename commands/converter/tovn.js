@@ -6,8 +6,8 @@ const FormData = require("form-data");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "toaud",
-    aliases: ["toaudio", "tomp3"],
+    name: "tovn",
+    aliases: ["toptt"],
     category: "converter",
     handler: {
         banned: true,
@@ -32,7 +32,8 @@ module.exports = {
                 audio: {
                     url: result.data.audio
                 },
-                mimetype: mime.lookup("mp3")
+                mimetype: mime.lookup("ptt"),
+                ptt: true
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);

@@ -42,8 +42,7 @@ module.exports = {
                 audio: {
                     url: result.mp3
                 },
-                mimetype: mime.lookup("mp3"),
-                ptt: false
+                mimetype: mime.lookup("mp3")
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
