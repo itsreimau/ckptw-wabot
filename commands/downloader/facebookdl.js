@@ -5,8 +5,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "fbdl",
-    aliases: ["fb", "facebook", "facebookdl"],
+    name: "facebookdl",
+    aliases: ["facebook", "fb", "fbdl"],
     category: "downloader",
     handler: {
         banned: true,
@@ -40,7 +40,7 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    url: data.high || data.low
+                    url: data.hd || data.sd
                 },
                 mimetype: mime.contentType("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +

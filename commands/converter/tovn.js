@@ -20,7 +20,7 @@ module.exports = {
         } = await handler(ctx, module.exports.handler);
         if (status) return await ctx.reply(message);
 
-        if (!(tools.general.checkQuotedMedia(ctx.quoted, "video"))) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
+        if (!(tools.general.checkQuotedMedia(ctx.quoted, "audio"))) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
 
         try {
             const buffer = await ctx.quoted.media.toBuffer()

@@ -6,7 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "capcutdl",
-    aliases: ["cc", "ccdl", "capcut"],
+    aliases: ["capcut", "cc", "ccdl"],
     category: "downloader",
     handler: {
         banned: true,

@@ -5,8 +5,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "igdl",
-    aliases: ["ig", "instagram", "instagramdl"],
+    name: "instagramdl",
+    aliases: ["ig", "igdl", "instagram"],
     category: "downloader",
     handler: {
         banned: true,
@@ -38,25 +38,23 @@ module.exports = {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            if (data.image && data.image.length > 0) {
-                for (const img of data.image) {
-                    await ctx.reply({
-                        image: {
-                            url: img
-                        },
-                        mimetype: mime.contentType("jpg")
-                    });
-                }
-            }
-
-            if (data.video && data.video.length > 0) {
-                for (const vid of data.video) {
-                    await ctx.reply({
-                        video: {
-                            url: vid.video
-                        },
-                        mimetype: mime.contentType("mp4")
-                    });
+            if (data.url_list && data.url_list.length > 0) {
+                for (const mediaUrl of data.url_list) {
+                    if (mediaUrl.includes(".mp4")) {
+                        await ctx.reply({
+                            video: {
+                                url: mediaUrl
+                            },
+                            mimetype: mime.contentType("mp4")
+                        });
+                    } else {
+                        await ctx.reply({
+                            image: {
+                                url: mediaUrl
+                            },
+                            mimetype: mime.contentType("jpg")
+                        });
+                    }
                 }
             }
         } catch (error) {

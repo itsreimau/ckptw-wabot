@@ -9,26 +9,11 @@ const APIs = {
     chiwa: {
         baseURL: "https://api.chiwa.my.id"
     },
-    firda: {
-        baseURL: "https://api.firda.uz"
-    },
-    imphnen_ai: {
-        baseURL: "https://imphnen-ai.vercel.app"
-    },
     itzpire: {
         baseURL: "https://itzpire.com"
     },
     lenwy: {
         baseURL: "https://api-lenwy.vercel.app"
-    },
-    lolhuman: {
-        baseURL: "https://api.lolhuman.xyz"
-    },
-    matbasing: {
-        baseURL: "https://matbasing.glitch.me"
-    },
-    miwudev: {
-        baseURL: "https://openapi.miwudev.my.id"
     },
     nyxs: {
         baseURL: "https://api.nyxs.pw"

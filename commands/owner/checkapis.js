@@ -48,7 +48,7 @@ module.exports = {
                 }
             }
 
-            await ctx.editMessage(wait.key,
+            return await ctx.editMessage(wait.key,
                 `${result.trim()}\n` +
                 "\n" +
                 config.msg.footer

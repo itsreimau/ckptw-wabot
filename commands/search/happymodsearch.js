@@ -33,9 +33,9 @@ module.exports = {
             const data = (await axios.get(apiUrl)).data.data.hsl;
 
             const resultText = data.map((d) =>
-                `${quote(`Judul: ${d.title}`)}\n` +
-                `${quote(`Rating: ${d.rating}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
+                `${quote(`Nama: ${d.name}`)}\n` +
+                `${quote(`Versi: ${d.version.replace("•", "")}`)}\n` +
+                `${quote(`URL: ${d.url}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

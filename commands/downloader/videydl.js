@@ -5,6 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "videydl",
+    aliases: ["videy"],
     category: "downloader",
     handler: {
         banned: true,
