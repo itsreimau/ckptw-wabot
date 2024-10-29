@@ -19,7 +19,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, config.bot.groupChat))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
         const urlRegex = /chat\.whatsapp\.com\/([0-9A-Za-z]{20,24})/i;

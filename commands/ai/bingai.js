@@ -4,7 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "bing",
+    name: "bingai",
     category: "ai",
     handler: {
         banned: true,

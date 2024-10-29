@@ -1,12 +1,12 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 
 module.exports = {
-    name: "jadwaltv",
-    category: "tools",
+    name: "bingsearch",
+    aliases: ["bing", "bsearch"],
+    category: "search",
     handler: {
         banned: true,
         cooldown: true,
@@ -23,28 +23,24 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "tvri"))}\n` +
-            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))
         );
 
-        if (ctx.args[0] === "list") {
-            const listText = await tools.list.get("jadwaltv");
-            return await ctx.reply(listText);
-        }
-
         try {
-            const apiUrl = await tools.api.createUrl("widipe", "/jadwaltv", {
-                tv: input
-            });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const apiUrl = await tools.api.createUrl("nexoracle", "/search/bing-search", {
+                q: input
+            }, "apikey");
+            const data = (await axios.get(apiUrl)).data.result;
 
-            const resultText = data.result.result.map((d) =>
-                `${quote(`${d.date} - ${d.event}`)}`
-            ).join("\n");
+            const resultText = data.map((d) =>
+                `${quote(`Judul: ${d.title}`)}\n` +
+                `${quote(`Deskripsi: ${d.description}`)}\n` +
+                `${quote(`URL: ${d.link}`)}`
+            ).join(
+                "\n" +
+                `${quote("─────")}\n`
+            );
             return await ctx.reply(
-                `${quote(`Kanal: ${data.result.channel}`)}\n` +
                 `${resultText}\n` +
                 "\n" +
                 config.msg.footer

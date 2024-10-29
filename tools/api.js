@@ -26,6 +26,10 @@ const APIs = {
     },
     widipe: {
         baseURL: "https://widipe.com"
+    },
+    nexoracle: {
+        baseURL: "https://api.nexoracle.com",
+        APIKey: "free_key@maher_apis" // APIKey Pro gratis dengan permintaan tak terbatas disediakan oleh Maher Zubair
     }
 };
 

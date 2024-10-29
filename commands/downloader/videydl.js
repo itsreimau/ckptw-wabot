@@ -10,7 +10,6 @@ module.exports = {
     handler: {
         banned: true,
         cooldown: true,
-        coin: [10, "text", 1],
         premium: true
     },
     code: async (ctx) => {

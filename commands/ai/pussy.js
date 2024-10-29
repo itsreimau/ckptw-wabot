@@ -1,18 +1,17 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "zerochan",
-    aliases: ["zc"],
-    category: "tools",
+    name: "pussyai",
+    aliases: ["pussy"],
+    category: "ai",
     handler: {
         banned: true,
         cooldown: true,
-        coin: [10, "text", 1]
+        premium: true
     },
     code: async (ctx) => {
         const {
@@ -25,24 +24,23 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon -s"))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("lenwy", "/zerochan", {
-                search: input
+            const apiUrl = tools.api.createUrl("sandipbaruwal", "/pussy", {
+                prompt: input
             });
             const {
-                images
-            } = (await axios.get(apiUrl)).data;
-            const result = tools.general.getRandomElement(images);
+                data
+            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 image: {
-                    url: result
+                    url: data.url
                 },
                 mimetype: mime.lookup("png"),
-                caption: `${quote(`Kueri: ${flag.input}`)}\n` +
+                caption: `${quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

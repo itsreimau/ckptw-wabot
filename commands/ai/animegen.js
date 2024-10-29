@@ -1,14 +1,11 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "zerochan",
-    aliases: ["zc"],
-    category: "tools",
+    name: "animegen",
+    category: "ai",
     handler: {
         banned: true,
         cooldown: true,
@@ -25,24 +22,20 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon -s"))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("lenwy", "/zerochan", {
-                search: input
-            });
-            const {
-                images
-            } = (await axios.get(apiUrl)).data;
-            const result = tools.general.getRandomElement(images);
+            const apiUrl = tools.api.createUrl("nexoracle", "/ai/anime-gen", {
+                prompt: input
+            }, "apikey");
 
             return await ctx.reply({
                 image: {
-                    url: result
+                    url: apiUrl
                 },
                 mimetype: mime.lookup("png"),
-                caption: `${quote(`Kueri: ${flag.input}`)}\n` +
+                caption: `${quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

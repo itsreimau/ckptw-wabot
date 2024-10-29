@@ -26,6 +26,8 @@ module.exports = {
         );
 
         let apiPath = "/ai/text2img";
+        let apiService = "widipe";
+
         const versionRegex = /^\(v(\d+)\)\s*(.*)$/;
         const match = input.match(versionRegex);
 
@@ -33,11 +35,15 @@ module.exports = {
             const version = match[1];
             apiPath = `/v${version}/text2img`;
             input = match[2];
+        } else {
+            apiService = "nyxs";
+            apiPath = "/ai-image/image-generator2";
         }
 
         try {
-            const apiUrl = tools.api.createUrl("widipe", apiPath, {
-                text: input
+            const apiUrl = tools.api.createUrl(apiService, apiPath, {
+                text: apiService === "widipe" ? input : undefined,
+                prompt: apiService === "nyxs" ? input : undefined
             });
 
             return await ctx.reply({

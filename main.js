@@ -139,12 +139,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     externalAdReply: {
                         mediaType: 1,
                         previewType: 0,
-                        mediaUrl: config.bot.groupChat,
+                        mediaUrl: config.bot.website,
                         title: "LEVEL UP",
                         body: null,
                         renderLargerThumbnail: true,
                         thumbnailUrl: card || profilePictureUrl || config.bot.picture.thumbnail,
-                        sourceUrl: config.bot.groupChat
+                        sourceUrl: config.bot.website
                     }
                 }
             });
@@ -236,8 +236,16 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             if (m.content && urlRegex.test(m.content) && !(await tools.general.isAdmin(ctx, senderJid))) {
                 await ctx.reply(quote(`❎ Jangan kirim tautan!`));
                 await ctx.deleteMessage(m.key);
-                if (!config.system.restrict) await ctx.group().kick([senderJid]);
+                await db.add(`group.${groupNumber}.warning.${senderNumber}`, 1);
             }
+        }
+
+        // Penanganan warning
+        const getWarning = await db.get(`group.${groupNumber}.warning.${senderNumber}`);
+        if (getWarning >= 3) {
+            await ctx.reply(quote(`❎ Kamu telah mencapai batas peringatan dan akan dikeluarkan dari grup!`));
+            if (!config.system.restrict) await ctx.group().kick([senderJid]);
+            await db.set(`group.${groupNumber}.warning.${senderNumber}`, 0);
         }
     }
 
@@ -368,12 +376,12 @@ async function handleUserEvent(m) {
                         externalAdReply: {
                             mediaType: 1,
                             previewType: 0,
-                            mediaUrl: config.bot.groupChat,
+                            mediaUrl: config.bot.website,
                             title: m.eventsType === "UserJoin" ? "JOIN" : "LEAVE",
                             body: null,
                             renderLargerThumbnail: true,
                             thumbnailUrl: card || profilePictureUrl || config.bot.picture.thumbnail,
-                            sourceUrl: config.bot.groupChat
+                            sourceUrl: config.bot.website
                         }
                     }
                 });

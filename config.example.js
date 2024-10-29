@@ -1,3 +1,4 @@
+// Modul dan dependensi yang diperlukan
 const pkg = require("./package.json");
 const {
     monospace,
@@ -5,8 +6,9 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 
-// Config untuk Bot CKPTW
+// Konfigurasi
 config = {
+    // Informasi bot dasar
     bot: {
         name: "CKPTW", // Nama bot
         prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i, // Karakter awalan perintah yang diizinkan
@@ -15,9 +17,10 @@ config = {
             thumbnail: "https://e1.pxfuel.com/desktop-wallpaper/943/672/desktop-wallpaper-whatsapp-bot-what-is-it-and-how-to-use-messenger-chatbots-chatbot.jpg", // Gambar thumbnail bot
             profile: "https://i.ibb.co/3Fh9V6p/avatar-contact.png" // Foto profil bot
         },
-        groupChat: "https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs" // Link untuk grup WhatsApp bot
+        website: "https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs" // Website untuk WhatsApp bot
     },
 
+    // Pesan bot yang disesuaikan untuk situasi tertentu
     msg: {
         admin: quote("❎ Perintah hanya dapat diakses oleh admin grup!"), // Pesan ketika perintah hanya untuk admin
         banned: quote("❎ Tidak dapat memproses karena Anda telah dibanned!"), // Pesan untuk pengguna yang dibanned
@@ -39,6 +42,7 @@ config = {
         urlInvalid: quote("❎ URL tidak valid!") // Pesan jika URL tidak valid
     },
 
+    // Informasi owner bot
     owner: {
         name: "", // Nama owner bot
         number: "", // Nomor telepon owner bot
@@ -46,11 +50,13 @@ config = {
         co: [""] // Nomor co-owner bot
     },
 
+    // Konfigurasi stiker bot
     sticker: {
         packname: "Stiker ini dibuat oleh", // Nama paket stiker
         author: "@ckptw-wabot" // Pembuat stiker
     },
 
+    // Pengaturan sistem bot
     system: {
         autoRead: true, // Apakah bot otomatis membaca pesan masuk
         autoTypingOnCmd: true, // Aktifkan status mengetik ketika memproses perintah

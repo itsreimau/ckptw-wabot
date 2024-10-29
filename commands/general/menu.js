@@ -52,12 +52,12 @@ module.exports = {
                     externalAdReply: {
                         mediaType: 1,
                         previewType: 0,
-                        mediaUrl: config.bot.groupChat,
+                        mediaUrl: config.bot.website,
                         title: config.msg.watermark,
                         body: null,
                         renderLargerThumbnail: true,
                         thumbnailUrl: config.bot.picture.thumbnail,
-                        sourceUrl: config.bot.groupChat
+                        sourceUrl: config.bot.website
                     },
                     forwardingScore: 9999,
                     isForwarded: true
