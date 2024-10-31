@@ -43,7 +43,7 @@ async function get(type, ctx) {
                     if (cmd.handler.coin) handlerText += "ⓒ";
                     if (cmd.handler.group) handlerText += "Ⓖ";
                     if (cmd.handler.owner) handlerText += "Ⓞ";
-                    if (cmd.handler.isPremium) handlerText += "Ⓟ";
+                    if (cmd.handler.premium) handlerText += "Ⓟ";
                     if (cmd.handler.private) handlerText += "ⓟ";
 
                     menuText += quote(monospace(`${(ctx._used.prefix || "/") + cmd.name} ${handlerText}`));
@@ -91,8 +91,15 @@ async function get(type, ctx) {
                     config.msg.footer;
                 break;
             }
-            case "disable_enable": {
+            case "setgroup": {
                 const data = ["antilink", "welcome"];
+                text = `${data.map(quote).join("\n")}\n` +
+                    "\n" +
+                    config.msg.footer;
+                break;
+            }
+            case "setprofile": {
+                const data = ["autolevelup"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;

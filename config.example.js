@@ -7,7 +7,7 @@ const {
 } = require("@mengkodingan/ckptw");
 
 // Konfigurasi
-config = {
+global.config = {
     // Informasi bot dasar
     bot: {
         name: "CKPTW", // Nama bot

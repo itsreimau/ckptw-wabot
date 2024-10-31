@@ -18,7 +18,7 @@ module.exports = {
         if (status) return await ctx.reply(message);
 
         try {
-            const wait = await ctx.reply(config.msg.wait);
+            const waitMsg = await ctx.reply(config.msg.wait);
 
             const APIs = tools.api.listUrl();
             let result = "";
@@ -48,7 +48,7 @@ module.exports = {
                 }
             }
 
-            return await ctx.editMessage(wait.key,
+            return await ctx.editMessage(waitMsg.key,
                 `${result.trim()}\n` +
                 "\n" +
                 config.msg.footer

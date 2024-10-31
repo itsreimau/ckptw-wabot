@@ -5,6 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "profile",
+    aliases: ["me", "prof", "profil"]
     category: "profile",
     handler: {
         banned: true,

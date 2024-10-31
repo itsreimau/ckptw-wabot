@@ -17,7 +17,7 @@ module.exports = {
         if (status) return await ctx.reply(message);
 
         try {
-            const wait = await ctx.reply(config.msg.wait);
+            const waitMsg = await ctx.reply(config.msg.wait);
 
             const oneMonthAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
             const dbJSON = await db.toJSON();
@@ -26,7 +26,7 @@ module.exports = {
             } = dbJSON;
             const importantKeys = ["coin", "level", "isPremium", "lastClaim", "winGame", "isBanned", "lastUse", "xp", "afk"];
 
-            await ctx.editMessage(wait.key, quote(`🔄 Memproses data pengguna...`));
+            await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data pengguna...`));
             Object.keys(user).forEach((userId) => {
                 const {
                     lastUse,
@@ -44,14 +44,14 @@ module.exports = {
                 }
             });
 
-            await ctx.editMessage(wait.key, quote(`🔄 Memproses data grup...`));
+            await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data grup...`));
             Object.keys(group).forEach((groupId) => {
                 if (!/^[0-9]{10,15}$/.test(groupId)) {
                     db.delete(`group.${groupId}`);
                 }
             });
 
-            await ctx.editMessage(wait.key, quote(`🔄 Memproses data menfess...`));
+            await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data menfess...`));
             Object.keys(menfess).forEach((conversationId) => {
                 const {
                     lastMsg
@@ -61,7 +61,7 @@ module.exports = {
                 }
             });
 
-            return await ctx.editMessage(wait.key, quote(`✅ Basis data berhasil diperbaiki!`));
+            return await ctx.editMessage(waitMsg.key, quote(`✅ Basis data berhasil diperbaiki!`));
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));

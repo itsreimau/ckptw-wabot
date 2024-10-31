@@ -24,28 +24,25 @@ module.exports = {
         );
 
         try {
-            const delay = (time) => new Promise((res) => setTimeout(res, time));
-            const getGroups = await ctx._client.groupFetchAllParticipating();
-            const groups = Object.entries(getGroups).map((entry) => entry[1]);
-            const anu = groups.map((a) => a.id);
+            const delay = ms => new Promise(res => setTimeout(res, ms));
+            const groupData = await ctx._client.groupFetchAllParticipating();
+            const groupIds = Object.values(groupData).map(group => group.id);
 
-            await ctx.reply(quote(`🔄 Mengirim siaran ke ${anu.length} obrolan grup, perkiraan waktu penyelesaian adalah ${(anu.length * 0.5)} detik.`));
+            const waitMsg = await ctx.reply(quote(`🔄 Mengirim siaran ke ${groupIds.length} grup, perkiraan waktu: ${(groupIds.length * 0.5)} detik.`));
 
-            const failedGroups = [];
+            const failedGroupIds = [];
 
-            for (let i of anu) {
+            for (const groupId of groupIds) {
                 await delay(500);
-
                 try {
-                    await ctx.sendMessage(i, {
-                        text: input,
+                    await ctx.sendMessage(groupId, {
+                        text: broadcastMessage,
                         contextInfo: {
                             externalAdReply: {
                                 mediaType: 1,
                                 previewType: 0,
                                 mediaUrl: config.bot.website,
                                 title: "BROADCAST",
-                                body: null,
                                 renderLargerThumbnail: true,
                                 thumbnailUrl: config.bot.picture.thumbnail,
                                 sourceUrl: config.bot.website
@@ -56,41 +53,12 @@ module.exports = {
                     });
                 } catch (error) {
                     console.error(`[${config.pkg.name}] Error:`, error);
-                    failedGroups.push(i);
+                    failedGroupIds.push(groupId);
                 }
             }
 
-            if (failedGroups.length > 0) {
-                await ctx.reply(quote(`⚠️ Tidak dapat mengirimkan siaran ke ${failedGroups.length} grup. Akan mencoba ulang dalam beberapa detik...`));
-
-                for (let i of failedGroups) {
-                    await delay(1000);
-
-                    try {
-                        await ctx.sendMessage(i, {
-                            text: input,
-                            contextInfo: {
-                                externalAdReply: {
-                                    mediaType: 1,
-                                    previewType: 0,
-                                    mediaUrl: config.bot.website,
-                                    title: "BROADCAST - Ulang",
-                                    body: null,
-                                    renderLargerThumbnail: true,
-                                    thumbnailUrl: config.bot.picture.thumbnail,
-                                    sourceUrl: config.bot.website
-                                },
-                                forwardingScore: 9999,
-                                isForwarded: true
-                            }
-                        });
-                    } catch (retryError) {
-                        console.error(`[${config.pkg.name}] Error:`, error);
-                    }
-                }
-            }
-
-            return await ctx.reply(quote(`✅ Berhasil mengirimkan siaran ke ${anu.length - failedGroups.length} obrolan grup. ${failedGroups.length > 0 ? `Beberapa grup gagal dikirimi: ${failedGroups.length} grup.` : ''}`));
+            const successCount = groupIds.length - failedGroupIds.length;
+            return await ctx.editMessage(waitMsg.key, quote(`✅ Berhasil mengirim ke ${successCount} grup. Gagal mengirim ke ${failedGroupIds.length} grup.`));
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));

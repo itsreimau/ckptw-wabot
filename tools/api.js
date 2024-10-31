@@ -27,9 +27,16 @@ const APIs = {
     widipe: {
         baseURL: "https://widipe.com"
     },
+    wudysoft: {
+        baseURL: "https://wudysoft.us.kg"
+    },
     nexoracle: {
         baseURL: "https://api.nexoracle.com",
-        APIKey: "free_key@maher_apis" // APIKey Pro gratis dengan permintaan tak terbatas disediakan oleh Maher Zubair
+        APIKey: "free_key@maher_apis" // APIKey disediakan oleh Maher Zubair
+    },
+    zenith: {
+        baseURL: "https://api-zenith.koyeb.app",
+        APIKey: "zenkey" // APIKey disediakan oleh Zenith
     }
 };
 

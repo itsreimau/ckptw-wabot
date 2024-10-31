@@ -1,6 +1,6 @@
 {
   "name": "ckptw-wabot",
-  "version": "1.40.15",
+  "version": "1.40.20",
   "description": "WhatsApp Bot with @mengkodingan/ckptw.",
   "main": "index.js",
   "directories": {
@@ -27,18 +27,18 @@
   },
   "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
   "dependencies": {
-    "@mengkodingan/ckptw": "^4.3.6",
+    "@mengkodingan/ckptw": "^4.3.8",
     "axios": "1.7.7",
     "cfonts": "^3.3.0",
     "cheerio": "^1.0.0",
     "didyoumean": "^1.2.2",
-    "file-type": "^16.5.4",
-    "form-data": "^4.0.0",
+    "file-type": "^19.6.0",
+    "form-data": "^4.0.1",
     "jimp": "^0.16.1",
-    "jsdom": "^25.0.0",
-    "link-preview-js": "^3.0.5",
+    "jsdom": "^25.0.1",
+    "link-preview-js": "^3.0.12",
     "mime-types": "^2.1.35",
-    "moment-timezone": "^0.5.45",
+    "moment-timezone": "^0.5.46",
     "simpl.db": "^2.13.0",
     "util": "^0.12.5",
     "wa-sticker-formatter": "^4.4.4"

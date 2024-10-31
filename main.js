@@ -107,9 +107,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const xpGain = 10;
         let xpToLevelUp = 100;
 
-        const [userXp, userLevel] = await Promise.all([
+        const [userXp, userLevel, autoLevelUp] = await Promise.all([
             db.get(`user.${senderNumber}.xp`) || 0,
-            db.get(`user.${senderNumber}.level`) || 1
+            db.get(`user.${senderNumber}.level`) || 1,
+            db.get(`user.${senderNumber}.autoLevelUp`) || true
         ]);
 
         let newUserXp = userXp + xpGain;
@@ -132,8 +133,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 level: newUserLevel
             });
 
-            await ctx.replyWithJid(senderJid, {
-                text: quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`),
+            if (autoLevelUp) await ctx.reply({
+                text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
+                    `${config.msg.readmore}\n` +
+                    quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
                 contextInfo: {
                     mentionedJid: [senderJid],
                     externalAdReply: {
