@@ -6,7 +6,7 @@ const {
 module.exports = {
     name: "setgroup",
     aliases: ["setg"],
-    category: "owner",
+    category: "group",
     handler: {
         admin: true,
         banned: true,
