@@ -25,7 +25,7 @@ module.exports = {
             const fakeProduct = {
                 key: {
                     fromMe: false,
-                    participant: 13135550002 + S_WHATSAPP_NET, 
+                    participant: 13135550002 + S_WHATSAPP_NET,
                     ...({
                         remoteJid: "status@broadcast"
                     })

@@ -14,7 +14,7 @@ module.exports = {
     handler: {
         banned: true,
         cooldown: true,
-        coin: [10, ["audio","document", "image", "video","sticker"], 3]
+        coin: [10, ["audio", "document", "image", "video", "sticker"], 3]
     },
     code: async (ctx) => {
         const {
@@ -25,21 +25,21 @@ module.exports = {
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.general.checkMedia(msgType, ["audio","document", "image", "video","sticker"], ctx),
-            tools.general.checkQuotedMedia(ctx.quoted, ["audio","document", "image", "video","sticker"])
+            tools.general.checkMedia(msgType, ["audio", "document", "image", "video", "sticker"], ctx),
+            tools.general.checkQuotedMedia(ctx.quoted, ["audio", "document", "image", "video", "sticker"])
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], ["audio","document", "image", "video","sticker"])));
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], ["audio", "document", "image", "video", "sticker"])));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
-   
+
             return await ctx.reply(
                 `${quote(`URL: ${uploadUrl}`)}\n` +
-                    "\n" +
-                    config.msg.footer
-             );
+                "\n" +
+                config.msg.footer
+            );
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);
