@@ -58,7 +58,7 @@ module.exports = {
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);
-            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

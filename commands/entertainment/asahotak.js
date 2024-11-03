@@ -81,7 +81,7 @@ module.exports = {
                     session.delete(ctx.id);
 
                     return await ctx.reply(
-                        `${quote("⌛ Waktu habis!")}\n` +
+                        `${quote("⏱ Waktu habis!")}\n` +
                         quote(`Jawabannya adalah ${answer}.`)
                     );
                 }
@@ -89,7 +89,7 @@ module.exports = {
 
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
-            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

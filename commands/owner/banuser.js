@@ -44,7 +44,7 @@ module.exports = {
             return await ctx.reply(quote(`✅ Berhasil dibanned!`));
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
-            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

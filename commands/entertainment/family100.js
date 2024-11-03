@@ -82,14 +82,14 @@ module.exports = {
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
                     await ctx.reply(
-                        `${quote("⌛ Waktu habis!")}\n` +
+                        `${quote("⏱ Waktu habis!")}\n` +
                         quote(`Jawaban yang belum terjawab adalah: ${remaining}`)
                     );
                 }
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
-            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -167,7 +167,7 @@ async function get(type, ctx) {
                 };
 
                 if (!cmd || cmd.size === 0) {
-                    text = quote("❎ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");
+                    text = quote("⚠️ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");
                 } else {
                     text = generateMenuText(cmd, tag);
                 }
@@ -181,7 +181,7 @@ async function get(type, ctx) {
         }
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
-        text = quote(`❎ Terjadi kesalahan: ${error.message}`);
+        text = quote(`⚠️ Terjadi kesalahan: ${error.message}`);
     }
 
     return text;

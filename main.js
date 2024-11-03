@@ -173,21 +173,21 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 await ctx.reply(monospace(util.inspect(result)));
             } catch (error) {
                 console.error(`[${config.pkg.name}] Error:`, error);
-                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+                await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
             }
         }
 
         // Perintah Exec: Jalankan perintah shell
         if (m.content && m.content.startsWith && m.content.startsWith("$ ")) {
-            const code = m.content.slice(2);
+            const command = m.content.slice(2);
 
             try {
-                const output = await util.promisify(exec)(code);
+                const output = await util.promisify(exec)(command);
 
                 await ctx.reply(monospace(output.stdout || output.stderr));
             } catch (error) {
                 console.error(`[${config.pkg.name}] Error:`, error);
-                await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+                await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
             }
         }
     }
@@ -245,9 +245,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Penanganan warning
         const getWarning = await db.get(`group.${groupNumber}.warning.${senderNumber}`);
-        if (getWarning >= 3) {
+        if (getWarning >= 3 && config.system.restrict) {
             await ctx.reply(quote(`❎ Kamu telah mencapai batas peringatan dan akan dikeluarkan dari grup!`));
-            if (!config.system.restrict) await ctx.group().kick([senderJid]);
+            await ctx.group().kick([senderJid]);
             await db.set(`group.${groupNumber}.warning.${senderNumber}`, 0);
         }
     }
@@ -269,7 +269,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     });
                 } catch (error) {
                     console.error(`[${config.pkg.name}] Error:`, error);
-                    await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+                    await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
                 }
             }
         }
@@ -320,7 +320,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     }
                 } catch (error) {
                     console.error(`[${config.pkg.name}] Error:`, error);
-                    await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+                    await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
                 }
             }
         }
@@ -393,7 +393,7 @@ async function handleUserEvent(m) {
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
         await bot.core.sendMessage(id, {
-            text: quote(`❎ Terjadi kesalahan: ${error.message}`)
+            text: quote(`⚠️ Terjadi kesalahan: ${error.message}`)
         });
     }
 }

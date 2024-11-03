@@ -7,7 +7,7 @@ const {
 
 module.exports = {
     name: "setpp",
-    aliases: ["seticon", "setprofile"],
+    aliases: ["seticon"],
     category: "group",
     handler: {
         admin: true,
@@ -38,7 +38,7 @@ module.exports = {
             return await ctx.reply(quote(`✅ Berhasil mengubah gambar profil foto grup!`));
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
-            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -75,7 +75,7 @@ module.exports = {
             await ctx.reply(monospace(output));
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
-            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

@@ -44,7 +44,7 @@ module.exports = {
             return await ctx.reply(quote(`✅ Berhasil dihapus sebagai pengguna Premium!`));
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
-            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

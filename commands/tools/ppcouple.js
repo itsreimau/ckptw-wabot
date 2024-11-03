@@ -43,7 +43,7 @@ module.exports = {
         } catch (error) {
             console.error(`[${global.config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
-            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

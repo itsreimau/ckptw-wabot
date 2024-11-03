@@ -64,7 +64,7 @@ module.exports = {
             return await ctx.editMessage(waitMsg.key, quote(`✅ Basis data berhasil diperbaiki!`));
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
-            return await ctx.reply(quote(`❎ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
