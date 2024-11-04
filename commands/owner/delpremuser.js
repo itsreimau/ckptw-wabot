@@ -1,9 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    S_WHATSAPP_NET
-} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "delprem",
@@ -24,7 +21,7 @@ module.exports = {
         const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.split(/[:@]/)[0];
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-        const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : userId + S_WHATSAPP_NET;
+        const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : `${userId}@s.whatsapp.net`;
 
         if (!ctx.args.length && !user) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +

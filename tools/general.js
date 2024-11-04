@@ -6,9 +6,6 @@ const FormData = require("form-data");
 const {
     fromBuffer
 } = require("file-type");
-const {
-    S_WHATSAPP_NET
-} = require("@whiskeysockets/baileys");
 
 async function checkAdmin(ctx, id) {
     try {

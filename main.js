@@ -10,9 +10,6 @@ const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
 const {
-    S_WHATSAPP_NET
-} = require("@whiskeysockets/baileys");
-const {
     exec
 } = require("child_process");
 const path = require("path");
@@ -39,7 +36,7 @@ bot.ev.once(Events.ClientReady, async (m) => {
     // Tetapkan config pada bot
     await Promise.all([
         config.bot.number = m.user.id.split(/[:@]/)[0],
-        config.bot.id = m.user.id.split(/[:@]/)[0] + S_WHATSAPP_NET,
+        config.bot.id = `${m.user.id.split(/[:@]/)[0]}@s.whatsapp.net`,
         config.bot.readyAt = bot.readyAt
     ]);
 });
@@ -260,7 +257,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const anonymousChatPartnerData = await db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
 
         if (anonymousChatPartnerData || !config.system.restrict) {
-            const partnerId = anonymousChatPartnerData + S_WHATSAPP_NET;
+            const partnerId = `${anonymousChatPartnerData}@s.whatsapp.net`;
 
             if (!["stop", "search", "next", "contact"].includes(isCmd?.cmd)) {
                 try {
@@ -295,7 +292,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                         const targetNumber = senderNumber === from ? to : from;
 
                         await ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
-                        await ctx.sendMessage(targetNumber + S_WHATSAPP_NET, {
+                        await ctx.sendMessage(`${targetNumber}@s.whatsapp.net`, {
                             text: quote("✅ Pesan menfess telah dihapus!")
                         });
 
@@ -307,7 +304,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     const senderInConversation = senderNumber === from || senderNumber === to;
 
                     if (senderInConversation) {
-                        const targetId = (senderNumber === from) ? to + S_WHATSAPP_NET : from + S_WHATSAPP_NET;
+                        const targetId = (senderNumber === from) ? `${to}@s.whatsapp.net` : `${from}@s.whatsapp.net`;
 
                         await ctx._client.sendMessage(targetId, {
                             forward: m

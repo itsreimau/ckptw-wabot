@@ -1,9 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    S_WHATSAPP_NET
-} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "next",
@@ -27,7 +24,7 @@ module.exports = {
         const currentPartner = await db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
 
         if (currentPartner && currentPartner !== botNumber) {
-            await ctx.sendMessage(currentPartner + S_WHATSAPP_NET, {
+            await ctx.sendMessage(`${currentPartner}@s.whatsapp.net`, {
                 text: quote(`❎ Partner kamu telah meninggalkan chat.`)
             });
             await db.delete(`anonymous_chat.conversation.${currentPartner}`);
@@ -48,7 +45,7 @@ module.exports = {
                 await db.set(`anonymous_chat.conversation.${partnerNumber}.partner`, senderNumber);
                 await db.set("anonymous_chat.queue", chatQueue);
 
-                await ctx.sendMessage(partnerNumber + S_WHATSAPP_NET, {
+                await ctx.sendMessage(`${partnerNumber}@s.whatsapp.net`, {
                     text: quote(`✅ Kamu telah terhubung dengan partner baru. Ketik ${ctx._used.prefix}next untuk mencari yang lain, atau ${ctx._used.prefix}stop untuk berhenti.`)
                 });
                 return await ctx.reply(quote(`✅ Kamu telah terhubung dengan partner baru. Ketik ${ctx._used.prefix}next untuk mencari yang lain, atau ${ctx._used.prefix}stop untuk berhenti.`));

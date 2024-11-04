@@ -1,9 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    S_WHATSAPP_NET
-} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "listpremium",
@@ -35,7 +32,7 @@ module.exports = {
             });
 
             premiumUsers.forEach((userId) => {
-                userMentions.push(userId + S_WHATSAPP_NET);
+                userMentions.push(`${userId}@s.whatsapp.net`);
             });
 
             return await ctx.reply({

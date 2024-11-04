@@ -1,9 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    S_WHATSAPP_NET
-} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "menu",
@@ -25,7 +22,7 @@ module.exports = {
             const fakeProduct = {
                 key: {
                     fromMe: false,
-                    participant: 13135550002 + S_WHATSAPP_NET,
+                    participant: "13135550002@s.whatsapp.net",
                     ...({
                         remoteJid: "status@broadcast"
                     })

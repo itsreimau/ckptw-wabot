@@ -1,9 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    S_WHATSAPP_NET
-} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "menfess",
@@ -39,7 +36,7 @@ module.exports = {
             const fakeText = {
                 key: {
                     fromMe: false,
-                    participant: numberFormatted + S_WHATSAPP_NET,
+                    participant: `${numberFormatted}@s.whatsapp.net`,
                     remoteJid: "status@broadcast"
                 },
                 message: {
@@ -51,10 +48,10 @@ module.exports = {
                 }
             };
             const menfessText = text.join(" ");
-            await ctx.sendMessage(numberFormatted + S_WHATSAPP_NET, {
+            await ctx.sendMessage(`${numberFormatted}@s.whatsapp.net`, {
                 text: menfessText,
                 contextInfo: {
-                    mentionedJid: [numberFormatted + S_WHATSAPP_NET],
+                    mentionedJid: [`${numberFormatted}@s.whatsapp.net`],
                     externalAdReply: {
                         mediaType: 1,
                         previewType: 0,
@@ -68,7 +65,7 @@ module.exports = {
                     forwardingScore: 9999,
                     isForwarded: true
                 },
-                mentions: [numberFormatted + S_WHATSAPP_NET]
+                mentions: [`${numberFormatted}@s.whatsapp.net`]
             }, {
                 quoted: fakeText
             });

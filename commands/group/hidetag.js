@@ -1,9 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    S_WHATSAPP_NET
-} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "hidetag",
@@ -25,7 +22,7 @@ module.exports = {
 
         try {
             const members = await ctx.group().members();
-            const mentions = members.map(member => member.id.split(/[:@]/)[0] + S_WHATSAPP_NET);
+            const mentions = members.map(member => `${member.id.split(/[:@]/)[0]}@s.whatsapp.net`);
 
             return await ctx.reply({
                 text: input,

@@ -2,9 +2,6 @@ const {
     quote,
     VCardBuilder
 } = require("@mengkodingan/ckptw");
-const {
-    S_WHATSAPP_NET
-} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "contact",
@@ -33,7 +30,7 @@ module.exports = {
             .setOrg(config.owner.organization)
             .setNumber(senderNumber).build();
 
-        await ctx.sendMessage(currentPartner + S_WHATSAPP_NET, {
+        await ctx.sendMessage(`${currentPartner}@s.whatsapp.net`, {
             contacts: {
                 displayName: ctx.sender.pushName,
                 contacts: [{

@@ -1,9 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    S_WHATSAPP_NET
-} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "tagall",
@@ -29,7 +26,7 @@ module.exports = {
                 const serialized = member.id.split(/[:@]/)[0];
                 return {
                     tag: `@${serialized}`,
-                    mention: serialized + S_WHATSAPP_NET
+                    mention: `${serialized}@s.whatsapp.net`
                 };
             });
 

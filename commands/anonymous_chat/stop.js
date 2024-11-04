@@ -1,9 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    S_WHATSAPP_NET
-} = require("@whiskeysockets/baileys");
 
 module.exports = {
     name: "stop",
@@ -26,7 +23,7 @@ module.exports = {
         const currentPartner = await db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
 
         if (currentPartner) {
-            await ctx.sendMessage(currentPartner + S_WHATSAPP_NET, {
+            await ctx.sendMessage(`${currentPartner}@s.whatsapp.net`, {
                 text: quote(`❎ Partner kamu telah menghentikan chat.`)
             });
             await db.delete(`anonymous_chat.conversation.${currentPartner}`);
