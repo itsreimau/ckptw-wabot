@@ -55,7 +55,7 @@ module.exports = {
                 return await ctx.reply(data.response);
             } else {
                 const apiUrl = tools.api.createUrl("ryzendesu", "/api/ai/blackbox", {
-                    text: input,
+                    chat: input,
                     options
                 });
                 const {
