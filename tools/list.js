@@ -159,6 +159,7 @@ async function get(type, ctx) {
                     entertainment: "Entertainment",
                     group: "Group",
                     maker: "Maker",
+                    profile: "Profile",
                     search: "Search",
                     tools: "Tools",
                     owner: "Owner",

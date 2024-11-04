@@ -33,8 +33,9 @@ module.exports = {
 
         if (match) {
             const version = match[1];
-            apiPath = `/v${version}/text2img`;
             input = match[2];
+
+            apiPath = version === "0" ? "/ai/text2img" : `/v${version}/text2img`;
         } else {
             apiService = "nyxs";
             apiPath = "/ai-image/image-generator2";
@@ -42,8 +43,12 @@ module.exports = {
 
         try {
             const apiUrl = tools.api.createUrl(apiService, apiPath, {
-                text: apiService === "widipe" ? input : undefined,
-                prompt: apiService === "nyxs" ? input : undefined
+                ...(apiService === "widipe" && {
+                    text: input
+                }),
+                ...(apiService === "nyxs" && {
+                    prompt: input
+                })
             });
 
             return await ctx.reply({

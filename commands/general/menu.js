@@ -36,7 +36,7 @@ module.exports = {
                             title: config.bot.name,
                             description: null,
                             currencyCode: "IDR",
-                            priceAmount1000: "1000",
+                            priceAmount1000: "99999",
                             retailerId: config.bot.name,
                             productImageCount: 0
                         },
@@ -59,7 +59,7 @@ module.exports = {
                         thumbnailUrl: config.bot.picture.thumbnail,
                         sourceUrl: config.bot.website
                     },
-                    forwardingScore: 9999,
+                    forwardingScore: 99999,
                     isForwarded: true
                 },
                 mentions: [ctx.sender.jid]
