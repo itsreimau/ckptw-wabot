@@ -92,14 +92,14 @@ module.exports = {
                 config.msg.footer
             );
 
-            const downloadApiUrl = tools.api.createUrl("widipe", "/download/ytdl", {
+            const downloadApiUrl = tools.api.createUrl("exonity", "/api/ytdlp2-faster", {
                 url: data.url
-            });
+            }, "apikey");
             const downloadData = (await axios.get(downloadApiUrl)).data;
 
             return await ctx.reply({
                 audio: {
-                    url: downloadData.result.mp3
+                    url: downloadData.result.media.mp3
                 },
                 mimetype: mime.lookup("mp3")
             });

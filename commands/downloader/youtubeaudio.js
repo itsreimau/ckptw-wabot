@@ -31,16 +31,16 @@ module.exports = {
         if (!urlRegex.test(url)) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("widipe", "/download/ytdl", {
+            const apiUrl = tools.api.createUrl("exonity", "/api/ytdlp2-faster", {
                 url
-            });
+            }, "apikey");
             const {
                 result
             } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply({
                 audio: {
-                    url: result.mp3
+                    url: result.media.mp3
                 },
                 mimetype: mime.lookup("mp3")
             });

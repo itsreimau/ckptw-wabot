@@ -38,7 +38,7 @@ module.exports = {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            for (const media of response.data.videoLinks) {
+            for (const media of data.videoLinks) {
                 const isImage = media.quality.toLowerCase().includes("download image");
                 await ctx.reply({
                     [isImage ? "image" : "video"]: {

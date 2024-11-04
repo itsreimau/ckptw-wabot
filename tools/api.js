@@ -9,6 +9,10 @@ const APIs = {
     chiwa: {
         baseURL: "https://api.chiwa.my.id"
     },
+    exonity: {
+        baseURL: "https://exonity.tech",
+        APIKey: "adminsepuh"
+    },
     itzpire: {
         baseURL: "https://itzpire.com"
     },
