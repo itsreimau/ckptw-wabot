@@ -2,6 +2,10 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const {
+    MessageType
+} = require("@mengkodingan/ckptw/lib/Constant");
+const mime = require("mime-types");
 
 module.exports = {
     name: "blackbox",
@@ -22,20 +26,44 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))
+            `${quote(tools.msg.generateInstruction(["send"], ["text", "image"]))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))}\n` +
+            quote(tools.msg.generateNotes(["AI ini dapat melihat gambar dan menjawab pertanyaan tentangnya. Kirim gambar dan tanyakan apa saja!"]))
         );
 
-        try {
-            const apiUrl = tools.api.createUrl("nyxs", "/ai/blackbox", {
-                prompt: input,
-                gaya: `Anda adalah bot WhatsApp bernama ${config.bot.name} yang dimiliki oleh ${config.owner.name}. Jika nama Anda mirip dengan tokoh di media, sesuaikan kepribadian Anda dengan nama tersebut. Jika tidak, tetaplah ramah, informatif, dan responsif.` // Dapat diubah sesuai keinginan Anda
-            });
-            const {
-                data
-            } = await axios.get(apiUrl);
+        const msgType = ctx.getMessageType();
+        const [checkMedia, checkQuotedMedia] = await Promise.all([
+            tools.general.checkMedia(msgType, "image", ctx),
+            tools.general.checkQuotedMedia(ctx.quoted, "image")
+        ]);
 
-            return await ctx.reply(data.result);
+        try {
+            const options = "blackboxai";
+
+            if (checkMedia || checkQuotedMedia) {
+                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+                const uploadUrl = await tools.general.upload(buffer);
+                const apiUrl = tools.api.createUrl("ryzendesu", "/api/ai/blackbox", {
+                    chat: input,
+                    options,
+                    url: uploadUrl
+                });
+                const {
+                    data
+                } = await axios.get(apiUrl);
+
+                return await ctx.reply(data.response);
+            } else {
+                const apiUrl = tools.api.createUrl("ryzendesu", "/api/ai/blackbox", {
+                    text: input,
+                    options
+                });
+                const {
+                    data
+                } = await axios.get(apiUrl);
+
+                return await ctx.reply(data.response);
+            }
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

@@ -29,9 +29,7 @@ module.exports = {
             if (!result) return await ctx.reply(config.msg.notFound);
 
             return await ctx.reply({
-                audio: {
-                    url: result.data.audio
-                },
+                audio: result.data.audio,
                 mimetype: mime.lookup("mp3")
             });
         } catch (error) {
