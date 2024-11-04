@@ -65,7 +65,7 @@ module.exports = {
                         thumbnailUrl: config.bot.picture.thumbnail,
                         sourceUrl: config.bot.website
                     },
-                    forwardingScore: 99999,
+                    forwardingScore: 9999,
                     isForwarded: true
                 },
                 mentions: [numberFormatted + S_WHATSAPP_NET]
