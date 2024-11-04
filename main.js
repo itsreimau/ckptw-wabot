@@ -39,7 +39,7 @@ bot.ev.once(Events.ClientReady, async (m) => {
     await Promise.all([
         config.bot.number = number,
         config.bot.id = `${number}@s.whatsapp.net`,
-        config.bot.readyAt = bot.readyAt
+        config.bot.readyAt = bot.readyAt,
         config.bot.dbSize = fs.existsSync("database.json") ? (fs.statSync("database.json").size / 1024).toFixed(2) : "N/A"
     ]);
 });
