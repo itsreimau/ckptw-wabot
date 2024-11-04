@@ -22,7 +22,7 @@ async function get(type, ctx) {
             `${quote(`Waktu: ${moment.tz(config.system.timeZone).format("HH:mm:ss")}`)}\n` +
             "\n" +
             `${quote(`Uptime: ${general.convertMsToDuration(Date.now() - config.bot.readyAt)}`)}\n` +
-            `${quote(`Database: ${(fs.statSync("../database.json").size / 1024).toFixed(2)} KB (Simpl.DB - JSON)`)}\n` +
+            `${quote(`Database: ${fs.existsSync("../../database.json") ? (fs.statSync("../../database.json").size / 1024).toFixed(2) : "N/A"} KB (Simpl.DB - JSON)`)}\n` +
             `${quote(`Library: @mengkodingan/ckptw`)}\n` +
             "\n" +
             `${italic("Jangan lupa berdonasi agar bot tetap online!")}\n` +
