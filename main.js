@@ -34,9 +34,10 @@ bot.ev.once(Events.ClientReady, async (m) => {
     console.log(`[${config.pkg.name}] Ready at ${m.user.id}`);
 
     // Tetapkan config pada bot
+    const number = m.user.id.split(/[:@]/)[0];
     await Promise.all([
-        config.bot.number = m.user.id.split(/[:@]/)[0],
-        config.bot.id = `${m.user.id.split(/[:@]/)[0]}@s.whatsapp.net`,
+        config.bot.number = number,
+        config.bot.id = `${number}@s.whatsapp.net`,
         config.bot.readyAt = bot.readyAt
     ]);
 });
