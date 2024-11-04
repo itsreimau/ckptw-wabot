@@ -5,7 +5,6 @@ const axios = require("axios");
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const mime = require("mime-types");
 
 module.exports = {
     name: "bard",

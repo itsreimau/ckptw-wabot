@@ -1,6 +1,5 @@
 const api = require("./api.js");
 const general = require("./general.js");
-const pkg = require("../package.json");
 const {
     bold,
     italic,
@@ -8,7 +7,9 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const fs = require("fs");
 const moment = require("moment-timezone");
+const path = require("path");
 
 async function get(type, ctx) {
     let text = "";
@@ -17,11 +18,12 @@ async function get(type, ctx) {
         let menuText =
             `Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
             "\n" +
-            `${quote(`Waktu aktif: ${general.convertMsToDuration(Date.now() - config.bot.readyAt)}`)}\n` +
             `${quote(`Tanggal: ${moment.tz(config.system.timeZone).format("DD/MM/YY")}`)}\n` +
             `${quote(`Waktu: ${moment.tz(config.system.timeZone).format("HH:mm:ss")}`)}\n` +
-            `${quote(`Versi: ${pkg.version}`)}\n` +
-            `${quote(`Prefix: ${ctx._used.prefix}`)}\n` +
+            "\n" +
+            `${quote(`Uptime: ${general.convertMsToDuration(Date.now() - config.bot.readyAt)}`)}\n` +
+            `${quote(`Database: ${(fs.statSync("../database.json").size / 1024).toFixed(2)} KB (Simpl.DB - JSON)`)}\n` +
+            `${quote(`Library: @mengkodingan/ckptw`)}\n` +
             "\n" +
             `${italic("Jangan lupa berdonasi agar bot tetap online!")}\n` +
             `${config.msg.readmore}\n`;

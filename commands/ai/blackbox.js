@@ -5,7 +5,6 @@ const axios = require("axios");
 const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
-const mime = require("mime-types");
 
 module.exports = {
     name: "blackbox",
@@ -46,7 +45,7 @@ module.exports = {
                 const apiUrl = tools.api.createUrl("ryzendesu", "/api/ai/blackbox", {
                     chat: input,
                     options,
-                    url: uploadUrl
+                    imageurl: uploadUrl
                 });
                 const {
                     data

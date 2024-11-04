@@ -4,6 +4,7 @@ const {
 
 module.exports = {
     name: "uptime",
+    aliases: ["runtime"],
     category: "information",
     handler: {
         banned: true,

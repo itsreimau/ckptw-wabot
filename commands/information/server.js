@@ -29,7 +29,7 @@ module.exports = {
                 `${quote(`OS: ${os.type()} (${os.arch()} / ${os.release()})`)}\n` +
                 `${quote(`RAM: ${tools.general.formatSize(process.memoryUsage().rss)} / ${tools.general.formatSize(os.totalmem())}`)}\n` +
                 Object.entries(data).map(([key, value]) => `${quote(`${tools.general.ucword(key)}: ${value}`)}\n`).join("") +
-                `${quote(`Waktu aktif: ${tools.general.convertMsToDuration(Date.now() - startTime)}`)}\n` +
+                `${quote(`Uptime: ${tools.general.convertMsToDuration(Date.now() - startTime)}`)}\n` +
                 `${quote(`Prosesor: ${os.cpus()[0].model}`)}\n` +
                 "\n" +
                 config.msg.footer
