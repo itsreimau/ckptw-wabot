@@ -5,8 +5,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "spotifysearch",
-    aliases: ["spotis", "spotisearch"],
+    name: "soundcloudsearch",
+    aliases: ["scs", "scsearch"],
     category: "search",
     handler: {
         banned: true,
@@ -28,18 +28,15 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/search/tracks", {
-                q: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/soundcloud", {
+                message: input
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
             const resultText = data.map((d) =>
-                `${quote(`Judul: ${d.title}`)}\n` +
-                `${quote(`Artis: ${d.artist}`)}\n` +
-                `${quote(`Album: ${d.album}`)}\n` +
-                `${quote(`Durasi: ${d.duration}`)}\n` +
+                `${quote(`Judul: ${d.judul}`)}\n` +
                 `${quote(`URL: ${d.link}`)}`
             ).join(
                 "\n" +

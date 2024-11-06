@@ -38,14 +38,16 @@ module.exports = {
             const resultText = data.map((d) => {
                 switch (d.type) {
                     case "video":
-                        return `${quote(bold(`${d.title} (${d.url})`))}\n` +
+                        return `${quote(`Judul: ${d.title}`)}\n` +
                             `${quote(`Durasi: ${d.timestamp}`)}\n` +
                             `${quote(`Diunggah: ${d.ago}`)}\n` +
-                            `${quote(`Dilihat: ${d.views}`)}`;
+                            `${quote(`Dilihat: ${d.views}`)}\n` +
+                            `${quote(`URL: ${d.link}`)}`;
                     case "channel":
-                        return `${quote(bold(`${d.name} (${d.url})`))}\n` +
+                        return `${quote(`Judul: ${d.title}`)}\n` +
                             `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
-                            `${quote(`Jumlah video: ${d.videoCount}`)}`;
+                            `${quote(`Jumlah video: ${d.videoCount}`)}\n` +
+                            `${quote(`URL: ${d.link}`)}`;
                 }
             }).filter((d) => d).join(
                 "\n" +

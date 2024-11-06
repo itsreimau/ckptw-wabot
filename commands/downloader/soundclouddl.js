@@ -5,8 +5,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "instagramdl",
-    aliases: ["ig", "igdl", "instagram"],
+    name: "soundclouddl",
+    aliases: ["scdl"],
     category: "downloader",
     handler: {
         banned: true,
@@ -31,25 +31,22 @@ module.exports = {
         if (!urlRegex.test(url)) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/instagram", {
+            const apiUrl = tools.api.createUrl("agatz", "/api/soundclouddl", {
                 url
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            for (const media of data.videoLinks) {
-                const isImage = media.quality.toLowerCase().includes("download image");
-                await ctx.reply({
-                    [isImage ? "image" : "video"]: {
-                        url: media.url
-                    },
-                    mimetype: mime.contentType(isImage ? "png" : "mp4")
-                });
-            }
+            return await ctx.reply({
+                audio: {
+                    url: data.download
+                },
+                mimetype: mime.lookup("mp3")
+            });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return ctx.reply(config.msg.notFound);
+            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }

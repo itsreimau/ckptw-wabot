@@ -1,13 +1,12 @@
 const {
-    bold,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "spotifysearch",
-    aliases: ["spotis", "spotisearch"],
-    category: "search",
+    name: "photoleap",
+    category: "ai",
     handler: {
         banned: true,
         cooldown: true,
@@ -24,32 +23,26 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "evangelion"))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/search/tracks", {
-                q: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/photoleap", {
+                message: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
-            const resultText = data.map((d) =>
-                `${quote(`Judul: ${d.title}`)}\n` +
-                `${quote(`Artis: ${d.artist}`)}\n` +
-                `${quote(`Album: ${d.album}`)}\n` +
-                `${quote(`Durasi: ${d.duration}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
-            ).join(
-                "\n" +
-                `${quote("─────")}\n`
-            );
-            return await ctx.reply(
-                `${resultText}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.reply({
+                image: {
+                    url: data.url
+                },
+                mimetype: mime.lookup("png"),
+                caption: `${quote(`Prompt: ${input}`)}\n` +
+                    "\n" +
+                    config.msg.footer
+            });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);
