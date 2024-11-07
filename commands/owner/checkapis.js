@@ -11,11 +11,8 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const {
-            status,
-            message
-        } = await handler(ctx, module.exports.handler);
-        if (status) return await ctx.reply(message);
+        const status = await handler(ctx, module.exports.handler);
+        if (status) return;
 
         try {
             const waitMsg = await ctx.reply(config.msg.wait);

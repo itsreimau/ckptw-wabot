@@ -12,11 +12,8 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const {
-            status,
-            message
-        } = await handler(ctx, module.exports.handler);
-        if (status) return await ctx.reply(message);
+        const status = await handler(ctx, module.exports.handler);
+        if (status) return;
 
         const apiUrl = tools.api.createUrl("https://candaan-api.vercel.app", "/api/text/random", {});
 

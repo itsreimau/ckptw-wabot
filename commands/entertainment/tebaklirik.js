@@ -14,11 +14,8 @@ module.exports = {
         cooldown: true
     },
     code: async (ctx) => {
-        const {
-            status,
-            message
-        } = await handler(ctx, module.exports.handler);
-        if (status) return await ctx.reply(message);
+        const status = await handler(ctx, module.exports.handler);
+        if (status) return;
 
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 

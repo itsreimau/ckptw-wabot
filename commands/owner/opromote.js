@@ -11,11 +11,8 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const {
-            status,
-            message
-        } = await handler(ctx, module.exports.handler);
-        if (status) return await ctx.reply(message);
+        const status = await handler(ctx, module.exports.handler);
+        if (status) return;
 
         const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.split(/[:@]/)[0];

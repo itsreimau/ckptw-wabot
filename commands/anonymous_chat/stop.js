@@ -13,11 +13,8 @@ module.exports = {
         restrict: true
     },
     code: async (ctx) => {
-        const {
-            status,
-            message
-        } = await handler(ctx, module.exports.handler);
-        if (status) return await ctx.reply(message);
+        const status = await handler(ctx, module.exports.handler);
+        if (status) return;
 
         const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
         const currentPartner = await db.get(`anonymous_chat.conversation.${senderNumber}.partner`);

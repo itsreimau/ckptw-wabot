@@ -91,6 +91,20 @@ async function get(type, ctx) {
                     config.msg.footer;
                 break;
             }
+            case "jadwaltv": {
+                const data = (await axios.get(api.createUrl("widipe", "/jadwaltv", {}))).data.message.split("Berikut list tv yang tersedia: ")[1].split(", ");
+                text = `${data.map(quote).join("\n")}\n` +
+                    "\n" +
+                    config.msg.footer;
+                break;
+            }
+            case "mode": {
+                const data = ["public", "self"];
+                text = `${data.map(quote).join("\n")}\n` +
+                    "\n" +
+                    config.msg.footer;
+                break;
+            }
             case "setgroup": {
                 const data = ["antilink", "welcome"];
                 text = `${data.map(quote).join("\n")}\n` +
@@ -107,13 +121,6 @@ async function get(type, ctx) {
             }
             case "group": {
                 const data = ["open", "close", "lock", "unlock"];
-                text = `${data.map(quote).join("\n")}\n` +
-                    "\n" +
-                    config.msg.footer;
-                break;
-            }
-            case "jadwaltv": {
-                const data = (await axios.get(api.createUrl("widipe", "/jadwaltv", {}))).data.message.split("Berikut list tv yang tersedia: ")[1].split(", ");
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;

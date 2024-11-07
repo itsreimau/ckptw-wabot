@@ -64,28 +64,25 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
    ```javascript
    // commands/test/helloworld.js
 
-   module.exports = { // Module yang diekspor berisi konfigurasi dan fungsi untuk perintah "helloworld".
-       name: "helloworld", // Nama perintah yang akan dipanggil oleh pengguna.
-       category: "test", // Kategori perintah yang berguna untuk pengelompokan atau filter perintah.
-       handler: { // Bagian handler ini berisi pengaturan opsi khusus untuk perintah.
-           admin: Boolean, // Apakah perintah hanya dapat digunakan oleh admin grup (true/false).
-           botAdmin: Boolean, // Apakah bot harus menjadi admin untuk menjalankan perintah ini (true/false).
-           banned: Boolean, // Apakah pengguna yang dilarang (banned) tidak bisa menggunakan perintah ini (true/false).
-           coin: Array || Number, // Opsi untuk menentukan penggunaan koin, bisa berupa array atau jumlah tertentu (Array atau Number).
-           cooldown: Number, // Waktu cooldown untuk mencegah perintah digunakan secara berulang dalam waktu singkat (dalam hitungan detik).
-           group: Boolean, // Apakah perintah ini hanya bisa digunakan di dalam grup (true/false).
-           owner: Boolean, // Apakah hanya pemilik bot yang bisa menggunakan perintah ini (true/false).
-           premium: Boolean, // Apakah perintah ini hanya bisa digunakan oleh pengguna premium (true/false).
-           private: Boolean // Apakah perintah ini hanya bisa digunakan dalam chat privat (true/false).
+   module.exports = { // Module yang diekspor berisi konfigurasi dan fungsi untuk perintah "helloworld"
+       name: "helloworld", // Nama perintah yang akan dipanggil oleh pengguna
+       category: "test", // Kategori perintah yang berguna untuk pengelompokan atau filter perintah
+       handler: { // Bagian handler ini berisi pengaturan opsi khusus untuk perintah
+           admin: Boolean, // Apakah perintah hanya dapat digunakan oleh admin grup (true/false)
+           botAdmin: Boolean, // Apakah bot harus menjadi admin untuk menjalankan perintah ini (true/false)
+           banned: Boolean, // Apakah pengguna yang dilarang (banned) tidak bisa menggunakan perintah ini (true/false)
+           coin: Array || Number, // Opsi untuk menentukan penggunaan koin, bisa berupa array atau jumlah tertentu (Array atau Number)
+           cooldown: Number, // Waktu cooldown untuk mencegah perintah digunakan secara berulang dalam waktu singkat (dalam hitungan detik)
+           group: Boolean, // Apakah perintah ini hanya bisa digunakan di dalam grup (true/false)
+           owner: Boolean, // Apakah hanya pemilik bot yang bisa menggunakan perintah ini (true/false)
+           premium: Boolean, // Apakah perintah ini hanya bisa digunakan oleh pengguna premium (true/false)
+           private: Boolean // Apakah perintah ini hanya bisa digunakan dalam chat privat (true/false)
        },
-       code: async (ctx) => { // Fungsi yang akan dijalankan ketika perintah ini dieksekusi.
-           const {
-               status, // Status hasil eksekusi fungsi handler.
-               message // Pesan yang akan dikirim jika status true.
-           } = await handler(ctx, module.exports.handler); // Memanggil fungsi handler global untuk memeriksa syarat-syarat dalam handler.
-           if (status) return await ctx.reply(message); // Jika status true, maka kirim pesan.
+       code: async (ctx) => { // Fungsi yang akan dijalankan ketika perintah ini dieksekusi
+           const status = await handler(ctx, module.exports.handler); // Memanggil fungsi handler untuk memeriksa status
+           if (status) return await ctx.reply(message); // Jika status true, maka tidak akan mengembalikan apa pun tetapi mungkin menghentikan proses perintah
 
-           return await ctx.reply("Hello, World!"); // Jika handler mengembalikan status false atau handler tidak dicek, maka kirimkan pesan "Hello, World!".
+           return await ctx.reply("Hello, World!"); // Jika handler mengembalikan status false atau handler tidak dicek, maka kirimkan pesan "Hello, World!"
        }
    };
    ```

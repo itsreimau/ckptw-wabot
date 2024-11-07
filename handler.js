@@ -3,6 +3,9 @@ const {
 } = require("@mengkodingan/ckptw");
 
 async function handler(ctx, options) {
+    const botMode = await db.get("bot.mode");
+    if (botMode === "self") return true;
+
     const senderJid = ctx.sender.jid;
     const senderNumber = senderJid.split(/[:@]/)[0];
 
@@ -59,17 +62,12 @@ async function handler(ctx, options) {
             msg
         }] of Object.entries(checkOptions)) {
         if (options[option] && typeof check === "function" && await check()) {
-            return {
-                status: true,
-                message: msg
-            };
+            await ctx.reply(msg);
+            return true;
         }
     }
 
-    return {
-        status: false,
-        message: null
-    };
+    return false;
 }
 
 async function checkCoin(ctx, coinOptions, senderNumber) {

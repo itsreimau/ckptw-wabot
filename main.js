@@ -33,6 +33,7 @@ const bot = new Client({
 // Penanganan acara saat bot siap
 bot.ev.once(Events.ClientReady, async (m) => {
     console.log(`[${config.pkg.name}] Ready at ${m.user.id}`);
+    await db.set("bot.mode", "public");
 
     // Tetapkan config pada bot
     const number = m.user.id.split(/[:@]/)[0];
@@ -50,6 +51,9 @@ cmd.load();
 
 // Penanganan event ketika pesan muncul
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
+    const botMode = await db.get("bot.mode");
+    if (botMode === "self") return;
+
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
     const senderJid = ctx.sender.jid;
@@ -329,11 +333,17 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
 // Penanganan peristiwa ketika pengguna bergabung atau keluar dari grup
 bot.ev.on(Events.UserJoin, (m) => {
+    const botMode = await db.get("bot.mode");
+    if (botMode === "self") return;
+
     m.eventsType = "UserJoin";
     handleUserEvent(m);
 });
 
 bot.ev.on(Events.UserLeave, (m) => {
+    const botMode = await db.get("bot.mode");
+    if (botMode === "self") return;
+
     m.eventsType = "UserLeave";
     handleUserEvent(m);
 });

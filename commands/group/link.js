@@ -12,11 +12,8 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        const {
-            status,
-            message
-        } = await handler(ctx, module.exports.handler);
-        if (status) return await ctx.reply(message);
+        const status = await handler(ctx, module.exports.handler);
+        if (status) return;
 
         try {
             const link = await ctx.group().inviteCode();

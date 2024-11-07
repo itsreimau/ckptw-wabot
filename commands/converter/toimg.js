@@ -17,11 +17,8 @@ module.exports = {
         cooldown: true
     },
     code: async (ctx) => {
-        const {
-            status,
-            message
-        } = await handler(ctx, module.exports.handler);
-        if (status) return await ctx.reply(message);
+        const status = await handler(ctx, module.exports.handler);
+        if (status) return;
 
         if (!(tools.general.checkQuotedMedia(ctx.quoted, "sticker"))) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
 

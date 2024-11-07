@@ -15,11 +15,8 @@ module.exports = {
         cooldown: true
     },
     code: async (ctx) => {
-        const {
-            status,
-            message
-        } = await handler(ctx, module.exports.handler);
-        if (status) return await ctx.reply(message);
+        const status = await handler(ctx, module.exports.handler);
+        if (status) return;
 
         const [suraNumber, ayaInput] = await Promise.all([
             parseInt(ctx.args[0]),
