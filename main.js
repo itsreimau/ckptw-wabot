@@ -51,15 +51,16 @@ cmd.load();
 
 // Penanganan event ketika pesan muncul
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
-    const botMode = await db.get("bot.mode");
-    if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return;
-
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
     const senderJid = ctx.sender.jid;
     const senderNumber = senderJid.split(/[:@]/)[0];
     const groupJid = isGroup ? ctx.id : null;
     const groupNumber = isGroup ? groupJid.split("@")[0] : null;
+
+    // Penanganan pada mode bot
+    const botMode = await db.get("bot.mode");
+    if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return;
 
     // Log pesan masuk
     if (isGroup) {
@@ -333,17 +334,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
 // Penanganan peristiwa ketika pengguna bergabung atau keluar dari grup
 bot.ev.on(Events.UserJoin, async (m) => {
-    const botMode = await db.get("bot.mode");
-    if (botMode === "self") return;
-
     m.eventsType = "UserJoin";
     handleUserEvent(m);
 });
 
 bot.ev.on(Events.UserLeave, async (m) => {
-    const botMode = await db.get("bot.mode");
-    if (botMode === "self") return;
-
     m.eventsType = "UserLeave";
     handleUserEvent(m);
 });

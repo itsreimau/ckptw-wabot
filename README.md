@@ -64,25 +64,28 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
    ```javascript
    // commands/test/helloworld.js
 
-   module.exports = { // Module yang diekspor berisi konfigurasi dan fungsi untuk perintah "helloworld"
-       name: "helloworld", // Nama perintah yang akan dipanggil oleh pengguna
-       category: "test", // Kategori perintah yang berguna untuk pengelompokan atau filter perintah
-       handler: { // Bagian handler ini berisi pengaturan opsi khusus untuk perintah
-           admin: Boolean, // Apakah perintah hanya dapat digunakan oleh admin grup (true/false)
-           botAdmin: Boolean, // Apakah bot harus menjadi admin untuk menjalankan perintah ini (true/false)
-           banned: Boolean, // Apakah pengguna yang dilarang (banned) tidak bisa menggunakan perintah ini (true/false)
-           coin: Array || Number, // Opsi untuk menentukan penggunaan koin, bisa berupa array atau jumlah tertentu (Array atau Number)
-           cooldown: Number, // Waktu cooldown untuk mencegah perintah digunakan secara berulang dalam waktu singkat (dalam hitungan detik)
-           group: Boolean, // Apakah perintah ini hanya bisa digunakan di dalam grup (true/false)
-           owner: Boolean, // Apakah hanya pemilik bot yang bisa menggunakan perintah ini (true/false)
-           premium: Boolean, // Apakah perintah ini hanya bisa digunakan oleh pengguna premium (true/false)
-           private: Boolean // Apakah perintah ini hanya bisa digunakan dalam chat privat (true/false)
+   module.exports = { // Mengatur dan membagikan fungsi untuk perintah "helloworld"
+       name: "helloworld", // Nama perintah yang akan digunakan oleh pengguna
+       category: "test", // Kategori untuk mengelompokkan perintah ini
+       handler: { // Pengaturan khusus untuk perintah ini
+           admin: Boolean, // Apakah hanya admin grup yang bisa menggunakan perintah ini? (true/false)
+           botAdmin: Boolean, // Apakah bot harus menjadi admin agar bisa menjalankan perintah ini? (true/false)
+           banned: Boolean, // Apakah pengguna yang dilarang tidak bisa menggunakan perintah ini? (true/false)
+           coin: Array[coin, media, source] || Number, // Koin yang diperlukan untuk menjalankan perintah ini:
+           // coin: jumlah koin yang dibutuhkan
+           // media: jenis media yang diperlukan
+           // source: dari mana media diambil (1 untuk media utama, 2 untuk media yang dikutip, 3 untuk keduanya)
+           cooldown: Boolean, // Apakah ada waktu tunggu sebelum perintah ini bisa digunakan lagi? (true/false)
+           group: Boolean, // Apakah perintah ini hanya bisa digunakan di dalam grup? (true/false)
+           owner: Boolean, // Apakah hanya pemilik bot yang bisa menggunakan perintah ini? (true/false)
+           premium: Boolean, // Apakah hanya pengguna premium yang bisa menggunakan perintah ini? (true/false)
+           private: Boolean // Apakah perintah ini hanya bisa digunakan dalam chat pribadi? (true/false)
        },
-       code: async (ctx) => { // Fungsi yang akan dijalankan ketika perintah ini dieksekusi
-           const status = await handler(ctx, module.exports.handler); // Memanggil fungsi handler untuk memeriksa status
-           if (status) return await ctx.reply(message); // Jika status true, maka tidak akan mengembalikan apa pun tetapi mungkin menghentikan proses perintah
+       code: async (ctx) => { // Fungsi yang dijalankan saat perintah ini dipanggil
+           const status = await handler(ctx, module.exports.handler); // Memeriksa apakah pengguna memiliki izin untuk menggunakan perintah
+           if (status) return; // Jika statusnya true, artinya pengguna tidak diperbolehkan menggunakan perintah ini, jadi hentikan proses
 
-           return await ctx.reply("Hello, World!"); // Jika handler mengembalikan status false atau handler tidak dicek, maka kirimkan pesan "Hello, World!"
+           return await ctx.reply("Hello, World!"); // Jika tidak ada pembatasan, kirim pesan "Hello, World!" kepada pengguna
        }
    };
    ```

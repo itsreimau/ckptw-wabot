@@ -3,11 +3,11 @@ const {
 } = require("@mengkodingan/ckptw");
 
 async function handler(ctx, options) {
-    const botMode = await db.get("bot.mode");
-    if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return true;
-
     const senderJid = ctx.sender.jid;
     const senderNumber = senderJid.split(/[:@]/)[0];
+
+    const botMode = await db.get("bot.mode");
+    if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return true;
 
     const [isOwner, isPremium] = await Promise.all([
         tools.general.isOwner(ctx, senderNumber, true),
