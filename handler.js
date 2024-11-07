@@ -4,7 +4,7 @@ const {
 
 async function handler(ctx, options) {
     const botMode = await db.get("bot.mode");
-    if (botMode === "self") return true;
+    if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return true;
 
     const senderJid = ctx.sender.jid;
     const senderNumber = senderJid.split(/[:@]/)[0];

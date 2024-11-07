@@ -52,7 +52,7 @@ cmd.load();
 // Penanganan event ketika pesan muncul
 bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const botMode = await db.get("bot.mode");
-    if (botMode === "self") return;
+    if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return;
 
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
