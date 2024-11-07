@@ -332,7 +332,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 });
 
 // Penanganan peristiwa ketika pengguna bergabung atau keluar dari grup
-bot.ev.on(Events.UserJoin, (m) => {
+bot.ev.on(Events.UserJoin, async (m) => {
     const botMode = await db.get("bot.mode");
     if (botMode === "self") return;
 
@@ -340,7 +340,7 @@ bot.ev.on(Events.UserJoin, (m) => {
     handleUserEvent(m);
 });
 
-bot.ev.on(Events.UserLeave, (m) => {
+bot.ev.on(Events.UserLeave, async (m) => {
     const botMode = await db.get("bot.mode");
     if (botMode === "self") return;
 
