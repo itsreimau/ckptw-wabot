@@ -6,7 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "tiktokdl",
-    aliases: ["tiktoknowm", "tt", "ttdl", "vt", "vtdltiktok", "vtnowm"],
+    aliases: ["tiktok", "tiktoknowm", "tt", "ttdl", "vt", "vtdl", "vtdltiktok", "vtnowm"],
     category: "downloader",
     handler: {
         banned: true,

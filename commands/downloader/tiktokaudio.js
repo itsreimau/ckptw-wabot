@@ -5,13 +5,13 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "mediafiredl",
-    aliases: ["mediafire", "mf", "mfdl"],
+    name: "tiktokaudio",
+    aliases: ["tiktokmusic", "tikmusic", "tta", "ttm"],
     category: "downloader",
     handler: {
         banned: true,
         cooldown: true,
-        premium: true
+        coin: [10, "text", 1]
     },
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
@@ -28,25 +28,26 @@ module.exports = {
         if (!urlRegex.test(url)) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/mediafire", {
+            const apiUrl = tools.api.createUrl("vreden", "/api/tikmusic", {
                 url
             });
-            const data = (await axios.get(apiUrl)).data.data[0];
+            const {
+                result
+            } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply({
-                document: {
-                    url: data.link
+                audio: {
+                    url: data.url
                 },
+                mimetype: mime.contentType("mp3"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
-                    config.msg.footer,
-                fileName: data.nama,
-                mimetype: mime.lookup(data.mime) || "application/octet-stream"
+                    config.msg.footer
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(config.msg.notFound);
+            return ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

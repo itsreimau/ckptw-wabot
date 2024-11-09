@@ -33,7 +33,7 @@ const bot = new Client({
 // Penanganan acara saat bot siap
 bot.ev.once(Events.ClientReady, async (m) => {
     console.log(`[${config.pkg.name}] Ready at ${m.user.id}`);
-    await db.set("bot.mode", "public");
+    if (!(await db.get("bot.mode"))) await db.set("bot.mode", "public");
 
     // Tetapkan config pada bot
     const number = m.user.id.split(/[:@]/)[0];

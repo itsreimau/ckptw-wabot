@@ -19,6 +19,10 @@ const APIs = {
     lenwy: {
         baseURL: "https://api-lenwy.vercel.app"
     },
+    nexoracle: {
+        baseURL: "https://api.nexoracle.com",
+        APIKey: "free_key@maher_apis" // APIKey disediakan oleh Maher Zubair
+    },
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },
@@ -28,15 +32,14 @@ const APIs = {
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com"
     },
+    vreden: {
+        baseURL: "https://api.vreden.my.id"
+    },
     widipe: {
         baseURL: "https://widipe.com"
     },
     wudysoft: {
         baseURL: "https://wudysoft.us.kg"
-    },
-    nexoracle: {
-        baseURL: "https://api.nexoracle.com",
-        APIKey: "free_key@maher_apis" // APIKey disediakan oleh Maher Zubair
     },
     zenith: {
         baseURL: "https://api-zenith.koyeb.app",
