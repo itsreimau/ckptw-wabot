@@ -60,7 +60,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Penanganan pada mode bot
     const botMode = await db.get("bot.mode");
-    if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return;
+    if (isPrivate && botMode === "group") return true;
+    if (isGroup && botMode === "private") return true;
+    if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return true;
 
     // Log pesan masuk
     if (isGroup) {
