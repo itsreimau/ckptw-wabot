@@ -99,7 +99,7 @@ async function get(type, ctx) {
                 break;
             }
             case "mode": {
-                const data = ["public", "self"];
+                const data = ["group", "private", "public", "self"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;

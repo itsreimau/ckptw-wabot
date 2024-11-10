@@ -3,14 +3,18 @@ const {
 } = require("@mengkodingan/ckptw");
 
 async function handler(ctx, options) {
+    const isGroup = ctx.isGroup();
+    const isPrivate = !isGroup;
     const senderJid = ctx.sender.jid;
     const senderNumber = senderJid.split(/[:@]/)[0];
 
     const botMode = await db.get("bot.mode");
+    if (isGroup && botMode === "group") return true;
+    if (isPrivate && botMode === "private") return true;
     if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return true;
 
     const [isOwner, isPremium] = await Promise.all([
-        tools.general.isOwner(ctx, senderNumber, true),
+        tools.general.isOwner(ctx, senderNumber, config.system.selfOwner),
         db.get(`user.${senderNumber}.isPremium`)
     ]);
 

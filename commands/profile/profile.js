@@ -52,7 +52,7 @@ module.exports = {
                 caption: `${quote(`Nama: ${senderName}`)}\n` +
                     `${quote(`Status: ${userStatus}`)}\n` +
                     `${quote(`Level: ${userLevel}`)}\n` +
-                    `${quote(`Koin: ${isOwner ? "Tak terbatas"         : isPremium ? "Tak terbatas"         : userCoin || "-"}`)}\n` +
+                    `${quote(`Koin: ${isOwner ? "Tak terbatas" : isPremium ? "Tak terbatas" : userCoin || "-"}`)}\n` +
                     `${quote(`XP: ${userXp}`)}\n` +
                     "\n" +
                     config.msg.footer,

@@ -167,7 +167,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     }
 
     // Perintah khusus Owner
-    if (tools.general.isOwner(ctx, senderNumber, true)) {
+    if (tools.general.isOwner(ctx, senderNumber, config.system.selfOwner)) {
         // Perintah eval: Jalankan kode JavaScript
         if (m.content && m.content.startsWith && (m.content.startsWith("==> ") || m.content.startsWith("=> "))) {
             const code = m.content.slice(m.content.startsWith("==> ") ? 4 : 3);

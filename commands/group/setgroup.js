@@ -35,7 +35,7 @@ module.exports = {
             const groupNumber = ctx.isGroup() ? ctx.id.split("@")[0] : null;
             let setKey;
 
-            switch (input) {
+            switch (input.toLowerCase()) {
                 case "antilink":
                     setKey = `group.${groupNumber}.antilink`;
                     break;

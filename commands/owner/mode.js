@@ -27,7 +27,13 @@ module.exports = {
         }
 
         try {
-            switch (input) {
+            switch (input.toLowerCase()) {
+                case "group":
+                    await db.set("bot.mode", "group");
+                    break;
+                case "private":
+                    await db.set("bot.mode", "private");
+                    break;
                 case "public":
                     await db.set("bot.mode", "public");
                     break;

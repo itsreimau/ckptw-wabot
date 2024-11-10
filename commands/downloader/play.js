@@ -24,7 +24,7 @@ module.exports = {
             `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss -i 8 -s spotify"))}\n` +
             quote(tools.msg.generatesFlagInformation({
                 "-i <number>": "Pilihan pada data indeks.",
-                "-s <text>": "Sumber untuk memutar lagu (tersedia: soundcloud, spotify | default: youtube)."
+                "-s <text>": "Sumber untuk memutar lagu (tersedia: soundcloud, spotify | default: random)."
             }))
         );
 
@@ -46,9 +46,10 @@ module.exports = {
 
             const searchIndex = flag.index || 0;
             const query = flag.input;
-            let source = flag.source || "youtube";
+            const availableSource = ["soundcloud", "spotify", "youtube"];
+            let source = flag.source || tools.general.getRandomElement(availableSource);
 
-            if (!["soundcloud", "spotify", "youtube"].includes(source)) {
+            if (!availableSource.includes(source)) {
                 source = "youtube";
             }
 

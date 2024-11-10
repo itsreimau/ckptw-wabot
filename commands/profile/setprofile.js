@@ -32,12 +32,12 @@ module.exports = {
             const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
             let setKey;
 
-            switch (input) {
+            switch (input.toLowerCase()) {
                 case "autolevelup":
                     setKey = `user.${senderNumber}.autolevelup`;
                     break;
                 default:
-                    return await ctx.reply(quote(`❎ Opsi tidak valid.`));
+                    return await ctx.reply(quote(`❎ Teks tidak valid.`));
             }
 
             const currentStatus = await db.get(setKey) || false;

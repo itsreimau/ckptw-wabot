@@ -31,7 +31,7 @@ module.exports = {
         }
 
         try {
-            switch (input) {
+            switch (input.toLowerCase()) {
                 case "open":
                     await ctx.group().open();
                     break;
