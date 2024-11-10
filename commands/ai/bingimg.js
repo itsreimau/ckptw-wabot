@@ -24,7 +24,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("widipe", "/bingimg", {
+            const apiUrl = tools.api.createUrl("aemt", "/bingimg", {
                 text: input
             });
             const {

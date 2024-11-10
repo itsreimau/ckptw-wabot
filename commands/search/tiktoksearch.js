@@ -25,7 +25,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("widipe", "/tiktoksearch", {
+            const apiUrl = tools.api.createUrl("aemt", "/tiktoksearch", {
                 text: input
             });
             const {

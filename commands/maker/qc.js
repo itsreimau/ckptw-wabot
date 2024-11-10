@@ -37,7 +37,7 @@ module.exports = {
                 profilePictureUrl = config.bot.picture.profile;
             }
 
-            const apiUrl = tools.api.createUrl("widipe", "/quotely", {
+            const apiUrl = tools.api.createUrl("aemt", "/quotely", {
                 avatar: profilePictureUrl,
                 name: ctx.sender.pushName || "-",
                 text: input

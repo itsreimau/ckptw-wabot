@@ -1,5 +1,8 @@
 // Daftar API gratis, gunakan dengan bijak!
 const APIs = {
+    aemt: {
+        baseURL: "https://aemt.uk.to"
+    },
     agatz: {
         baseURL: "https://api.agatz.xyz"
     },
@@ -34,9 +37,6 @@ const APIs = {
     },
     vreden: {
         baseURL: "https://api.vreden.my.id"
-    },
-    widipe: {
-        baseURL: "https://widipe.com"
     },
     wudysoft: {
         baseURL: "https://wudysoft.us.kg"

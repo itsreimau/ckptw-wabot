@@ -23,7 +23,7 @@ module.exports = {
         );
 
         let apiPath = "/ai/text2img";
-        let apiService = "widipe";
+        let apiService = "aemt";
 
         const versionRegex = /^\(v(\d+)\)\s*(.*)$/;
         const match = input.match(versionRegex);
@@ -40,7 +40,7 @@ module.exports = {
 
         try {
             const apiUrl = tools.api.createUrl(apiService, apiPath, {
-                ...(apiService === "widipe" && {
+                ...(apiService === "aemt" && {
                     text: input
                 }),
                 ...(apiService === "nyxs" && {

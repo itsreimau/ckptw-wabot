@@ -24,7 +24,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("widipe", "/filmapiksearch", {
+            const apiUrl = await tools.api.createUrl("aemt", "/filmapiksearch", {
                 query: input
             });
             const data = (await axios.get(apiUrl)).data.result.data;

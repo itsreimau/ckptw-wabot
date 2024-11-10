@@ -23,7 +23,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("widipe", "/bingai", {
+            const apiUrl = tools.api.createUrl("aemt", "/bingai", {
                 text: input
             });
             const {

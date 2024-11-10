@@ -23,7 +23,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("widipe", "/prompt/gpt", {
+            const apiUrl = tools.api.createUrl("aemt", "/prompt/gpt", {
                 prompt: `Anda adalah bot WhatsApp bernama ${config.bot.name} yang dimiliki oleh ${config.owner.name}. Jika nama Anda mirip dengan tokoh di media, sesuaikan kepribadian Anda dengan nama tersebut. Jika tidak, tetaplah ramah, informatif, dan responsif.`, // Dapat diubah sesuai keinginan Anda
                 text: input
             });

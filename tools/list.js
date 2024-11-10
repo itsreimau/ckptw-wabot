@@ -46,10 +46,10 @@ async function get(type, ctx) {
                     if (cmd.handler.premium) handlerText += "Ⓟ";
                     if (cmd.handler.private) handlerText += "ⓟ";
 
-                    menuText += quote(monospace(`${(ctx._used.prefix || "/") + cmd.name} ${handlerText}`));
+                    menuText += quote(monospace(`${ctx._used.prefix + cmd.name} ${handlerText}`));
 
                     if (category === "general" && cmd.aliases && cmd.aliases.length > 0) {
-                        menuText += `\n` + cmd.aliases.map(alias => quote(monospace(`${ctx._used.prefix || "/"}${alias}`))).join("\n");
+                        menuText += `\n` + cmd.aliases.map(alias => quote(monospace(`${ctx._used.prefix + alias}`))).join("\n");
                     }
                     menuText += "\n";
                 });
@@ -92,7 +92,7 @@ async function get(type, ctx) {
                 break;
             }
             case "jadwaltv": {
-                const data = (await axios.get(api.createUrl("widipe", "/jadwaltv", {}))).data.message.split("Berikut list tv yang tersedia: ")[1].split(", ");
+                const data = (await axios.get(api.createUrl("aemt", "/jadwaltv", {}))).data.message.split("Berikut list tv yang tersedia: ")[1].split(", ");
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;

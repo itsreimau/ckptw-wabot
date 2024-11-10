@@ -24,7 +24,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("widipe", "/simi", {
+            const apiUrl = tools.api.createUrl("aemt", "/simi", {
                 text: input
             });
             const {

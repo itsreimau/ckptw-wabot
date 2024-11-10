@@ -30,7 +30,7 @@ module.exports = {
         }
 
         try {
-            const apiUrl = await tools.api.createUrl("widipe", "/jadwaltv", {
+            const apiUrl = await tools.api.createUrl("aemt", "/jadwaltv", {
                 tv: input
             });
             const {

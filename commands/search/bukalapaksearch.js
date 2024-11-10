@@ -24,7 +24,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("widipe", "/bukalapak", {
+            const apiUrl = await tools.api.createUrl("aemt", "/bukalapak", {
                 text: input
             });
             const data = (await axios.get(apiUrl)).data.result;

@@ -24,7 +24,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("widipe", "/lirik", {
+            const apiUrl = await tools.api.createUrl("aemt", "/lirik", {
                 text: input
             });
             const {

@@ -24,7 +24,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("widipe", "/weather", {
+            const apiUrl = await tools.api.createUrl("aemt", "/weather", {
                 text: input
             });
             const {

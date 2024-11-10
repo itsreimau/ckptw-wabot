@@ -22,7 +22,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("widipe", "/dalle", {
+            const apiUrl = tools.api.createUrl("aemt", "/dalle", {
                 text: input
             });
 
