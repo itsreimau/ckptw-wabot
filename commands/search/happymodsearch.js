@@ -24,15 +24,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("agatz", "/api/happymod", {
-                message: input
+            const apiUrl = await tools.api.createUrl("itzpire", "/search/happymod", {
+                query: input
             });
-            const data = (await axios.get(apiUrl)).data.data.hsl;
+            const {
+                data
+            } = (await axios.get(apiUrl)).data;
 
             const resultText = data.map((d) =>
-                `${quote(`Nama: ${d.name}`)}\n` +
-                `${quote(`Versi: ${d.version.replace("•", "")}`)}\n` +
-                `${quote(`URL: ${d.url}`)}`
+                `${quote(`Nama: ${d.title}`)}\n` +
+                `${quote(`Rating: ${d.rating}`)}\n` +
+                `${quote(`URL: ${d.link}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

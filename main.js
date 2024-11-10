@@ -135,9 +135,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 profilePictureUrl = config.bot.picture.profile;
             }
 
-            const card = tools.api.createUrl("aggelos_007", "/levelup", {
-                avatar: profilePictureUrl,
-                level: newUserLevel
+            const card = tools.api.createUrl("aemt", "/rankup", {
+                avatar: profilePictureUrl
             });
 
             if (autoLevelUp) await ctx.reply({
