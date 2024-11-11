@@ -46,11 +46,10 @@ module.exports = {
 
             const searchIndex = flag.index || 0;
             const query = flag.input;
-            const availableSource = ["soundcloud", "spotify", "youtube"];
-            let source = flag.source || tools.general.getRandomElement(availableSource);
+            let source = flag.source || "spotify";
 
-            if (!availableSource.includes(source)) {
-                source = "youtube";
+            if (!["soundcloud", "spotify", "youtube"].includes(source)) {
+                source = "spotify";
             }
 
             if (source === "soundcloud") {
