@@ -28,16 +28,16 @@ module.exports = {
         if (!urlRegex.test(url)) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("exonity", "/api/ytdlp2-faster", {
+            const apiUrl = tools.api.createUrl("ryzendesu", "/api/downloader/ytmp4", {
                 url
-            }, "apikey");
+            });
             const {
-                result
-            } = (await axios.get(apiUrl)).data;
+                data
+            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 video: {
-                    url: result.media.mp4
+                    url: data.url
                 },
                 mimetype: mime.lookup("mp4")
             });

@@ -121,14 +121,14 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("exonity", "/api/ytdlp2-faster", {
+                const downloadApiUrl = tools.api.createUrl("ryzendesu", "/api/downloader/ytmp3", {
                     url: data.url
-                }, "apikey");
+                });
                 const downloadData = (await axios.get(downloadApiUrl)).data;
 
                 return await ctx.reply({
                     audio: {
-                        url: downloadData.result.media.mp3
+                        url: downloadData.url
                     },
                     mimetype: mime.lookup("mp3")
                 });
