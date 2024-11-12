@@ -59,9 +59,12 @@ async function blurredImage(input) {
         const yOffset = (canvasHeight - newHeight) / 2;
         finalImage.composite(image.resize(newWidth, newHeight), xOffset, yOffset);
 
-const buffer = await finalImage.getBufferAsync(Jimp.MIME_PNG)
-const url = await upload(buffer);
-        return {buffer, url};
+        const buffer = await finalImage.getBufferAsync(Jimp.MIME_PNG)
+        const url = await upload(buffer);
+        return {
+            buffer,
+            url
+        };
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
         return false;

@@ -9,7 +9,7 @@ const {
 
 module.exports = {
     name: "brat",
-    aliases: ["tanomali", "teksanomali"]
+    aliases: ["tanomali", "teksanomali"],
     category: "maker",
     handler: {
         banned: true,
