@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "npmsearch",
-    aliases: ["npms"],
+    aliases: ["npm", "npms"],
     category: "search",
     handler: {
         banned: true,

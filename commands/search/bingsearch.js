@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "bingsearch",
-    aliases: ["bing", "bsearch"],
+    aliases: ["bing", "bings"],
     category: "search",
     handler: {
         banned: true,
@@ -32,7 +32,7 @@ module.exports = {
             const resultText = data.map((d) =>
                 `${quote(`Judul: ${d.title}`)}\n` +
                 `${quote(`Deskripsi: ${d.description}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
+                `${quote(`URL: ${d.url}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

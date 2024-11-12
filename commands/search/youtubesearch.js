@@ -6,7 +6,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "youtubesearch",
-    aliases: ["ytsearch", "yts"],
+    aliases: ["youtube", "youtubes", "yt", "yts", "ytsearch"],
     category: "search",
     handler: {
         banned: true,

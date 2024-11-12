@@ -6,7 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "tiktoksearch",
-    aliases: ["ttsearch", "vtsearch"],
+    aliases: ["vts", "ttsearch", "vtsearch"],
     category: "search",
     handler: {
         banned: true,

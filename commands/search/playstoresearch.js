@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "playstoresearch",
-    aliases: ["playstores"],
+    aliases: ["playstore", "playstores"],
     category: "search",
     handler: {
         banned: true,

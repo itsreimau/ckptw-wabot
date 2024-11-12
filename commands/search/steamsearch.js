@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "steamsearch",
-    aliases: ["steams"],
+    aliases: ["steam", "steams"],
     category: "search",
     handler: {
         banned: true,

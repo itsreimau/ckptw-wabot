@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "filmapiksearch",
-    aliases: ["filmapiks"],
+    aliases: ["filmapik", "filmapiks"],
     category: "search",
     handler: {
         banned: true,

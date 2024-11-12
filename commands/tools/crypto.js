@@ -47,7 +47,6 @@ module.exports = {
     }
 };
 
-
 async function coingecko(search) {
     const apiUrl = tools.api.createUrl("https://api.coingecko.com", "/api/v3/coins/markets", {
         vs_currency: "usd",
@@ -60,14 +59,12 @@ async function coingecko(search) {
         const result = [];
 
         data.forEach((crypto) => {
-            const cryptoName = `${crypto.name} (${crypto.symbol}) - $${crypto.current_price}`;
             const percentChange = crypto.price_change_percentage_24h.toFixed(2);
-            const priceChange = percentChange >= 0 ? `+${percentChange}%` : `${percentChange}%`;
 
             if (crypto.name.toLowerCase().includes(search.toLowerCase())) {
                 result.push({
-                    cryptoName: cryptoName,
-                    priceChange: priceChange
+                    cryptoName: `${crypto.name} (${crypto.symbol}) - $${crypto.current_price}`,
+                    priceChange: percentChange >= 0 ? `+${percentChange}%` : `${percentChange}%`
                 });
             }
         });

@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "happymodsearch",
-    aliases: ["happymods"],
+    aliases: ["happymod", "happymods"],
     category: "search",
     handler: {
         banned: true,

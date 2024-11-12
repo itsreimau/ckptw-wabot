@@ -36,7 +36,7 @@ module.exports = {
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`+${coin} Koin`)}\n` +
-                    `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n` +
+                    `${quote(`Batas waktu ${timeout / 1000} detik.`)}\n` +
                     `${quote('Ketik "hint" untuk bantuan.')}\n` +
                     "\n" +
                     config.msg.footer

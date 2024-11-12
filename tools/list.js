@@ -160,7 +160,6 @@ async function get(type, ctx) {
                 const tag = {
                     general: "General",
                     ai: "AI",
-                    anonymous_chat: "Anonymous Chat",
                     converter: "Converter",
                     downloader: "Downloader",
                     entertainment: "Entertainment",

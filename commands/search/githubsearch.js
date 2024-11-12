@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "githubsearch",
-    aliases: ["githubs"],
+    aliases: ["github", "githubs"],
     category: "search",
     handler: {
         banned: true,

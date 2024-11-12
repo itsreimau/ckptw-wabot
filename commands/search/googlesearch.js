@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "googlesearch",
-    aliases: ["google", "gsearch"],
+    aliases: ["google", "googles"],
     category: "search",
     handler: {
         banned: true,

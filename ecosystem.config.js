@@ -6,7 +6,7 @@ module.exports = {
 
         // Fitur-fitur canggih
         watch: true,
-        ignore_watch: ["database.json", "node_modules", "state"],
+        ignore_watch: ["node_modules", "state", "database.json"],
 
         // Aliran kontrol
         cron_restart: "*/30 * * * *"

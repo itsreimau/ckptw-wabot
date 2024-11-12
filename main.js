@@ -132,12 +132,13 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             try {
                 profilePictureUrl = await bot.core.profilePictureUrl(senderJid, "image");
             } catch (error) {
-                profilePictureUrl = config.bot.picture.profile;
+                profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
             }
 
-            const card = tools.api.createUrl("aemt", "/rankup", {
+            const cardApiUrl = tools.api.createUrl("aemt", "/rankup", {
                 avatar: profilePictureUrl
             });
+            const card = await tools.api.blurredImage(cardApiUrl);
 
             if (autoLevelUp) await ctx.reply({
                 text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
@@ -152,7 +153,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                         title: "LEVEL UP",
                         body: null,
                         renderLargerThumbnail: true,
-                        thumbnailUrl: card || profilePictureUrl || config.bot.picture.thumbnail,
+                        thumbnailUrl: card.url || profilePictureUrl || config.bot.thumbnail,
                         sourceUrl: config.bot.website
                     }
                 }
@@ -254,7 +255,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (getWarning >= 3 && config.system.restrict) {
             await ctx.reply(quote(`❎ Kamu telah mencapai batas peringatan dan akan dikeluarkan dari grup!`));
             await ctx.group().kick([senderJid]);
-            await db.set(`group.${groupNumber}.warning.${senderNumber}`, 0);
+            await db.delete(`group.${groupNumber}.warning.${senderNumber}`);
         }
     }
 
@@ -262,27 +263,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (isPrivate) {
         if (m.key.fromMe) return;
 
-        // Penanganan anonymous_chat
-        const anonymousChatPartnerData = await db.get(`anonymous_chat.conversation.${senderNumber}.partner`);
-
-        if (anonymousChatPartnerData && !config.system.restrict) {
-            const partnerId = `${anonymousChatPartnerData}@s.whatsapp.net`;
-
-            if (!["stop", "search", "next", "contact"].includes(isCmd?.cmd)) {
-                try {
-                    await ctx.sendMessage(partnerId, {
-                        forward: m
-                    });
-                } catch (error) {
-                    console.error(`[${config.pkg.name}] Error:`, error);
-                    await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
-                }
-            }
-        }
-
         // Penanganan menfess
         const allMenfessData = await db.get("menfess");
-
         if (allMenfessData && typeof allMenfessData === "object" && Object.keys(allMenfessData).length > 0) {
             const menfessEntries = Object.entries(allMenfessData);
 
@@ -291,10 +273,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     from,
                     to
                 } = menfessData;
+                const senderInConversation = senderNumber === from || senderNumber === to;
 
-                if (m.content && /delete|stop/i.test(m.content)) {
-                    const senderInConversation = senderNumber === from || senderNumber === to;
-
+                if (m.content && /^\b(delete|stop)\b$/i.test(m.content.trim())) {
                     if (senderInConversation) {
                         await db.delete(`menfess.${conversationId}`);
 
@@ -304,29 +285,20 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                         await ctx.sendMessage(`${targetNumber}@s.whatsapp.net`, {
                             text: quote("✅ Pesan menfess telah dihapus!")
                         });
-
-                        continue;
                     }
                 }
 
-                try {
-                    const senderInConversation = senderNumber === from || senderNumber === to;
+                if (senderInConversation) {
+                    const targetId = senderNumber === from ? `${to}@s.whatsapp.net` : `${from}@s.whatsapp.net`;
 
-                    if (senderInConversation) {
-                        const targetId = (senderNumber === from) ? `${to}@s.whatsapp.net` : `${from}@s.whatsapp.net`;
+                    await ctx._client.sendMessage(targetId, {
+                        forward: m
+                    });
 
-                        await ctx._client.sendMessage(targetId, {
-                            forward: m
-                        });
+                    await ctx.reply(quote("✅ Pesan berhasil diteruskan!"));
+                    await db.set(`menfess.${conversationId}.lastMsg`, Date.now());
 
-                        await ctx.reply(quote(`✅ Pesan berhasil diteruskan!`));
-                        await db.set(`menfess.${conversationId}.lastMsg`, Date.now());
-
-                        break;
-                    }
-                } catch (error) {
-                    console.error(`[${config.pkg.name}] Error:`, error);
-                    await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+                    break;
                 }
             }
         }
@@ -364,7 +336,7 @@ async function handleUserEvent(m) {
                 try {
                     profilePictureUrl = await bot.core.profilePictureUrl(jid, "image");
                 } catch (error) {
-                    profilePictureUrl = config.bot.picture.profile;
+                    profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
                 }
 
                 const message = m.eventsType === "UserJoin" ?
@@ -375,7 +347,7 @@ async function handleUserEvent(m) {
                     text2: m.eventsType === "UserJoin" ? "Selamat datang!" : "Selamat tinggal!",
                     text3: metadata.subject,
                     avatar: profilePictureUrl,
-                    background: config.bot.picture.thumbnail
+                    background: config.bot.thumbnail
                 });
 
                 await bot.core.sendMessage(id, {
@@ -389,7 +361,7 @@ async function handleUserEvent(m) {
                             title: m.eventsType === "UserJoin" ? "JOIN" : "LEAVE",
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: card || profilePictureUrl || config.bot.picture.thumbnail,
+                            thumbnailUrl: card || profilePictureUrl || config.bot.thumbnail,
                             sourceUrl: config.bot.website
                         }
                     }

@@ -49,7 +49,7 @@ module.exports = {
             const currentTime = Date.now();
 
             if (lastClaimFreetrial === "expired") return await ctx.reply(quote(`❎ Free Trial hanya bisa diambil satu kali per pengguna. Jika Anda ingin mendapatkan akses Premium, silakan hubungi Owner.`));
-            if (lastClaimFreetrial && (currentTime - lastClaimFreetrial < trialPeriod)) return await ctx.reply(quote(`❎ Anda telah mengklaim Free Trial sebelumnya dan belum habis masa tunggunya.`));
+            if (lastClaimFreetrial && (currentTime - lastClaimFreetrial < trialPeriod)) return await ctx.reply(quote(`❎ Anda sebelumnya telah mengklaim Free Trial dan masa berlakunya belum habis.`));
             if (isPremium === true) return await ctx.reply(quote(`❎ Anda sudah memiliki Premium.`));
 
             await Promise.all([

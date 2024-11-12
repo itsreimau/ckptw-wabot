@@ -28,7 +28,7 @@ module.exports = {
                 answered: 5,
                 allAnswered: 50
             };
-            const timeout = 60000;
+            const timeout = 90000;
             const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
             const remainingAnswers = new Set(data.jawaban.map(j => j.toLowerCase()));
             const participants = new Set();
@@ -38,7 +38,7 @@ module.exports = {
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`Jumlah jawaban: ${remainingAnswers.size}`)}\n` +
-                `${quote(`Batas waktu ${(timeout / 1000).toFixed(2)} detik.`)}\n\n` +
+                `${quote(`Batas waktu ${timeout / 1000} detik.`)}\n\n` +
                 config.msg.footer
             );
 

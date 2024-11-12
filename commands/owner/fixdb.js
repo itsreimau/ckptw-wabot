@@ -21,7 +21,9 @@ module.exports = {
             const {
                 user = {}, group = {}, menfess = {}
             } = dbJSON;
-            const importantKeys = ["coin", "level", "isPremium", "lastClaim", "winGame", "isBanned", "lastUse", "xp", "afk"];
+
+            const userImportantKeys = ["afk", "coin", "isBanned", "isPremium", "lastClaim", "lastUse", "level", "winGame", "xp"];
+            const groupImportantKeys = ["antilink", "warning", "welcome"];
 
             await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data pengguna...`));
             Object.keys(user).forEach((userId) => {
@@ -33,7 +35,7 @@ module.exports = {
                 if (!/^[0-9]{10,15}$/.test(userId) || (lastUse && new Date(lastUse).getTime() < oneMonthAgo)) {
                     db.delete(`user.${userId}`);
                 } else {
-                    const filteredData = Object.fromEntries(Object.entries(userData).filter(([key]) => importantKeys.includes(key)));
+                    const filteredData = Object.fromEntries(Object.entries(userData).filter(([key]) => userImportantKeys.includes(key)));
                     db.set(`user.${userId}`, {
                         ...filteredData,
                         lastUse
@@ -43,8 +45,13 @@ module.exports = {
 
             await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data grup...`));
             Object.keys(group).forEach((groupId) => {
+                const groupData = group[groupId] || {};
+
                 if (!/^[0-9]{10,15}$/.test(groupId)) {
                     db.delete(`group.${groupId}`);
+                } else {
+                    const filteredGroupData = Object.fromEntries(Object.entries(groupData).filter(([key]) => groupImportantKeys.includes(key)));
+                    db.set(`group.${groupId}`, filteredGroupData);
                 }
             });
 

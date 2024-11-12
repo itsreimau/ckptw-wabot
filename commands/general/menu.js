@@ -50,7 +50,7 @@ module.exports = {
                         title: config.msg.watermark,
                         body: null,
                         renderLargerThumbnail: true,
-                        thumbnailUrl: config.bot.picture.thumbnail,
+                        thumbnailUrl: config.bot.thumbnail,
                         sourceUrl: config.bot.website
                     },
                     forwardingScore: 9999,

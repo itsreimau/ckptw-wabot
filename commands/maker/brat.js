@@ -8,8 +8,8 @@ const {
 } = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "qc",
-    aliases: ["bubblechat"],
+    name: "brat",
+    aliases: ["tanomali", "teksanomali"]
     category: "maker",
     handler: {
         banned: true,
@@ -30,16 +30,7 @@ module.exports = {
         if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 50 kata!`));
 
         try {
-            let profilePictureUrl;
-            try {
-                profilePictureUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image");
-            } catch (error) {
-                profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
-            }
-
-            const apiUrl = tools.api.createUrl("aemt", "/quotely", {
-                avatar: profilePictureUrl,
-                name: ctx.sender.pushName || "-",
+            const apiUrl = tools.api.createUrl("https://mxmxk-helper.hf.space", "/brat", {
                 text: input
             });
 
