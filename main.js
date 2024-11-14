@@ -138,7 +138,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const cardApiUrl = tools.api.createUrl("aemt", "/rankup", {
                 avatar: profilePictureUrl
             });
-            const card = await tools.api.blurredImage(cardApiUrl);
+            const card = await tools.general.blurredImage(cardApiUrl);
 
             if (autoLevelUp) await ctx.reply({
                 text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +

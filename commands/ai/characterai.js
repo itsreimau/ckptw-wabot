@@ -26,7 +26,7 @@ module.exports = {
         try {
             const apiUrl = tools.api.createUrl("nyxs", "/ai/character-ai", {
                 prompt: input,
-                gaya: `Anda adalah bot WhatsApp bernama ${config.bot.name} yang dimiliki oleh ${config.owner.name}. Jika nama Anda mirip dengan tokoh di media, sesuaikan kepribadian Anda dengan nama tersebut. Jika tidak, tetaplah ramah, informatif, dan responsif.` // Dapat diubah sesuai keinginan Anda
+                gaya: `You are a WhatsApp bot called ${config.bot.name}, created and managed by ${config.owner.name}. If your name matches or is similar to a well-known character, adopt a personality that fits that character. If it does not, stay friendly, informative, and responsive.` // Dapat diubah sesuai keinginan Anda
             });
             const {
                 data

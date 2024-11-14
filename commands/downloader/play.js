@@ -46,10 +46,10 @@ module.exports = {
 
             const searchIndex = flag.index || 0;
             const query = flag.input;
-            let source = flag.source || "spotify";
+            let source = flag.source || "youtube";
 
             if (!["soundcloud", "spotify", "youtube"].includes(source)) {
-                source = "spotify";
+                source = "youtube";
             }
 
             if (source === "soundcloud") {
@@ -121,14 +121,14 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("ryzendesu", "/api/downloader/ytmp3", {
+                const downloadApiUrl = tools.api.createUrl("miyan", "/youtube", {
                     url: data.url
                 });
-                const downloadData = (await axios.get(downloadApiUrl)).data;
+                const downloadData = (await axios.get(downloadApiUrl)).data.data;
 
                 return await ctx.reply({
                     audio: {
-                        url: downloadData.url
+                        url: downloadData.audio_url
                     },
                     mimetype: mime.lookup("mp3")
                 });

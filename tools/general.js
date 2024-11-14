@@ -190,6 +190,20 @@ function formatSize(bytes) {
     }
 }
 
+function generateUID(phoneNumber) {
+    if (typeof phoneNumber !== "string") {
+        phoneNumber = phoneNumber.toString();
+    }
+
+    let hash = 0;
+    for (let i = 0; i < phoneNumber.length; i++) {
+        const charCode = phoneNumber.charCodeAt(i);
+        hash = (hash * 31 + charCode) % 1000000007;
+    }
+
+    return "ckptw-" + Math.abs(hash).toString(16).toLowerCase();
+}
+
 function getRandomElement(arr) {
     try {
         if (arr.length === 0) {
@@ -377,10 +391,12 @@ async function upload(buffer) {
 }
 
 module.exports = {
+    blurredImage,
     checkMedia,
     checkQuotedMedia,
     convertMsToDuration,
     formatSize,
+    generateUID,
     getRandomElement,
     isCmd,
     isAdmin,

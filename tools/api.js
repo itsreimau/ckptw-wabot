@@ -22,6 +22,9 @@ const APIs = {
     lenwy: {
         baseURL: "https://api-lenwy.vercel.app"
     },
+    miyan: {
+        baseURL: "https://miyanapi.vercel.app"
+    },
     nexoracle: {
         baseURL: "https://api.nexoracle.com",
         APIKey: "free_key@maher_apis" // APIKey disediakan oleh Maher Zubair
