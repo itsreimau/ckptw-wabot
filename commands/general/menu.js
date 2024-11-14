@@ -49,7 +49,7 @@ module.exports = {
                 },
                 mentions: [ctx.sender.jid]
             }, {
-                quoted: fakeProduct
+                quoted: fakeText
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
