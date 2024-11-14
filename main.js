@@ -117,7 +117,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const [userXp, userLevel, autoLevelUp] = await Promise.all([
             db.get(`user.${senderNumber}.xp`) || 0,
             db.get(`user.${senderNumber}.level`) || 1,
-            s db.get(`user.${senderNumber}.autoLevelUp`) || false
+            db.get(`user.${senderNumber}.autoLevelUp`) || false
         ]);
 
         let newUserXp = userXp + xpGain;
