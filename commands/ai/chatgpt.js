@@ -21,15 +21,15 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text", "image", "gif", "stiker"]))}\n` +
+            `${quote(tools.msg.generateInstruction(["send"], ["text", "image", "gif", "sticker"]))}\n` +
             `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))}\n` +
             quote(tools.msg.generateNotes(["AI ini dapat melihat gambar dan menjawab pertanyaan tentangnya. Kirim gambar dan tanyakan apa saja!"]))
         );
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.general.checkMedia(msgType, ["image", "gif", "stiker"], ctx),
-            tools.general.checkQuotedMedia(ctx.quoted, ["image", "gif", "stiker"])
+            tools.general.checkMedia(msgType, ["image", "gif", "sticker"], ctx),
+            tools.general.checkQuotedMedia(ctx.quoted, ["image", "gif", "sticker"])
         ]);
 
         try {
