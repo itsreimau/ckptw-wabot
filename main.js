@@ -117,7 +117,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const [userXp, userLevel, autoLevelUp] = await Promise.all([
             db.get(`user.${senderNumber}.xp`) || 0,
             db.get(`user.${senderNumber}.level`) || 1,
-            db.get(`user.${senderNumber}.autoLevelUp`) || true
+            s db.get(`user.${senderNumber}.autoLevelUp`) || false
         ]);
 
         let newUserXp = userXp + xpGain;
@@ -136,27 +136,19 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             }
 
             const cardApiUrl = tools.api.createUrl("aemt", "/rankup", {
-                avatar: profilePictureUrl
+                avatar: profilePictureUrl,
+                level: newUserLevel,
+                border: "003366"
             });
-            const card = await tools.general.blurredImage(cardApiUrl);
 
             if (autoLevelUp) await ctx.reply({
-                text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
+                image: {
+                    url: cardApiUrl
+                },
+                mimetype: mime.lookup("png"),
+                caption: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                     `${config.msg.readmore}\n` +
-                    quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
-                contextInfo: {
-                    mentionedJid: [senderJid],
-                    externalAdReply: {
-                        mediaType: 1,
-                        previewType: 0,
-                        mediaUrl: config.bot.website,
-                        title: "LEVEL UP",
-                        body: null,
-                        renderLargerThumbnail: true,
-                        thumbnailUrl: card.url || profilePictureUrl || config.bot.thumbnail,
-                        sourceUrl: config.bot.website
-                    }
-                }
+                    quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]))
             });
 
             await Promise.all([
@@ -342,29 +334,22 @@ async function handleUserEvent(m) {
                 const message = m.eventsType === "UserJoin" ?
                     quote(`👋 Selamat datang @${jid.split(/[:@]/)[0]} di grup ${metadata.subject}!`) :
                     quote(`👋 @${jid.split(/[:@]/)[0]} keluar dari grup ${metadata.subject}.`);
-                const card = tools.api.createUrl("aggelos_007", "/welcomecard", {
+                const cardApiUrl = tools.api.createUrl("aggelos_007", "/welcomecard", {
                     text1: jid.split(/[:@]/)[0],
                     text2: m.eventsType === "UserJoin" ? "Selamat datang!" : "Selamat tinggal!",
                     text3: metadata.subject,
                     avatar: profilePictureUrl,
-                    background: config.bot.thumbnail
+                    background: config.bot.thumbnail,
+                    fontcolor: "003366",
+                    bordercolor: "003366"
                 });
 
                 await bot.core.sendMessage(id, {
-                    text: message,
-                    contextInfo: {
-                        mentionedJid: [jid],
-                        externalAdReply: {
-                            mediaType: 1,
-                            previewType: 0,
-                            mediaUrl: config.bot.website,
-                            title: m.eventsType === "UserJoin" ? "JOIN" : "LEAVE",
-                            body: null,
-                            renderLargerThumbnail: true,
-                            thumbnailUrl: card || profilePictureUrl || config.bot.thumbnail,
-                            sourceUrl: config.bot.website
-                        }
-                    }
+                    image: {
+                        url: cardApiUrl || profilePictureUrl
+                    },
+                    mimetype: mime.lookup("png"),
+                    caption: message
                 });
             }
         }

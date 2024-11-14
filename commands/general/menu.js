@@ -16,25 +16,16 @@ module.exports = {
 
         try {
             const text = await tools.list.get("menu", ctx);
-            const fakeProduct = {
+            const fakeText = {
                 key: {
                     fromMe: false,
                     participant: "13135550002@s.whatsapp.net",
-                    ...({
-                        remoteJid: "status@broadcast"
-                    })
+                    remoteJid: "status@broadcast"
                 },
                 message: {
-                    productMessage: {
-                        product: {
-                            title: config.bot.name,
-                            description: null,
-                            currencyCode: "IDR",
-                            priceAmount1000: "9999",
-                            retailerId: config.bot.name,
-                            productImageCount: 0
-                        },
-                        businessOwnerJid: ctx.sender.jid
+                    extendedTextMessage: {
+                        text: "Those who hate themselves, cannot love or trust others.",
+                        title: config.bot.name
                     }
                 }
             };

@@ -33,7 +33,7 @@ module.exports = {
             const fakeText = {
                 key: {
                     fromMe: false,
-                    participant: `${numberFormatted}@s.whatsapp.net`,
+                    participant: "13135550002@s.whatsapp.net",
                     remoteJid: "status@broadcast"
                 },
                 message: {
@@ -46,23 +46,7 @@ module.exports = {
             };
             const menfessText = text.join(" ");
             await ctx.sendMessage(`${numberFormatted}@s.whatsapp.net`, {
-                text: menfessText,
-                contextInfo: {
-                    mentionedJid: [`${numberFormatted}@s.whatsapp.net`],
-                    externalAdReply: {
-                        mediaType: 1,
-                        previewType: 0,
-                        mediaUrl: config.bot.website,
-                        title: config.msg.watermark,
-                        body: null,
-                        renderLargerThumbnail: true,
-                        thumbnailUrl: config.bot.thumbnail,
-                        sourceUrl: config.bot.website
-                    },
-                    forwardingScore: 9999,
-                    isForwarded: true
-                },
-                mentions: [`${numberFormatted}@s.whatsapp.net`]
+                text: menfessText
             }, {
                 quoted: fakeText
             });

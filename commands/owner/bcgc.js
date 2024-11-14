@@ -32,21 +32,24 @@ module.exports = {
             for (const groupId of groupIds) {
                 await delay(500);
                 try {
-                    await ctx.sendMessage(groupId, {
-                        text: broadcastMessage,
-                        contextInfo: {
-                            externalAdReply: {
-                                mediaType: 1,
-                                previewType: 0,
-                                mediaUrl: config.bot.website,
-                                title: "BROADCAST",
-                                renderLargerThumbnail: true,
-                                thumbnailUrl: config.bot.thumbnail,
-                                sourceUrl: config.bot.website
-                            },
-                            forwardingScore: 9999,
-                            isForwarded: true
+                    const fakeText = {
+                        key: {
+                            fromMe: false,
+                            participant: "13135550002@s.whatsapp.net",
+                            remoteJid: "status@broadcast"
+                        },
+                        message: {
+                            extendedTextMessage: {
+                                text: "Those who hate themselves, cannot love or trust others.",
+                                title: config.bot.name,
+                                thumbnailUrl: config.bot.thumbnail
+                            }
                         }
+                    };
+                    await ctx.sendMessage(groupId, {
+                        text: input
+                    }, {
+                        quoted: fakeText
                     });
                 } catch (error) {
                     console.error(`[${config.pkg.name}] Error:`, error);

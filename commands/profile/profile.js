@@ -41,12 +41,12 @@ module.exports = {
                 xp: userXp,
                 maxxp: "100",
                 level: userLevel,
-                avatar: profilePictureUrl,
+                avatar: profilePictureUrl
             });
 
             return await ctx.reply({
                 image: {
-                    url: card || profilePictureUrl,
+                    url: card || profilePictureUrl
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Nama: ${senderName}`)}\n` +
@@ -55,7 +55,7 @@ module.exports = {
                     `${quote(`Koin: ${isOwner ? "Tak terbatas" : isPremium ? "Tak terbatas" : userCoin || "-"}`)}\n` +
                     `${quote(`XP: ${userXp}`)}\n` +
                     "\n" +
-                    config.msg.footer,
+                    config.msg.footer
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
