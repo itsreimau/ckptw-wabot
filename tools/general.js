@@ -1,4 +1,7 @@
-const api = require("./api.js");
+nslate,
+    ucword,
+    upload
+};const api = require("./api.js");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const didyoumean = require("didyoumean");
@@ -6,7 +9,6 @@ const FormData = require("form-data");
 const {
     fromBuffer
 } = require("file-type");
-const Jimp = require("jimp");
 
 async function checkAdmin(ctx, id) {
     try {
@@ -338,7 +340,6 @@ async function upload(buffer) {
 }
 
 module.exports = {
-    blurredImage,
     checkMedia,
     checkQuotedMedia,
     convertMsToDuration,
