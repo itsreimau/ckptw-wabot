@@ -1,7 +1,4 @@
-nslate,
-    ucword,
-    upload
-};const api = require("./api.js");
+const api = require("./api.js");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const didyoumean = require("didyoumean");
