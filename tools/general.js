@@ -7,6 +7,9 @@ const {
     fromBuffer
 } = require("file-type");
 const Jimp = require("jimp");
+const {
+    URL
+} = require("url");
 
 async function checkAdmin(ctx, id) {
     try {
@@ -34,8 +37,8 @@ async function blurredImage(input) {
             throw new Error("Invalid input type. Input should be a URL or a Buffer.");
         }
 
-        const canvasWidth = 800;
-        const canvasHeight = 600;
+        const canvasWidth = 400;
+        const canvasHeight = 210;
         const aspectRatio = canvasWidth / canvasHeight;
         const imageAspectRatio = image.bitmap.width / image.bitmap.height;
 
@@ -49,17 +52,17 @@ async function blurredImage(input) {
             newHeight = canvasHeight;
         }
 
-        const blurredImage = image.clone().resize(canvasWidth + 200, canvasHeight + 200).blur(50);
+        const blurredImage = image.clone().resize(canvasWidth + 100, canvasHeight + 100).blur(50);
 
         const finalImage = new Jimp(canvasWidth, canvasHeight);
 
-        finalImage.composite(blurredImage, -100, -100);
+        finalImage.composite(blurredImage, -50, -50);
 
         const xOffset = (canvasWidth - newWidth) / 2;
         const yOffset = (canvasHeight - newHeight) / 2;
         finalImage.composite(image.resize(newWidth, newHeight), xOffset, yOffset);
 
-        const buffer = await finalImage.getBufferAsync(Jimp.MIME_PNG)
+        const buffer = await finalImage.getBufferAsync(Jimp.MIME_PNG);
         const url = await upload(buffer);
         return {
             buffer,
@@ -291,6 +294,29 @@ function isOwner(ctx, id, selfOwner) {
     }
 }
 
+function isValidUrl(string) {
+    const urlRegex = /([a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/[^\s]*)?/g;
+    const matches = string.match(urlRegex);
+
+    if (matches) {
+        return matches.every(url => {
+            try {
+                if (!/^https?:\/\//.test(url)) {
+                    url = `http://${url}`;
+                }
+
+                const parsedUrl = new URL(url);
+
+                return true;
+            } catch (error) {
+                return false;
+            }
+        });
+    }
+
+    return false;
+}
+
 function parseFlag(argsString, customRules = {}) {
     if (!argsString || argsString.trim() === "") {
         return false;
@@ -402,6 +428,7 @@ module.exports = {
     isAdmin,
     isBotAdmin,
     isOwner,
+    isValidUrl,
     parseFlag,
     translate,
     ucword,

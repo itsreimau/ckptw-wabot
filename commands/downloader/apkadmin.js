@@ -23,8 +23,8 @@ module.exports = {
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
-        const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!urlRegex.test(url)) return await ctx.reply(config.msg.urlInvalid);
+        const isValidUrl = tools.general.isValidUrl(url);
+        if (!isValidUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
             const apiUrl = tools.api.createUrl("agatz", "/api/apkadmin", {

@@ -57,7 +57,8 @@ module.exports = {
 
                     await db.add(`user.${participantNumber}.coin`, coin.answered);
                     await ctx.sendMessage(ctx.id, {
-                        text: quote(`✅ ${tools.general.ucword(userAnswer)} benar! Jawaban tersisa: ${remainingAnswers.size}`),
+                        text: quote(`✅ ${tools.general.ucword(userAnswer)} benar! Jawaban tersisa: ${remainingAnswers.size}`)
+                    }, {
                         quoted: m
                     });
 

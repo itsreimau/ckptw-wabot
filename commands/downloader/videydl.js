@@ -23,9 +23,8 @@ module.exports = {
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
-        const urlRegex = /^(https?:\/\/)?(www\.)?videy\.co\/v\?id=([a-zA-Z0-9]+)/i;
-        const match = urlRegex.exec(url);
-        if (!match) return await ctx.reply(config.msg.urlInvalid);
+        const isValidUrl = tools.general.isValidUrl(url);
+        if (!isValidUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
             const videoId = match[3];
