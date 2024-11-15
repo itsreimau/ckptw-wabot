@@ -95,10 +95,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 db.get(`user.${senderNumber}.xp`)
             ]);
 
-            if (typeof userCoin === "undefined") await db.set(`user.${senderNumber}.coin`, 1000);
-            if (typeof userLevel === "undefined") await db.set(`user.${senderNumber}.level`, 0);
-            if (typeof userUid === "undefined") await db.set(`user.${senderNumber}.uid`, tools.general.generateUID(senderNumber));
-            if (typeof userXp === "undefined") await db.set(`user.${senderNumber}.xp`, 0);
+            if (!userCoin) await db.set(`user.${senderNumber}.coin`, 1000);
+            if (!userLevel) await db.set(`user.${senderNumber}.level`, 0);
+            if (!userUid) await db.set(`user.${senderNumber}.uid`, tools.general.generateUID(senderNumber));
+            if (!userXp) await db.set(`user.${senderNumber}.xp`, 0);
         }
 
         if (tools.general.isOwner(ctx, senderNumber, config.system.selfOwner) || userPremium) {
@@ -109,6 +109,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Penanganan untuk free trial
         const currentTime = Date.now();
         const freetrialDuration = 7 * 24 * 60 * 60 * 1000;
+        const lastClaimFreetrial = await db.get(`user.${senderNumber}.lastClaim.freetrial`);
         if (userPremium === "freetrial" && (currentTime - lastClaimFreetrial > freetrialDuration)) {
             await db.set(`user.${senderNumber}.isPremium`, false);
             await db.set(`user.${senderNumber}.lastClaim.freetrial`, "expired");
