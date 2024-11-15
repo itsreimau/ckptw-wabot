@@ -295,26 +295,26 @@ function isOwner(ctx, id, selfOwner) {
 }
 
 function isValidUrl(string) {
+    if (typeof string !== "string") return false;
+
     const urlRegex = /([a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/[^\s]*)?/g;
     const matches = string.match(urlRegex);
 
-    if (matches) {
-        return matches.every(url => {
-            try {
-                if (!/^https?:\/\//.test(url)) {
-                    url = `http://${url}`;
-                }
+    if (!matches) return false;
 
-                const parsedUrl = new URL(url);
-
-                return true;
-            } catch (error) {
-                return false;
+    return matches.every(url => {
+        try {
+            if (!/^https?:\/\//.test(url)) {
+                url = `http://${url}`;
             }
-        });
-    }
 
-    return false;
+            new URL(url);
+
+            return true;
+        } catch (error) {
+            return false;
+        }
+    });
 }
 
 function parseFlag(argsString, customRules = {}) {

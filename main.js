@@ -258,18 +258,20 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Penanganan warning
         const groupWarnings = await db.get(`group.${groupNumber}.warning`);
-        for (const senderNumber of Object.keys(groupWarnings)) {
-            const warningCount = groupWarnings[senderNumber];
+        if (groupWarnings && typeof groupWarnings === "object") {
+            for (const senderNumber of Object.keys(groupWarnings)) {
+                const warningCount = groupWarnings[senderNumber];
 
-            if (warningCount >= 3 && config.system.restrict) {
-                await ctx.sendMessage(ctx.id, {
-                    text: quote(`❎ @${senderNumber} telah mencapai batas peringatan dan akan dikeluarkan dari grup!`),
-                    mentions: [`${senderNumber}@s.whatsapp.net`]
-                });
+                if (warningCount >= 3 && config.system.restrict) {
+                    await ctx.sendMessage(ctx.id, {
+                        text: quote(`❎ @${senderNumber} telah mencapai batas peringatan dan akan dikeluarkan dari grup!`),
+                        mentions: [`${senderNumber}@s.whatsapp.net`]
+                    });
 
-                await ctx.group().kick([senderNumber]);
+                    await ctx.group().kick([senderNumber]);
 
-                await db.delete(`group.${groupNumber}.warning.${senderNumber}`);
+                    await db.delete(`group.${groupNumber}.warning.${senderNumber}`);
+                }
             }
         }
     }
