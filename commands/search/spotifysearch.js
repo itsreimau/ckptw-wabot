@@ -37,7 +37,7 @@ module.exports = {
                 `${quote(`Artis: ${d.artist}`)}\n` +
                 `${quote(`Album: ${d.album}`)}\n` +
                 `${quote(`Durasi: ${d.duration}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
+                `${quote(`URL: ${d.url}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

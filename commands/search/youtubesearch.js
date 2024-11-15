@@ -39,12 +39,12 @@ module.exports = {
                             `${quote(`Durasi: ${d.timestamp}`)}\n` +
                             `${quote(`Diunggah: ${d.ago}`)}\n` +
                             `${quote(`Dilihat: ${d.views}`)}\n` +
-                            `${quote(`URL: ${d.link}`)}`;
+                            `${quote(`URL: ${d.url}`)}`;
                     case "channel":
                         return `${quote(`Judul: ${d.title}`)}\n` +
                             `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
                             `${quote(`Jumlah video: ${d.videoCount}`)}\n` +
-                            `${quote(`URL: ${d.link}`)}`;
+                            `${quote(`URL: ${d.url}`)}`;
                 }
             }).filter((d) => d).join(
                 "\n" +

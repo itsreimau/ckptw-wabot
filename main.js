@@ -75,20 +75,38 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Grup atau Pribadi
     if (isGroup || isPrivate) {
         // Basis data untuk pengguna
-        const [userDb, userPremium, lastClaimFreetrial] = await Promise.all([
+        const [userDb, userPremium] = await Promise.all([
             db.get(`user.${senderNumber}`),
-            db.get(`user.${senderNumber}.isPremium`),
-            db.get(`user.${senderNumber}.lastClaim.freetrial`)
+            db.get(`user.${senderNumber}.isPremium`)
         ]);
 
         if (!userDb) {
             await db.set(`user.${senderNumber}`, {
                 coin: 1000,
                 level: 0,
+                uid: tools.general.generateUID(senderNumber),
                 xp: 0
             });
+        } else {
+            const [userCoin, userLevel, userUid, userXp] = await Promise.all([
+                db.get(`user.${senderNumber}.coin`),
+                db.get(`user.${senderNumber}.level`),
+                db.get(`user.${senderNumber}.uid`),
+                db.get(`user.${senderNumber}.xp`)
+            ]);
+
+            if (typeof userCoin === "undefined") await db.set(`user.${senderNumber}.coin`, 1000);
+            if (typeof userLevel === "undefined") await db.set(`user.${senderNumber}.level`, 0);
+            if (typeof userUid === "undefined") await db.set(`user.${senderNumber}.uid`, tools.general.generateUID(senderNumber));
+            if (typeof userXp === "undefined") await db.set(`user.${senderNumber}.xp`, 0);
         }
 
+        if (tools.general.isOwner(ctx, senderNumber, config.system.selfOwner) || userPremium) {
+            const userCoin = await db.get(`user.${senderNumber}.coin`);
+            if (userCoin > 0) await db.set(`user.${senderNumber}.coin`, "unlimited");
+        }
+
+        // Penanganan untuk free trial
         const currentTime = Date.now();
         const freetrialDuration = 7 * 24 * 60 * 60 * 1000;
         if (userPremium === "freetrial" && (currentTime - lastClaimFreetrial > freetrialDuration)) {
@@ -97,8 +115,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
             await ctx.reply(quote(`❎ Masa percobaan Free Trial Anda sudah habis. Jika Anda ingin melanjutkan akses Premium, silakan hubungi Owner.`));
         }
-
-        if (userPremium) await db.delete(`user.${senderNumber}.coin`);
 
         // Penanganan untuk perintah
         const isCmd = tools.general.isCmd(m, ctx);
@@ -250,28 +266,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const isValidUrl = tools.general.isValidUrl(m.content);
         if (getAntilink) {
             if (m.content && isValidUrl && !(await tools.general.isAdmin(ctx, senderJid))) {
-                await ctx.reply(quote(`❎ Jangan kirim tautan!`));
+                await ctx.reply(quote(`❎ Jangan kirim link, Anda akan dikeluarkan dari grup!`));
                 await ctx.deleteMessage(m.key);
-                await db.add(`group.${groupNumber}.warning.${senderNumber}`, 1);
-            }
-        }
-
-        // Penanganan warning
-        const groupWarnings = await db.get(`group.${groupNumber}.warning`);
-        if (groupWarnings && typeof groupWarnings === "object") {
-            for (const senderNumber of Object.keys(groupWarnings)) {
-                const warningCount = await db.get(`group.${groupNumber}.warning.${senderNumber}`);
-
-                if (warningCount >= 3 && config.system.restrict && !(await tools.general.isAdmin(ctx, senderJid))) {
-                    await ctx.sendMessage(ctx.id, {
-                        text: quote(`❎ @${senderNumber} telah mencapai batas peringatan dan akan dikeluarkan dari grup!`),
-                        mentions: [`${senderNumber}@s.whatsapp.net`]
-                    });
-
-                    await ctx.group().kick([senderNumber]);
-
-                    await db.delete(`group.${groupNumber}.warning.${senderNumber}`);
-                }
+                await ctx.group().kick([`${warningNumber}@s.whatsapp.net`]);
             }
         }
     }

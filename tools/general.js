@@ -297,18 +297,22 @@ function isOwner(ctx, id, selfOwner) {
 function isValidUrl(string) {
     if (typeof string !== "string") return false;
 
-    const urlRegex = /([a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/[^\s]*)?/g;
+    const urlRegex = /\b([a-zA-Z0-9-]+\.[a-zA-Z]{2,}|[0-9]{1,3}(\.[0-9]{1,3}){3})(\/[^\s]*)?\b/g;
     const matches = string.match(urlRegex);
 
     if (!matches) return false;
 
     return matches.every(url => {
         try {
-            if (!/^https?:\/\//.test(url)) {
-                url = `http://${url}`;
-            }
+            const formattedUrl = /^https?:\/\//.test(url) ? url : `http://${url}`;
 
-            new URL(url);
+            const tempUrl = new URL(formattedUrl);
+
+            const domainParts = tempUrl.hostname.split('.');
+            if (domainParts.length < 2) return false;
+
+            const ipRegex = /^(?:\d{1,3}\.){3}\d{1,3}$/;
+            if (ipRegex.test(tempUrl.hostname)) return true;
 
             return true;
         } catch (error) {
