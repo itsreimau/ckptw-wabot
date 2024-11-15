@@ -7,9 +7,6 @@ const {
     fromBuffer
 } = require("file-type");
 const Jimp = require("jimp");
-const {
-    URL
-} = require("url");
 
 async function checkAdmin(ctx, id) {
     try {
@@ -277,11 +274,16 @@ function isOwner(ctx, id, selfOwner) {
     }
 }
 
+
 async function isValidUrl(string) {
     if (typeof string !== "string") return false;
 
-    const urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/i;
-    if (!urlRegex.test(string)) return false;
+    const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
+    const match = string.match(urlRegex);
+
+    if (!match) return false;
+
+    const url = match[0];
 
     const tryUrl = async (url) => {
         try {
@@ -297,8 +299,7 @@ async function isValidUrl(string) {
         }
     };
 
-    if (await tryUrl(`https://${string}`)) return true;
-    if (await tryUrl(`http://${string}`)) return true;
+    if (await tryUrl(url)) return true;
 
     return false;
 }
