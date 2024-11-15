@@ -260,9 +260,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const groupWarnings = await db.get(`group.${groupNumber}.warning`);
         if (groupWarnings && typeof groupWarnings === "object") {
             for (const senderNumber of Object.keys(groupWarnings)) {
-                const warningCount = groupWarnings[senderNumber];
+                const warningCount = await db.get(`group.${groupNumber}.warning.${senderNumber}`);
 
-                if (warningCount >= 3 && config.system.restrict) {
+                if (warningCount >= 3 && config.system.restrict!(await tools.general.isAdmin(ctx, senderJid))) {
                     await ctx.sendMessage(ctx.id, {
                         text: quote(`❎ @${senderNumber} telah mencapai batas peringatan dan akan dikeluarkan dari grup!`),
                         mentions: [`${senderNumber}@s.whatsapp.net`]
