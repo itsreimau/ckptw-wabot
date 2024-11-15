@@ -135,11 +135,9 @@ async function checkQuotedMedia(quoted, requiredMedia) {
 }
 
 function convertMsToDuration(ms) {
-    try {
-        if (ms < 1000) {
-            return "kurang satu detik";
-        }
+    if (ms < 1000) return "kurang satu detik";
 
+    try {
         const years = Math.floor(ms / (1000 * 60 * 60 * 24 * 365.25));
         const months = Math.floor((ms / (1000 * 60 * 60 * 24 * 30.44)) % 12);
         const weeks = Math.floor((ms / (1000 * 60 * 60 * 24 * 7)) % 4.345);
@@ -150,27 +148,13 @@ function convertMsToDuration(ms) {
 
         let durationString = "";
 
-        if (years > 0) {
-            durationString += years + " tahun ";
-        }
-        if (months > 0) {
-            durationString += months + " bulan ";
-        }
-        if (weeks > 0) {
-            durationString += weeks + " minggu ";
-        }
-        if (days > 0) {
-            durationString += days + " hari ";
-        }
-        if (hours > 0) {
-            durationString += hours + " jam ";
-        }
-        if (minutes > 0) {
-            durationString += minutes + " menit ";
-        }
-        if (seconds > 0) {
-            durationString += seconds + " detik";
-        }
+        if (years > 0) durationString += years + " tahun ";
+        if (months > 0) durationString += months + " bulan ";
+        if (weeks > 0) durationString += weeks + " minggu ";
+        if (days > 0) durationString += days + " hari ";
+        if (hours > 0) durationString += hours + " jam ";
+        if (minutes > 0) durationString += minutes + " menit ";
+        if (seconds > 0) durationString += seconds + " detik";
 
         return durationString.trim();
     } catch (error) {
@@ -179,14 +163,14 @@ function convertMsToDuration(ms) {
     }
 }
 
-function formatSize(bytes) {
+function formatSize(byteCount) {
+    if (byteCount === 0) return "0 Bytes";
+
     try {
-        const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-        if (bytes === 0) {
-            return "0 Byte";
-        }
-        const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-        return Math.round(bytes / Math.pow(1024, i), 2) + " " + sizes[i];
+        const units = ["Bytes", "KiB", "MiB", "GiB", "TiB"];
+        const index = Math.floor(Math.log(byteCount) / Math.log(1024));
+        const size = (byteCount / Math.pow(1024, index)).toFixed(2);
+        return `${parseFloat(size)} ${units[index]}`;
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
         return null;
@@ -208,10 +192,9 @@ function generateUID(phoneNumber) {
 }
 
 function getRandomElement(arr) {
+    if (arr.length === 0) return null;
+
     try {
-        if (arr.length === 0) {
-            return null;
-        }
         const randomIndex = Math.floor(Math.random() * arr.length);
         return arr[randomIndex];
     } catch (error) {
@@ -322,9 +305,7 @@ function isValidUrl(string) {
 }
 
 function parseFlag(argsString, customRules = {}) {
-    if (!argsString || argsString.trim() === "") {
-        return false;
-    }
+    if (!argsString || argsString.trim() === "") return false;
 
     const options = {};
     let input = [];

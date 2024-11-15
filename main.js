@@ -376,7 +376,7 @@ async function handleUserEvent(m) {
                             mediaType: 1,
                             previewType: 0,
                             mediaUrl: config.bot.website,
-                            title: m.eventsType === "UserJoin" ? "JOIN" : "LEAVE",
+                            title: config.msg.watermark,
                             body: null,
                             renderLargerThumbnail: true,
                             thumbnailUrl: card.url || profilePictureUrl || config.bot.thumbnail,
