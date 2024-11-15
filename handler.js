@@ -2,6 +2,7 @@ const {
     Cooldown
 } = require("@mengkodingan/ckptw");
 
+// Penanganan opsi khusus
 async function handler(ctx, options) {
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
@@ -74,6 +75,7 @@ async function handler(ctx, options) {
     return false;
 }
 
+// Cek koin
 async function checkCoin(ctx, coinOptions, senderNumber) {
     const [isOwner, isPremium] = await Promise.all([
         tools.general.isOwner(ctx, senderNumber, true),

@@ -48,7 +48,7 @@ module.exports = {
                 text: `${quote(`Nama: ${senderName}`)}\n` +
                     `${quote(`Status: ${isOwner ? "Owner" : (isPremium === "freetrial" ? "Premium (Free Trial)" : (isPremium ? "Premium" : "Freemium"))}`)}\n` +
                     `${quote(`Level: ${userLevel}`)}\n` +
-                    `${quote(`Koin: ${userCoin === "unlimited" ? "Tak terbatas" : userCoin || "-"}`)}\n` +
+                    `${quote(`Koin: ${isOwner ? "Tak terbatas" : isPremium ? "Tak terbatas" : userCoin || "-"}`)}\n` +
                     `${quote(`XP: ${userXp}`)}\n` +
                     "\n" +
                     config.msg.footer,

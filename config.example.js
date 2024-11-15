@@ -30,7 +30,7 @@ global.config = {
         private: quote("❎ Perintah hanya dapat diakses dalam obrolan pribadi!"), // Pesan untuk perintah obrolan pribadi
         restrict: quote("❎ Perintah ini telah dibatasi karena alasan keamanan!"), // Pesan pembatasan perintah
 
-        watermark: `${pkg.name}@^${pkg.version}`, // Watermark versi bot
+        watermark: `@${pkg.name} / v${pkg.version}`, // Watermark versi bot
         footer: italic("Developed by ItsReimau"), // Footer di pesan bot
         readmore: "\u200E".repeat(4001), // String read more
 
