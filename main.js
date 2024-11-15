@@ -153,7 +153,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                         mediaType: 1,
                         previewType: 0,
                         mediaUrl: config.bot.website,
-                        title: "LEVEL UP",
+                        title: config.msg.watermark,
                         body: null,
                         renderLargerThumbnail: true,
                         thumbnailUrl: card.url || profilePictureUrl || config.bot.thumbnail,

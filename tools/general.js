@@ -6,6 +6,7 @@ const FormData = require("form-data");
 const {
     fromBuffer
 } = require("file-type");
+const Jimp = require("jimp");
 
 async function checkAdmin(ctx, id) {
     try {
