@@ -27,7 +27,7 @@ module.exports = {
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
-        const isValidUrl = tools.general.isValidUrl(url);
+        const isValidUrl = await tools.general.isValidUrl(url)
         if (!isValidUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {

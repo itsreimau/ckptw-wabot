@@ -277,31 +277,30 @@ function isOwner(ctx, id, selfOwner) {
     }
 }
 
-function isValidUrl(string) {
+async function isValidUrl(string) {
     if (typeof string !== "string") return false;
 
-    const urlRegex = /\b([a-zA-Z0-9-]+\.[a-zA-Z]{2,}|[0-9]{1,3}(\.[0-9]{1,3}){3})(\/[^\s]*)?\b/g;
-    const matches = string.match(urlRegex);
+    const urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/i;
+    if (!urlRegex.test(string)) return false;
 
-    if (!matches) return false;
-
-    return matches.every(url => {
+    const tryUrl = async (url) => {
         try {
-            const formattedUrl = /^https?:\/\//.test(url) ? url : `http://${url}`;
-
-            const tempUrl = new URL(formattedUrl);
-
-            const domainParts = tempUrl.hostname.split('.');
-            if (domainParts.length < 2) return false;
-
-            const ipRegex = /^(?:\d{1,3}\.){3}\d{1,3}$/;
-            if (ipRegex.test(tempUrl.hostname)) return true;
-
+            await axios.get(url, {
+                timeout: 5000,
+                headers: {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+                }
+            });
             return true;
         } catch (error) {
-            return false;
+            return error.code !== "ENOTFOUND";
         }
-    });
+    };
+
+    if (await tryUrl(`https://${string}`)) return true;
+    if (await tryUrl(`http://${string}`)) return true;
+
+    return false;
 }
 
 function parseFlag(argsString, customRules = {}) {

@@ -156,9 +156,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 }
 
                 const cardApiUrl = tools.api.createUrl("aemt", "/rankup", {
-                    avatar: profilePictureUrl,
-                    level: newUserLevel,
-                    border: "003366"
+                    avatar: profilePictureUrl
                 });
                 const card = await tools.general.blurredImage(cardApiUrl);
 
@@ -264,7 +262,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Penanganan antilink
         const getAntilink = await db.get(`group.${groupNumber}.antilink`);
-        const isValidUrl = tools.general.isValidUrl(m.content);
+        const isValidUrl = await tools.general.isValidUrl(m.content);
         if (getAntilink) {
             if (m.content && isValidUrl && !(await tools.general.isAdmin(ctx, senderJid))) {
                 await ctx.reply(quote(`❎ Jangan kirim link, Anda akan dikeluarkan dari grup!`));
@@ -362,9 +360,7 @@ async function handleUserEvent(m) {
                     text2: metadata.subject,
                     text3: jid.split(/[:@]/)[0],
                     avatar: profilePictureUrl,
-                    background: config.bot.thumbnail,
-                    fontcolor: "003366",
-                    bordercolor: "003366"
+                    background: config.bot.thumbnail
                 });
                 const card = await tools.general.blurredImage(cardApiUrl);
 

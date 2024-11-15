@@ -41,7 +41,7 @@ module.exports = {
 
         const url = flag.input || null;
 
-        const isValidUrl = tools.general.isValidUrl(url);
+        const isValidUrl = await tools.general.isValidUrl(url)
         if (!isValidUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
