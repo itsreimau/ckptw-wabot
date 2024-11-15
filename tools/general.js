@@ -274,34 +274,11 @@ function isOwner(ctx, id, selfOwner) {
     }
 }
 
-
-async function isValidUrl(string) {
+function isUrl(string) {
     if (typeof string !== "string") return false;
 
     const urlRegex = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-    const match = string.match(urlRegex);
-
-    if (!match) return false;
-
-    const url = match[0];
-
-    const tryUrl = async (url) => {
-        try {
-            await axios.get(url, {
-                timeout: 5000,
-                headers: {
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
-                }
-            });
-            return true;
-        } catch (error) {
-            return error.code !== "ENOTFOUND";
-        }
-    };
-
-    if (await tryUrl(url)) return true;
-
-    return false;
+    return urlRegex.test(string);
 }
 
 function parseFlag(argsString, customRules = {}) {
@@ -413,7 +390,7 @@ module.exports = {
     isAdmin,
     isBotAdmin,
     isOwner,
-    isValidUrl,
+    isUrl,
     parseFlag,
     translate,
     ucword,

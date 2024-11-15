@@ -262,9 +262,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Penanganan antilink
         const getAntilink = await db.get(`group.${groupNumber}.antilink`);
-        const isValidUrl = await tools.general.isValidUrl(m.content);
+        const isUrl = await tools.general.isUrl(m.content);
         if (getAntilink) {
-            if (m.content && isValidUrl && !(await tools.general.isAdmin(ctx, senderJid))) {
+            if (m.content && isUrl && !(await tools.general.isAdmin(ctx, senderJid))) {
                 await ctx.reply(quote(`❎ Jangan kirim link, Anda akan dikeluarkan dari grup!`));
                 await ctx.deleteMessage(m.key);
                 await ctx.group().kick([senderJid]);

@@ -23,8 +23,8 @@ module.exports = {
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
-        const isValidUrl = await tools.general.isValidUrl(url)
-        if (!isValidUrl) return await ctx.reply(config.msg.urlInvalid);
+        const isUrl = await tools.general.isUrl(url)
+        if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
             const apiUrl = tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/download/track", {
