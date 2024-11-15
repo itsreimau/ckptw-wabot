@@ -49,7 +49,7 @@ async function handler(ctx, options) {
         },
         premium: {
             check: () => !isOwner && !isPremium,
-            msg: config.msg.isPremium
+            msg: config.msg.premium
         },
         private: {
             check: async () => await ctx.isGroup(),

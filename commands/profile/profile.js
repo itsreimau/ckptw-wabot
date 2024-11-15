@@ -28,34 +28,43 @@ module.exports = {
                 db.get(`user.${senderNumber}.xp`),
             ]);
 
-            const userStatus = isOwner ? "Owner" : (isPremium === "freetrial" ? "Premium (Free Trial)" : (isPremium ? "Premium" : "Freemium"));
-
             let profilePictureUrl;
             try {
                 profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image");
             } catch (error) {
                 profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
             }
-            const card = tools.api.createUrl("aggelos_007", "/rankcard", {
+
+            const cardApiUrl = tools.api.createUrl("aggelos_007", "/rankcard", {
                 username: senderName,
                 xp: userXp,
                 maxxp: "100",
                 level: userLevel,
                 avatar: profilePictureUrl
             });
+            const card = await tools.general.blurredImage(cardApiUrl);
 
             return await ctx.reply({
-                image: {
-                    url: card || profilePictureUrl
-                },
-                mimetype: mime.lookup("png"),
-                caption: `${quote(`Nama: ${senderName}`)}\n` +
-                    `${quote(`Status: ${userStatus}`)}\n` +
+                text: `${quote(`Nama: ${senderName}`)}\n` +
+                    `${quote(`Status: ${isOwner ? "Owner" : (isPremium === "freetrial" ? "Premium (Free Trial)" : (isPremium ? "Premium" : "Freemium"))}`)}\n` +
                     `${quote(`Level: ${userLevel}`)}\n` +
                     `${quote(`Koin: ${isOwner ? "Tak terbatas" : isPremium ? "Tak terbatas" : userCoin || "-"}`)}\n` +
                     `${quote(`XP: ${userXp}`)}\n` +
                     "\n" +
-                    config.msg.footer
+                    config.msg.footer,
+                contextInfo: {
+                    mentionedJid: [senderJid],
+                    externalAdReply: {
+                        mediaType: 1,
+                        previewType: 0,
+                        mediaUrl: config.bot.website,
+                        title: "LEVEL UP",
+                        body: null,
+                        renderLargerThumbnail: true,
+                        thumbnailUrl: card.url || profilePictureUrl || config.bot.thumbnail,
+                        sourceUrl: config.bot.website
+                    }
+                }
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);

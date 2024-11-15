@@ -42,7 +42,7 @@ bot.ev.once(Events.ClientReady, async (m) => {
         config.bot.number = number,
         config.bot.id = `${number}@s.whatsapp.net`,
         config.bot.readyAt = bot.readyAt,
-        config.bot.dbSize = fs.existsSync("database.json") ? (fs.statSync("database.json").size / 1024).toFixed(2) : "N/A"
+        config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"
     ]);
 });
 
@@ -141,15 +141,25 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 level: newUserLevel,
                 border: "003366"
             });
+            const card = await tools.general.blurredImage(cardApiUrl);
 
             if (autoLevelUp) await ctx.reply({
-                image: {
-                    url: cardApiUrl
-                },
-                mimetype: mime.lookup("png"),
-                caption: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
+                text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                     `${config.msg.readmore}\n` +
-                    quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]))
+                    quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
+                contextInfo: {
+                    mentionedJid: [senderJid],
+                    externalAdReply: {
+                        mediaType: 1,
+                        previewType: 0,
+                        mediaUrl: config.bot.website,
+                        title: "LEVEL UP",
+                        body: null,
+                        renderLargerThumbnail: true,
+                        thumbnailUrl: card.url || profilePictureUrl || config.bot.thumbnail,
+                        sourceUrl: config.bot.website
+                    }
+                }
             });
 
             await Promise.all([
@@ -336,21 +346,31 @@ async function handleUserEvent(m) {
                     quote(`👋 Selamat datang @${jid.split(/[:@]/)[0]} di grup ${metadata.subject}!`) :
                     quote(`👋 @${jid.split(/[:@]/)[0]} keluar dari grup ${metadata.subject}.`);
                 const cardApiUrl = tools.api.createUrl("aggelos_007", "/welcomecard", {
-                    text1: jid.split(/[:@]/)[0],
-                    text2: m.eventsType === "UserJoin" ? "Selamat datang!" : "Selamat tinggal!",
-                    text3: metadata.subject,
+                    text1: m.eventsType === "UserJoin" ? "Selamat datang!" : "Selamat tinggal!",
+                    text2: metadata.subject,
+                    text3: jid.split(/[:@]/)[0],
                     avatar: profilePictureUrl,
                     background: config.bot.thumbnail,
                     fontcolor: "003366",
                     bordercolor: "003366"
                 });
+                const card = await tools.general.blurredImage(cardApiUrl);
 
                 await bot.core.sendMessage(id, {
-                    image: {
-                        url: cardApiUrl || profilePictureUrl
-                    },
-                    mimetype: mime.lookup("png"),
-                    caption: message
+                    text: message,
+                    contextInfo: {
+                        mentionedJid: [jid],
+                        externalAdReply: {
+                            mediaType: 1,
+                            previewType: 0,
+                            mediaUrl: config.bot.website,
+                            title: m.eventsType === "UserJoin" ? "JOIN" : "LEAVE",
+                            body: null,
+                            renderLargerThumbnail: true,
+                            thumbnailUrl: card.url || profilePictureUrl || config.bot.thumbnail,
+                            sourceUrl: config.bot.website
+                        }
+                    }
                 });
             }
         }

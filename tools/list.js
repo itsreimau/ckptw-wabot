@@ -20,7 +20,7 @@ async function get(type, ctx) {
             `${quote(`Waktu: ${moment.tz(config.system.timeZone).format("HH:mm:ss")}`)}\n` +
             "\n" +
             `${quote(`Uptime: ${general.convertMsToDuration(Date.now() - config.bot.readyAt)}`)}\n` +
-            `${quote(`Database: ${config.bot.dbSize} KB (Simpl.DB - JSON)`)}\n` +
+            `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
             `${quote(`Library: @mengkodingan/ckptw`)}\n` +
             "\n" +
             `${italic("Jangan lupa berdonasi agar bot tetap online!")}\n` +
