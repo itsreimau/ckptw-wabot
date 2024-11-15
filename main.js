@@ -268,7 +268,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             if (m.content && isValidUrl && !(await tools.general.isAdmin(ctx, senderJid))) {
                 await ctx.reply(quote(`❎ Jangan kirim link, Anda akan dikeluarkan dari grup!`));
                 await ctx.deleteMessage(m.key);
-                await ctx.group().kick([`${warningNumber}@s.whatsapp.net`]);
+                await ctx.group().kick([senderJid]);
             }
         }
     }
