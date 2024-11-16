@@ -25,14 +25,14 @@ module.exports = {
             const data = tools.general.getRandomElement(response.data);
             const coin = 5;
             const timeout = 60000;
-            const senderNumber = ctx.sender.jid.split("@");
+            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
 
             session.set(ctx.id, true);
 
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`+${coin} Koin`)}\n` +
-                `${quote(`Batas waktu ${tools.general.convertMsToDuration(timeout - (Date.now() - startTime))}.`)}\n` +
+                `${quote(`Batas waktu ${milliseconds / 1000}.`)}\n` +
                 `${quote('Ketik "hint" untuk bantuan.')}\n` +
                 "\n" +
                 config.msg.footer

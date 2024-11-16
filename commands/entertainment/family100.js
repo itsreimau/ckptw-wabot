@@ -38,7 +38,7 @@ module.exports = {
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`Jumlah jawaban: ${remainingAnswers.size}`)}\n` +
-                `${quote(`Batas waktu ${tools.general.convertMsToDuration(timeout - (Date.now() - startTime))}.`)}\n\n` +
+                `${quote(`Batas waktu ${milliseconds / 1000}.`)}\n\n` +
                 config.msg.footer
             );
 

@@ -36,7 +36,7 @@ module.exports = {
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`+${coin} Koin`)}\n` +
-                    `${quote(`Batas waktu ${tools.general.convertMsToDuration(timeout - (Date.now() - startTime))}.`)}\n` +
+                    `${quote(`Batas waktu ${milliseconds / 1000}.`)}\n` +
                     `${quote('Ketik "hint" untuk bantuan.')}\n` +
                     "\n" +
                     config.msg.footer
