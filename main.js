@@ -273,9 +273,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Penanganan antitoxic
-        const getAntilink = await db.get(`group.${groupNumber}.antitoxic`);
+        const getAntitoxic = await db.get(`group.${groupNumber}.antitoxic`);
         const antiToxic = regex.antiToxic;
-        if (getAntilink) {
+        if (getAntitoxic) {
             if (m.content && antiToxic.test(m.content) && !(await tools.general.isAdmin(ctx, senderJid))) {
                 await ctx.reply(quote(`⛔ Jangan toxic!`));
                 await ctx.deleteMessage(m.key);
