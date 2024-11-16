@@ -32,7 +32,7 @@ module.exports = {
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`+${coin} Koin`)}\n` +
-                `${quote(`Batas waktu ${tools.general.convertMsToDuration(Date.now() - timeout)}.`)}\n` +
+                `${quote(`Batas waktu ${tools.general.convertMsToDuration(timeout - (Date.now() - startTime))}.`)}\n` +
                 `${quote('Ketik "hint" untuk bantuan.')}\n` +
                 "\n" +
                 config.msg.footer
