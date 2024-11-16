@@ -259,15 +259,27 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Grup
     if (isGroup) {
         if (m.key.fromMe) return;
+        const getAutokick = await db.get(`group.${groupNumber}.autokick`);
 
-        // Penanganan antilink
-        const getAntilink = await db.get(`group.${groupNumber}.antilink`);
-        const isUrl = await tools.general.isUrl(m.content);
+        // Penanganan antilinkgc
+        const getAntilink = await db.get(`group.${groupNumber}.antilinkgc`);
+        const groupChatUrl = regex.groupChatUrl;
         if (getAntilink) {
-            if (m.content && isUrl && !(await tools.general.isAdmin(ctx, senderJid))) {
-                await ctx.reply(quote(`❎ Jangan kirim link, Anda akan dikeluarkan dari grup!`));
+            if (m.content && groupChatUrl.test(m.content) && !(await tools.general.isAdmin(ctx, senderJid))) {
+                await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
                 await ctx.deleteMessage(m.key);
-                await ctx.group().kick([senderJid]);
+                if (config.system.restrict && !getAutokick) await ctx.group().kick([senderJid]);
+            }
+        }
+
+        // Penanganan antitoxic
+        const getAntilink = await db.get(`group.${groupNumber}.antitoxic`);
+        const antiToxic = regex.antiToxic;
+        if (getAntilink) {
+            if (m.content && antiToxic.test(m.content) && !(await tools.general.isAdmin(ctx, senderJid))) {
+                await ctx.reply(quote(`⛔ Jangan toxic!`));
+                await ctx.deleteMessage(m.key);
+                if (config.system.restrict && !getAutokick) await ctx.group().kick([senderJid]);
             }
         }
     }
@@ -362,7 +374,6 @@ async function handleUserEvent(m) {
                     avatar: profilePictureUrl,
                     background: config.bot.thumbnail
                 });
-                const card = await tools.general.blurredImage(cardApiUrl);
 
                 await bot.core.sendMessage(id, {
                     text: message,
@@ -375,7 +386,7 @@ async function handleUserEvent(m) {
                             title: config.msg.watermark,
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: card.url || profilePictureUrl || config.bot.thumbnail,
+                            thumbnailUrl: cardApiUrl || profilePictureUrl || config.bot.thumbnail,
                             sourceUrl: config.bot.website
                         }
                     }

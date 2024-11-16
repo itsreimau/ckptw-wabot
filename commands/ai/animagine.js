@@ -2,12 +2,10 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "youtubevideo",
-    aliases: ["ytmp4", "ytv", "ytvideo"],
-    category: "downloader",
+    name: "animagine",
+    category: "ai",
     handler: {
         banned: true,
         cooldown: true,
@@ -17,29 +15,29 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        const url = ctx.args[0] || null;
+        const input = ctx.args.join(" ") || null;
 
-        if (!url) return await ctx.reply(
+        if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon"))
         );
 
-        const universalUrl = regex.universalUrl;
-        if (!universalUrl.test(url)) return await ctx.reply(config.msg.urlInvalid);
-
         try {
-            const apiUrl = tools.api.createUrl("miyan", "/youtube", {
-                url
+            const apiUrl = tools.api.createUrl("cifumo", "/api/ai/animagine", {
+                prompt: input
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply({
-                video: {
-                    url: data.video_url
+                image: {
+                    url: data
                 },
-                mimetype: mime.lookup("mp4")
+                mimetype: mime.lookup("png"),
+                caption: `${quote(`Prompt: ${input}`)}\n` +
+                    "\n" +
+                    config.msg.footer
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);

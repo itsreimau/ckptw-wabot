@@ -21,9 +21,9 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text", "image"]))}\n` +
+            `${quote(tools.msg.generateInstruction(["send"], [ "image","text"]))}\n` +
             `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))}\n` +
-            quote(tools.msg.generateNotes(["AI ini dapat melihat gambar dan menjawab pertanyaan tentangnya. Kirim gambar dan tanyakan apa saja!"]))
+            quote(tools.msg.generateNotes(["AI ini dapat melihat media dan menjawab pertanyaan tentangnya. Kirim media dan tanyakan apa saja!"]))
         );
 
         const msgType = ctx.getMessageType();

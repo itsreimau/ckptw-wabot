@@ -24,8 +24,8 @@ module.exports = {
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
-        const isUrl = await tools.general.isUrl(url)
-        if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
+        const universalUrl = regex.universalUrl;
+        if (!universalUrl.test(url)) return await ctx.reply(config.msg.urlInvalid);
 
         try {
             const apiUrl = tools.api.createUrl("agatz", "/api/capcut", {

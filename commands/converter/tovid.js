@@ -42,6 +42,7 @@ module.exports = {
     }
 };
 
+// Dibuat oleh UdeanDev (https://github.com/udeannn)
 async function webp2mp4(source) {
     try {
         const isUrl = typeof source === "string" && /https?:\/\//.test(source);

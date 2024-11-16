@@ -22,7 +22,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "antilink"))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "antilinkgcgc"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
@@ -36,8 +36,14 @@ module.exports = {
             let setKey;
 
             switch (input.toLowerCase()) {
-                case "antilink":
-                    setKey = `group.${groupNumber}.antilink`;
+                case "antilinkgcgc":
+                    setKey = `group.${groupNumber}.antilinkgc`;
+                    break;
+                case "antitoxic":
+                    setKey = `group.${groupNumber}.antitoxic`;
+                    break;
+                case "autokick":
+                    setKey = `group.${groupNumber}.autokick`;
                     break;
                 case "welcome":
                     setKey = `group.${groupNumber}.welcome`;

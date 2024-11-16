@@ -36,7 +36,7 @@ module.exports = {
     }
 };
 
-// Dibuat oleh ZTRdiamond
+// Dibuat oleh ZTRdiamond (https://github.com/ZTRdiamond)
 async function video2audio(buffer) {
     try {
         if (!buffer) throw new Error("Buffer is undefined.");

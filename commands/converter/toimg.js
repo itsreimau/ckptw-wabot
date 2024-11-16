@@ -41,6 +41,7 @@ module.exports = {
     }
 };
 
+// Dibuat oleh UdeanDev (https://github.com/udeannn)
 async function webp2png(source) {
     try {
         const isUrl = typeof source === "string" && /https?:\/\//.test(source);

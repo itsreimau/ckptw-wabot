@@ -49,7 +49,7 @@ async function get(type, ctx) {
                     menuText += quote(monospace(`${ctx._used.prefix + cmd.name} ${handlerText}`));
 
                     if (category === "general" && cmd.aliases && cmd.aliases.length > 0) {
-                        menuText += `\n` + cmd.aliases.map(alias => quote(monospace(`${ctx._used.prefix + alias}`))).join("\n");
+                        menuText += "\n" + cmd.aliases.map(alias => quote(monospace(`${ctx._used.prefix + alias}`))).join("\n");
                     }
                     menuText += "\n";
                 });
@@ -106,7 +106,9 @@ async function get(type, ctx) {
                 break;
             }
             case "setgroup": {
-                const data = ["antilink", "welcome"];
+                const data = ["antilinkgc", "antitoxic", "autokick"
+                    "welcome"
+                ];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;
