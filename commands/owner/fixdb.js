@@ -23,9 +23,7 @@ module.exports = {
             } = dbJSON;
 
             const userImportantKeys = ["afk", "coin", "isBanned", "isPremium", "lastClaim", "lastUse", "level", "winGame", "xp"];
-            const groupImportantKeys = ["antilinkgc", "antitoxic", "autokick"
-                "welcome"
-            ];
+            const groupImportantKeys = ["antilinkgc", "antitoxic", "autokick", "welcome"];
 
             await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data pengguna...`));
             Object.keys(user).forEach((userId) => {

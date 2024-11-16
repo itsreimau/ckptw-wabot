@@ -106,9 +106,7 @@ async function get(type, ctx) {
                 break;
             }
             case "setgroup": {
-                const data = ["antilinkgc", "antitoxic", "autokick"
-                    "welcome"
-                ];
+                const data = ["antilinkgc", "antitoxic", "autokick", "welcome"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;
