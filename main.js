@@ -333,70 +333,71 @@ bot.launch().catch((error) => console.error(`[${config.pkg.name}] Error:`, error
 
 // Fungsi utilitas
 async function handleUserEvent(m) {
-        const {
-            id,
-            participants
-        } = m;
+    const {
+        id,
+        participants
+    } = m;
 
-        try {
-            const groupNumber = id.split(/[:@]/)[0];
-            const getWelcome = await db.get(`group.${groupNumber}.option.welcome`);
+    try {
+        const groupNumber = id.split(/[:@]/)[0];
+        const getWelcome = await db.get(`group.${groupNumber}.option.welcome`);
 
-            if (getWelcome) {
-                const metadata = await bot.core.groupMetadata(id);
-                const textWelcome = await db.get(`group.${groupNumber}.text.welcome`);
-                const textGoodbye = await db.get(`group.${groupNumber}.text.goodbye`);
+        if (getWelcome) {
+            const metadata = await bot.core.groupMetadata(id);
+            const textWelcome = await db.get(`group.${groupNumber}.text.welcome`);
+            const textGoodbye = await db.get(`group.${groupNumber}.text.goodbye`);
 
-                for (const jid of participants) {
-                    let profilePictureUrl;
-                    try {
-                        profilePictureUrl = await bot.core.profilePictureUrl(jid, "image");
-                    } catch (error) {
-                        profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
-                    }
-
-                    const eventType = m.eventsType;
-                    const customText = eventType === "UserJoin" ? textWelcome : textGoodbye;
-                    const userTag = `@${jid.split(/[:@]/)[0]}`;
-
-                    const text = customText ?
-                        customText
-                        .replace(/%tag%/g, userTag)
-                        .replace(/%name%/g, metadata.subject)
-                        .replace(/%description%/g, metadata.description) :
-                        (eventType === "UserJoin" ?
-                            `👋 Selamat datang ${userTag} di grup ${metadata.subject}!` :
-                            `👋 ${userTag} keluar dari grup ${metadata.subject}.`);
-
-                    const cardApiUrl = tools.api.createUrl("aggelos_007", "/welcomecard", {
-                        text1: eventType === "UserJoin" ? "Selamat datang!" : "Selamat tinggal!",
-                        text2: metadata.subject || "Grup",
-                        text3: userTag,
-                        avatar: profilePictureUrl,
-                        background: config.bot.thumbnail
-                    });
-
-                    await bot.core.sendMessage(id, {
-                        text,
-                        contextInfo: {
-                            mentionedJid: [jid],
-                            externalAdReply: {
-                                mediaType: 1,
-                                previewType: 0,
-                                mediaUrl: config.bot.website || "",
-                                title: config.msg.watermark || "",
-                                body: null,
-                                renderLargerThumbnail: true,
-                                thumbnailUrl: cardApiUrl || profilePictureUrl || config.bot.thumbnail,
-                                sourceUrl: config.bot.website || ""
-                            }
-                        }
-                    });
+            for (const jid of participants) {
+                let profilePictureUrl;
+                try {
+                    profilePictureUrl = await bot.core.profilePictureUrl(jid, "image");
+                } catch (error) {
+                    profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
                 }
-            } catch (error) {
-                console.error(`[${config.pkg.name}] Error:`, error);
+
+                const eventType = m.eventsType;
+                const customText = eventType === "UserJoin" ? textWelcome : textGoodbye;
+                const userTag = `@${jid.split(/[:@]/)[0]}`;
+
+                const text = customText ?
+                    customText
+                    .replace(/%tag%/g, userTag)
+                    .replace(/%name%/g, metadata.subject)
+                    .replace(/%description%/g, metadata.description) :
+                    (eventType === "UserJoin" ?
+                        `👋 Selamat datang ${userTag} di grup ${metadata.subject}!` :
+                        `👋 ${userTag} keluar dari grup ${metadata.subject}.`);
+
+                const cardApiUrl = tools.api.createUrl("aggelos_007", "/welcomecard", {
+                    text1: eventType === "UserJoin" ? "Selamat datang!" : "Selamat tinggal!",
+                    text2: metadata.subject || "Grup",
+                    text3: userTag,
+                    avatar: profilePictureUrl,
+                    background: config.bot.thumbnail
+                });
+
                 await bot.core.sendMessage(id, {
-                    text: quote(`⚠️ Terjadi kesalahan: ${error.message}`)
+                    text,
+                    contextInfo: {
+                        mentionedJid: [jid],
+                        externalAdReply: {
+                            mediaType: 1,
+                            previewType: 0,
+                            mediaUrl: config.bot.website || "",
+                            title: config.msg.watermark || "",
+                            body: null,
+                            renderLargerThumbnail: true,
+                            thumbnailUrl: cardApiUrl || profilePictureUrl || config.bot.thumbnail,
+                            sourceUrl: config.bot.website || ""
+                        }
+                    }
                 });
             }
         }
+    } catch (error) {
+        console.error(`[${config.pkg.name}] Error:`, error);
+        await bot.core.sendMessage(id, {
+            text: quote(`⚠️ Terjadi kesalahan: ${error.message}`)
+        });
+    }
+}
