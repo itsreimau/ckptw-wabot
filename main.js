@@ -213,11 +213,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (mentionJids && mentionJids.length > 0) {
             for (const mentionJid of mentionJids) {
                 const getAFKMention = db.get(`user.${mentionJid.split(/[:@]/)[0]}.afk`);
-                if (getAFKMention) {
-                    const [reason, timeStamp] = await Promise.all([
-                        db.get(`user.${mentionJid.split(/[:@]/)[0]}.afk.reason`),
-                        db.get(`user.${mentionJid.split(/[:@]/)[0]}.afk.timeStamp`)
-                    ]);
+                const [reason, timeStamp] = await Promise.all([
+                    db.get(`user.${mentionJid.split(/[:@]/)[0]}.afk.reason`),
+                    db.get(`user.${mentionJid.split(/[:@]/)[0]}.afk.timeStamp`)
+                ]);
+                if (getAFKMessage && reason && timeStamp) {
                     const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
 
                     await ctx.reply(quote(`📴 Dia AFK dengan alasan ${reason} selama ${timeAgo}.`));
@@ -227,12 +227,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Penanganan AFK : Berangkat dari AFK
         const getAFKMessage = await db.get(`user.${senderNumber}.afk`);
-        if (getAFKMessage) {
-            const [reason, timeStamp] = await Promise.all([
-                db.get(`user.${senderNumber}.afk.reason`),
-                db.get(`user.${senderNumber}.afk.timeStamp`)
-            ]);
-
+        const [reason, timeStamp] = await Promise.all([
+            db.get(`user.${senderNumber}.afk.reason`),
+            db.get(`user.${senderNumber}.afk.timeStamp`)
+        ]);
+        if (getAFKMessage && reason && timeStamp) {
             const currentTime = Date.now();
             const timeElapsed = currentTime - timeStamp;
 
