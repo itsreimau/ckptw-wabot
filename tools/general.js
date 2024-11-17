@@ -22,7 +22,7 @@ async function blurredImage(input) {
     try {
         let image;
 
-        const universalUrl = regex.universalUrl;
+        const universalUrl = /((https?):\/\/)?(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
         if (typeof input === "string" && universalUrl.test(input)) {
             const response = await axios.get(input, {
                 responseType: "arraybuffer"
@@ -279,7 +279,7 @@ function isOwner(ctx, id, selfOwner) {
 function isUrl(string) {
     if (typeof string !== "string") return false;
 
-    const universalUrl = regex.universalUrl;
+    const universalUrl = /((https?):\/\/)?(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
     return universalUrl.test(string);
 }
 

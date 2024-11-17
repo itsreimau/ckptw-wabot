@@ -19,7 +19,7 @@ module.exports = {
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
 
-        const universalUrl = regex.groupChatUrl;
+        const universalUrl = /((https?):\/\/)?(www\.)?chat\.whatsapp\.com\/([a-zA-Z0-9_-]{22})/i;
         const match = input.match(universalUrl);
         if (!match) return await ctx.reply(config.msg.urlInvalid);
 

@@ -23,10 +23,9 @@ module.exports = {
         );
 
         const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
-        const [userLevel, isPremium, lastClaimFreetrial, lastClaim, currentCoins] = await Promise.all([
+        const [userLevel, isPremium, lastClaim, currentCoins] = await Promise.all([
             db.get(`user.${senderNumber}.level`) || 0,
             db.get(`user.${senderNumber}.isPremium`) || false,
-            db.get(`user.${senderNumber}.lastClaim.freetrial`) || null,
             db.get(`user.${senderNumber}.lastClaim`) || {},
             db.get(`user.${senderNumber}.coin`) || 0
         ]);
@@ -34,30 +33,6 @@ module.exports = {
         if (input === "list") {
             const listText = await tools.list.get("claim");
             return await ctx.reply(listText);
-        }
-
-        if (input === "premium") {
-            if (userLevel <= 100) return await ctx.reply(quote(`❎ Anda harus memiliki level lebih dari 100 untuk mengklaim status premium. Level Anda saat ini adalah ${userLevel}.`));
-            if (isPremium === true) return await ctx.reply(quote(`❎ Anda sudah memiliki Premium.`));
-
-            await db.set(`user.${senderNumber}.isPremium`, true);
-            return await ctx.reply(quote(`🎉 Selamat! Anda telah berhasil mengklaim Premium!`));
-        }
-
-        if (input === "freetrial") {
-            const trialPeriod = 7 * 24 * 60 * 60 * 1000;
-            const currentTime = Date.now();
-
-            if (lastClaimFreetrial === "expired") return await ctx.reply(quote(`❎ Free Trial hanya bisa diambil satu kali per pengguna. Jika Anda ingin mendapatkan akses Premium, silakan hubungi Owner.`));
-            if (lastClaimFreetrial && (currentTime - lastClaimFreetrial < trialPeriod)) return await ctx.reply(quote(`❎ Anda sebelumnya telah mengklaim Free Trial dan masa berlakunya belum habis.`));
-            if (isPremium === true) return await ctx.reply(quote(`❎ Anda sudah memiliki Premium.`));
-
-            await Promise.all([
-                db.set(`user.${senderNumber}.isPremium`, "freetrial"),
-                db.set(`user.${senderNumber}.lastClaim.freetrial`, currentTime)
-            ]);
-
-            return await ctx.reply(quote(`🎉 Selamat! Anda telah berhasil mengklaim Free Trial Premium selama 7 hari!`));
         }
 
         if (!claimRewards[input]) return await ctx.reply(quote(`❎ Teks tidak valid.`));

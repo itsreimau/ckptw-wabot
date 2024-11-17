@@ -46,7 +46,7 @@ module.exports = {
 
             return await ctx.reply({
                 text: `${quote(`Nama: ${senderName}`)}\n` +
-                    `${quote(`Status: ${isOwner ? "Owner" : (isPremium === "freetrial" ? "Premium (Free Trial)" : (isPremium ? "Premium" : "Freemium"))}`)}\n` +
+                    `${quote(`Status: ${isOwner ? "Owner" : (isPremium ? "Premium" : "Freemium")}`)}\n` +
                     `${quote(`Level: ${userLevel}`)}\n` +
                     `${quote(`Koin: ${isOwner ? "Tak terbatas" : isPremium ? "Tak terbatas" : userCoin || "-"}`)}\n` +
                     `${quote(`XP: ${userXp}`)}\n` +

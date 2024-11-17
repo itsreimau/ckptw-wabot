@@ -106,17 +106,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             if (userCoin > 0) await db.delete(`user.${senderNumber}.coin`);
         }
 
-        // Penanganan untuk free trial
-        const currentTime = Date.now();
-        const freetrialDuration = 7 * 24 * 60 * 60 * 1000;
-        const lastClaimFreetrial = await db.get(`user.${senderNumber}.lastClaim.freetrial`);
-        if (userPremium === "freetrial" && (currentTime - lastClaimFreetrial > freetrialDuration)) {
-            await db.set(`user.${senderNumber}.isPremium`, false);
-            await db.set(`user.${senderNumber}.lastClaim.freetrial`, "expired");
-
-            await ctx.reply(quote(`❎ Masa percobaan Free Trial Anda sudah habis. Jika Anda ingin melanjutkan akses Premium, silakan hubungi Owner.`));
-        }
-
         // Penanganan untuk perintah
         const isCmd = tools.general.isCmd(m, ctx);
         if (isCmd) {
@@ -259,27 +248,27 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Grup
     if (isGroup) {
         if (m.key.fromMe) return;
-        const getAutokick = await db.get(`group.${groupNumber}.autokick`);
+        const getAutokick = await db.get(`group.${groupNumber}.option.autokick`);
 
         // Penanganan antilinkgc
-        const getAntilink = await db.get(`group.${groupNumber}.antilinkgc`);
-        const groupChatUrl = regex.groupChatUrl;
+        const getAntilink = await db.get(`group.${groupNumber}.option.antilinkgc`);
+        const groupChatUrl = /((https?):\/\/)?(www\.)?chat\.whatsapp\.com\/([a-zA-Z0-9_-]{22})/i;
         if (getAntilink) {
             if (m.content && groupChatUrl.test(m.content) && !(await tools.general.isAdmin(ctx, senderJid))) {
                 await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
                 await ctx.deleteMessage(m.key);
-                if (config.system.restrict && !getAutokick) await ctx.group().kick([senderJid]);
+                if (!config.system.restrict && getAutokick) await ctx.group().kick([senderJid]);
             }
         }
 
         // Penanganan antitoxic
-        const getAntitoxic = await db.get(`group.${groupNumber}.antitoxic`);
-        const antiToxic = regex.antiToxic;
-        if (getAntitoxic) {
-            if (m.content && antiToxic.test(m.content) && !(await tools.general.isAdmin(ctx, senderJid))) {
+        const getAntitoxic = await db.get(`group.${groupNumber}.option.antitoxic`);
+        const toxicWord = ["kunyuk", "bajingan", "asu", "bangsat", "kampret", "kontol", "memek", "ngentot", "pentil", "perek", "pepek", "pecun", "bencong", "banci", "maho", "gila", "sinting", "tolol", "sarap", "setan", "lonte", "hencet", "taptei", "kampang", "pilat", "keparat", "bejad", "gembel", "brengsek", "tai", "anjrit", "bangsat", "fuck", "tetek", "ngulum", "jembut", "totong", "kolop", "pukimak", "bodat", "heang", "jancuk", "burit", "titit", "nenen", "bejat", "silit", "sempak", "fucking", "asshole", "bitch", "penis", "vagina", "klitoris", "kelentit", "borjong", "dancuk", "pantek", "taek", "itil", "teho", "bejat", "pantat", "bagudung", "babami", "kanciang", "bungul", "idiot", "kimak", "henceut", "kacuk", "blowjob", "pussy", "dick", "damn", "ass"];
+        if (getAntitoxic && m.content && !(await tools.general.isAdmin(ctx, senderJid))) {
+            if (toxicWord.some(word => m.content.toLowerCase().includes(word))) {
                 await ctx.reply(quote(`⛔ Jangan toxic!`));
                 await ctx.deleteMessage(m.key);
-                if (config.system.restrict && !getAutokick) await ctx.group().kick([senderJid]);
+                if (!config.system.restrict && getAutokick) await ctx.group().kick([senderJid]);
             }
         }
     }
@@ -319,8 +308,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     await ctx._client.sendMessage(targetId, {
                         forward: m
                     });
-
-                    await ctx.reply(quote("✅ Pesan berhasil diteruskan!"));
                     await db.set(`menfess.${conversationId}.lastMsg`, Date.now());
 
                     break;
@@ -346,57 +333,70 @@ bot.launch().catch((error) => console.error(`[${config.pkg.name}] Error:`, error
 
 // Fungsi utilitas
 async function handleUserEvent(m) {
-    const {
-        id,
-        participants
-    } = m;
+        const {
+            id,
+            participants
+        } = m;
 
-    try {
-        const getWelcome = await db.get(`group.${id.split(/[:@]/)[0]}.welcome`);
-        if (getWelcome) {
-            const metadata = await bot.core.groupMetadata(id);
+        try {
+            const groupNumber = id.split(/[:@]/)[0];
+            const getWelcome = await db.get(`group.${groupNumber}.option.welcome`);
 
-            for (const jid of participants) {
-                let profilePictureUrl;
-                try {
-                    profilePictureUrl = await bot.core.profilePictureUrl(jid, "image");
-                } catch (error) {
-                    profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
-                }
+            if (getWelcome) {
+                const metadata = await bot.core.groupMetadata(id);
+                const textWelcome = await db.get(`group.${groupNumber}.text.welcome`);
+                const textGoodbye = await db.get(`group.${groupNumber}.text.goodbye`);
 
-                const message = m.eventsType === "UserJoin" ?
-                    quote(`👋 Selamat datang @${jid.split(/[:@]/)[0]} di grup ${metadata.subject}!`) :
-                    quote(`👋 @${jid.split(/[:@]/)[0]} keluar dari grup ${metadata.subject}.`);
-                const cardApiUrl = tools.api.createUrl("aggelos_007", "/welcomecard", {
-                    text1: m.eventsType === "UserJoin" ? "Selamat datang!" : "Selamat tinggal!",
-                    text2: metadata.subject,
-                    text3: jid.split(/[:@]/)[0],
-                    avatar: profilePictureUrl,
-                    background: config.bot.thumbnail
-                });
-
-                await bot.core.sendMessage(id, {
-                    text: message,
-                    contextInfo: {
-                        mentionedJid: [jid],
-                        externalAdReply: {
-                            mediaType: 1,
-                            previewType: 0,
-                            mediaUrl: config.bot.website,
-                            title: config.msg.watermark,
-                            body: null,
-                            renderLargerThumbnail: true,
-                            thumbnailUrl: cardApiUrl || profilePictureUrl || config.bot.thumbnail,
-                            sourceUrl: config.bot.website
-                        }
+                for (const jid of participants) {
+                    let profilePictureUrl;
+                    try {
+                        profilePictureUrl = await bot.core.profilePictureUrl(jid, "image");
+                    } catch (error) {
+                        profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
                     }
+
+                    const eventType = m.eventsType;
+                    const customText = eventType === "UserJoin" ? textWelcome : textGoodbye;
+                    const userTag = `@${jid.split(/[:@]/)[0]}`;
+
+                    const text = customText ?
+                        customText
+                        .replace(/%tag%/g, userTag)
+                        .replace(/%name%/g, metadata.subject)
+                        .replace(/%description%/g, metadata.description) :
+                        (eventType === "UserJoin" ?
+                            `👋 Selamat datang ${userTag} di grup ${metadata.subject}!` :
+                            `👋 ${userTag} keluar dari grup ${metadata.subject}.`);
+
+                    const cardApiUrl = tools.api.createUrl("aggelos_007", "/welcomecard", {
+                        text1: eventType === "UserJoin" ? "Selamat datang!" : "Selamat tinggal!",
+                        text2: metadata.subject || "Grup",
+                        text3: userTag,
+                        avatar: profilePictureUrl,
+                        background: config.bot.thumbnail
+                    });
+
+                    await bot.core.sendMessage(id, {
+                        text,
+                        contextInfo: {
+                            mentionedJid: [jid],
+                            externalAdReply: {
+                                mediaType: 1,
+                                previewType: 0,
+                                mediaUrl: config.bot.website || "",
+                                title: config.msg.watermark || "",
+                                body: null,
+                                renderLargerThumbnail: true,
+                                thumbnailUrl: cardApiUrl || profilePictureUrl || config.bot.thumbnail,
+                                sourceUrl: config.bot.website || ""
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error(`[${config.pkg.name}] Error:`, error);
+                await bot.core.sendMessage(id, {
+                    text: quote(`⚠️ Terjadi kesalahan: ${error.message}`)
                 });
             }
         }
-    } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
-        await bot.core.sendMessage(id, {
-            text: quote(`⚠️ Terjadi kesalahan: ${error.message}`)
-        });
-    }
-}

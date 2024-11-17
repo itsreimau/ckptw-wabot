@@ -85,7 +85,7 @@ async function get(type, ctx) {
                 break;
             }
             case "claim": {
-                const data = ["daily", "weekly", "monthly", "yearly", "premium", "freetrial"];
+                const data = ["daily", "weekly", "monthly", "yearly"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;
@@ -105,7 +105,7 @@ async function get(type, ctx) {
                     config.msg.footer;
                 break;
             }
-            case "setgroup": {
+            case "setoption": {
                 const data = ["antilinkgc", "antitoxic", "autokick", "welcome"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
@@ -114,6 +114,13 @@ async function get(type, ctx) {
             }
             case "setprofile": {
                 const data = ["autolevelup"];
+                text = `${data.map(quote).join("\n")}\n` +
+                    "\n" +
+                    config.msg.footer;
+                break;
+            }
+            case "settext": {
+                const data = ["goodbye", "intro", "welcome"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;

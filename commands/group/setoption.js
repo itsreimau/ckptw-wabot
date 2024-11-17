@@ -4,8 +4,7 @@ const {
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: "setgroup",
-    aliases: ["setg"],
+    name: "setoption",
     category: "group",
     handler: {
         admin: true,
@@ -22,12 +21,12 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "antilinkgcgc"))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "antilinkgc"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (ctx.args[0] === "list") {
-            const listText = await tools.list.get("setgroup");
+            const listText = await tools.list.get("setoption");
             return await ctx.reply(listText);
         }
 
@@ -36,17 +35,17 @@ module.exports = {
             let setKey;
 
             switch (input.toLowerCase()) {
-                case "antilinkgcgc":
-                    setKey = `group.${groupNumber}.antilinkgc`;
+                case "antilinkgc":
+                    setKey = `group.${groupNumber}.option.antilinkgc`;
                     break;
                 case "antitoxic":
-                    setKey = `group.${groupNumber}.antitoxic`;
+                    setKey = `group.${groupNumber}.option.antitoxic`;
                     break;
                 case "autokick":
-                    setKey = `group.${groupNumber}.autokick`;
+                    setKey = `group.${groupNumber}.option.autokick`;
                     break;
                 case "welcome":
-                    setKey = `group.${groupNumber}.welcome`;
+                    setKey = `group.${groupNumber}.option.welcome`;
                     break;
                 default:
                     return await ctx.reply(quote(`❎ Teks tidak valid.`));
