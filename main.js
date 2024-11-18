@@ -271,6 +271,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (m.key.fromMe) return;
 
         // Penanganan menfess
+        const isCmd = tools.general.isCmd(m, ctx);
         const allMenfessData = await db.get("menfess");
         if ((!isCmd && isCmd.didyoumean) && allMenfessData && typeof allMenfessData === "object" && Object.keys(allMenfessData).length > 0) {
             const menfessEntries = Object.entries(allMenfessData);
