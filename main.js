@@ -360,7 +360,7 @@ async function handleUserEvent(m) {
 
                 await bot.core.sendMessage(id, {
                     text,
-                    introText {
+                    contextInfo: {
                         mentionedJid: [jid],
                         externalAdReply: {
                             mediaType: 1,
