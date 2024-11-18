@@ -18,7 +18,7 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        const [key, text] = = await Promise.all([
+        const [key, text] = await Promise.all([
             ctx.args[0],
             ctx.args.slice(1).join(" ")
         ]);
