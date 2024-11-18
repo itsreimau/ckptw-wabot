@@ -144,17 +144,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
                 }
 
-                const cardApiUrl = tools.api.createUrl("aemt", "/rankup", {
-                    avatar: profilePictureUrl
-                });
-                const card = await tools.general.blurredImage(cardApiUrl);
-
                 if (autoLevelUp) await ctx.reply({
                     text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                         `${config.msg.readmore}\n` +
                         quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
-                    contextInfo: {
-                        mentionedJid: [senderJid],
+                    introText {
                         externalAdReply: {
                             mediaType: 1,
                             previewType: 0,
@@ -162,7 +156,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                             title: config.msg.watermark,
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: card.url || profilePictureUrl || config.bot.thumbnail,
+                            thumbnailUrl: profilePictureUrl || config.bot.thumbnail,
                             sourceUrl: config.bot.website
                         }
                     }
@@ -278,7 +272,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Penanganan menfess
         const allMenfessData = await db.get("menfess");
-        if (allMenfessData && typeof allMenfessData === "object" && Object.keys(allMenfessData).length > 0) {
+        if ((!isCmd && isCmd.didyoumean) && allMenfessData && typeof allMenfessData === "object" && Object.keys(allMenfessData).length > 0) {
             const menfessEntries = Object.entries(allMenfessData);
 
             for (const [conversationId, menfessData] of menfessEntries) {
@@ -290,20 +284,17 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                 if (m.content && /^\b(delete|stop)\b$/i.test(m.content.trim())) {
                     if (senderInConversation) {
-                        await db.delete(`menfess.${conversationId}`);
-
                         const targetNumber = senderNumber === from ? to : from;
-
                         await ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
                         await ctx.sendMessage(`${targetNumber}@s.whatsapp.net`, {
                             text: quote("✅ Pesan menfess telah dihapus!")
                         });
+                        await db.delete(`menfess.${conversationId}`);
                     }
                 }
 
                 if (senderInConversation) {
                     const targetId = senderNumber === from ? `${to}@s.whatsapp.net` : `${from}@s.whatsapp.net`;
-
                     await ctx._client.sendMessage(targetId, {
                         forward: m
                     });
@@ -361,23 +352,15 @@ async function handleUserEvent(m) {
                 const text = customText ?
                     customText
                     .replace(/%tag%/g, userTag)
-                    .replace(/%name%/g, metadata.subject)
+                    .replace(/%subject%/g, metadata.subject)
                     .replace(/%description%/g, metadata.description) :
                     (eventType === "UserJoin" ?
                         `👋 Selamat datang ${userTag} di grup ${metadata.subject}!` :
                         `👋 ${userTag} keluar dari grup ${metadata.subject}.`);
 
-                const cardApiUrl = tools.api.createUrl("aggelos_007", "/welcomecard", {
-                    text1: eventType === "UserJoin" ? "Selamat datang!" : "Selamat tinggal!",
-                    text2: metadata.subject || "Grup",
-                    text3: userTag,
-                    avatar: profilePictureUrl,
-                    background: config.bot.thumbnail
-                });
-
                 await bot.core.sendMessage(id, {
                     text,
-                    contextInfo: {
+                    introText {
                         mentionedJid: [jid],
                         externalAdReply: {
                             mediaType: 1,
@@ -386,10 +369,16 @@ async function handleUserEvent(m) {
                             title: config.msg.watermark || "",
                             body: null,
                             renderLargerThumbnail: true,
-                            thumbnailUrl: cardApiUrl || profilePictureUrl || config.bot.thumbnail,
+                            thumbnailUrl: profilePictureUrl || config.bot.thumbnail,
                             sourceUrl: config.bot.website || ""
                         }
                     }
+                });
+
+                const introText = await db.get(`group.${groupNumber}.text.intro`);
+                if (!introText) await bot.core.sendMessage(id, {
+                    text: quote(`Grup ini memiliki intro. Ketik ${monospace("/intro")} untuk mendapatkan intro.`),
+                    mentions: [jid]
                 });
             }
         }

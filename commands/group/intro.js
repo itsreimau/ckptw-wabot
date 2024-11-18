@@ -14,12 +14,11 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        const introWelcome = await db.get(`group.${groupNumber}.text.welcome`);
-        if (!introWelcome) return await ctx.reply(quote("❎ Grup ini tidak memiliki intro."))
-
         try {
-            const link = await ctx.group().inviteCode();
-            return await ctx.reply(introWelcome);
+            const groupNumber = ctx.isGroup() ? ctx.id.split("@")[0] : null;
+            const introText = await db.get(`group.${groupNumber}.text.intro`) || quote("❎ Grup ini tidak memiliki intro.");
+
+            return await ctx.reply(introText);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));

@@ -120,7 +120,7 @@ async function get(type, ctx) {
                 break;
             }
             case "settext": {
-                const data = ["goodbye", "intro", "welcome"];
+                const data = ["goodbye (Variabel yang tersedia: %tag%, %subject%, %description%)", "intro", "welcome (Variabel yang tersedia: %tag%, %subject%, %description%)"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;

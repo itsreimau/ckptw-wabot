@@ -35,15 +35,6 @@ module.exports = {
                 profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
             }
 
-            const cardApiUrl = tools.api.createUrl("aggelos_007", "/rankcard", {
-                username: senderName,
-                xp: userXp,
-                maxxp: "100",
-                level: userLevel,
-                avatar: profilePictureUrl
-            });
-            const card = await tools.general.blurredImage(cardApiUrl);
-
             return await ctx.reply({
                 text: `${quote(`Nama: ${senderName}`)}\n` +
                     `${quote(`Status: ${isOwner ? "Owner" : (isPremium ? "Premium" : "Freemium")}`)}\n` +
@@ -53,7 +44,6 @@ module.exports = {
                     "\n" +
                     config.msg.footer,
                 contextInfo: {
-                    mentionedJid: [senderJid],
                     externalAdReply: {
                         mediaType: 1,
                         previewType: 0,
@@ -61,7 +51,7 @@ module.exports = {
                         title: config.msg.watermark,
                         body: null,
                         renderLargerThumbnail: true,
-                        thumbnailUrl: card.url || profilePictureUrl || config.bot.thumbnail,
+                        thumbnailUrl: profilePictureUrl || config.bot.thumbnail,
                         sourceUrl: config.bot.website
                     }
                 }

@@ -5,6 +5,7 @@ const {
 
 module.exports = {
     name: "settext",
+    aliases: ["settxt"],
     category: "group",
     handler: {
         admin: true,
@@ -40,7 +41,7 @@ module.exports = {
                     setKey = `group.${groupNumber}.text.goodbye`;
                     break;
                 case "intro":
-                    setKey = `group.${groupNumber}.text.goodbye`;
+                    setKey = `group.${groupNumber}.text.intro`;
                     break;
                     intro
                 case "welcome":

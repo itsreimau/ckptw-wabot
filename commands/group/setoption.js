@@ -5,6 +5,7 @@ const {
 
 module.exports = {
     name: "setoption",
+    aliases: ["setopt"],
     category: "group",
     handler: {
         admin: true,
