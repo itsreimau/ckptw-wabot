@@ -355,8 +355,8 @@ async function handleUserEvent(m) {
                     .replace(/%subject%/g, metadata.subject)
                     .replace(/%description%/g, metadata.description) :
                     (eventType === "UserJoin" ?
-                        `👋 Selamat datang ${userTag} di grup ${metadata.subject}!` :
-                        `👋 ${userTag} keluar dari grup ${metadata.subject}.`);
+                        quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
+                        quote(`👋 ${userTag} keluar dari grup ${metadata.subject}.`));
 
                 await bot.core.sendMessage(id, {
                     text,
@@ -376,7 +376,7 @@ async function handleUserEvent(m) {
                 });
 
                 const introText = await db.get(`group.${groupNumber}.text.intro`);
-                if (introText) await bot.core.sendMessage(id, {
+                if (eventType === "UserJoin" && introText) await bot.core.sendMessage(id, {
                     text: quote(`Grup ini memiliki intro. Ketik ${monospace("/intro")} untuk mendapatkan intro.`),
                     mentions: [jid]
                 });
