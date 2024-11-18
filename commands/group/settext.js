@@ -18,16 +18,18 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        const key = ctx.args[0] || null;
-        const text = ctx.args.slice(1).join(" ") || null;
+        const [key, text] = = await Promise.all([
+            ctx.args[0],
+            ctx.args.slice(1).join(" ")
+        ]);
 
-        if (!key || !text) return await ctx.reply(
+        if (!ctx.args.length) return await ctx.reply(
             `${quote(`${tools.msg.generateInstruction(["send"], ["key", "message"])}`)}\n` +
             `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "welcome Selamat datang di grup!"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
-        if (key.toLowerCase() === "list") {
+        if (ctx.args[0] === "list") {
             const listText = await tools.list.get("settext");
             return await ctx.reply(listText);
         }
