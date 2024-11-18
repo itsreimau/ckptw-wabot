@@ -148,7 +148,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                         `${config.msg.readmore}\n` +
                         quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
-                    introText {
+                    contextInfo: {
                         externalAdReply: {
                             mediaType: 1,
                             previewType: 0,
