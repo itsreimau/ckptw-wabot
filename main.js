@@ -376,7 +376,7 @@ async function handleUserEvent(m) {
                 });
 
                 const introText = await db.get(`group.${groupNumber}.text.intro`);
-                if (!introText) await bot.core.sendMessage(id, {
+                if (introText) await bot.core.sendMessage(id, {
                     text: quote(`Grup ini memiliki intro. Ketik ${monospace("/intro")} untuk mendapatkan intro.`),
                     mentions: [jid]
                 });
