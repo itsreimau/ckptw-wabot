@@ -9,8 +9,6 @@ module.exports = {
     aliases: ["yta", "ytaudio", "ytmp3"],
     category: "downloader",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1]
     },
     code: async (ctx) => {

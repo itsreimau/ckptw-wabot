@@ -9,8 +9,6 @@ module.exports = {
     aliases: ["waifudiff", "wdiff"],
     category: "ai",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "image", 3]
     },
     code: async (ctx) => {
@@ -21,32 +19,12 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon -s 5"))}\n` +
-            `${quote(tools.msg.generatesFlagInformation({
-                "-s <number>": "Jenis gaya."
-            }))}\n` +
-            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon"))
         );
 
-        if (ctx.args[0] === "list") {
-            const listText = await tools.list.get("waifudiffusion");
-            return await ctx.reply(listText);
-        }
-
         try {
-            const type = ["Cute-Anime", "Studio-Ghibli", "Anime", "Waifu", "Vintage-Anime", "Soft-Anime"];
-            const flag = tools.general.parseFlag(input, {
-                "-s": {
-                    type: "value",
-                    key: "style",
-                    validator: (val) => !isNaN(val) && parseInt(val) > 0 && parseInt(val) <= type.length,
-                    parser: (val) => type[parseInt(val) - 1]
-                }
-            });
-
-            const apiUrl = tools.api.createUrl("ryzendesu", "/api/ai/waifu-diff", {
-                prompt: flag.input,
-                style: flag.style || tools.general.getRandomElement(type)
+            const apiUrl = tools.api.createUrl("neastooid", "/api/ai/waifu-diff", {
+                prompt: input
             });
 
             return await ctx.reply({
@@ -55,7 +33,6 @@ module.exports = {
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +
-                    `${quote(`Gaya: ${flag.style || "Acak"}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

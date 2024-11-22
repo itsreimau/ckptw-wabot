@@ -8,8 +8,6 @@ module.exports = {
     aliases: ["videy"],
     category: "downloader",
     handler: {
-        banned: true,
-        cooldown: true,
         premium: true
     },
     code: async (ctx) => {

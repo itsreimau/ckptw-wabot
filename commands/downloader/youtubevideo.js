@@ -9,8 +9,6 @@ module.exports = {
     aliases: ["ytmp4", "ytv", "ytvideo"],
     category: "downloader",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1]
     },
     code: async (ctx) => {

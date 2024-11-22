@@ -10,8 +10,6 @@ module.exports = {
     name: "family100",
     category: "entertainment",
     handler: {
-        banned: true,
-        cooldown: true,
         group: true
     },
     code: async (ctx) => {

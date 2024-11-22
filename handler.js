@@ -14,27 +14,31 @@ async function handler(ctx, options) {
     if (isGroup && botMode === "private") return true;
     if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return true;
 
-    const [isOwner, isPremium] = await Promise.all([
+    const [isOwner, isBanned, isPremium] = await Promise.all([
         tools.general.isOwner(ctx, senderNumber, config.system.selfOwner),
+        db.get(`user.${senderNumber}.isBanned`),
         db.get(`user.${senderNumber}.isPremium`)
     ]);
+
+    if (isBanned) {
+        await ctx.reply(config.msg.banned);
+        return true;
+    }
+
+    const cooldown = new Cooldown(ctx, config.system.cooldown);
+    if (cooldown.onCooldown && !isPremium) {
+        await ctx.reply(config.msg.cooldown);
+        return true;
+    }
 
     const checkOptions = {
         admin: {
             check: async () => (await ctx.isGroup()) && !(await tools.general.isAdmin(ctx, senderJid)),
             msg: config.msg.admin
         },
-        banned: {
-            check: async () => await db.get(`user.${senderNumber}.isBanned`),
-            msg: config.msg.banned
-        },
         botAdmin: {
             check: async () => (await ctx.isGroup()) && !(await tools.general.isBotAdmin(ctx)),
             msg: config.msg.botAdmin
-        },
-        cooldown: {
-            check: async () => new Cooldown(ctx, config.system.cooldown).onCooldown,
-            msg: config.msg.cooldown
         },
         coin: {
             check: async () => await checkCoin(ctx, options.coin, senderNumber),

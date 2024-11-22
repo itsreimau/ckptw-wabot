@@ -7,8 +7,6 @@ module.exports = {
     aliases: ["conf", "confes", "confess", "menf", "menfes"],
     category: "tools",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1],
         private: true
     },

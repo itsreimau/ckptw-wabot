@@ -9,10 +9,7 @@ const session = new Map();
 module.exports = {
     name: "tebaklirik",
     category: "entertainment",
-    handler: {
-        banned: true,
-        cooldown: true
-    },
+    handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;

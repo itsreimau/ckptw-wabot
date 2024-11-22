@@ -9,8 +9,6 @@ module.exports = {
     aliases: ["ig", "igdl", "instagram"],
     category: "downloader",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1]
     },
     code: async (ctx) => {
@@ -37,17 +35,20 @@ module.exports = {
 
             for (const media of data.videoLinks) {
                 const isImage = media.quality.toLowerCase().includes("download image");
+                const mediaType = isImage ? "image" : "video";
+                const extension = isImage ? "png" : "mp4";
+
                 await ctx.reply({
-                    [isImage ? "image" : "video"]: {
+                    [mediaType]: {
                         url: media.url
                     },
-                    mimetype: mime.contentType(isImage ? "png" : "mp4")
+                    mimetype: mime.lookup(extension)
                 });
             }
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return ctx.reply(config.msg.notFound);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${errorMessage}`));
         }
     }
 };

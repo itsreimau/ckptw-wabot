@@ -10,8 +10,6 @@ module.exports = {
     name: "ocr",
     category: "tools",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "image", 3]
     },
     code: async (ctx) => {

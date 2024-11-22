@@ -7,8 +7,6 @@ module.exports = {
     category: "group",
     handler: {
         admin: true,
-        banned: true,
-        cooldown: true,
         group: true
     },
     code: async (ctx) => {

@@ -7,8 +7,6 @@ module.exports = {
     name: "waifu2x",
     category: "ai",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "image", 3]
     },
     code: async (ctx) => {

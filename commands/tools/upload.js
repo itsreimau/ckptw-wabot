@@ -12,8 +12,6 @@ module.exports = {
     aliases: ["tourl"],
     category: "tools",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, ["audio", "document", "image", "video", "sticker"], 3]
     },
     code: async (ctx) => {

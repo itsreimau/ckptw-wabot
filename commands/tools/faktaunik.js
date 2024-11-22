@@ -8,8 +8,6 @@ module.exports = {
     aliases: ["fakta"],
     category: "tools",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: 10
     },
     code: async (ctx) => {

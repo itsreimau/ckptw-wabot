@@ -9,8 +9,6 @@ module.exports = {
     aliases: ["threads"],
     category: "downloader",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1]
     },
     code: async (ctx) => {
@@ -41,7 +39,7 @@ module.exports = {
                         image: {
                             url: imageUrl
                         },
-                        mimetype: mime.contentType("png"),
+                        mimetype: mime.lookup("png"),
                     });
                 }
             }
@@ -52,7 +50,7 @@ module.exports = {
                         video: {
                             url: videoUrl
                         },
-                        mimetype: mime.contentType("mp4"),
+                        mimetype: mime.lookup("mp4"),
                         gifPlayback: false
                     });
                 }

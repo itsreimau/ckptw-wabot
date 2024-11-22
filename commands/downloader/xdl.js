@@ -9,8 +9,6 @@ module.exports = {
     aliases: ["twit", "twitdl", "twitter", "twitterdl", "x"],
     category: "downloader",
     handler: {
-        banned: true,
-        cooldown: true,
         premium: true
     },
     code: async (ctx) => {

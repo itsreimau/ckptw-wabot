@@ -8,8 +8,6 @@ module.exports = {
     aliases: ["kodepos", "kodeposs"],
     category: "search",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1]
     },
     code: async (ctx) => {

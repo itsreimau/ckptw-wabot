@@ -10,8 +10,6 @@ module.exports = {
     aliases: ["gimage"],
     category: "tools",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1]
     },
     code: async (ctx) => {
@@ -26,15 +24,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("aemt", "/googleimage", {
-                query: input
+            const apiUrl = tools.api.createUrl("neastooid", "/api/tools/gimage", {
+                q: input
             });
-            const data = (await axios.get(apiUrl)).data.result;
+            const {
+                data
+            } = await axios.get(apiUrl);
             const result = tools.general.getRandomElement(data);
 
             return await ctx.reply({
                 image: {
-                    url: result
+                    url: result.url
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +

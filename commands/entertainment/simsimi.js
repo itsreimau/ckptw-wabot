@@ -8,8 +8,6 @@ module.exports = {
     aliases: ["simi"],
     category: "entertainment",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1]
     },
     code: async (ctx) => {

@@ -28,6 +28,9 @@ const APIs = {
     miyan: {
         baseURL: "https://miyanapi.vercel.app"
     },
+    neastooid: {
+        baseURL: "https://api.neastooid.xyz"
+    },
     nexoracle: {
         baseURL: "https://api.nexoracle.com",
         APIKey: "free_key@maher_apis" // APIKey disediakan oleh Maher Zubair

@@ -10,10 +10,7 @@ module.exports = {
     name: "chatgpt",
     aliases: ["ai", "chatai", "gpt", "gpt4"],
     category: "ai",
-    handler: {
-        banned: true,
-        cooldown: true
-    },
+    handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;

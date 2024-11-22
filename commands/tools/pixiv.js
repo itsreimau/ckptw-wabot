@@ -12,8 +12,6 @@ module.exports = {
     aliases: ["pix"],
     category: "tools",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1]
     },
     code: async (ctx) => {
@@ -31,11 +29,9 @@ module.exports = {
             const apiUrl = tools.api.createUrl("ryzendesu", "/api/search/pixiv", {
                 query: input
             });
-            const {
-                Media
-            } = (await axios.get(apiUrl)).data;
+            const data = (await axios.get(apiUrl)).data.Media;
+            const result = tools.general.getRandomElement(data);
 
-            const result = tools.general.getRandomElement(Media);
             return await ctx.reply({
                 image: {
                     url: result

@@ -6,10 +6,7 @@ module.exports = {
     name: "uptime",
     aliases: ["runtime"],
     category: "information",
-    handler: {
-        banned: true,
-        cooldown: true
-    },
+    handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;

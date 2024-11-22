@@ -12,15 +12,12 @@ module.exports = {
     name: "tovid",
     aliases: ["tomp4", "togif"],
     category: "converter",
-    handler: {
-        banned: true,
-        cooldown: true
-    },
+    handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        if (!(tools.general.checkQuotedMedia(ctx.quoted, "sticker"))) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
+        if (!(tools.general.checkQuotedMedia(ctx.quoted, ["sticker"]))) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
 
         try {
             const buffer = await ctx.quoted.media.toBuffer()

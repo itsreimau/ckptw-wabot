@@ -8,8 +8,6 @@ module.exports = {
     aliases: ["anime"],
     category: "tools",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1]
     },
     code: async (ctx) => {

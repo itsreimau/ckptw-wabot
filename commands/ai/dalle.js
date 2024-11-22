@@ -6,10 +6,7 @@ const mime = require("mime-types");
 module.exports = {
     name: "dalle",
     category: "ai",
-    handler: {
-        banned: true,
-        cooldown: true
-    },
+    handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;

@@ -9,8 +9,6 @@ module.exports = {
     aliases: ["mediafire", "mf", "mfdl"],
     category: "downloader",
     handler: {
-        banned: true,
-        cooldown: true,
         premium: true
     },
     code: async (ctx) => {

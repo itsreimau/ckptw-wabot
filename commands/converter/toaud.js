@@ -9,15 +9,12 @@ module.exports = {
     name: "toaud",
     aliases: ["toaudio", "tomp3"],
     category: "converter",
-    handler: {
-        banned: true,
-        cooldown: true
-    },
+    handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        if (!(tools.general.checkQuotedMedia(ctx.quoted, "video"))) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
+        if (!(tools.general.checkQuotedMedia(ctx.quoted, ["video"]))) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
 
         try {
             const buffer = await ctx.quoted.media.toBuffer()

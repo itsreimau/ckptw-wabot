@@ -9,8 +9,6 @@ module.exports = {
     aliases: ["facebook", "fb", "fbdl"],
     category: "downloader",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1]
     },
     code: async (ctx) => {
@@ -39,7 +37,7 @@ module.exports = {
                 video: {
                     url: data.hd || data.sd
                 },
-                mimetype: mime.contentType("mp4"),
+                mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer,

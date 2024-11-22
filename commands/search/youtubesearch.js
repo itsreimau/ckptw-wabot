@@ -9,8 +9,6 @@ module.exports = {
     aliases: ["youtube", "youtubes", "yt", "yts", "ytsearch"],
     category: "search",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1]
     },
     code: async (ctx) => {

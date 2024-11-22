@@ -9,8 +9,6 @@ module.exports = {
     aliases: ["tiktok", "tiktoknowm", "tt", "ttdl", "vt", "vtdl", "vtdltiktok", "vtnowm"],
     category: "downloader",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1]
     },
     code: async (ctx) => {
@@ -101,7 +99,7 @@ module.exports = {
                     audio: {
                         url: data.url
                     },
-                    mimetype: mime.contentType("mp3"),
+                    mimetype: mime.lookup("mp3"),
                     caption: `${quote(`URL: ${url}`)}\n` +
                         "\n" +
                         config.msg.footer

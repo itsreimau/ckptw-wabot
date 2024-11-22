@@ -12,8 +12,6 @@ module.exports = {
     aliases: ["tanomali", "teksanomali"],
     category: "maker",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: [10, "text", 1]
     },
     code: async (ctx) => {

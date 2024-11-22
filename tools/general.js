@@ -6,67 +6,11 @@ const FormData = require("form-data");
 const {
     fromBuffer
 } = require("file-type");
-const Jimp = require("jimp");
 
 async function checkAdmin(ctx, id) {
     try {
         const members = await ctx.group().members();
         return members.some((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id === id);
-    } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
-        return false;
-    }
-}
-
-async function blurredImage(input) {
-    try {
-        let image;
-
-        const universalUrl = /((https?):\/\/)?(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (typeof input === "string" && universalUrl.test(input)) {
-            const response = await axios.get(input, {
-                responseType: "arraybuffer"
-            });
-            image = await Jimp.read(Buffer.from(response.data));
-        } else if (Buffer.isBuffer(input)) {
-            image = await Jimp.read(input);
-        } else {
-            throw new Error("Invalid input type. Input should be a URL or a Buffer.");
-        }
-
-        const canvasWidth = 115;
-        const canvasHeight = 90;
-        const aspectRatio = canvasWidth / canvasHeight;
-        const imageAspectRatio = image.bitmap.width / image.bitmap.height;
-
-        let newWidth, newHeight;
-
-        if (imageAspectRatio > aspectRatio) {
-            newWidth = canvasWidth;
-            newHeight = canvasWidth / imageAspectRatio;
-        } else {
-            newWidth = canvasHeight * imageAspectRatio;
-            newHeight = canvasHeight;
-        }
-
-        const blurredImage = image.clone().resize(canvasWidth + 40, canvasHeight + 40).blur(50);
-
-        const finalImage = new Jimp(canvasWidth, canvasHeight);
-
-        finalImage.composite(blurredImage, -20, -20);
-
-        const xOffset = (canvasWidth - newWidth) / 2;
-        const yOffset = (canvasHeight - newHeight) / 2;
-
-        finalImage.composite(image.resize(newWidth, newHeight), xOffset, yOffset);
-
-        const buffer = await finalImage.getBufferAsync(Jimp.MIME_PNG);
-        const url = await upload(buffer);
-
-        return {
-            buffer,
-            url
-        };
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
         return false;
@@ -381,7 +325,6 @@ async function upload(buffer) {
 }
 
 module.exports = {
-    blurredImage,
     checkMedia,
     checkQuotedMedia,
     convertMsToDuration,

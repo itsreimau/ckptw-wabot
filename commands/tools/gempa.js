@@ -9,8 +9,6 @@ module.exports = {
     aliases: ["gempabumi", "infogempa"],
     category: "tools",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: 10
     },
     code: async (ctx) => {

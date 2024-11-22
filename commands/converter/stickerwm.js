@@ -13,10 +13,7 @@ module.exports = {
     name: "stickerwm",
     aliases: ["swm", "stikerwm"],
     category: "converter",
-    handler: {
-        banned: true,
-        cooldown: true
-    },
+    handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;

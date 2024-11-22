@@ -7,8 +7,6 @@ module.exports = {
     name: "jokes",
     category: "entertainment",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: 10
     },
     code: async (ctx) => {

@@ -9,8 +9,6 @@ module.exports = {
     aliases: ["ppcp"],
     category: "tools",
     handler: {
-        banned: true,
-        cooldown: true,
         coin: 10
     },
     code: async (ctx) => {
@@ -31,13 +29,13 @@ module.exports = {
                     image: {
                         url: data.male
                     },
-                    mimetype: mime.contentType("png"),
+                    mimetype: mime.lookup("png"),
                 }),
                 ctx.reply({
                     image: {
                         url: data.female
                     },
-                    mimetype: mime.contentType("png")
+                    mimetype: mime.lookup("png")
                 })
             ]);
         } catch (error) {
