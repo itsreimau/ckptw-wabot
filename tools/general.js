@@ -230,13 +230,14 @@ async function isUrl(str) {
     let matches = [];
 
     try {
-        const urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+        const urlRegex = /https?:\/\/(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
         matches = str.match(urlRegex);
 
         if (!matches || matches.length === 0) return false;
 
         const response = await axios.get("https://jecas.cz/tld-list/");
         const $ = cheerio.load(response.data);
+
         const tldList = JSON.parse($("div.content textarea").text());
 
         for (const match of matches) {
@@ -245,9 +246,9 @@ async function isUrl(str) {
                 const url = new URL(urlString);
 
                 const hostname = url.hostname;
-                const tld = hostname.split(".").pop().toLowerCase();
+                const tld = hostname.split(".").pop().toUpperCase();
 
-                if (tldList.includes("." + tld)) {
+                if (tldList.includes(tld)) {
                     validUrls.push(match);
                 }
             } catch (error) {
