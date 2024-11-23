@@ -39,8 +39,8 @@ module.exports = {
 
         const url = flag.input || null;
 
-        const universalUrl = /((https?):\/\/)?(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-        if (!universalUrl.test(url)) return await ctx.reply(config.msg.urlInvalid);
+        const isUrl = await tools.general.isUrl(url);
+        if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
             const mediaType = flag.audio ? "audio" : "video_image";

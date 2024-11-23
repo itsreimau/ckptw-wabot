@@ -243,11 +243,11 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (m.key.fromMe) return;
         const getAutokick = await db.get(`group.${groupNumber}.option.autokick`);
 
-        // Penanganan antilinkgc
-        const getAntilink = await db.get(`group.${groupNumber}.option.antilinkgc`);
-        const groupChatUrl = /((https?):\/\/)?(www\.)?chat\.whatsapp\.com\/([a-zA-Z0-9_-]{22})/i;
+        // Penanganan antilink
+        const getAntilink = await db.get(`group.${groupNumber}.option.antilink`);
         if (getAntilink) {
-            if (m.content && groupChatUrl.test(m.content) && !(await tools.general.isAdmin(ctx, senderJid))) {
+            const isUrl = await tools.general.isUrl(m.content);
+            if (m.content && isUrl && !(await tools.general.isAdmin(ctx, senderJid))) {
                 await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
                 await ctx.deleteMessage(m.key);
                 if (!config.system.restrict && getAutokick) await ctx.group().kick([senderJid]);
@@ -273,7 +273,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Penanganan menfess
         const isCmd = tools.general.isCmd(m, ctx);
         const allMenfessData = await db.get("menfess");
-        if ((!isCmd && isCmd.didyoumean) && allMenfessData && typeof allMenfessData === "object" && Object.keys(allMenfessData).length > 0) {
+        if (isCmd && isCmd.didyoumean && allMenfessData && typeof allMenfessData === "object" && Object.keys(allMenfessData).length > 0) {
             const menfessEntries = Object.entries(allMenfessData);
 
             for (const [conversationId, menfessData] of menfessEntries) {
@@ -283,24 +283,25 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 } = menfessData;
                 const senderInConversation = senderNumber === from || senderNumber === to;
 
-                if (m.content && /^\b(delete|stop)\b$/i.test(m.content.trim())) {
-                    if (senderInConversation) {
-                        const targetNumber = senderNumber === from ? to : from;
-                        await ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
-                        await ctx.sendMessage(`${targetNumber}@s.whatsapp.net`, {
-                            text: quote("✅ Pesan menfess telah dihapus!")
-                        });
-                        await db.delete(`menfess.${conversationId}`);
-                    }
+                if (m.content && /^\b(delete|stop)\b$/i.test(m.content.trim()) && senderInConversation) {
+                    const targetNumber = senderNumber === from ? to : from;
+                    const message = "✅ Pesan menfess telah dihapus!";
+
+                    await ctx.reply(quote(message));
+                    await ctx.sendMessage(`${targetNumber}@s.whatsapp.net`, {
+                        text: quote(message)
+                    });
+                    await db.delete(`menfess.${conversationId}`);
+                    break;
                 }
 
                 if (senderInConversation) {
                     const targetId = senderNumber === from ? `${to}@s.whatsapp.net` : `${from}@s.whatsapp.net`;
+
                     await ctx._client.sendMessage(targetId, {
                         forward: m
                     });
                     await db.set(`menfess.${conversationId}.lastMsg`, Date.now());
-
                     break;
                 }
             }
@@ -366,19 +367,19 @@ async function handleUserEvent(m) {
                         externalAdReply: {
                             mediaType: 1,
                             previewType: 0,
-                            mediaUrl: config.bot.website || "",
-                            title: config.msg.watermark || "",
+                            mediaUrl: config.bot.website,
+                            title: config.msg.watermark,
                             body: null,
                             renderLargerThumbnail: true,
                             thumbnailUrl: profilePictureUrl || config.bot.thumbnail,
-                            sourceUrl: config.bot.website || ""
+                            sourceUrl: config.bot.website
                         }
                     }
                 });
 
                 const introText = await db.get(`group.${groupNumber}.text.intro`);
                 if (eventType === "UserJoin" && introText) await bot.core.sendMessage(id, {
-                    text: quote(`Grup ini memiliki intro. Ketik ${monospace("/intro")} untuk mendapatkan intro.`),
+                    text: introText,
                     mentions: [jid]
                 });
             }

@@ -29,9 +29,9 @@ module.exports = {
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`Tipe: ${data.tipe}`)}\n` +
-                `${quote(`+${coin} Koin`)}\n` +
-                `${quote(`Batas waktu ${timeout / 1000} detik.`)}\n` +
-                `${quote('Ketik "hint" untuk bantuan.')}\n` +
+                `${quote(`Bonus: ${coin} Koin`)}\n` +
+                `${quote(`Batas waktu: ${timeout / 1000} detik.`)}\n` +
+                `${quote("Ketik 'hint' untuk bantuan.")}\n` +
                 "\n" +
                 config.msg.footer
             );

@@ -8,7 +8,7 @@ module.exports = {
     handler: {
         banned: true,
         group: true,
-        cooldown: true
+
     },
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);

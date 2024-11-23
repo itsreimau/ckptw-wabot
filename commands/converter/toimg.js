@@ -39,13 +39,9 @@ module.exports = {
 };
 
 // Dibuat oleh UdeanDev (https://github.com/udeannn)
-async function webp2png(source) {
+async function webp2png(blob) {
     try {
-        const isUrl = typeof source === "string" && /https?:\/\//.test(source);
-        const blob = isUrl ? Buffer.from(source) : source;
-
         const form = new FormData();
-        form.append("new-image-url", isUrl ? "" : "");
         form.append("new-image", blob, "image.webp");
 
         const res = await axios.post("https://ezgif.com/webp-to-png", form, {

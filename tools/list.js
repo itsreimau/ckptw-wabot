@@ -106,7 +106,7 @@ async function get(type, ctx) {
                 break;
             }
             case "setoption": {
-                const data = ["antilinkgc", "antitoxic", "autokick", "welcome"];
+                const data = ["antilink", "antitoxic", "autokick", "welcome"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;
@@ -149,13 +149,6 @@ async function get(type, ctx) {
                         `${quote(`Kode: ${d.code}`)}\n` +
                         `${quote(`Bahasa: ${d["bahasa negara"]}`)}\n`
                     ).join(`${quote("─────")}\n`) +
-                    "\n" +
-                    config.msg.footer;
-                break;
-            }
-            case "waifudiffusion": {
-                const data = ["Cute-Anime", "Studio-Ghibli", "Anime", "Waifu", "Vintage-Anime", "Soft-Anime"];
-                text = `${data.map((item, index) => quote(`${item} (${index + 1})`)).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;
                 break;

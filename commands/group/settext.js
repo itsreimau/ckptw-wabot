@@ -11,7 +11,6 @@ module.exports = {
         admin: true,
         banned: true,
         botAdmin: true,
-        cooldown: true,
         group: true
     },
     code: async (ctx) => {

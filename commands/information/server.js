@@ -7,9 +7,7 @@ const os = require("os");
 module.exports = {
     name: "server",
     category: "information",
-    handler: {
-        cooldown: true
-    },
+    handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;

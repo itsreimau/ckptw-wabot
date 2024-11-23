@@ -11,7 +11,6 @@ module.exports = {
         admin: true,
         banned: true,
         botAdmin: true,
-        cooldown: true,
         group: true
     },
     code: async (ctx) => {
@@ -22,7 +21,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "antilinkgc"))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "antilink"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
@@ -36,8 +35,8 @@ module.exports = {
             let setKey;
 
             switch (input.toLowerCase()) {
-                case "antilinkgc":
-                    setKey = `group.${groupNumber}.option.antilinkgc`;
+                case "antilink":
+                    setKey = `group.${groupNumber}.option.antilink`;
                     break;
                 case "antitoxic":
                     setKey = `group.${groupNumber}.option.antitoxic`;

@@ -165,25 +165,28 @@ function isCmd(m, ctx) {
 
         const matchedCmd = cmd.get(cmdName) || Array.from(cmd.values()).find(c => c.aliases && c.aliases.includes(cmdName));
 
-        if (matchedCmd) return {
-            msg: content,
-            prefix,
-            cmd: cmdName,
-            input
-        };
+        if (matchedCmd) {
+            return {
+                msg: content,
+                prefix,
+                cmd: cmdName,
+                input
+            };
+        }
 
         const mean = didyoumean(cmdName, listCmd);
 
-        if (mean) return {
-            msg: content,
-            prefix,
-            cmd: cmdName,
-            input,
-            didyoumean: mean
-        };
+        if (mean) {
+            return {
+                msg: content,
+                prefix,
+                cmd: cmdName,
+                input,
+                didyoumean: mean
+            };
+        }
 
         return false;
-
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
         return false;
@@ -220,11 +223,43 @@ function isOwner(ctx, id, selfOwner) {
     }
 }
 
-function isUrl(string) {
-    if (typeof string !== "string") return false;
+async function isUrl(str) {
+    if (typeof str !== "string") return false;
 
-    const universalUrl = /((https?):\/\/)?(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-    return universalUrl.test(string);
+    let validUrls = [];
+    let matches = [];
+
+    try {
+        const urlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+        matches = str.match(urlRegex);
+
+        if (!matches || matches.length === 0) return false;
+
+        const response = await axios.get("https://jecas.cz/tld-list/");
+        const $ = cheerio.load(response.data);
+        const tldList = JSON.parse($("div.content textarea").text());
+
+        for (const match of matches) {
+            try {
+                let urlString = match.startsWith("http://") || match.startsWith("https://") ? match : `https://${match}`;
+                const url = new URL(urlString);
+
+                const hostname = url.hostname;
+                const tld = hostname.split(".").pop().toLowerCase();
+
+                if (tldList.includes("." + tld)) {
+                    validUrls.push(match);
+                }
+            } catch (error) {
+                continue;
+            }
+        }
+
+        return validUrls.length > 0 ? validUrls : false;
+    } catch (error) {
+        console.error(`[${config.pkg.name}] Error:`, error);
+        return false;
+    }
 }
 
 function parseFlag(argsString, customRules = {}) {

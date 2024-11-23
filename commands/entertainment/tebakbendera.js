@@ -32,9 +32,9 @@ module.exports = {
                     url: data.img
                 },
                 mimetype: mime.lookup("png"),
-                caption: `${quote(`+${coin} Koin`)}\n` +
-                    `${quote(`Batas waktu ${timeout / 1000} detik.`)}\n` +
-                    `${quote('Ketik "hint" untuk bantuan.')}\n` +
+                caption: `${quote(`Bonus: ${coin} Koin`)}\n` +
+                    `${quote(`Batas waktu: ${timeout / 1000} detik.`)}\n` +
+                    `${quote("Ketik 'hint' untuk bantuan.")}\n` +
                     "\n" +
                     config.msg.footer
             });

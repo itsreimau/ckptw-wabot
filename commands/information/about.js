@@ -5,9 +5,7 @@ const {
 module.exports = {
     name: "about",
     category: "information",
-    handler: {
-        cooldown: true
-    },
+    handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
