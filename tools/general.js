@@ -216,7 +216,7 @@ async function isBotAdmin(ctx) {
 
 function isOwner(ctx, id, selfOwner) {
     try {
-        const number = id || ctx.senderJid.split(/[:@]/)[0]
+        const number = id || ctx.sender.jid.split(/[:@]/)[0]
         return selfOwner ? config.bot.number === number || config.owner.number === number || config.owner.co.includes(number) : config.owner.number === number || config.owner.co.includes(number);
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);

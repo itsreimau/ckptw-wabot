@@ -22,7 +22,7 @@ module.exports = {
             const data = tools.general.getRandomElement(response.data);
             const coin = 5;
             const timeout = 60000;
-            const senderNumber = ctx.senderJid.split(/[:@]/)[0];
+            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
 
             session.set(ctx.id, true);
 

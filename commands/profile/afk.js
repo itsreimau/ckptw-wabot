@@ -14,7 +14,7 @@ module.exports = {
 
         try {
             const reason = input || "tanpa alasan";
-            db.set(`user.${ctx.senderJid.split(/[:@]/)[0]}.afk`, {
+            db.set(`user.${ctx.sender.jid.split(/[:@]/)[0]}.afk`, {
                 reason: reason,
                 timeStamp: Date.now()
             });

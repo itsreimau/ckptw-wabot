@@ -27,7 +27,7 @@ module.exports = {
                 allAnswered: 50
             };
             const timeout = 90000;
-            const senderNumber = ctx.senderJid.split(/[:@]/)[0];
+            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
             const remainingAnswers = new Set(data.jawaban.map(j => j.toLowerCase()));
             const participants = new Set();
 

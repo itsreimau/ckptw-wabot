@@ -19,7 +19,7 @@ module.exports = {
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
-        const senderNumber = ctx.senderJid.split(/[:@]/)[0];
+        const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
         const [userLevel, isPremium, lastClaim, currentCoins] = await Promise.all([
             db.get(`user.${senderNumber}.level`) || 0,
             db.get(`user.${senderNumber}.isPremium`) || false,
