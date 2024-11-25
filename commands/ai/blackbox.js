@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: "blackbox",
-    aliases: ["bb"],
+    aliases: ["ai", "bb"],
     category: "ai",
     handler: {
         coin: [10, "text", 1]
