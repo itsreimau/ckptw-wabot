@@ -37,7 +37,7 @@ module.exports = {
                 `${quote(`Dzuhur: ${d.jadwal.dzuhur}`)}\n` +
                 `${quote(`Ashar: ${d.jadwal.ashar}`)}\n` +
                 `${quote(`Maghrib: ${d.jadwal.maghrib}`)}\n` +
-                `${quote(`Isya: ${d.jadwal.isya}`)}\n` +
+                `${quote(`Isya: ${d.jadwal.isya}`)}\n`
             ).join("\n");
             return await ctx.reply(
                 `${quote(`Total: ${data.total}`)}\n` +
