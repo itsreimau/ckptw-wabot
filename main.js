@@ -256,9 +256,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Penanganan antitoxic
         const getAntitoxic = await db.get(`group.${groupNumber}.option.antitoxic`);
-        const toxicWord = ["kunyuk", "bajingan", "asu", "bangsat", "kampret", "kontol", "memek", "ngentot", "pentil", "perek", "pepek", "pecun", "bencong", "banci", "maho", "gila", "sinting", "tolol", "sarap", "setan", "lonte", "hencet", "taptei", "kampang", "pilat", "keparat", "bejad", "gembel", "brengsek", "tai", "anjrit", "bangsat", "fuck", "tetek", "ngulum", "jembut", "totong", "kolop", "pukimak", "bodat", "heang", "jancuk", "burit", "titit", "nenen", "bejat", "silit", "sempak", "fucking", "asshole", "bitch", "penis", "vagina", "klitoris", "kelentit", "borjong", "dancuk", "pantek", "taek", "itil", "teho", "bejat", "pantat", "bagudung", "babami", "kanciang", "bungul", "idiot", "kimak", "henceut", "kacuk", "blowjob", "pussy", "dick", "damn", "ass"];
+        const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
         if (getAntitoxic && m.content && !(await tools.general.isAdmin(ctx, senderJid))) {
-            if (toxicWord.some(word => m.content.toLowerCase().includes(word))) {
+            if (toxicRegex.test(m.text)) {
                 await ctx.reply(quote(`⛔ Jangan toxic!`));
                 await ctx.deleteMessage(m.key);
                 if (!config.system.restrict && getAutokick) await ctx.group().kick([senderJid]);

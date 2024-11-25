@@ -6,27 +6,11 @@ const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"
     },
-    aggelos_007: {
-        baseURL: "https://api.aggelos-007.xyz"
-    },
-    chiwa: {
-        baseURL: "https://api.chiwa.my.id"
-    },
     cifumo: {
         baseURL: "https://rest.cifumo.biz.id"
     },
-    exonity: {
-        baseURL: "https://exonity.tech",
-        APIKey: "adminsepuh"
-    },
     itzpire: {
         baseURL: "https://itzpire.com"
-    },
-    lenwy: {
-        baseURL: "https://api-lenwy.vercel.app"
-    },
-    miyan: {
-        baseURL: "https://miyanapi.vercel.app"
     },
     neastooid: {
         baseURL: "https://api.neastooid.xyz"
@@ -46,13 +30,6 @@ const APIs = {
     },
     vreden: {
         baseURL: "https://api.vreden.my.id"
-    },
-    wudysoft: {
-        baseURL: "https://wudysoft.us.kg"
-    },
-    zenith: {
-        baseURL: "https://api-zenith.koyeb.app",
-        APIKey: "zenkey" // APIKey disediakan oleh Zenith
     }
 };
 

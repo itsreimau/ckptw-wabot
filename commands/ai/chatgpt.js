@@ -2,15 +2,14 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const {
-    MessageType
-} = require("@mengkodingan/ckptw/lib/Constant");
 
 module.exports = {
-    name: "chatgpt",
-    aliases: ["ai", "chatai", "gpt", "gpt4"],
+    name: "characterai",
+    aliases: ["cai"],
     category: "ai",
-    handler: {},
+    handler: {
+        coin: [10, "text", 1]
+    },
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
@@ -18,44 +17,20 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["audio", "image", "gif", "sticker", "text","video"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))}\n` +
-            quote(tools.msg.generateNotes(["AI ini dapat melihat media dan menjawab pertanyaan tentangnya. Kirim media dan tanyakan apa saja!"]))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))
         );
 
-        const msgType = ctx.getMessageType();
-        const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.general.checkMedia(msgType, ["audio", "image", "gif", "sticker", "video"], ctx),
-            tools.general.checkQuotedMedia(ctx.quoted, ["audio", "image", "gif", "sticker", "video"])
-        ]);
-
         try {
-            if (checkMedia || checkQuotedMedia) {
-                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-                const uploadUrl = await tools.general.upload(buffer);
-                const apiUrl = tools.api.createUrl("miyan", "/ai", {
-                    file_url: uploadUrl,
-                    text: input
-                });
-                const {
-                    data
-                } = await axios.get(apiUrl);
+            const apiUrl = tools.api.createUrl("ryzendesu", "/api/ai/chatgpt", {
+                text: input,
+                prompt: `You are a WhatsApp bot called ${config.bot.name}, created and managed by ${config.owner.name}. If your name matches or is similar to a well-known character, adopt a personality that fits that character. If it does not, stay friendly, informative, and responsive.` // Dapat diubah sesuai keinginan Anda
+            });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
-                return await ctx.reply(data.result);
-            } else {
-                const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
-                const uid = await db.get(`user.${senderNumber}.uid`)
-                const apiUrl = tools.api.createUrl("miyan", "/ai", {
-                    prompt: `You are a WhatsApp bot called ${config.bot.name}, created and managed by ${config.owner.name}. If your name matches or is similar to a well-known character, adopt a personality that fits that character. If it does not, stay friendly, informative, and responsive.`, // Dapat diubah sesuai keinginan Anda
-                    userid: uid,
-                    text: input
-                });
-                const {
-                    data
-                } = await axios.get(apiUrl);
-
-                return await ctx.reply(data.result);
-            }
+            return await ctx.reply(data.response);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

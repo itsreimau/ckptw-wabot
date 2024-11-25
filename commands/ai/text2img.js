@@ -32,8 +32,8 @@ module.exports = {
 
             apiPath = version === "0" ? "/ai/text2img" : `/v${version}/text2img`;
         } else {
-            apiService = "nyxs";
-            apiPath = "/ai-image/image-generator2";
+            apiService = "ryzendesu";
+            apiPath = "/api/ai/text2img";
         }
 
         try {
@@ -41,7 +41,7 @@ module.exports = {
                 ...(apiService === "aemt" && {
                     text: input
                 }),
-                ...(apiService === "nyxs" && {
+                ...(apiService === "ryzendesu" && {
                     prompt: input
                 })
             });

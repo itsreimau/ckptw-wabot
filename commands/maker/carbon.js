@@ -1,15 +1,11 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
-const {
-    Sticker,
-    StickerTypes
-} = require("wa-sticker-formatter");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "brat",
-    aliases: ["tanomali", "teksanomali"],
+    name: "carbon",
+    aliases: ["carbonify"]
     category: "maker",
     handler: {
         coin: [10, "text", 1]
@@ -28,20 +24,16 @@ module.exports = {
         if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 50 kata!`));
 
         try {
-            const apiUrl = tools.api.createUrl("ryzendesu", "/api/sticker/brat", {
-                text: input
+            const apiUrl = tools.api.createUrl("ryzendesu", "/api/tool/carbon", {
+                code: input
             });
 
-            const sticker = new Sticker(apiUrl, {
-                pack: config.sticker.packname,
-                author: config.sticker.author,
-                type: StickerTypes.FULL,
-                categories: ["🤩", "🎉"],
-                id: ctx.id,
-                quality: 50
+            return await ctx.reply({
+                image: {
+                    url: apiUrl
+                },
+                mimetype: mime.lookup("png")
             });
-
-            return await ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
