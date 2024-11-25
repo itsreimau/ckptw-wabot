@@ -18,16 +18,17 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        if (!ctx.args.length) return await ctx.reply(
+        const emojisString = ctx.args.join("");
+        const emojiRegex = /\p{Emoji}/gu;
+        const emojis = Array.from(emojisString.matchAll(emojiRegex), (match) => match[0]);
+        const [emoji1, emoji2] = emojis.slice(0, 2);
+
+        if (!ctx.args.length || (emoji1 || emoji2)) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "😱 🤓"))
         );
 
         try {
-            const emojisString = ctx.args.join("");
-            const emojiRegex = /\p{Emoji}/gu;
-            const emojis = Array.from(emojisString.matchAll(emojiRegex), (match) => match[0]);
-            const [emoji1, emoji2] = emojis.slice(0, 2);
             const apiUrl = tools.api.createUrl("https://tenor.googleapis.com", "/v2/featured", {
                 key: "AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ",
                 contentfilter: "high",

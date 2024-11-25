@@ -34,7 +34,7 @@ module.exports = {
 
             return await ctx.reply({
                 image: {
-                    url: result.url
+                    url: result.image
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +

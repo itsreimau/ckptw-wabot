@@ -8,8 +8,8 @@ const mime = require("mime-types");
 const session = new Map();
 
 module.exports = {
-    name: "tebakbendera",
-    category: "entertainment",
+    name: "tebakgambar",
+    category: "game",
     handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
@@ -18,12 +18,12 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tebakbendera2.json", {});
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tebakgambar.json", {});
             const response = await axios.get(apiUrl);
             const data = tools.general.getRandomElement(response.data);
             const coin = 5;
             const timeout = 60000;
-            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+            const senderNumber = ctx.senderJid.split(/[:@]/)[0];
 
             session.set(ctx.id, true);
 
@@ -32,7 +32,8 @@ module.exports = {
                     url: data.img
                 },
                 mimetype: mime.lookup("png"),
-                caption: `${quote(`Bonus: ${coin} Koin`)}\n` +
+                caption: `${quote(`Deskripsi: ${data.deskripsi}`)}\n` +
+                    `${quote(`Bonus: ${coin} Koin`)}\n` +
                     `${quote(`Batas waktu: ${timeout / 1000} detik.`)}\n` +
                     `${quote("Ketik 'hint' untuk bantuan.")}\n` +
                     "\n" +
@@ -45,7 +46,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toLowerCase();
-                const answer = data.name.toLowerCase();
+                const answer = data.jawaban.toLowerCase();
 
                 if (userAnswer === answer) {
                     session.delete(ctx.id);
@@ -73,7 +74,7 @@ module.exports = {
             });
 
             collector.on("end", async (collector, reason) => {
-                const answer = data.name;
+                const answer = data.jawaban;
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);

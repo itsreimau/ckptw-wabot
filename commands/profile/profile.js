@@ -1,7 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const mime = require("mime-types");
 
 module.exports = {
     name: "profile",
@@ -13,17 +12,31 @@ module.exports = {
         if (status) return;
 
         try {
-            const senderName = ctx.sender.pushName || "-";
+            const senderName = ctx.sender.pushName;
             const senderJid = ctx.sender.jid;
             const senderNumber = senderJid.split(/[:@]/)[0];
 
-            const [userCoin = 0, isOwner, isPremium, userLevel = 1, userXp = 0] = await Promise.all([
+            const [userCoin = 0, isOwner, isPremium, userLevel = 1, userXp = 0, userWinGame = 0] = await Promise.all([
                 db.get(`user.${senderNumber}.coin`),
                 tools.general.isOwner(ctx, senderNumber, true),
                 db.get(`user.${senderNumber}.isPremium`),
                 db.get(`user.${senderNumber}.level`),
                 db.get(`user.${senderNumber}.xp`),
+                db.get(`user.${senderNumber}.winGame`)
             ]);
+
+            const users = (await db.toJSON()).user;
+            const leaderboardData = Object.keys(users)
+                .map(id => ({
+                    id,
+                    winGame: users[id].winGame || 0,
+                    level: users[id].level || 0
+                }))
+                .sort((a, b) => {
+                    if (b.winGame !== a.winGame) return b.winGame - a.winGame;
+                    return b.level - a.level;
+                });
+            const userRank = leaderboardData.findIndex(user => user.id === senderNumber) + 1;
 
             let profilePictureUrl;
             try {
@@ -33,11 +46,13 @@ module.exports = {
             }
 
             return await ctx.reply({
-                text: `${quote(`Nama: ${senderName}`)}\n` +
+                text: `${quote(`Nama: ${senderName ||  "-"}`)}\n` +
                     `${quote(`Status: ${isOwner ? "Owner" : (isPremium ? "Premium" : "Freemium")}`)}\n` +
                     `${quote(`Level: ${userLevel}`)}\n` +
-                    `${quote(`Koin: ${isOwner ? "Tak terbatas" : isPremium ? "Tak terbatas" : userCoin || "-"}`)}\n` +
                     `${quote(`XP: ${userXp}`)}\n` +
+                    `${quote(`Koin: ${isOwner ? "Tak terbatas" : isPremium ? "Tak terbatas" : userCoin || "-"}`)}\n` +
+                    `${quote(`Peringkat: ${userRank}`)}\n` +
+                    `${quote(`Menang: ${userWinGame}`)}\n` +
                     "\n" +
                     config.msg.footer,
                 contextInfo: {

@@ -3,13 +3,12 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 const session = new Map();
 
 module.exports = {
-    name: "tebakgambar",
-    category: "entertainment",
+    name: "tebakkata",
+    category: "game",
     handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
@@ -18,27 +17,23 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tebakgambar.json", {});
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tebakkata.json", {});
             const response = await axios.get(apiUrl);
             const data = tools.general.getRandomElement(response.data);
             const coin = 5;
             const timeout = 60000;
-            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+            const senderNumber = ctx.senderJid.split(/[:@]/)[0];
 
             session.set(ctx.id, true);
 
-            await ctx.reply({
-                image: {
-                    url: data.img
-                },
-                mimetype: mime.lookup("png"),
-                caption: `${quote(`Deskripsi: ${data.deskripsi}`)}\n` +
-                    `${quote(`Bonus: ${coin} Koin`)}\n` +
-                    `${quote(`Batas waktu: ${timeout / 1000} detik.`)}\n` +
-                    `${quote("Ketik 'hint' untuk bantuan.")}\n` +
-                    "\n" +
-                    config.msg.footer
-            });
+            await ctx.reply(
+                `${quote(`Soal: ${data.soal}`)}\n` +
+                `${quote(`Bonus: ${coin} Koin`)}\n` +
+                `${quote(`Batas waktu: ${timeout / 1000} detik.`)}\n` +
+                `${quote("Ketik 'hint' untuk bantuan.")}\n` +
+                "\n" +
+                config.msg.footer
+            );
 
             const collector = ctx.MessageCollector({
                 time: timeout

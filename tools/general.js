@@ -195,7 +195,8 @@ function isCmd(m, ctx) {
 
 async function isAdmin(ctx, id) {
     try {
-        const jid = id || ctx.sender.jid;
+        let jid = id || ctx.sender.jid;
+        if (jid.includes(":")) jid = `${jid.split(":")[0]}@s.whatsapp.net`;
         return await checkAdmin(ctx, jid);
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
@@ -215,7 +216,7 @@ async function isBotAdmin(ctx) {
 
 function isOwner(ctx, id, selfOwner) {
     try {
-        const number = id || ctx.sender.jid.split(/[:@]/)[0]
+        const number = id || ctx.senderJid.split(/[:@]/)[0]
         return selfOwner ? config.bot.number === number || config.owner.number === number || config.owner.co.includes(number) : config.owner.number === number || config.owner.co.includes(number);
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
@@ -226,37 +227,27 @@ function isOwner(ctx, id, selfOwner) {
 async function isUrl(str) {
     if (typeof str !== "string") return false;
 
-    let validUrls = [];
-    let matches = [];
-
     try {
-        const urlRegex = /https?:\/\/(www\.)?[a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/gi;
-        matches = str.match(urlRegex);
+        const url = "https://data.iana.org/TLD/tlds-alpha-by-domain.txt";
+        const response = await axios.get(url);
+        const tldList = response.data.split("\n")
+            .filter(line => line && !line.startsWith("#"))
+            .map(line => line.trim().toLowerCase());
 
-        if (!matches || matches.length === 0) return false;
+        const urlRegex = /^(https?:\/\/)?([\w\-]+\.)+[a-zA-Z]{2,6}(\:[0-9]{1,5})?(\/[^\s]*)?$/;
 
-        const response = await axios.get("https://jecas.cz/tld-list/");
-        const $ = cheerio.load(response.data);
+        if (!urlRegex.test(str)) return false;
 
-        const tldList = JSON.parse($("div.content textarea").text());
+        let urlString = str.startsWith("http://") || str.startsWith("https://") ? str : `https://${str}`;
 
-        for (const match of matches) {
-            try {
-                let urlString = match.startsWith("http://") || match.startsWith("https://") ? match : `https://${match}`;
-                const url = new URL(urlString);
+        const urlObj = new URL(urlString);
+        const hostname = urlObj.hostname;
 
-                const hostname = url.hostname;
-                const tld = hostname.split(".").pop().toUpperCase();
+        const tld = hostname.split(".").pop().toLowerCase();
 
-                if (tldList.includes(tld)) {
-                    validUrls.push(match);
-                }
-            } catch (error) {
-                continue;
-            }
-        }
+        if (tldList && tldList.length > 0 && !tldList.includes(tld)) return false;
 
-        return validUrls.length > 0 ? validUrls : false;
+        return true;
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
         return false;

@@ -37,7 +37,7 @@ bot.ev.once(Events.ClientReady, async (m) => {
     if (!(await db.get("bot.mode"))) await db.set("bot.mode", "public");
 
     // Tetapkan config pada bot
-    const number = m.user.id.split(/[:@]/)[0];
+    const number = m.user.id.split(":")[0];
     await Promise.all([
         config.bot.number = number,
         config.bot.id = `${number}@s.whatsapp.net`,
@@ -273,7 +273,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Penanganan menfess
         const isCmd = tools.general.isCmd(m, ctx);
         const allMenfessData = await db.get("menfess");
-        if (isCmd && isCmd.didyoumean && allMenfessData && typeof allMenfessData === "object" && Object.keys(allMenfessData).length > 0) {
+        if ((!isCmd || isCmd.didyoumean) && allMenfessData && typeof allMenfessData === "object" && Object.keys(allMenfessData).length > 0) {
             const menfessEntries = Object.entries(allMenfessData);
 
             for (const [conversationId, menfessData] of menfessEntries) {
@@ -331,7 +331,7 @@ async function handleUserEvent(m) {
     } = m;
 
     try {
-        const groupNumber = id.split(/[:@]/)[0];
+        const groupNumber = id.split("@")[0];
         const getWelcome = await db.get(`group.${groupNumber}.option.welcome`);
 
         if (getWelcome) {
@@ -349,7 +349,7 @@ async function handleUserEvent(m) {
 
                 const eventType = m.eventsType;
                 const customText = eventType === "UserJoin" ? textWelcome : textGoodbye;
-                const userTag = `@${jid.split(/[:@]/)[0]}`;
+                const userTag = `@${jid.split("@")[0]}`;
 
                 const text = customText ?
                     customText

@@ -15,30 +15,8 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        let textToTranslate = ctx.args.join(" ") || null;
-        let langCode = "id";
-
-        if (tools.general.checkQuotedMedia(ctx.quoted, "text")) {
-            const quotedMessage = ctx.quoted;
-
-            if (quotedMessage.conversation) {
-                textToTranslate = quotedMessage.conversation;
-            } else {
-                textToTranslate = Object.values(quotedMessage).find(msg => msg?.caption || msg?.text)?.caption || quotedMessage?.extendedTextMessage?.text || textToTranslate || null;
-            }
-
-            if (ctx.args[0] && ctx.args[0].length === 2) {
-                langCode = ctx.args[0];
-                textToTranslate = ctx.args.slice(1).join(" ") || textToTranslate;
-            }
-        } else {
-            if (ctx.args[0] && ctx.args[0].length === 2) {
-                langCode = ctx.args[0];
-                textToTranslate = ctx.args.slice(1).join(" ");
-            } else {
-                textToTranslate = ctx.args.join(" ");
-            }
-        }
+        let textToTranslate = ctx.quoted?.conversation || ctx.quoted?.extendedTextMessage?.text || Object.values(ctx.quoted || {}).find(msg => msg?.caption || msg?.text)?.caption || ctx.args.slice(ctx.args[0]?.length === 2 ? 1 : 0).join(" ") || null;
+        let langCode = ctx.args[0]?.length === 2 ? ctx.args[0] : "id";
 
         if (!textToTranslate) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +

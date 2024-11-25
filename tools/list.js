@@ -163,6 +163,7 @@ async function get(type, ctx) {
                     converter: "Converter",
                     downloader: "Downloader",
                     entertainment: "Entertainment",
+                    game: "Game",
                     group: "Group",
                     maker: "Maker",
                     profile: "Profile",

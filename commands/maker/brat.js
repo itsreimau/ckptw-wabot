@@ -28,7 +28,7 @@ module.exports = {
         if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 50 kata!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://mxmxk-helper.hf.space", "/brat", {
+            const apiUrl = tools.api.createUrl("neastooid", "/api/tools/brat", {
                 text: input
             });
 

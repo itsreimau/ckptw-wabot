@@ -26,7 +26,7 @@ module.exports = {
         }
 
         try {
-            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+            const senderNumber = ctx.senderJid.split(/[:@]/)[0];
             let setKey;
 
             switch (input.toLowerCase()) {

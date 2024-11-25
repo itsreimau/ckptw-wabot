@@ -43,7 +43,7 @@ module.exports = {
 
                 return await ctx.reply(data.result);
             } else {
-                const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+                const senderNumber = ctx.senderJid.split(/[:@]/)[0];
                 const uid = await db.get(`user.${senderNumber}.uid`)
                 const apiUrl = tools.api.createUrl("miyan", "/ai", {
                     prompt: `You are a WhatsApp bot called ${config.bot.name}, created and managed by ${config.owner.name}. If your name matches or is similar to a well-known character, adopt a personality that fits that character. If it does not, stay friendly, informative, and responsive.`, // Dapat diubah sesuai keinginan Anda

@@ -7,8 +7,8 @@ const axios = require("axios");
 const session = new Map();
 
 module.exports = {
-    name: "asahotak",
-    category: "entertainment",
+    name: "tebakkimia",
+    category: "game",
     handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
@@ -17,17 +17,17 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/asahotak.json", {});
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tebakkimia.json", {});
             const response = await axios.get(apiUrl);
             const data = tools.general.getRandomElement(response.data);
             const coin = 5;
             const timeout = 60000;
-            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+            const senderNumber = ctx.senderJid.split(/[:@]/)[0];
 
             session.set(ctx.id, true);
 
             await ctx.reply(
-                `${quote(`Soal: ${data.soal}`)}\n` +
+                `${quote(`Lambang: ${data.lambang}`)}\n` +
                 `${quote(`Bonus: ${coin} Koin`)}\n` +
                 `${quote(`Batas waktu: ${timeout / 1000} detik.`)}\n` +
                 `${quote("Ketik 'hint' untuk bantuan.")}\n` +
@@ -41,7 +41,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toLowerCase();
-                const answer = data.jawaban.toLowerCase();
+                const answer = data.unsur.toLowerCase();
 
                 if (userAnswer === answer) {
                     session.delete(ctx.id);
@@ -69,7 +69,7 @@ module.exports = {
             });
 
             collector.on("end", async (collector, reason) => {
-                const answer = data.jawaban;
+                const answer = data.unsur;
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);

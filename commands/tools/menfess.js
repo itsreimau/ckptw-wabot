@@ -14,10 +14,14 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
+        const [number, ...text] = ctx.args;
+        const numberFormatted = number.replace(/[^\d]/g, "");
+        const menfessText = text.join(" ");
+
         const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.split(/[:@]/)[0];
 
-        if (!ctx.args.length) return await ctx.reply(
+        if (!ctx.args.length || (!numberFormatted || !menfessText)) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `${senderNumber} halo dunia!`))
         );
@@ -33,12 +37,8 @@ module.exports = {
         if (isInvolvedInConversation) return await ctx.reply(quote(`❎ Anda sedang melakukan percakapan aktif. Selesaikan percakapan itu terlebih dahulu sebelum memulai percakapan baru.`));
 
         try {
-            const [number, ...text] = ctx.args;
-            const numberFormatted = number.replace(/[^\d]/g, "");
-
             if (numberFormatted === senderNumber) return await ctx.reply(quote(`❎ Tidak dapat digunakan pada diri Anda sendiri.`));
 
-            const menfessText = text.join(" ");
             const fakeText = {
                 key: {
                     fromMe: false,

@@ -7,8 +7,8 @@ const axios = require("axios");
 const session = new Map();
 
 module.exports = {
-    name: "tebaktebakan",
-    category: "entertainment",
+    name: "tebakkalimat",
+    category: "game",
     handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
@@ -17,12 +17,12 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tebaktebakan.json", {});
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tebakkalimat.json", {});
             const response = await axios.get(apiUrl);
             const data = tools.general.getRandomElement(response.data);
             const coin = 5;
             const timeout = 60000;
-            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+            const senderNumber = ctx.senderJid.split(/[:@]/)[0];
 
             session.set(ctx.id, true);
 

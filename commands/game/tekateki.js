@@ -7,8 +7,8 @@ const axios = require("axios");
 const session = new Map();
 
 module.exports = {
-    name: "susunkata",
-    category: "entertainment",
+    name: "tekateki",
+    category: "game",
     handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
@@ -17,18 +17,17 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/susunkata.json", {});
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tekateki.json", {});
             const response = await axios.get(apiUrl);
             const data = tools.general.getRandomElement(response.data);
             const coin = 5;
             const timeout = 60000;
-            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+            const senderNumber = ctx.senderJid.split(/[:@]/)[0];
 
             session.set(ctx.id, true);
 
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
-                `${quote(`Tipe: ${data.tipe}`)}\n` +
                 `${quote(`Bonus: ${coin} Koin`)}\n` +
                 `${quote(`Batas waktu: ${timeout / 1000} detik.`)}\n` +
                 `${quote("Ketik 'hint' untuk bantuan.")}\n` +
@@ -74,6 +73,7 @@ module.exports = {
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
+
                     return await ctx.reply(
                         `${quote("⏱ Waktu habis!")}\n` +
                         quote(`Jawabannya adalah ${answer}.`)

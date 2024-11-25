@@ -7,8 +7,8 @@ const axios = require("axios");
 const session = new Map();
 
 module.exports = {
-    name: "caklontong",
-    category: "entertainment",
+    name: "asahotak",
+    category: "game",
     handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
@@ -17,12 +17,12 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/caklontong.json", {});
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/asahotak.json", {});
             const response = await axios.get(apiUrl);
             const data = tools.general.getRandomElement(response.data);
             const coin = 5;
             const timeout = 60000;
-            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+            const senderNumber = ctx.senderJid.split(/[:@]/)[0];
 
             session.set(ctx.id, true);
 
@@ -52,7 +52,6 @@ module.exports = {
                     await ctx.sendMessage(
                         ctx.id, {
                             text: `${quote("💯 Benar!")}\n` +
-                                `${quote(data.deskripsi)}\n` +
                                 quote(`+${coin} Koin`)
                         }, {
                             quoted: m
@@ -71,15 +70,13 @@ module.exports = {
 
             collector.on("end", async (collector, reason) => {
                 const answer = data.jawaban;
-                const description = data.deskripsi;
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
 
                     return await ctx.reply(
                         `${quote("⏱ Waktu habis!")}\n` +
-                        `${quote(`Jawabannya adalah ${answer}.`)}\n` +
-                        quote(description)
+                        quote(`Jawabannya adalah ${answer}.`)
                     );
                 }
             });

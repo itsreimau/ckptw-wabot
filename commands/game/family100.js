@@ -8,7 +8,7 @@ const session = new Map();
 
 module.exports = {
     name: "family100",
-    category: "entertainment",
+    category: "game",
     handler: {
         group: true
     },
@@ -27,7 +27,7 @@ module.exports = {
                 allAnswered: 50
             };
             const timeout = 90000;
-            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+            const senderNumber = ctx.senderJid.split(/[:@]/)[0];
             const remainingAnswers = new Set(data.jawaban.map(j => j.toLowerCase()));
             const participants = new Set();
 
@@ -47,7 +47,7 @@ module.exports = {
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toLowerCase();
                 const participantJid = m.jid;
-                const participantNumber = participantJid.split(/[:@]/)[0]
+                const participantNumber = participantJid.split("@")[0]
 
                 if (remainingAnswers.has(userAnswer)) {
                     remainingAnswers.delete(userAnswer);

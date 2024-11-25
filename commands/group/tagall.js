@@ -18,7 +18,7 @@ module.exports = {
         try {
             const members = await ctx.group().members();
             const mentions = members.map(member => {
-                const serialized = member.id.split(/[:@]/)[0];
+                const serialized = member.id.split("@")[0];
                 return {
                     tag: `@${serialized}`,
                     mention: `${serialized}@s.whatsapp.net`
