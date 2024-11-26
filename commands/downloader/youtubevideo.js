@@ -41,22 +41,23 @@ module.exports = {
                 `${quote(`Saluran: ${parts[parts.length - 1].split(" (")[0]}`)}\n` +
                 `${quote(`URL: ${url}`)}\n` +
                 `${quote(`Pilih kualitas:`)}\n` +
-                availableQualities.map((quality, index) => quote(`${index + 1}. ${quality}`)).join("\n") +
+                `${availableQualities.map((quality, index) => quote(`${index + 1}. ${quality}`)).join("\n")}\n` +
                 "\n" +
                 global.config.msg.footer
             );
 
-            const col = ctx.MessageCollector({
+            let selected = false;
+            const collector = ctx.MessageCollector({
                 time: 60000
             });
 
-            col.on("collect", async (m) => {
+            collector.on("collectorlect", async (m) => {
                 const selectedNumber = parseInt(m.content.trim());
                 const selectedQualityIndex = selectedNumber - 1;
 
                 if (!isNaN(selectedNumber) && selectedQualityIndex >= 0 && selectedQualityIndex < downloads.length) {
                     const selectedDownload = downloads[selectedQualityIndex];
-
+                    selected = true;
                     await ctx.simulateTyping();
                     await ctx.reply({
                         video: {
@@ -69,12 +70,12 @@ module.exports = {
                         gifPlayback: false
                     });
 
-                    return col.stop();
+                    return collector.stop();
                 }
             });
 
-            col.on("end", async () => {
-                await ctx.reply("⌛ Waktu habis. Silakan ulangi perintah jika ingin mencoba lagi.");
+            collector.on("end", async () => {
+                if (!selected) return await ctx.reply(quote("⌛ Waktu habis. Silakan ulangi perintah jika ingin mencoba lagi."));
             });
 
         } catch (error) {
