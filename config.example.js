@@ -10,11 +10,11 @@ const {
 global.config = {
     // Informasi bot dasar
     bot: {
-        name: "CKPTW", // Nama bot
+        name: "Gilz-Botz", // Nama bot
         prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i, // Karakter awalan perintah yang diizinkan
-        phoneNumber: "", // Nomor telepon bot (opsional jika menggunakan QR code)
-        thumbnail: "https://e1.pxfuel.com/desktop-wallpaper/943/672/desktop-wallpaper-whatsapp-bot-what-is-it-and-how-to-use-messenger-chatbots-chatbot.png", // Gambar thumbnail bot
-        website: "https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs" // Website untuk WhatsApp bot
+        phoneNumber: "6285894104907", // Nomor telepon bot (opsional jika menggunakan QR code)
+        thumbnail: "https://uploader.nyxs.pw/tmp/Uzqma0-1732598326841.png", // Gambar thumbnail bot
+        website: "https://whatsapp.com/channel/0029Vado355IN9ikUY1R1O2o" // Website untuk WhatsApp bot
     },
 
     // Pesan bot yang disesuaikan untuk situasi tertentu
@@ -31,7 +31,7 @@ global.config = {
         restrict: quote("❎ Perintah ini telah dibatasi karena alasan keamanan!"), // Pesan pembatasan perintah
 
         watermark: `@${pkg.name} / v${pkg.version}`, // Watermark nama dan versi pada bot
-        footer: italic("Developed by ItsReimau"), // Footer di pesan bot
+        footer: italic("Developed by Gilz MD"), // Footer di pesan bot
         readmore: "\u200E".repeat(4001), // String read more
 
         wait: quote("🔄 Tunggu sebentar..."), // Pesan loading
@@ -41,16 +41,16 @@ global.config = {
 
     // Informasi owner bot
     owner: {
-        name: "", // Nama owner bot
-        number: "", // Nomor telepon owner bot
-        organization: "", // Nama organisasi owner bot
-        co: [""] // Nomor co-owner bot
+        name: "Gilz-Developer", // Nama owner bot
+        number: "6285217871749", // Nomor telepon owner bot
+        organization: "Gilz MD", // Nama organisasi owner bot
+        co: ["6285894104907"] // Nomor co-owner bot
     },
 
     // Konfigurasi stiker bot
     sticker: {
         packname: "Stiker ini dibuat oleh", // Nama paket stiker
-        author: "@ckptw-wabot" // Pembuat stiker
+        author: "@Gilz-Botz" // Pembuat stiker
     },
 
     // Pengaturan sistem bot
@@ -58,10 +58,10 @@ global.config = {
         autoRead: true, // Apakah bot otomatis membaca pesan masuk
         autoTypingOnCmd: true, // Aktifkan status mengetik ketika memproses perintah
         cooldown: 5000, // Waktu cooldown antar perintah dalam milidetik
-        restrict: false, // Membatasi perintah tertentu untuk keamanan
+        restrict: true, // Membatasi perintah tertentu untuk keamanan
         selfOwner: true, // Apakah bot menjadi owner
         selfReply: true, // Apakah bot merespon pesan yang dikirim bot sendiri
         timeZone: "Asia/Jakarta", // Zona waktu bot
-        usePairingCode: false // Menggunakan kode pairing untuk koneksi
+        usePairingCode: true // Menggunakan kode pairing untuk koneksi
     }
 };
