@@ -25,8 +25,9 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("chiwa", "/api/ssweb", {
-                url
+            const apiUrl = tools.api.createUrl("ryzendesu", "/api/tool/ssweb", {
+                url,
+                mode: "full"
             });
 
             return await ctx.reply({

@@ -91,13 +91,6 @@ async function get(type, ctx) {
                     config.msg.footer;
                 break;
             }
-            case "jadwaltv": {
-                const data = (await axios.get(api.createUrl("aemt", "/jadwaltv", {}))).data.message.split("Berikut list tv yang tersedia: ")[1].split(", ");
-                text = `${data.map(quote).join("\n")}\n` +
-                    "\n" +
-                    config.msg.footer;
-                break;
-            }
             case "mode": {
                 const data = ["group", "private", "public", "self"];
                 text = `${data.map(quote).join("\n")}\n` +

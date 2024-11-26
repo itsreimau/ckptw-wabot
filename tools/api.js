@@ -1,8 +1,5 @@
 // Daftar API gratis, gunakan dengan bijak!
 const APIs = {
-    aemt: {
-        baseURL: "https://aemt.uk.to"
-    },
     agatz: {
         baseURL: "https://api.agatz.xyz"
     },

@@ -13,37 +13,16 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        let input = ctx.args.join(" ") || null;
+        const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon"))
         );
 
-        let apiPath = "/ai/text2img";
-        let apiService = "aemt";
-
-        const versionRegex = /^\(v(\d+)\)\s*(.*)$/;
-        const match = input.match(versionRegex);
-
-        if (match) {
-            const version = match[1];
-            input = match[2];
-
-            apiPath = version === "0" ? "/ai/text2img" : `/v${version}/text2img`;
-        } else {
-            apiService = "ryzendesu";
-            apiPath = "/api/ai/text2img";
-        }
-
         try {
-            const apiUrl = tools.api.createUrl(apiService, apiPath, {
-                ...(apiService === "aemt" && {
-                    text: input
-                }),
-                ...(apiService === "ryzendesu" && {
-                    prompt: input
-                })
+            const apiUrl = tools.api.createUrl("ryzendesu", "/api/ai/text2img", {
+                prompt: input
             });
 
             return await ctx.reply({

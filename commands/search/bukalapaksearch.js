@@ -22,10 +22,12 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("aemt", "/bukalapak", {
-                text: input
+            const apiUrl = await tools.api.createUrl("agatz", "/api/bukalapak", {
+                message: input
             });
-            const data = (await axios.get(apiUrl)).data.result;
+            const {
+                data
+            } = (await axios.get(apiUrl)).data;
 
             const resultText = data.map((d) =>
                 `${quote(`Nama: ${d.title}`)}\n` +

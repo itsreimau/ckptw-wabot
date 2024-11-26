@@ -35,10 +35,10 @@ module.exports = {
                 profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
             }
 
-            const apiUrl = tools.api.createUrl("aemt", "/quotely", {
-                avatar: profilePictureUrl,
-                name: ctx.sender.pushName || "-",
-                text: input
+            const apiUrl = tools.api.createUrl("ryzendesu", "/api/sticker/quotly", {
+                text: input,
+                name: ctx.sender.pushName,
+                avatar: profilePictureUrl
             });
 
             const sticker = new Sticker(apiUrl, {
@@ -53,6 +53,7 @@ module.exports = {
             return await ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
+            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
