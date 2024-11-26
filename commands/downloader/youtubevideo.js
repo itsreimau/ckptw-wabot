@@ -38,10 +38,10 @@ module.exports = {
 
             await ctx.reply(
                 `${quote(`Judul: ${parts.slice(0, parts.length - 1).join(" - ")}`)}\n` +
-                `${quote(`Kanal: ${parts[parts.length - 1].split(" (")[0]}`)}\n` +
+                `${quote(`Saluran: ${parts[parts.length - 1].split(" (")[0]}`)}\n` +
                 `${quote(`URL: ${url}`)}\n` +
                 `${quote(`Pilih kualitas:`)}\n` +
-                availableQualities.map((quality, index) => `${index + 1}. ${quality}`).join("\n") +
+                availableQualities.map((quality, index) => quote(`${index + 1}. ${quality}`)).join("\n") +
                 "\n" +
                 global.msg.footer
             );
