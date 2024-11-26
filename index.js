@@ -27,7 +27,6 @@ CFonts.say(pkg.name, {
 
 // Menampilkan informasi paket
 const authorName = pkg.author.name || pkg.author;
-z
 CFonts.say(
     `'${pkg.description}'\n` +
     `By ${authorName}`, {
