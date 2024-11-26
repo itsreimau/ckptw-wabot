@@ -110,7 +110,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const isCmd = tools.general.isCmd(m, ctx);
         if (isCmd) {
             await db.set(`user.${senderNumber}.lastUse`, Date.now());
-            if (config.system.autoTypingOnCmd) ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah
+            if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah
 
             // Did you mean?
             const mean = isCmd.didyoumean;

@@ -119,10 +119,10 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("ryzendesu", "/api/downloader/ytmp3", {
+                const downloadApiUrl = tools.api.createUrl("agatz", "/api/ytmp3", {
                     url: data.url
                 });
-                const downloadData = (await axios.get(downloadApiUrl)).data;
+                const downloadData = (await axios.get(downloadApiUrl)).data.data;
 
                 return await ctx.reply({
                     audio: {

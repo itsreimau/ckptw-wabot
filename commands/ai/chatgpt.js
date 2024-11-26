@@ -5,7 +5,6 @@ const axios = require("axios");
 
 module.exports = {
     name: "chatgpt",
-    aliases: ["ai"],
     category: "ai",
     handler: {
         coin: [10, "text", 1]

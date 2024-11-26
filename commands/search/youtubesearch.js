@@ -39,7 +39,7 @@ module.exports = {
                             `${quote(`Dilihat: ${d.views}`)}\n` +
                             `${quote(`URL: ${d.url}`)}`;
                     case "channel":
-                        return `${quote(`Judul: ${d.title}`)}\n` +
+                        return `${quote(`Saluran: ${d.title}`)}\n` +
                             `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
                             `${quote(`Jumlah video: ${d.videoCount}`)}\n` +
                             `${quote(`URL: ${d.url}`)}`;

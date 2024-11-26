@@ -8,6 +8,7 @@ const {
 
 module.exports = {
     name: "gemini",
+    aliases: ["ai"],
     category: "ai",
     handler: {
         coin: [10, "text", 1]
