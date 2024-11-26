@@ -43,7 +43,7 @@ module.exports = {
                 `${quote(`Pilih kualitas:`)}\n` +
                 availableQualities.map((quality, index) => quote(`${index + 1}. ${quality}`)).join("\n") +
                 "\n" +
-                global.msg.footer
+                global.config.msg.footer
             );
 
             const col = ctx.MessageCollector({
@@ -65,7 +65,7 @@ module.exports = {
                         mimetype: mime.contentType("mp4"),
                         caption: `${quote(`Kualitas: ${selectedDownload.quality}`)}\n` +
                             "\n" +
-                            global.msg.footer,
+                            global.config.msg.footer,
                         gifPlayback: false
                     });
 
