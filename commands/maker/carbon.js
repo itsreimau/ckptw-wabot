@@ -22,8 +22,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("ryzendesu", "/api/tool/carbon", {
-                code: input
+            const apiUrl = tools.api.createUrl("siputzx", "/api/c/carbonify", {
+                input
             });
 
             return await ctx.reply({

@@ -119,10 +119,10 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("agatz", "/api/ytmp3", {
+                const downloadApiUrl = tools.api.createUrl("nexoracle", "/downloader/yt-audio", {
                     url: data.url
-                });
-                const downloadData = (await axios.get(downloadApiUrl)).data.data;
+                }, "apikey");
+                const downloadData = (await axios.get(downloadApiUrl)).data.result;
 
                 return await ctx.reply({
                     audio: {

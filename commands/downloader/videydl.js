@@ -26,7 +26,7 @@ module.exports = {
 
         try {
             const parsedUrl = new URL(url);
-            const videoId = parsedUrl.searchParams.get("v");
+            const videoId = parsedUrl.searchParams.get("id");
             const videoUrl = `https://cdn.videy.co/${videoId}.mp4`;
 
             return await ctx.reply({

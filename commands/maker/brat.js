@@ -9,7 +9,7 @@ const {
 
 module.exports = {
     name: "brat",
-    aliases: ["tanomali", "teksanomali"],
+    aliases: ["sbrat", "stikerbrat", "stickerbrat", "tanomali", "teksanomali"],
     category: "maker",
     handler: {
         coin: [10, "text", 1]
@@ -28,7 +28,7 @@ module.exports = {
         if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 50 kata!`));
 
         try {
-            const apiUrl = tools.api.createUrl("ryzendesu", "/api/sticker/brat", {
+            const apiUrl = tools.api.createUrl("neastooid", "/api/tools/brat", {
                 text: input
             });
 

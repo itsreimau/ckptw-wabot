@@ -18,7 +18,7 @@ module.exports = {
             const waitMsg = await ctx.reply(config.msg.wait);
 
             const APIs = tools.api.listUrl();
-            let result = "";
+            let resultText = "";
 
             for (const [name, api] of Object.entries(APIs)) {
                 try {
@@ -30,23 +30,23 @@ module.exports = {
                     });
 
                     if (response.status >= 200 && response.status < 500) {
-                        result += quote(`${api.baseURL} 🟢 (${response.status})\n`);
+                        resultText += quote(`${api.baseURL} 🟢 (${response.status})\n`);
                     } else {
-                        result += quote(`${api.baseURL} 🔴 (${response.status})\n`);
+                        resultText += quote(`${api.baseURL} 🔴 (${response.status})\n`);
                     }
                 } catch (error) {
                     if (error.response) {
-                        result += quote(`${api.baseURL} 🔴 (${error.response.status})\n`);
+                        resultText += quote(`${api.baseURL} 🔴 (${error.response.status})\n`);
                     } else if (error.request) {
-                        result += quote(`${api.baseURL} 🔴 (Tidak ada respon)\n`);
+                        resultText += quote(`${api.baseURL} 🔴 (Tidak ada respon)\n`);
                     } else {
-                        result += quote(`${api.baseURL} 🔴 (Kesalahan: ${error.message})\n`);
+                        resultText += quote(`${api.baseURL} 🔴 (Kesalahan: ${error.message})\n`);
                     }
                 }
             }
 
             return await ctx.editMessage(waitMsg.key,
-                `${result.trim()}\n` +
+                `${resultText.trim()}\n` +
                 "\n" +
                 config.msg.footer
             );

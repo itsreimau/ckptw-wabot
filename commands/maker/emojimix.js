@@ -41,8 +41,6 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
-            if (!data.results[0].url) return await ctx.reply(config.msg.notFound);
-
             const sticker = new Sticker(data.results[0].url, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,

@@ -25,6 +25,13 @@ const APIs = {
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com"
     },
+    siputzx: {
+        baseURL: "https://api.siputzx.my.id"
+    },
+    ssateam: {
+        baseURL: "https://api.ssateam.my.id",
+        APIKey: "root" // APIKey disediakan oleh Fainshe
+    },
     vreden: {
         baseURL: "https://api.vreden.my.id"
     }

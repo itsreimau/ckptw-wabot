@@ -8,8 +8,8 @@ const {
 } = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "qc",
-    aliases: ["bubblechat"],
+    name: "quotlychat",
+    aliases: ["qc", "quotly"],
     category: "maker",
     handler: {
         coin: [10, "text", 1]
