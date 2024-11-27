@@ -22,7 +22,7 @@ module.exports = {
             `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss -i 8 -s spotify"))}\n` +
             quote(tools.msg.generatesFlagInformation({
                 "-i <number>": "Pilihan pada data indeks.",
-                "-s <text>": "Sumber untuk memutar lagu (tersedia: soundcloud, spotify | default: random)."
+                "-s <text>": "Sumber untuk memutar lagu (tersedia: soundcloud, spotify, youtube | default: youtube)."
             }))
         );
 
@@ -51,27 +51,27 @@ module.exports = {
             }
 
             if (source === "soundcloud") {
-                const searchApiUrl = tools.api.createUrl("agatz", "/api/soundcloud", {
-                    message: query
+                const searchApiUrl = tools.api.createUrl("siputzx", "/api/s/soundcloud", {
+                    query
                 });
                 const searchData = (await axios.get(searchApiUrl)).data.data;
                 const data = searchData[searchIndex];
 
                 await ctx.reply(
-                    `${quote(`Judul: ${data.judul}`)}\n` +
+                    `${quote(`Judul: ${data.permalink}`)}\n` +
                     `${quote(`URL: ${data.link}`)}\n` +
                     "\n" +
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("agatz", "/api/soundclouddl", {
+                const downloadApiUrl = tools.api.createUrl("siputzx", "/api/d/soundcloud", {
                     url: data.link
                 });
-                const downloadData = (await axios.get(downloadApiUrl)).data.data.download;
+                const downloadData = (await axios.get(downloadApiUrl)).data.data;
 
                 return await ctx.reply({
                     audio: {
-                        url: downloadData
+                        url: downloadData.url
                     },
                     mimetype: mime.lookup("mp3"),
                 });

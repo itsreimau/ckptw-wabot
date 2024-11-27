@@ -23,16 +23,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/soundcloud", {
-                message: input
+            const apiUrl = tools.api.createUrl("siputzx", "/api/s/soundcloud", {
+                query: input
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
 
             const resultText = data.map((d) =>
-                `${quote(`Judul: ${d.judul}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
+                `${quote(`Judul: ${d.permalink}`)}\n` +
+                `${quote(`URL: ${d.permalink_url}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

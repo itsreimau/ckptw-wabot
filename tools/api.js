@@ -19,6 +19,9 @@ const APIs = {
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },
+    ochinpo: {
+        baseURL: "https://ochinpo-helper.hf.space"
+    },
     ryzendesu: {
         baseURL: "https://api.ryzendesu.vip"
     },
@@ -39,20 +42,25 @@ const APIs = {
 
 function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName = null, decodeParams = false) {
     try {
-        const api = APIs[apiNameOrURL];
-        const baseURL = api ? api.baseURL : new URL(apiNameOrURL).origin;
+        let baseURL;
+        if (APIs && APIs[apiNameOrURL]) {
+            const api = APIs[apiNameOrURL];
+            baseURL = api.baseURL;
+        } else {
+            baseURL = new URL(apiNameOrURL).origin;
+        }
+
         const apiUrl = new URL(endpoint, baseURL);
 
         let queryParams;
-
         if (decodeParams) {
             queryParams = Object.entries(params).map(([key, value]) => `${encodeURIComponent(key)}=${decodeURIComponent(value)}`).join("&");
         } else {
             queryParams = new URLSearchParams(params).toString();
         }
 
-        if (apiKeyParamName && api && "APIKey" in api) {
-            const apiKeyValue = encodeURIComponent(api.APIKey);
+        if (apiKeyParamName && baseURL && APIs[apiNameOrURL] && "APIKey" in APIs[apiNameOrURL]) {
+            const apiKeyValue = encodeURIComponent(APIs[apiNameOrURL].APIKey);
             queryParams += (queryParams ? "&" : "") + `${encodeURIComponent(apiKeyParamName)}=${apiKeyValue}`;
         }
 
@@ -61,6 +69,7 @@ function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName = null, 
         return apiUrl.toString();
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
+        return null;
     }
 }
 
