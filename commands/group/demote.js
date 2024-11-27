@@ -27,11 +27,11 @@ module.exports = {
         });
 
         try {
-            if ((await !tools.general.isAdmin(ctx, account))) return await ctx.reply(quote(`❎ Anggota ini adalah anggota biasa.`));
+            if ((await !tools.general.isAdmin(ctx, account))) return await ctx.reply(quote(`⛔ Peserta ini adalah peserta!`));
 
             await ctx.group().demote([account]);
 
-            return await ctx.reply(quote(`✅ Berhasil diturunkan dari admin menjadi anggota biasa!`));
+            return await ctx.reply(quote(`✅ Berhasil diturunkan dari admin menjadi peserta!`));
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));

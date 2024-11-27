@@ -27,11 +27,11 @@ module.exports = {
         });
 
         try {
-            if ((await tools.general.isAdmin(ctx, account))) return await ctx.reply(quote(`❎ Anggota ini adalah admin grup.`));
+            if ((await tools.general.isAdmin(ctx, account))) return await ctx.reply(quote(`⛔ Peserta ini adalah admin grup!`));
 
             await ctx.group().promote([account]);
 
-            return await ctx.reply(quote(`✅ Berhasil ditingkatkan dari anggota biasa menjadi admin!`));
+            return await ctx.reply(quote(`✅ Berhasil ditingkatkan dari peserta menjadi admin!`));
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));

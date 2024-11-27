@@ -28,7 +28,7 @@ module.exports = {
 
         try {
             const [result] = await ctx._client.onWhatsApp(user);
-            if (!result.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
+            if (!result.exists) return await ctx.reply(quote(`⛔ Akun tidak ada di WhatsApp!`));
 
             await db.set(`user.${user.split("@")[0]}.isPremium`, false);
 

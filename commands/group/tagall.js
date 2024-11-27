@@ -13,7 +13,7 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        const input = ctx.args.join(" ") || "Hai!";
+        const input = ctx.args.join(" ") || "Saya tidak tahu harus mengetik apa...";
 
         try {
             const members = await ctx.group().members();

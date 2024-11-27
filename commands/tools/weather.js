@@ -37,7 +37,6 @@ module.exports = {
                 `${quote(`Waktu Lokal: ${data.location.localtime}`)}\n` +
                 `${quote("─────")}\n` +
                 `${quote(`Cuaca: ${await tools.general.translate(data.current.condition.text, "id")}`)}\n` +
-                `${quote(`Ikon Cuaca: ${data.current.condition.icon}`)}\n` +
                 `${quote(`Suhu Saat Ini: ${data.current.temp_c}°C (${data.current.temp_f}°F)`)}\n` +
                 `${quote(`Terasa Seperti: ${data.current.feelslike_c}°C (${data.current.feelslike_f}°F)`)}\n` +
                 `${quote(`Kelembaban: ${data.current.humidity}%`)}\n` +

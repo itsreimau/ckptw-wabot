@@ -32,10 +32,10 @@ module.exports = {
             return await ctx.reply(listText);
         }
 
-        if (!claimRewards[input]) return await ctx.reply(quote(`❎ Teks tidak valid.`));
+        if (!claimRewards[input]) return await ctx.reply(quote(`⛔ Hadiah tidak valid!`));
 
         const requiredLevel = claimRewards[input].level || 0;
-        if (userLevel < requiredLevel) return await ctx.reply(quote(`❎ Anda perlu mencapai level ${requiredLevel} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userLevel}.`));
+        if (userLevel < requiredLevel) return await ctx.reply(quote(`⛔ Anda perlu mencapai level ${requiredLevel} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userLevel}.`));
 
         const lastClaimTime = lastClaim[input] || 0;
         const currentTime = Date.now();
@@ -43,7 +43,7 @@ module.exports = {
         const remainingTime = claimRewards[input].cooldown - timePassed;
 
         if (remainingTime > 0) return await ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input}. Tunggu ${tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
-        if (isPremium === true) return await ctx.reply(quote("❎ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
+        if (isPremium === true) return await ctx.reply(quote("⛔ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
 
         try {
             const newBalance = currentCoins + claimRewards[input].reward;

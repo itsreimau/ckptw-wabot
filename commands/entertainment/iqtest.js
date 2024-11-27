@@ -19,7 +19,7 @@ module.exports = {
         const iqScore = getIqScore(winGame);
         const feedback = getFeedback(iqScore, winGame);
 
-        return await ctx.reply(quote(`IQ Anda sebesar: ${iqScore}. ${feedback}`));
+        return await ctx.reply(quote(`🧠 IQ Anda sebesar: ${iqScore}. ${feedback}`));
     }
 };
 

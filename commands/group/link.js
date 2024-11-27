@@ -16,8 +16,8 @@ module.exports = {
         if (status) return;
 
         try {
-            const link = await ctx.group().inviteCode();
-            return await ctx.reply(`https://chat.whatsapp.com/${link}`);
+            const code = await ctx.group().inviteCode();
+            return await ctx.reply(`https://chat.whatsapp.com/${code}`);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));

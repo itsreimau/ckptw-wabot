@@ -49,7 +49,7 @@ module.exports = {
                     setKey = `group.${groupNumber}.text.welcome`;
                     break;
                 default:
-                    return await ctx.reply(quote(`❎ Key '${key}' tidak valid.`));
+                    return await ctx.reply(quote(`⛔ Key '${key}' tidak valid!`));
             }
 
             await db.set(setKey, text);

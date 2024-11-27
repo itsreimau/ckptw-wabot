@@ -48,7 +48,7 @@ module.exports = {
                     setKey = `group.${groupNumber}.option.welcome`;
                     break;
                 default:
-                    return await ctx.reply(quote(`❎ Teks tidak valid.`));
+                    return await ctx.reply(quote(`⛔ Key '${input}' tidak valid!`));
             }
 
             const currentStatus = await db.get(setKey);

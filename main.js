@@ -117,7 +117,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const prefix = isCmd.prefix;
             const input = isCmd.input;
 
-            if (mean) await ctx.reply(quote(`❓ Apakah maksud Anda ${monospace(prefix + mean)}?`));
+            if (mean) await ctx.reply(quote(`🤔 Apakah maksud Anda ${monospace(prefix + mean)}?`));
 
             // Penanganan XP & Level untuk pengguna
             const xpGain = 10;

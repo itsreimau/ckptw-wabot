@@ -176,7 +176,7 @@ async function get(type, ctx) {
             }
             default: {
                 console.error(`[${config.pkg.name}] Error:`, error);
-                text = quote(`❎ Tidak diketahui: ${type}`);
+                text = quote(`⛔ Tidak diketahui: ${type}`);
                 break;
             }
         }
