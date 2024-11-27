@@ -28,7 +28,7 @@ module.exports = {
         try {
             const apiUrl = tools.api.createUrl("vreden", "/api/ytmp4", {
                 url
-            });
+            }, null, true);
             const data = (await axios.get(apiUrl)).data.result.download;
 
             return await ctx.reply({

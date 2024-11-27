@@ -37,7 +37,7 @@ const APIs = {
     }
 };
 
-function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
+function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName, decodeParams = false) {
     try {
         const api = APIs[apiNameOrURL];
 
@@ -46,7 +46,15 @@ function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
             apiNameOrURL = url;
         }
 
-        const queryParams = new URLSearchParams(params);
+        const queryParams = new URLSearchParams();
+
+        for (const [key, value] of Object.entries(params)) {
+            if (decodeParams) {
+                queryParams.append(key, decodeURIComponent(value));
+            } else {
+                queryParams.append(key, value);
+            }
+        }
 
         if (apiKeyParamName && api && "APIKey" in api) {
             queryParams.set(apiKeyParamName, api.APIKey);

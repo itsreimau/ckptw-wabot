@@ -121,7 +121,7 @@ module.exports = {
 
                 const downloadApiUrl = tools.api.createUrl("vreden", "/api/ytmp3", {
                     url: data.url
-                });
+                }, null, true);
                 const downloadData = (await axios.get(downloadApiUrl)).data.result.download;
 
                 return await ctx.reply({
