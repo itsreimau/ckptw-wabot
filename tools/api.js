@@ -37,32 +37,26 @@ const APIs = {
     }
 };
 
-function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName, decodeParams = false) {
+function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName = null, decodeParams = false) {
     try {
         const api = APIs[apiNameOrURL];
+        const baseURL = api ? api.baseURL : new URL(apiNameOrURL).origin;
+        const apiUrl = new URL(endpoint, baseURL);
 
-        if (!api) {
-            const url = new URL(apiNameOrURL);
-            apiNameOrURL = url;
-        }
+        let queryParams;
 
-        const queryParams = new URLSearchParams();
-
-        for (const [key, value] of Object.entries(params)) {
-            if (decodeParams) {
-                queryParams.append(key, decodeURIComponent(value));
-            } else {
-                queryParams.append(key, value);
-            }
+        if (decodeParams) {
+            queryParams = Object.entries(params).map(([key, value]) => `${encodeURIComponent(key)}=${decodeURIComponent(value)}`).join("&");
+        } else {
+            queryParams = new URLSearchParams(params).toString();
         }
 
         if (apiKeyParamName && api && "APIKey" in api) {
-            queryParams.set(apiKeyParamName, api.APIKey);
+            const apiKeyValue = encodeURIComponent(api.APIKey);
+            queryParams += (queryParams ? "&" : "") + `${encodeURIComponent(apiKeyParamName)}=${apiKeyValue}`;
         }
 
-        const baseURL = api ? api.baseURL : apiNameOrURL.origin;
-        const apiUrl = new URL(endpoint, baseURL);
-        apiUrl.search = queryParams.toString();
+        apiUrl.search = queryParams;
 
         return apiUrl.toString();
     } catch (error) {
