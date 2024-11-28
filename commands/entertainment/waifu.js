@@ -14,7 +14,7 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        const apiUrl = tools.api.createUrl("ryzendesu", "/api/weebs/sfw-waifu", {});
+        const apiUrl = tools.api.createUrl("neastooid", "/api/anime/waifuv2");
 
         try {
             const {

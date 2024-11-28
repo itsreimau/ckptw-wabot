@@ -19,7 +19,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/family100.json", {});
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/family100.json");
             const response = await axios.get(apiUrl);
             const data = response.data[Math.floor(Math.random() * response.data.length)];
             const coin = {
@@ -36,7 +36,7 @@ module.exports = {
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`Jumlah jawaban: ${remainingAnswers.size}`)}\n` +
-                `${quote(`Batas waktu ${timeout / 1000} detik.`)}\n\n` +
+                `${quote(`Batas waktu ${timeout / 1000} detik`)}\n\n` +
                 config.msg.footer
             );
 

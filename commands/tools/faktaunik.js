@@ -15,7 +15,7 @@ module.exports = {
         if (status) return;
 
         try {
-            const apiUrl = await tools.api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random", {});
+            const apiUrl = await tools.api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random");
             const {
                 data
             } = await axios.get(apiUrl);

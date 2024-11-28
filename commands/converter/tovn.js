@@ -44,7 +44,7 @@ async function video2audio(buffer) {
         form.append("userfile", buffer, `${Date.now()}.mp4`);
 
         const uploadResponse = await axios.post("https://service5.coolutils.org/upload.php", form, {
-            headers: form.getHeaders(),
+            headers: form.getHeaders()
         });
 
         const uploadedFile = uploadResponse.data;
@@ -55,15 +55,15 @@ async function video2audio(buffer) {
             srcfile: uploadedFile,
             Ref: "/convert/MP4-to-MP3",
             fmt: "mp3",
-            resize_constraint: "on",
+            resize_constraint: "on"
         });
 
         const conversionResponse = await axios.post("https://service5.coolutils.org/movie_convert.php", payload.toString(), {
             headers: {
                 Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-                "Content-Type": "application/x-www-form-urlencoded",
+                "Content-Type": "application/x-www-form-urlencoded"
             },
-            responseType: "arraybuffer",
+            responseType: "arraybuffer"
         });
 
         if (!Buffer.isBuffer(conversionResponse.data)) {
@@ -73,13 +73,11 @@ async function video2audio(buffer) {
         return {
             status: true,
             data: {
-                audio: Buffer.from(conversionResponse.data, "binary"),
-            },
+                audio: Buffer.from(conversionResponse.data, "binary")
+            }
         };
     } catch (error) {
-        return {
-            status: false,
-            message: error.message || "An error occurred."
-        };
+        console.error(`[${config.pkg.name}] Error:`, error);
+        return null;
     }
 }

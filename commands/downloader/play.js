@@ -119,14 +119,15 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("vreden", "/api/ytmp3", {
-                    url: data.url
-                }, null, true);
-                const downloadData = (await axios.get(downloadApiUrl)).data.result.download;
+                const downloadApiUrl = tools.api.createUrl("siputzx", "/api/d/colbalt", {
+                    url: data.url,
+                    downloadMode: "audio"
+                });
+                const downloadData = (await axios.get(downloadApiUrl)).data.data;
 
                 return await ctx.reply({
                     audio: {
-                        url: downloadData.url
+                        url: downloadData
                     },
                     mimetype: mime.lookup("mp3")
                 });

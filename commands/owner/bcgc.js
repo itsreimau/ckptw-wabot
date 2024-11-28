@@ -40,7 +40,7 @@ module.exports = {
                         },
                         message: {
                             extendedTextMessage: {
-                                text: "”Those who hate themselves, cannot love or trust others.”",
+                                text: "“Lorem ipsum dolor sit amet, tenebris in umbra, vitae ad mortem.”",
                                 title: config.bot.name,
                                 thumbnailUrl: config.bot.thumbnail
                             }

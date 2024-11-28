@@ -19,7 +19,7 @@ module.exports = {
         if (status) return await ctx.reply(message);
 
         try {
-            const apiUrl = global.tools.api.createUrl("sandipbaruwal", "/dp", {});
+            const apiUrl = global.tools.api.createUrl("sandipbaruwal", "/dp");
             const {
                 data
             } = await axios.get(apiUrl);
@@ -29,7 +29,7 @@ module.exports = {
                     image: {
                         url: data.male
                     },
-                    mimetype: mime.lookup("png"),
+                    mimetype: mime.lookup("png")
                 }),
                 ctx.reply({
                     image: {

@@ -16,32 +16,26 @@ module.exports = {
         const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
         const winGame = await db.get(`user.${senderNumber}.winGame`);
 
-        const iqScore = getIqScore(winGame);
-        const feedback = getFeedback(iqScore, winGame);
+        let iqScore;
+        let feedback;
+
+        if (winGame < 5) {
+            iqScore = Math.floor(Math.random() * 50) + 1;
+            feedback = iqScore < 50 ?
+                "Hmm, mungkin Anda harus mencobanya lagi? Jangan menyerah!" :
+                "Cukup bagus, terus bermain untuk meningkatkan keterampilan Anda!";
+        } else if (winGame < 20) {
+            iqScore = Math.floor(Math.random() * 50) + 51;
+            feedback = iqScore < 100 ?
+                "Tidak buruk, tapi Anda bisa melakukannya lebih baik!" :
+                "Anda semakin pintar! Pertahankan momentum!";
+        } else {
+            iqScore = Math.floor(Math.random() * 50) + 101;
+            feedback = iqScore < 150 ?
+                "Luar biasa! Anda di atas rata-rata!" :
+                "Wah, kamu jenius luar biasa! Kemenanganmu sangat mengesankan!";
+        }
 
         return await ctx.reply(quote(`🧠 IQ Anda sebesar: ${iqScore}. ${feedback}`));
     }
 };
-
-function getIqScore(winGame) {
-    if (winGame < 5) {
-        return Math.floor(Math.random() * 50) + 1;
-    } else if (winGame < 20) {
-        return Math.floor(Math.random() * 50) + 51;
-    } else {
-        return Math.floor(Math.random() * 50) + 101;
-    }
-}
-
-function getFeedback(iqScore, winGame) {
-    if (winGame < 5) {
-        if (iqScore < 50) return "Hmm, mungkin Anda harus mencobanya lagi? Jangan menyerah!";
-        return "Cukup bagus, terus bermain untuk meningkatkan keterampilan Anda!";
-    } else if (winGame < 20) {
-        if (iqScore < 100) return "Tidak buruk, tapi Anda bisa melakukannya lebih baik!";
-        return "Anda semakin pintar! Pertahankan momentum!";
-    } else {
-        if (iqScore < 150) return "Luar biasa! Anda di atas rata-rata!";
-        return "Wah, kamu jenius luar biasa! Kemenanganmu sangat mengesankan!";
-    }
-}

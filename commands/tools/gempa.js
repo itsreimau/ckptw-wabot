@@ -15,7 +15,7 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        const apiUrl = await tools.api.createUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json", {});
+        const apiUrl = await tools.api.createUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json");
 
         try {
             const {

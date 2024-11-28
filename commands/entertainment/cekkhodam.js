@@ -22,7 +22,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", `/SazumiVicky/cek-khodam/main/khodam/list.txt`, {});
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", `/SazumiVicky/cek-khodam/main/khodam/list.txt`);
             const {
                 data
             } = await axios.get(apiUrl);

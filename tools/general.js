@@ -325,26 +325,19 @@ async function upload(buffer) {
         const {
             ext
         } = await fromBuffer(buffer);
-        if (!ext) {
-            throw new Error("Could not determine file type from buffer");
-        }
 
-        let form = new FormData();
-        form.append("file", buffer, `tmp.${ext}`);
+        const form = new FormData();
+        form.append("file", buffer, `${Date.now()}.${ext}`);
 
-        const apiUrl = api.createUrl("https://uploader.nyxs.pw", "/upload", {});
-        const response = await axios.post(apiUrl, form, {
+        const {
+            data
+        } = await axios.post("https://filezone-api.caliph.dev/upload", form, {
             headers: {
                 ...form.getHeaders()
             }
         });
 
-        const $ = cheerio.load(response.data);
-        const url = $("a").attr("href");
-
-        if (!url) throw new Error("URL not found in response");
-
-        return url;
+        return data.result.url_file;
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
         return null;

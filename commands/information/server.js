@@ -12,7 +12,7 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        const apiUrl = tools.api.createUrl("http://ip-api.com", "/json", {});
+        const apiUrl = tools.api.createUrl("http://ip-api.com", "/json");
 
         try {
             const {

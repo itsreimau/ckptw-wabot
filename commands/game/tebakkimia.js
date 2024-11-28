@@ -17,7 +17,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tebakkimia.json", {});
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tebakkimia.json");
             const response = await axios.get(apiUrl);
             const data = tools.general.getRandomElement(response.data);
             const coin = 5;
@@ -29,7 +29,7 @@ module.exports = {
             await ctx.reply(
                 `${quote(`Lambang: ${data.lambang}`)}\n` +
                 `${quote(`Bonus: ${coin} Koin`)}\n` +
-                `${quote(`Batas waktu: ${timeout / 1000} detik.`)}\n` +
+                `${quote(`Batas waktu: ${timeout / 1000} detik`)}\n` +
                 `${quote("Ketik 'hint' untuk bantuan.")}\n` +
                 "\n" +
                 config.msg.footer
