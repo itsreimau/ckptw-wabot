@@ -35,9 +35,9 @@ module.exports = {
                 categories: ["🤩", "🎉"],
                 id: ctx.id,
                 quality: 50
-
-                return await ctx.reply(await sticker.toMessage());
             });
+
+            return await ctx.reply(await sticker.toMessage());
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
