@@ -37,43 +37,45 @@ module.exports = {
             if (/image/.test(contentType)) {
                 return await ctx.reply({
                     image: response?.data,
-                    mimetype: mime.lookup(contentType)
+                    mimetype: mime.contentType(contentType)
                 });
             }
 
             if (/video/.test(contentType)) {
                 return await ctx.reply({
                     video: response?.data,
-                    mimetype: mime.lookup(contentType)
+                    mimetype: mime.contentType(contentType)
                 });
             }
 
             if (/audio/.test(contentType)) {
                 return await ctx.reply({
                     audio: response?.data,
-                    mimetype: mime.lookup(contentType)
+                    mimetype: mime.contentType(contentType)
                 });
             }
 
-            if (/webp/.test(contentType)) return await ctx.reply({
-                sticker: response?.data
-            });
+            if (/webp/.test(contentType)) {
+                return await ctx.reply({
+                    sticker: response?.data
+                });
+            }
 
             if (!/utf-8|json|html|plain/.test(contentType)) {
                 let fileName = /filename/i.test(response?.headers?.["content-disposition"]) ? response?.headers?.["content-disposition"]?.match(/filename=(.*)/)?.[1]?.replace(/["";]/g, "") : "";
                 return await ctx.reply({
                     document: response?.data,
                     fileName,
-                    mimetype: mime.lookup(contentType)
+                    mimetype: mime.contentType(contentType)
                 });
             }
 
             let text = response?.data?.toString() || response?.data;
             text = format(text);
             try {
-                await ctx.reply(text.slice(0, 65536) + "");
+                return await ctx.reply(text.slice(0, 65536));
             } catch (e) {
-                await ctx.reply(format(e));
+                return await ctx.reply(format(e));
             }
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);

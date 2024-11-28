@@ -34,7 +34,6 @@ module.exports = {
                 },
                 mimetype: mime.lookup("png")
             });
-            sdafaknsaf
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

@@ -66,9 +66,7 @@ async function video2audio(buffer) {
             responseType: "arraybuffer"
         });
 
-        if (!Buffer.isBuffer(conversionResponse.data)) {
-            throw new Error("Conversion response is not a valid buffer.");
-        }
+        if (!Buffer.isBuffer(conversionResponse.data)) throw new Error("Conversion response is not a valid buffer.");
 
         return {
             status: true,
