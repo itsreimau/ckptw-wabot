@@ -26,7 +26,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/igdl", {
+            const apiUrl = tools.api.createUrl("btch", "/download/igdl", {
                 url
             });
             const {
@@ -36,7 +36,7 @@ module.exports = {
             for (const media of data.result) {
                 const isImage = media.url.includes(".jpg");
                 const mediaType = isImage ? "image" : "video";
-                const extension = isImage ? "jpg" : "mp4";
+                const extension = isImage ? "png" : "mp4";
 
                 await ctx.reply({
                     [mediaType]: {

@@ -21,27 +21,18 @@ module.exports = {
 
         if (!textToSpeech) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))}\n` +
-            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))
         );
 
-        if (ctx.args[0] === "list") {
-            const listText = await tools.list.get("tts");
-            return await ctx.reply(listText);
-        }
-
         try {
-            const apiUrl = tools.api.createUrl("nyxs", "tools/tts", {
+            const apiUrl = tools.api.createUrl("itzpire", "/tools/tts-google", {
                 text: textToSpeech,
-                to: langCode
+                lang: langCode
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 audio: {
-                    url: data.result
+                    url: apiUrl
                 },
                 mimetype: mime.lookup("mp3"),
                 ptt: true

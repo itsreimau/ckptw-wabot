@@ -133,26 +133,6 @@ async function get(type, ctx) {
                     config.msg.footer;
                 break;
             }
-            case "translate": {
-                const data = (await axios.get(api.createUrl("nyxs", "/tools/translate", {})).catch(err => err.response?.data?.available_languange)) || [];
-                text = data.map(d =>
-                        `${quote(`Kode: ${d.code}`)}\n` +
-                        `${quote(`Bahasa: ${d.bahasa}`)}\n`
-                    ).join(`${quote("─────")}\n`) +
-                    "\n" +
-                    config.msg.footer;
-                break;
-            }
-            case "tts": {
-                const data = (await axios.get(api.createUrl("nyxs", "/tools/tts", {}))).data.available_languange;
-                text = data.map(d =>
-                        `${quote(`Kode: ${d.code}`)}\n` +
-                        `${quote(`Bahasa: ${d["bahasa negara"]}`)}\n`
-                    ).join(`${quote("─────")}\n`) +
-                    "\n" +
-                    config.msg.footer;
-                break;
-            }
             case "menu": {
                 const {
                     cmd

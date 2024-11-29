@@ -295,10 +295,10 @@ function parseFlag(argsString, customRules = {}) {
 }
 
 async function translate(text, to) {
-    const apiUrl = api.createUrl("nyxs", "/tools/translate", {
+    const apiUrl = api.createUrl("nexoracle", "/misc/translate", {
         text,
         to
-    });
+    }, "apikey");
 
     try {
         const {

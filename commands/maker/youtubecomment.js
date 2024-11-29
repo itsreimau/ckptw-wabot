@@ -1,11 +1,15 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const mime = require("mime-types");
+const axios = require("axios");
+const {
+    Sticker,
+    StickerTypes
+} = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "carbon",
-    aliases: ["carbonify"],
+    name: "youtubecomment",
+    aliases: ["ytcomment"],
     category: "maker",
     handler: {
         coin: [10, "text", 1]
@@ -18,12 +22,21 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, 'console.log("halo dunia!");'))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "get in the fucking robot, shinji!"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("brat", "/carbon", {
-                code: input
+            let profilePictureUrl;
+            try {
+                profilePictureUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image");
+            } catch (error) {
+                profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
+            }
+
+            const apiUrl = tools.api.createUrl("itzpire", "/maker/yt-comment", {
+                username: ctx.sender.pushName || "-",
+                pp_user: profilePictureUrl,
+                comment: input
             });
 
             return await ctx.reply({

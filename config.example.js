@@ -57,7 +57,7 @@ global.config = {
     system: {
         autoRead: true, // Apakah bot otomatis membaca pesan masuk
         autoTypingOnCmd: true, // Aktifkan status mengetik ketika memproses perintah
-        cooldown: 5000, // Waktu cooldown antar perintah dalam milidetik
+        cooldown: 30000, // Waktu cooldown antar perintah dalam milidetik
         restrict: false, // Membatasi perintah tertentu untuk keamanan
         selfOwner: true, // Apakah bot menjadi owner
         selfReply: true, // Apakah bot merespon pesan yang dikirim bot sendiri

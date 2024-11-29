@@ -19,9 +19,6 @@ const APIs = {
         baseURL: "https://api.nexoracle.com",
         APIKey: "free_key@maher_apis" // APIKey disediakan oleh Maher Zubair
     },
-    nyxs: {
-        baseURL: "https://api.nyxs.pw"
-    },
     ochinpo: {
         baseURL: "https://ochinpo-helper.hf.space"
     },

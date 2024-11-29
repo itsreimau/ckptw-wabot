@@ -1,12 +1,11 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const mime = require("mime-types");
+const axios = require("axios");
 
 module.exports = {
-    name: "carbon",
-    aliases: ["carbonify"],
-    category: "maker",
+    name: "lepton",
+    category: "ai",
     handler: {
         coin: [10, "text", 1]
     },
@@ -18,20 +17,18 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, 'console.log("halo dunia!");'))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("brat", "/carbon", {
-                code: input
+            const apiUrl = tools.api.createUrl("btch", "/lepton", {
+                text: input
             });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
-            return await ctx.reply({
-                image: {
-                    url: apiUrl
-                },
-                mimetype: mime.lookup("png")
-            });
+            return await ctx.reply(data.answer);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

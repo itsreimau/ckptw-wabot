@@ -7,7 +7,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "ocr",
+    name: "removebg",
+    aliases: ["rbg"],
     category: "tools",
     handler: {
         coin: [10, "image", 3]
@@ -27,14 +28,19 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
-            const apiUrl = tools.api.createUrl("itzpire", "/tools/ocr", {
+            const apiUrl = tools.api.createUrl("btch", "/removebg", {
                 url: uploadUrl
             });
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.ParsedText);
+            return await ctx.reply({
+                image: {
+                    url: data.result.urls
+                },
+                mimetype: mime.lookup("png")
+            });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);
