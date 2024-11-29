@@ -14,7 +14,7 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        const apiUrl = tools.api.createUrl("https://candaan-api.vercel.app", "/api/image/random");
+        const apiUrl = tools.api.createUrl("https://candaan-api.vercel.app", "/api/image/random", {});
 
         try {
             const {

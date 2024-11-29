@@ -3,6 +3,9 @@ const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"
     },
+    btch: {
+        baseURL: "https://btch.us.kg"
+    },
     cifumo: {
         baseURL: "https://rest.cifumo.biz.id"
     },
@@ -21,9 +24,6 @@ const APIs = {
     },
     ochinpo: {
         baseURL: "https://ochinpo-helper.hf.space"
-    },
-    ryzendesu: {
-        baseURL: "https://api.ryzendesu.vip"
     },
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com"

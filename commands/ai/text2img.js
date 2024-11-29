@@ -13,7 +13,7 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        const input = ctx.args.join(" ") || null;
+        let input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
@@ -21,8 +21,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("ryzendesu", "/api/ai/text2img", {
-                prompt: input
+            const apiUrl = tools.api.createUrl("btch", "/ai/text2img", {
+                text: input
             });
 
             return await ctx.reply({

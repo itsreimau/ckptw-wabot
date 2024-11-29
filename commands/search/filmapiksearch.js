@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "bukalapaksearch",
-    aliases: ["bukalapak", "bukalapaks"],
+    name: "filmapiksearch",
+    aliases: ["filmapik", "filmapiks"],
     category: "search",
     handler: {
         coin: [10, "text", 1]
@@ -22,18 +22,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("btch", "/bukalapak", {
-                text: input
+            const apiUrl = await tools.api.createUrl("btch", "/filmapiksearch", {
+                query: input
             });
-            const data = (await axios.get(apiUrl)).data.result;
+            const data = (await axios.get(apiUrl)).data.result.data;
 
             const resultText = data.map((d) =>
-                `${quote(`Nama: ${d.title}`)}\n` +
+                `${quote(`Judul: ${d.title}`)}\n` +
+                `${quote(`Sinopsis: ${d.synopsis || "-"}`)}\n` +
                 `${quote(`Rating: ${d.rating}`)}\n` +
-                `${quote(`Terjual: ${d.terjual}`)}\n` +
-                `${quote(`Harga: ${d.harga}`)}\n` +
-                `${quote(`Toko: ${d.store.nama} - ${d.store.lokasi} (${d.store.link})`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
+                `${quote(`URL: ${d.url}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

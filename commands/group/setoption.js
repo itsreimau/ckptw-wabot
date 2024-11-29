@@ -9,7 +9,6 @@ module.exports = {
     category: "group",
     handler: {
         admin: true,
-        banned: true,
         botAdmin: true,
         group: true
     },

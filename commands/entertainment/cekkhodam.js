@@ -22,11 +22,11 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", `/SazumiVicky/cek-khodam/main/khodam/list.txt`);
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", `/SazumiVicky/cek-khodam/main/khodam/list.txt`, {});
             const {
                 data
             } = await axios.get(apiUrl);
-            const list = data.split("\n").filter(l => l.trim().length > 0);
+            const list = data.split('\n').filter(l => l.trim().length > 0);
             const khodam = list[Math.floor(Math.random() * list.length)];
 
             return await ctx.reply(

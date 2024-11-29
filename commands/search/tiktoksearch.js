@@ -23,16 +23,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/tiktoksearch", {
-                message: input
+            const apiUrl = tools.api.createUrl("btch", "/tiktoksearch", {
+                text: input
             });
             const {
-                data
+                result
             } = (await axios.get(apiUrl)).data;
+            const data = tools.general.getRandomElement(result.data);
 
             return await ctx.reply({
                 video: {
-                    url: data.no_watermark
+                    url: data.play
                 },
                 mimetype: mime.lookup("mp4"),
                 gifPlayback: false

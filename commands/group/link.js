@@ -7,7 +7,6 @@ module.exports = {
     aliases: ["gclink", "grouplink"],
     category: "group",
     handler: {
-        banned: true,
         botAdmin: true,
         group: true
     },

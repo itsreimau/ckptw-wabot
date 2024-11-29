@@ -1,13 +1,15 @@
 const {
+    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 
 module.exports = {
-    name: "jadwalsholat",
-    aliases: ["sholat"],
+    name: "jadwaltv",
     category: "tools",
-    handler: {},
+    handler: {
+        coin: [10, "text", 1]
+    },
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
@@ -16,31 +18,28 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "bogor"))
+            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "tvri"))}\n` +
+            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
+        if (ctx.args[0] === "list") {
+            const listText = await tools.list.get("jadwaltv");
+            return await ctx.reply(listText);
+        }
+
         try {
-            const apiUrl = tools.api.createUrl("ryzendesu", "/api/search/jadwal-sholat", {
-                kota: input
+            const apiUrl = await tools.api.createUrl("btch", "/jadwaltv", {
+                tv: input
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            const resultText = data.schedules.map((d) =>
-                `${quote(`Lokasi: ${d.lokasi}`)}`
-                `${quote(`Daerah: ${d.daerah}`)}\n` +
-                `${quote(`Imsak: ${d.jadwal.imsak}`)}\n` +
-                `${quote(`Subuh: ${d.jadwal.subuh}`)}\n` +
-                `${quote(`Terbit: ${d.jadwal.terbit}`)}\n` +
-                `${quote(`Dhuha: ${d.jadwal.dhuha}`)}\n` +
-                `${quote(`Dzuhur: ${d.jadwal.dzuhur}`)}\n` +
-                `${quote(`Ashar: ${d.jadwal.ashar}`)}\n` +
-                `${quote(`Maghrib: ${d.jadwal.maghrib}`)}\n` +
-                `${quote(`Isya: ${d.jadwal.isya}`)}\n`
+            const resultText = data.result.result.map((d) =>
+                `${quote(`${d.date} - ${d.event}`)}`
             ).join("\n");
             return await ctx.reply(
-                `${quote(`Total: ${data.total}`)}\n` +
+                `${quote(`Kanal: ${data.result.channel}`)}\n` +
                 `${resultText}\n` +
                 "\n" +
                 config.msg.footer

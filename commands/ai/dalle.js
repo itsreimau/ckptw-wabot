@@ -4,11 +4,9 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "aimoji",
+    name: "dalle",
     category: "ai",
-    handler: {
-        coin: [10, "text", 1]
-    },
+    handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
@@ -21,8 +19,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("ryzendesu", "/api/ai/aimoji", {
-                prompt: input
+            const apiUrl = tools.api.createUrl("btch", "/dalle", {
+                text: input
             });
 
             return await ctx.reply({

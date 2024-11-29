@@ -26,17 +26,17 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/instagram", {
+            const apiUrl = tools.api.createUrl("btch", "/igdl", {
                 url
             });
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
 
-            for (const media of data.videoLinks) {
-                const isImage = media.quality.toLowerCase().includes("download image");
+            for (const media of data.result) {
+                const isImage = media.url.includes(".jpg");
                 const mediaType = isImage ? "image" : "video";
-                const extension = isImage ? "png" : "mp4";
+                const extension = isImage ? "jpg" : "mp4";
 
                 await ctx.reply({
                     [mediaType]: {

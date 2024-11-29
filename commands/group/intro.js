@@ -6,7 +6,6 @@ module.exports = {
     name: "intro",
     category: "group",
     handler: {
-        banned: true,
         botAdmin: true,
         group: true
     },

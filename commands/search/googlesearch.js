@@ -22,12 +22,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("ryzendesu", "/api/search/google", {
+            const apiUrl = await tools.api.createUrl("btch", "/googlesearch", {
                 query: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const data = (await axios.get(apiUrl)).data.result;
 
             const resultText = data.map((d) =>
                 `${quote(`Judul: ${d.title}`)}\n` +

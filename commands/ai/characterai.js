@@ -22,9 +22,9 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nyxs", "/ai/character-ai", {
-                prompt: input,
-                gaya: `You are a WhatsApp bot called ${config.bot.name}, created and managed by ${config.owner.name}. If your name matches or is similar to a well-known character, adopt a personality that fits that character. If it does not, stay friendly, informative, and responsive.` // Dapat diubah sesuai keinginan Anda
+            const apiUrl = tools.api.createUrl("btch", "/ai/c-ai", {
+                prompt: `You are a WhatsApp bot called ${config.bot.name}, created and managed by ${config.owner.name}. If your name matches or is similar to a well-known character, adopt a personality that fits that character. If it does not, stay friendly, informative, and responsive.`, // Dapat diubah sesuai keinginan Anda
+                text: input
             });
             const {
                 data

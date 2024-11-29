@@ -1,16 +1,12 @@
 const {
-    ButtonBuilder,
-    CarouselBuilder,
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "pixiv",
-    aliases: ["pix"],
-    category: "tools",
+    name: "bingimg",
+    category: "ai",
     handler: {
         coin: [10, "text", 1]
     },
@@ -26,18 +22,19 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("ryzendesu", "/api/search/pixiv", {
-                query: input
+            const apiUrl = tools.api.createUrl("btch", "/bingimg", {
+                text: input
             });
-            const data = (await axios.get(apiUrl)).data.Media;
-            const result = tools.general.getRandomElement(data);
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 image: {
-                    url: result
+                    url: tools.general.getRandomElement(data.result)
                 },
                 mimetype: mime.lookup("png"),
-                caption: `${quote(`Kueri: ${input}`)}\n` +
+                caption: `${quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

@@ -22,14 +22,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/simsimi", {
-                message: input
+            const apiUrl = tools.api.createUrl("btch", "/simi", {
+                text: input
             });
             const {
-                data
+                result
             } = (await axios.get(apiUrl)).data;
 
-            return await ctx.reply(data);
+            return await ctx.reply(result);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

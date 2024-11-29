@@ -22,18 +22,18 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("agatz", "/api/lirik", {
-                message: input
+            const apiUrl = await tools.api.createUrl("btch", "/lirik", {
+                text: input
             });
             const {
-                data
+                result
             } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply(
-                `${quote(`Judul: ${data.title}`)}\n` +
-                `${quote(`Artis: ${data.artist}`)}\n` +
+                `${quote(`Judul: ${result.title}`)}\n` +
+                `${quote(`Artis: ${result.artist}`)}\n` +
                 `${quote("─────")}\n` +
-                `${data.lyrics}\n` +
+                `${result.lyrics}\n` +
                 "\n" +
                 config.msg.footer
             );
