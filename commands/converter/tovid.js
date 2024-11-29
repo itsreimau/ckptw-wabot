@@ -9,8 +9,8 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "tovid",
-    aliases: ["tomp4", "togif"],
+    name: "tovideo",
+    aliases: ["togif", "tomp4", "tovid"],
     category: "converter",
     handler: {},
     code: async (ctx) => {

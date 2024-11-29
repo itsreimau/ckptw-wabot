@@ -6,7 +6,7 @@ const {
     MessageType
 } = require("@mengkodingan/ckptw/lib/Constant");
 const axios = require("axios");
-const mime = require("mime-resolutions");
+const mime = require("mime-types");
 
 module.exports = {
     name: "remini",

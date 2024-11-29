@@ -9,8 +9,8 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "toimg",
-    aliases: ["topng", "toimage"],
+    name: "toimage",
+    aliases: ["toimg", "topng"],
     category: "converter",
     handler: {},
     code: async (ctx) => {

@@ -6,8 +6,8 @@ const FormData = require("form-data");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "toaud",
-    aliases: ["toaudio", "tomp3"],
+    name: "toaudio",
+    aliases: ["toaud", "tomp3"],
     category: "converter",
     handler: {},
     code: async (ctx) => {
