@@ -119,7 +119,7 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("siputzx", "/api/d/colbalt", {
+                const downloadApiUrl = tools.api.createUrl("siputzx", "/api/d/cobalt", {
                     url: data.url,
                     downloadMode: "audio"
                 });

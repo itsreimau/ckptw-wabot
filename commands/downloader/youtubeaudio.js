@@ -26,7 +26,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/d/colbalt", {
+            const apiUrl = tools.api.createUrl("siputzx", "/api/d/cobalt", {
                 url,
                 downloadMode: "audio"
             });
