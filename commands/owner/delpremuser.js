@@ -20,7 +20,7 @@ module.exports = {
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : (userNumber ? `${userNumber}@s.whatsapp.net` : null);
 
-        if (!ctx.args.length || (!userNumber && !user)) return await ctx.reply({
+        if (!user) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
                 quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderNumber}`)),
             mentions: [senderJid]

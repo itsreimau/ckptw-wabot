@@ -91,6 +91,20 @@ async function get(type, ctx) {
                     config.msg.footer;
                 break;
             }
+            case "fixdb": {
+                const data = ["user", "group", "menfess"];
+                text = `${data.map(quote).join("\n")}\n` +
+                    "\n" +
+                    config.msg.footer;
+                break;
+            }
+            case "group": {
+                const data = ["open", "close", "lock", "unlock"];
+                text = `${data.map(quote).join("\n")}\n` +
+                    "\n" +
+                    config.msg.footer;
+                break;
+            }
             case "jadwaltv": {
                 const data = (await axios.get(api.createUrl("btch", "/jadwaltv", {}))).data.message.split("Berikut list tv yang tersedia: ")[1].split(", ");
                 text = `${data.map(quote).join("\n")}\n` +
@@ -121,13 +135,6 @@ async function get(type, ctx) {
             }
             case "settext": {
                 const data = ["goodbye (Variabel yang tersedia: %tag%, %subject%, %description%)", "intro", "welcome (Variabel yang tersedia: %tag%, %subject%, %description%)"];
-                text = `${data.map(quote).join("\n")}\n` +
-                    "\n" +
-                    config.msg.footer;
-                break;
-            }
-            case "group": {
-                const data = ["open", "close", "lock", "unlock"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;

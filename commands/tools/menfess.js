@@ -21,7 +21,7 @@ module.exports = {
         const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.split(/[:@]/)[0];
 
-        if (!ctx.args.length || (!numberFormatted && !menfessText)) return await ctx.reply(
+        if (!numberFormatted && !menfessText) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `${senderNumber} halo dunia!`))
         );

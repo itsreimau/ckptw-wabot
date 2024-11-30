@@ -17,7 +17,7 @@ module.exports = {
 
         const [abbr, chapter] = ctx.args;
 
-        if (!ctx.args.length || (!abbr && !chapter)) return await ctx.reply(
+        if (!abbr && !chapter) return await ctx.reply(
             `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
             `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "kej 2:18"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))

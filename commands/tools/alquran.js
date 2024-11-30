@@ -20,7 +20,7 @@ module.exports = {
             ctx.args[1]
         ]);
 
-        if (!ctx.args.length) return await ctx.reply(
+        if (!suratNumber && !ayatInput) return await ctx.reply(
             `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
             `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "21 35"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
