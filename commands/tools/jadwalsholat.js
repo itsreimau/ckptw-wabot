@@ -32,7 +32,7 @@ module.exports = {
                 `${quote(`Dhuhur: ${data.dhuhur}`)}\n` +
                 `${quote(`Ashar: ${data.ashar}`)}\n` +
                 `${quote(`Maghrib: ${data.maghrib}`)}\n` +
-                `${quote(`Isya: ${data.isya}`)}\n`
+                `${quote(`Isya: ${data.isya}`)}\n` +
                 "\n" +
                 config.msg.footer
             );
