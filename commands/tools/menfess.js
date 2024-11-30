@@ -34,10 +34,10 @@ module.exports = {
             } = allConversations[id];
             return from === senderNumber || to === senderNumber;
         });
-        if (isInvolvedInConversation) return await ctx.reply(quote(`⛔ Anda sedang melakukan percakapan aktif. Selesaikan percakapan itu terlebih dahulu sebelum memulai percakapan baru.`));
+        if (isInvolvedInConversation) return await ctx.reply(quote(`❎ Anda sedang melakukan percakapan aktif. Selesaikan percakapan itu terlebih dahulu sebelum memulai percakapan baru.`));
 
         try {
-            if (numberFormatted === senderNumber) return await ctx.reply(quote(`⛔ Tidak dapat digunakan pada diri Anda sendiri.`));
+            if (numberFormatted === senderNumber) return await ctx.reply(quote(`❎ Tidak dapat digunakan pada diri Anda sendiri.`));
 
             const fakeText = {
                 key: {
@@ -62,8 +62,7 @@ module.exports = {
                 quoted: fakeText
             });
 
-            const conversationId = `${senderNumber}_${numberFormatted}`;
-            db.set(`menfess.${conversationId}`, {
+            db.set(`menfess.${Date.now()}`, {
                 from: senderNumber,
                 to: numberFormatted,
                 lastMsg: Date.now()

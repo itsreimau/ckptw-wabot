@@ -26,7 +26,7 @@ module.exports = {
         });
 
         try {
-            if ((await !tools.general.isAdmin(ctx, account))) return await ctx.reply(quote(`⛔ Peserta ini adalah peserta!`));
+            if ((await !tools.general.isAdmin(ctx, account))) return await ctx.reply(quote(`❎ Peserta ini adalah peserta!`));
 
             await ctx.group().demote([account]);
 

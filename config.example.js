@@ -36,7 +36,7 @@ global.config = {
 
         wait: quote("🔄 Tunggu sebentar..."), // Pesan loading
         notFound: quote("❎ Tidak ada yang ditemukan! Coba lagi nanti."), // Pesan item tidak ditemukan
-        urlInvalid: quote("⛔ URL tidak valid!") // Pesan jika URL tidak valid
+        urlInvalid: quote("❎ URL tidak valid!") // Pesan jika URL tidak valid
     },
 
     // Informasi owner bot

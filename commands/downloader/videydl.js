@@ -25,8 +25,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const parsedUrl = new URL(url);
-            const videoId = parsedUrl.searchParams.get("id");
+            const videoId = new URL(url).searchParams.get("id");
             const videoUrl = `https://cdn.videy.co/${videoId}.mp4`;
 
             return await ctx.reply({

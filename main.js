@@ -74,32 +74,22 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
     // Grup atau Pribadi
     if (isGroup || isPrivate) {
-        // Basis data untuk pengguna
-        const [userDb, userPremium] = await Promise.all([
+        const [userDb, userCoin, userLevel, userUid, userXp, userPremium] = await Promise.all([
             db.get(`user.${senderNumber}`),
+            db.get(`user.${senderNumber}.coin`),
+            db.get(`user.${senderNumber}.level`),
+            db.get(`user.${senderNumber}.uid`),
+            db.get(`user.${senderNumber}.xp`),
             db.get(`user.${senderNumber}.isPremium`)
         ]);
 
-        if (!userDb) {
-            await db.set(`user.${senderNumber}`, {
-                coin: 1000,
-                level: 0,
-                uid: tools.general.generateUID(senderNumber),
-                xp: 0
-            });
-        } else {
-            const [userCoin, userLevel, userUid, userXp] = await Promise.all([
-                db.get(`user.${senderNumber}.coin`),
-                db.get(`user.${senderNumber}.level`),
-                db.get(`user.${senderNumber}.uid`),
-                db.get(`user.${senderNumber}.xp`)
-            ]);
-
-            if (!userCoin) await db.set(`user.${senderNumber}.coin`, 1000);
-            if (!userLevel) await db.set(`user.${senderNumber}.level`, 0);
-            if (!userUid) await db.set(`user.${senderNumber}.uid`, tools.general.generateUID(senderNumber));
-            if (!userXp) await db.set(`user.${senderNumber}.xp`, 0);
-        }
+        await db.set(`user.${senderNumber}`, {
+            coin: userCoin ?? 1000,
+            level: userLevel ?? 0,
+            uid: userUid ?? tools.general.generateUID(senderNumber),
+            xp: userXp ?? 0,
+            ...userDb
+        });
 
         if (tools.general.isOwner(ctx, senderNumber, config.system.selfOwner) || userPremium) {
             const userCoin = await db.get(`user.${senderNumber}.coin`);
@@ -110,6 +100,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const isCmd = tools.general.isCmd(m, ctx);
         if (isCmd) {
             await db.set(`user.${senderNumber}.lastUse`, Date.now());
+            await db.set(`group.${groupNumber}.lastUse`, Date.now());
             if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah
 
             // Did you mean?
@@ -126,7 +117,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const [userXp, userLevel, autoLevelUp] = await Promise.all([
                 db.get(`user.${senderNumber}.xp`) || 0,
                 db.get(`user.${senderNumber}.level`) || 1,
-                db.get(`user.${senderNumber}.autoLevelUp`) || false
+                db.get(`user.${senderNumber}.autolevelup`) || false
             ]);
 
             let newUserXp = userXp + xpGain;

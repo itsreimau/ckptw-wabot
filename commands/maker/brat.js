@@ -25,7 +25,7 @@ module.exports = {
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "get in the fucking robot, shinji!"))
         );
 
-        if (input.length > 10000) return await ctx.reply(quote(`⛔ Maksimal 50 kata!`));
+        if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 50 kata!`));
 
         try {
             const apiUrl = tools.api.createUrl("ochinpo", "/brat", {

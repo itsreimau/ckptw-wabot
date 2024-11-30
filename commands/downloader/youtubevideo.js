@@ -28,7 +28,7 @@ module.exports = {
         try {
             const apiUrl = tools.api.createUrl("siputzx", "/api/d/colbalt", {
                 url,
-                downloadMode: "video"
+                downloadMode: "auto"
             });
             const {
                 data

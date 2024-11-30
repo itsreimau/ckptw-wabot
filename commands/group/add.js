@@ -27,7 +27,7 @@ module.exports = {
             const account = `${accountFormatted}@s.whatsapp.net`;
 
             const [result] = await ctx._client.onWhatsApp(accountFormatted);
-            if (!result.exists) return await ctx.reply(quote(`⛔ Akun tidak ada di WhatsApp!`));
+            if (!result.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp!`));
 
             await ctx.group().add([account]).catch(async (error) => {
                 const code = await ctx.group().inviteCode();

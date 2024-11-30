@@ -27,7 +27,7 @@ module.exports = {
         });
 
         try {
-            if ((await tools.general.isAdmin(ctx, account))) return await ctx.reply(quote(`⛔ Peserta ini adalah admin grup!`));
+            if ((await tools.general.isAdmin(ctx, account))) return await ctx.reply(quote(`❎ Peserta ini adalah admin grup!`));
 
             await ctx.group().kick([account]);
 

@@ -31,7 +31,7 @@ module.exports = {
             return await ctx.reply(listText);
         }
 
-        if (isNaN(suratNumber) || suratNumber < 1 || suratNumber > 114) return await ctx.reply(quote(`⛔ Surah harus berupa nomor antara 1 dan 114!`));
+        if (isNaN(suratNumber) || suratNumber < 1 || suratNumber > 114) return await ctx.reply(quote(`❎ Surah harus berupa nomor antara 1 dan 114!`));
 
         const apiUrl = tools.api.createUrl("https://equran.id", `/api/v2/surat/${suratNumber}`);
         const {
@@ -39,15 +39,15 @@ module.exports = {
         } = (await axios.get(apiUrl)).data;
 
         if (ayatInput) {
-            if (isNaN(ayatInput)) return await ctx.reply(quote(`⛔ Ayat harus berupa nomor yang valid!`));
+            if (isNaN(ayatInput)) return await ctx.reply(quote(`❎ Ayat harus berupa nomor yang valid!`));
 
             if (ayatInput.includes("-")) {
                 const [startAya, endAya] = ayatInput.split("-").map(num => parseInt(num));
 
-                if (isNaN(startAya) || isNaN(endAya) || startAya < 1 || endAya < startAya) return await ctx.reply(quote(`⛔ Rentang ayat tidak valid!`));
+                if (isNaN(startAya) || isNaN(endAya) || startAya < 1 || endAya < startAya) return await ctx.reply(quote(`❎ Rentang ayat tidak valid!`));
 
                 const verses = data.ayat.filter(d => d.nomorAyat >= startAya && d.nomorAyat <= endAya);
-                if (verses.length === 0) return await ctx.reply(quote(`⛔ Ayat dalam rentang ${startAya}-${endAya} tidak ada!`));
+                if (verses.length === 0) return await ctx.reply(quote(`❎ Ayat dalam rentang ${startAya}-${endAya} tidak ada!`));
 
                 const versesText = verses.map(d =>
                     `${bold(`Ayat ${d.nomorAyat}:`)}\n` +
@@ -64,10 +64,10 @@ module.exports = {
                 );
             } else {
                 const ayatNumber = parseInt(ayatInput);
-                if (isNaN(ayatNumber) || ayatNumber < 1) return await ctx.reply(quote(`⛔ Ayat harus berupa nomor yang lebih besar dari 0!`));
+                if (isNaN(ayatNumber) || ayatNumber < 1) return await ctx.reply(quote(`❎ Ayat harus berupa nomor yang lebih besar dari 0!`));
 
                 const ayat = data.ayat.find(d => d.nomorAyat === ayatNumber);
-                if (!ayat) return await ctx.reply(quote(`⛔ Ayat ${ayatNumber} tidak ada!`));
+                if (!ayat) return await ctx.reply(quote(`❎ Ayat ${ayatNumber} tidak ada!`));
 
                 return await ctx.reply(
                     `${ayat.teksArab} (${ayat.teksLatin})\n` +
