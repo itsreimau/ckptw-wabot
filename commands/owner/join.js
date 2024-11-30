@@ -14,7 +14,7 @@ module.exports = {
 
         const url = ctx.args[0] || null;
 
-        if (!input) return await ctx.reply(
+        if (!url) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/"))
         );
@@ -23,14 +23,13 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const urlCode = new URL(input).pathname.split("/").pop();
+            const urlCode = new URL(url).pathname.split("/").pop();
             const res = await ctx.groups.acceptInvite(urlCode);
             const members = await ctx.group().members();
-            const participantsIds = members.map(user => user.id);
+            const participantsIds = members.map(member => member.id);
 
             await ctx.sendMessage(res, {
-                text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${config.bot.name}, dimiliki oleh ${config.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)
-            }, {
+                text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${config.bot.name}, dimiliki oleh ${config.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`),
                 mentions: participantsIds
             });
 

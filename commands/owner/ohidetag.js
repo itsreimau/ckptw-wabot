@@ -18,7 +18,7 @@ module.exports = {
 
         try {
             const members = await ctx.group().members();
-            const mentions = members.map(member => `${member.id.split("@")[0]}@s.whatsapp.net`);
+            const mentions = members.map(member => member.id);
 
             return await ctx.reply({
                 text: input,

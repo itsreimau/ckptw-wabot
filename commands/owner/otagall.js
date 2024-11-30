@@ -21,7 +21,7 @@ module.exports = {
                 const serialized = member.id.split("@")[0];
                 return {
                     tag: `@${serialized}`,
-                    mention: `${serialized}@s.whatsapp.net`
+                    mention: member.id
                 };
             });
 
