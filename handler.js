@@ -26,18 +26,18 @@ async function handler(ctx, options) {
     }
 
     const cooldown = new Cooldown(ctx, config.system.cooldown);
-    if (cooldown.onCooldown && !isPremium) {
+    if (cooldown.onCooldown && !isOwner && !isPremium) {
         await ctx.reply(config.msg.cooldown);
         return true;
     }
 
     const checkOptions = {
         admin: {
-            check: async () => (await ctx.isGroup()) && !(await tools.general.isAdmin(ctx, senderJid)),
+            check: async () => (await ctx.isGroup() && !await tools.general.isAdmin(ctx, senderJid)),
             msg: config.msg.admin
         },
         botAdmin: {
-            check: async () => (await ctx.isGroup()) && !(await tools.general.isBotAdmin(ctx)),
+            check: async () => (await ctx.isGroup() && !await tools.general.isBotAdmin(ctx)),
             msg: config.msg.botAdmin
         },
         coin: {
@@ -45,7 +45,7 @@ async function handler(ctx, options) {
             msg: config.msg.coin
         },
         group: {
-            check: async () => !(await ctx.isGroup()),
+            check: async () => !await ctx.isGroup(),
             msg: config.msg.group
         },
         owner: {

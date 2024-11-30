@@ -34,7 +34,7 @@ const bot = new Client({
 // Penanganan acara saat bot siap
 bot.ev.once(Events.ClientReady, async (m) => {
     console.log(`[${config.pkg.name}] Ready at ${m.user.id}`);
-    if (!(await db.get("bot.mode"))) await db.set("bot.mode", "public");
+    if (!await db.get("bot.mode")) await db.set("bot.mode", "public");
 
     // Tetapkan config pada bot
     const number = m.user.id.split(":")[0];
@@ -114,7 +114,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             const xpGain = 10;
             let xpToLevelUp = 100;
 
-            const [userXp, userLevel, autoLevelUp] = await Promise.all([
+            const [userXp, userLevel, userAutolevelup] = await Promise.all([
                 db.get(`user.${senderNumber}.xp`) || 0,
                 db.get(`user.${senderNumber}.level`) || 1,
                 db.get(`user.${senderNumber}.autolevelup`) || false
@@ -135,7 +135,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
                 }
 
-                if (autoLevelUp) await ctx.reply({
+                if (userAutolevelup) await ctx.reply({
                     text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                         `${config.msg.readmore}\n` +
                         quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
@@ -238,7 +238,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const getAntilink = await db.get(`group.${groupNumber}.option.antilink`);
         if (getAntilink) {
             const isUrl = await tools.general.isUrl(m.content);
-            if (m.content && isUrl && !(await tools.general.isAdmin(ctx, senderJid))) {
+            if (m.content && await tools.general.isUrl(m.content) && !await tools.general.isAdmin(ctx, senderJid)) {
                 await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
                 await ctx.deleteMessage(m.key);
                 if (!config.system.restrict && getAutokick) await ctx.group().kick([senderJid]);
@@ -248,8 +248,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Penanganan antitoxic
         const getAntitoxic = await db.get(`group.${groupNumber}.option.antitoxic`);
         const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
-        if (getAntitoxic && m.content && !(await tools.general.isAdmin(ctx, senderJid))) {
-            if (toxicRegex.test(m.text)) {
+        if (getAntitoxic) {
+            if (m.content && toxicRegex.test(m.content) && !await tools.general.isAdmin(ctx, senderJid)) {
                 await ctx.reply(quote(`⛔ Jangan toxic!`));
                 await ctx.deleteMessage(m.key);
                 if (!config.system.restrict && getAutokick) await ctx.group().kick([senderJid]);

@@ -14,7 +14,7 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        if (!(await tools.general.checkQuotedMedia(ctx.quoted, ["viewOnce"]))) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["viewOnce"])));
+        if (!await tools.general.checkQuotedMedia(ctx.quoted, ["viewOnce"])) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["viewOnce"])));
 
         try {
             const quoted = ctx.quoted?.viewOnceMessageV2?.message;

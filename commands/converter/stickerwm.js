@@ -25,7 +25,7 @@ module.exports = {
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "i want to be a cat|just meow meow"))
         );
 
-        if (!(await tools.general.checkQuotedMedia(ctx.quoted, ["sticker"]))) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], ["sticker"])));
+        if (!await tools.general.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], ["sticker"])));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();

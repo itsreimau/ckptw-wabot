@@ -47,33 +47,20 @@ module.exports = {
             const buffer = await ctx.msg?.media?.toBuffer() || await ctx.quoted?.media?.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
 
-            const useDefaultApi = !flag.resolution;
-            if (useDefaultApi) {
-                const apiUrl = tools.api.createUrl("neastooid", "/api/ai/remini", {
-                    url: uploadUrl
-                });
-                return await ctx.reply({
-                    image: {
-                        url: apiUrl
-                    },
-                    mimetype: mime.lookup("png")
-                });
-            } else {
-                const apiUrl = tools.api.createUrl("btch", "/remini", {
-                    url: uploadUrl,
-                    resolusi: flag.resolution || tools.general.getRandomElement(resolutions)
-                });
-                const {
-                    data
-                } = await axios.get(apiUrl);
+            const apiUrl = tools.api.createUrl("btch", "/remini", {
+                url: uploadUrl,
+                resolusi: flag.resolution || tools.general.getRandomElement(resolutions)
+            });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
-                return await ctx.reply({
-                    image: {
-                        url: data.url
-                    },
-                    mimetype: mime.lookup("png")
-                });
-            }
+            return await ctx.reply({
+                image: {
+                    url: data.url
+                },
+                mimetype: mime.lookup("png")
+            });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

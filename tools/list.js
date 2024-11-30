@@ -160,17 +160,12 @@ async function get(type, ctx) {
                     information: "Information",
                     misc: "Miscellaneous"
                 };
-
-                if (!cmd || cmd.size === 0) {
-                    text = quote("⚠️ Terjadi kesalahan: Tidak ada perintah yang ditemukan.");
-                } else {
-                    text = generateMenuText(cmd, tag);
-                }
+                text = generateMenuText(cmd, tag);
                 break;
             }
             default: {
                 console.error(`[${config.pkg.name}] Error:`, error);
-                text = quote(`⛔ Tidak diketahui: ${type}`);
+                text = quote(`❎ Tidak diketahui: ${type}`);
                 break;
             }
         }
