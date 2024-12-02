@@ -7,7 +7,7 @@ const axios = require("axios");
 const session = new Map();
 
 module.exports = {
-    name: "tekateki",
+    name: "lengkapikalimat",
     category: "game",
     handler: {},
     code: async (ctx) => {
@@ -17,7 +17,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/games/tekateki");
+            const apiUrl = tools.api.createUrl("siputzx", "/api/games/lengkapikalimat");
             const {
                 data
             } = (await axios.get(apiUrl)).data;
@@ -29,7 +29,7 @@ module.exports = {
             session.set(ctx.id, true);
 
             await ctx.reply(
-                `${quote(`Soal: ${data.soal}`)}\n` +
+                `${quote(`Pertanyaan: ${data.pertanyaan}`)}\n` +
                 `${quote(`Bonus: ${coin} Koin`)}\n` +
                 `${quote(`Batas waktu: ${timeout / 1000} detik`)}\n` +
                 `${quote("Ketik 'hint' untuk bantuan.")}\n` +
@@ -75,8 +75,7 @@ module.exports = {
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
-
-                    return await ctx.reply(
+                    await ctx.reply(
                         `${quote("⏱ Waktu habis!")}\n` +
                         quote(`Jawabannya adalah ${answer}.`)
                     );

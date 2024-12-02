@@ -9,9 +9,6 @@ const APIs = {
     cifumo: {
         baseURL: "https://rest.cifumo.biz.id"
     },
-    itzpire: {
-        baseURL: "https://itzpire.com"
-    },
     neastooid: {
         baseURL: "https://api.neastooid.xyz"
     },

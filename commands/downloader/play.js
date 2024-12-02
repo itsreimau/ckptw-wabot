@@ -105,8 +105,8 @@ module.exports = {
             }
 
             if (source === "youtube") {
-                const searchApiUrl = tools.api.createUrl("itzpire", "/search/youtube", {
-                    query: query
+                const searchApiUrl = tools.api.createUrl("agatz", "/api/ytsearch", {
+                    message: query
                 });
                 const searchData = (await axios.get(searchApiUrl)).data.data;
                 const data = searchData[searchIndex];

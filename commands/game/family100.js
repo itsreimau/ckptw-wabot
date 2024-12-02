@@ -19,9 +19,11 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/family100.json");
-            const response = await axios.get(apiUrl);
-            const data = response.data[Math.floor(Math.random() * response.data.length)];
+            const apiUrl = tools.api.createUrl("siputzx", "/api/games/family100");
+            const {
+                data
+            } = (await axios.get(apiUrl)).data;
+
             const coin = {
                 answered: 5,
                 allAnswered: 50

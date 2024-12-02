@@ -16,18 +16,18 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        let textToSpeech = ctx.quoted?.conversation || ctx.quoted?.extendedTextMessage?.text || Object.values(ctx.quoted || {}).find(msg => msg?.caption || msg?.text)?.caption || ctx.args.slice(ctx.args[0]?.length === 2 ? 1 : 0).join(" ") || null;
+        let input = ctx.quoted?.conversation || ctx.quoted?.extendedTextMessage?.text || Object.values(ctx.quoted || {}).find(msg => msg?.caption || msg?.text)?.caption || ctx.args.slice(ctx.args[0]?.length === 2 ? 1 : 0).join(" ") || null;
         let langCode = ctx.args[0]?.length === 2 ? ctx.args[0] : "id";
 
-        if (!textToSpeech) return await ctx.reply(
+        if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("itzpire", "/tools/tts-google", {
-                text: textToSpeech,
-                lang: langCode
+            const apiUrl = tools.api.createUrl("vreden", "/api/tts", {
+                lang: langCode,
+                query: input
             });
 
             return await ctx.reply({

@@ -17,9 +17,11 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/asahotak.json");
-            const response = await axios.get(apiUrl);
-            const data = tools.general.getRandomElement(response.data);
+            const apiUrl = tools.api.createUrl("siputzx", "/api/games/asahotak");
+            const {
+                data
+            } = (await axios.get(apiUrl)).data;
+
             const coin = 5;
             const timeout = 60000;
             const senderNumber = ctx.sender.jid.split(/[:@]/)[0];

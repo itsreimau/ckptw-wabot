@@ -23,8 +23,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("itzpire", "/search/youtube", {
-                query: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/ytsearch", {
+                message: input
             });
             const {
                 data

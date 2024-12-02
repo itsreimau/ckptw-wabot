@@ -15,22 +15,16 @@ module.exports = {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        let textToTranslate = ctx.quoted?.conversation || ctx.quoted?.extendedTextMessage?.text || Object.values(ctx.quoted || {}).find(msg => msg?.caption || msg?.text)?.caption || ctx.args.slice(ctx.args[0]?.length === 2 ? 1 : 0).join(" ") || null;
+        let input = ctx.quoted?.conversation || ctx.quoted?.extendedTextMessage?.text || Object.values(ctx.quoted || {}).find(msg => msg?.caption || msg?.text)?.caption || ctx.args.slice(ctx.args[0]?.length === 2 ? 1 : 0).join(" ") || null;
         let langCode = ctx.args[0]?.length === 2 ? ctx.args[0] : "id";
 
-        if (!textToTranslate) return await ctx.reply(
+        if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))}\n` +
-            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))
         );
 
-        if (ctx.args[0] === "list") {
-            const listText = await tools.list.get("translate");
-            return await ctx.reply(listText);
-        }
-
         try {
-            const translation = await tools.general.translate(textToTranslate, langCode);
+            const translation = await tools.general.translate(input, langCode);
 
             return await ctx.reply(translation);
         } catch (error) {

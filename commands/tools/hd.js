@@ -10,6 +10,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "hd",
+    aliases: ["colorize", "enhance", "enhancer", "hd", "hdr", "remini", "unblur"],
     category: "tools",
     handler: {
         coin: [10, "image", 3]
@@ -29,26 +30,27 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send", "reply"], "image"))}\n` +
             quote(tools.msg.generatesFlagInformation({
-                "-t <number>": "Jenis pemrosesan gambar (1: modelx2, 2: modelx2 25 JXL, 3: modelx4, 4: minecraft_modelx4)."
+                "-r <number>": "Resolusi pemrosesan gambar (2, 4, 6, 8, 16)."
             }))
         );
 
         try {
-            const types = ["modelx2", "modelx2 25 JXL", "modelx4", "minecraft_modelx4"];
+            const resolutions = [2, 4, 6, 8, 16];
             const flag = tools.general.parseFlag(input, {
-                "-t": {
+                "-r": {
                     type: "value",
-                    key: "type",
-                    validator: (val) => !isNaN(val) && parseInt(val) > 0 && parseInt(val) <= types.length,
-                    parser: (val) => types[parseInt(val) - 1]
+                    key: "resolution",
+                    validator: (val) => !isNaN(val) && resolutions.includes(parseInt(val)),
+                    parser: (val) => parseInt(val)
                 }
             });
 
             const buffer = await ctx.msg?.media?.toBuffer() || await ctx.quoted?.media?.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
-            const apiUrl = tools.api.createUrl("itzpire", "/tools/enhance", {
+
+            const apiUrl = tools.api.createUrl("btch", "/remini", {
                 url: uploadUrl,
-                type: flag.type || tools.general.getRandomElement(types)
+                resolusi: flag.resolution || tools.general.getRandomElement(resolutions)
             });
             const {
                 data
@@ -56,7 +58,7 @@ module.exports = {
 
             return await ctx.reply({
                 image: {
-                    url: data.result.img
+                    url: data.url
                 },
                 mimetype: mime.lookup("png")
             });

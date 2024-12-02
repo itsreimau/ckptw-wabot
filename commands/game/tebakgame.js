@@ -3,11 +3,12 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const mime = require("mime-types");
 
 const session = new Map();
 
 module.exports = {
-    name: "tekateki",
+    name: "tebakgame",
     category: "game",
     handler: {},
     code: async (ctx) => {
@@ -17,7 +18,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/games/tekateki");
+            const apiUrl = tools.api.createUrl("siputzx", "/api/games/tebakgame");
             const {
                 data
             } = (await axios.get(apiUrl)).data;
@@ -28,14 +29,17 @@ module.exports = {
 
             session.set(ctx.id, true);
 
-            await ctx.reply(
-                `${quote(`Soal: ${data.soal}`)}\n` +
-                `${quote(`Bonus: ${coin} Koin`)}\n` +
-                `${quote(`Batas waktu: ${timeout / 1000} detik`)}\n` +
-                `${quote("Ketik 'hint' untuk bantuan.")}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            await ctx.reply({
+                image: {
+                    url: data.img
+                },
+                mimetype: mime.lookup("png"),
+                caption: `${quote(`Bonus: ${coin} Koin`)}\n` +
+                    `${quote(`Batas waktu: ${timeout / 1000} detik`)}\n` +
+                    `${quote("Ketik 'hint' untuk bantuan.")}\n` +
+                    "\n" +
+                    config.msg.footer
+            });
 
             const collector = ctx.MessageCollector({
                 time: timeout

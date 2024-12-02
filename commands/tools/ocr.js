@@ -27,14 +27,15 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
-            const apiUrl = tools.api.createUrl("itzpire", "/tools/ocr", {
+            const apiUrl = tools.api.createUrl("https://api.ocr.space", "/parse/imageurl", {
+                apikey: "8e65f273cd88957",
                 url: uploadUrl
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            return await ctx.reply(data.ParsedText);
+            return await ctx.reply(data.ParsedResults.ParsedText);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

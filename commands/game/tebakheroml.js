@@ -3,11 +3,12 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const mime = require("mime-types");
 
 const session = new Map();
 
 module.exports = {
-    name: "tekateki",
+    name: "tebakheroml",
     category: "game",
     handler: {},
     code: async (ctx) => {
@@ -17,7 +18,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/games/tekateki");
+            const apiUrl = tools.api.createUrl("siputzx", "/api/games/tebakheroml");
             const {
                 data
             } = (await axios.get(apiUrl)).data;
@@ -28,14 +29,18 @@ module.exports = {
 
             session.set(ctx.id, true);
 
+            await ctx.reply({
+                audio: {
+                    url: data.audio
+                },
+                mimetype: mime.lookup("mp3")
+            });
             await ctx.reply(
-                `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`Bonus: ${coin} Koin`)}\n` +
                 `${quote(`Batas waktu: ${timeout / 1000} detik`)}\n` +
                 `${quote("Ketik 'hint' untuk bantuan.")}\n` +
                 "\n" +
-                config.msg.footer
-            );
+                config.msg.footer)
 
             const collector = ctx.MessageCollector({
                 time: timeout
@@ -43,7 +48,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toLowerCase();
-                const answer = data.jawaban.toLowerCase();
+                const answer = data.name.toLowerCase();
 
                 if (userAnswer === answer) {
                     session.delete(ctx.id);
@@ -71,7 +76,7 @@ module.exports = {
             });
 
             collector.on("end", async (collector, reason) => {
-                const answer = data.jawaban;
+                const answer = data.name;
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
