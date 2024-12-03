@@ -33,6 +33,7 @@ module.exports = {
                 `${quote(`Bonus: ${coin} Koin`)}\n` +
                 `${quote(`Batas waktu: ${timeout / 1000} detik`)}\n` +
                 `${quote("Ketik 'hint' untuk bantuan.")}\n` +
+                `${quote("Ketik 'surrender' untuk menyerah.")}\n` +
                 "\n" +
                 config.msg.footer
             );
@@ -67,11 +68,18 @@ module.exports = {
                     }, {
                         quoted: m
                     });
+                } else if (userAnswer === "surrender") {
+                    session.delete(ctx.id);
+                    await ctx.reply(
+                        `${quote("🏳️ Anda menyerah!")}\n` +
+                        quote(`Jawabannya adalah ${answer}.`)
+                    );
+                    return collector.stop();
                 }
             });
 
             collector.on("end", async (collector, reason) => {
-                const answer = data.jawaban;
+                const answer = data.jawaban.toUpperCase();
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);

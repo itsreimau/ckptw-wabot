@@ -8,7 +8,7 @@ const mime = require("mime-types");
 const session = new Map();
 
 module.exports = {
-    name: "tebakhewan",
+    name: "tebaklogo",
     category: "game",
     handler: {},
     code: async (ctx) => {
@@ -18,9 +18,10 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/games/tebakhewan");
-            const response = await axios.get(apiUrl);
-            const data = tools.general.getRandomElement(response.data.data);
+            const apiUrl = tools.api.createUrl("siputzx", "/api/games/tebaklogo");
+            const {
+                data
+            } = (await axios.get(apiUrl)).data.data;
 
             const coin = 5;
             const timeout = 60000;
@@ -30,7 +31,7 @@ module.exports = {
 
             await ctx.reply({
                 image: {
-                    url: data.url
+                    url: data.image
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Bonus: ${coin} Koin`)}\n` +
@@ -47,7 +48,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toLowerCase();
-                const answer = data.title.toLowerCase();
+                const answer = data.jawaban.toLowerCase();
 
                 if (userAnswer === answer) {
                     session.delete(ctx.id);
@@ -82,7 +83,7 @@ module.exports = {
             });
 
             collector.on("end", async (collector, reason) => {
-                const answer = data.title;
+                const answer = data.jawaban;
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);

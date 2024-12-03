@@ -40,6 +40,7 @@ module.exports = {
                 `${quote(`Bonus: ${coin} Koin`)}\n` +
                 `${quote(`Batas waktu: ${timeout / 1000} detik`)}\n` +
                 `${quote("Ketik 'hint' untuk bantuan.")}\n` +
+                `${quote("Ketik 'surrender' untuk menyerah.")}\n` +
                 "\n" +
                 config.msg.footer)
 
@@ -49,7 +50,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toLowerCase();
-                const answer = data.name.toLowerCase();
+                const answer = data.judul.toLowerCase();
 
                 if (userAnswer === answer) {
                     session.delete(ctx.id);
@@ -73,11 +74,18 @@ module.exports = {
                     }, {
                         quoted: m
                     });
+                } else if (userAnswer === "surrender") {
+                    session.delete(ctx.id);
+                    await ctx.reply(
+                        `${quote("🏳️ Anda menyerah!")}\n` +
+                        quote(`Jawabannya adalah ${answer}.`)
+                    );
+                    return collector.stop();
                 }
             });
 
             collector.on("end", async (collector, reason) => {
-                const answer = data.name;
+                const answer = data.judul;
                 const artist = data.artis;
 
                 if (session.has(ctx.id)) {

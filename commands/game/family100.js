@@ -38,7 +38,9 @@ module.exports = {
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
                 `${quote(`Jumlah jawaban: ${remainingAnswers.size}`)}\n` +
-                `${quote(`Batas waktu ${timeout / 1000} detik`)}\n\n` +
+                `${quote(`Batas waktu ${timeout / 1000} detik`)}\n` +
+                `${quote("Ketik 'surrender' untuk menyerah.")}\n` +
+                "\n" +
                 config.msg.footer
             );
 
@@ -71,6 +73,13 @@ module.exports = {
                         await ctx.reply(quote(`🎉 Selamat! Semua jawaban telah ditemukan! Setiap peserta yang menjawab mendapat 10 koin.`));
                         return collector.stop();
                     }
+                } else if (userAnswer === "surrender") {
+                    session.delete(ctx.id);
+                    await ctx.reply(
+                        `${quote("🏳️ Anda menyerah!")}\n` +
+                        quote(`Jawabannya adalah ${answer}.`)
+                    );
+                    return collector.stop();
                 }
             });
 

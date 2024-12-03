@@ -17,7 +17,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/games/tebakkimia");
+            const apiUrl = tools.api.createUrl("siputzx", "/api/games/tebaklirik");
             const {
                 data
             } = (await axios.get(apiUrl)).data;
@@ -33,6 +33,7 @@ module.exports = {
                 `${quote(`Bonus: ${coin} Koin`)}\n` +
                 `${quote(`Batas waktu: ${timeout / 1000} detik`)}\n` +
                 `${quote("Ketik 'hint' untuk bantuan.")}\n` +
+                `${quote("Ketik 'surrender' untuk menyerah.")}\n` +
                 "\n" +
                 config.msg.footer
             );
@@ -64,6 +65,13 @@ module.exports = {
                     }, {
                         quoted: m
                     });
+                } else if (userAnswer === "surrender") {
+                    session.delete(ctx.id);
+                    await ctx.reply(
+                        `${quote("🏳️ Anda menyerah!")}\n` +
+                        quote(`Jawabannya adalah ${answer}.`)
+                    );
+                    return collector.stop();
                 }
             });
 

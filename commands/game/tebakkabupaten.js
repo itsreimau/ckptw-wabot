@@ -37,6 +37,7 @@ module.exports = {
                 caption: `${quote(`Bonus: ${coin} Koin`)}\n` +
                     `${quote(`Batas waktu: ${timeout / 1000} detik`)}\n` +
                     `${quote("Ketik 'hint' untuk bantuan.")}\n` +
+                    `${quote("Ketik 'surrender' untuk menyerah.")}\n` +
                     "\n" +
                     config.msg.footer
             });
@@ -71,6 +72,13 @@ module.exports = {
                     }, {
                         quoted: m
                     });
+                } else if (userAnswer === "surrender") {
+                    session.delete(ctx.id);
+                    await ctx.reply(
+                        `${quote("🏳️ Anda menyerah!")}\n` +
+                        quote(`Jawabannya adalah ${answer}.`)
+                    );
+                    return collector.stop();
                 }
             });
 
