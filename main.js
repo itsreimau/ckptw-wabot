@@ -75,15 +75,15 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Grup atau Pribadi
     if (isGroup || isPrivate) {
         // Penanganan untuk database
-        const userDb = await db.get(`user.${senderNumber}`),
-            if (userDb) {
-                await db.set(`user.${senderNumber}`, {
-                    coin: 1000,
-                    level: 0,
-                    uid: tools.general.generateUID(senderNumber),
-                    xp: 0
-                });
-            }
+        const userDb = await db.get(`user.${senderNumber}`);
+        if (userDb) {
+            await db.set(`user.${senderNumber}`, {
+                coin: 1000,
+                level: 0,
+                uid: tools.general.generateUID(senderNumber),
+                xp: 0
+            });
+        }
 
         if (tools.general.isOwner(ctx, senderNumber, config.system.selfOwner) || userPremium) {
             const userCoin = await db.get(`user.${senderNumber}.coin`);
