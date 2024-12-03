@@ -85,7 +85,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             });
         }
 
-        if (tools.general.isOwner(ctx, senderNumber, config.system.selfOwner) || userPremium) {
+        if (tools.general.isOwner(ctx, senderNumber, config.system.selfOwner) || await db.get(`user.${senderNumber}.isPremium`)) {
             const userCoin = await db.get(`user.${senderNumber}.coin`);
             if (userCoin > 0) await db.delete(`user.${senderNumber}.coin`);
         }
