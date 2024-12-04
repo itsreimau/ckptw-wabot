@@ -33,13 +33,10 @@ module.exports = {
             const apiUrl = tools.api.createUrl("vreden", "/api/remini", {
                 url: uploadUrl
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 image: {
-                    url: data.url
+                    url: apiUrl
                 },
                 mimetype: mime.lookup("png")
             });
