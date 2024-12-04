@@ -15,8 +15,8 @@ module.exports = {
         if (status) return;
 
         const [number, ...text] = ctx.args;
-        const numberFormatted = number.replace(/[^\d]/g, "") || null;
-        const menfessText = text.join(" ") || null;
+        const numberFormatted = number ? number.replace(/[^\d]/g, "") : null;
+        const menfessText = text ? text.join(" ") : null;
 
         const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.split(/[:@]/)[0];

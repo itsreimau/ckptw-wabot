@@ -76,7 +76,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     if (isGroup || isPrivate) {
         // Penanganan untuk database
         const userDb = await db.get(`user.${senderNumber}`);
-        if (userDb) {
+        if (!userDb) {
             await db.set(`user.${senderNumber}`, {
                 coin: 1000,
                 level: 0,

@@ -131,7 +131,9 @@ function generateUID(phoneNumber) {
         hash = (hash * 31 + charCode) % 1000000007;
     }
 
-    return "ckptw-" + Math.abs(hash).toString(16).toLowerCase();
+    const uniquePart = phoneNumber.split("").reverse().join("").charCodeAt(0).toString(16);
+
+    return `${Math.abs(hash).toString(16).toLowerCase()}-${uniquePart}`;
 }
 
 function getRandomElement(arr) {
