@@ -10,7 +10,7 @@ const APIs = {
         baseURL: "https://rest.cifumo.biz.id"
     },
     fastrestapis: {
-        baseURL: "https://fastrestapis.fasturl.cloud"
+        baseURL: "https://fastrestapis.fasturl.cloud",
         APIKey: "" // APIKey tidak disediakan, Anda dapat menggunakan APIKey Anda sendiri
     },
     neastooid: {

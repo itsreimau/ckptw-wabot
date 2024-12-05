@@ -34,12 +34,12 @@ module.exports = {
             } = await axios.get(apiUrl, {
                 headers: {
                     "x-api-key": api.listUrl().fastrestapis.APIKey,
-                    response: "arraybuffer"
+                    responseType: "arraybuffer"
                 }
             });
 
             return await ctx.reply({
-                audio: data,
+                audio: Buffer.from(data),
                 mimetype: mime.lookup("mp3"),
                 ptt: true
             });
