@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: "islamic",
-    aliases: ["islamicai", "muslim", "muslimai"]
+    aliases: ["islamicai", "muslim", "muslimai"],
     category: "ai",
     handler: {},
     code: async (ctx) => {
