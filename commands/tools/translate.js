@@ -20,8 +20,14 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))
+            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))}\n` +
+            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
+
+        if (ctx.args[0] === "list") {
+            const listText = await tools.list.get("jadwaltv");
+            return await ctx.reply(listText);
+        }
 
         try {
             const translation = await tools.general.translate(input, langCode);

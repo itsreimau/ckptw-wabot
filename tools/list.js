@@ -140,6 +140,22 @@ async function get(type, ctx) {
                     config.msg.footer;
                 break;
             }
+            case "translate": {
+                const data = (await axios.get(api.createUrl("fastrestapis", "/tools/translate", {
+                    text: "ckptw-wabot"
+                }), {
+                    headers: {
+                        "x-api-key": tools.api.listUrl().fastrestapis.APIKey
+                    }
+                }).catch(err => err.response?.data?.availableLanguages)) || [];
+                text = data.map(([code, language]) =>
+                        `${quote(`Kode: ${code}`)}\n` +
+                        `${quote(`Bahasa: ${language}`)}\n`
+                    ).join(`${quote("─────")}\n`) +
+                    "\n" +
+                    config.msg.footer;
+                break;
+            }
             case "menu": {
                 const {
                     cmd
