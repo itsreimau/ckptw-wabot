@@ -204,7 +204,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             }
         }
 
-        // Penanganan AFK : Berangkat dari AFK
+        // Penanganan AFK : Mengakhiri AFK
         const [getAFKMessage, reason, timeStamp] = await Promise.all([
             db.get(`user.${senderNumber}.afk`),
             db.get(`user.${senderNumber}.afk.reason`),

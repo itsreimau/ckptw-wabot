@@ -25,15 +25,21 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("vreden", "/api/tts", {
-                lang: langCode,
-                query: input
+            const apiUrl = tools.api.createUrl("fastrestapis", "/tts/google", {
+                text: input,
+                target: langCode
+            });
+            const {
+                data
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "x-api-key": api.listUrl().fastrestapis.APIKey,
+                    response: "arraybuffer"
+                }
             });
 
             return await ctx.reply({
-                audio: {
-                    url: apiUrl
-                },
+                audio: data,
                 mimetype: mime.lookup("mp3"),
                 ptt: true
             });
