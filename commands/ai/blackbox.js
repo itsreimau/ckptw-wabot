@@ -8,6 +8,7 @@ const {
 
 module.exports = {
     name: "blackbox",
+    aliases: ["bb"],
     category: "ai",
     handler: {
         coin: [10, "text", 1]
@@ -45,7 +46,7 @@ module.exports = {
                     data
                 } = await axios.get(apiUrl, {
                     headers: {
-                        "x-api-key": api.listUrl().fastrestapis.APIKey
+                        "x-api-key": tools.api.listUrl().fastrestapis.APIKey
                     }
                 });
 
@@ -59,7 +60,7 @@ module.exports = {
                     data
                 } = await axios.get(apiUrl, {
                     headers: {
-                        "x-api-key": api.listUrl().fastrestapis.APIKey
+                        "x-api-key": tools.api.listUrl().fastrestapis.APIKey
                     }
                 });
                 return await ctx.reply(data.response);

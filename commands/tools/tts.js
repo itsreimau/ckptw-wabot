@@ -33,7 +33,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl, {
                 headers: {
-                    "x-api-key": api.listUrl().fastrestapis.APIKey,
+                    "x-api-key": tools.api.listUrl().fastrestapis.APIKey,
                     responseType: "arraybuffer"
                 }
             });
