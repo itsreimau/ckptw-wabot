@@ -43,7 +43,6 @@ module.exports = {
                 case "intro":
                     setKey = `group.${groupNumber}.text.intro`;
                     break;
-                    intro
                 case "welcome":
                     setKey = `group.${groupNumber}.text.welcome`;
                     break;

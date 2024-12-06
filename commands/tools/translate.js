@@ -25,7 +25,7 @@ module.exports = {
         );
 
         if (ctx.args[0] === "list") {
-            const listText = await tools.list.get("jadwaltv");
+            const listText = await tools.list.get("translate");
             return await ctx.reply(listText);
         }
 

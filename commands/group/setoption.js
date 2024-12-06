@@ -31,8 +31,9 @@ module.exports = {
 
         if (ctx.args[0] === "status") {
             const groupNumber = ctx.isGroup() ? ctx.id.split("@")[0] : null;
-            const [groupAntilink, groupAntitoxic, groupAutokick, groupWelcome] = await Promise.all([
+            const [groupAntilink, groupAntinsfw, groupAntitoxic, groupAutokick, groupWelcome] = await Promise.all([
                 db.get(`group.${groupNumber}.option.antilink`),
+                db.get(`group.${groupNumber}.option.antinsfw`),
                 db.get(`group.${groupNumber}.option.antitoxic`),
                 db.get(`group.${groupNumber}.option.autokick`),
                 db.get(`group.${groupNumber}.option.welcome`)
@@ -40,6 +41,7 @@ module.exports = {
 
             return await ctx.reply(
                 `${quote(`Antilink: ${groupAntilink ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${quote(`Antinsfw: ${groupAntinsfw ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Antitoxic: ${groupAntitoxic ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Autokick: ${groupAutokick ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Welcome: ${groupWelcome ? "Aktif" : "Nonaktif"}`)}\n` +
@@ -55,6 +57,9 @@ module.exports = {
             switch (input.toLowerCase()) {
                 case "antilink":
                     setKey = `group.${groupNumber}.option.antilink`;
+                    break;
+                case "antinsfw":
+                    setKey = `group.${groupNumber}.option.antinsfw`;
                     break;
                 case "antitoxic":
                     setKey = `group.${groupNumber}.option.antitoxic`;

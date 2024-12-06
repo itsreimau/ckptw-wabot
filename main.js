@@ -239,6 +239,37 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             }
         }
 
+        const getAntinsfw = await db.get(`group.${groupNumber}.option.antinsfw`);
+        if (getAntinsfw) {
+            const msgType = ctx.getMessageType();
+            const isImage = await Promise.any([
+                tools.general.checkMedia(msgType, "image", ctx),
+                tools.general.checkQuotedMedia(ctx.quoted, "image")
+            ]).catch(() => false);
+
+            if (isImage && !await tools.general.isAdmin(ctx, senderJid)) {
+                const buffer = await (ctx.msg.media?.toBuffer() || ctx.quoted?.media?.toBuffer());
+                const uploadUrl = await tools.general.upload(buffer);
+
+                const apiUrl = tools.api.createUrl("fastrestapis", "/tool/imagechecker", {
+                    url: uploadUrl
+                });
+                const {
+                    data
+                } = await axios.get(apiUrl, {
+                    headers: {
+                        "x-api-key": tools.api.listUrl().fastrestapis.APIKey
+                    }
+                });
+
+                if (data.results.status === "NSFW") {
+                    await ctx.reply(`⛔ Jangan kirim NSFW!`);
+                    await ctx.deleteMessage(ctx.msg.key);
+                    if (!config.system.restrict && getAutokick) await ctx.group().kick([senderJid]);
+                }
+            }
+        }
+
         // Penanganan antitoxic
         const getAntitoxic = await db.get(`group.${groupNumber}.option.antitoxic`);
         const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;

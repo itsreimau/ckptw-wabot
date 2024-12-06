@@ -296,17 +296,21 @@ function parseFlag(argsString, customRules = {}) {
     return options;
 }
 
-async function translate(text, to) {
-    const apiUrl = api.createUrl("nexoracle", "/misc/translate", {
+async function translate(text, target) {
+    const apiUrl = tools.api.createUrl("fastrestapis", "/tts/google", {
         text,
-        to
-    }, "apikey");
+        target
+    });
 
     try {
         const {
             data
-        } = await axios.get(apiUrl);
-        return data.result;
+        } = await axios.get(apiUrl, {
+            headers: {
+                "x-api-key": tools.api.listUrl().fastrestapis.APIKey
+            }
+        });
+        return data.translatedText;
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
         return null;

@@ -141,15 +141,27 @@ async function get(type, ctx) {
                 break;
             }
             case "translate": {
-                const data = (await axios.get(api.createUrl("fastrestapis", "/tools/translate", {
-                    text: "ckptw-wabot"
-                }), {
+                const data = (await axios.get(api.createUrl("fastrestapis", "/tool/translate"), {
                     headers: {
                         "x-api-key": tools.api.listUrl().fastrestapis.APIKey
                     }
-                }).catch(err => err.response?.data?.availableLanguages)) || [];
-                text = data.map(([code, language]) =>
-                        `${quote(`Kode: ${code}`)}\n` +
+                }).catch(err => err.response?.data?.availableLanguages)) || {};
+                text = Object.entries(data).map(([code, language]) =>
+                        `${quote(`Kode: ${code.toUpperCase()}`)}\n` +
+                        `${quote(`Bahasa: ${language}`)}\n`
+                    ).join(`${quote("─────")}\n`) +
+                    "\n" +
+                    config.msg.footer;
+                break;
+            }
+            case "tts": {
+                const data = (await axios.get(api.createUrl("fastrestapis", "/tts/google"), {
+                    headers: {
+                        "x-api-key": tools.api.listUrl().fastrestapis.APIKey
+                    }
+                }).catch(err => err.response?.data?.availableLanguages)) || {};
+                text = Object.entries(data).map(([code, language]) =>
+                        `${quote(`Kode: ${code.toUpperCase()}`)}\n` +
                         `${quote(`Bahasa: ${language}`)}\n`
                     ).join(`${quote("─────")}\n`) +
                     "\n" +
