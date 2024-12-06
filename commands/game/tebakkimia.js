@@ -24,8 +24,8 @@ module.exports = {
 
             const game = {
                 coin: 5,
-                timeout = 60000,
-                senderNumber = ctx.sender.jid.split(/[:@]/)[0],
+                timeout: 60000,
+                senderNumber: ctx.sender.jid.split(/[:@]/)[0],
                 answer: data.unsur.toUpperCase()
             };
 

@@ -30,7 +30,7 @@ module.exports = {
                     allAnswered: 50
                 },
                 timeout = 90000,
-                senderNumber = ctx.sender.jid.split(/[:@]/)[0],
+                senderNumber: ctx.sender.jid.split(/[:@]/)[0],
                 answers: new Set(data.jawaban.map(d => d.toUpperCase())),
                 participants: new Set()
             };
