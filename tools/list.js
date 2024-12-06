@@ -119,6 +119,13 @@ async function get(type, ctx) {
                     config.msg.footer;
                 break;
             }
+            case "osettext": {
+                const data = ["price (Variabel yang tersedia: %tag%, %name%, %version%, %watermark%, %footer%, %readmore%)"];
+                text = `${data.map(quote).join("\n")}\n` +
+                    "\n" +
+                    config.msg.footer;
+                break;
+            }
             case "setoption": {
                 const data = ["antilink", "antitoxic", "autokick", "welcome"];
                 text = `${data.map(quote).join("\n")}\n` +

@@ -12,9 +12,23 @@ module.exports = {
         if (status) return;
 
         try {
-            const priceText = await db.get(`bot.text.price`) || quote("❎ Bot ini tidak memiliki harga.");
+            const senderJid = ctx.sender.jid;
+            const senderNumber = senderJid.split(/[:@]/)[0];
 
-            return await ctx.reply(priceText);
+            const customText = await db.get(`bot.text.price`);
+            const text = customText ?
+                customText
+                .replace(/%tag%/g, `@${senderNumber}`)
+                .replace(/%name%/g, config.bot.name)
+                .replace(/%version%/g, config.pkg.version)
+                .replace(/%watermark%/g, config.msg.watermark)
+                .replace(/%footer%/g, config.msg.footer)
+                .replace(/%readmore%/g, config.msg.readmore) : quote("❎ Bot ini tidak memiliki harga.");
+
+            return await ctx.reply({
+                text: introText,
+                mentions: [senderJid]
+            });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));

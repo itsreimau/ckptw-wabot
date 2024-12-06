@@ -27,7 +27,7 @@ module.exports = {
                 coin: 5,
                 timeout: 60000,
                 senderNumber: ctx.sender.jid.split(/[:@]/)[0],
-                answer: data.jawaban.toUpperCase()
+                answer: data.name.toUpperCase()
             };
 
             session.set(ctx.id, true);
@@ -51,7 +51,6 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toUpperCase();
-                const game.answer = data.name.toLowerCase();
 
                 if (userAnswer === game.answer) {
                     session.delete(ctx.id);
@@ -86,8 +85,6 @@ module.exports = {
             });
 
             collector.on("end", async () => {
-                const game.answer = data.name;
-
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
                     return await ctx.reply(
