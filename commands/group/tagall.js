@@ -17,11 +17,11 @@ module.exports = {
 
         try {
             const members = await ctx.group().members();
-            const mentions = members.map(member => {
-                const serialized = member.id.split("@")[0];
+            const mentions = members.map(m => {
+                const serialized = m.id.split("@")[0];
                 return {
                     tag: `@${serialized}`,
-                    mention: member.id
+                    mention: m.id
                 };
             });
 

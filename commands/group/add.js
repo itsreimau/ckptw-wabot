@@ -29,11 +29,14 @@ module.exports = {
             const [result] = await ctx._client.onWhatsApp(accountFormatted);
             if (!result.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp!`));
 
-            await ctx.group().add([account]).catch(async (error) => {
-                const code = await ctx.group().inviteCode();
-                await ctx.sendMessage(account, {
-                    text: quote(`👋 Hai, saya diminta untuk menambahkan Anda ke grup tetapi terjadi kesalahan. Bisakah kamu bergabung sendiri? https://chat.whatsapp.com/${code}`)
-                });
+            ctx.group().add([account]).then(async (result) => {
+                const res = result[0];
+                if (res.status === "403") {
+                    const code = await ctx.group().inviteCode();
+                    await ctx.sendMessage(res.jid, {
+                        text: quote(`👋 Hai, saya diminta untuk menambahkan Anda ke grup tetapi terjadi kesalahan. Bisakah kamu bergabung sendiri? https://chat.whatsapp.com/${code}`)
+                    });
+                }
             });
 
             return await ctx.reply(quote(`✅ Berhasil ditambahkan!`));

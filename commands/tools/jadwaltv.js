@@ -39,7 +39,7 @@ module.exports = {
                 `${quote(`${d.date} - ${d.event}`)}`
             ).join("\n");
             return await ctx.reply(
-                `${quote(`Kanal: ${data.result.channel}`)}\n` +
+                `${quote(`Saluran: ${data.result.channel}`)}\n` +
                 `${resultText}\n` +
                 "\n" +
                 config.msg.footer

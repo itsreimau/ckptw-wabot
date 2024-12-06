@@ -18,7 +18,7 @@ module.exports = {
 
         try {
             const members = await ctx.group().members();
-            const mentions = members.map(member => member.id);
+            const mentions = members.map(m => m.id);
 
             return await ctx.reply({
                 text: input,

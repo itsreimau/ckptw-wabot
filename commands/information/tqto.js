@@ -18,6 +18,7 @@ module.exports = {
             `${quote("Idul (https://github.com/aidulcandra)")}\n` +
             `${quote("UdeanDev (https://github.com/udeannn)")}\n` +
             `${quote("ZTRdiamond (https://github.com/ZTRdiamond)")}\n` +
+            `${quote("FastURL (alias Hikaru) (https://github.com/fasturl)")}\n` +
             `${quote("Serv00 (https://serv00.com/)")}\n` +
             `${quote("Dan kepada semua pihak yang telah membantu dalam pengembangan bot ini.")}\n` +
             "\n" +

@@ -20,7 +20,7 @@ module.exports = {
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "user -d 30"))}\n` +
             `${quote(tools.msg.generatesFlagInformation({
-                "-d": "Tentukan hari untuk menghapus data 'terakhir' pada hari itu."
+                "-d": "Tentukan hari untuk menghapus data 'last...' pada hari itu."
             }))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );

@@ -3,27 +3,18 @@ const {
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: "hidetag",
-    aliases: ["ht"],
+    name: "price",
+    aliases: ["belibot", "rent", "rentbot", "sewa", "sewabot"],
     category: "group",
-    handler: {
-        admin: true,
-        group: true
-    },
+    handler: {},
     code: async (ctx) => {
         const status = await handler(ctx, module.exports.handler);
         if (status) return;
 
-        const input = ctx.args.join(" ") || "Saya tidak tahu harus mengetik apa...";
-
         try {
-            const members = await ctx.group().members();
-            const mentions = members.map(m => m.id);
+            const priceText = await db.get(`bot.text.price`) || quote("❎ Bot ini tidak memiliki harga.");
 
-            return await ctx.reply({
-                text: input,
-                mentions
-            });
+            return await ctx.reply(priceText);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));

@@ -12,10 +12,10 @@ module.exports = {
             const users = (await db.toJSON()).user;
 
             const leaderboardData = Object.keys(users)
-                .map(id => ({
-                    id,
-                    level: users[id].level || 0,
-                    winGame: users[id].winGame || 0
+                .map(i => ({
+                    i,
+                    level: users[i].level || 0,
+                    winGame: users[i].winGame || 0
                 }))
                 .sort((a, b) => {
                     if (b.winGame !== a.winGame) return b.winGame - a.winGame;

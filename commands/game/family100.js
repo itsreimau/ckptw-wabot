@@ -24,71 +24,73 @@ module.exports = {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            const coin = {
-                answered: 5,
-                allAnswered: 50
+            const game = {
+                coin: {
+                    answered: 5,
+                    allAnswered: 50
+                },
+                timeout = 90000,
+                senderNumber = ctx.sender.jid.split(/[:@]/)[0],
+                answers: new Set(data.jawaban.map(d => d.toUpperCase())),
+                participants: new Set()
             };
-            const timeout = 90000;
-            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
-            const remainingAnswers = new Set(data.jawaban.map(j => j.toLowerCase()));
-            const participants = new Set();
 
             session.set(ctx.id, true);
 
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
-                `${quote(`Jumlah jawaban: ${remainingAnswers.size}`)}\n` +
-                `${quote(`Batas waktu ${timeout / 1000} detik`)}\n` +
+                `${quote(`Jumlah jawaban: ${game.answers.size}`)}\n` +
+                `${quote(`Batas waktu ${game.timeout / 1000} detik`)}\n` +
                 `${quote("Ketik 'surrender' untuk menyerah.")}\n` +
                 "\n" +
                 config.msg.footer
             );
 
             const collector = ctx.MessageCollector({
-                time: timeout
+                time: game.timeout
             });
 
             collector.on("collect", async (m) => {
-                const userAnswer = m.content.toLowerCase();
+                const userAnswer = m.content.toUpperCase();
                 const participantJid = m.jid;
                 const participantNumber = participantJid.split("@")[0]
 
-                if (remainingAnswers.has(userAnswer)) {
-                    remainingAnswers.delete(userAnswer);
-                    participants.add(participantNumber);
+                if (game.answers.has(userAnswer)) {
+                    game.answers.delete(userAnswer);
+                    game.participants.add(participantNumber);
 
-                    await db.add(`user.${participantNumber}.coin`, coin.answered);
+                    await db.add(`user.${participantNumber}.game.coin`, game.coin.answered);
                     await ctx.sendMessage(ctx.id, {
-                        text: quote(`✅ ${tools.general.ucword(userAnswer)} benar! Jawaban tersisa: ${remainingAnswers.size}`)
+                        text: quote(`✅ ${tools.general.ucword(userAnswer)} benar! Jawaban tersisa: ${game.answers.size}`)
                     }, {
                         quoted: m
                     });
 
-                    if (remainingAnswers.size === 0) {
+                    if (game.answers.size === 0) {
                         session.delete(ctx.id);
-                        for (const participant of participants) {
-                            await db.add(`user.${participant}.coin`, coin.allAnswered);
+                        for (const participant of game.participants) {
+                            await db.add(`user.${participant}.game.coin`, game.coin.allAnswered);
                             await db.add(`user.${participant}.winGame`, 1);
                         }
-                        await ctx.reply(quote(`🎉 Selamat! Semua jawaban telah ditemukan! Setiap peserta yang menjawab mendapat 10 koin.`));
+                        await ctx.reply(quote(`🎉 Selamat! Semua jawaban telah terjawab! Setiap peserta yang menjawab mendapat ${game.coin.allAnswered} koin.`));
                         return collector.stop();
                     }
-                } else if (userAnswer === "surrender") {
+                } else if (userAnswer === "SURRENDER") {
                     session.delete(ctx.id);
                     await ctx.reply(
                         `${quote("🏳️ Anda menyerah!")}\n` +
-                        quote(`Jawabannya adalah ${answer}.`)
+                        quote(`Jawabannya adalah ${game.answer}.`)
                     );
                     return collector.stop();
                 }
             });
 
             collector.on("end", async () => {
-                const remaining = [...remainingAnswers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1");
+                const remaining = [...game.answers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1");
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
-                    await ctx.reply(
+                    return await ctx.reply(
                         `${quote("⏱ Waktu habis!")}\n` +
                         quote(`Jawaban yang belum terjawab adalah: ${remaining}`)
                     );

@@ -42,17 +42,17 @@ module.exports = {
             if (isNaN(ayatInput)) return await ctx.reply(quote(`❎ Ayat harus berupa nomor yang valid!`));
 
             if (ayatInput.includes("-")) {
-                const [startAya, endAya] = ayatInput.split("-").map(num => parseInt(num));
+                const [startAya, endAya] = ayatInput.split("-").map(i => parseInt(i));
 
                 if (isNaN(startAya) || isNaN(endAya) || startAya < 1 || endAya < startAya) return await ctx.reply(quote(`❎ Rentang ayat tidak valid!`));
 
                 const verses = data.ayat.filter(d => d.nomorAyat >= startAya && d.nomorAyat <= endAya);
                 if (verses.length === 0) return await ctx.reply(quote(`❎ Ayat dalam rentang ${startAya}-${endAya} tidak ada!`));
 
-                const versesText = verses.map(d =>
-                    `${bold(`Ayat ${d.nomorAyat}:`)}\n` +
-                    `${d.teksArab} (${d.teksLatin})\n` +
-                    `${italic(d.teksIndonesia)}`
+                const versesText = verses.map(v =>
+                    `${bold(`Ayat ${v.nomorAyat}:`)}\n` +
+                    `${v.teksArab} (${v.teksLatin})\n` +
+                    `${italic(v.teksIndonesia)}`
                 ).join("\n");
                 return await ctx.reply(
                     `${bold(`Surah ${data.namaLatin}`)}\n` +

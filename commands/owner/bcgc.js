@@ -23,7 +23,7 @@ module.exports = {
         try {
             const delay = ms => new Promise(res => setTimeout(res, ms));
             const groupData = await ctx._client.groupFetchAllParticipating();
-            const groupIds = Object.values(groupData).map(group => group.id);
+            const groupIds = Object.values(groupData).map(g => g.id);
 
             const waitMsg = await ctx.reply(quote(`🔄 Mengirim siaran ke ${groupIds.length} grup, perkiraan waktu: ${(groupIds.length * 0.5 / 60).toFixed(2)} menit.`));
 

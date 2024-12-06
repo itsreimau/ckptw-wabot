@@ -28,10 +28,11 @@ module.exports = {
             const {
                 data
             } = await axios.get(apiUrl);
+            const result = tools.general.getRandomElement(data.result);
 
             return await ctx.reply({
                 image: {
-                    url: tools.general.getRandomElement(data.result)
+                    url: result
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +

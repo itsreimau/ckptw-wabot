@@ -240,6 +240,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             }
         }
 
+        // Penanganan antinsfw
         const getAntinsfw = await db.get(`group.${groupNumber}.option.antinsfw`);
         if (getAntinsfw) {
             const msgType = ctx.getMessageType();
