@@ -23,10 +23,11 @@ module.exports = {
                 .replace(/%version%/g, config.pkg.version)
                 .replace(/%watermark%/g, config.msg.watermark)
                 .replace(/%footer%/g, config.msg.footer)
-                .replace(/%readmore%/g, config.msg.readmore) : quote("❎ Bot ini tidak memiliki harga.");
+                .replace(/%readmore%/g, config.msg.readmore) :
+                quote("❎ Bot ini tidak memiliki harga.");
 
             return await ctx.reply({
-                text: introText,
+                text: text,
                 mentions: [senderJid]
             });
         } catch (error) {

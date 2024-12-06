@@ -45,7 +45,7 @@ module.exports = {
             });
 
             return await ctx.reply({
-                audio: Buffer.from(data, "binary"),
+                audio: data,
                 mimetype: mime.lookup("mp3"),
                 ptt: true
             });
