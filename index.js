@@ -4,6 +4,7 @@ const handler = require("./handler.js");
 const pkg = require("./package.json");
 const tools = require("./tools/exports.js");
 const CFonts = require("cfonts");
+const http = require("http");
 const SimplDB = require("simpl.db");
 
 // Buat basis data
@@ -16,7 +17,7 @@ global.tools = tools;
 global.db = db;
 
 // Memulai
-console.log(`[${pkg.name}] Stating...`);
+console.log(`[${pkg.name}] Starting...`);
 
 // Tampilkan judul menggunakan CFonts
 CFonts.say(pkg.name, {
@@ -35,6 +36,21 @@ CFonts.say(
         gradient: ["red", "magenta"]
     }
 );
+
+// Fungsi untuk menjalankan server jika diaktifkan
+if (config.system.useServer) {
+    const port = config.system.port || 3000;
+    const server = http.createServer((req, res) => {
+        res.writeHead(200, {
+            "Content-Type": "text/plain"
+        });
+        res.end(`${pkg.name} is running on port ${port}`);
+    });
+
+    server.listen(port, () => {
+        console.log(`[${pkg.name}] Server is running at http://localhost:${port}`);
+    });
+}
 
 // Impor dan jalankan modul utama
 require("./main.js");

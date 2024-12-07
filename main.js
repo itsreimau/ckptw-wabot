@@ -353,7 +353,7 @@ async function handleUserEvent(m) {
             const textGoodbye = await db.get(`group.${groupNumber}.text.goodbye`);
 
             for (const jid of participants) {
-                const profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+                const profilePictureUrl = await bot.core.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
                 const eventType = m.eventsType;
                 const customText = eventType === "UserJoin" ? textWelcome : textGoodbye;

@@ -14,7 +14,7 @@ global.config = {
         prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i, // Karakter awalan perintah yang diizinkan
         phoneNumber: "", // Nomor telepon bot (opsional jika menggunakan QR code)
         thumbnail: "https://e1.pxfuel.com/desktop-wallpaper/943/672/desktop-wallpaper-whatsapp-bot-what-is-it-and-how-to-use-messenger-chatbots-chatbot.png", // Gambar thumbnail bot
-        website: "https://chat.whatsapp.com/FlqTGm4chSjKMsijcqAIJs" // Website untuk WhatsApp bot
+        website: "https://chat.whatsapp.com/FxEYZl2UyzAEI2yhaH34Ye" // Website untuk WhatsApp bot
     },
 
     // Pesan bot yang disesuaikan untuk situasi tertentu
@@ -59,9 +59,11 @@ global.config = {
         autoTypingOnCmd: true, // Aktifkan status mengetik ketika memproses perintah
         cooldown: 5000, // Waktu cooldown antar perintah dalam milidetik
         restrict: false, // Membatasi perintah tertentu untuk keamanan
+        port: 8080, // Port yang diinginkan (opsional jika menggunakan server)
         selfOwner: true, // Apakah bot menjadi owner
         selfReply: true, // Apakah bot merespon pesan yang dikirim bot sendiri
         timeZone: "Asia/Jakarta", // Zona waktu bot
-        usePairingCode: false // Menggunakan kode pairing untuk koneksi
+        usePairingCode: false, // Menggunakan kode pairing untuk koneksi
+        useServer: false // Menggunakan server
     }
 };
