@@ -1,4 +1,4 @@
-onst {
+const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
