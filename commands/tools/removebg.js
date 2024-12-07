@@ -14,8 +14,7 @@ module.exports = {
         coin: [10, "image", 3]
     },
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([

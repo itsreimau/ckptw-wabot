@@ -12,8 +12,7 @@ module.exports = {
     category: "ai",
     handler: {},
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         const input = ctx.args.join(" ") || null;
 

@@ -14,7 +14,7 @@ async function get(type, ctx) {
 
     const generateMenuText = (cmd, tag) => {
         let menuText =
-            `Hai ${ctx.sender.pushName || "Kak"}, berikut adalah daftar perintah yang tersedia!\n` +
+            `Hai @${ctx.sender.jid.split(/[:@]/)[0]}, berikut adalah daftar perintah yang tersedia!\n` +
             "\n" +
             `${quote(`Tanggal: ${moment.tz(config.system.timeZone).format("DD/MM/YY")}`)}\n` +
             `${quote(`Waktu: ${moment.tz(config.system.timeZone).format("HH:mm:ss")}`)}\n` +
@@ -68,8 +68,8 @@ async function get(type, ctx) {
             case "alkitab": {
                 const data = (await axios.get(api.createUrl("https://beeble.vercel.app", "/api/v1/passage/list", {}))).data.data;
                 text = data.map(d =>
-                        `Buku: ${d.name} (${d.abbr})\n` +
-                        `Jumlah Bab: ${d.chapter}\n`
+                        `${quote(`Buku: ${d.name} (${d.abbr})`)}\n` +
+                        `${quote(`Jumlah Bab: ${d.chapter}`)}\n`
                     ).join(`${quote("─────")}\n`) +
                     config.msg.footer;
                 break;

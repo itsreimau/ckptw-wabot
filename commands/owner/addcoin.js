@@ -9,8 +9,7 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         const userNumber = ctx.args[0];
         const coinAmount = parseInt(ctx.args[1], 10);

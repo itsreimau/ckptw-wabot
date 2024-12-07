@@ -11,8 +11,7 @@ module.exports = {
         premium: true
     },
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         const url = ctx.args[0] || null;
 

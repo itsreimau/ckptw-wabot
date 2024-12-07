@@ -12,8 +12,7 @@ module.exports = {
     category: "game",
     handler: {},
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
@@ -69,7 +68,7 @@ module.exports = {
                     );
                     return collector.stop();
                 } else if (userAnswer === "HINT") {
-                    const clue = game.answer.replace(/[AIUEOaiueo]/g, "_");
+                    const clue = game.answer.replace(/[AIUEO]/g, "_");
                     await ctx.sendMessage(ctx.id, {
                         text: monospace(clue)
                     }, {
@@ -94,7 +93,6 @@ module.exports = {
                     );
                 }
             });
-
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));

@@ -10,8 +10,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
         const winGame = await db.get(`user.${senderNumber}.winGame`);

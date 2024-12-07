@@ -12,8 +12,7 @@ module.exports = {
         coin: [10, "text", 1]
     },
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         try {
             const month = new Date().getMonth() + 1;

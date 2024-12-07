@@ -12,8 +12,7 @@ module.exports = {
         restrict: true
     },
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         const senderJid = ctx.sender.jid;
         const senderNumber = senderJid.split(/[:@]/)[0];

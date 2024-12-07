@@ -15,8 +15,7 @@ module.exports = {
         coin: [10, "text", 1]
     },
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         const input = ctx.args.join(" ") || null;
 
@@ -28,12 +27,7 @@ module.exports = {
         if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 50 kata!`));
 
         try {
-            let profilePictureUrl;
-            try {
-                profilePictureUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image");
-            } catch (error) {
-                profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
-            }
+            const profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
             const apiUrl = tools.api.createUrl("btch", "/quotely", {
                 avatar: profilePictureUrl,

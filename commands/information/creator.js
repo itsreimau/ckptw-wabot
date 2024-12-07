@@ -8,8 +8,7 @@ module.exports = {
     category: "information",
     handler: {},
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         const vcard = new VCardBuilder()
             .setFullName(config.owner.name)

@@ -11,8 +11,7 @@ module.exports = {
         coin: [10, "text", 1]
     },
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         const input = ctx.args.join(" ") || null;
 
@@ -51,7 +50,6 @@ module.exports = {
                 "\n" +
                 config.msg.footer
             );
-
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

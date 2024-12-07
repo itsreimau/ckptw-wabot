@@ -123,12 +123,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                 xpToLevelUp = Math.floor(xpToLevelUp * 1.2);
 
-                let profilePictureUrl;
-                try {
-                    profilePictureUrl = await bot.core.profilePictureUrl(senderJid, "image");
-                } catch (error) {
-                    profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
-                }
+                const profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
                 if (userAutolevelup) await ctx.reply({
                     text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
@@ -358,12 +353,7 @@ async function handleUserEvent(m) {
             const textGoodbye = await db.get(`group.${groupNumber}.text.goodbye`);
 
             for (const jid of participants) {
-                let profilePictureUrl;
-                try {
-                    profilePictureUrl = await bot.core.profilePictureUrl(jid, "image");
-                } catch (error) {
-                    profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
-                }
+                const profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
                 const eventType = m.eventsType;
                 const customText = eventType === "UserJoin" ? textWelcome : textGoodbye;

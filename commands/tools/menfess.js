@@ -11,8 +11,7 @@ module.exports = {
         private: true
     },
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         const [number, ...text] = ctx.args;
         const numberFormatted = number ? number.replace(/[^\d]/g, "") : null;

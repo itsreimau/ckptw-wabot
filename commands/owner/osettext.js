@@ -11,8 +11,7 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         const [key, text] = await Promise.all([
             ctx.args[0],

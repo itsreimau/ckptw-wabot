@@ -12,14 +12,10 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const {
-            status,
-            message
-        } = await global.handler(ctx, module.exports.handler);
-        if (status) return await ctx.reply(message);
+        if (await handler(ctx, module.exports.handler)) return;
 
         try {
-            const apiUrl = global.tools.api.createUrl("sandipbaruwal", "/dp");
+            const apiUrl = tools.api.createUrl("sandipbaruwal", "/dp");
             const {
                 data
             } = await axios.get(apiUrl);
@@ -39,8 +35,8 @@ module.exports = {
                 })
             ]);
         } catch (error) {
-            console.error(`[${global.config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return await ctx.reply(global.config.msg.notFound);
+            console.error(`[${config.pkg.name}] Error:`, error);
+            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }

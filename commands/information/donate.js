@@ -8,8 +8,7 @@ module.exports = {
     category: "information",
     handler: {},
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         return await ctx.reply(
             `${quote("083838039693 (DANA)")}\n` +

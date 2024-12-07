@@ -8,49 +8,40 @@ module.exports = {
     category: "profile",
     handler: {},
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         try {
-            const senderName = ctx.sender.pushName;
+            const senderName = ctx.sender.pushName || "-";
             const senderJid = ctx.sender.jid;
             const senderNumber = senderJid.split(/[:@]/)[0];
 
-            const [userCoin = 0, isOwner, isPremium, userLevel = 1, userXp = 0, userWinGame = 0] = await Promise.all([
-                db.get(`user.${senderNumber}.coin`),
+            const [userCoin, isOwner, isPremium, userLevel, userXp, userWinGame] = await Promise.all([
+                db.get(`user.${senderNumber}.coin`) || 0,
                 tools.general.isOwner(ctx, senderNumber, true),
                 db.get(`user.${senderNumber}.isPremium`),
-                db.get(`user.${senderNumber}.level`),
-                db.get(`user.${senderNumber}.xp`),
-                db.get(`user.${senderNumber}.winGame`)
+                db.get(`user.${senderNumber}.level`) || 1,
+                db.get(`user.${senderNumber}.xp`) || 0,
+                db.get(`user.${senderNumber}.winGame`) || 0
             ]);
 
-            const users = (await db.toJSON()).user;
-            const leaderboardData = Object.keys(users)
-                .map(i => ({
-                    i,
-                    winGame: users[i].winGame || 0,
-                    level: users[i].level || 0
+            const leaderboardData = Object.entries((await db.toJSON()).user)
+                .map(([id, data]) => ({
+                    id,
+                    winGame: data.winGame || 0,
+                    level: data.level || 0
                 }))
-                .sort((a, b) => {
-                    if (b.winGame !== a.winGame) return b.winGame - a.winGame;
-                    return b.level - a.level;
-                });
+                .sort((a, b) => b.winGame - a.winGame || b.level - a.level);
+
             const userRank = leaderboardData.findIndex(user => user.id === senderNumber) + 1;
 
-            let profilePictureUrl;
-            try {
-                profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image");
-            } catch (error) {
-                profilePictureUrl = "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg";
-            }
+            const profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
             return await ctx.reply({
-                text: `${quote(`Nama: ${senderName ||  "-"}`)}\n` +
-                    `${quote(`Status: ${isOwner ? "Owner" : (isPremium ? "Premium" : "Freemium")}`)}\n` +
+                text: `${quote(`Nama: ${senderName}`)}\n` +
+                    `${quote(`Status: ${isOwner ? "Owner" : isPremium ? "Premium" : "Freemium"}`)}\n` +
                     `${quote(`Level: ${userLevel}`)}\n` +
                     `${quote(`XP: ${userXp}`)}\n` +
-                    `${quote(`Koin: ${isOwner ? "Tak terbatas" : isPremium ? "Tak terbatas" : userCoin || "-"}`)}\n` +
+                    `${quote(`Koin: ${isOwner || isPremium ? "Tak terbatas" : userCoin || "-"}`)}\n` +
                     `${quote(`Peringkat: ${userRank}`)}\n` +
                     `${quote(`Menang: ${userWinGame}`)}\n` +
                     "\n" +
@@ -63,7 +54,7 @@ module.exports = {
                         title: config.msg.watermark,
                         body: null,
                         renderLargerThumbnail: true,
-                        thumbnailUrl: profilePictureUrl || config.bot.thumbnail,
+                        thumbnailUrl: profilePictureUrl,
                         sourceUrl: config.bot.website
                     }
                 }

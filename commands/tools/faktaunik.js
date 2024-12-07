@@ -11,8 +11,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
-        if (status) return;
+        if (await handler(ctx, module.exports.handler)) return;
 
         try {
             const apiUrl = await tools.api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random");
