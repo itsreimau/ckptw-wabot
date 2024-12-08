@@ -4,6 +4,7 @@ const handler = require("./handler.js");
 const pkg = require("./package.json");
 const tools = require("./tools/exports.js");
 const CFonts = require("cfonts");
+const fs = require("fs");
 const http = require("http");
 const path = require("path");
 const SimplDB = require("simpl.db");
