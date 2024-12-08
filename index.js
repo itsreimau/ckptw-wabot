@@ -5,10 +5,13 @@ const pkg = require("./package.json");
 const tools = require("./tools/exports.js");
 const CFonts = require("cfonts");
 const http = require("http");
+const path = require("path");
 const SimplDB = require("simpl.db");
 
 // Buat basis data
 const db = new SimplDB();
+const dbFile = path.join(__dirname, "database.json");
+if (!fs.existsSync(dbFile)) fs.writeFileSync(dbFile, JSON.stringify({}), "utf8");
 
 // Atur konfigurasi ke global
 global.handler = handler;

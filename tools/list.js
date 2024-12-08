@@ -148,28 +148,20 @@ async function get(type, ctx) {
                 break;
             }
             case "translate": {
-                const data = (await axios.get(api.createUrl("fastrestapis", "/tool/translate"), {
-                    headers: {
-                        "x-api-key": tools.api.listUrl().fastrestapis.APIKey
-                    }
-                }).catch(err => err.response?.data?.availableLanguages)) || {};
-                text = Object.entries(data).map(([code, language]) =>
-                        `${quote(`Kode: ${code.toUpperCase()}`)}\n` +
-                        `${quote(`Bahasa: ${language}`)}\n`
+                const data = (await axios.get(api.createUrl("nyxs", "/tools/translate", {})).catch(err => err.response?.data?.available_languange)) || [];
+                text = data.map(d =>
+                        `${quote(`Kode: ${d.code}`)}\n` +
+                        `${quote(`Bahasa: ${d.bahasa}`)}\n`
                     ).join(`${quote("─────")}\n`) +
                     "\n" +
                     config.msg.footer;
                 break;
             }
             case "tts": {
-                const data = (await axios.get(api.createUrl("fastrestapis", "/tts/google"), {
-                    headers: {
-                        "x-api-key": tools.api.listUrl().fastrestapis.APIKey
-                    }
-                }).catch(err => err.response?.data?.availableLanguages)) || {};
-                text = Object.entries(data).map(([code, language]) =>
-                        `${quote(`Kode: ${code.toUpperCase()}`)}\n` +
-                        `${quote(`Bahasa: ${language}`)}\n`
+                const data = (await axios.get(api.createUrl("nyxs", "/tools/tts", {}))).data.available_languange;
+                text = data.map(d =>
+                        `${quote(`Kode: ${d.code}`)}\n` +
+                        `${quote(`Bahasa: ${d["bahasa negara"]}`)}\n`
                     ).join(`${quote("─────")}\n`) +
                     "\n" +
                     config.msg.footer;

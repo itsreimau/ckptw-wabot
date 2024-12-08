@@ -6,9 +6,6 @@ const APIs = {
     btch: {
         baseURL: "https://btch.us.kg"
     },
-    cifumo: {
-        baseURL: "https://rest.cifumo.biz.id"
-    },
     fastrestapis: {
         baseURL: "https://fastrestapis.fasturl.cloud",
         APIKey: "" // APIKey tidak disediakan, Anda dapat menggunakan APIKey Anda sendiri
@@ -19,6 +16,9 @@ const APIs = {
     nexoracle: {
         baseURL: "https://api.nexoracle.com",
         APIKey: "free_key@maher_apis" // APIKey disediakan oleh Maher Zubair
+    },
+    nyxs: {
+        baseURL: "https://api.nyxs.pw"
     },
     ochinpo: {
         baseURL: "https://ochinpo-helper.hf.space"

@@ -30,21 +30,18 @@ module.exports = {
         }
 
         try {
-            const apiUrl = tools.api.createUrl("fastrestapis", "/tts/google", {
+            const apiUrl = tools.api.createUrl("nyxs", "tools/tts", {
                 text: input,
-                target: langCode
+                to: langCode
             });
             const {
                 data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "x-api-key": tools.api.listUrl().fastrestapis.APIKey,
-                    responseType: "arraybuffer"
-                }
-            });
+            } = await axios.get(apiUrl);
 
             return await ctx.reply({
-                audio: data,
+                audio: {
+                    url: data.result
+                },
                 mimetype: mime.lookup("mp3"),
                 ptt: true
             });
