@@ -1,6 +1,6 @@
 {
   "name": "ckptw-wabot",
-  "version": "2.17.0",
+  "version": "2.17.3",
   "description": "WhatsApp Bot with @mengkodingan/ckptw.",
   "main": "index.js",
   "directories": {
@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ."
+    "start": "node .",
+    "start:pm2": "pm2 start ./index.js --name \"ckptw-wabot\""
   },
   "repository": {
     "type": "git",

@@ -74,6 +74,9 @@ module.exports = {
                     await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data grup...`));
                     const importantKeysGroup = ["option", "text", "lastUse"];
 
+                    const groupData = await ctx._client.groupFetchAllParticipating();
+                    const groupIds = Object.values(groupData).map(g => g.id.split("@")[0]);
+
                     Object.keys(group).forEach((groupId) => {
                         const groupData = group[groupId] || {};
                         const {
@@ -82,7 +85,7 @@ module.exports = {
                             text
                         } = groupData;
 
-                        if (!/^[0-9]{10,15}$/.test(groupId)) {
+                        if (!/^[0-9]{10,15}$/.test(groupId) || !groupIds.includes(groupId)) {
                             db.delete(`group.${groupId}`);
                         } else {
                             const filteredGroupData = {
