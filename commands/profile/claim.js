@@ -18,12 +18,12 @@ module.exports = {
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
-        const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+        const senderId = ctx.sender.jid.split(/[:@]/)[0];
         const [userLevel, isPremium, lastClaim, currentCoins] = await Promise.all([
-            db.get(`user.${senderNumber}.level`) || 0,
-            db.get(`user.${senderNumber}.isPremium`) || false,
-            db.get(`user.${senderNumber}.lastClaim`) || {},
-            db.get(`user.${senderNumber}.coin`) || 0
+            db.get(`user.${senderId}.level`) || 0,
+            db.get(`user.${senderId}.isPremium`) || false,
+            db.get(`user.${senderId}.lastClaim`) || {},
+            db.get(`user.${senderId}.coin`) || 0
         ]);
 
         if (input === "list") {
@@ -48,8 +48,8 @@ module.exports = {
             const newBalance = currentCoins + claimRewards[input].reward;
 
             await Promise.all([
-                db.set(`user.${senderNumber}.coin`, newBalance),
-                db.set(`user.${senderNumber}.lastClaim.${input}`, currentTime)
+                db.set(`user.${senderId}.coin`, newBalance),
+                db.set(`user.${senderId}.lastClaim.${input}`, currentTime)
             ]);
 
             return await ctx.reply(quote(`✅ Anda berhasil mengklaim hadiah ${input} sebesar ${claimRewards[input].reward} koin! Koin saat ini: ${newBalance}.`));

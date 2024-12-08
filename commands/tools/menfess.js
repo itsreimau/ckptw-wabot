@@ -13,16 +13,16 @@ module.exports = {
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
-        const [number, ...text] = ctx.args;
-        const numberFormatted = number ? number.replace(/[^\d]/g, "") : null;
+        const [id, ...text] = ctx.args;
+        const formattedId = id ? id.replace(/[^\d]/g, "") : null;
         const menfessText = text ? text.join(" ") : null;
 
         const senderJid = ctx.sender.jid;
-        const senderNumber = senderJid.split(/[:@]/)[0];
+        const senderId = senderJid.split(/[:@]/)[0];
 
-        if (!numberFormatted && !menfessText) return await ctx.reply(
+        if (!formattedId && !menfessText) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `${senderNumber} halo dunia!`))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `${senderId} halo dunia!`))}\n` +
             quote(tools.msg.generateNotes(["Jangan gunakan spasi pada angka. Contoh: +62 8123-4567-8910, seharusnya +628123-4567-8910"]))
         );
 
@@ -32,12 +32,12 @@ module.exports = {
                 from,
                 to
             } = allConversations[id];
-            return from === senderNumber || to === senderNumber;
+            return from === senderId || to === senderId;
         });
         if (isInvolvedInConversation) return await ctx.reply(quote(`❎ Anda sedang melakukan percakapan aktif. Selesaikan percakapan itu terlebih dahulu sebelum memulai percakapan baru.`));
 
         try {
-            if (numberFormatted === senderNumber) return await ctx.reply(quote(`❎ Tidak dapat digunakan pada diri Anda sendiri.`));
+            if (formattedId === senderId) return await ctx.reply(quote(`❎ Tidak dapat digunakan pada diri Anda sendiri.`));
 
             const fakeText = {
                 key: {
@@ -54,7 +54,7 @@ module.exports = {
                 }
             };
 
-            await ctx.sendMessage(`${numberFormatted}@s.whatsapp.net`, {
+            await ctx.sendMessage(`${formattedId}@s.whatsapp.net`, {
                 text: `${menfessText}\n` +
                     `${config.msg.readmore}\n` +
                     quote("Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik 'delete' atau 'stop'.")
@@ -63,8 +63,8 @@ module.exports = {
             });
 
             db.set(`menfess.${Date.now()}`, {
-                from: senderNumber,
-                to: numberFormatted,
+                from: senderId,
+                to: formattedId,
                 lastMsg: Date.now()
             });
 

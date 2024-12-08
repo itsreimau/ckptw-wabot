@@ -29,13 +29,13 @@ module.exports = {
         }
 
         if (ctx.args[0] === "status") {
-            const groupNumber = ctx.isGroup() ? ctx.id.split("@")[0] : null;
+            const groupId = ctx.isGroup() ? ctx.id.split("@")[0] : null;
             const [groupAntilink, groupAntinsfw, groupAntitoxic, groupAutokick, groupWelcome] = await Promise.all([
-                db.get(`group.${groupNumber}.option.antilink`),
-                db.get(`group.${groupNumber}.option.antinsfw`),
-                db.get(`group.${groupNumber}.option.antitoxic`),
-                db.get(`group.${groupNumber}.option.autokick`),
-                db.get(`group.${groupNumber}.option.welcome`)
+                db.get(`group.${groupId}.option.antilink`),
+                db.get(`group.${groupId}.option.antinsfw`),
+                db.get(`group.${groupId}.option.antitoxic`),
+                db.get(`group.${groupId}.option.autokick`),
+                db.get(`group.${groupId}.option.welcome`)
             ]);
 
             return await ctx.reply(
@@ -50,24 +50,24 @@ module.exports = {
         }
 
         try {
-            const groupNumber = ctx.isGroup() ? ctx.id.split("@")[0] : null;
+            const groupId = ctx.isGroup() ? ctx.id.split("@")[0] : null;
             let setKey;
 
             switch (input.toLowerCase()) {
                 case "antilink":
-                    setKey = `group.${groupNumber}.option.antilink`;
+                    setKey = `group.${groupId}.option.antilink`;
                     break;
                 case "antinsfw":
-                    setKey = `group.${groupNumber}.option.antinsfw`;
+                    setKey = `group.${groupId}.option.antinsfw`;
                     break;
                 case "antitoxic":
-                    setKey = `group.${groupNumber}.option.antitoxic`;
+                    setKey = `group.${groupId}.option.antitoxic`;
                     break;
                 case "autokick":
-                    setKey = `group.${groupNumber}.option.autokick`;
+                    setKey = `group.${groupId}.option.autokick`;
                     break;
                 case "welcome":
-                    setKey = `group.${groupNumber}.option.welcome`;
+                    setKey = `group.${groupId}.option.welcome`;
                     break;
                 default:
                     return await ctx.reply(quote(`❎ Key '${input}' tidak valid!`));

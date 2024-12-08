@@ -38,12 +38,11 @@ bot.ev.once(Events.ClientReady, async (m) => {
     if (!await db.get("bot.mode")) await db.set("bot.mode", "public");
 
     // Tetapkan config pada bot
-    const number = m.user.id.split(":")[0];
+    const id = m.user.id.split(":")[0];
     await Promise.all([
-        config.bot.number = number,
-        config.bot.id = `${number}@s.whatsapp.net`,
-        config.bot.readyAt = bot.readyAt,
-        config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"
+        config.bot.id = id,
+        config.bot.jid = `${id}@s.whatsapp.net`,
+        config.bot.readyAt = bot.readyAt
     ]);
 });
 
@@ -56,46 +55,49 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
     const senderJid = ctx.sender.jid;
-    const senderNumber = senderJid.split(/[:@]/)[0];
+    const senderId = senderJid.split(/[:@]/)[0];
     const groupJid = isGroup ? ctx.id : null;
-    const groupNumber = isGroup ? groupJid.split("@")[0] : null;
+    const groupId = isGroup ? groupJid.split("@")[0] : null;
 
     // Penanganan pada mode bot
     const botMode = await db.get("bot.mode");
     if (isPrivate && botMode === "group") return;
     if (isGroup && botMode === "private") return;
-    if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return;
+    if (!tools.general.isOwner(ctx, senderId, true) && botMode === "self") return;
 
     // Log pesan masuk
     if (isGroup) {
-        console.log(`[${config.pkg.name}] Incoming message from group: ${groupNumber}, by: ${senderNumber}`);
+        console.log(`[${config.pkg.name}] Incoming message from group: ${groupId}, by: ${senderId}`);
     } else {
-        console.log(`[${config.pkg.name}] Incoming message from: ${senderNumber}`);
+        console.log(`[${config.pkg.name}] Incoming message from: ${senderId}`);
     }
 
     // Grup atau Pribadi
     if (isGroup || isPrivate) {
+        // Penangan pada ukuran basis data
+        config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"
+
         // Penanganan untuk database
-        const userDb = await db.get(`user.${senderNumber}`);
+        const userDb = await db.get(`user.${senderId}`);
         if (!userDb) {
-            await db.set(`user.${senderNumber}`, {
+            await db.set(`user.${senderId}`, {
                 coin: 1000,
                 level: 0,
-                uid: tools.general.generateUID(senderNumber),
+                uid: tools.general.generateUID(senderId),
                 xp: 0
             });
         }
 
-        if (tools.general.isOwner(ctx, senderNumber, config.system.selfOwner) || await db.get(`user.${senderNumber}.isPremium`)) {
-            const userCoin = await db.get(`user.${senderNumber}.coin`);
-            if (userCoin > 0) await db.delete(`user.${senderNumber}.coin`);
+        if (tools.general.isOwner(ctx, senderId, config.system.selfOwner) || await db.get(`user.${senderId}.isPremium`)) {
+            const userCoin = await db.get(`user.${senderId}.coin`);
+            if (userCoin > 0) await db.delete(`user.${senderId}.coin`);
         }
 
         // Penanganan untuk perintah
         const isCmd = tools.general.isCmd(m, ctx);
         if (isCmd) {
-            await db.set(`user.${senderNumber}.lastUse`, Date.now());
-            await db.set(`group.${groupNumber}.lastUse`, Date.now());
+            await db.set(`user.${senderId}.lastUse`, Date.now());
+            await db.set(`group.${groupId}.lastUse`, Date.now());
             if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah
 
             // Did you mean?
@@ -110,9 +112,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             let xpToLevelUp = 100;
 
             const [userXp, userLevel, userAutolevelup] = await Promise.all([
-                db.get(`user.${senderNumber}.xp`) || 0,
-                db.get(`user.${senderNumber}.level`) || 1,
-                db.get(`user.${senderNumber}.autolevelup`) || false
+                db.get(`user.${senderId}.xp`) || 0,
+                db.get(`user.${senderId}.level`) || 1,
+                db.get(`user.${senderId}.autolevelup`) || false
             ]);
 
             let newUserXp = userXp + xpGain;
@@ -144,16 +146,16 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 });
 
                 await Promise.all([
-                    db.set(`user.${senderNumber}.xp`, newUserXp),
-                    db.set(`user.${senderNumber}.level`, newUserLevel)
+                    db.set(`user.${senderId}.xp`, newUserXp),
+                    db.set(`user.${senderId}.level`, newUserLevel)
                 ]);
             } else {
-                await db.set(`user.${senderNumber}.xp`, newUserXp);
+                await db.set(`user.${senderId}.xp`, newUserXp);
             }
         }
 
         // Perintah khusus Owner
-        if (tools.general.isOwner(ctx, senderNumber, config.system.selfOwner)) {
+        if (tools.general.isOwner(ctx, senderId, config.system.selfOwner)) {
             // Perintah eval: Jalankan kode JavaScript
             if (m.content && m.content.startsWith && (m.content.startsWith("==> ") || m.content.startsWith("=> "))) {
                 const code = m.content.slice(m.content.startsWith("==> ") ? 4 : 3);
@@ -188,9 +190,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         if (mentionJids && mentionJids.length > 0) {
             for (const mentionJid of mentionJids) {
                 const [getAFKMessage, reason, timeStamp] = await Promise.all([
-                    db.get(`user.${senderNumber}.afk`),
-                    db.get(`user.${senderNumber}.afk.reason`),
-                    db.get(`user.${senderNumber}.afk.timeStamp`)
+                    db.get(`user.${senderId}.afk`),
+                    db.get(`user.${senderId}.afk.reason`),
+                    db.get(`user.${senderId}.afk.timeStamp`)
                 ]);
                 if (getAFKMessage && reason && timeStamp) {
                     const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
@@ -202,9 +204,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Penanganan AFK : Mengakhiri AFK
         const [getAFKMessage, reason, timeStamp] = await Promise.all([
-            db.get(`user.${senderNumber}.afk`),
-            db.get(`user.${senderNumber}.afk.reason`),
-            db.get(`user.${senderNumber}.afk.timeStamp`)
+            db.get(`user.${senderId}.afk`),
+            db.get(`user.${senderId}.afk.reason`),
+            db.get(`user.${senderId}.afk.timeStamp`)
         ]);
         if (getAFKMessage && reason && timeStamp) {
             const currentTime = Date.now();
@@ -212,7 +214,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
             if (timeElapsed > 3000) {
                 const timeAgo = tools.general.convertMsToDuration(timeElapsed);
-                await db.delete(`user.${senderNumber}.afk`);
+                await db.delete(`user.${senderId}.afk`);
 
                 await ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`));
             }
@@ -222,10 +224,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Grup
     if (isGroup) {
         if (m.key.fromMe) return;
-        const getAutokick = await db.get(`group.${groupNumber}.option.autokick`);
+        const getAutokick = await db.get(`group.${groupId}.option.autokick`);
 
         // Penanganan antilink
-        const getAntilink = await db.get(`group.${groupNumber}.option.antilink`);
+        const getAntilink = await db.get(`group.${groupId}.option.antilink`);
         if (getAntilink) {
             const isUrl = await tools.general.isUrl(m.content);
             if (m.content && await tools.general.isUrl(m.content) && !await tools.general.isAdmin(ctx, senderJid)) {
@@ -236,7 +238,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Penanganan antinsfw
-        const getAntinsfw = await db.get(`group.${groupNumber}.option.antinsfw`);
+        const getAntinsfw = await db.get(`group.${groupId}.option.antinsfw`);
         if (getAntinsfw) {
             const msgType = ctx.getMessageType();
             const isImage = await Promise.any([
@@ -268,7 +270,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Penanganan antitoxic
-        const getAntitoxic = await db.get(`group.${groupNumber}.option.antitoxic`);
+        const getAntitoxic = await db.get(`group.${groupId}.option.antitoxic`);
         const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
         if (getAntitoxic) {
             if (m.content && toxicRegex.test(m.content) && !await tools.general.isAdmin(ctx, senderJid)) {
@@ -294,14 +296,14 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     from,
                     to
                 } = menfessData;
-                const senderInConversation = senderNumber === from || senderNumber === to;
+                const senderInConversation = senderId === from || senderId === to;
 
                 if (m.content && /^\b(delete|stop)\b$/i.test(m.content.trim()) && senderInConversation) {
-                    const targetNumber = senderNumber === from ? to : from;
+                    const targetId = senderId === from ? to : from;
                     const message = "✅ Pesan menfess telah dihapus!";
 
                     await ctx.reply(quote(message));
-                    await ctx.sendMessage(`${targetNumber}@s.whatsapp.net`, {
+                    await ctx.sendMessage(`${targetId}@s.whatsapp.net`, {
                         text: quote(message)
                     });
                     await db.delete(`menfess.${conversationId}`);
@@ -309,7 +311,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 }
 
                 if (senderInConversation) {
-                    const targetId = senderNumber === from ? `${to}@s.whatsapp.net` : `${from}@s.whatsapp.net`;
+                    const targetId = senderId === from ? `${to}@s.whatsapp.net` : `${from}@s.whatsapp.net`;
 
                     await ctx._client.sendMessage(targetId, {
                         forward: m
@@ -344,13 +346,13 @@ async function handleUserEvent(m) {
     } = m;
 
     try {
-        const groupNumber = id.split("@")[0];
-        const getWelcome = await db.get(`group.${groupNumber}.option.welcome`);
+        const groupId = id.split("@")[0];
+        const getWelcome = await db.get(`group.${groupId}.option.welcome`);
 
         if (getWelcome) {
             const metadata = await bot.core.groupMetadata(id);
-            const textWelcome = await db.get(`group.${groupNumber}.text.welcome`);
-            const textGoodbye = await db.get(`group.${groupNumber}.text.goodbye`);
+            const textWelcome = await db.get(`group.${groupId}.text.welcome`);
+            const textGoodbye = await db.get(`group.${groupId}.text.goodbye`);
 
             for (const jid of participants) {
                 const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
@@ -385,7 +387,7 @@ async function handleUserEvent(m) {
                     }
                 });
 
-                const introText = await db.get(`group.${groupNumber}.text.intro`);
+                const introText = await db.get(`group.${groupId}.text.intro`);
                 if (eventType === "UserJoin" && introText) await bot.core.sendMessage(id, {
                     text: introText,
                     mentions: [jid]

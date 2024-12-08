@@ -30,8 +30,8 @@ module.exports = {
 
         try {
             const style = `You are a WhatsApp bot called ${config.bot.name}, owned by ${config.owner.name}. If your name matches or is similar to a well-known character, adopt a personality that fits that character. If it does not, stay friendly, informative, and responsive.`;
-            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
-            const uid = await db.get(`user.${senderNumber}.uid`);
+            const senderId = ctx.sender.jid.split(/[:@]/)[0];
+            const uid = await db.get(`user.${senderId}.uid`);
 
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();

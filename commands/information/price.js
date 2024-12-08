@@ -12,12 +12,12 @@ module.exports = {
 
         try {
             const senderJid = ctx.sender.jid;
-            const senderNumber = senderJid.split(/[:@]/)[0];
+            const senderId = senderJid.split(/[:@]/)[0];
 
             const customText = await db.get(`bot.text.price`);
             const text = customText ?
                 customText
-                .replace(/%tag%/g, `@${senderNumber}`)
+                .replace(/%tag%/g, `@${senderId}`)
                 .replace(/%name%/g, config.bot.name)
                 .replace(/%version%/g, config.pkg.version)
                 .replace(/%watermark%/g, config.msg.watermark)

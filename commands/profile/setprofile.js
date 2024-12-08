@@ -25,12 +25,12 @@ module.exports = {
         }
 
         try {
-            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
+            const senderId = ctx.sender.jid.split(/[:@]/)[0];
             let setKey;
 
             switch (input.toLowerCase()) {
                 case "autolevelup":
-                    setKey = `user.${senderNumber}.autolevelup`;
+                    setKey = `user.${senderId}.autolevelup`;
                     break;
                 default:
                     return await ctx.reply(quote(`❎ Teks tidak valid.`));

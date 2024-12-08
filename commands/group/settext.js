@@ -32,18 +32,18 @@ module.exports = {
         }
 
         try {
-            const groupNumber = ctx.isGroup() ? ctx.id.split("@")[0] : null;
+            const groupId = ctx.isGroup() ? ctx.id.split("@")[0] : null;
             let setKey;
 
             switch (key.toLowerCase()) {
                 case "goodbye":
-                    setKey = `group.${groupNumber}.text.goodbye`;
+                    setKey = `group.${groupId}.text.goodbye`;
                     break;
                 case "intro":
-                    setKey = `group.${groupNumber}.text.intro`;
+                    setKey = `group.${groupId}.text.intro`;
                     break;
                 case "welcome":
-                    setKey = `group.${groupNumber}.text.welcome`;
+                    setKey = `group.${groupId}.text.welcome`;
                     break;
                 default:
                     return await ctx.reply(quote(`❎ Key '${key}' tidak valid!`));

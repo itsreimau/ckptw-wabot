@@ -13,10 +13,10 @@ module.exports = {
 
         try {
             const senderJid = ctx.sender.jid;
-            const senderNumber = senderJid.split(/[:@]/)[0];
+            const senderId = senderJid.split(/[:@]/)[0];
 
             return await ctx.reply({
-                text: `@${senderNumber}`,
+                text: `@${senderId}`,
                 mentions: [senderJid]
             });
         } catch (error) {

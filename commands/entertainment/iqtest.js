@@ -12,8 +12,8 @@ module.exports = {
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
-        const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
-        const winGame = await db.get(`user.${senderNumber}.winGame`);
+        const senderId = ctx.sender.jid.split(/[:@]/)[0];
+        const winGame = await db.get(`user.${senderId}.winGame`);
 
         let iqScore;
         let feedback;

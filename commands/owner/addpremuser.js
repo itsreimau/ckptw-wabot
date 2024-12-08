@@ -12,16 +12,16 @@ module.exports = {
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
-        const userNumber = ctx.args[0];
+        const userId = ctx.args[0];
 
         const senderJid = ctx.sender.jid;
-        const senderNumber = senderJid.split(/[:@]/)[0];
+        const senderId = senderJid.split(/[:@]/)[0];
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-        const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : (userNumber ? `${userNumber}@s.whatsapp.net` : null);
+        const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : (userId ? `${userId}@s.whatsapp.net` : null);
 
         if (!user) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderNumber}`)),
+                quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderId}`)),
             mentions: [senderJid]
         });
 

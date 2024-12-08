@@ -7,17 +7,17 @@ async function handler(ctx, options) {
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
     const senderJid = ctx.sender.jid;
-    const senderNumber = senderJid.split(/[:@]/)[0];
+    const senderId = senderJid.split(/[:@]/)[0];
 
     const botMode = await db.get("bot.mode");
     if (isPrivate && botMode === "group") return true;
     if (isGroup && botMode === "private") return true;
-    if (!tools.general.isOwner(ctx, senderNumber, true) && botMode === "self") return true;
+    if (!tools.general.isOwner(ctx, senderId, true) && botMode === "self") return true;
 
     const [isOwner, isBanned, isPremium] = await Promise.all([
-        tools.general.isOwner(ctx, senderNumber, config.system.selfOwner),
-        db.get(`user.${senderNumber}.isBanned`),
-        db.get(`user.${senderNumber}.isPremium`)
+        tools.general.isOwner(ctx, senderId, config.system.selfOwner),
+        db.get(`user.${senderId}.isBanned`),
+        db.get(`user.${senderId}.isPremium`)
     ]);
 
     if (isBanned) {
@@ -41,7 +41,7 @@ async function handler(ctx, options) {
             msg: config.msg.botAdmin
         },
         coin: {
-            check: async () => await checkCoin(ctx, options.coin, senderNumber),
+            check: async () => await checkCoin(ctx, options.coin, senderId),
             msg: config.msg.coin
         },
         group: {
@@ -80,15 +80,15 @@ async function handler(ctx, options) {
 }
 
 // Cek koin
-async function checkCoin(ctx, coinOptions, senderNumber) {
+async function checkCoin(ctx, coinOptions, senderId) {
     const [isOwner, isPremium] = await Promise.all([
-        tools.general.isOwner(ctx, senderNumber, true),
-        db.get(`user.${senderNumber}.isPremium`)
+        tools.general.isOwner(ctx, senderId, true),
+        db.get(`user.${senderId}.isPremium`)
     ]);
 
     if (isOwner || isPremium) return false;
 
-    const userCoin = await db.get(`user.${senderNumber}.coin`) || 0;
+    const userCoin = await db.get(`user.${senderId}.coin`) || 0;
     const [requiredCoin = 0, requiredMedia = null, mediaSourceOption = null] = Array.isArray(coinOptions) ? coinOptions : [coinOptions];
 
     if (requiredMedia) {
@@ -103,7 +103,7 @@ async function checkCoin(ctx, coinOptions, senderNumber) {
 
     if (userCoin < requiredCoin) return true;
 
-    await db.subtract(`user.${senderNumber}.coin`, requiredCoin);
+    await db.subtract(`user.${senderId}.coin`, requiredCoin);
     return false;
 }
 

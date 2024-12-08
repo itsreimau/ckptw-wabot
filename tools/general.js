@@ -208,7 +208,7 @@ async function isAdmin(ctx, id) {
 
 async function isBotAdmin(ctx) {
     try {
-        const id = config.bot.id;
+        const id = config.bot.jid;
         return await checkAdmin(ctx, id);
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);

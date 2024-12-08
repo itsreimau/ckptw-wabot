@@ -25,7 +25,7 @@ module.exports = {
             const game = {
                 coin: 5,
                 timeout: 60000,
-                senderNumber: ctx.sender.jid.split(/[:@]/)[0],
+                senderId: ctx.sender.jid.split(/[:@]/)[0],
                 answer: data.jawaban.toUpperCase()
             };
 
@@ -54,8 +54,8 @@ module.exports = {
                 if (userAnswer === game.answer) {
                     session.delete(ctx.id);
                     await Promise.all([
-                        await db.add(`user.${game.senderNumber}.game.coin`, game.coin),
-                        await db.add(`user.${game.senderNumber}.winGame`, 1)
+                        await db.add(`user.${game.senderId}.game.coin`, game.coin),
+                        await db.add(`user.${game.senderId}.winGame`, 1)
                     ]);
                     await ctx.sendMessage(
                         ctx.id, {

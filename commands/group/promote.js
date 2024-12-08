@@ -14,13 +14,13 @@ module.exports = {
         if (await handler(ctx, module.exports.handler)) return;
 
         const senderJid = ctx.sender.jid;
-        const senderNumber = senderJid.split(/[:@]/)[0];
+        const senderId = senderJid.split(/[:@]/)[0];
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const account = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : null;
 
         if (!account) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderNumber}`)),
+                quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderId}`)),
             mentions: [senderJid]
         });
 

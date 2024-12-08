@@ -29,7 +29,7 @@ module.exports = {
                     allAnswered: 50
                 },
                 timeout: 90000,
-                senderNumber: ctx.sender.jid.split(/[:@]/)[0],
+                senderId: ctx.sender.jid.split(/[:@]/)[0],
                 answers: new Set(data.jawaban.map(d => d.toUpperCase())),
                 participants: new Set()
             };
@@ -52,13 +52,13 @@ module.exports = {
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toUpperCase();
                 const participantJid = m.jid;
-                const participantNumber = participantJid.split("@")[0]
+                const participantId = participantJid.split("@")[0]
 
                 if (game.answers.has(userAnswer)) {
                     game.answers.delete(userAnswer);
-                    game.participants.add(participantNumber);
+                    game.participants.add(participantId);
 
-                    await db.add(`user.${participantNumber}.game.coin`, game.coin.answered);
+                    await db.add(`user.${participantId}.game.coin`, game.coin.answered);
                     await ctx.sendMessage(ctx.id, {
                         text: quote(`✅ ${tools.general.ucword(userAnswer)} benar! Jawaban tersisa: ${game.answers.size}`)
                     }, {

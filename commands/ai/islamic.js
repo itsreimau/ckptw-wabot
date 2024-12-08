@@ -22,8 +22,8 @@ module.exports = {
         );
 
         try {
-            const senderNumber = ctx.sender.jid.split(/[:@]/)[0];
-            const uid = await db.get(`user.${senderNumber}.uid`);
+            const senderId = ctx.sender.jid.split(/[:@]/)[0];
+            const uid = await db.get(`user.${senderId}.uid`);
             const apiUrl = tools.api.createUrl("fastrestapis", "/aillm/islamic", {
                 ask: input,
                 sessionId: uid

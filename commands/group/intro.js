@@ -13,8 +13,8 @@ module.exports = {
         if (await handler(ctx, module.exports.handler)) return;
 
         try {
-            const groupNumber = ctx.isGroup() ? ctx.id.split("@")[0] : null;
-            const introText = await db.get(`group.${groupNumber}.text.intro`) || quote("❎ Grup ini tidak memiliki intro.");
+            const groupId = ctx.isGroup() ? ctx.id.split("@")[0] : null;
+            const introText = await db.get(`group.${groupId}.text.intro`) || quote("❎ Grup ini tidak memiliki intro.");
 
             return await ctx.reply(introText);
         } catch (error) {

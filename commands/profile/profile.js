@@ -13,15 +13,15 @@ module.exports = {
         try {
             const senderName = ctx.sender.pushName || "-";
             const senderJid = ctx.sender.jid;
-            const senderNumber = senderJid.split(/[:@]/)[0];
+            const senderId = senderJid.split(/[:@]/)[0];
 
             const [userCoin, isOwner, isPremium, userLevel, userXp, userWinGame] = await Promise.all([
-                db.get(`user.${senderNumber}.coin`) || 0,
-                tools.general.isOwner(ctx, senderNumber, true),
-                db.get(`user.${senderNumber}.isPremium`),
-                db.get(`user.${senderNumber}.level`) || 1,
-                db.get(`user.${senderNumber}.xp`) || 0,
-                db.get(`user.${senderNumber}.winGame`) || 0
+                db.get(`user.${senderId}.coin`) || 0,
+                tools.general.isOwner(ctx, senderId, true),
+                db.get(`user.${senderId}.isPremium`),
+                db.get(`user.${senderId}.level`) || 1,
+                db.get(`user.${senderId}.xp`) || 0,
+                db.get(`user.${senderId}.winGame`) || 0
             ]);
 
             const leaderboardData = Object.entries((await db.toJSON()).user)
@@ -32,7 +32,7 @@ module.exports = {
                 }))
                 .sort((a, b) => b.winGame - a.winGame || b.level - a.level);
 
-            const userRank = leaderboardData.findIndex(user => user.id === senderNumber) + 1;
+            const userRank = leaderboardData.findIndex(user => user.id === senderId) + 1;
 
             const profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
