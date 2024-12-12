@@ -5,7 +5,7 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "waifu",
+    name: "shinobu",
     category: "entertainment",
     handler: {
         coin: 10
@@ -13,7 +13,7 @@ module.exports = {
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
-        const apiUrl = tools.api.createUrl("https://api.waifu.pics", `/sfw/waifu`);
+        const apiUrl = tools.api.createUrl("https://api.waifu.pics", `/sfw/shinobu`);
 
         try {
             const {

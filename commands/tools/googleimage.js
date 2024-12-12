@@ -23,17 +23,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("neastooid", "/api/tools/gimage", {
-                q: input
+            const apiUrl = tools.api.createUrl("siputzx", "/api/images", {
+                query: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
             const result = tools.general.getRandomElement(data);
 
             return await ctx.reply({
                 image: {
-                    url: result.image
+                    url: result.url
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +

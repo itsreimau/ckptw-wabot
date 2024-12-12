@@ -10,9 +10,6 @@ const APIs = {
         baseURL: "https://fastrestapis.fasturl.cloud",
         APIKey: "" // APIKey tidak disediakan, Anda dapat menggunakan APIKey Anda sendiri
     },
-    neastooid: {
-        baseURL: "https://api.neastooid.xyz"
-    },
     nexoracle: {
         baseURL: "https://api.nexoracle.com",
         APIKey: "free_key@maher_apis" // APIKey disediakan oleh Maher Zubair

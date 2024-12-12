@@ -7,7 +7,7 @@ const mime = require("mime-types");
 module.exports = {
     name: "ppcouple",
     aliases: ["ppcp"],
-    category: "tools",
+    category: "entertainment",
     handler: {
         coin: 10
     },
