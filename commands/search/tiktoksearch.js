@@ -34,8 +34,7 @@ module.exports = {
                 video: {
                     url: data.play
                 },
-                mimetype: mime.lookup("mp4"),
-                gifPlayback: false
+                mimetype: mime.lookup("mp4")
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);

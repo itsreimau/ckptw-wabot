@@ -32,24 +32,30 @@ const APIs = {
     }
 };
 
-function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
+function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName, noEncodeParams = []) {
     try {
         const api = APIs[apiNameOrURL];
-
         if (!api) {
             const url = new URL(apiNameOrURL);
             apiNameOrURL = url;
         }
 
-        const queryParams = new URLSearchParams(params);
+        const queryParams = [];
+        for (const [key, value] of Object.entries(params)) {
+            if (noEncodeParams.includes(key)) {
+                queryParams.push(`${key}=${value}`);
+            } else {
+                queryParams.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
+            }
+        }
 
         if (apiKeyParamName && api && "APIKey" in api) {
-            queryParams.set(apiKeyParamName, api.APIKey);
+            queryParams.push(`${encodeURIComponent(apiKeyParamName)}=${encodeURIComponent(api.APIKey)}`);
         }
 
         const baseURL = api ? api.baseURL : apiNameOrURL.origin;
         const apiUrl = new URL(endpoint, baseURL);
-        apiUrl.search = queryParams.toString();
+        apiUrl.search = queryParams.join('&');
 
         return apiUrl.toString();
     } catch (error) {

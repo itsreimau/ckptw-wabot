@@ -34,8 +34,7 @@ module.exports = {
                 mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
-                    config.msg.footer,
-                gifPlayback: false
+                    config.msg.footer
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);

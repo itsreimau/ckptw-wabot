@@ -27,7 +27,7 @@ module.exports = {
         try {
             const apiUrl = tools.api.createUrl("agatz", "/api/threads", {
                 url
-            });
+            }, null, ["url"]);
             const {
                 data
             } = (await axios.get(apiUrl)).data;
@@ -38,7 +38,7 @@ module.exports = {
                         image: {
                             url: imageUrl
                         },
-                        mimetype: mime.lookup("png"),
+                        mimetype: mime.lookup("png")
                     });
                 }
             }
@@ -49,8 +49,7 @@ module.exports = {
                         video: {
                             url: videoUrl
                         },
-                        mimetype: mime.lookup("mp4"),
-                        gifPlayback: false,
+                        mimetype: mime.lookup("mp4")
                     });
                 }
             }

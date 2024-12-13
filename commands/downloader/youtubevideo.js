@@ -27,7 +27,7 @@
             try {
                 const apiUrl = tools.api.createUrl("siputzx", "/api/d/ytmp4", {
                     url
-                });
+                }, null, ["url"]);
                 const {
                     data
                 } = (await axios.get(apiUrl)).data;

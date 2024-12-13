@@ -25,8 +25,9 @@ module.exports = {
 
         try {
             const apiUrl = tools.api.createUrl("agatz", "/api/pixeldrain", {
-                url
-            });
+                    url
+                }),
+                null, ["url"];
             const {
                 data
             } = (await axios.get(apiUrl)).data;

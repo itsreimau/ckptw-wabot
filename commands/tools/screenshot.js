@@ -33,7 +33,7 @@ module.exports = {
 
             const apiUrl = tools.api.createUrl("btch", endpoint, {
                 url
-            });
+            }, null, ["url"]);
 
             return await ctx.reply({
                 image: {

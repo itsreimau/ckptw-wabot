@@ -46,7 +46,7 @@ module.exports = {
 
             const apiUrl = tools.api.createUrl("https://api.tiklydown.eu.org", "/api/download", {
                 url
-            });
+            }, null, ["url"]);
             const {
                 data
             } = await axios.get(apiUrl);
@@ -69,8 +69,7 @@ module.exports = {
                         mimetype: mime.lookup("mp4"),
                         caption: `${quote(`URL: ${url}`)}\n` +
                             "\n" +
-                            config.msg.footer,
-                        gifPlayback: false
+                            config.msg.footer
                     });
                 }
 
@@ -89,7 +88,7 @@ module.exports = {
             if (flag.music) {
                 const apiUrl = tools.api.createUrl("vreden", "/api/tikmusic", {
                     url
-                });
+                }, null, ["url"]);
                 const {
                     result
                 } = (await axios.get(apiUrl)).data;

@@ -27,7 +27,7 @@ module.exports = {
         try {
             const apiUrl = tools.api.createUrl("siputzx", "/api/d/ytmp3", {
                 url
-            });
+            }, null, ["url"]);
             const {
                 data
             } = (await axios.get(apiUrl)).data;

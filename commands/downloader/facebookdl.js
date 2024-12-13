@@ -25,12 +25,12 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/facebook", {
+            const apiUrl = tools.api.createUrl("https://fbdown.vercel.app", "/api/get", {
                 url
-            });
+            }, null, ["url"]);
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 video: {
@@ -39,8 +39,7 @@ module.exports = {
                 mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
-                    config.msg.footer,
-                gifPlayback: false
+                    config.msg.footer
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
