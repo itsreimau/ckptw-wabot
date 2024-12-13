@@ -34,7 +34,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.ParsedResults.ParsedText);
+            return await ctx.reply(data.ParsedResults[0].ParsedText);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

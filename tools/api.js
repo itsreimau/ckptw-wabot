@@ -17,8 +17,8 @@ const APIs = {
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },
-    ochinpo: {
-        baseURL: "https://ochinpo-helper.hf.space"
+    rioooxdzz: {
+        baseURL: "https://restapii.rioooxdzz.web.id"
     },
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com"

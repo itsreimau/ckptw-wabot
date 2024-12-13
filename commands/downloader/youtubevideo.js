@@ -25,7 +25,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/d/ytmp4", {
+            const apiUrl = tools.api.createUrl("rioooxdzz", "/api/ytmp3", {
                 url
             });
             const {
@@ -34,9 +34,9 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    url: data.dl
+                    url: data.url
                 },
-                mimetype: mime.lookup("mp3")
+                mimetype: mime.lookup("mp4")
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
