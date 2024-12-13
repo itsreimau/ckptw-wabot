@@ -20,6 +20,28 @@ async function handler(ctx, options) {
         db.get(`user.${senderId}.isPremium`)
     ]);
 
+    if (config.system.requireBotGroupMembership) {
+        const botGroupMembersId = ctx.group(config.bot.groupJid).members().map(member => member.id.split("@")[0]);
+        if (botGroupMembersId.includes(senderId)) {
+            await ctx.reply({
+                text: config.msg.botGroupMembership,
+                contextInfo: {
+                    externalAdReply: {
+                        mediaType: 1,
+                        previewType: 0,
+                        mediaUrl: config.bot.groupLink,
+                        title: config.msg.watermark,
+                        body: null,
+                        renderLargerThumbnail: true,
+                        thumbnailUrl: config.bot.thumbnail,
+                        sourceUrl: config.bot.groupLink
+                    },
+                }
+            });
+            return true;
+        }
+    }
+
     if (isBanned) {
         await ctx.reply(config.msg.banned);
         return true;

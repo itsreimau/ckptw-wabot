@@ -44,6 +44,11 @@ bot.ev.once(Events.ClientReady, async (m) => {
         config.bot.jid = `${id}@s.whatsapp.net`,
         config.bot.readyAt = bot.readyAt
     ]);
+
+    if (config.system.requireBotGroupMembership) {
+        const code = await ctx.group(config.bot.groupJid).inviteCode();
+        config.bot.groupLink = `https://chat.whatsapp.com/${code}`;
+    }
 });
 
 // Buat penangan perintah dan muat perintah
