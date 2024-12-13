@@ -22,7 +22,7 @@ async function handler(ctx, options) {
 
     if (config.system.requireBotGroupMembership) {
         const botGroupMembersId = (await ctx.group(config.bot.groupJid).members()).map(member => member.id.split("@")[0]);
-        if (botGroupMembersId.includes(senderId)) {
+        if (!botGroupMembersId.includes(senderId)) {
             await ctx.reply({
                 text: config.msg.botGroupMembership,
                 contextInfo: {
