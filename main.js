@@ -46,7 +46,7 @@ bot.ev.once(Events.ClientReady, async (m) => {
     ]);
 
     if (config.system.requireBotGroupMembership) {
-        const code = await ctx.group(config.bot.groupJid).inviteCode();
+        const code = await bot.core.groupInviteCode(config.bot.groupJid);
         config.bot.groupLink = `https://chat.whatsapp.com/${code}`;
     }
 });
