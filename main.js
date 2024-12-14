@@ -246,13 +246,10 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const getAntinsfw = await db.get(`group.${groupId}.option.antinsfw`);
         if (getAntinsfw) {
             const msgType = ctx.getMessageType();
-            const isImage = await Promise.any([
-                tools.general.checkMedia(msgType, "image", ctx),
-                tools.general.checkQuotedMedia(ctx.quoted, "image")
-            ]).catch(() => false);
+            const checkMedia = await tools.general.checkMedia(msgType, "image", ctx)
 
-            if (isImage && !await tools.general.isAdmin(ctx, senderJid)) {
-                const buffer = await (ctx.msg.media?.toBuffer() || ctx.quoted?.media?.toBuffer());
+            if (checkMedia && !await tools.general.isAdmin(ctx, senderJid)) {
+                const buffer = await ctx.msg.media.toBuffer();
                 const uploadUrl = await tools.general.upload(buffer);
 
                 const apiUrl = tools.api.createUrl("fastrestapis", "/tool/imagechecker", {
@@ -271,6 +268,19 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                     await ctx.deleteMessage(ctx.msg.key);
                     if (!config.system.restrict && getAutokick) await ctx.group().kick([senderJid]);
                 }
+            }
+        }
+
+        // Penanganan antisticker
+        const getAntisticker = await db.get(`group.${groupId}.option.antisticker`);
+        if (getAntinsfw) {
+            const msgType = ctx.getMessageType();
+            const checkMedia = await tools.general.checkMedia(msgType, "sticker", ctx)
+
+            if (checkMedia && !await tools.general.isAdmin(ctx, senderJid)) {
+                await ctx.reply(`⛔ Jangan kirim stiker!`);
+                await ctx.deleteMessage(ctx.msg.key);
+                if (!config.system.restrict && getAutokick) await ctx.group().kick([senderJid]);
             }
         }
 

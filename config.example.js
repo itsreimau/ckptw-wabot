@@ -23,7 +23,7 @@ global.config = {
         admin: quote("⛔ Perintah hanya dapat diakses oleh admin grup!"), // Pesan ketika perintah hanya untuk admin
         banned: quote("⛔ Tidak dapat memproses karena Anda tidak bergabung dengan grup bot!"), // Pesan untuk pengguna yang dibanned
         botAdmin: quote("⛔ Bot bukan admin, tidak bisa menggunakan perintah!"), // Pesan jika bot bukan admin di grup
-        botGroupMembership: quote("⛔ Anda bukan pengguna Premium!"), // Pesan untuk pengguna yang tidak ada dalam grup
+        botGroupMembership: quote("⛔ Tidak dapat memproses karena Anda tidak tergabung dalam grup bot!"), // Pesan untuk pengguna yang tidak ada dalam grup
         cooldown: quote("🔄 Perintah ini sedang dalam cooldown, tunggu..."), // Pesan saat cooldown perintah
         coin: quote("⛔ Anda tidak punya cukup koin!"), // Pesan ketika koin tidak cukup
         group: quote("⛔ Perintah hanya dapat diakses dalam grup!"), // Pesan untuk perintah grup

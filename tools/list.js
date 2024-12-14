@@ -127,7 +127,7 @@ async function get(type, ctx) {
                 break;
             }
             case "setoption": {
-                const data = ["antilink", "antitoxic", "autokick", "welcome"];
+                const data = ["antilink", "antinsfw", "antisticker", "antitoxic", "autokick", "welcome"];
                 text = `${data.map(quote).join("\n")}\n` +
                     "\n" +
                     config.msg.footer;

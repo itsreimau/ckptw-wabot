@@ -30,9 +30,10 @@ module.exports = {
 
         if (ctx.args[0] === "status") {
             const groupId = ctx.isGroup() ? ctx.id.split("@")[0] : null;
-            const [groupAntilink, groupAntinsfw, groupAntitoxic, groupAutokick, groupWelcome] = await Promise.all([
+            const [groupAntilink, groupAntinsfw, groupAntisticker, groupAntitoxic, groupAutokick, groupWelcome] = await Promise.all([
                 db.get(`group.${groupId}.option.antilink`),
                 db.get(`group.${groupId}.option.antinsfw`),
+                db.get(`group.${groupId}.option.antisticker`),
                 db.get(`group.${groupId}.option.antitoxic`),
                 db.get(`group.${groupId}.option.autokick`),
                 db.get(`group.${groupId}.option.welcome`)
@@ -41,6 +42,7 @@ module.exports = {
             return await ctx.reply(
                 `${quote(`Antilink: ${groupAntilink ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Antinsfw: ${groupAntinsfw ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${quote(`Antisticker: ${groupAntisticker ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Antitoxic: ${groupAntitoxic ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Autokick: ${groupAutokick ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Welcome: ${groupWelcome ? "Aktif" : "Nonaktif"}`)}\n` +
@@ -59,6 +61,9 @@ module.exports = {
                     break;
                 case "antinsfw":
                     setKey = `group.${groupId}.option.antinsfw`;
+                    break;
+                case "antisticker":
+                    setKey = `group.${groupId}.option.antisticker`;
                     break;
                 case "antitoxic":
                     setKey = `group.${groupId}.option.antitoxic`;
