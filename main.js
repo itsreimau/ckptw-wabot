@@ -273,7 +273,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Penanganan antisticker
         const getAntisticker = await db.get(`group.${groupId}.option.antisticker`);
-        if (getAntinsfw) {
+        if (getAntisticker) {
             const msgType = ctx.getMessageType();
             const checkMedia = await tools.general.checkMedia(msgType, "sticker", ctx)
 

@@ -226,34 +226,9 @@ function isOwner(ctx, id, selfOwner) {
     }
 }
 
-async function isUrl(str) {
-    if (typeof str !== "string") return false;
-
-    try {
-        const url = "https://data.iana.org/TLD/tlds-alpha-by-domain.txt";
-        const response = await axios.get(url);
-        const tldList = response.data.split("\n")
-            .filter(line => line && !line.startsWith("#"))
-            .map(line => line.trim().toLowerCase());
-
-        const urlRegex = /^(https?:\/\/)?([\w\-]+\.)+[a-zA-Z]{2,6}(\:[0-9]{1,5})?(\/[^\s]*)?$/;
-
-        if (!urlRegex.test(str)) return false;
-
-        let urlString = str.startsWith("http://") || str.startsWith("https://") ? str : `https://${str}`;
-
-        const urlObj = new URL(urlString);
-        const hostname = urlObj.hostname;
-
-        const tld = hostname.split(".").pop().toLowerCase();
-
-        if (tldList && tldList.length > 0 && !tldList.includes(tld)) return false;
-
-        return true;
-    } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
-        return false;
-    }
+function isUrl(url) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return urlRegex.test(url);
 }
 
 function parseFlag(argsString, customRules = {}) {

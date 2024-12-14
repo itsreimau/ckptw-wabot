@@ -20,25 +20,25 @@ global.config = {
 
     // Pesan bot yang disesuaikan untuk situasi tertentu
     msg: {
-        admin: quote("⛔ Perintah hanya dapat diakses oleh admin grup!"), // Pesan ketika perintah hanya untuk admin
-        banned: quote("⛔ Tidak dapat memproses karena Anda tidak bergabung dengan grup bot!"), // Pesan untuk pengguna yang dibanned
-        botAdmin: quote("⛔ Bot bukan admin, tidak bisa menggunakan perintah!"), // Pesan jika bot bukan admin di grup
-        botGroupMembership: quote("⛔ Tidak dapat memproses karena Anda tidak tergabung dalam grup bot!"), // Pesan untuk pengguna yang tidak ada dalam grup
-        cooldown: quote("🔄 Perintah ini sedang dalam cooldown, tunggu..."), // Pesan saat cooldown perintah
-        coin: quote("⛔ Anda tidak punya cukup koin!"), // Pesan ketika koin tidak cukup
-        group: quote("⛔ Perintah hanya dapat diakses dalam grup!"), // Pesan untuk perintah grup
-        owner: quote("⛔ Perintah hanya dapat diakses Owner!"), // Pesan untuk perintah yang hanya owner bisa akses
-        premium: quote("⛔ Anda bukan pengguna Premium!"), // Pesan jika pengguna bukan Premium
-        private: quote("⛔ Perintah hanya dapat diakses dalam obrolan pribadi!"), // Pesan untuk perintah obrolan pribadi
-        restrict: quote("⛔ Perintah ini telah dibatasi karena alasan keamanan!"), // Pesan pembatasan perintah
+        admin: quote("⛔ Maaf, perintah ini hanya dapat diakses oleh admin grup."), // Pesan ketika perintah hanya untuk admin
+        banned: quote("⛔ Maaf, Anda telah diblokir sehingga tidak dapat menggunakan perintah ini."), // Pesan untuk pengguna yang dibanned
+        botAdmin: quote("⛔ Maaf, bot perlu menjadi admin untuk memproses perintah ini."), // Pesan jika bot bukan admin di grup
+        botGroupMembership: quote("⛔ Maaf, Anda tidak tergabung dalam grup bot sehingga tidak dapat menggunakan perintah ini."), // Pesan untuk pengguna yang tidak ada dalam grup
+        cooldown: quote("🔄 Perintah ini sedang dalam masa tunggu. Mohon bersabar..."), // Pesan saat cooldown perintah
+        coin: quote("⛔ Maaf, koin Anda tidak mencukupi untuk memproses perintah ini."), // Pesan ketika koin tidak cukup
+        group: quote("⛔ Maaf, perintah ini hanya dapat diakses dalam grup."), // Pesan untuk perintah grup
+        owner: quote("⛔ Maaf, perintah ini hanya dapat diakses oleh pemilik bot."), // Pesan untuk perintah yang hanya owner bisa akses
+        premium: quote("⛔ Maaf, fitur ini hanya tersedia untuk pengguna premium."), // Pesan jika pengguna bukan Premium
+        private: quote("⛔ Maaf, perintah ini hanya dapat diakses dalam obrolan pribadi."), // Pesan untuk perintah obrolan pribadi
+        restrict: quote("⛔ Maaf, perintah ini telah dibatasi karena alasan keamanan."), // Pesan pembatasan perintah
 
         watermark: `@${pkg.name} / v${pkg.version}`, // Watermark nama dan versi pada bot
         footer: italic("Developed by ItsReimau"), // Footer di pesan bot
         readmore: "\u200E".repeat(4001), // String read more
 
-        wait: quote("🔄 Tunggu sebentar..."), // Pesan loading
-        notFound: quote("❎ Tidak ada yang ditemukan! Coba lagi nanti."), // Pesan item tidak ditemukan
-        urlInvalid: quote("❎ URL tidak valid!") // Pesan jika URL tidak valid
+        wait: quote("🔄 Mohon tunggu sebentar..."), // Pesan loading
+        notFound: quote("❎ Maaf, tidak ada hasil yang ditemukan. Silakan coba lagi nanti."), // Pesan item tidak ditemukan
+        urlInvalid: quote("❎ Maaf, URL yang Anda masukkan tidak valid.") // Pesan jika URL tidak valid
     },
 
     // Informasi owner bot

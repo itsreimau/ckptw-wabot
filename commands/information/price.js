@@ -20,6 +20,9 @@ module.exports = {
                 .replace(/%tag%/g, `@${senderId}`)
                 .replace(/%name%/g, config.bot.name)
                 .replace(/%version%/g, config.pkg.version)
+                .replace(/%prefix%/g, ctx._used.prefix)
+                .replace(/%command%/g, ctx._used.command)
+                .replace(/%watermark%/g, config.msg.watermark)
                 .replace(/%watermark%/g, config.msg.watermark)
                 .replace(/%footer%/g, config.msg.footer)
                 .replace(/%readmore%/g, config.msg.readmore) :
