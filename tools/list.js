@@ -47,10 +47,6 @@ async function get(type, ctx) {
                     if (cmd.handler.private) handlerText += "ⓟ";
 
                     menuText += quote(monospace(`${ctx._used.prefix + cmd.name} ${handlerText}`));
-
-                    if (category === "general" && cmd.aliases && cmd.aliases.length > 0) {
-                        menuText += "\n" + cmd.aliases.map(alias => quote(monospace(`${ctx._used.prefix + alias}`))).join("\n");
-                    }
                     menuText += "\n";
                 });
 
@@ -172,7 +168,6 @@ async function get(type, ctx) {
                     cmd
                 } = ctx._config;
                 const tag = {
-                    general: "General",
                     ai: "AI",
                     converter: "Converter",
                     downloader: "Downloader",

@@ -6,7 +6,7 @@ const {
 module.exports = {
     name: "osettext",
     aliases: ["osettxt"],
-    category: "group",
+    category: "owner",
     handler: {
         owner: true
     },

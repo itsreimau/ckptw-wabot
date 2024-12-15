@@ -4,7 +4,7 @@ const {
 
 module.exports = {
     name: "menu",
-    aliases: ["help", "?"],
+    aliases: ["allmenu", "help", "?"],
     category: "general",
     handler: {},
     code: async (ctx) => {
