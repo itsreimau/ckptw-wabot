@@ -50,7 +50,7 @@ module.exports = {
             switch (input) {
                 case "user": {
                     await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data pengguna...`));
-                    const importantKeys = ["autolevelup", "coin", "level", "isPremium", "lastClaim", "winGame", "isBanned", "lastUse", "xp", "afk"];
+                    const importantKeys = ["afk", "autolevelup", "coin", "isBanned", "isPremium", "lastClaim", "lastUse", "level", "uid", "winGame", "xp"];
 
                     Object.keys(user).forEach((userId) => {
                         const {
@@ -72,7 +72,7 @@ module.exports = {
 
                 case "group": {
                     await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data grup...`));
-                    const importantKeysGroup = ["option", "text", "lastUse"];
+                    const importantKeysGroup = ["lastUse", "option", "text"];
 
                     const groupData = await ctx._client.groupFetchAllParticipating();
                     const groupIds = Object.values(groupData).map(g => g.id.split("@")[0]);
@@ -101,12 +101,12 @@ module.exports = {
 
                 case "menfess": {
                     await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data menfess...`));
-                    const importantKeysMenfess = ["from", "to", "lastMsg"];
+                    const importantKeysMenfess = ["from", "lastMsg", "to"];
 
                     Object.keys(menfess).forEach((conversationId) => {
                         const {
-                            lastMsg,
                             from,
+                            lastMsg,
                             to
                         } = menfess[conversationId] || {};
 
@@ -115,8 +115,8 @@ module.exports = {
                         } else {
                             const filteredMenfessData = Object.fromEntries(Object.entries({
                                 from,
-                                to,
-                                lastMsg
+                                lastMsg,
+                                to
                             }).filter(([key]) => importantKeysMenfess.includes(key)));
                             db.set(`menfess.${conversationId}`, filteredMenfessData);
                         }

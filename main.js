@@ -82,16 +82,18 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Penangan pada ukuran basis data
         config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"
 
-        // Penanganan untuk database
-        const userDb = await db.get(`user.${senderId}`);
-        if (!userDb) {
-            await db.set(`user.${senderId}`, {
-                coin: 1000,
-                level: 0,
-                uid: tools.general.generateUID(senderId),
-                xp: 0
-            });
-        }
+        // Basis data untuk pengguna
+        const [userDb, userPremium] = await Promise.all([
+            db.get(`user.${senderNumber}`),
+            db.get(`user.${senderNumber}.isPremium`)
+        ]);
+
+        await db.set(`user.${senderNumber}`, {
+            coin: (tools.general.isOwner(ctx, senderNumber, config.system.selfOwner) || userPremium) ? 0 : (userDb.coin || 1000),
+            level: userDb.level || 0,
+            uid: userDb.uid || tools.general.generateUID(senderNumber),
+            xp: userDb.xp || 0
+        });
 
         // Penanganan untuk perintah
         const isCmd = tools.general.isCmd(m, ctx);
@@ -156,7 +158,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Perintah khusus Owner
         if (tools.general.isOwner(ctx, senderId, config.system.selfOwner)) {
-            // Perintah eval: Jalankan kode JavaScript
+            // Perintah Eval: Jalankan kode JavaScript
             if (m.content && m.content.startsWith && (m.content.startsWith("==> ") || m.content.startsWith("=> "))) {
                 const code = m.content.slice(m.content.startsWith("==> ") ? 4 : 3);
 
@@ -189,34 +191,33 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         if (mentionJids && mentionJids.length > 0) {
             for (const mentionJid of mentionJids) {
-                const [getAFKMessage, reason, timeStamp] = await Promise.all([
-                    db.get(`user.${senderId}.afk`),
-                    db.get(`user.${senderId}.afk.reason`),
-                    db.get(`user.${senderId}.afk.timeStamp`)
+                const [isAFK, reason, timeStamp] = await Promise.all([
+                    db.get(`user.${mentionJid}.afk`),
+                    db.get(`user.${mentionJid}.afk.reason`),
+                    db.get(`user.${mentionJid}.afk.timeStamp`)
                 ]);
-                if (getAFKMessage && reason && timeStamp) {
-                    const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
 
-                    await ctx.reply(quote(`📴 Dia AFK dengan alasan ${reason} selama ${timeAgo}.`));
+                if (isAFK) {
+                    const timeAgo = tools.general.convertMsToDuration(Date.now() - timeStamp);
+                    await ctx.reply(quote(`📴 Dia sedang AFK ${reason ? `dengan alasan "${reason}"` : "tanpa alasan"} selama ${timeAgo}.`));
                 }
             }
         }
 
-        // Penanganan AFK : Mengakhiri AFK
-        const [getAFKMessage, reason, timeStamp] = await Promise.all([
+        const [isAFK, reason, timeStamp] = await Promise.all([
             db.get(`user.${senderId}.afk`),
             db.get(`user.${senderId}.afk.reason`),
             db.get(`user.${senderId}.afk.timeStamp`)
         ]);
-        if (getAFKMessage && reason && timeStamp) {
+
+        if (isAFK) {
             const currentTime = Date.now();
             const timeElapsed = currentTime - timeStamp;
 
             if (timeElapsed > 3000) {
                 const timeAgo = tools.general.convertMsToDuration(timeElapsed);
+                await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${reason ? `dengan alasan "${reason}"` : "tanpa alasan"} selama ${timeAgo}.`));
                 await db.delete(`user.${senderId}.afk`);
-
-                await ctx.reply(quote(`📴 Anda mengakhiri AFK dengan alasan ${reason} selama ${timeAgo}.`));
             }
         }
     }
@@ -227,8 +228,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const getAutokick = await db.get(`group.${groupId}.option.autokick`);
 
         // Penanganan antilink
-        const getAntilink = await db.get(`group.${groupId}.option.antilink`);
-        if (getAntilink) {
+        const isAntilink = await db.get(`group.${groupId}.option.antilink`);
+        if (isAntilink) {
             const isUrl = await tools.general.isUrl(m.content);
             if (m.content && await tools.general.isUrl(m.content) && !await tools.general.isAdmin(ctx, senderJid)) {
                 await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
@@ -238,8 +239,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Penanganan antinsfw
-        const getAntinsfw = await db.get(`group.${groupId}.option.antinsfw`);
-        if (getAntinsfw) {
+        const isAntinsfw = await db.get(`group.${groupId}.option.antinsfw`);
+        if (isAntinsfw) {
             const msgType = ctx.getMessageType();
             const checkMedia = await tools.general.checkMedia(msgType, "image", ctx)
 
@@ -267,8 +268,8 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Penanganan antisticker
-        const getAntisticker = await db.get(`group.${groupId}.option.antisticker`);
-        if (getAntisticker) {
+        const isAntisticker = await db.get(`group.${groupId}.option.antisticker`);
+        if (isAntisticker) {
             const msgType = ctx.getMessageType();
             const checkMedia = await tools.general.checkMedia(msgType, "sticker", ctx)
 
@@ -280,9 +281,9 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         }
 
         // Penanganan antitoxic
-        const getAntitoxic = await db.get(`group.${groupId}.option.antitoxic`);
+        const isAntitoxic = await db.get(`group.${groupId}.option.antitoxic`);
         const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
-        if (getAntitoxic) {
+        if (isAntitoxic) {
             if (m.content && toxicRegex.test(m.content) && !await tools.general.isAdmin(ctx, senderJid)) {
                 await ctx.reply(quote(`⛔ Jangan toxic!`));
                 await ctx.deleteMessage(m.key);

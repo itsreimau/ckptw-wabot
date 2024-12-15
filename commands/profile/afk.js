@@ -12,13 +12,12 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         try {
-            const reason = input || "tanpa alasan";
             db.set(`user.${ctx.sender.jid.split(/[:@]/)[0]}.afk`, {
-                reason: reason,
+                reason: input,
                 timeStamp: Date.now()
             });
 
-            return await ctx.reply(quote(`📴 Anda sekarang akan AFK dengan alasan ${reason}.`));
+            return await ctx.reply(quote(`📴 Anda akan AFK, ${input ? `dengan alasan ${input}` : "tanpa alasan apapun"}.`));
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
