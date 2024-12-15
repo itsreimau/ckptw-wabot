@@ -5,7 +5,7 @@ const {
 module.exports = {
     name: "price",
     aliases: ["belibot", "rent", "rentbot", "sewa", "sewabot"],
-    category: "group",
+    category: "information",
     handler: {},
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;

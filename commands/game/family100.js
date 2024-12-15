@@ -71,7 +71,7 @@ module.exports = {
                             await db.add(`user.${participant}.game.coin`, game.coin.allAnswered);
                             await db.add(`user.${participant}.winGame`, 1);
                         }
-                        await ctx.reply(quote(`🎉 Selamat! Semua jawaban telah terjawab! Setiap peserta yang menjawab mendapat ${game.coin.allAnswered} koin.`));
+                        await ctx.reply(quote(`🎉 Selamat! Semua jawaban telah terjawab! Setiap anggota yang menjawab mendapat ${game.coin.allAnswered} koin.`));
                         return collector.stop();
                     }
                 } else if (userAnswer === "SURRENDER") {

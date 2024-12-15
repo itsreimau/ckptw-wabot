@@ -20,13 +20,13 @@ module.exports = {
 
         try {
             const buffer = await ctx.quoted.media.toBuffer()
-            const vidUrl = buffer ? await webp2mp4(buffer) : null;
+            const result = buffer ? await webp2mp4(buffer) : null;
 
-            if (!vidUrl) return await ctx.reply(config.msg.notFound);
+            if (!result) return await ctx.reply(config.msg.notFound);
 
             return await ctx.reply({
                 video: {
-                    url: vidUrl
+                    url: result
                 },
                 mimetype: ctx._used.command === "togif" ? mime.lookup("gif") : mime.lookup("mp4"),
                 gifPlayback: ctx._used.command === "togif" ? true : false

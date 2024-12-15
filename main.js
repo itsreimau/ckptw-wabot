@@ -93,11 +93,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             });
         }
 
-        if (tools.general.isOwner(ctx, senderId, config.system.selfOwner) || await db.get(`user.${senderId}.isPremium`)) {
-            const userCoin = await db.get(`user.${senderId}.coin`);
-            if (userCoin > 0) await db.delete(`user.${senderId}.coin`);
-        }
-
         // Penanganan untuk perintah
         const isCmd = tools.general.isCmd(m, ctx);
         if (isCmd) {
