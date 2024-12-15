@@ -247,14 +247,14 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 const buffer = await ctx.msg.media.toBuffer();
                 const uploadUrl = await tools.general.upload(buffer);
 
-                const apiUrl = tools.api.createUrl("fastrestapis", "/tool/imagechecker", {
+                const apiUrl = tools.api.createUrl("fasturl", "/tool/imagechecker", {
                     url: uploadUrl
                 });
                 const {
                     data
                 } = await axios.get(apiUrl, {
                     headers: {
-                        "x-api-key": tools.api.listUrl().fastrestapis.APIKey
+                        "x-api-key": tools.api.listUrl().fasturl.APIKey
                     }
                 });
 

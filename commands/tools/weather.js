@@ -28,7 +28,7 @@ module.exports = {
                 data
             } = (await axios.get(apiUrl)).data;
 
-            ctx.reply(
+            return await ctx.reply(
                 `${quote(`Lokasi: ${data.location.name}, ${data.location.region}, ${data.location.country}`)}\n` +
                 `${quote(`Latitude: ${data.location.lat}`)}\n` +
                 `${quote(`Longitude: ${data.location.lon}`)}\n` +

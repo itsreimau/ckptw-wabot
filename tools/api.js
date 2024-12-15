@@ -6,9 +6,9 @@ const APIs = {
     btch: {
         baseURL: "https://btch.us.kg"
     },
-    fastrestapis: {
+    fasturl: {
         baseURL: "https://fastrestapis.fasturl.cloud",
-        APIKey: "" // APIKey tidak disediakan, Anda dapat menggunakan APIKey Anda sendiri
+        APIKey: "ckptw-wabot" // APIKey disediakan oleh ItsReimau
     },
     nexoracle: {
         baseURL: "https://api.nexoracle.com",
@@ -26,6 +26,9 @@ const APIs = {
     ssateam: {
         baseURL: "https://api.ssateam.my.id",
         APIKey: "root" // APIKey disediakan oleh Fainshe
+    },
+    toxicdevil: {
+        baseURL: "https://toxicdevilapi.vercel.app"
     },
     vreden: {
         baseURL: "https://api.vreden.my.id"

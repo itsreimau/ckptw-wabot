@@ -24,7 +24,7 @@ module.exports = {
         try {
             const senderId = ctx.sender.jid.split(/[:@]/)[0];
             const uid = await db.get(`user.${senderId}.uid`);
-            const apiUrl = tools.api.createUrl("fastrestapis", "/aillm/islamic", {
+            const apiUrl = tools.api.createUrl("fasturl", "/aillm/islamic", {
                 ask: input,
                 sessionId: uid
             });
@@ -32,7 +32,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl, {
                 headers: {
-                    "x-api-key": tools.api.listUrl().fastrestapis.APIKey
+                    "x-api-key": tools.api.listUrl().fasturl.APIKey
                 }
             });
 

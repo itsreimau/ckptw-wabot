@@ -36,7 +36,7 @@ module.exports = {
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadUrl = await tools.general.upload(buffer);
-                const apiUrl = tools.api.createUrl("fastrestapis", "/aillm/blackbox", {
+                const apiUrl = tools.api.createUrl("fasturl", "/aillm/blackbox", {
                     ask: input,
                     model,
                     imageUrl: uploadUrl
@@ -45,13 +45,13 @@ module.exports = {
                     data
                 } = await axios.get(apiUrl, {
                     headers: {
-                        "x-api-key": tools.api.listUrl().fastrestapis.APIKey
+                        "x-api-key": tools.api.listUrl().fasturl.APIKey
                     }
                 });
 
                 return await ctx.reply(data.response);
             } else {
-                const apiUrl = tools.api.createUrl("fastrestapis", "/aillm/blackbox", {
+                const apiUrl = tools.api.createUrl("fasturl", "/aillm/blackbox", {
                     ask: input,
                     model
                 });
@@ -59,7 +59,7 @@ module.exports = {
                     data
                 } = await axios.get(apiUrl, {
                     headers: {
-                        "x-api-key": tools.api.listUrl().fastrestapis.APIKey
+                        "x-api-key": tools.api.listUrl().fasturl.APIKey
                     }
                 });
                 return await ctx.reply(data.response);

@@ -23,7 +23,7 @@ module.exports = {
         try {
             const senderId = ctx.sender.jid.split(/[:@]/)[0];
             const uid = await db.get(`user.${senderId}.uid`);
-            const apiUrl = tools.api.createUrl("fastrestapis", "/aillm/bagoodex", {
+            const apiUrl = tools.api.createUrl("fasturl", "/aillm/bagoodex", {
                 ask: input,
                 style: `You are a WhatsApp bot called ${config.bot.name}, owned by ${config.owner.name}. If your name matches or is similar to a well-known character, adopt a personality that fits that character. If it does not, stay friendly, informative, and responsive.`,
                 sessionId: uid
@@ -32,7 +32,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl, {
                 headers: {
-                    "x-api-key": tools.api.listUrl().fastrestapis.APIKey
+                    "x-api-key": tools.api.listUrl().fasturl.APIKey
                 }
             });
 
