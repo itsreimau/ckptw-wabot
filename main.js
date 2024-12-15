@@ -84,14 +84,14 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         // Basis data untuk pengguna
         const [userDb, userPremium] = await Promise.all([
-            db.get(`user.${senderNumber}`),
-            db.get(`user.${senderNumber}.isPremium`)
+            db.get(`user.${senderId}`),
+            db.get(`user.${senderId}.isPremium`)
         ]);
 
-        await db.set(`user.${senderNumber}`, {
-            coin: (tools.general.isOwner(ctx, senderNumber, config.system.selfOwner) || userPremium) ? 0 : (userDb.coin || 1000),
+        await db.set(`user.${senderId}`, {
+            coin: (tools.general.isOwner(ctx, senderId, config.system.selfOwner) || userPremium) ? 0 : (userDb.coin || 1000),
             level: userDb.level || 0,
-            uid: userDb.uid || tools.general.generateUID(senderNumber),
+            uid: userDb.uid || tools.general.generateUID(senderId),
             xp: userDb.xp || 0
         });
 
