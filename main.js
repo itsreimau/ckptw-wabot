@@ -89,12 +89,12 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         ]);
 
         await db.set(`user.${senderId}`, {
-            coin: (tools.general.isOwner(ctx, senderId, config.system.selfOwner) || userPremium) ? 0 : (userDb.coin || 1000),
-            level: userDb.level || 0,
-            uid: userDb.uid || tools.general.generateUID(senderId),
-            xp: userDb.xp || 0
+            coin: (tools.general.isOwner(ctx, senderId, config.system.selfOwner) || userPremium) ? 0 : (userDb?.coin || 1000),
+            level: userDb?.level || 0,
+            uid: userDb?.uid || tools.general.generateUID(senderId),
+            xp: userDb?.xp || 0,
+            ...userDb
         });
-
         // Penanganan untuk perintah
         const isCmd = tools.general.isCmd(m, ctx);
         if (isCmd) {
