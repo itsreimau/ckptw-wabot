@@ -23,7 +23,7 @@ module.exports = {
 
         try {
             const apiUrl = tools.api.createUrl("itzpire", "/ai/search-img", {
-                text: input
+                q: input
             });
             const {
                 data
