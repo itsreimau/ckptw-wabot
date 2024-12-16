@@ -17,7 +17,7 @@ module.exports = {
             const premiumUsers = [];
 
             for (const userId in users) {
-                if (users[userId].isPremium === true) premiumUsers.push(userId);
+                if (users[userId].premium === true) premiumUsers.push(userId);
             }
 
             let resultText = "";

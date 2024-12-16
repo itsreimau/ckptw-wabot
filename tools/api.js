@@ -10,6 +10,9 @@ const APIs = {
         baseURL: "https://fastrestapis.fasturl.cloud",
         APIKey: "ckptw-wabot" // APIKey disediakan oleh ItsReimau
     },
+    itzpire: {
+        baseURL: "https://itzpire.com"
+    },
     nexoracle: {
         baseURL: "https://api.nexoracle.com",
         APIKey: "free_key@maher_apis" // APIKey disediakan oleh Maher Zubair

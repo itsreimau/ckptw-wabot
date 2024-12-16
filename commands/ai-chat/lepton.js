@@ -4,9 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "characterai",
-    aliases: ["cai"],
-    category: "ai",
+    name: "lepton",
+    category: "ai-chat",
     handler: {
         coin: [10, "text", 1]
     },
@@ -21,15 +20,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/ai/c-ai", {
-                prompt: `You are a WhatsApp bot called ${config.bot.name}, owned by ${config.owner.name}. If your name matches or is similar to a well-known character, adopt a personality that fits that character. If it does not, stay friendly, informative, and responsive.`, // Dapat diubah sesuai keinginan Anda
+            const apiUrl = tools.api.createUrl("btch", "/lepton", {
                 text: input
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.result);
+            return await ctx.reply(data.answer);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

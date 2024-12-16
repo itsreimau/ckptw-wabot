@@ -50,7 +50,7 @@ module.exports = {
             switch (input) {
                 case "user": {
                     await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data pengguna...`));
-                    const importantKeys = ["afk", "autolevelup", "coin", "isBanned", "isPremium", "lastClaim", "lastUse", "level", "uid", "winGame", "xp"];
+                    const importantKeys = ["afk", "autolevelup", "coin", "banned", "premium", "lastClaim", "lastUse", "level", "uid", "winGame", "xp"];
 
                     Object.keys(user).forEach((userId) => {
                         const {

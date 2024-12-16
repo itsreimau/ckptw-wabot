@@ -1,15 +1,12 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "photoleap",
-    category: "ai",
-    handler: {
-        coin: [10, "text", 1]
-    },
+    name: "imgen",
+    category: "ai-image",
+    handler: {},
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
@@ -21,16 +18,11 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/photoleap", {
-                message: input
-            });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const apiUrl = tools.api.createUrl("https://imgen.duck.mom", `/prompt/${input}`, {});
 
             return await ctx.reply({
                 image: {
-                    url: data.url
+                    url: apiUrl
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +

@@ -14,13 +14,13 @@ async function handler(ctx, options) {
     if (isGroup && botMode === "private") return true;
     if (!tools.general.isOwner(ctx, senderId, true) && botMode === "self") return true;
 
-    const [isOwner, isBanned, isPremium] = await Promise.all([
+    const [isOwner, userBanned, userPremium] = await Promise.all([
         tools.general.isOwner(ctx, senderId, config.system.selfOwner),
-        db.get(`user.${senderId}.isBanned`),
-        db.get(`user.${senderId}.isPremium`)
+        db.get(`user.${senderId}.banned`),
+        db.get(`user.${senderId}.premium`)
     ]);
 
-    if (config.system.requireBotGroupMembership) {
+    if (config.system.requireBotGroupMembership && !isOwner && !userPremium) {
         const botGroupMembersId = (await ctx.group(config.bot.groupJid).members()).map(member => member.id.split("@")[0]);
         if (!botGroupMembersId.includes(senderId)) {
             await ctx.reply({
@@ -42,13 +42,13 @@ async function handler(ctx, options) {
         }
     }
 
-    if (isBanned) {
+    if (userBanned) {
         await ctx.reply(config.msg.banned);
         return true;
     }
 
     const cooldown = new Cooldown(ctx, config.system.cooldown);
-    if (cooldown.onCooldown && !isOwner && !isPremium) {
+    if (cooldown.onCooldown && !isOwner && !userPremium) {
         await ctx.reply(config.msg.cooldown);
         return true;
     }
@@ -75,7 +75,7 @@ async function handler(ctx, options) {
             msg: config.msg.owner
         },
         premium: {
-            check: () => !isOwner && !isPremium,
+            check: () => !isOwner && !userPremium,
             msg: config.msg.premium
         },
         private: {
@@ -103,12 +103,12 @@ async function handler(ctx, options) {
 
 // Cek koin
 async function checkCoin(ctx, coinOptions, senderId) {
-    const [isOwner, isPremium] = await Promise.all([
+    const [isOwner, userPremium] = await Promise.all([
         tools.general.isOwner(ctx, senderId, true),
-        db.get(`user.${senderId}.isPremium`)
+        db.get(`user.${senderId}.premium`)
     ]);
 
-    if (isOwner || isPremium) return false;
+    if (isOwner || userPremium) return false;
 
     const userCoin = await db.get(`user.${senderId}.coin`) || 0;
     const [requiredCoin = 0, requiredMedia = null, mediaSourceOption = null] = Array.isArray(coinOptions) ? coinOptions : [coinOptions];

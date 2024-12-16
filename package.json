@@ -1,6 +1,6 @@
 {
   "name": "ckptw-wabot",
-  "version": "2.20.15",
+  "version": "2.20.17",
   "description": "WhatsApp Bot with @mengkodingan/ckptw.",
   "main": "index.js",
   "directories": {

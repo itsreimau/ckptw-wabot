@@ -6,7 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "bingimg",
-    category: "ai",
+    category: "ai-image",
     handler: {
         coin: [10, "text", 1]
     },

@@ -4,9 +4,11 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "imgen",
-    category: "ai",
-    handler: {},
+    name: "animegen",
+    category: "ai-image",
+    handler: {
+        coin: [10, "text", 1]
+    },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
@@ -18,7 +20,9 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("https://imgen.duck.mom", `/prompt/${input}`, {});
+            const apiUrl = tools.api.createUrl("nexoracle", "/ai/anime-gen", {
+                prompt: input
+            }, "apikey");
 
             return await ctx.reply({
                 image: {

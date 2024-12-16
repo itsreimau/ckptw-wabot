@@ -29,7 +29,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("https://api.ocr.space", "/parse/imageurl", {
                 apikey: "8e65f273cd88957",
                 url: uploadUrl
-            });
+            }, null, ["url"]);
             const {
                 data
             } = await axios.get(apiUrl);

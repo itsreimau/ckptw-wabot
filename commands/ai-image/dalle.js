@@ -5,7 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "dalle",
-    category: "ai",
+    category: "ai-image",
     handler: {},
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;

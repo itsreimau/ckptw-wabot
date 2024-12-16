@@ -33,7 +33,7 @@ module.exports = {
                 avatar: profilePictureUrl,
                 name: ctx.sender.pushName || "-",
                 text: input
-            });
+            }, null, ["avatar"]);
 
             const sticker = new Sticker(apiUrl, {
                 pack: config.sticker.packname,

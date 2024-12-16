@@ -168,19 +168,20 @@ async function get(type, ctx) {
                     cmd
                 } = ctx._config;
                 const tag = {
-                    ai: "AI",
-                    converter: "Converter",
-                    downloader: "Downloader",
-                    entertainment: "Entertainment",
-                    game: "Game",
-                    group: "Group",
-                    maker: "Maker",
-                    profile: "Profile",
-                    search: "Search",
-                    tools: "Tools",
-                    owner: "Owner",
-                    information: "Information",
-                    misc: "Miscellaneous"
+                    "ai-chat": "AI (Chat)",
+                    "ai-image": "AI (Image)",
+                    "converter": "Converter",
+                    "downloader": "Downloader",
+                    "entertainment": "Entertainment",
+                    "game": "Game",
+                    "group": "Group",
+                    "maker": "Maker",
+                    "profile": "Profile",
+                    "search": "Search",
+                    "tools": "Tools",
+                    "owner": "Owner",
+                    "information": "Information",
+                    "misc": "Miscellaneous"
                 };
                 text = generateMenuText(cmd, tag);
                 break;

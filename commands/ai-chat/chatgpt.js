@@ -7,11 +7,10 @@ const {
 } = require("@mengkodingan/ckptw/lib/Constant");
 
 module.exports = {
-    name: "gemini",
-    category: "ai",
-    handler: {
-        coin: [10, "text", 1]
-    },
+    name: "chatgpt",
+    aliases: ["ai-chat", "chatai", "gpt", "openai"],
+    category: "ai-chat",
+    handler: {},
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
@@ -30,27 +29,43 @@ module.exports = {
         ]);
 
         try {
+            const style = `You are a WhatsApp bot called ${config.bot.name}, owned by ${config.owner.name}. If your name matches or is similar to a well-known character, adopt a personality that fits that character. If it does not, stay friendly, informative, and responsive.`;
+            const senderId = ctx.sender.jid.split(/[:@]/)[0];
+            const uid = await db.get(`user.${senderId}.uid`);
+
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadUrl = await tools.general.upload(buffer);
-                const apiUrl = tools.api.createUrl("sandipbaruwal", "/gemini2", {
-                    prompt: input,
-                    url: uploadUrl
-                });
+                const apiUrl = tools.api.createUrl("fasturl", "/aillm/gpt-4o", {
+                    ask: input,
+                    imageUrl: uploadUrl,
+                    style,
+                    sessionId: uid
+                }, null, ["imageUrl"]);
                 const {
                     data
-                } = await axios.get(apiUrl);
+                } = await axios.get(apiUrl, {
+                    headers: {
+                        "x-api-key": tools.api.listUrl().fasturl.APIKey
+                    }
+                });
 
-                return await ctx.reply(data.answer);
+                return await ctx.reply(data.response);
             } else {
-                const apiUrl = tools.api.createUrl("sandipbaruwal", "/gemini", {
-                    prompt: input
+                const apiUrl = tools.api.createUrl("fasturl", "/aillm/gpt-4o", {
+                    ask: input,
+                    style,
+                    sessionId: uid
                 });
                 const {
                     data
-                } = await axios.get(apiUrl);
+                } = await axios.get(apiUrl, {
+                    headers: {
+                        "x-api-key": tools.api.listUrl().fasturl.APIKey
+                    }
+                });
 
-                return await ctx.reply(data.answer);
+                return await ctx.reply(data.response);
             }
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);

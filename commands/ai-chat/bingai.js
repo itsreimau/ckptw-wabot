@@ -2,15 +2,13 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const {
-    MessageType
-} = require("@mengkodingan/ckptw/lib/Constant");
 
 module.exports = {
-    name: "islamic",
-    aliases: ["islamicai", "muslim", "muslimai"],
-    category: "ai",
-    handler: {},
+    name: "bingai",
+    category: "ai-chat",
+    handler: {
+        coin: [10, "text", 1]
+    },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
@@ -22,21 +20,14 @@ module.exports = {
         );
 
         try {
-            const senderId = ctx.sender.jid.split(/[:@]/)[0];
-            const uid = await db.get(`user.${senderId}.uid`);
-            const apiUrl = tools.api.createUrl("fasturl", "/aillm/islamic", {
-                ask: input,
-                sessionId: uid
+            const apiUrl = tools.api.createUrl("btch", "/bingai", {
+                text: input
             });
             const {
                 data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "x-api-key": tools.api.listUrl().fasturl.APIKey
-                }
-            });
+            } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.response);
+            return await ctx.reply(data.result);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

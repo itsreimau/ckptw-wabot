@@ -19,9 +19,9 @@ module.exports = {
         );
 
         const senderId = ctx.sender.jid.split(/[:@]/)[0];
-        const [userLevel, isPremium, lastClaim, currentCoins] = await Promise.all([
+        const [userLevel, userPremium, lastClaim, currentCoins] = await Promise.all([
             db.get(`user.${senderId}.level`) || 0,
-            db.get(`user.${senderId}.isPremium`) || false,
+            db.get(`user.${senderId}.premium`) || false,
             db.get(`user.${senderId}.lastClaim`) || {},
             db.get(`user.${senderId}.coin`) || 0
         ]);
@@ -42,7 +42,7 @@ module.exports = {
         const remainingTime = claimRewards[input].cooldown - timePassed;
 
         if (remainingTime > 0) return await ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input}. Tunggu ${tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
-        if (isPremium === true) return await ctx.reply(quote("❎ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
+        if (userPremium === true) return await ctx.reply(quote("❎ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
 
         try {
             const newBalance = currentCoins + claimRewards[input].reward;

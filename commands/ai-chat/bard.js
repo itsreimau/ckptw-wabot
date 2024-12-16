@@ -7,9 +7,8 @@ const {
 } = require("@mengkodingan/ckptw/lib/Constant");
 
 module.exports = {
-    name: "blackbox",
-    aliases: ["bb"],
-    category: "ai",
+    name: "bard",
+    category: "ai-chat",
     handler: {
         coin: [10, "text", 1]
     },
@@ -21,7 +20,7 @@ module.exports = {
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], [ "image","text"]))}\n` +
             `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))}\n` +
-            quote(tools.msg.generateNotes(["AI ini dapat melihat media dan menjawab pertanyaan tentangnya. Kirim media dan tanyakan apa saja!"]))
+            quote(tools.msg.generateNotes(["AI ini dapat melihat gambar dan menjawab pertanyaan tentangnya. Kirim media dan tanyakan apa saja!"]))
         );
 
         const msgType = ctx.getMessageType();
@@ -31,38 +30,27 @@ module.exports = {
         ]);
 
         try {
-            const model = "blackbox";
-
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadUrl = await tools.general.upload(buffer);
-                const apiUrl = tools.api.createUrl("fasturl", "/aillm/blackbox", {
-                    ask: input,
-                    model,
-                    imageUrl: uploadUrl
-                });
+                const apiUrl = tools.api.createUrl("btch", "/bardimg", {
+                    url: uploadUrl,
+                    text: input
+                }, null, ["url"]);
                 const {
                     data
-                } = await axios.get(apiUrl, {
-                    headers: {
-                        "x-api-key": tools.api.listUrl().fasturl.APIKey
-                    }
-                });
+                } = await axios.get(apiUrl);
 
-                return await ctx.reply(data.response);
+                return await ctx.reply(data.result);
             } else {
-                const apiUrl = tools.api.createUrl("fasturl", "/aillm/blackbox", {
-                    ask: input,
-                    model
+                const apiUrl = tools.api.createUrl("btch", "/bard", {
+                    text: input
                 });
                 const {
                     data
-                } = await axios.get(apiUrl, {
-                    headers: {
-                        "x-api-key": tools.api.listUrl().fasturl.APIKey
-                    }
-                });
-                return await ctx.reply(data.response);
+                } = await axios.get(apiUrl);
+
+                return await ctx.reply(data.result);
             }
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);

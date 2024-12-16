@@ -7,8 +7,9 @@ const {
 } = require("@mengkodingan/ckptw/lib/Constant");
 
 module.exports = {
-    name: "bagoodex",
-    category: "ai",
+    name: "islamic",
+    aliases: ["islamicai", "muslim", "muslimai"],
+    category: "ai-chat",
     handler: {},
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
@@ -23,9 +24,8 @@ module.exports = {
         try {
             const senderId = ctx.sender.jid.split(/[:@]/)[0];
             const uid = await db.get(`user.${senderId}.uid`);
-            const apiUrl = tools.api.createUrl("fasturl", "/aillm/bagoodex", {
+            const apiUrl = tools.api.createUrl("fasturl", "/aillm/islamic", {
                 ask: input,
-                style: `You are a WhatsApp bot called ${config.bot.name}, owned by ${config.owner.name}. If your name matches or is similar to a well-known character, adopt a personality that fits that character. If it does not, stay friendly, informative, and responsive.`,
                 sessionId: uid
             });
             const {
@@ -36,7 +36,7 @@ module.exports = {
                 }
             });
 
-            return await ctx.reply(data.result);
+            return await ctx.reply(data.response);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

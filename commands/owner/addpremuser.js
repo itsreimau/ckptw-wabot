@@ -29,7 +29,7 @@ module.exports = {
             const [result] = await ctx._client.onWhatsApp(user);
             if (!result.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp.`));
 
-            await db.set(`user.${user.split("@")[0]}.isPremium`, true);
+            await db.set(`user.${user.split("@")[0]}.premium`, true);
 
             await ctx.sendMessage(user, {
                 text: quote(`🎉 Anda telah ditambahkan sebagai pengguna Premium oleh Owner!`)

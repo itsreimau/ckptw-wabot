@@ -1,11 +1,12 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "animegen",
-    category: "ai",
+    name: "pixelart",
+    category: "ai-image",
     handler: {
         coin: [10, "text", 1]
     },
@@ -20,13 +21,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nexoracle", "/ai/anime-gen", {
+            const apiUrl = tools.api.createUrl("itzpire", "/ai/pixelart", {
                 prompt: input
-            }, "apikey");
+            });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: data.result
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +

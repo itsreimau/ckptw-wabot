@@ -85,7 +85,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Basis data untuk pengguna
         const [userDb, userPremium] = await Promise.all([
             db.get(`user.${senderId}`),
-            db.get(`user.${senderId}.isPremium`)
+            db.get(`user.${senderId}.premium`)
         ]);
 
         await db.set(`user.${senderId}`, {
@@ -225,7 +225,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
     // Grup
     if (isGroup) {
         if (m.key.fromMe) return;
-        const getAutokick = await db.get(`group.${groupId}.option.autokick`);
+        const isAutokick = await db.get(`group.${groupId}.option.autokick`);
 
         // Penanganan antilink
         const isAntilink = await db.get(`group.${groupId}.option.antilink`);
@@ -234,7 +234,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             if (m.content && await tools.general.isUrl(m.content) && !await tools.general.isAdmin(ctx, senderJid)) {
                 await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
                 await ctx.deleteMessage(m.key);
-                if (!config.system.restrict && getAutokick) await ctx.group().kick([senderJid]);
+                if (!config.system.restrict && isAutokick) await ctx.group().kick([senderJid]);
             }
         }
 
@@ -250,7 +250,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                 const apiUrl = tools.api.createUrl("fasturl", "/tool/imagechecker", {
                     url: uploadUrl
-                });
+                }, null, ["url"]);
                 const {
                     data
                 } = await axios.get(apiUrl, {
@@ -262,7 +262,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
                 if (data.results.status === "NSFW") {
                     await ctx.reply(`⛔ Jangan kirim NSFW!`);
                     await ctx.deleteMessage(ctx.msg.key);
-                    if (!config.system.restrict && getAutokick) await ctx.group().kick([senderJid]);
+                    if (!config.system.restrict && isAutokick) await ctx.group().kick([senderJid]);
                 }
             }
         }
@@ -276,7 +276,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             if (checkMedia && !await tools.general.isAdmin(ctx, senderJid)) {
                 await ctx.reply(`⛔ Jangan kirim stiker!`);
                 await ctx.deleteMessage(ctx.msg.key);
-                if (!config.system.restrict && getAutokick) await ctx.group().kick([senderJid]);
+                if (!config.system.restrict && isAutokick) await ctx.group().kick([senderJid]);
             }
         }
 
@@ -287,7 +287,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             if (m.content && toxicRegex.test(m.content) && !await tools.general.isAdmin(ctx, senderJid)) {
                 await ctx.reply(quote(`⛔ Jangan toxic!`));
                 await ctx.deleteMessage(m.key);
-                if (!config.system.restrict && getAutokick) await ctx.group().kick([senderJid]);
+                if (!config.system.restrict && isAutokick) await ctx.group().kick([senderJid]);
             }
         }
     }
@@ -358,9 +358,9 @@ async function handleUserEvent(m) {
 
     try {
         const groupId = id.split("@")[0];
-        const getWelcome = await db.get(`group.${groupId}.option.welcome`);
+        const isWelcome = await db.get(`group.${groupId}.option.welcome`);
 
-        if (getWelcome) {
+        if (isWelcome) {
             const metadata = await bot.core.groupMetadata(id);
             const textWelcome = await db.get(`group.${groupId}.text.welcome`);
             const textGoodbye = await db.get(`group.${groupId}.text.goodbye`);
