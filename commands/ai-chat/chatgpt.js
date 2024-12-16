@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: "chatgpt",
-    aliases: ["ai-chat", "chatai", "gpt", "openai"],
+    aliases: ["ai", "chatai", "gpt", "openai"],
     category: "ai-chat",
     handler: {},
     code: async (ctx) => {
