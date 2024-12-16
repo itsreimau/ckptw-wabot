@@ -95,6 +95,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             xp: userDb?.xp || 0,
             ...userDb
         });
+
         // Penanganan untuk perintah
         const isCmd = tools.general.isCmd(m, ctx);
         if (isCmd) {
