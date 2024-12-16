@@ -47,7 +47,7 @@ module.exports = {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,
-                categories: ["🤩", "🎉"],
+                categories: ["🌕"],
                 id: ctx.id,
                 quality: 50
             });

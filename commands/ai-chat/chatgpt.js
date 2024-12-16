@@ -50,7 +50,21 @@ module.exports = {
                     }
                 });
 
-                return await ctx.reply(data.response);
+                if (!ctx.isGroup()) return await ctx._client.relayMessage(ctx.id, {
+                    conversation: data.response
+                }, {
+                    additionalNodes: [{
+                        attrs: {
+                            biz_bot: "1"
+                        },
+                        tag: "bot"
+                    }, {
+                        attrs: {},
+                        tag: "biz"
+                    }]
+                });
+
+                return await ctx.reply();
             } else {
                 const apiUrl = tools.api.createUrl("fasturl", "/aillm/gpt-4o", {
                     ask: input,
@@ -63,6 +77,20 @@ module.exports = {
                     headers: {
                         "x-api-key": tools.api.listUrl().fasturl.APIKey
                     }
+                });
+
+                if (!ctx.isGroup()) return await ctx._client.relayMessage(ctx.id, {
+                    conversation: data.response
+                }, {
+                    additionalNodes: [{
+                        attrs: {
+                            biz_bot: "1"
+                        },
+                        tag: "bot"
+                    }, {
+                        attrs: {},
+                        tag: "biz"
+                    }]
                 });
 
                 return await ctx.reply(data.response);

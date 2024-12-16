@@ -27,7 +27,7 @@ module.exports = {
         if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 50 kata!`));
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/brat", {
+            const apiUrl = tools.api.createUrl("siputzx", "/api/m/brat", {
                 text: input
             });
 
@@ -35,7 +35,7 @@ module.exports = {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,
-                categories: ["🤩", "🎉"],
+                categories: ["🌕"],
                 id: ctx.id,
                 quality: 50
             });

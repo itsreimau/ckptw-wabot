@@ -28,7 +28,7 @@ module.exports = {
             const {
                 data
             } = (await axios.get(apiUrl)).data;
-            const result = tools.general.getRandomElement(data.result);
+            const result = tools.general.getRandomElement(data);
 
             return await ctx.reply({
                 image: {

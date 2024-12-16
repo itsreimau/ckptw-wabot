@@ -33,7 +33,7 @@ module.exports = {
                 pack: packname || "",
                 author: author || "",
                 type: StickerTypes.FULL,
-                categories: ["🤩", "🎉"],
+                categories: ["🌕"],
                 id: ctx.id,
                 quality: 50
             });
