@@ -18,6 +18,6 @@ module.exports = {
             `${quote("https://trakteer.id/itsreimau (Trakteer)")}\n` +
             "\n" +
             config.msg.footer
-        );
+        ); // Dapat diubah sesuai keinginan Anda
     }
 };

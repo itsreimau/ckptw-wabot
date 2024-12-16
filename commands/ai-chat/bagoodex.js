@@ -25,7 +25,7 @@ module.exports = {
             const uid = await db.get(`user.${senderId}.uid`);
             const apiUrl = tools.api.createUrl("fasturl", "/aillm/bagoodex", {
                 ask: input,
-                style: `You are a WhatsApp bot called ${config.bot.name}, owned by ${config.owner.name}. If your name matches or is similar to a well-known character, adopt a personality that fits that character. If it does not, stay friendly, informative, and responsive.`,
+                style: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. If your name matches a well-known character, adopt their personality, traits, and emotions in your responses (e.g., calm and enigmatic like Ayanami Rei, cheerful and helpful like Doraemon), otherwise stay friendly, informative, and adaptive to the user's mood and language, maintaining empathy and clarity while being engaging and supportive.`, // Dapat diubah sesuai keinginan Anda
                 sessionId: uid
             });
             const {
