@@ -193,7 +193,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             for (const mentionJid of mentionJids) {
                 const userAFK = await db.get(`user.${mentionJid}.afk`)
 
-                if (isAFK) {
+                if (userAFK) {
                     const timeAgo = tools.general.convertMsToDuration(Date.now() - userAFK.timeStamp);
                     await ctx.reply(quote(`📴 Dia sedang AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeAgo}.`));
                 }
@@ -202,7 +202,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
         const userAFK = await db.get(`user.${senderId}.afk`)
 
-        if (isAFK) {
+        if (userAFK) {
             const currentTime = Date.now();
             const timeElapsed = currentTime - userAFK.timeStamp;
 
