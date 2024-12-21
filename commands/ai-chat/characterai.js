@@ -22,7 +22,7 @@ module.exports = {
 
         try {
             const apiUrl = tools.api.createUrl("btch", "/ai/c-ai", {
-                prompt: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`; // Dapat diubah sesuai keinginan Anda
+                prompt: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.` // Dapat diubah sesuai keinginan Anda
                 text: input
             });
             const {
