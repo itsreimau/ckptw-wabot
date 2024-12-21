@@ -32,9 +32,9 @@ module.exports = {
         const requiredLevel = claimRewards[input].level || 0;
         if (userDb.level < requiredLevel) return await ctx.reply(quote(`❎ Anda perlu mencapai level ${requiredLevel} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userDb.level}.`));
 
-        const userDb.lastClaimTime = userDb.lastClaim[input] || 0;
+        const lastClaimTime = userDb.lastClaim[input] || 0;
         const currentTime = Date.now();
-        const timePassed = currentTime - userDb.lastClaimTime;
+        const timePassed = currentTime - lastClaimTime;
         const remainingTime = claimRewards[input].cooldown - timePassed;
 
         if (remainingTime > 0) return await ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input}. Tunggu ${tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
