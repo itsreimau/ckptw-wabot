@@ -52,7 +52,7 @@ module.exports = {
                     await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data pengguna...`));
                     const importantKeys = ["afk", "autolevelup", "coin", "banned", "premium", "lastClaim", "lastUse", "level", "uid", "winGame", "xp"];
 
-                    Object.keys(user).forEach((userId) => {
+                    Object.keys(user).forEach(async (userId) => {
                         const {
                             lastUse,
                             ...userData
@@ -77,7 +77,7 @@ module.exports = {
                     const groupData = await ctx._client.groupFetchAllParticipating();
                     const groupIds = Object.values(groupData).map(g => g.id.split("@")[0]);
 
-                    Object.keys(group).forEach((groupId) => {
+                    Object.keys(group).forEach(async (groupId) => {
                         const groupData = group[groupId] || {};
                         const {
                             lastUse,
@@ -103,7 +103,7 @@ module.exports = {
                     await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data menfess...`));
                     const importantKeysMenfess = ["from", "lastMsg", "to"];
 
-                    Object.keys(menfess).forEach((conversationId) => {
+                    Object.keys(menfess).forEach(async (conversationId) => {
                         const {
                             from,
                             lastMsg,
