@@ -58,10 +58,10 @@ module.exports = {
                             ...userData
                         } = user[userId] || {};
                         if (!/^[0-9]{10,15}$/.test(userId) || (lastUse && new Date(lastUse).getTime() < cutoffTime)) {
-                            db.delete(`user.${userId}`);
+                            await db.delete(`user.${userId}`);
                         } else {
                             const filteredData = Object.fromEntries(Object.entries(userData).filter(([key]) => importantKeys.includes(key)));
-                            db.set(`user.${userId}`, {
+                            await db.set(`user.${userId}`, {
                                 ...filteredData,
                                 lastUse
                             });
@@ -86,14 +86,14 @@ module.exports = {
                         } = groupData;
 
                         if (!/^[0-9]{10,15}$/.test(groupId) || !groupIds.includes(groupId)) {
-                            db.delete(`group.${groupId}`);
+                            await db.delete(`group.${groupId}`);
                         } else {
                             const filteredGroupData = {
                                 lastUse,
                                 option,
                                 text
                             };
-                            db.set(`group.${groupId}`, filteredGroupData);
+                            await db.set(`group.${groupId}`, filteredGroupData);
                         }
                     });
                     break;
@@ -111,14 +111,14 @@ module.exports = {
                         } = menfess[conversationId] || {};
 
                         if (!/^[0-9]{10,15}$/.test(conversationId)) {
-                            db.delete(`menfess.${conversationId}`);
+                            await db.delete(`menfess.${conversationId}`);
                         } else {
                             const filteredMenfessData = Object.fromEntries(Object.entries({
                                 from,
                                 lastMsg,
                                 to
                             }).filter(([key]) => importantKeysMenfess.includes(key)));
-                            db.set(`menfess.${conversationId}`, filteredMenfessData);
+                            await db.set(`menfess.${conversationId}`, filteredMenfessData);
                         }
                     });
                     break;

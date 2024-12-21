@@ -15,14 +15,9 @@ module.exports = {
             const senderJid = ctx.sender.jid;
             const senderId = senderJid.split(/[:@]/)[0];
 
-            const [userCoin, isOwner, userPremium, userLevel, userXp, userWinGame] = await Promise.all([
-                db.get(`user.${senderId}.coin`) || 0,
-                tools.general.isOwner(ctx, senderId, true),
-                db.get(`user.${senderId}.premium`),
-                db.get(`user.${senderId}.level`) || 1,
-                db.get(`user.${senderId}.xp`) || 0,
-                db.get(`user.${senderId}.winGame`) || 0
-            ]);
+            const userDb = await db.get(`user.${senderId}`);
+
+            const isOwner = await tools.general.isOwner(ctx, senderId, true);
 
             const leaderboardData = Object.entries((await db.toJSON()).user)
                 .map(([id, data]) => ({
@@ -38,12 +33,12 @@ module.exports = {
 
             return await ctx.reply({
                 text: `${quote(`Nama: ${senderName}`)}\n` +
-                    `${quote(`Status: ${isOwner ? "Owner" : userPremium ? "Premium" : "Freemium"}`)}\n` +
-                    `${quote(`Level: ${userLevel}`)}\n` +
-                    `${quote(`XP: ${userXp}`)}\n` +
-                    `${quote(`Koin: ${isOwner || userPremium ? "Tak terbatas" : userCoin || "-"}`)}\n` +
+                    `${quote(`Status: ${isOwner ? "Owner" : userDb.premium ? "Premium" : "Freemium"}`)}\n` +
+                    `${quote(`Level: ${userDb.level}`)}\n` +
+                    `${quote(`XP: ${userDb.xp}`)}\n` +
+                    `${quote(`Koin: ${isOwner || userDb.premium ? "Tak terbatas" : userDb.coin || "-"}`)}\n` +
                     `${quote(`Peringkat: ${userRank}`)}\n` +
-                    `${quote(`Menang: ${userWinGame}`)}\n` +
+                    `${quote(`Menang: ${userDb.winGame}`)}\n` +
                     "\n" +
                     config.msg.footer,
                 contextInfo: {

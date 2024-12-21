@@ -55,18 +55,19 @@ global.config = {
         author: "@ckptw-wabot" // Pembuat stiker
     },
 
-    // Pengaturan sistem bot
     system: {
-        autoRead: true, // Apakah bot otomatis membaca pesan masuk
-        autoTypingOnCmd: true, // Aktifkan status mengetik ketika memproses perintah
-        cooldown: 5000, // Waktu cooldown antar perintah dalam milidetik
-        restrict: false, // Membatasi perintah tertentu untuk keamanan
-        requireBotGroupMembership: false, // Apakah pengguna harus bergabung dengan grup bot
-        port: 8080, // Port yang diinginkan (opsional jika menggunakan server)
-        selfOwner: true, // Apakah bot menjadi owner
-        selfReply: true, // Apakah bot merespon pesan yang dikirim bot sendiri
+        alwaysOnline: true, // Bot selalu aktif
+        autoMention: false, // Bot otomatis mention seseorang dalam pesan yang dikirim
+        autoRead: true, // Bot baca pesan otomatis
+        autoTypingOnCmd: true, // Tampilkan status mengetik saat memproses
+        cooldown: 5000, // Jeda antar perintah (ms)
+        port: 8080, // Port (jika pakai server)
+        restrict: false, // Batasi akses perintah
+        requireBotGroupMembership: false, // Harus gabung grup bot
+        selfOwner: false, // Bot jadi owner sendiri
+        selfReply: true, // Bot balas pesan bot sendiri
         timeZone: "Asia/Jakarta", // Zona waktu bot
-        usePairingCode: false, // Menggunakan kode pairing untuk koneksi
-        useServer: false // Menggunakan server
+        usePairingCode: false, // Pakai kode pairing untuk koneksi
+        useServer: false // Jalankan bot tanpa server
     }
 };

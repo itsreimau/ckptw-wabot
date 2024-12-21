@@ -15,10 +15,8 @@ module.exports = {
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
-        const [key, text] = await Promise.all([
-            ctx.args[0],
-            ctx.args.slice(1).join(" ")
-        ]);
+        const key = ctx.args[0];
+        const text = ctx.args.slice(1).join(" ");
 
         if (!key && !text) return await ctx.reply(
             `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +

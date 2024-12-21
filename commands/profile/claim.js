@@ -19,12 +19,8 @@ module.exports = {
         );
 
         const senderId = ctx.sender.jid.split(/[:@]/)[0];
-        const [userLevel, userPremium, lastClaim, currentCoins] = await Promise.all([
-            db.get(`user.${senderId}.level`) || 0,
-            db.get(`user.${senderId}.premium`) || false,
-            db.get(`user.${senderId}.lastClaim`) || {},
-            db.get(`user.${senderId}.coin`) || 0
-        ]);
+
+        const userDb = await db.get(`user.${senderId}`);
 
         if (input === "list") {
             const listText = await tools.list.get("claim");
@@ -34,23 +30,22 @@ module.exports = {
         if (!claimRewards[input]) return await ctx.reply(quote(`❎ Hadiah tidak valid!`));
 
         const requiredLevel = claimRewards[input].level || 0;
-        if (userLevel < requiredLevel) return await ctx.reply(quote(`❎ Anda perlu mencapai level ${requiredLevel} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userLevel}.`));
+        if (userDb.level < requiredLevel) return await ctx.reply(quote(`❎ Anda perlu mencapai level ${requiredLevel} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userDb.level}.`));
 
-        const lastClaimTime = lastClaim[input] || 0;
+        const userDb.lastClaimTime = userDb.lastClaim[input] || 0;
         const currentTime = Date.now();
-        const timePassed = currentTime - lastClaimTime;
+        const timePassed = currentTime - userDb.lastClaimTime;
         const remainingTime = claimRewards[input].cooldown - timePassed;
 
         if (remainingTime > 0) return await ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input}. Tunggu ${tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
-        if (userPremium === true) return await ctx.reply(quote("❎ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
+        if (userDb.premium === true) return await ctx.reply(quote("❎ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
 
         try {
-            const newBalance = currentCoins + claimRewards[input].reward;
-
+            const newBalance = userDb.coin + claimRewards[input].reward;
             await Promise.all([
                 db.set(`user.${senderId}.coin`, newBalance),
-                db.set(`user.${senderId}.lastClaim.${input}`, currentTime)
-            ]);
+                db.set(`user.${senderId}.userDb.lastClaim.${input}`, currentTime)
+            ])
 
             return await ctx.reply(quote(`✅ Anda berhasil mengklaim hadiah ${input} sebesar ${claimRewards[input].reward} koin! Koin saat ini: ${newBalance}.`));
         } catch (error) {

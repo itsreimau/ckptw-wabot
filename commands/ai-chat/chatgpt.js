@@ -29,7 +29,7 @@ module.exports = {
         ]);
 
         try {
-            const style = `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. If your name matches a well-known character, adopt their personality, traits, and emotions in your responses (e.g., calm and enigmatic like Ayanami Rei, cheerful and helpful like Doraemon), otherwise stay friendly, informative, and adaptive to the user's mood and language, maintaining empathy and clarity while being engaging and supportive.`; // Dapat diubah sesuai keinginan Anda
+            const style = `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`; // Dapat diubah sesuai keinginan Anda
             const senderId = ctx.sender.jid.split(/[:@]/)[0];
             const uid = await db.get(`user.${senderId}.uid`);
 
