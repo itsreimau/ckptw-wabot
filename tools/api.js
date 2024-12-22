@@ -7,8 +7,8 @@ const APIs = {
         baseURL: "https://btch.us.kg"
     },
     fasturl: {
-        baseURL: "https://fastrestapis.fasturl.cloud",
-        APIKey: "ckptw-wabot" // APIKey disediakan oleh ItsReimau
+        baseURL: "https://fastrestapis.fasturl.link",
+        APIKey: "" // APIKey disediakan oleh ItsReimau
     },
     itzpire: {
         baseURL: "https://itzpire.com"

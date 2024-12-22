@@ -1,6 +1,6 @@
 # ckptw-wabot - WhatsApp Bot dengan @mengkodingan/ckptw
 
-> **Catatan:** Script ini telah diperbarui.
+> **Catatan:** Skrip diperbarui hanya bila diperlukan, seperti untuk penyesuaian atau perbaikan.
 
 ## Gambaran Umum
 

@@ -11,7 +11,7 @@ module.exports = {
         if (await handler(ctx, module.exports.handler)) return;
 
         try {
-            const senderName = ctx.sender.pushName || "-";
+            const senderName = ctx.sender.pushName;
             const senderJid = ctx.sender.jid;
             const senderId = senderJid.split(/[:@]/)[0];
 
@@ -32,13 +32,13 @@ module.exports = {
             const profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
             return await ctx.reply({
-                text: `${quote(`Nama: ${senderName}`)}\n` +
-                    `${quote(`Status: ${isOwner ? "Owner" : userDb.premium ? "Premium" : "Freemium"}`)}\n` +
-                    `${quote(`Level: ${userDb.level}`)}\n` +
-                    `${quote(`XP: ${userDb.xp}`)}\n` +
+                text: `${quote(`Nama: ${senderName || "-"}`)}\n` +
+                    `${quote(`Status: ${isOwner ? "Owner" : userDb.premium ? "Premium" : "Freemium" || "-"}`)}\n` +
+                    `${quote(`Level: ${userDb.level || "-"}`)}\n` +
+                    `${quote(`XP: ${userDb.xp || "-"}`)}\n` +
                     `${quote(`Koin: ${isOwner || userDb.premium ? "Tak terbatas" : userDb.coin || "-"}`)}\n` +
-                    `${quote(`Peringkat: ${userRank}`)}\n` +
-                    `${quote(`Menang: ${userDb.winGame}`)}\n` +
+                    `${quote(`Peringkat: ${userRank || "-"}`)}\n` +
+                    `${quote(`Menang: ${userDb.winGame || "-"}`)}\n` +
                     "\n" +
                     config.msg.footer,
                 contextInfo: {
