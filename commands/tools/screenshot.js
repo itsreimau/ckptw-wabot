@@ -24,15 +24,16 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            let endpoint = "/sspc";
+            let type = "desktop";
             if (ctx._used.command === "sshp") {
-                endpoint = "/sshp";
+                type = "phone";
             } else if (ctx._used.command === "sstab") {
-                endpoint = "/sstab";
+                type = "tablet";
             }
 
-            const apiUrl = tools.api.createUrl("btch", endpoint, {
-                url
+            const apiUrl = tools.api.createUrl("vreden", "/api/ssweb", {
+                url,
+                type
             }, null, ["url"]);
 
             return await ctx.reply({
