@@ -80,13 +80,13 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         console.log(`[${config.pkg.name}] Incoming message from: ${senderId}`);
     }
 
+    // Basis data untuk pengguna
+    const userDb = await db.get(`user.${senderId}`) || {};
+
     // Grup atau Pribadi
     if (isGroup || isPrivate) {
         // Penangan pada ukuran basis data
         config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"
-
-        // Basis data untuk pengguna
-        const userDb = await db.get(`user.${senderId}`);
 
         await db.set(`user.${senderId}`, {
             coin: (tools.general.isOwner(ctx, senderId, config.system.selfOwner) || userDb?.premium) ? 0 : (userDb?.coin || 1000),
@@ -116,8 +116,6 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
             // Penanganan XP & Level untuk pengguna
             const xpGain = 10;
             let xpToLevelUp = 100;
-
-            const userDb = await db.get(`user.${senderId}`);
 
             let newUserXp = userDb?.xp + xpGain;
 
