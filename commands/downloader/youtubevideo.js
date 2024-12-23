@@ -25,7 +25,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/d/ytmp4", {
+            const apiUrl = tools.api.createUrl("vapis", "/api/ytdl", {
                 url
             }, null, ["url"]);
             const {
@@ -34,7 +34,7 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    url: data.dl
+                    url: data.video.link
                 },
                 mimetype: mime.lookup("mp4")
             });

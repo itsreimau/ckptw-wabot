@@ -2,9 +2,6 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const {
-    MessageType
-} = require("@mengkodingan/ckptw/lib/Constant");
-const {
     Sticker,
     StickerTypes
 } = require("wa-sticker-formatter");

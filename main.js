@@ -6,8 +6,7 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const {
-    Events,
-    MessageType
+    Events
 } = require("@mengkodingan/ckptw/lib/Constant");
 const axios = require("axios");
 const {

@@ -1,9 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    MessageType
-} = require("@mengkodingan/ckptw/lib/Constant");
 const axios = require("axios");
 
 module.exports = {

@@ -2,9 +2,6 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const {
-    MessageType
-} = require("@mengkodingan/ckptw/lib/Constant");
 
 module.exports = {
     name: "chatgpt",

@@ -8,7 +8,7 @@ const APIs = {
     },
     fasturl: {
         baseURL: "https://fastrestapis.fasturl.link",
-        APIKey: "" // APIKey disediakan oleh ItsReimau
+        APIKey: "" // APIKey tidak disediakan, Anda dapat menggunakan APIKey Anda sendiri
     },
     itzpire: {
         baseURL: "https://itzpire.com"
@@ -32,6 +32,9 @@ const APIs = {
     },
     toxicdevil: {
         baseURL: "https://toxicdevilapi.vercel.app"
+    },
+    vapis: {
+        baseURL: "https://vapis.my.id"
     },
     vreden: {
         baseURL: "https://api.vreden.my.id"
