@@ -1,6 +1,7 @@
 const {
     bold,
     italic,
+    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const moment = require("moment-timezone");
