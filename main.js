@@ -89,7 +89,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const userDb = await db.get(`user.${senderId}`);
 
         await db.set(`user.${senderId}`, {
-            coin: (tools.general.isOwner(ctx, senderId, config.system.selfOwner) || userDb?.premium) ? 0 : (userDb ? .coin || 1000),
+            coin: (tools.general.isOwner(ctx, senderId, config.system.selfOwner) || userDb?.premium) ? 0 : (userDb?.coin || 1000),
             level: userDb?.level || 0,
             uid: userDb?.uid || tools.general.generateUID(senderId),
             xp: userDb?.xp || 0,
