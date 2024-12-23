@@ -33,12 +33,12 @@ module.exports = {
 
             return await ctx.reply({
                 text: `${quote(`Nama: ${senderName || "-"}`)}\n` +
-                    `${quote(`Status: ${isOwner ? "Owner" : userDb.premium ? "Premium" : "Freemium" || "-"}`)}\n` +
-                    `${quote(`Level: ${userDb.level || "-"}`)}\n` +
-                    `${quote(`XP: ${userDb.xp || "-"}`)}\n` +
-                    `${quote(`Koin: ${isOwner || userDb.premium ? "Tak terbatas" : userDb.coin || "-"}`)}\n` +
+                    `${quote(`Status: ${isOwner ? "Owner" : userDb?.premium ? "Premium" : "Freemium" || "-"}`)}\n` +
+                    `${quote(`Level: ${userDb?.level || "-"}`)}\n` +
+                    `${quote(`XP: ${userDb?.xp || "-"}`)}\n` +
+                    `${quote(`Koin: ${isOwner || userDb?.premium ? "Tak terbatas" : userDb?.coin || "-"}`)}\n` +
                     `${quote(`Peringkat: ${userRank || "-"}`)}\n` +
-                    `${quote(`Menang: ${userDb.winGame || "-"}`)}\n` +
+                    `${quote(`Menang: ${userDb?.winGame || "-"}`)}\n` +
                     "\n" +
                     config.msg.footer,
                 contextInfo: {

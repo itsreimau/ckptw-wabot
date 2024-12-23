@@ -17,7 +17,7 @@ async function handler(ctx, options) {
     const isOwner = await tools.general.isOwner(ctx, senderId, config.system.selfOwner);
     const userDb = await db.get(`user.${senderId}`);
 
-    if (config.system.requireBotGroupMembership && !isOwner && !userDb.premium) {
+    if (config.system.requireBotGroupMembership && !isOwner && !userDb?.premium) {
         const botGroupMembersId = (await ctx.group(config.bot.groupJid).members()).map(member => member.id.split("@")[0]);
         if (!botGroupMembersId.includes(senderId)) {
             await ctx.reply({
@@ -39,13 +39,13 @@ async function handler(ctx, options) {
         }
     }
 
-    if (userDb.banned) {
+    if (userDb?.banned) {
         await ctx.reply(config.msg.banned);
         return true;
     }
 
     const cooldown = new Cooldown(ctx, config.system.cooldown);
-    if (cooldown.onCooldown && !isOwner && !userDb.premium) {
+    if (cooldown.onCooldown && !isOwner && !userDb?.premium) {
         await ctx.reply(config.msg.cooldown);
         return true;
     }
@@ -72,7 +72,7 @@ async function handler(ctx, options) {
             msg: config.msg.owner
         },
         premium: {
-            check: () => !isOwner && !userDb.premium,
+            check: () => !isOwner && !userDb?.premium,
             msg: config.msg.premium
         },
         private: {
@@ -103,7 +103,7 @@ async function checkCoin(ctx, coinOptions, senderId) {
     const isOwner = await tools.general.isOwner(ctx, senderId, config.system.selfOwner);
     const userDb = await db.get(`user.${senderId}`);
 
-    if (isOwner || userDb.premium) return false;
+    if (isOwner || userDb?.premium) return false;
 
     const userCoin = await db.get(`user.${senderId}.coin`) || 0;
     const [requiredCoin = 0, requiredMedia = null, mediaSourceOption = null] = Array.isArray(coinOptions) ? coinOptions : [coinOptions];
