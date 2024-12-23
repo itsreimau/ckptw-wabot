@@ -64,7 +64,7 @@ module.exports = {
                     }]
                 });
 
-                return await ctx.reply();
+                return await ctx.reply(data.response);
             } else {
                 const apiUrl = tools.api.createUrl("fasturl", "/aillm/gpt-4o", {
                     ask: input,
