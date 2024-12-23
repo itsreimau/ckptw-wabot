@@ -30,8 +30,7 @@ const bot = new Client({
     readIncommingMsg: config.system.autoRead,
     printQRInTerminal: !config.system.usePairingCode,
     selfReply: config.system.selfReply,
-    usePairingCode: config.system.usePairingCode,
-    markOnlineOnConnect: config.system.alwaysOnline
+    usePairingCode: config.system.usePairingCode
 });
 
 // Penanganan acara saat bot siap
@@ -250,7 +249,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
                 if (data.results.status === "NSFW") {
                     await ctx.reply(`⛔ Jangan kirim NSFW!`);
-                    await ctx.deleteMessage(ctx.msg.key);
+                    await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupAutokick) await ctx.group().kick([senderJid]);
                 }
             }
@@ -264,7 +263,7 @@ bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
 
             if (checkMedia && !await tools.general.isAdmin(ctx, senderJid)) {
                 await ctx.reply(`⛔ Jangan kirim stiker!`);
-                await ctx.deleteMessage(ctx.msg.key);
+                await ctx.deleteMessage(m.key);
                 if (!config.system.restrict && groupAutokick) await ctx.group().kick([senderJid]);
             }
         }
