@@ -1,4 +1,4 @@
-// Modul dan dependensi yang diperlukan
+s // Modul dan dependensi yang diperlukan
 require("./config.js");
 const handler = require("./handler.js");
 const pkg = require("./package.json");

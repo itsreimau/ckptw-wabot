@@ -16,6 +16,7 @@ module.exports = {
             `${quote("JastinXyz (https://github.com/JastinXyz)")}\n` +
             `${quote("Idul (https://github.com/aidulcandra)")}\n` +
             `${quote("UdeanDev (https://github.com/udeannn)")}\n` +
+            `${quote("Caliph Dev (https://github.com/caliph91)")}\n` +
             `${quote("ZTRdiamond (https://github.com/ZTRdiamond)")}\n` +
             `${quote("FastURL (alias Hikaru) (https://github.com/fasturl)")}\n` +
             `${quote("Serv00 (https://serv00.com/)")}\n` +

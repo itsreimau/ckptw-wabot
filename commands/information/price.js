@@ -11,8 +11,7 @@ module.exports = {
         if (await handler(ctx, module.exports.handler)) return;
 
         try {
-            const senderJid = ctx.sender.jid;
-            const senderId = senderJid.split(/[:@]/)[0];
+            const senderId = ctx.sender.jid.split(/[:@]/)[0];
 
             const customText = await db.get(`bot.text.price`);
             const text = customText ?
