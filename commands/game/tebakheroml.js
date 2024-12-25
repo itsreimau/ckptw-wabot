@@ -43,7 +43,8 @@ module.exports = {
                 `${quote("Ketik 'hint' untuk bantuan.")}\n` +
                 `${quote("Ketik 'surrender' untuk menyerah.")}\n` +
                 "\n" +
-                config.msg.footer)
+                config.msg.footer
+            )
 
             const collector = ctx.MessageCollector({
                 time: game.timeout

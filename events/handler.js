@@ -12,7 +12,7 @@ const {
 const fs = require("fs");
 const util = require("util");
 
-// Fungsi utilitas
+// Utilitas
 async function handleUserEvent(bot, m) {
     const {
         id,

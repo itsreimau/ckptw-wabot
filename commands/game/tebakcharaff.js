@@ -8,7 +8,7 @@ const mime = require("mime-types");
 const session = new Map();
 
 module.exports = {
-    name: "tebaklagu",
+    name: "tebakcharaff",
     category: "game",
     handler: {},
     code: async (ctx) => {
@@ -17,7 +17,7 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/games/tebaklagu");
+            const apiUrl = tools.api.createUrl("siputzx", "/api/games/karakter-freefire");
             const {
                 data
             } = (await axios.get(apiUrl)).data;
@@ -26,26 +26,23 @@ module.exports = {
                 coin: 5,
                 timeout: 60000,
                 senderId: ctx.sender.jid.split(/[:@]/)[0],
-                answer: data.judul.toUpperCase()
+                answer: data.name.toUpperCase()
             };
 
             session.set(ctx.id, true);
 
             await ctx.reply({
-                audio: {
-                    url: data.lagu
+                image: {
+                    url: data.gambar
                 },
-                mimetype: mime.lookup("mp3")
+                mimetype: mime.lookup("png"),
+                caption: `${quote(`Bonus: ${game.coin} Koin`)}\n` +
+                    `${quote(`Batas waktu: ${game.timeout / 1000} detik`)}\n` +
+                    `${quote("Ketik 'hint' untuk bantuan.")}\n` +
+                    `${quote("Ketik 'surrender' untuk menyerah.")}\n` +
+                    "\n" +
+                    config.msg.footer
             });
-            await ctx.reply(
-                `${quote(`Artis: ${data.artis}`)}\n` +
-                `${quote(`Bonus: ${game.coin} Koin`)}\n` +
-                `${quote(`Batas waktu: ${game.timeout / 1000} detik`)}\n` +
-                `${quote("Ketik 'hint' untuk bantuan.")}\n` +
-                `${quote("Ketik 'surrender' untuk menyerah.")}\n` +
-                "\n" +
-                config.msg.footer
-            )
 
             const collector = ctx.MessageCollector({
                 time: game.timeout
@@ -87,13 +84,11 @@ module.exports = {
             });
 
             collector.on("end", async () => {
-                const artist = data.artis;
-
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
                     return await ctx.reply(
                         `${quote("⏱ Waktu habis!")}\n` +
-                        quote(`Jawabannya adalah ${game.answer} oleh ${artist}.`)
+                        quote(`Jawabannya adalah ${game.answer}.`)
                     );
                 }
             });
