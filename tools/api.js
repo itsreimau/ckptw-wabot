@@ -20,6 +20,9 @@ const APIs = {
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },
+    rintohsaka: {
+        baseURL: "https://api-rin-tohsaka.vercel.app"
+    },
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com"
     },

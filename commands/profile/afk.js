@@ -17,7 +17,7 @@ module.exports = {
                 timeStamp: Date.now()
             });
 
-            return await ctx.reply(quote(`📴 Anda akan AFK, ${input ? `dengan alasan ${input}` : "tanpa alasan apapun"}.`));
+            return await ctx.reply(quote(`📴 Anda akan AFK, ${input ? `dengan alasan "${input}"` : "tanpa alasan apapun"}.`));
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));

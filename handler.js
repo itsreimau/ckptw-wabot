@@ -60,7 +60,7 @@ async function handler(ctx, options) {
             msg: config.msg.botAdmin
         },
         coin: {
-            check: async () => await checkCoin(ctx, options.coin, senderId),
+            check: async () => await checkCoin(ctx, options.coin, senderId) && config.system.useCoin,
             msg: config.msg.coin
         },
         group: {

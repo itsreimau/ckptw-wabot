@@ -6,7 +6,9 @@ const axios = require("axios");
 module.exports = {
     name: "bagoodex",
     category: "ai-chat",
-    handler: {},
+    handler: {
+        coin: [10, "text", 1]
+    },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 

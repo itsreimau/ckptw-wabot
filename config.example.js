@@ -13,7 +13,7 @@ global.config = {
         name: "CKPTW", // Nama bot
         prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i, // Karakter awalan perintah yang diizinkan
         phoneNumber: "", // Nomor telepon bot (opsional jika menggunakan QR code)
-        thumbnail: "https://e1.pxfuel.com/desktop-wallpaper/943/672/desktop-wallpaper-whatsapp-bot-what-is-it-and-how-to-use-messenger-chatbots-chatbot.png", // Gambar thumbnail bot
+        thumbnail: "", // Gambar thumbnail bot
         website: "https://chat.whatsapp.com/FxEYZl2UyzAEI2yhaH34Ye", // Website untuk WhatsApp bot
         groupJid: "" // JID untuk group bot (opsional jika tidak menggunakan requireBotGroupMembership)
     },
@@ -51,8 +51,8 @@ global.config = {
 
     // Konfigurasi stiker bot
     sticker: {
-        packname: "Stiker ini dibuat oleh", // Nama paket stiker
-        author: "@ckptw-wabot" // Pembuat stiker
+        packname: "", // Nama paket stiker
+        author: "github.com/itsreimau/ckptw-wabot" // Pembuat stiker
     },
 
     system: {
@@ -67,6 +67,7 @@ global.config = {
         selfOwner: false, // Bot jadi owner sendiri
         selfReply: true, // Bot balas pesan bot sendiri
         timeZone: "Asia/Jakarta", // Zona waktu bot
+        useCoin: true, // Pakai koin
         usePairingCode: false, // Pakai kode pairing untuk koneksi
         useServer: false // Jalankan bot tanpa server
     }
