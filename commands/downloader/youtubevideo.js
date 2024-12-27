@@ -36,7 +36,7 @@ module.exports = {
                 `${quote(`Uploader: ${infoData.uploader}`)}\n` +
                 `${quote(`Durasi: ${infoData.duration}`)}\n` +
                 `${quote(`Pilih resolusi:`)}\n` +
-                `${infoData.resolutions.map((resolution, index) => `${index + 1}. ${resolution.resolution} kbps (${resolution.size})`).join("\n")}\n` +
+                `${infoData.resolutions.map((data, index) => quote(`${index + 1}. ${data.height} kbps (${data.size})`)).join("\n")}\n` +
                 "\n" +
                 global.config.msg.footer
             );
@@ -50,7 +50,7 @@ module.exports = {
                 const selectedResolutionIndex = selectedNumber - 1;
 
                 if (!isNaN(selectedNumber) && selectedResolutionIndex >= 0 && selectedResolutionIndex < infoData.resolutions.length) {
-                    const selectedResolution = infoData.resolutions[selectedResolutionIndex].resolution;
+                    const selectedResolution = infoData.resolutions[selectedResolutionIndex].height;
                     const downloadApiUrl = tools.api.createUrl(baseApiUrl, "/download", {
                         url,
                         resolution: selectedResolution

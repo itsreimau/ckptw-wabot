@@ -21,7 +21,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("ssateam", "/api/sendthesong", {
+            const apiUrl = tools.api.createUrl("ssateam", "/api/sendthesong", {
                 query: input
             }, "apiKey");
             const data = (await axios.get(apiUrl)).data.data.result;

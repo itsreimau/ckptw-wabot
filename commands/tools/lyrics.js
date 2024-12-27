@@ -21,7 +21,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("btch", "/lirik", {
+            const apiUrl = tools.api.createUrl("btch", "/lirik", {
                 text: input
             });
             const {

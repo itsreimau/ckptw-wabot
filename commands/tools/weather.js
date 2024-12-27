@@ -21,7 +21,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("agatz", "/api/cuaca", {
+            const apiUrl = tools.api.createUrl("agatz", "/api/cuaca", {
                 message: input
             });
             const {

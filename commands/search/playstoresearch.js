@@ -21,7 +21,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("agatz", "/api/playstore", {
+            const apiUrl = tools.api.createUrl("agatz", "/api/playstore", {
                 message: input
             });
             const {

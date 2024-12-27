@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "steamsearch",
-    aliases: ["steam", "steams"],
+    name: "apkmirrorsearch",
+    aliases: ["apkmirror", "apkmirrors"],
     category: "search",
     handler: {
         coin: [10, "text", 1]
@@ -21,18 +21,18 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/steams", {
-                message: input
-            });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const apiUrl = tools.api.createUrl("gifted", "/api/search/apkmirror", {
+                query: input
+            }, "apikey");
+            const data = (await axios.get(apiUrl)).data.results;
 
-            const resultText = (await Promise.all(data.map(async (d) =>
-                `${quote(`Nama: ${d.judul}`)}\n` +
-                `${quote(`Rilis: ${d.rilis.trim()}`)}\n` +
-                `${quote(`Rating: ${await tools.general.translate(d.rating, "id")}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`))).join(
+            const resultText = data.map((d) =>
+                `${quote(`Nama: ${d.title}`)}\n` +
+                `${quote(`Pengembang: ${d.developer.toString() || "-"}`)}\n` +
+                `${quote(`Versi: ${d.version}`)}\n` +
+                `${quote(`Ukuran: ${d.size}`)}\n` +
+                `${quote(`URL: ${d.url}`)}`
+            ).join(
                 "\n" +
                 `${quote("─────")}\n`
             );

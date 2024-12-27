@@ -21,7 +21,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("toxicdevil", "/search/wikipedia", {
+            const apiUrl = tools.api.createUrl("toxicdevil", "/search/wikipedia", {
                 lang: "id",
                 query: input
             });

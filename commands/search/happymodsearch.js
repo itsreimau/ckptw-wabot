@@ -21,7 +21,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("agatz", "/api/happymod", {
+            const apiUrl = tools.api.createUrl("agatz", "/api/happymod", {
                 message: input
             });
             const data = (await axios.get(apiUrl)).data.data.hsl;

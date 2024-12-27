@@ -1,40 +1,41 @@
 const {
+    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "gempa",
-    aliases: ["gempabumi", "infogempa"],
+    name: "wikimedia",
     category: "tools",
     handler: {
-        coin: 10
+        coin: [10, "text", 1]
     },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
-        const apiUrl = tools.api.createUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json");
+        const input = ctx.args.join(" ") || null;
+
+        if (!input) return await ctx.reply(
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon"))
+        );
 
         try {
+            const apiUrl = tools.api.createUrl("gifted", "/api/search/wikimedia", {
+                title: input
+            }, "apikey");
             const {
                 data
             } = await axios.get(apiUrl);
-            const gempa = data.Infogempa.gempa;
+            const result = tools.general.getRandomElement(data.results);
 
             return await ctx.reply({
                 image: {
-                    url: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`
+                    url: result.image
                 },
                 mimetype: mime.lookup("png"),
-                caption: `${quote(gempa.Wilayah)}\n` +
-                    `${quote("─────")}\n` +
-                    `${quote(`Tanggal: ${gempa.Tanggal}`)}\n` +
-                    `${quote(`Potensi: ${gempa.Potensi}`)}\n` +
-                    `${quote(`Magnitude: ${gempa.Magnitude}`)}\n` +
-                    `${quote(`Kedalaman: ${gempa.Kedalaman}`)}\n` +
-                    `${quote(`Koordinat: ${gempa.Coordinates}`)}\n` +
-                    `${quote(`Dirasakan: ${gempa.Dirasakan}`)}\n` +
+                caption: `${quote(`Kueri: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

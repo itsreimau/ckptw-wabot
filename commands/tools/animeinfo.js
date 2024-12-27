@@ -21,7 +21,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("https://api.jikan.moe", "/v4/anime", {
+            const apiUrl = tools.api.createUrl("https://api.jikan.moe", "/v4/anime", {
                 q: input
             });
             const {

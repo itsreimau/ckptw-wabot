@@ -27,7 +27,7 @@ module.exports = {
         }
 
         try {
-            const apiUrl = await tools.api.createUrl("btch", "/jadwaltv", {
+            const apiUrl = tools.api.createUrl("btch", "/jadwaltv", {
                 tv: input
             });
             const {

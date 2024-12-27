@@ -36,7 +36,7 @@ module.exports = {
                 `${quote(`Uploader: ${infoData.uploader}`)}\n` +
                 `${quote(`Durasi: ${infoData.duration}`)}\n` +
                 `${quote(`Pilih bitrate:`)}\n` +
-                `${infoData.audioBitrates.map((bitrate, index) => `${index + 1}. ${bitrate.bitrate} kbps (${bitrate.size})`).join("\n")}\n` +
+                `${infoData.audioBitrates.map((data, index) => quote(`${index + 1}. ${data.bitrate} kbps (${data.size})`)).join("\n")}\n` +
                 "\n" +
                 global.config.msg.footer
             );
@@ -51,7 +51,7 @@ module.exports = {
 
                 if (!isNaN(selectedNumber) && selectedBitrateIndex >= 0 && selectedBitrateIndex < infoData.audioBitrates.length) {
                     const selectedBitrate = infoData.audioBitrates[selectedBitrateIndex].bitrate;
-                    const downloadApiUrl = tools.api.createUrl(baseApiUrl, "/download", {
+                    const downloadApiUrl = tools.api.createUrl(baseApiUrl, "/audio", {
                         url,
                         bitrate: selectedBitrate
                     }, null, ["url"]);

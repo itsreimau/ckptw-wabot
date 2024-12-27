@@ -21,7 +21,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("btch", "/otakudesusearch", {
+            const apiUrl = tools.api.createUrl("btch", "/otakudesusearch", {
                 query: input
             });
             const {

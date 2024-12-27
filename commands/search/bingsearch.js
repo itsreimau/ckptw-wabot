@@ -21,7 +21,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("nexoracle", "/search/bing-search", {
+            const apiUrl = tools.api.createUrl("nexoracle", "/search/bing-search", {
                 q: input
             }, "apikey");
             const data = (await axios.get(apiUrl)).data.result;

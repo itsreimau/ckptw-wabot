@@ -21,7 +21,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = await tools.api.createUrl("btch", "/googlesearch", {
+            const apiUrl = tools.api.createUrl("btch", "/googlesearch", {
                 query: input
             });
             const data = (await axios.get(apiUrl)).data.result;
