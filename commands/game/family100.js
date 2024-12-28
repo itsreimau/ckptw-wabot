@@ -58,7 +58,7 @@ module.exports = {
                     game.answers.delete(userAnswer);
                     game.participants.add(participantId);
 
-                    await db.add(`user.${participantId}.game.coin`, game.coin.answered);
+                    await db.add(`user.${participantId}.coin`, game.coin.answered);
                     await ctx.sendMessage(ctx.id, {
                         text: quote(`✅ ${tools.general.ucword(userAnswer)} benar! Jawaban tersisa: ${game.answers.size}`)
                     }, {
@@ -68,7 +68,7 @@ module.exports = {
                     if (game.answers.size === 0) {
                         session.delete(ctx.id);
                         for (const participant of game.participants) {
-                            await db.add(`user.${participant}.game.coin`, game.coin.allAnswered);
+                            await db.add(`user.${participant}.coin`, game.coin.allAnswered);
                             await db.add(`user.${participant}.winGame`, 1);
                         }
                         await ctx.reply(quote(`🎉 Selamat! Semua jawaban telah terjawab! Setiap anggota yang menjawab mendapat ${game.coin.allAnswered} koin.`));

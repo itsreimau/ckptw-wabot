@@ -44,7 +44,7 @@ module.exports = {
                 }
             });
 
-            const sticker = new Sticker(Buffer.from(data, "binary"), {
+            const sticker = new Sticker(data, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,

@@ -118,8 +118,9 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("rintohsaka", "/download/ytmp3", {
-                    url: data.url
+                const downloadApiUrl = tools.api.createUrl("https://ytdownloader.nvlgroup.my.id", "/download", {
+                    url,
+                    bitrate: "160"
                 }, null, ["url"]);
 
                 return await ctx.reply({

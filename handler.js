@@ -105,7 +105,7 @@ async function checkCoin(ctx, coinOptions, senderId) {
 
     if (isOwner || userDb?.premium) return false;
 
-    const userCoin = await db.get(`user.${senderId}.coin`) || 0;
+    const userCoin = userDb?.coin || 0;
     const [requiredCoin = 0, requiredMedia = null, mediaSourceOption = null] = Array.isArray(coinOptions) ? coinOptions : [coinOptions];
 
     if (requiredMedia) {

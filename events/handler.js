@@ -139,11 +139,6 @@ module.exports = (bot) => {
             if (isCmd) {
                 if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah
 
-                await Promise.all([
-                    db.set(`user.${senderId}.lastUse`, Date.now()),
-                    db.set(`group.${groupId}.lastUse`, Date.now())
-                ]);
-
                 // Did you mean?
                 const mean = isCmd.didyoumean;
                 const prefix = isCmd.prefix;
@@ -229,8 +224,8 @@ module.exports = (bot) => {
                 for (const mentionJid of mentionJids) {
                     const userAFK = await db.get(`user.${mentionJid}.afk`)
 
-                    if (userAFK) {
-                        const timeAgo = tools.general.convertMsToDuration(Date.now() - userAFK.timeStamp);
+                    if (userAFK && userAFK.reason && userAFK.timestamp) {
+                        const timeAgo = tools.general.convertMsToDuration(Date.now() - userAFK.timestamp);
                         await ctx.reply(quote(`📴 Dia sedang AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeAgo}.`));
                     }
                 }
@@ -238,9 +233,9 @@ module.exports = (bot) => {
 
             const userAFK = await db.get(`user.${senderId}.afk`)
 
-            if (userAFK) {
+            if (userAFK && userAFK.reason && userAFK.timestamp) {
                 const currentTime = Date.now();
-                const timeElapsed = currentTime - userAFK.timeStamp;
+                const timeElapsed = currentTime - userAFK.timestamp;
 
                 if (timeElapsed > 3000) {
                     const timeAgo = tools.general.convertMsToDuration(timeElapsed);
@@ -253,6 +248,7 @@ module.exports = (bot) => {
         // Grup
         if (isGroup) {
             if (m.key.fromMe) return;
+
             const groupAutokick = await db.get(`group.${groupId}.option.autokick`);
 
             // Penanganan antilink
@@ -324,8 +320,9 @@ module.exports = (bot) => {
         if (isPrivate) {
             if (m.key.fromMe) return;
 
-            // Penanganan menfess
             const isCmd = tools.general.isCmd(m, ctx);
+
+            // Penanganan menfess
             const allMenfessDb = await db.get("menfess");
             if ((!isCmd || isCmd.didyoumean) && allMenfessDb && typeof allMenfessDb === "object" && Object.keys(allMenfessDb).length > 0) {
                 const menfessEntries = Object.entries(allMenfessDb);
@@ -355,7 +352,7 @@ module.exports = (bot) => {
                         await ctx._client.sendMessage(targetId, {
                             forward: m
                         });
-                        await db.set(`menfess.${conversationId}.lastMsg`, Date.now());
+
                         break;
                     }
                 }

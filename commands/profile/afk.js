@@ -14,7 +14,7 @@ module.exports = {
         try {
             db.set(`user.${ctx.sender.jid.split(/[:@]/)[0]}.afk`, {
                 reason: input,
-                timeStamp: Date.now()
+                timestamp: Date.now()
             });
 
             return await ctx.reply(quote(`📴 Anda akan AFK, ${input ? `dengan alasan "${input}"` : "tanpa alasan apapun"}.`));

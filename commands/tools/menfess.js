@@ -26,14 +26,11 @@ module.exports = {
         );
 
         const allConversations = db.get("menfess") || {};
-        const isInvolvedInConversation = Object.keys(allConversations).some(id => {
-            const {
-                from,
-                to
-            } = allConversations[id];
-            return from === senderId || to === senderId;
-        });
-        if (isInvolvedInConversation) return await ctx.reply(quote(`❎ Anda sedang melakukan percakapan aktif. Selesaikan percakapan itu terlebih dahulu sebelum memulai percakapan baru.`));
+        const isSenderInMenfess = Object.values(allConversations).some(conv => conv.from === senderId || conv.to === senderId);
+        const isReceiverInMenfess = Object.values(allConversations).some(conv => conv.from === formattedId || conv.to === formattedId);
+
+        if (isSenderInMenfess) return await ctx.reply(quote(`❎ Anda tidak dapat mengirim menfess karena Anda sudah terlibat dalam percakapan lain.`));
+        if (isReceiverInMenfess) return await ctx.reply(quote(`❎ Anda tidak dapat mengirim menfess kepada pengguna ini karena dia sedang terlibat dalam percakapan lain.`));
 
         try {
             if (formattedId === senderId) return await ctx.reply(quote(`❎ Tidak dapat digunakan pada diri Anda sendiri.`));
@@ -63,8 +60,7 @@ module.exports = {
 
             db.set(`menfess.${Date.now()}`, {
                 from: senderId,
-                to: formattedId,
-                lastMsg: Date.now()
+                to: formattedId
             });
 
             return await ctx.reply(quote(`✅ Pesan berhasil terkirim! Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik 'delete' atau 'stop'.`));

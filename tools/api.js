@@ -10,6 +10,10 @@ const APIs = {
         baseURL: "https://fastrestapis.fasturl.link",
         APIKey: "" // APIKey tidak disediakan, Anda dapat menggunakan APIKey Anda sendiri
     },
+    gifted: {
+        baseURL: "https://api.gifted.my.id",
+        APIKey: "gifted" // APIKey disediakan oleh Gifted Tech
+    },
     itzpire: {
         baseURL: "https://itzpire.com"
     },

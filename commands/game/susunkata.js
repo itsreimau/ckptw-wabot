@@ -51,7 +51,7 @@ module.exports = {
                 if (userAnswer === game.answer) {
                     session.delete(ctx.id);
                     await Promise.all([
-                        await db.add(`user.${game.senderId}.game.coin`, game.coin),
+                        await db.add(`user.${game.senderId}.coin`, game.coin),
                         await db.add(`user.${game.senderId}.winGame`, 1)
                     ]);
                     await ctx.sendMessage(

@@ -17,27 +17,13 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "user -d 30"))}\n` +
-            `${quote(tools.msg.generatesFlagInformation({
-                "-d": "Tentukan hari untuk menghapus data 'last...' pada hari itu."
-            }))}\n` +
-            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "user"))
         );
 
         if (input === "list") {
             const listText = await tools.list.get("fixdb");
             return await ctx.reply(listText);
         }
-
-        const flag = tools.general.parseFlag(ctx.args.slice(1).join(" "), {
-            "-d": {
-                type: "number",
-                key: "days"
-            }
-        });
-
-        const days = flag.days || 30;
-        const cutoffTime = Date.now() - (days * 24 * 60 * 60 * 1000);
 
         try {
             const waitMsg = await ctx.reply(config.msg.wait);
@@ -50,21 +36,44 @@ module.exports = {
             switch (input) {
                 case "user": {
                     await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data pengguna...`));
-                    const importantKeys = ["afk", "autolevelup", "coin", "banned", "premium", "lastClaim", "lastUse", "level", "uid", "winGame", "xp"];
-
                     Object.keys(user).forEach(async (userId) => {
+                        const userData = user[userId] || {};
                         const {
-                            lastUse,
-                            ...userData
-                        } = user[userId] || {};
-                        if (!/^[0-9]{10,15}$/.test(userId) || (lastUse && new Date(lastUse).getTime() < cutoffTime)) {
+                            afk,
+                            banned,
+                            coin = 1000,
+                            lastClaim,
+                            level = 0,
+                            premium,
+                            uid,
+                            winGame,
+                            xp = 0
+                        } = userData;
+
+                        const filteredData = {
+                            ...(afk && {
+                                afk
+                            }),
+                            banned,
+                            coin,
+                            lastClaim,
+                            level,
+                            ...(premium && {
+                                premium
+                            }),
+                            ...(uid && {
+                                uid
+                            }),
+                            ...(winGame && {
+                                winGame
+                            }),
+                            xp
+                        };
+
+                        if (!/^[0-9]{10,15}$/.test(userId)) {
                             await db.delete(`user.${userId}`);
                         } else {
-                            const filteredData = Object.fromEntries(Object.entries(userData).filter(([key]) => importantKeys.includes(key)));
-                            await db.set(`user.${userId}`, {
-                                ...filteredData,
-                                lastUse
-                            });
+                            await db.set(`user.${userId}`, filteredData);
                         }
                     });
                     break;
@@ -72,27 +81,25 @@ module.exports = {
 
                 case "group": {
                     await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data grup...`));
-                    const importantKeysGroup = ["lastUse", "option", "text"];
-
-                    const groupData = await ctx._client.groupFetchAllParticipating();
-                    const groupIds = Object.values(groupData).map(g => g.id.split("@")[0]);
-
                     Object.keys(group).forEach(async (groupId) => {
                         const groupData = group[groupId] || {};
                         const {
-                            lastUse,
-                            option,
-                            text
+                            text,
+                            option
                         } = groupData;
 
-                        if (!/^[0-9]{10,15}$/.test(groupId) || !groupIds.includes(groupId)) {
+                        const filteredGroupData = {
+                            ...(text && {
+                                text
+                            }),
+                            ...(option && {
+                                option
+                            })
+                        };
+
+                        if (!/^[0-9]{10,15}$/.test(groupId)) {
                             await db.delete(`group.${groupId}`);
                         } else {
-                            const filteredGroupData = {
-                                lastUse,
-                                option,
-                                text
-                            };
                             await db.set(`group.${groupId}`, filteredGroupData);
                         }
                     });
@@ -101,23 +108,24 @@ module.exports = {
 
                 case "menfess": {
                     await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data menfess...`));
-                    const importantKeysMenfess = ["from", "lastMsg", "to"];
-
                     Object.keys(menfess).forEach(async (conversationId) => {
                         const {
                             from,
-                            lastMsg,
                             to
                         } = menfess[conversationId] || {};
+
+                        const filteredMenfessData = {
+                            ...(from && {
+                                from
+                            }),
+                            ...(to && {
+                                to
+                            })
+                        };
 
                         if (!/^[0-9]{10,15}$/.test(conversationId)) {
                             await db.delete(`menfess.${conversationId}`);
                         } else {
-                            const filteredMenfessData = Object.fromEntries(Object.entries({
-                                from,
-                                lastMsg,
-                                to
-                            }).filter(([key]) => importantKeysMenfess.includes(key)));
                             await db.set(`menfess.${conversationId}`, filteredMenfessData);
                         }
                     });

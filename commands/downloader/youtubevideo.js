@@ -25,16 +25,49 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("rintohsaka", "/download/ytmp4", {
+            const baseApiUrl = "https://ytdownloader.nvlgroup.my.id";
+            const infoApiUrl = tools.api.createUrl(baseApiUrl, "/info", {
                 url
             }, null, ["url"]);
+            const infoData = (await axios.get(infoApiUrl)).data;
 
-            return await ctx.reply({
-                video: {
-                    url: apiUrl
-                },
-                mimetype: mime.lookup("mp4")
+            await ctx.reply(
+                `${quote(`Judul: ${infoData.title}`)}\n` +
+                `${quote(`Uploader: ${infoData.uploader}`)}\n` +
+                `${quote(`Durasi: ${infoData.duration}`)}\n` +
+                `${quote(`Pilih resolusi:`)}\n` +
+                `${infoData.resolutions.map((resolution, index) => `${index + 1}. ${resolution.resolution} kbps (${resolution.size})`).join("\n")}\n` +
+                "\n" +
+                global.config.msg.footer
+            );
+
+            const collector = ctx.MessageCollector({
+                time: 60000
             });
+
+            collector.on("collect", async (m) => {
+                const selectedNumber = parseInt(m.content.trim());
+                const selectedResolutionIndex = selectedNumber - 1;
+
+                if (!isNaN(selectedNumber) && selectedResolutionIndex >= 0 && selectedResolutionIndex < infoData.resolutions.length) {
+                    const selectedResolution = infoData.resolutions[selectedResolutionIndex].resolution;
+                    const downloadApiUrl = tools.api.createUrl(baseApiUrl, "/download", {
+                        url,
+                        resolution: selectedResolution
+                    }, null, ["url"]);
+
+                    if (config.system.autoTypingOnCmd) ctx.simulateTyping();
+                    await ctx.reply({
+                        video: {
+                            url: downloadApiUrl
+                        },
+                        mimetype: mime.contentType("mp4")
+                    });
+                    return collector.stop();
+                }
+            });
+
+            collector.on("end", async () => {});
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);
