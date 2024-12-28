@@ -119,7 +119,7 @@ module.exports = {
                 );
 
                 const downloadApiUrl = tools.api.createUrl("https://ytdownloader.nvlgroup.my.id", "/download", {
-                    url,
+                    url: data.url,
                     bitrate: "160"
                 }, null, ["url"]);
 
