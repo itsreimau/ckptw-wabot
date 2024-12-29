@@ -3,7 +3,8 @@ async function get(type, ctx) {
         let text = "";
 
         const createList = (data, formatter) =>
-            `${data.map(formatter).join(`\n${quote("─────")}\n`)}\n` + config.msg.footer;
+            `${data.map(formatter).join(`\n${quote("─────")}\n`)}\n` +
+            config.msg.footer;
 
         switch (type) {
             case "alkitab": {
@@ -48,7 +49,7 @@ async function get(type, ctx) {
                 break;
             }
             case "osettext": {
-                const data = ["price (Variabel yang tersedia: %tag%, %name%, %version%, %watermark%, %footer%, %readmore%)"];
+                const data = ["price (Variabel yang tersedia: %tag%, %name%, %version%, %prefix%, %command%, %watermark%, %footer%, %readmore%)"];
                 text = createList(data, d => `${quote(d)}`);
                 break;
             }

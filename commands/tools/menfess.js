@@ -25,9 +25,9 @@ module.exports = {
             quote(tools.msg.generateNotes(["Jangan gunakan spasi pada angka. Contoh: +62 8123-4567-8910, seharusnya +628123-4567-8910"]))
         );
 
-        const allConversations = await db.get("menfess") || {};
-        const isSenderInMenfess = Object.values(allConversations).some(conv => conv.from === senderId || conv.to === senderId);
-        const isReceiverInMenfess = Object.values(allConversations).some(conv => conv.from === formattedId || conv.to === formattedId);
+        const allMenfessDb = await db.get("menfess") || {};
+        const isSenderInMenfess = Object.values(allMenfessDb).some(m => m.from === senderId || m.to === senderId);
+        const isReceiverInMenfess = Object.values(allMenfessDb).some(m => m.from === formattedId || m.to === formattedId);
 
         if (isSenderInMenfess) return await ctx.reply(quote(`❎ Anda tidak dapat mengirim menfess karena Anda sudah terlibat dalam percakapan lain.`));
         if (isReceiverInMenfess) return await ctx.reply(quote(`❎ Anda tidak dapat mengirim menfess kepada pengguna ini karena dia sedang terlibat dalam percakapan lain.`));

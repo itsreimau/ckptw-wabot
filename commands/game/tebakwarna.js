@@ -48,12 +48,12 @@ module.exports = {
             });
 
             collector.on("collect", async (m) => {
-                const userAnswer = m.content.toUpperCase();
+                const userAnswer = m.content;
 
                 if (userAnswer === game.answer) {
                     session.delete(ctx.id);
                     await Promise.all([
-                        await db.add(`user.${game.senderId}.coin`, coin),
+                        await db.add(`user.${game.senderId}.coin`, game.coin),
                         await db.add(`user.${game.senderId}.winGame`, 1)
                     ]);
                     await ctx.sendMessage(
