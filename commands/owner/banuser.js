@@ -3,8 +3,8 @@ const {
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: "ban",
-    aliases: ["banuser"],
+    name: "banuser",
+    aliases: ["ban", "bu"],
     category: "owner",
     handler: {
         owner: true

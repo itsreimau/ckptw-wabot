@@ -12,7 +12,7 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         try {
-            db.set(`user.${ctx.sender.jid.split(/[:@]/)[0]}.afk`, {
+            await db.set(`user.${ctx.sender.jid.split(/[:@]/)[0]}.afk`, {
                 reason: input,
                 timestamp: Date.now()
             });

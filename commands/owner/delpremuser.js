@@ -3,8 +3,8 @@ const {
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: "delprem",
-    aliases: ["delpremuser"],
+    name: "delpremuser",
+    aliases: ["delprem", "dpu"],
     category: "owner",
     handler: {
         owner: true

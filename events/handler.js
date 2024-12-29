@@ -78,6 +78,15 @@ module.exports = (bot) => {
     bot.ev.once(Events.ClientReady, async (m) => {
         console.log(`[${config.pkg.name}] Ready at ${m.user.id}`);
 
+        const botRestart = await db.get("bot.restart") || {};
+        if (botRestart && botRestart.jid && botRestart.timestamp) {
+            const timeago = tools.general.convertMsToDuration(Date.now() - botRestart.timestamp);
+            await bot.core.sendMessage(botRestart.jid, {
+                text: quote(`✅ Berhasil dimulai ulang! Membutuhkan waktu ${timeago}.`)
+            });
+            db.delete("bot.restart");
+        }
+
         // Tetapkan config pada bot
         const id = m.user.id.split(":")[0];
         await Promise.all([
@@ -221,8 +230,8 @@ module.exports = (bot) => {
                     const userAFK = await db.get(`user.${mentionJid}.afk`) || {};
 
                     if (userAFK && userAFK.reason && userAFK.timestamp) {
-                        const timeAgo = tools.general.convertMsToDuration(Date.now() - userAFK.timestamp);
-                        await ctx.reply(quote(`📴 Dia sedang AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeAgo}.`));
+                        const timeago = tools.general.convertMsToDuration(Date.now() - userAFK.timestamp);
+                        await ctx.reply(quote(`📴 Dia sedang AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                     }
                 }
             }
@@ -234,8 +243,8 @@ module.exports = (bot) => {
                 const timeElapsed = currentTime - userAFK.timestamp;
 
                 if (timeElapsed > 3000) {
-                    const timeAgo = tools.general.convertMsToDuration(timeElapsed);
-                    await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeAgo}.`));
+                    const timeago = tools.general.convertMsToDuration(timeElapsed);
+                    await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                     await db.delete(`user.${senderId}.afk`);
                 }
             }

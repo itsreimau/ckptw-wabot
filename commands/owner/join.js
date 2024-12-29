@@ -4,6 +4,7 @@ const {
 
 module.exports = {
     name: "join",
+    aliases: ["j"],
     category: "owner",
     handler: {
         owner: true

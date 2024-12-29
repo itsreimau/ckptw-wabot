@@ -58,7 +58,7 @@ module.exports = {
                 quoted: fakeText
             });
 
-            db.set(`menfess.${Date.now()}`, {
+            await db.set(`menfess.${Date.now()}`, {
                 from: senderId,
                 to: formattedId
             });

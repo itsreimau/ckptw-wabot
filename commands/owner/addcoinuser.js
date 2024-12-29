@@ -3,7 +3,8 @@ const {
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: "addcoin",
+    name: "addcoinuser",
+    aliases: ["addcoin", "acu"],
     category: "owner",
     handler: {
         owner: true

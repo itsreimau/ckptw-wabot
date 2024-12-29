@@ -3,8 +3,8 @@ const {
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: "addprem",
-    aliases: ["addpremuser"],
+    name: "addpremuser",
+    aliases: ["addprem", "apu"],
     category: "owner",
     handler: {
         owner: true
