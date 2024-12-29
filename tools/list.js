@@ -1,20 +1,9 @@
-const api = require("./api.js");
-const {
-    bold,
-    italic,
-    monospace,
-    quote
-} = require("@mengkodingan/ckptw");
-const axios = require("axios");
-
 async function get(type, ctx) {
     try {
         let text = "";
 
         const createList = (data, formatter) =>
-            `${data.map(formatter).join(`${quote("─────")}\n`)}` +
-            "\n" +
-            config.msg.footer;
+            `${data.map(formatter).join(`\n${quote("─────")}\n`)}\n` + config.msg.footer;
 
         switch (type) {
             case "alkitab": {
@@ -35,42 +24,42 @@ async function get(type, ctx) {
             }
             case "claim": {
                 const data = ["daily", "weekly", "monthly", "yearly"];
-                text = createList(data, quote);
+                text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "fixdb": {
                 const data = ["user", "group", "menfess"];
-                text = createList(data, quote);
+                text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "group": {
                 const data = ["open", "close", "lock", "unlock"];
-                text = createList(data, quote);
+                text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "jadwaltv": {
                 const data = (await axios.get(api.createUrl("btch", "/jadwaltv", {}))).data.message.split("Berikut list tv yang tersedia: ")[1].split(", ");
-                text = createList(data, quote);
+                text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "mode": {
                 const data = ["group", "private", "public", "self"];
-                text = createList(data, quote);
+                text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "osettext": {
                 const data = ["price (Variabel yang tersedia: %tag%, %name%, %version%, %watermark%, %footer%, %readmore%)"];
-                text = createList(data, quote);
+                text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "setoption": {
                 const data = ["antilink", "antinsfw", "antisticker", "antitoxic", "autokick", "welcome"];
-                text = createList(data, quote);
+                text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "setprofile": {
                 const data = ["autolevelup"];
-                text = createList(data, quote);
+                text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "settext": {
@@ -79,7 +68,7 @@ async function get(type, ctx) {
                     "intro",
                     "welcome (Variabel yang tersedia: %tag%, %subject%, %description%)"
                 ];
-                text = createList(data, quote);
+                text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "translate": {
