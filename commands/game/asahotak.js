@@ -32,7 +32,7 @@ module.exports = {
 
             await ctx.reply(
                 `${quote(`Soal: ${data.soal}`)}\n` +
-                `${quote(`Bonus: ${coin} Koin`)}\n` +
+                `${quote(`Bonus: ${game.coin} Koin`)}\n` +
                 `${quote(`Batas waktu: ${game.timeout / 1000} detik`)}\n` +
                 `${quote("Ketik 'hint' untuk bantuan.")}\n` +
                 `${quote("Ketik 'surrender' untuk menyerah.")}\n` +
@@ -56,7 +56,7 @@ module.exports = {
                     await ctx.sendMessage(
                         ctx.id, {
                             text: `${quote("💯 Benar!")}\n` +
-                                quote(`+${coin} Koin`)
+                                quote(`+${game.coin} Koin`)
                         }, {
                             quoted: m
                         }

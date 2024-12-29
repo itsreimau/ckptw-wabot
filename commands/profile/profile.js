@@ -15,7 +15,7 @@ module.exports = {
             const senderJid = ctx.sender.jid;
             const senderId = senderJid.split(/[:@]/)[0];
 
-            const userDb = await db.get(`user.${senderId}`);
+            const userDb = await db.get(`user.${senderId}`) || {};
 
             const isOwner = await tools.general.isOwner(ctx, senderId, true);
 

@@ -9,13 +9,13 @@ async function handler(ctx, options) {
     const senderJid = ctx.sender.jid;
     const senderId = senderJid.split(/[:@]/)[0];
 
-    const botMode = await db.get("bot.mode");
+    const botMode = await db.get("bot.mode") || "public";
     if (isPrivate && botMode === "group") return true;
     if (isGroup && botMode === "private") return true;
     if (!tools.general.isOwner(ctx, senderId, true) && botMode === "self") return true;
 
     const isOwner = await tools.general.isOwner(ctx, senderId, config.system.selfOwner);
-    const userDb = await db.get(`user.${senderId}`);
+    const userDb = await db.get(`user.${senderId}`) || {};
 
     if (config.system.requireBotGroupMembership && !isOwner && !userDb?.premium) {
         const botGroupMembersId = (await ctx.group(config.bot.groupJid).members()).map(member => member.id.split("@")[0]);
@@ -101,7 +101,7 @@ async function handler(ctx, options) {
 // Cek koin
 async function checkCoin(ctx, coinOptions, senderId) {
     const isOwner = await tools.general.isOwner(ctx, senderId, config.system.selfOwner);
-    const userDb = await db.get(`user.${senderId}`);
+    const userDb = await db.get(`user.${senderId}`) || {};
 
     if (isOwner || userDb?.premium) return false;
 

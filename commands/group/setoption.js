@@ -30,7 +30,7 @@ module.exports = {
 
         if (ctx.args[0] === "status") {
             const groupId = ctx.isGroup() ? ctx.id.split("@")[0] : null;
-            const groupOption = await db.get(`group.${groupId}.option`);
+            const groupOption = await db.get(`group.${groupId}.option`) || {};
 
             return await ctx.reply(
                 `${quote(`Antilink: ${groupOption.antilink ? "Aktif" : "Nonaktif"}`)}\n` +

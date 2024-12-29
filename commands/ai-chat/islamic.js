@@ -20,7 +20,7 @@ module.exports = {
 
         try {
             const senderId = ctx.sender.jid.split(/[:@]/)[0];
-            const uid = await db.get(`user.${senderId}.uid`);
+            const uid = await db.get(`user.${senderId}.uid`) || "guest";
             const apiUrl = tools.api.createUrl("fasturl", "/aillm/islamic", {
                 ask: input,
                 sessionId: uid

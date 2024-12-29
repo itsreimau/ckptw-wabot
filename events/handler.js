@@ -21,18 +21,16 @@ async function handleUserEvent(bot, m) {
 
     try {
         const groupId = id.split("@")[0];
-        const groupWelcome = await db.get(`group.${groupId}.option.welcome`);
+        const groupDb = await db.get(`group.${groupId}`) || {};
 
-        if (groupWelcome) {
+        if (groupDb?.option?.welcome) {
             const metadata = await bot.core.groupMetadata(id);
-            const textWelcome = await db.get(`group.${groupId}.text.welcome`);
-            const textGoodbye = await db.get(`group.${groupId}.text.goodbye`);
 
             for (const jid of participants) {
                 const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
                 const eventType = m.eventsType;
-                const customText = eventType === "UserJoin" ? textWelcome : textGoodbye;
+                const customText = eventType === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
                 const userTag = `@${jid.split("@")[0]}`;
 
                 const text = customText ?
@@ -61,9 +59,8 @@ async function handleUserEvent(bot, m) {
                     }
                 });
 
-                const introText = await db.get(`group.${groupId}.text.intro`);
-                if (eventType === "UserJoin" && introText) await bot.core.sendMessage(id, {
-                    text: introText,
+                if (eventType === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(id, {
+                    text: groupDb?.text?.intro,
                     mentions: [jid]
                 });
             }
@@ -80,7 +77,6 @@ module.exports = (bot) => {
     // Penanganan acara saat bot siap
     bot.ev.once(Events.ClientReady, async (m) => {
         console.log(`[${config.pkg.name}] Ready at ${m.user.id}`);
-        if (!await db.get("bot.mode")) await db.set("bot.mode", "public");
 
         // Tetapkan config pada bot
         const id = m.user.id.split(":")[0];
@@ -106,7 +102,7 @@ module.exports = (bot) => {
         const groupId = isGroup ? groupJid.split("@")[0] : null;
 
         // Penanganan pada mode bot
-        const botMode = await db.get("bot.mode");
+        const botMode = await db.get("bot.mode") || "public";
         if (isPrivate && botMode === "group") return;
         if (isGroup && botMode === "private") return;
         if (!tools.general.isOwner(ctx, senderId, true) && botMode === "self") return;
@@ -222,7 +218,7 @@ module.exports = (bot) => {
             const mentionJids = m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
             if (mentionJids && mentionJids.length > 0) {
                 for (const mentionJid of mentionJids) {
-                    const userAFK = await db.get(`user.${mentionJid}.afk`)
+                    const userAFK = await db.get(`user.${mentionJid}.afk`) || {};
 
                     if (userAFK && userAFK.reason && userAFK.timestamp) {
                         const timeAgo = tools.general.convertMsToDuration(Date.now() - userAFK.timestamp);
@@ -231,7 +227,7 @@ module.exports = (bot) => {
                 }
             }
 
-            const userAFK = await db.get(`user.${senderId}.afk`)
+            const userAFK = await db.get(`user.${senderId}.afk`) || {};
 
             if (userAFK && userAFK.reason && userAFK.timestamp) {
                 const currentTime = Date.now();
@@ -249,22 +245,20 @@ module.exports = (bot) => {
         if (isGroup) {
             if (m.key.fromMe) return;
 
-            const groupAutokick = await db.get(`group.${groupId}.option.autokick`);
+            const groupDb = await db.get(`group.${groupId}`) || {};
 
             // Penanganan antilink
-            const groupAntilink = await db.get(`group.${groupId}.option.antilink`);
-            if (groupAntilink) {
+            if (groupDb?.option?.antilink) {
                 const isUrl = await tools.general.isUrl(m.content);
                 if (m.content && await tools.general.isUrl(m.content) && !await tools.general.isAdmin(ctx, senderJid)) {
                     await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
                     await ctx.deleteMessage(m.key);
-                    if (!config.system.restrict && groupAutokick) await ctx.group().kick([senderJid]);
+                    if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([senderJid]);
                 }
             }
 
             // Penanganan antinsfw
-            const groupAntinsfw = await db.get(`group.${groupId}.option.antinsfw`);
-            if (groupAntinsfw) {
+            if (groupDb?.option?.antinsfw) {
                 const msgType = ctx.getMessageType();
                 const checkMedia = await tools.general.checkMedia(msgType, "image", ctx)
 
@@ -286,32 +280,30 @@ module.exports = (bot) => {
                     if (data.results.status === "NSFW") {
                         await ctx.reply(`⛔ Jangan kirim NSFW!`);
                         await ctx.deleteMessage(m.key);
-                        if (!config.system.restrict && groupAutokick) await ctx.group().kick([senderJid]);
+                        if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([senderJid]);
                     }
                 }
             }
 
             // Penanganan antisticker
-            const groupAntisticker = await db.get(`group.${groupId}.option.antisticker`);
-            if (groupAntisticker) {
+            if (groupDb?.option?.antisticker) {
                 const msgType = ctx.getMessageType();
                 const checkMedia = await tools.general.checkMedia(msgType, "sticker", ctx)
 
                 if (checkMedia && !await tools.general.isAdmin(ctx, senderJid)) {
                     await ctx.reply(`⛔ Jangan kirim stiker!`);
                     await ctx.deleteMessage(m.key);
-                    if (!config.system.restrict && groupAutokick) await ctx.group().kick([senderJid]);
+                    if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([senderJid]);
                 }
             }
 
             // Penanganan antitoxic
-            const groupAntitoxic = await db.get(`group.${groupId}.option.antitoxic`);
             const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
-            if (groupAntitoxic) {
+            if (groupDb?.option?.antitoxic) {
                 if (m.content && toxicRegex.test(m.content) && !await tools.general.isAdmin(ctx, senderJid)) {
                     await ctx.reply(quote(`⛔ Jangan toxic!`));
                     await ctx.deleteMessage(m.key);
-                    if (!config.system.restrict && groupAutokick) await ctx.group().kick([senderJid]);
+                    if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([senderJid]);
                 }
             }
         }
@@ -323,7 +315,7 @@ module.exports = (bot) => {
             const isCmd = tools.general.isCmd(m, ctx);
 
             // Penanganan menfess
-            const allMenfessDb = await db.get("menfess");
+            const allMenfessDb = await db.get("menfess") || {};
             if ((!isCmd || isCmd.didyoumean) && allMenfessDb && typeof allMenfessDb === "object" && Object.keys(allMenfessDb).length > 0) {
                 const menfessEntries = Object.entries(allMenfessDb);
 

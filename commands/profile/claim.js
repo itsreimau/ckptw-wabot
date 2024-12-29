@@ -20,7 +20,7 @@ module.exports = {
 
         const senderId = ctx.sender.jid.split(/[:@]/)[0];
 
-        const userDb = await db.get(`user.${senderId}`);
+        const userDb = await db.get(`user.${senderId}`) || {};
 
         if (input === "list") {
             const listText = await tools.list.get("claim");

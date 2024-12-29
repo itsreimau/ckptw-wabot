@@ -13,7 +13,7 @@ module.exports = {
         if (await handler(ctx, module.exports.handler)) return;
 
         const senderId = ctx.sender.jid.split(/[:@]/)[0];
-        const winGame = await db.get(`user.${senderId}.winGame`);
+        const winGame = await db.get(`user.${senderId}.winGame`) || 0;
 
         let iqScore;
         let feedback;

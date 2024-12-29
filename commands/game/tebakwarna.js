@@ -59,7 +59,7 @@ module.exports = {
                     await ctx.sendMessage(
                         ctx.id, {
                             text: `${quote("💯 Benar!")}\n` +
-                                quote(`+${coin} Koin`)
+                                quote(`+${game.coin} Koin`)
                         }, {
                             quoted: m
                         }

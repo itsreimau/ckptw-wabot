@@ -13,7 +13,7 @@ module.exports = {
         try {
             const senderId = ctx.sender.jid.split(/[:@]/)[0];
 
-            const customText = await db.get(`bot.text.price`);
+            const customText = await db.get(`bot.text.price`) || null;
             const text = customText ?
                 customText
                 .replace(/%tag%/g, `@${senderId}`)
