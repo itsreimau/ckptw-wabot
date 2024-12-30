@@ -21,6 +21,10 @@ const APIs = {
         baseURL: "https://api.nexoracle.com",
         APIKey: "free_key@maher_apis" // APIKey disediakan oleh Maher Zubair
     },
+    nervapi: {
+        baseURL: "https://itsreimau-nervapi.hf.space",
+        APIKey: "demo" // APIKey disediakan oleh ItsReimau
+    },
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },
