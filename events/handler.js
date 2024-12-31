@@ -106,16 +106,23 @@ module.exports = (bot) => {
     bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         const isGroup = ctx.isGroup();
         const isPrivate = !isGroup;
+
         const senderJid = ctx.sender.jid;
         const senderId = senderJid.split(/[:@]/)[0];
         const groupJid = isGroup ? ctx.id : null;
         const groupId = isGroup ? groupJid.split("@")[0] : null;
 
+        // Basis data untuk pengguna
+        const userDb = await db.get(`user.${senderId}`) || {};
+
+        const isOwner = tools.general.isOwner(ctx, senderId, config.system.selfOwner);
+        const isPremium = userDb?.premium;
+
         // Penanganan pada mode bot
         const botMode = await db.get("bot.mode") || "public";
         if (isPrivate && botMode === "group") return;
         if (isGroup && botMode === "private") return;
-        if (!tools.general.isOwner(ctx, senderId, true) && botMode === "self") return;
+        if (!isOwner && botMode === "self") return;
 
         // Log pesan masuk
         if (isGroup) {
@@ -124,21 +131,20 @@ module.exports = (bot) => {
             console.log(`[${config.pkg.name}] Incoming message from: ${senderId}`);
         }
 
-        // Basis data untuk pengguna
-        const userDb = await db.get(`user.${senderId}`) || {};
-
         // Grup atau Pribadi
         if (isGroup || isPrivate) {
             // Penangan pada ukuran basis data
             config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"
 
-            await db.set(`user.${senderId}`, {
-                coin: (tools.general.isOwner(ctx, senderId, config.system.selfOwner) || userDb?.premium) ? 0 : tools.general.clamp(userDb?.coin || 1000, 0, 10000),
+            // Penangan pada basis data pengguna
+            const newUserDb = {
+                coin: (isOwner || isPremium) ? 0 : tools.general.clamp(userDb?.coin || 1000, 0, 10000),
                 level: tools.general.clamp(userDb?.level || 0, 0, 100),
                 uid: userDb?.uid || tools.general.generateUID(senderId),
-                xp: userDb?.xp || 0,
-                ...userDb
-            });
+                xp: userDb?.xp || 0
+            };
+            Object.assign(newUserDb, userDb);
+            await db.set(`user.${senderId}`, newUserDb);
 
             // Penanganan untuk perintah
             const isCmd = tools.general.isCmd(m, ctx);
@@ -194,7 +200,7 @@ module.exports = (bot) => {
             }
 
             // Perintah khusus Owner
-            if (tools.general.isOwner(ctx, senderId, config.system.selfOwner)) {
+            if (isOwner) {
                 // Perintah Eval: Jalankan kode JavaScript
                 if (m.content && m.content.startsWith && (m.content.startsWith("==> ") || m.content.startsWith("=> "))) {
                     const code = m.content.slice(m.content.startsWith("==> ") ? 4 : 3);
