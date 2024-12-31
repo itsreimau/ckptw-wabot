@@ -143,7 +143,10 @@ module.exports = (bot) => {
                 uid: userDb?.uid || tools.general.generateUID(senderId),
                 xp: userDb?.xp || 0
             };
-            const newUserDb = Object.assign({}, rawUserDb, userDb);
+            const newUserDb = {
+                ...rawUserDb,
+                ...userDb
+            };
             await db.set(`user.${senderId}`, newUserDb);
 
             // Penanganan untuk perintah
