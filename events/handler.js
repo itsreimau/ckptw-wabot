@@ -136,18 +136,21 @@ module.exports = (bot) => {
             // Penangan pada ukuran basis data
             config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"
 
-            // Penangan pada basis data pengguna
-            const rawUserDb = {
-                coin: (isOwner || isPremium) ? 0 : tools.general.clamp(userDb?.coin || 1000, 0, 10000),
-                level: tools.general.clamp(userDb?.level || 0, 0, 100),
-                uid: userDb?.uid || tools.general.generateUID(senderId),
-                xp: userDb?.xp || 0
-            };
+            // Penanganan basis data pengguna
+            const {
+                coin,
+                level,
+                ...otherUserDb
+            } = userDb || {};
             const newUserDb = {
-                ...rawUserDb,
-                ...userDb
+                coin: (isOwner || isPremium) ? 0 : tools.general.clamp(coin || 1000, 0, 10000),
+                level: tools.general.clamp(level || 0, 0, 100),
+                uid: userDb?.uid || tools.general.generateUID(senderId),
+                xp: userDb?.xp || 0,
+                ...otherUserDb
             };
             await db.set(`user.${senderId}`, newUserDb);
+
 
             // Penanganan untuk perintah
             const isCmd = tools.general.isCmd(m, ctx);
