@@ -60,7 +60,7 @@ global.config = {
         autoMention: false, // Bot otomatis mention seseorang dalam pesan yang dikirim
         autoRead: true, // Bot baca pesan otomatis
         autoTypingOnCmd: true, // Tampilkan status mengetik saat memproses
-        cooldown: 5000, // Jeda antar perintah (ms)
+        cooldown: 5 * 1000, // Jeda antar perintah (ms)
         port: 3000, // Port (jika pakai server)
         restrict: false, // Batasi akses perintah
         requireBotGroupMembership: false, // Harus gabung grup bot

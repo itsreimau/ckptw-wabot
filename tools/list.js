@@ -1,3 +1,12 @@
+const api = require("./api.js");
+const {
+    bold,
+    italic,
+    monospace,
+    quote
+} = require("@mengkodingan/ckptw");
+const axios = require("axios");
+
 async function get(type, ctx) {
     try {
         let text = "";
