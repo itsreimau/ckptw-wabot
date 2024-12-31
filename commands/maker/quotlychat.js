@@ -33,7 +33,7 @@ module.exports = {
                 text: input,
                 avatar: profilePictureUrl,
                 bgColor: "#444444"
-            }, null, ["avatar"]);
+            }, "apikey");
 
             const sticker = new Sticker(apiUrl, {
                 pack: config.sticker.packname,
