@@ -20,7 +20,7 @@ module.exports = {
             }
 
             return await ctx.reply(
-                "Daftar API yang digunakan: (Tanpa API ini, bot tidak akan berfungsi dengan baik)\n" +
+                `${quote("Daftar API yang digunakan: (Tanpa API ini, bot tidak akan berfungsi dengan baik)")}\n` +
                 `${resultText.trim()}\n` +
                 "\n" +
                 config.msg.footer

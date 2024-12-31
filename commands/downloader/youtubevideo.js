@@ -25,13 +25,16 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("rintohsaka", "/download/ytmp4", {
+            const apiUrl = tools.api.createUrl("devo", "/api/downloader/ytmp4", {
                 url
             });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 video: {
-                    url: apiUrl
+                    url: data.result.download
                 },
                 mimetype: mime.lookup("mp4")
             });
