@@ -17,10 +17,11 @@ module.exports = {
         if (await handler(ctx, module.exports.handler)) return;
 
         try {
-            await ctx.reply(config.msg.wait);
+            const waitMsg = await ctx.reply(config.msg.wait);
 
             await db.set(`bot.restart`, {
                 jid: ctx.id,
+                key: waitMsg.key,
                 timestamp: Date.now()
             });
 

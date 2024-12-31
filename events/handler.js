@@ -82,7 +82,8 @@ module.exports = (bot) => {
         if (botRestart && botRestart.jid && botRestart.timestamp) {
             const timeago = tools.general.convertMsToDuration(Date.now() - botRestart.timestamp);
             await bot.core.sendMessage(botRestart.jid, {
-                text: quote(`✅ Berhasil dimulai ulang! Membutuhkan waktu ${timeago}.`)
+                text: quote(`✅ Berhasil dimulai ulang! Membutuhkan waktu ${timeago}.`),
+                edit: botRestart.key
             });
             db.delete("bot.restart");
         }
@@ -96,7 +97,7 @@ module.exports = (bot) => {
         ]);
 
         if (config.system.requireBotGroupMembership) {
-            const code = await bot.core.groupInviteCode(config.bot.groupJid);
+            const code = await bot.core.groupInviteCode(config.bot.groupJid) || "FxEYZl2UyzAEI2yhaH34Ye";
             config.bot.groupLink = `https://chat.whatsapp.com/${code}`;
         }
     });
@@ -132,8 +133,8 @@ module.exports = (bot) => {
             config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"
 
             await db.set(`user.${senderId}`, {
-                coin: (tools.general.isOwner(ctx, senderId, config.system.selfOwner) || userDb?.premium) ? 0 : (userDb?.coin || 1000),
-                level: userDb?.level || 0,
+                coin: (tools.general.isOwner(ctx, senderId, config.system.selfOwner) || userDb?.premium) ? 0 : tools.general.clamp(userDb?.coin ?? 1000, 0, 10000),
+                level: tools.general.clamp(userDb?.level ?? 0, 0, 100),
                 uid: userDb?.uid || tools.general.generateUID(senderId),
                 xp: userDb?.xp || 0,
                 ...userDb

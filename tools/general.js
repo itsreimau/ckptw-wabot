@@ -77,6 +77,10 @@ async function checkQuotedMedia(quoted, requiredMedia) {
     });
 }
 
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+}
+
 function convertMsToDuration(ms) {
     if (ms < 1000) return "kurang satu detik";
 
@@ -324,6 +328,7 @@ async function upload(buffer) {
 module.exports = {
     checkMedia,
     checkQuotedMedia,
+    clamp,
     convertMsToDuration,
     formatSize,
     generateUID,
