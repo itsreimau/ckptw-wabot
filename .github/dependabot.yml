@@ -12,7 +12,7 @@ updates:
     ignore:
       - dependency-name: "file-type"
         versions:
-          - "16.5.4"
+          - "*"
       - dependency-name: "jimp"
         versions:
-          - "0.16.1"
+          - "*"

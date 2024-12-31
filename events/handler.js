@@ -133,8 +133,8 @@ module.exports = (bot) => {
             config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"
 
             await db.set(`user.${senderId}`, {
-                coin: (tools.general.isOwner(ctx, senderId, config.system.selfOwner) || userDb?.premium) ? 0 : tools.general.clamp(userDb?.coin ?? 1000, 0, 10000),
-                level: tools.general.clamp(userDb?.level ?? 0, 0, 100),
+                coin: (tools.general.isOwner(ctx, senderId, config.system.selfOwner) || userDb?.premium) ? 0 : tools.general.clamp(userDb?.coin || 1000, 0, 10000),
+                level: tools.general.clamp(userDb?.level || 0, 0, 100),
                 uid: userDb?.uid || tools.general.generateUID(senderId),
                 xp: userDb?.xp || 0,
                 ...userDb
