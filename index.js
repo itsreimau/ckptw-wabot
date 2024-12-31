@@ -43,7 +43,7 @@
 
  // Fungsi untuk menjalankan server jika diaktifkan
  if (config.system.useServer) {
-     const port = config.system.port || 3000;
+     const port = config.system.port;
      const server = http.createServer((req, res) => {
          res.writeHead(200, {
              "Content-Type": "text/plain"

@@ -65,7 +65,7 @@ module.exports = {
 
                 const downloadApiUrl = tools.api.createUrl("siputzx", "/api/d/soundcloud", {
                     url: data.link
-                }, null, ["url"]);
+                });
                 const downloadData = (await axios.get(downloadApiUrl)).data.data;
 
                 return await ctx.reply({
@@ -93,7 +93,7 @@ module.exports = {
 
                 const downloadApiUrl = tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/download/track", {
                     url: data.url
-                }, null, ["url"]);
+                });
 
                 return await ctx.reply({
                     audio: {
@@ -118,10 +118,9 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("https://ytdownloader.nvlgroup.my.id", "/audio", {
-                    url: data.url,
-                    bitrate: "160"
-                }, null, ["url"]);
+                const downloadApiUrl = tools.api.createUrl("rintohsaka", "/download/ytmp3", {
+                    url: data.url
+                });
 
                 return await ctx.reply({
                     audio: {

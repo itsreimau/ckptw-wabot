@@ -26,9 +26,9 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
-            const apiUrl = tools.api.createUrl("vapis", "/api/remini", {
-                url: uploadUrl
-            }, null, ["url"]);
+            const apiUrl = tools.api.createUrl("devo", "/api/tools/upscale", {
+                imageUrl: uploadUrl
+            });
 
             return await ctx.reply({
                 image: {

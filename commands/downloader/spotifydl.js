@@ -26,7 +26,7 @@ module.exports = {
         try {
             const apiUrl = tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/download/track", {
                 url
-            }, null, ["url"]);
+            });
 
             return await ctx.reply({
                 audio: {

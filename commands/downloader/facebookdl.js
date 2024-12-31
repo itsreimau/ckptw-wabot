@@ -27,7 +27,7 @@ module.exports = {
         try {
             const apiUrl = tools.api.createUrl("https://fbdown.vercel.app", "/api/get", {
                 url
-            }, null, ["url"]);
+            });
             const {
                 data
             } = await axios.get(apiUrl);

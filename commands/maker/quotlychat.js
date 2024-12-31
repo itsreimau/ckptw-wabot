@@ -29,8 +29,8 @@ module.exports = {
             const profilePictureUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
             const apiUrl = tools.api.createUrl("nervapi", "/api/maker/quotlychat", {
-                name: ctx.sender.pushName || "-",
                 text: input,
+                username: ctx.sender.pushName || "-",
                 avatar: profilePictureUrl,
                 bgColor: "#444444"
             }, "apikey");

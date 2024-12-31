@@ -70,7 +70,7 @@ module.exports = {
                             xp
                         };
 
-                        if (!/^[0-9]{10,15}$/.test(userId)) {
+                        if (!/^[0-9]$/.test(userId)) {
                             await db.delete(`user.${userId}`);
                         } else {
                             await db.set(`user.${userId}`, filteredData);
@@ -97,7 +97,7 @@ module.exports = {
                             })
                         };
 
-                        if (!/^[0-9]{10,15}$/.test(groupId)) {
+                        if (!/^[0-9]$/.test(groupId)) {
                             await db.delete(`group.${groupId}`);
                         } else {
                             await db.set(`group.${groupId}`, filteredGroupData);
@@ -123,7 +123,7 @@ module.exports = {
                             })
                         };
 
-                        if (!/^[0-9]{10,15}$/.test(conversationId)) {
+                        if (!/^[0-9]$/.test(conversationId)) {
                             await db.delete(`menfess.${conversationId}`);
                         } else {
                             await db.set(`menfess.${conversationId}`, filteredMenfessData);

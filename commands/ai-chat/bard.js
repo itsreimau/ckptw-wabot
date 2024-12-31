@@ -33,7 +33,7 @@ module.exports = {
                 const apiUrl = tools.api.createUrl("btch", "/bardimg", {
                     url: uploadUrl,
                     text: input
-                }, null, ["url"]);
+                });
                 const {
                     data
                 } = await axios.get(apiUrl);

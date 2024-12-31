@@ -61,7 +61,7 @@ global.config = {
         autoRead: true, // Bot baca pesan otomatis
         autoTypingOnCmd: true, // Tampilkan status mengetik saat memproses
         cooldown: 5000, // Jeda antar perintah (ms)
-        port: 8080, // Port (jika pakai server)
+        port: 3000, // Port (jika pakai server)
         restrict: false, // Batasi akses perintah
         requireBotGroupMembership: false, // Harus gabung grup bot
         selfOwner: false, // Bot jadi owner sendiri

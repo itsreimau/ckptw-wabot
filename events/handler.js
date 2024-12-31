@@ -278,7 +278,7 @@ module.exports = (bot) => {
 
                     const apiUrl = tools.api.createUrl("fasturl", "/tool/imagechecker", {
                         url: uploadUrl
-                    }, null, ["url"]);
+                    });
                     const {
                         data
                     } = await axios.get(apiUrl, {

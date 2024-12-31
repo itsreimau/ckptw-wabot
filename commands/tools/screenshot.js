@@ -34,7 +34,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("vreden", "/api/ssweb", {
                 url,
                 type
-            }, null, ["url"]);
+            });
 
             return await ctx.reply({
                 image: {

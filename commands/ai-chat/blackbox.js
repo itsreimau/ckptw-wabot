@@ -37,7 +37,7 @@ module.exports = {
                     ask: input,
                     model,
                     imageUrl: uploadUrl
-                }, null, ["imageUrl"]);
+                });
                 const {
                     data
                 } = await axios.get(apiUrl, {

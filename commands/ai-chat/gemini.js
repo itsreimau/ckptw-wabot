@@ -33,7 +33,7 @@ module.exports = {
                 const apiUrl = tools.api.createUrl("sandipbaruwal", "/gemini2", {
                     prompt: input,
                     url: uploadUrl
-                }, null, ["url"]);
+                });
                 const {
                     data
                 } = await axios.get(apiUrl);

@@ -27,7 +27,7 @@ module.exports = {
         try {
             const apiUrl = tools.api.createUrl("toxicdevil", "/downloader/twitter", {
                 url
-            }, null, ["url"]);
+            });
             const data = (await axios.get(apiUrl)).data.result;
             const mediaType = data.url.hd.includes("mp4") ? "video" : "image";
             const extension = data.url.hd.includes("mp4") ? "mp4" : "png";
