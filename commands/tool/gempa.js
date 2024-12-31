@@ -7,7 +7,7 @@ const mime = require("mime-types");
 module.exports = {
     name: "gempa",
     aliases: ["gempabumi", "infogempa"],
-    category: "tools",
+    category: "tool",
     handler: {
         coin: 10
     },

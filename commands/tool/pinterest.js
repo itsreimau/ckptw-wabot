@@ -6,9 +6,9 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "googleimage",
-    aliases: ["gimage"],
-    category: "tools",
+    name: "pinterest",
+    aliases: ["pin", "pint"],
+    category: "tool",
     handler: {
         coin: [10, "text", 1]
     },
@@ -23,8 +23,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/images", {
-                query: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/pinsearch", {
+                message: input
             });
             const {
                 data
@@ -33,7 +33,7 @@ module.exports = {
 
             return await ctx.reply({
                 image: {
-                    url: result.url
+                    url: result.images_url
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +

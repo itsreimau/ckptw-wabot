@@ -9,7 +9,7 @@ const axios = require("axios");
 module.exports = {
     name: "alquran",
     aliases: ["quran"],
-    category: "tools",
+    category: "tool",
     handler: {},
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;

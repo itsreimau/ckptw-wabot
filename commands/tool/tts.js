@@ -3,11 +3,12 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "translate",
-    aliases: ["tr"],
-    category: "tools",
+    name: "tts",
+    aliases: ["texttospeechgoogle", "ttsgoogle"],
+    category: "tool",
     handler: {
         coin: [10, "text", 1]
     },
@@ -24,14 +25,26 @@ module.exports = {
         );
 
         if (ctx.args[0] === "list") {
-            const listText = await tools.list.get("translate");
+            const listText = await tools.list.get("tts");
             return await ctx.reply(listText);
         }
 
         try {
-            const translation = await tools.general.translate(input, langCode);
+            const apiUrl = tools.api.createUrl("nyxs", "tools/tts", {
+                text: input,
+                to: langCode
+            });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
-            return await ctx.reply(translation);
+            return await ctx.reply({
+                audio: {
+                    url: data.result
+                },
+                mimetype: mime.lookup("mp3"),
+                ptt: true
+            });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

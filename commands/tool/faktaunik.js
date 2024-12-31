@@ -6,7 +6,7 @@ const axios = require("axios");
 module.exports = {
     name: "faktaunik",
     aliases: ["fakta"],
-    category: "tools",
+    category: "tool",
     handler: {
         coin: 10
     },

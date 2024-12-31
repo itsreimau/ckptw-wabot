@@ -1,14 +1,12 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "pinterest",
-    aliases: ["pin", "pint"],
-    category: "tools",
+    name: "lyrics",
+    aliases: ["lirik", "lyric"],
+    category: "tool",
     handler: {
         coin: [10, "text", 1]
     },
@@ -19,27 +17,25 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon"))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/pinsearch", {
-                message: input
+            const apiUrl = tools.api.createUrl("btch", "/lirik", {
+                text: input
             });
             const {
-                data
+                result
             } = (await axios.get(apiUrl)).data;
-            const result = tools.general.getRandomElement(data);
 
-            return await ctx.reply({
-                image: {
-                    url: result.images_url
-                },
-                mimetype: mime.lookup("png"),
-                caption: `${quote(`Kueri: ${input}`)}\n` +
-                    "\n" +
-                    config.msg.footer
-            });
+            return await ctx.reply(
+                `${quote(`Judul: ${result.title}`)}\n` +
+                `${quote(`Artis: ${result.artist}`)}\n` +
+                `${quote("─────")}\n` +
+                `${result.lyrics}\n` +
+                "\n" +
+                config.msg.footer
+            );
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

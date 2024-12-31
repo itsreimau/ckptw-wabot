@@ -29,7 +29,7 @@ module.exports = {
                 "maker": "Maker",
                 "profile": "Profile",
                 "search": "Search",
-                "tools": "Tools",
+                "tool": "Tool",
                 "owner": "Owner",
                 "information": "Information",
                 "misc": "Miscellaneous"

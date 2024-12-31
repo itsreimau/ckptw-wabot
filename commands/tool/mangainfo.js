@@ -4,9 +4,9 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "lyrics",
-    aliases: ["lirik", "lyric"],
-    category: "tools",
+    name: "mangainfo",
+    aliases: ["manga"],
+    category: "tool",
     handler: {
         coin: [10, "text", 1]
     },
@@ -17,22 +17,28 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "hikaru utada - one last kiss"))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "evangelion"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/lirik", {
-                text: input
+            const apiUrl = tools.api.createUrl("https://api.jikan.moe", "/v4/manga", {
+                q: input
             });
             const {
-                result
-            } = (await axios.get(apiUrl)).data;
+                data
+            } = await axios.get(apiUrl);
+            const info = data.data[0];
 
             return await ctx.reply(
-                `${quote(`Judul: ${result.title}`)}\n` +
-                `${quote(`Artis: ${result.artist}`)}\n` +
+                `${quote(`Judul: ${info.title}`)}\n` +
+                `${quote(`Judul (Inggris): ${info.title_english}`)}\n` +
+                `${quote(`Judul (Jepang): ${info.title_japanese}`)}\n` +
+                `${quote(`Tipe: ${info.type}`)}\n` +
+                `${quote(`Bab: ${info.chapters}`)}\n` +
+                `${quote(`Volume: ${info.volumes}`)}\n` +
+                `${quote(`URL: ${info.url}`)}\n` +
                 `${quote("─────")}\n` +
-                `${result.lyrics}\n` +
+                `${await tools.general.translate(info.synopsis, "id", ).translation}\n` +
                 "\n" +
                 config.msg.footer
             );

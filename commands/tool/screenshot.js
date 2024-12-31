@@ -6,7 +6,7 @@ const mime = require("mime-types");
 module.exports = {
     name: "screenshot",
     aliases: ["ss", "sshp", "sspc", "sstab", "ssweb"],
-    category: "tools",
+    category: "tool",
     handler: {
         coin: [10, "text", 1]
     },

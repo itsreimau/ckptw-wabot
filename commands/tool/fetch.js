@@ -10,7 +10,7 @@ const {
 module.exports = {
     name: "fetch",
     aliases: ["get"],
-    category: "tools",
+    category: "tool",
     handler: {
         coin: [10, "text", 1]
     },

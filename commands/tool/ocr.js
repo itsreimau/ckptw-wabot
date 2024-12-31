@@ -2,12 +2,10 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "removebg",
-    aliases: ["rbg"],
-    category: "tools",
+    name: "ocr",
+    category: "tool",
     handler: {
         coin: [10, "image", 3]
     },
@@ -25,19 +23,15 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
-            const apiUrl = tools.api.createUrl("btch", "/removebg", {
+            const apiUrl = tools.api.createUrl("https://api.ocr.space", "/parse/imageurl", {
+                apikey: "8e65f273cd88957",
                 url: uploadUrl
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply({
-                image: {
-                    url: data.result.urls
-                },
-                mimetype: mime.lookup("png")
-            });
+            return await ctx.reply(data.ParsedResults[0].ParsedText);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

@@ -6,7 +6,7 @@ const axios = require("axios");
 module.exports = {
     name: "crypto",
     aliases: ["coingecko"],
-    category: "tools",
+    category: "tool",
     handler: {
         coin: [10, "image", 3]
     },

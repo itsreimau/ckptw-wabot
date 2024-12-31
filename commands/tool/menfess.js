@@ -5,7 +5,7 @@ const {
 module.exports = {
     name: "menfess",
     aliases: ["conf", "confes", "confess", "menf", "menfes"],
-    category: "tools",
+    category: "tool",
     handler: {
         coin: [10, "text", 1],
         private: true

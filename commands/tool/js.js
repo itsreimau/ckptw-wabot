@@ -9,7 +9,7 @@ const {
 module.exports = {
     name: "js",
     aliases: ["javascript"],
-    category: "tools",
+    category: "tool",
     handler: {
         coin: [10, "text", 1]
     },

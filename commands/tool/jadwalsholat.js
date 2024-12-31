@@ -4,12 +4,10 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "wikipedia",
-    aliases: ["wiki"],
-    category: "tools",
-    handler: {
-        coin: [10, "text", 1]
-    },
+    name: "jadwalsholat",
+    aliases: ["sholat"],
+    category: "tool",
+    handler: {},
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
@@ -17,19 +15,23 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "evangelion"))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "bogor"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("toxicdevil", "/search/wikipedia", {
-                lang: "id",
-                query: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/jadwalsholat", {
+                kota: input
             });
-            const data = (await axios.get(apiUrl)).data.result;
+            const {
+                data
+            } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply(
-                `${quote(data.info)}\n` +
-                `${quote(`Baca selengkapnya di: ${data.url}`)}\n` +
+                `${quote(`Subuh: ${data.subuh}`)}\n` +
+                `${quote(`Dhuhur: ${data.dhuhur}`)}\n` +
+                `${quote(`Ashar: ${data.ashar}`)}\n` +
+                `${quote(`Maghrib: ${data.maghrib}`)}\n` +
+                `${quote(`Isya: ${data.isya}`)}\n` +
                 "\n" +
                 config.msg.footer
             );

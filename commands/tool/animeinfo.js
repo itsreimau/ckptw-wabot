@@ -6,7 +6,7 @@ const axios = require("axios");
 module.exports = {
     name: "animeinfo",
     aliases: ["anime"],
-    category: "tools",
+    category: "tool",
     handler: {
         coin: [10, "text", 1]
     },

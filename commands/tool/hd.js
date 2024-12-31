@@ -1,11 +1,14 @@
 const {
+    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "ocr",
-    category: "tools",
+    name: "hd",
+    aliases: ["enhance", "enhancer", "hd", "hdr", "remini", "unblur"],
+    category: "tool",
     handler: {
         coin: [10, "image", 3]
     },
@@ -23,15 +26,16 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
-            const apiUrl = tools.api.createUrl("https://api.ocr.space", "/parse/imageurl", {
-                apikey: "8e65f273cd88957",
-                url: uploadUrl
+            const apiUrl = tools.api.createUrl("devo", "/api/tools/upscale", {
+                imageUrl: uploadUrl
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.ParsedResults[0].ParsedText);
+            return await ctx.reply({
+                image: {
+                    url: apiUrl
+                },
+                mimetype: mime.lookup("png")
+            });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

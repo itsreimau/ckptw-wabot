@@ -2,35 +2,36 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "upload",
-    aliases: ["tourl"],
-    category: "tools",
+    name: "promptgenerator",
+    aliases: ["promptgen"],
+    category: "tool",
     handler: {
-        coin: [10, ["audio", "document", "image", "video", "sticker"], 3]
+        coin: [10, "image", 3]
     },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.general.checkMedia(msgType, ["audio", "document", "image", "video", "sticker"], ctx),
-            tools.general.checkQuotedMedia(ctx.quoted, ["audio", "document", "image", "video", "sticker"])
+            tools.general.checkMedia(msgType, "image", ctx),
+            tools.general.checkQuotedMedia(ctx.quoted, "image")
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], ["audio", "document", "image", "video", "sticker"])));
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], "image")));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
+            const apiUrl = tools.api.createUrl("devo", "/api/ai/v2/analyz", {
+                buffer: uploadUrl
+            });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
-            return await ctx.reply(
-                `${quote(`URL: ${uploadUrl}`)}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.reply(data.result);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

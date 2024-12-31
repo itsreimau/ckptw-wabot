@@ -2,11 +2,12 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "promptgenerator",
-    aliases: ["promptgen"],
-    category: "tools",
+    name: "removebg",
+    aliases: ["rbg"],
+    category: "tool",
     handler: {
         coin: [10, "image", 3]
     },
@@ -24,14 +25,19 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
-            const apiUrl = tools.api.createUrl("devo", "/api/ai/v2/analyz", {
-                buffer: uploadUrl
+            const apiUrl = tools.api.createUrl("btch", "/removebg", {
+                url: uploadUrl
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.result);
+            return await ctx.reply({
+                image: {
+                    url: data.result.urls
+                },
+                mimetype: mime.lookup("png")
+            });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);
