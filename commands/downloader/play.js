@@ -118,14 +118,13 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("devo", "/api/downloader/ytmp3", {
+                const downloadApiUrl = tools.api.createUrl("rintohsaka", "/download/ytmp3", {
                     url: data.url
                 });
-                const downloadData = (await axios.get(downloadApiUrl)).data;
 
                 return await ctx.reply({
                     audio: {
-                        url: downloadData.result.download
+                        url: downloadApiUrl
                     },
                     mimetype: mime.lookup("mp3")
                 });

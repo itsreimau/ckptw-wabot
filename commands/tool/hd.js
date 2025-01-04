@@ -7,8 +7,8 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "hd",
-    aliases: ["enhance", "enhancer", "hd", "hdr", "remini", "unblur"],
-    category: "tool",
+    aliases: ["enhance", "enhancer", "hd", "hdr", "remini"],
+    category: "tools",
     handler: {
         coin: [10, "image", 3]
     },

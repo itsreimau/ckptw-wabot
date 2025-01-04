@@ -1,12 +1,12 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "characterai",
-    aliases: ["cai"],
-    category: "ai-chat",
+    name: "stabilityai",
+    aliases: ["stability"],
+    category: "ai-image",
     handler: {
         coin: [10, "text", 1]
     },
@@ -17,19 +17,23 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nyxs", "/ai/character-aii", {
-                prompt: input,
-                gaya: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.` // Dapat diubah sesuai keinginan Anda
+            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/stabilityai", {
+                prompt: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.result);
+            return await ctx.reply({
+                image: {
+                    url: apiUrl
+                },
+                mimetype: mime.lookup("png"),
+                caption: `${quote(`Prompt: ${input}`)}\n` +
+                    "\n" +
+                    config.msg.footer
+            });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

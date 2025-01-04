@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "feloai",
-    aliases: ["feloai"],
+    aliases: ["felo"],
     category: "ai-chat",
     handler: {
         coin: [10, "text", 1]
@@ -21,7 +21,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("vapis", "/api/feloai", {
+            const apiUrl = tools.api.createUrl("btch", "/feloai", {
                 text: input
             });
             const {

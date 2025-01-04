@@ -4,8 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "characterai",
-    aliases: ["cai"],
+    name: "llama",
     category: "ai-chat",
     handler: {
         coin: [10, "text", 1]
@@ -21,15 +20,15 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nyxs", "/ai/character-aii", {
-                prompt: input,
-                gaya: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.` // Dapat diubah sesuai keinginan Anda
+            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/llama33", {
+                prompt: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`, // Dapat diubah sesuai keinginan Anda
+                text: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
-            return await ctx.reply(data.result);
+            return await ctx.reply(data);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

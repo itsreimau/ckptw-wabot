@@ -23,17 +23,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/images", {
+            const apiUrl = tools.api.createUrl("btch", "/googleimage", {
                 query: input
             });
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
-            const result = tools.general.getRandomElement(data);
+            } = await axios.get(apiUrl);
+            const result = tools.general.getRandomElement(data.result);
 
             return await ctx.reply({
                 image: {
-                    url: result.url
+                    url: result
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +

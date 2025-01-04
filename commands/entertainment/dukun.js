@@ -4,9 +4,9 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "characterai",
-    aliases: ["cai"],
-    category: "ai-chat",
+    name: "dukun",
+    aliases: ["dukunsakti"],
+    category: "entertainment",
     handler: {
         coin: [10, "text", 1]
     },
@@ -17,19 +17,18 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "halo dunia!"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nyxs", "/ai/character-aii", {
-                prompt: input,
-                gaya: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.` // Dapat diubah sesuai keinginan Anda
+            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/dukun", {
+                content: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
-            return await ctx.reply(data.result);
+            return await ctx.reply(data);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

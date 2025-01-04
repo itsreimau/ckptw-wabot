@@ -1,12 +1,14 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const mime = require("mime-types");
+const axios = require("axios");
 
 module.exports = {
-    name: "imgen",
-    category: "ai-image",
-    handler: {},
+    name: "copilot",
+    category: "ai-chat",
+    handler: {
+        coin: [10, "text", 1]
+    },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
@@ -14,21 +16,18 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon"))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("https://imgen.duck.mom", `/prompt/${input}`, {});
-
-            return await ctx.reply({
-                image: {
-                    url: apiUrl
-                },
-                mimetype: mime.lookup("png"),
-                caption: `${quote(`Prompt: ${input}`)}\n` +
-                    "\n" +
-                    config.msg.footer
+            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/copilot", {
+                text: input
             });
+            const {
+                data
+            } = (await axios.get(apiUrl)).data;
+
+            return await ctx.reply(data);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);
