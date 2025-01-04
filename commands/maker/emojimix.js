@@ -31,7 +31,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("nervapi", "/api/maker/emojimix", {
                 emoji1,
                 emoji2
-            });
+            }, "apikey");
 
             const sticker = new Sticker(apiUrl, {
                 pack: config.sticker.packname,
