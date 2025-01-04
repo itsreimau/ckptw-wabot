@@ -4,8 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "cekkhodam",
-    aliases: ["checkkhodam", "khodam"],
+    name: "zodiak",
     category: "entertainment",
     handler: {
         coin: [10, "text", 1]
