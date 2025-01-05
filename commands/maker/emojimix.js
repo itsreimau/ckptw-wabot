@@ -32,8 +32,11 @@ module.exports = {
                 emoji1,
                 emoji2
             }, "apikey");
+            const {
+                data
+            } = await axios.get(apiUrl);
 
-            const sticker = new Sticker(apiUrl, {
+            const sticker = new Sticker(data.result, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,
