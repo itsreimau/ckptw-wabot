@@ -71,25 +71,25 @@ function generatesFlagInformation(flags) {
     const flagInfo = "Flag:\n" +
         Object.entries(flags).map(([flag, description]) =>
             quote(`• ${monospace(flag)}: ${description}`)
-        ).join("\n"
+        ).join("\n");
 
-            return flagInfo;
-        }
+    return flagInfo;
+}
 
-    function generateNotes(notes) {
-        if (!Array.isArray(notes)) return "Notes must be an array of strings.";
+function generateNotes(notes) {
+    if (!Array.isArray(notes)) return "Notes must be an array of strings.";
 
-        const notesInfo = "Catatan:\n" +
-            notes.map(note =>
-                quote(`• ${note}`)
-            ).join("\n"
+    const notesInfo = "Catatan:\n" +
+        notes.map(note =>
+            quote(`• ${note}`)
+        ).join("\n");
 
-                return notesInfo;
-            }
+    return notesInfo;
+}
 
-        module.exports = {
-            generateInstruction,
-            generateCommandExample,
-            generatesFlagInformation,
-            generateNotes
-        };
+module.exports = {
+    generateInstruction,
+    generateCommandExample,
+    generatesFlagInformation,
+    generateNotes
+};
