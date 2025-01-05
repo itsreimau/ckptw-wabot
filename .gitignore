@@ -4,9 +4,6 @@ node_modules/
 # Ignore state directory
 state/
 
-# Ignore ecosystem.config.js file
-ecosystem.config.js
-
 # Ignore config.js file
 config.js
 

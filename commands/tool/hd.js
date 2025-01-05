@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -26,9 +25,9 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
-            const apiUrl = tools.api.createUrl("devo", "/api/tools/upscale", {
-                imageUrl: uploadUrl
-            });
+            const apiUrl = tools.api.createUrl("nervapi", "/api/tools/upscale", {
+                url: uploadUrl
+            }, "apikey");
 
             return await ctx.reply({
                 image: {

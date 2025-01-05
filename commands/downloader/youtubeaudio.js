@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -24,13 +25,17 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("rintohsaka", "/download/ytmp3", {
+            const apiUrl = tools.api.createUrl("agatz", "/api/ytmp3", {
                 url
             });
+            const {
+                data
+            } = (await axios.get(apiUrl)).data;
+            const result = data.reduce((prev, current) => parseInt(current.quality) > parseInt(prev.quality) ? current : prev);
 
             return await ctx.reply({
                 audio: {
-                    url: apiUrl
+                    url: result.downloadUrl
                 },
                 mimetype: mime.lookup("mp3")
             });

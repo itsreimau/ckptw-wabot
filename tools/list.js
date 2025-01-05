@@ -13,6 +13,7 @@ async function get(type, ctx) {
 
         const createList = (data, formatter) =>
             `${data.map(formatter).join(`\n${quote("─────")}\n`)}\n` +
+            "\n" +
             config.msg.footer;
 
         switch (type) {

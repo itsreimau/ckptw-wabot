@@ -5,11 +5,10 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "youtubevideo",
-    aliases: ["ytmp4", "ytv", "ytvideo"],
+    name: "xnxxdl",
     category: "downloader",
     handler: {
-        coin: [10, "text", 1]
+        premium: true
     },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
@@ -25,7 +24,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/ytmp4", {
+            const apiUrl = tools.api.createUrl("agatz", "/api/xnxxdown", {
                 url
             });
             const {
@@ -34,14 +33,17 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    url: data.downloadUrl
+                    url: data.files.high || data.files.low
                 },
-                mimetype: mime.lookup("mp4")
+                mimetype: mime.lookup("mp4"),
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    config.msg.footer
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return ctx.reply(config.msg.notFound);
+            return ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
