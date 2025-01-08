@@ -1,3 +1,4 @@
+const axios = require("axios");
 const {
     monospace,
     quote
@@ -24,24 +25,35 @@ module.exports = {
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const uploadUrl = await tools.general.upload(buffer);
-            const apiUrl = tools.api.createUrl("nervapi", "/api/tools/upscale", {
-                url: uploadUrl
-            }, "apikey");
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = await upscale(buffer);
 
             return await ctx.reply({
-                image: {
-                    url: data.result
-                },
+                image: result,
                 mimetype: mime.lookup("png")
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
-            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
+            if (error.response && error.response.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
+
+// Dibuat oleh Axel (https://github.com/AxellNetwork)
+async function upscale(buffer) {
+    try {
+        const response = await axios.post("https://lexica.qewertyy.dev/upscale", {
+            image_data: Buffer.from(buffer, "base64").toString("base64"),
+            format: "binary"
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            responseType: "arraybuffer"
+        });
+        return Buffer.from(response.data);
+    } catch (error) {
+        console.error(`[${config.pkg.name}] Error:`, error);
+        return null;
+    }
+}

@@ -25,7 +25,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/ytmp4", {
+            const apiUrl = tools.api.createUrl("https://ytdl.axeel.my.id", "/api/download/video", {
                 url
             });
             const {
@@ -34,7 +34,7 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    url: data.downloadUrl
+                    url: data.downloads.url
                 },
                 mimetype: mime.lookup("mp4")
             });

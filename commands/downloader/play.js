@@ -118,15 +118,14 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("agatz", "/api/ytmp3", {
+                const downloadApiUrl = tools.api.createUrl("https://ytdl.axeel.my.id", "/api/download/audio", {
                     url: data.url
                 });
-                const downloadData = (await axios.get(downloadApiUrl)).data.data;
-                const downloadUrl = (downloadData.reduce((prev, current) => parseInt(current.quality) > parseInt(prev.quality) ? current : prev)).downloadUrl;
+                const downloadData = (await axios.get(downloadApiUrl)).data;
 
                 return await ctx.reply({
                     audio: {
-                        url: downloadUrl
+                        url: data.downloads.url
                     },
                     mimetype: mime.lookup("mp3")
                 });

@@ -1,7 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const {
     Sticker,
     StickerTypes
@@ -28,15 +27,12 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nervapi", "/api/maker/emojimix", {
+            const apiUrl = tools.api.createUrl("btch", "/emojimix", {
                 emoji1,
                 emoji2
-            }, "apikey");
-            const {
-                data
-            } = await axios.get(apiUrl);
+            });
 
-            const sticker = new Sticker(data.result, {
+            const sticker = new Sticker(apiUrl, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,

@@ -307,18 +307,20 @@ async function upload(buffer) {
             ext
         } = await fromBuffer(buffer);
 
-        const form = new FormData();
-        form.append("file", buffer, `${Date.now()}.${ext}`);
+        let form = new FormData();
+        form.append("file", buffer, `tmp.${ext}`);
 
-        const {
-            data
-        } = await axios.post("https://filezone-api.caliph.dev/upload", form, {
+        const apiUrl = api.createUrl("https://uploader.nyxs.pw", "/upload", {});
+        const response = await axios.post(apiUrl, form, {
             headers: {
                 ...form.getHeaders()
             }
         });
 
-        return data.result.url_file;
+        const $ = cheerio.load(response.data);
+        const url = $("a").attr("href");
+
+        return url;
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
         return null;

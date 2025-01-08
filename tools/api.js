@@ -4,7 +4,7 @@ const APIs = {
         baseURL: "https://api.agatz.xyz"
     },
     btch: {
-        baseURL: "https://btch.us.kg"
+        baseURL: "https://api.tioo.eu.org"
     },
     fasturl: {
         baseURL: "https://fastrestapis.fasturl.link",
@@ -21,15 +21,8 @@ const APIs = {
         baseURL: "https://api.nexoracle.com",
         APIKey: "free_key@maher_apis" // APIKey disediakan oleh Maher Zubair
     },
-    nervapi: {
-        baseURL: "https://itsreimau-nervapi.hf.space",
-        APIKey: "demo" // APIKey disediakan oleh ItsReimau
-    },
     nyxs: {
         baseURL: "https://api.nyxs.pw"
-    },
-    rintohsaka: {
-        baseURL: "https://api-rin-tohsaka.vercel.app"
     },
     sandipbaruwal: {
         baseURL: "https://sandipbaruwal.onrender.com"
