@@ -125,7 +125,7 @@ module.exports = {
 
                 return await ctx.reply({
                     audio: {
-                        url: data.downloads.url
+                        url: downloadData.downloads.url
                     },
                     mimetype: mime.lookup("mp3")
                 });

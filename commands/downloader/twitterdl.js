@@ -28,15 +28,16 @@ module.exports = {
             const apiUrl = tools.api.createUrl("toxicdevil", "/downloader/twitter", {
                 url
             });
-            const data = (await axios.get(apiUrl)).data.result;
-            const mediaType = data.url.hd.includes("mp4") ? "video" : "image";
-            const extension = data.url.hd.includes("mp4") ? "mp4" : "png";
+            const data = (await axios.get(apiUrl)).data.result.url;
 
             return await ctx.reply({
-                [mediaType]: {
-                    url: data.url.hd
+                video: {
+                    url: data.hd || data.sd
                 },
-                mimetype: mime.lookup(extension)
+                mimetype: mime.lookup("mp4"),
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    config.msg.footer
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
