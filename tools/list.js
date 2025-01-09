@@ -59,7 +59,9 @@ async function get(type, ctx) {
                 break;
             }
             case "osettext": {
-                const data = ["price (Variabel yang tersedia: %tag%, %name%, %version%, %prefix%, %command%, %watermark%, %footer%, %readmore%)"];
+                const data = [
+                    "price (Variabel yang tersedia: %tag%, %name%, %version%, %prefix%, %command%, %watermark%, %footer%, %readmore%)"
+                ];
                 text = createList(data, d => `${quote(d)}`);
                 break;
             }

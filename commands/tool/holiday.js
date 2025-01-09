@@ -3,6 +3,7 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const moment = require("moment-timezone");
 
 module.exports = {
     name: "holiday",
@@ -24,16 +25,9 @@ module.exports = {
             } = await axios.get(apiUrl);
 
             const resultText = data.reverse().map((d) => {
-                const dt = new Date(d.holiday_date);
-                const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-                const months = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-
-                const day = days[dt.getDay()];
-                const mon = months[dt.getMonth()];
-                const year = dt.getFullYear();
-
+                const formattedDate = moment.tz(d.holiday_date, "Asia/Jakarta").locale("id").format("dddd, DD MMMM YYYY");
                 return `${bold(d.holiday_name)}\n` +
-                    `${quote(`${day}, ${dt.getDate()} ${mon} ${year}`)}`;
+                    quote(formattedDate);
             }).join(
                 "\n" +
                 `${quote("─────")}\n`

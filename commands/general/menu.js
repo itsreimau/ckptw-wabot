@@ -9,7 +9,7 @@ const moment = require("moment-timezone");
 module.exports = {
     name: "menu",
     aliases: ["allmenu", "help", "list", "listmenu"],
-    category: "tools.general",
+    category: "general",
     handler: {},
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
@@ -37,8 +37,8 @@ module.exports = {
 
             let text = `Hai @${ctx.sender.jid.split(/[:@]/)[0]}, berikut adalah daftar perintah yang tersedia!\n` +
                 "\n" +
-                `${quote(`Tanggal: ${moment.tz(config.system.timeZone).format("DD/MM/YY")}`)}\n` +
-                `${quote(`Waktu: ${moment.tz(config.system.timeZone).format("HH:mm:ss")}`)}\n` +
+                `${quote(`Tanggal: ${moment.tz(config.system.timeZone).locale("id").format("dddd, DD MMMM YYYY")}`)}\n` +
+                `${quote(`Waktu: ${moment.tz(config.system.timeZone).format("HH.mm.ss")}`)}\n` +
                 "\n" +
                 `${quote(`Uptime: ${tools.general.convertMsToDuration(Date.now() - config.bot.readyAt)}`)}\n` +
                 `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +

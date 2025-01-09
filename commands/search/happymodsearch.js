@@ -29,7 +29,7 @@ module.exports = {
             const resultText = data.map((d) =>
                 `${quote(`Nama: ${d.name}`)}\n` +
                 `${quote(`Versi: ${d.version.slice(0, -1)}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
+                `${quote(`URL: ${d.url}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`
