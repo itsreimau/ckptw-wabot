@@ -5,7 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "screenshot",
-    aliases: ["ss", "sshp", "sspc", "sstab", "ssweb"],
+    aliases: ["ss", "sspc", "ssweb"],
     category: "tool",
     handler: {
         coin: [10, "text", 1]
@@ -24,16 +24,8 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            let type = "desktop";
-            if (ctx._used.command === "sshp") {
-                type = "phone";
-            } else if (ctx._used.command === "sstab") {
-                type = "tablet";
-            }
-
-            const apiUrl = tools.api.createUrl("vreden", "/api/ssweb", {
-                url,
-                type
+            const apiUrl = tools.api.createUrl("vapis", "/api/ssweb", {
+                url
             });
 
             return await ctx.reply({

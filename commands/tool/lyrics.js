@@ -21,16 +21,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/lirik", {
-                text: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/lirik", {
+                message: input
             });
             const {
-                result
+                data
             } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply(
-                `${quote(`Judul: ${result.title}`)}\n` +
-                `${quote(`Artis: ${result.artist}`)}\n` +
+                `${quote(`Judul: ${data.title}`)}\n` +
+                `${quote(`Album: ${data.album}`)}\n` +
                 `${quote("─────")}\n` +
                 `${result.lyrics}\n` +
                 "\n" +

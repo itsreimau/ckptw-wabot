@@ -20,14 +20,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/lepton", {
+            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/lepton", {
                 text: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
-            return await ctx.reply(data.answer);
+            return await ctx.reply(data);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

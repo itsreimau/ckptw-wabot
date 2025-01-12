@@ -21,14 +21,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/googlesearch", {
-                query: input
+            const apiUrl = tools.api.createUrl("vapis", "/api/googlev1", {
+                q: input
             });
-            const data = (await axios.get(apiUrl)).data.result;
+            const {
+                data
+            } = (await axios.get(apiUrl)).data;
 
             const resultText = data.map((d) =>
                 `${quote(`Judul: ${d.title}`)}\n` +
-                `${quote(`Deskripsi: ${d.description}`)}\n` +
+                `${quote(`Deskripsi: ${d.desc}`)}\n` +
                 `${quote(`URL: ${d.link}`)}`
             ).join(
                 "\n" +

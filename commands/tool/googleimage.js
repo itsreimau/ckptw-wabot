@@ -23,13 +23,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/googleimage", {
-                query: input
+            const apiUrl = tools.api.createUrl("vapis", "/api/gimage", {
+                q: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
-            const result = tools.general.getRandomElement(data.result);
+            } = (await axios.get(apiUrl)).data;
+            const result = tools.general.getRandomElement(data);
 
             return await ctx.reply({
                 image: {

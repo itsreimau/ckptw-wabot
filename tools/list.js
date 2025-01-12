@@ -48,11 +48,6 @@ async function get(type, ctx) {
                 text = createList(data, d => `${quote(d)}`);
                 break;
             }
-            case "jadwaltv": {
-                const data = (await axios.get(api.createUrl("btch", "/jadwaltv", {}))).data.message.split("Berikut list tv yang tersedia: ")[1].split(", ");
-                text = createList(data, d => `${quote(d)}`);
-                break;
-            }
             case "mode": {
                 const data = ["group", "private", "public", "self"];
                 text = createList(data, d => `${quote(d)}`);

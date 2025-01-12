@@ -15,40 +15,19 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], [ "image","text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))}\n` +
-            quote(tools.msg.generateNotes(["AI ini dapat melihat gambar dan menjawab pertanyaan tentangnya. Kirim media dan tanyakan apa saja!"]))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))
         );
 
-        const msgType = ctx.getMessageType();
-        const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.general.checkMedia(msgType, "image", ctx),
-            tools.general.checkQuotedMedia(ctx.quoted, "image")
-        ]);
-
         try {
-            if (checkMedia || checkQuotedMedia) {
-                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-                const uploadUrl = await tools.general.upload(buffer);
-                const apiUrl = tools.api.createUrl("btch", "/bardimg", {
-                    url: uploadUrl,
-                    text: input
-                });
-                const {
-                    data
-                } = await axios.get(apiUrl);
+            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/bard", {
+                query: input
+            });
+            const {
+                data
+            } = (await axios.get(apiUrl)).data;
 
-                return await ctx.reply(data.result);
-            } else {
-                const apiUrl = tools.api.createUrl("btch", "/bard", {
-                    text: input
-                });
-                const {
-                    data
-                } = await axios.get(apiUrl);
-
-                return await ctx.reply(data.result);
-            }
+            return await ctx.reply(data);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

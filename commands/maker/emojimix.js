@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const {
     Sticker,
     StickerTypes
@@ -27,12 +28,19 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/emojimix", {
-                emoji1,
-                emoji2
+            const apiUrl = tools.api.createUrl("https://tenor.googleapis.com", "/v2/featured", {
+                key: "AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ",
+                contentfilter: "high",
+                media_filter: "png_transparent",
+                component: "proactive",
+                collection: "emoji_kitchen_v5",
+                q: `${emoji1}_${emoji2}`
             });
+            const {
+                data
+            } = await axios.get(apiUrl);
 
-            const sticker = new Sticker(apiUrl, {
+            const sticker = new Sticker(data.results[0].url, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,

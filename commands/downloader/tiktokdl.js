@@ -20,8 +20,7 @@ module.exports = {
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "https://example.com/ -a"))}\n` +
             quote(tools.msg.generatesFlagInformation({
-                "-a": "Otomatis kirim audio.",
-                "-m": "Unduh musik."
+                "-a": "Otomatis kirim audio."
             }))
         );
 
@@ -29,10 +28,6 @@ module.exports = {
             "-a": {
                 type: "boolean",
                 key: "audio"
-            },
-            "-m": {
-                type: "boolean",
-                key: "music"
             }
         });
 
@@ -83,25 +78,6 @@ module.exports = {
                         });
                     }
                 }
-            }
-
-            if (flag.music) {
-                const apiUrl = tools.api.createUrl("vreden", "/api/tikmusic", {
-                    url
-                });
-                const {
-                    result
-                } = (await axios.get(apiUrl)).data;
-
-                return await ctx.reply({
-                    audio: {
-                        url: data.url
-                    },
-                    mimetype: mime.lookup("mp3"),
-                    caption: `${quote(`URL: ${url}`)}\n` +
-                        "\n" +
-                        config.msg.footer
-                });
             }
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);

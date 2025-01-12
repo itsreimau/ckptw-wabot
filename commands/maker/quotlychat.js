@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const {
     Sticker,
     StickerTypes
@@ -28,13 +29,22 @@ module.exports = {
         try {
             const profilePictureUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
-            const apiUrl = tools.api.createUrl("btch", "/quotely", {
-                avatar: profilePictureUrl,
+            const apiUrl = tools.api.createUrl("fasturl", "/tool/quotly", {
                 name: ctx.sender.pushName || "-",
-                text: input
+                text: input,
+                avatar: profilePictureUrl,
+                bgColor: "#444444"
+            });
+            const {
+                data
+            } = await axios.get(apiUrl, {
+                headers: {
+                    responseType: "arraybuffer",
+                    "x-api-key": tools.api.listUrl().fasturl.APIKey
+                }
             });
 
-            const sticker = new Sticker(apiUrl, {
+            const sticker = new Sticker(data, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,

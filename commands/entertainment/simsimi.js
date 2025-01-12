@@ -21,14 +21,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/simi", {
-                text: input
+            const apiUrl = tools.api.createUrl("vapis", "/api/simi", {
+                q: input
             });
             const {
-                result
-            } = (await axios.get(apiUrl)).data;
+                data
+            } = await axios.get(apiUrl);
 
-            return await ctx.reply(result);
+            return await ctx.reply(data.result);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

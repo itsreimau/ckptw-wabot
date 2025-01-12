@@ -21,8 +21,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/ai/text2img", {
-                text: input
+            const apiUrl = tools.api.createUrl("vapis", "/api/txt2imgv1", {
+                q: input
             });
 
             return await ctx.reply({

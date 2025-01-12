@@ -21,10 +21,12 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/bukalapak", {
-                text: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/bukalapak", {
+                message: input
             });
-            const data = (await axios.get(apiUrl)).data.result;
+            const {
+                data
+            } = (await axios.get(apiUrl)).data;
 
             const resultText = data.map((d) =>
                 `${quote(`Nama: ${d.title}`)}\n` +

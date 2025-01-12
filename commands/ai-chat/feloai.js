@@ -21,14 +21,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/feloai", {
-                text: input
+            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/felo", {
+                query: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
-            return await ctx.reply(data.result.answer);
+            return await ctx.reply(data.answer);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

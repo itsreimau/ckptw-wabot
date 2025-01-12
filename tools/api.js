@@ -3,9 +3,6 @@ const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"
     },
-    btch: {
-        baseURL: "https://api.tioo.eu.org"
-    },
     fasturl: {
         baseURL: "https://fastrestapis.fasturl.link",
         APIKey: "" // APIKey tidak disediakan, Anda dapat menggunakan APIKey Anda sendiri
@@ -39,9 +36,6 @@ const APIs = {
     },
     vapis: {
         baseURL: "https://vapis.my.id"
-    },
-    vreden: {
-        baseURL: "https://api.vreden.my.id"
     }
 };
 

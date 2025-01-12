@@ -10,10 +10,10 @@ const {
 global.config = {
     // Informasi bot dasar
     bot: {
-        name: "CKPTW", // Nama bot
+        name: "UmbrX", // Nama bot
         prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i, // Karakter awalan perintah yang diizinkan
         phoneNumber: "", // Nomor telepon bot (opsional jika menggunakan QR code)
-        thumbnail: "", // Gambar thumbnail bot
+        thumbnail: "https://itsreimau.is-a.dev/umbrx/dist/img/thumbnail/umbrx.jpg", // Gambar thumbnail bot
         website: "https://chat.whatsapp.com/FxEYZl2UyzAEI2yhaH34Ye", // Website untuk WhatsApp bot
         groupJid: "" // JID untuk group bot (opsional jika tidak menggunakan requireBotGroupMembership)
     },
@@ -33,7 +33,7 @@ global.config = {
         restrict: quote("⛔ Perintah ini telah dibatasi karena alasan keamanan!"), // Pesan pembatasan perintah
 
         watermark: `@${pkg.name} / v${pkg.version}`, // Watermark nama dan versi pada bot
-        footer: italic("Developed by ItsReimau"), // Footer di pesan bot
+        footer: italic("UmbrX - Developed by ItsReimau"), // Footer di pesan bot
         readmore: "\u200E".repeat(4001), // String read more
 
         wait: quote("🔄 Tunggu sebentar..."), // Pesan loading
@@ -56,11 +56,11 @@ global.config = {
     },
 
     system: {
-        alwaysOnline: true, // Bot selalu aktif
+        alwaysOnline: true, // Bot selalu berstatus "online"
         autoMention: false, // Bot otomatis mention seseorang dalam pesan yang dikirim
         autoRead: true, // Bot baca pesan otomatis
-        autoTypingOnCmd: true, // Tampilkan status mengetik saat memproses
-        cooldown: 5 * 1000, // Jeda antar perintah (ms)
+        autoTypingOnCmd: true, // Tampilkan status "sedang mengetik" saat memproses perintah
+        cooldown: 10 * 1000, // Jeda antar perintah (ms)
         port: 3000, // Port (jika pakai server)
         restrict: false, // Batasi akses perintah
         requireBotGroupMembership: false, // Harus gabung grup bot
@@ -69,6 +69,6 @@ global.config = {
         timeZone: "Asia/Jakarta", // Zona waktu bot
         useCoin: true, // Pakai koin
         usePairingCode: false, // Pakai kode pairing untuk koneksi
-        useServer: false // Jalankan bot tanpa server
+        useServer: false // Jalankan bot dengan server
     }
 };

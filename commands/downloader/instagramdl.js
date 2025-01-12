@@ -12,7 +12,8 @@ module.exports = {
         coin: [10, "text", 1]
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        const status = await handler(ctx, module.exports.handler);
+        if (status) return;
 
         const url = ctx.args[0] || null;
 
@@ -25,15 +26,15 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("btch", "/download/igdl", {
+            const apiUrl = tools.api.createUrl("agatz", "/api/instagram", {
                 url
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
-            for (const media of data.result) {
-                const isImage = media.url.includes(".jpg");
+            for (const media of data.videoLinks) {
+                const isImage = media.quality.toLowerCase().includes("download image");
                 const mediaType = isImage ? "image" : "video";
                 const extension = isImage ? "png" : "mp4";
 
