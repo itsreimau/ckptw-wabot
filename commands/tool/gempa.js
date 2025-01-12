@@ -23,7 +23,7 @@ module.exports = {
 
             return await ctx.reply({
                 image: {
-                    url: tools.api.createUrl("https://data.bmkg.go.id", `/DataMKG/TEWS/${gempa.Shakemap}`);
+                    url: tools.api.createUrl("https://data.bmkg.go.id", `/DataMKG/TEWS/${gempa.Shakemap}`)
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(gempa.Wilayah)}\n` +
