@@ -76,7 +76,7 @@ async function handleUserEvent(bot, m) {
 module.exports = (bot) => {
     // Penanganan acara saat bot siap
     bot.ev.once(Events.ClientReady, async (m) => {
-        console.log(`[${config.pkg.name}] Ready at ${m.user.id}`);
+        console.log(`[${config.pkg.name}] ${config.bot.name} by ${config.owner.name} | Ready at ${m.user.id}`);
 
         const botRestart = await db.get("bot.restart") || {};
         if (botRestart && botRestart.jid && botRestart.timestamp) {
