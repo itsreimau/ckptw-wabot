@@ -2,11 +2,11 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
+const mime = require("mime");
+const path = require("path");
 
 module.exports = {
-    name: "threadsdl",
-    aliases: ["threads"],
+    name: "sfiledl",
     category: "downloader",
     handler: {
         coin: [10, "text", 1]
@@ -25,32 +25,25 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("vapis", "/api/threads", {
+            const apiUrl = tools.api.createUrl("vapis", "/api/sfiledl", {
                 url
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
+            const fileName = path.basename(data.dl.split("&")[0]);
+            const fileExtension = path.extname(fileName).slice(1);
 
-            if (data.media && data.media.length > 0) {
-                for (const media of data.media) {
-                    if (media.type === "Video" && media.videoUrl) {
-                        await ctx.reply({
-                            video: {
-                                url: media.videoUrl
-                            },
-                            mimetype: mime.lookup("mp4")
-                        });
-                    } else if (media.type === "Image" && media.url) {
-                        await ctx.reply({
-                            image: {
-                                url: media.url
-                            },
-                            mimetype: mime.lookup("png")
-                        });
-                    }
-                }
-            }
+            return await ctx.reply({
+                document: {
+                    url: data.download
+                },
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    config.msg.footer,
+                fileName,
+                mimetype: mime.lookup(fileExtension) || "application/octet-stream"
+            });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

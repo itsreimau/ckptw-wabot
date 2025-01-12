@@ -14,8 +14,9 @@ module.exports = {
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
+        const apiUrl = tools.api.createUrl("sandipbaruwal", "/dp");
+
         try {
-            const apiUrl = tools.api.createUrl("sandipbaruwal", "/dp");
             const {
                 data
             } = await axios.get(apiUrl);

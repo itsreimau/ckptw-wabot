@@ -1,15 +1,14 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const {
     Sticker,
     StickerTypes
 } = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "quotlychat",
-    aliases: ["qc", "quotly"],
+    name: "furbrat",
+    aliases: ["sfurbrat", "stikerfurbrat", "stickerfurbrat"],
     category: "maker",
     handler: {
         coin: [10, "text", 1]
@@ -27,25 +26,11 @@ module.exports = {
         if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 50 kata!`));
 
         try {
-            const profilePictureUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-
-            const apiUrl = tools.api.createUrl("fasturl", "/tool/quotly", {
-                name: ctx.sender.pushName || "-",
-                text: input,
-                avatar: profilePictureUrl,
-                bgColor: "#444444"
+            const apiUrl = tools.api.createUrl("fasturl", "/tool/furbrat", {
+                text: input
             });
 
-            const {
-                data: buffer
-            } = await axios.get(apiUrl, {
-                responseType: "arraybuffer",
-                headers: {
-                    "x-api-key": tools.api.listUrl().fasturl.APIKey
-                }
-            });
-
-            const sticker = new Sticker(buffer, {
+            const sticker = new Sticker(apiUrl, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,

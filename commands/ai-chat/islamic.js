@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "islamic",
-    aliases: ["islamicai", "muslim", "muslimai"],
+    aliases: ["islamicai"],
     category: "ai-chat",
     handler: {},
     code: async (ctx) => {

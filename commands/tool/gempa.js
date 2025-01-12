@@ -18,13 +18,12 @@ module.exports = {
 
         try {
             const {
-                data
-            } = await axios.get(apiUrl);
-            const gempa = data.Infogempa.gempa;
+                gempa
+            } = (await axios.get(apiUrl)).data.Infogempa;
 
             return await ctx.reply({
                 image: {
-                    url: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`
+                    url: tools.api.createUrl("https://data.bmkg.go.id", `/DataMKG/TEWS/${gempa.Shakemap}`);
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(gempa.Wilayah)}\n` +

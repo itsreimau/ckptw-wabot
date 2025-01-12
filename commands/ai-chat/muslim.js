@@ -4,12 +4,10 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "characterai",
-    aliases: ["cai"],
+    name: "muslim",
+    aliases: ["muslimai"],
     category: "ai-chat",
-    handler: {
-        coin: [10, "text", 1]
-    },
+    handler: {},
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
@@ -21,15 +19,21 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nyxs", "/ai/character-ai", {
-                prompt: input,
-                gaya: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.` // Dapat diubah sesuai keinginan Anda
+            const senderId = ctx.sender.jid.split(/[:@]/)[0];
+            const uid = await db.get(`user.${senderId}.uid`) || "guest";
+            const apiUrl = tools.api.createUrl("fasturl", "/aillm/muslim", {
+                ask: input,
+                sessionId: uid
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = await axios.get(apiUrl, {
+                headers: {
+                    "x-api-key": tools.api.listUrl().fasturl.APIKey
+                }
+            });
 
-            return await ctx.reply(data.result);
+            return await ctx.reply(data.response);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

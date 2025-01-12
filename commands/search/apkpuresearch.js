@@ -1,14 +1,12 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "googleimage",
-    aliases: ["gimage"],
-    category: "tool",
+    name: "apkpuresearch",
+    aliases: ["apkpure", "apkpures"],
+    category: "search",
     handler: {
         coin: [10, "text", 1]
     },
@@ -19,27 +17,31 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "moon"))
+            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "evangelion"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("vapis", "/api/gimage", {
+            const apiUrl = tools.api.createUrl("vapis", "/api/apkpure", {
                 q: input
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
-            const result = tools.general.getRandomElement(data);
 
-            return await ctx.reply({
-                image: {
-                    url: result.url
-                },
-                mimetype: mime.lookup("png"),
-                caption: `${quote(`Kueri: ${input}`)}\n` +
-                    "\n" +
-                    config.msg.footer
-            });
+            const resultText = data.map((d) =>
+                `${quote(`Nama: ${d.title}`)}\n` +
+                `${quote(`Pengembang: ${d.developer}`)}\n` +
+                `${quote(`Rating: ${d.rating}`)}\n` +
+                `${quote(`URL: ${d.link}`)}`
+            ).join(
+                "\n" +
+                `${quote("─────")}\n`
+            );
+            return await ctx.reply(
+                `${resultText}\n` +
+                "\n" +
+                config.msg.footer
+            );
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);
