@@ -151,7 +151,6 @@ function getRandomElement(arr) {
 
 function isCmd(content, config) {
     const prefixRegex = new RegExp(config.prefix, "i");
-    const content = content && content.trim();
 
     if (!prefixRegex.test(content)) return false;
 
