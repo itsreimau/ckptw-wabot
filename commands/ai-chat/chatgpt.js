@@ -15,13 +15,13 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], [ "image","text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used, "apa itu bot whatsapp?"))}\n` +
             quote(tools.msg.generateNotes(["AI ini dapat melihat media dan menjawab pertanyaan tentangnya. Kirim media dan tanyakan apa saja!"]))
         );
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.general.checkMedia(msgType, "image", ctx),
+            tools.general.checkMedia(msgType, "image"),
             tools.general.checkQuotedMedia(ctx.quoted, "image")
         ]);
 

@@ -12,9 +12,9 @@ async function handler(ctx, options) {
     const botMode = await db.get("bot.mode") || "public";
     if (isPrivate && botMode === "group") return true;
     if (isGroup && botMode === "private") return true;
-    if (!tools.general.isOwner(ctx, senderId, true) && botMode === "self") return true;
+    if (!tools.general.isOwner(senderId, true) && botMode === "self") return true;
 
-    const isOwner = await tools.general.isOwner(ctx, senderId, config.system.selfOwner);
+    const isOwner = tools.general.isOwner(senderId);
     const userDb = await db.get(`user.${senderId}`) || {};
 
     if (config.system.requireBotGroupMembership && !isOwner && !userDb?.premium) {
@@ -52,15 +52,15 @@ async function handler(ctx, options) {
 
     const checkOptions = {
         admin: {
-            check: async () => (await ctx.isGroup() && !await tools.general.isAdmin(ctx, senderJid)),
+            check: async () => (await ctx.isGroup() && !await tools.general.isAdmin(ctx.group, senderJid)),
             msg: config.msg.admin
         },
         botAdmin: {
-            check: async () => (await ctx.isGroup() && !await tools.general.isBotAdmin(ctx)),
+            check: async () => (await ctx.isGroup() && !await tools.general.isBotAdmin(ctx.group)),
             msg: config.msg.botAdmin
         },
         coin: {
-            check: async () => await checkCoin(ctx, options.coin, senderId) && config.system.useCoin,
+            check: async () => await checkCoin(options.coin, senderId) && config.system.useCoin,
             msg: config.msg.coin
         },
         group: {
@@ -99,29 +99,19 @@ async function handler(ctx, options) {
 }
 
 // Cek koin
-async function checkCoin(ctx, coinOptions, senderId) {
-    const isOwner = await tools.general.isOwner(ctx, senderId, config.system.selfOwner);
+async function checkCoin(requiredCoin, senderId) {
+    const isOwner = tools.general.isOwner(senderId);
     const userDb = await db.get(`user.${senderId}`) || {};
 
     if (isOwner || userDb?.premium) return false;
 
     const userCoin = userDb?.coin || 0;
-    const [requiredCoin = 0, requiredMedia = null, mediaSourceOption = null] = Array.isArray(coinOptions) ? coinOptions : [coinOptions];
-
-    if (requiredMedia) {
-        const msgType = ctx.getMessageType();
-        let hasMedia = false;
-
-        if (mediaSourceOption === 1 || mediaSourceOption === 3) hasMedia = await tools.general.checkMedia(msgType, requiredMedia, ctx);
-        if ((mediaSourceOption === 2 || mediaSourceOption === 3) && ctx.quoted) hasMedia = await tools.general.checkQuotedMedia(ctx.quoted, requiredMedia);
-
-        if (!hasMedia) return false;
-    }
 
     if (userCoin < requiredCoin) return true;
 
     await db.subtract(`user.${senderId}.coin`, requiredCoin);
     return false;
 }
+
 
 module.exports = handler;

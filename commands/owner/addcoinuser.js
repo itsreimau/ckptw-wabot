@@ -22,7 +22,7 @@ module.exports = {
 
         if (!user && isNaN(coinAmount)) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderId} 4`)),
+                quote(tools.msg.generateCommandExample(ctx._used, `@${senderId} 4`)),
             mentions: [senderJid]
         });
 

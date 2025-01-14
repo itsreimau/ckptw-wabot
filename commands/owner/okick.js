@@ -21,12 +21,12 @@ module.exports = {
 
         if (!account) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderId}`)),
+                quote(tools.msg.generateCommandExample(ctx._used, `@${senderId}`)),
             mentions: [senderJid]
         });
 
         try {
-            if ((await tools.general.isAdmin(ctx, account))) return await ctx.reply(quote(`❎ Dia adalah admin grup!`));
+            if ((await tools.general.isAdmin(ctx.group, account))) return await ctx.reply(quote(`❎ Dia adalah admin grup!`));
 
             await ctx.group().kick([account]);
 

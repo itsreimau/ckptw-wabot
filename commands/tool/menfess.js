@@ -7,7 +7,7 @@ module.exports = {
     aliases: ["conf", "confes", "confess", "menf", "menfes"],
     category: "tool",
     handler: {
-        coin: [10, "text", 1],
+        coin: 10,
         private: true
     },
     code: async (ctx) => {
@@ -21,7 +21,7 @@ module.exports = {
 
         if (!formattedId && !menfessText) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `${senderId} halo dunia!`))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used, `${senderId} halo dunia!`))}\n` +
             quote(tools.msg.generateNotes(["Jangan gunakan spasi pada angka. Contoh: +62 8123-4567-8910, seharusnya +628123-4567-8910"]))
         );
 

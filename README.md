@@ -70,10 +70,7 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
        handler: { // Pengaturan khusus untuk perintah ini
            admin: Boolean, // Apakah hanya admin grup yang bisa menggunakan perintah ini? (true/false)
            botAdmin: Boolean, // Apakah bot harus menjadi admin agar bisa menjalankan perintah ini? (true/false)
-           coin: Array[coin, media, source] || Number, // Koin yang diperlukan untuk menjalankan perintah ini:
-           // coin: jumlah koin yang dibutuhkan
-           // media: jenis media yang diperlukan
-           // source: dari mana media diambil (1 untuk media utama, 2 untuk media yang dikutip, 3 untuk keduanya)
+           coin: Number, // Jumlah koin yang diperlukan untuk menjalankan perintah ini
            group: Boolean, // Apakah perintah ini hanya bisa digunakan di dalam grup? (true/false)
            owner: Boolean, // Apakah hanya pemilik bot yang bisa menggunakan perintah ini? (true/false)
            premium: Boolean, // Apakah hanya pengguna premium yang bisa menggunakan perintah ini? (true/false)

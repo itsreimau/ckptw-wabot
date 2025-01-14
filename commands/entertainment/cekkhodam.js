@@ -8,7 +8,7 @@ module.exports = {
     aliases: ["checkkhodam", "khodam"],
     category: "entertainment",
     handler: {
-        coin: [10, "text", 1]
+        coin: 10
     },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
@@ -17,11 +17,11 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "john doe"))
+            quote(tools.msg.generateCommandExample(ctx._used, "john doe"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", `/SazumiVicky/cek-khodam/main/khodam/list.txt`, {});
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/SazumiVicky/cek-khodam/main/khodam/list.txt", {});
             const {
                 data
             } = await axios.get(apiUrl);

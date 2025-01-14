@@ -21,7 +21,7 @@ module.exports = {
 
         if (!user) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, `@${senderId}`)),
+                quote(tools.msg.generateCommandExample(ctx._used, `@${senderId}`)),
             mentions: [senderJid]
         });
 

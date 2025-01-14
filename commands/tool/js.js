@@ -11,7 +11,7 @@ module.exports = {
     aliases: ["javascript"],
     category: "tool",
     handler: {
-        coin: [10, "text", 1]
+        coin: 10
     },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
@@ -20,7 +20,7 @@ module.exports = {
 
         if (!script) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, 'console.log("halo dunia!");'))
+            quote(tools.msg.generateCommandExample(ctx._used, 'console.log("halo dunia!");'))
         );
 
         try {

@@ -10,7 +10,7 @@ module.exports = {
     aliases: ["harilibur", "libur"],
     category: "tool",
     handler: {
-        coin: [10, "text", 1]
+        coin: 10
     },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;

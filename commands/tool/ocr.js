@@ -7,14 +7,14 @@ module.exports = {
     name: "ocr",
     category: "tool",
     handler: {
-        coin: [10, "image", 3]
+        coin: 10
     },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.general.checkMedia(msgType, "image", ctx),
+            tools.general.checkMedia(msgType, "image"),
             tools.general.checkQuotedMedia(ctx.quoted, "image")
         ]);
 

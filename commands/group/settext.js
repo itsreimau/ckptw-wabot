@@ -20,7 +20,7 @@ module.exports = {
 
         if (!key && !text) return await ctx.reply(
             `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "welcome Selamat datang di grup!"))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used, "welcome Selamat datang di grup!"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 

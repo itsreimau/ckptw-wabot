@@ -20,12 +20,12 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "i want to be a cat|just meow meow"))
+            quote(tools.msg.generateCommandExample(ctx._used, "i want to be a cat|just meow meow"))
         );
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.general.checkMedia(msgType, "image", ctx),
+            tools.general.checkMedia(msgType, "image"),
             tools.general.checkQuotedMedia(ctx.quoted, "image")
         ]);
 

@@ -9,14 +9,14 @@ module.exports = {
     aliases: ["tourl"],
     category: "tool",
     handler: {
-        coin: [10, ["audio", "document", "image", "video", "sticker"], 3]
+        coin: 10
     },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.general.checkMedia(msgType, ["audio", "document", "image", "video", "sticker"], ctx),
+            tools.general.checkMedia(msgType, ["audio", "document", "image", "video", "sticker"]),
             tools.general.checkQuotedMedia(ctx.quoted, ["audio", "document", "image", "video", "sticker"])
         ]);
 

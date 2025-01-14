@@ -18,7 +18,7 @@ module.exports = {
 
         if (!key && !text) return await ctx.reply(
             `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "price $1 untuk sewa bot 1 bulan"))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used, "price $1 untuk sewa bot 1 bulan"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 

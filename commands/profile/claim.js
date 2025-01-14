@@ -14,7 +14,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "daily"))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used, "daily"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
@@ -39,7 +39,7 @@ module.exports = {
 
         if (remainingTime > 0) return await ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input}. Tunggu ${tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
 
-        if (tools.general.isOwner(ctx, senderId, true) && userDb?.premium) return await ctx.reply(quote("❎ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
+        if (tools.general.isOwner(senderId) && userDb?.premium) return await ctx.reply(quote("❎ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
 
         try {
             const rewardCoin = (userDb?.coin || 0) + claimRewards[input].reward;

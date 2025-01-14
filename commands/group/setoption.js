@@ -19,7 +19,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "antilink"))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used, "antilink"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`, `Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} status`)} untuk melihat status.`]))
         );
 

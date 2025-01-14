@@ -33,7 +33,7 @@ global.config = {
         restrict: quote("⛔ Perintah ini telah dibatasi karena alasan keamanan!"), // Pesan pembatasan perintah
 
         watermark: `@${pkg.name} / v${pkg.version}`, // Watermark nama dan versi pada bot
-        footer: italic("UmbrX - Developed by ItsReimau"), // Footer di pesan bot
+        footer: italic("Developed by ItsReimau"), // Footer di pesan bot
         readmore: "\u200E".repeat(4001), // String read more
 
         wait: quote("🔄 Tunggu sebentar..."), // Pesan loading

@@ -7,9 +7,9 @@ const {
     fromBuffer
 } = require("file-type");
 
-async function checkAdmin(ctx, id) {
+async function checkAdmin(group, id) {
     try {
-        const members = await ctx.group().members();
+        const members = await group().members();
         return members.some((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id === id);
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
@@ -17,7 +17,7 @@ async function checkAdmin(ctx, id) {
     }
 }
 
-async function checkMedia(msgType, requiredMedia, ctx) {
+async function checkMedia(msgType, requiredMedia) {
     const mediaMap = {
         audio: "audioMessage",
         contact: "contactMessage",
@@ -32,7 +32,6 @@ async function checkMedia(msgType, requiredMedia, ctx) {
         ptt: "audioMessage",
         reaction: "reactionMessage",
         sticker: "stickerMessage",
-        text: () => ctx.args && ctx.args.length > 0,
         video: "videoMessage",
         viewOnce: "viewOnceMessageV2"
     };
@@ -42,8 +41,6 @@ async function checkMedia(msgType, requiredMedia, ctx) {
     return mediaList.some(media => {
         if (media === "document") {
             return mediaMap[media].includes(msgType);
-        } else if (media === "text") {
-            return mediaMap[media]();
         }
         return msgType === mediaMap[media];
     });
@@ -152,9 +149,9 @@ function getRandomElement(arr) {
     }
 }
 
-function isCmd(m, ctx) {
-    const prefixRegex = new RegExp(ctx._config.prefix, "i");
-    const content = m.content && m.content.trim();
+function isCmd(content, config) {
+    const prefixRegex = new RegExp(config.prefix, "i");
+    const content = content && content.trim();
 
     if (!prefixRegex.test(content)) return false;
 
@@ -163,7 +160,7 @@ function isCmd(m, ctx) {
         const [cmdName, ...inputArray] = content.slice(1).trim().toLowerCase().split(/\s+/);
         const input = inputArray.join(" ");
 
-        const cmd = ctx._config.cmd;
+        const cmd = config.cmd;
         const listCmd = Array.from(cmd.values()).flatMap(command => {
             const aliases = Array.isArray(command.aliases) ? command.aliases : [];
             return [command.name, ...aliases];
@@ -199,35 +196,21 @@ function isCmd(m, ctx) {
     }
 }
 
-async function isAdmin(ctx, id) {
-    try {
-        let jid = id || ctx.sender.jid;
-        if (jid.includes(":")) jid = `${jid.split(":")[0]}@s.whatsapp.net`;
-        return await checkAdmin(ctx, jid);
-    } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
-        return false;
-    }
+async function isAdmin(group, jid) {
+    const check = await checkAdmin(group, jid);
+    return check;
 }
 
-async function isBotAdmin(ctx) {
-    try {
-        const id = config.bot.jid;
-        return await checkAdmin(ctx, id);
-    } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
-        return false;
-    }
+async function isBotAdmin(group) {
+    const jid = config.bot.jid;
+    const check = await checkAdmin(group, jid);
+    return check;
 }
 
-function isOwner(ctx, id, selfOwner) {
-    try {
-        const number = id || ctx.sender.jid.split(/[:@]/)[0]
-        return selfOwner ? config.bot.id === number || config.owner.number === number || config.owner.co.includes(number) : config.owner.number === number || config.owner.co.includes(number);
-    } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
-        return false;
-    }
+function isOwner(id) {
+    if (config.system.selfOwner) return config.bot.id === id || config.owner.id === id || config.owner.co.includes(id);
+
+    return config.owner.id === id || config.owner.co.includes(id);
 }
 
 function isUrl(url) {

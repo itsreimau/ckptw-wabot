@@ -7,7 +7,7 @@ const {
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 
-async function get(type, ctx) {
+async function get(type) {
     try {
         let text = "";
 
@@ -96,8 +96,7 @@ async function get(type, ctx) {
                 break;
             }
             default: {
-                console.error(`[${config.pkg.name}] Error: Unknown type ${type}`);
-                text = quote(`❎ Tidak diketahui: ${type}`);
+                text = quote(`❎ Tipe tidak diketahui: ${type}`);
                 break;
             }
         }

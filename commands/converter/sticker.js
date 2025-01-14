@@ -16,7 +16,7 @@ module.exports = {
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.general.checkMedia(msgType, ["image", "gif", "video"], ctx),
+            tools.general.checkMedia(msgType, ["image", "gif", "video"]),
             tools.general.checkQuotedMedia(ctx.quoted, ["image", "gif", "video"])
         ]);
 

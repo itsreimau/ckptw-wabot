@@ -9,7 +9,7 @@ module.exports = {
     aliases: ["tr"],
     category: "tool",
     handler: {
-        coin: [10, "text", 1]
+        coin: 10
     },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
@@ -19,7 +19,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "en halo dunia!"))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used, "en halo dunia!"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 

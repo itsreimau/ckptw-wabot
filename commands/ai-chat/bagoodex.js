@@ -7,7 +7,7 @@ module.exports = {
     name: "bagoodex",
     category: "ai-chat",
     handler: {
-        coin: [10, "text", 1]
+        coin: 10
     },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
@@ -16,7 +16,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used.prefix + ctx._used.command, "apa itu bot whatsapp?"))
+            quote(tools.msg.generateCommandExample(ctx._used, "apa itu bot whatsapp?"))
         );
 
         try {

@@ -4,7 +4,7 @@ const {
 } = require("@mengkodingan/ckptw");
 
 function generateInstruction(actions, mediaTypes) {
-    if (!actions || !actions.length) return "Tindakan yang diperlukan harus ditentukan!";
+    if (!actions || !actions.length) return "'actions' yang diperlukan harus ditentukan!";
 
     let translatedMediaTypes;
     if (typeof mediaTypes === "string") {
@@ -12,7 +12,7 @@ function generateInstruction(actions, mediaTypes) {
     } else if (Array.isArray(mediaTypes)) {
         translatedMediaTypes = mediaTypes;
     } else {
-        return "Jenis media harus berupa string atau array string!";
+        return "'mediaTypes' harus berupa string atau array string!";
     }
 
     const mediaTypeTranslations = {
@@ -56,17 +56,17 @@ function generateInstruction(actions, mediaTypes) {
     return `📌 ${actionList} ${mediaTypesList}!`;
 }
 
-function generateCommandExample(command, args) {
-    if (!command) return "Perintah harus diberikan!";
+function generateCommandExample(used, args) {
+    if (!used) return "'used' harus diberikan!";
 
-    if (!args) return "Argumen harus diberikan!";
+    if (!args) return "'args' harus diberikan!";
 
-    const commandMessage = `Contoh: ${monospace(`${command} ${args}`)}`;
+    const commandMessage = `Contoh: ${monospace(`${used.prefix + used.command} ${args}`)}`;
     return commandMessage;
 }
 
 function generatesFlagInformation(flags) {
-    if (typeof flags !== "object" || !flags) return "Flags harus disediakan sebagai objek!";
+    if (typeof flags !== "object" || !flags) return "'flags' harus berupa objek!";
 
     const flagInfo = "Flag:\n" +
         Object.entries(flags).map(([flag, description]) =>
@@ -77,7 +77,7 @@ function generatesFlagInformation(flags) {
 }
 
 function generateNotes(notes) {
-    if (!Array.isArray(notes)) return "Notes must be an array of strings!";
+    if (!Array.isArray(notes)) return "'notes' harus berupa string!";
 
     const notesInfo = "Catatan:\n" +
         notes.map(note =>

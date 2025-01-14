@@ -13,7 +13,7 @@ const fs = require("fs");
 const util = require("util");
 
 // Utilitas
-async function handleUserEvent(bot, m) {
+async function handleUserEvent(core, m, type) {
     const {
         id,
         participants
@@ -24,13 +24,12 @@ async function handleUserEvent(bot, m) {
         const groupDb = await db.get(`group.${groupId}`) || {};
 
         if (groupDb?.option?.welcome) {
-            const metadata = await bot.core.groupMetadata(id);
+            const metadata = await core.groupMetadata(id);
 
             for (const jid of participants) {
-                const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+                const profilePictureUrl = await core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
-                const eventType = m.eventsType;
-                const customText = eventType === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
+                const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
                 const userTag = `@${jid.split("@")[0]}`;
 
                 const text = customText ?
@@ -42,7 +41,7 @@ async function handleUserEvent(bot, m) {
                         quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
                         quote(`👋 ${userTag} keluar dari grup ${metadata.subject}.`));
 
-                await bot.core.sendMessage(id, {
+                await core.sendMessage(id, {
                     text,
                     contextInfo: {
                         mentionedJid: [jid],
@@ -59,7 +58,7 @@ async function handleUserEvent(bot, m) {
                     }
                 });
 
-                if (eventType === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(id, {
+                if (eventType === "UserJoin" && groupDb?.text?.intro) await core.sendMessage(id, {
                     text: groupDb?.text?.intro,
                     mentions: [jid]
                 });
@@ -67,7 +66,7 @@ async function handleUserEvent(bot, m) {
         }
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
-        await bot.core.sendMessage(id, {
+        await core.sendMessage(id, {
             text: quote(`⚠️ Terjadi kesalahan: ${error.message}`)
         });
     }
@@ -81,7 +80,7 @@ module.exports = (bot) => {
         const botRestart = await db.get("bot.restart") || {};
         if (botRestart && botRestart.jid && botRestart.timestamp) {
             const timeago = tools.general.convertMsToDuration(Date.now() - botRestart.timestamp);
-            await bot.core.sendMessage(botRestart.jid, {
+            await core.sendMessage(botRestart.jid, {
                 text: quote(`✅ Berhasil dimulai ulang! Membutuhkan waktu ${timeago}.`),
                 edit: botRestart.key
             });
@@ -97,7 +96,7 @@ module.exports = (bot) => {
         ]);
 
         if (config.system.requireBotGroupMembership) {
-            const code = await bot.core.groupInviteCode(config.bot.groupJid) || "FxEYZl2UyzAEI2yhaH34Ye";
+            const code = await core.groupInviteCode(config.bot.groupJid) || "FxEYZl2UyzAEI2yhaH34Ye";
             config.bot.groupLink = `https://chat.whatsapp.com/${code}`;
         }
     });
@@ -115,7 +114,7 @@ module.exports = (bot) => {
         // Basis data untuk pengguna
         const userDb = await db.get(`user.${senderId}`) || {};
 
-        const isOwner = tools.general.isOwner(ctx, senderId, config.system.selfOwner);
+        const isOwner = tools.general.isOwner(senderId);
         const isPremium = userDb?.premium;
 
         // Penanganan pada mode bot
@@ -153,7 +152,7 @@ module.exports = (bot) => {
 
 
             // Penanganan untuk perintah
-            const isCmd = tools.general.isCmd(m, ctx);
+            const isCmd = tools.general.isCmd(m.content, ctx._config);
             if (isCmd) {
                 if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah
 
@@ -272,7 +271,7 @@ module.exports = (bot) => {
             // Penanganan antilink
             if (groupDb?.option?.antilink) {
                 const isUrl = await tools.general.isUrl(m.content);
-                if (m.content && await tools.general.isUrl(m.content) && !await tools.general.isAdmin(ctx, senderJid)) {
+                if (m.content && await tools.general.isUrl(m.content) && !await tools.general.isAdmin(ctx.group, senderJid)) {
                     await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
                     await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([senderJid]);
@@ -282,9 +281,9 @@ module.exports = (bot) => {
             // Penanganan antinsfw
             if (groupDb?.option?.antinsfw) {
                 const msgType = ctx.getMessageType();
-                const checkMedia = await tools.general.checkMedia(msgType, "image", ctx)
+                const checkMedia = await tools.general.checkMedia(msgType, "image")
 
-                if (checkMedia && !await tools.general.isAdmin(ctx, senderJid)) {
+                if (checkMedia && !await tools.general.isAdmin(ctx.group, senderJid)) {
                     const buffer = await ctx.msg.media.toBuffer();
                     const uploadUrl = await tools.general.upload(buffer);
 
@@ -310,9 +309,9 @@ module.exports = (bot) => {
             // Penanganan antisticker
             if (groupDb?.option?.antisticker) {
                 const msgType = ctx.getMessageType();
-                const checkMedia = await tools.general.checkMedia(msgType, "sticker", ctx)
+                const checkMedia = await tools.general.checkMedia(msgType, "sticker")
 
-                if (checkMedia && !await tools.general.isAdmin(ctx, senderJid)) {
+                if (checkMedia && !await tools.general.isAdmin(ctx.group, senderJid)) {
                     await ctx.reply(`⛔ Jangan kirim stiker!`);
                     await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([senderJid]);
@@ -322,7 +321,7 @@ module.exports = (bot) => {
             // Penanganan antitoxic
             const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
             if (groupDb?.option?.antitoxic) {
-                if (m.content && toxicRegex.test(m.content) && !await tools.general.isAdmin(ctx, senderJid)) {
+                if (m.content && toxicRegex.test(m.content) && !await tools.general.isAdmin(ctx.group, senderJid)) {
                     await ctx.reply(quote(`⛔ Jangan toxic!`));
                     await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([senderJid]);
@@ -334,7 +333,7 @@ module.exports = (bot) => {
         if (isPrivate) {
             if (m.key.fromMe) return;
 
-            const isCmd = tools.general.isCmd(m, ctx);
+            const isCmd = tools.general.isCmd(m.content, ctx._config);
 
             // Penanganan menfess
             const allMenfessDb = await db.get("menfess") || {};
@@ -375,13 +374,6 @@ module.exports = (bot) => {
     });
 
     // Penanganan peristiwa ketika pengguna bergabung atau keluar dari grup
-    bot.ev.on(Events.UserJoin, async (m) => {
-        m.eventsType = "UserJoin";
-        handleUserEvent(bot, m);
-    });
-
-    bot.ev.on(Events.UserLeave, async (m) => {
-        m.eventsType = "UserLeave";
-        handleUserEvent(bot, m);
-    });
+    bot.ev.on(Events.UserJoin, async (m) => handleUserEvent(bot.core, m, "UserJoin"));
+    bot.ev.on(Events.UserLeave, async (m) => handleUserEvent(bot.core, m, "UserLeave"));
 };
