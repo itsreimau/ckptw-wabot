@@ -85,7 +85,7 @@ module.exports = {
                 },
                 message: {
                     extendedTextMessage: {
-                        text: "“Lorem ipsum dolor sit amet, tenebris in umbra, vitae ad mortem.”",
+                        text: config.msg.note,
                         title: config.bot.name
                     }
                 }

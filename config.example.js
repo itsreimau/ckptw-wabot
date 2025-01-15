@@ -35,6 +35,7 @@ global.config = {
         watermark: `@${pkg.name} / v${pkg.version}`, // Watermark nama dan versi pada bot
         footer: italic("Developed by ItsReimau"), // Footer di pesan bot
         readmore: "\u200E".repeat(4001), // String read more
+        note: "“Lorem ipsum dolor sit amet, tenebris in umbra, vitae ad mortem.”", // Catatan
 
         wait: quote("🔄 Tunggu sebentar..."), // Pesan loading
         notFound: quote("❎ Tidak ada yang ditemukan! Coba lagi nanti."), // Pesan item tidak ditemukan
@@ -47,6 +48,14 @@ global.config = {
         number: "", // Nomor telepon owner bot
         organization: "", // Nama organisasi owner bot
         co: [""] // Nomor co-owner bot
+    },
+
+    // Kunci API
+    APIKey: {
+        fasturl: "", // APIKey tidak disediakan, Anda dapat menggunakan APIKey Anda sendiri
+        gifted: "gifted" // APIKey disediakan oleh Gifted Tech
+        nexoracle: "free_key@maher_apis", // APIKey disediakan oleh Maher Zubair
+        ssateam: "root" // APIKey disediakan oleh Fainshe
     },
 
     // Konfigurasi stiker bot

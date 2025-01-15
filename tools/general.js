@@ -7,10 +7,11 @@ const {
     fromBuffer
 } = require("file-type");
 
-async function checkAdmin(group, id) {
+
+async function checkAdmin(group, jid) {
     try {
-        const members = await group().members();
-        return members.some((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id === id);
+        const members = await group.members();
+        return members.some((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id === jid);
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
         return false;
