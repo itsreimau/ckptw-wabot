@@ -199,9 +199,9 @@ async function isBotAdmin(group) {
 }
 
 function isOwner(id) {
-    if (config.system.selfOwner) return config.bot.id === id || config.owner.id === id || config.owner.co.includes(id);
+    if (config.system.selfOwner) return config.bot.id === id || config.owner.number === id || config.owner.co.includes(id);
 
-    return config.owner.id === id || config.owner.co.includes(id);
+    return config.owner.number === id || config.owner.co.includes(id);
 }
 
 function isUrl(url) {
