@@ -16,7 +16,7 @@ module.exports = {
 
         const input = ctx.args.join(" ") || null;
 
-        if (!input && isNaN(input)) return await ctx.reply(
+        if (!input || isNaN(input)) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.msg.generateCommandExample(ctx._used, ctx._client.user.id.split("@")[0]))
         );
