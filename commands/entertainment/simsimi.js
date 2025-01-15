@@ -21,14 +21,15 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("vapis", "/api/simi", {
-                q: input
+            const apiUrl = tools.api.createUrl("sandipbaruwal", "/sim", {
+                chat: input,
+                lang: ctx.sender.jid.startsWith("62") ? "id" : "en"
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.result);
+            return await ctx.reply(data.answer);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

@@ -133,7 +133,7 @@ module.exports = (bot) => {
         // Grup atau Pribadi
         if (isGroup || isPrivate) {
             // Penangan pada ukuran basis data
-            config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"
+            config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A";
 
             // Penanganan basis data pengguna
             const {
@@ -149,7 +149,6 @@ module.exports = (bot) => {
                 ...otherUserDb
             };
             await db.set(`user.${senderId}`, newUserDb);
-
 
             // Penanganan untuk perintah
             const isCmd = tools.general.isCmd(m.content, ctx._config);

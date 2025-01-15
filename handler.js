@@ -113,5 +113,4 @@ async function checkCoin(requiredCoin, senderId) {
     return false;
 }
 
-
 module.exports = handler;

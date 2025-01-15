@@ -7,7 +7,6 @@ const {
     fromBuffer
 } = require("file-type");
 
-
 async function checkAdmin(group, jid) {
     try {
         const members = await group.members();
@@ -82,44 +81,46 @@ function clamp(value, min, max) {
 function convertMsToDuration(ms) {
     if (ms < 1000) return "kurang satu detik";
 
-    try {
-        const years = Math.floor(ms / (1000 * 60 * 60 * 24 * 365.25));
-        const months = Math.floor((ms / (1000 * 60 * 60 * 24 * 30.44)) % 12);
-        const weeks = Math.floor((ms / (1000 * 60 * 60 * 24 * 7)) % 4.345);
-        const days = Math.floor((ms / (1000 * 60 * 60 * 24)) % 7);
-        const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((ms / (1000 * 60)) % 60);
-        const seconds = Math.floor((ms / 1000) % 60);
+    const years = Math.floor(ms / (1000 * 60 * 60 * 24 * 365.25));
+    const months = Math.floor((ms / (1000 * 60 * 60 * 24 * 30.44)) % 12);
+    const weeks = Math.floor((ms / (1000 * 60 * 60 * 24 * 7)) % 4.345);
+    const days = Math.floor((ms / (1000 * 60 * 60 * 24)) % 7);
+    const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((ms / (1000 * 60)) % 60);
+    const seconds = Math.floor((ms / 1000) % 60);
 
-        let durationString = "";
+    let durationString = "";
 
-        if (years > 0) durationString += years + " tahun ";
-        if (months > 0) durationString += months + " bulan ";
-        if (weeks > 0) durationString += weeks + " minggu ";
-        if (days > 0) durationString += days + " hari ";
-        if (hours > 0) durationString += hours + " jam ";
-        if (minutes > 0) durationString += minutes + " menit ";
-        if (seconds > 0) durationString += seconds + " detik";
+    if (years > 0) durationString += years + " tahun ";
+    if (months > 0) durationString += months + " bulan ";
+    if (weeks > 0) durationString += weeks + " minggu ";
+    if (days > 0) durationString += days + " hari ";
+    if (hours > 0) durationString += hours + " jam ";
+    if (minutes > 0) durationString += minutes + " menit ";
+    if (seconds > 0) durationString += seconds + " detik";
 
-        return durationString.trim();
-    } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
-        return null;
-    }
+    return durationString.trim();
 }
 
 function formatSize(byteCount) {
     if (byteCount === 0) return "0 Bytes";
 
-    try {
-        const units = ["Bytes", "KiB", "MiB", "GiB", "TiB"];
-        const index = Math.floor(Math.log(byteCount) / Math.log(1024));
-        const size = (byteCount / Math.pow(1024, index)).toFixed(2);
-        return `${parseFloat(size)} ${units[index]}`;
-    } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
-        return null;
+    const units = ["yBytes", "zBytes", "aBytes", "fBytes", "pBytes", "nBytes", "µBytes", "mBytes", "Bytes", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
+
+    let index = 8;
+    let size = byteCount;
+
+    while (size < 1 && index > 0) {
+        size *= 1024;
+        index--;
     }
+
+    while (size >= 1024 && index < units.length - 1) {
+        size /= 1024;
+        index++;
+    }
+
+    return `${size.toFixed(2)} ${units[index]}`;
 }
 
 function generateUID(phoneNumber) {
@@ -141,13 +142,8 @@ function generateUID(phoneNumber) {
 function getRandomElement(arr) {
     if (arr.length === 0) return null;
 
-    try {
-        const randomIndex = Math.floor(Math.random() * arr.length);
-        return arr[randomIndex];
-    } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
-        return null;
-    }
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    return arr[randomIndex];
 }
 
 function isCmd(content, config) {
@@ -155,45 +151,40 @@ function isCmd(content, config) {
 
     if (!prefixRegex.test(content)) return false;
 
-    try {
-        const prefix = content.charAt(0);
-        const [cmdName, ...inputArray] = content.slice(1).trim().toLowerCase().split(/\s+/);
-        const input = inputArray.join(" ");
+    const prefix = content.charAt(0);
+    const [cmdName, ...inputArray] = content.slice(1).trim().toLowerCase().split(/\s+/);
+    const input = inputArray.join(" ");
 
-        const cmd = config.cmd;
-        const listCmd = Array.from(cmd.values()).flatMap(command => {
-            const aliases = Array.isArray(command.aliases) ? command.aliases : [];
-            return [command.name, ...aliases];
-        });
+    const cmd = config.cmd;
+    const listCmd = Array.from(cmd.values()).flatMap(command => {
+        const aliases = Array.isArray(command.aliases) ? command.aliases : [];
+        return [command.name, ...aliases];
+    });
 
-        const matchedCmd = cmd.get(cmdName) || Array.from(cmd.values()).find(c => c.aliases && c.aliases.includes(cmdName));
+    const matchedCmd = cmd.get(cmdName) || Array.from(cmd.values()).find(c => c.aliases && c.aliases.includes(cmdName));
 
-        if (matchedCmd) {
-            return {
-                msg: content,
-                prefix,
-                cmd: cmdName,
-                input
-            };
-        }
-
-        const mean = didyoumean(cmdName, listCmd);
-
-        if (mean) {
-            return {
-                msg: content,
-                prefix,
-                cmd: cmdName,
-                input,
-                didyoumean: mean
-            };
-        }
-
-        return false;
-    } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
-        return false;
+    if (matchedCmd) {
+        return {
+            msg: content,
+            prefix,
+            cmd: cmdName,
+            input
+        };
     }
+
+    const mean = didyoumean(cmdName, listCmd);
+
+    if (mean) {
+        return {
+            msg: content,
+            prefix,
+            cmd: cmdName,
+            input,
+            didyoumean: mean
+        };
+    }
+
+    return false;
 }
 
 async function isAdmin(group, jid) {
@@ -276,12 +267,9 @@ async function translate(text, to) {
 }
 
 function ucword(str) {
-    try {
-        return str.toLowerCase().replace(/\b(\w)/g, (s) => s.toUpperCase());
-    } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
-        return null;
-    }
+    if (!str || str.trim() === "") return false;
+
+    return str.toLowerCase().replace(/\b(\w)/g, (s) => s.toUpperCase());
 }
 
 async function upload(buffer) {
