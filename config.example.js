@@ -53,17 +53,18 @@ global.config = {
     // Kunci API
     APIKey: {
         fasturl: "", // APIKey tidak disediakan, Anda dapat menggunakan APIKey Anda sendiri
-        gifted: "gifted" // APIKey disediakan oleh Gifted Tech
+        gifted: "gifted", // APIKey disediakan oleh Gifted Tech
         nexoracle: "free_key@maher_apis", // APIKey disediakan oleh Maher Zubair
         ssateam: "root" // APIKey disediakan oleh Fainshe
     },
 
-    // Konfigurasi stiker bot
+    // Stiker bot
     sticker: {
         packname: "", // Nama paket stiker
         author: "github.com/itsreimau/ckptw-wabot" // Pembuat stiker
     },
 
+    // Sistem bot
     system: {
         alwaysOnline: true, // Bot selalu berstatus "online"
         autoMention: false, // Bot otomatis mention seseorang dalam pesan yang dikirim
