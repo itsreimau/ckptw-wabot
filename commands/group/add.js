@@ -18,7 +18,7 @@ module.exports = {
 
         if (!input || isNaN(input)) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used, ctx._client.user.id.split("@")[0]))
+            quote(tools.msg.generateCommandExample(ctx._used, ctx.sender.jid.split(/[:@]/)[0]))
         );
 
         try {
