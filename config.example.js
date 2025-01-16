@@ -45,7 +45,7 @@ global.config = {
     // Informasi owner bot
     owner: {
         name: "", // Nama owner bot
-                organization: "", // Nama organisasi owner bot
+        organization: "", // Nama organisasi owner bot
         id: "", // Nomor telepon owner bot
         co: [""] // Nomor co-owner bot
     },
