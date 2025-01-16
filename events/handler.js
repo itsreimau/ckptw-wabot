@@ -13,7 +13,7 @@ const fs = require("fs");
 const util = require("util");
 
 // Utilitas
-async function handleUserEvent(core, m, type) {
+async function handleUserEvent(bot, m, type) {
     const {
         id,
         participants
@@ -24,10 +24,10 @@ async function handleUserEvent(core, m, type) {
         const groupDb = await db.get(`group.${groupId}`) || {};
 
         if (groupDb?.option?.welcome) {
-            const metadata = await core.groupMetadata(id);
+            const metadata = await bot.core.groupMetadata(id);
 
             for (const jid of participants) {
-                const profilePictureUrl = await core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+                const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
                 const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
                 const userTag = `@${jid.split("@")[0]}`;
@@ -41,7 +41,7 @@ async function handleUserEvent(core, m, type) {
                         quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
                         quote(`👋 ${userTag} keluar dari grup ${metadata.subject}.`));
 
-                await core.sendMessage(id, {
+                await bot.core.sendMessage(id, {
                     text,
                     contextInfo: {
                         mentionedJid: [jid],
@@ -58,7 +58,7 @@ async function handleUserEvent(core, m, type) {
                     }
                 });
 
-                if (type === "UserJoin" && groupDb?.text?.intro) await core.sendMessage(id, {
+                if (type === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(id, {
                     text: groupDb?.text?.intro,
                     mentions: [jid]
                 });
@@ -66,7 +66,7 @@ async function handleUserEvent(core, m, type) {
         }
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
-        await core.sendMessage(id, {
+        await bot.core.sendMessage(id, {
             text: quote(`⚠️ Terjadi kesalahan: ${error.message}`)
         });
     }
@@ -80,7 +80,7 @@ module.exports = (bot) => {
         const botRestart = await db.get("bot.restart") || {};
         if (botRestart && botRestart.jid && botRestart.timestamp) {
             const timeago = tools.general.convertMsToDuration(Date.now() - botRestart.timestamp);
-            await core.sendMessage(botRestart.jid, {
+            await bot.core.sendMessage(botRestart.jid, {
                 text: quote(`✅ Berhasil dimulai ulang! Membutuhkan waktu ${timeago}.`),
                 edit: botRestart.key
             });
@@ -96,7 +96,7 @@ module.exports = (bot) => {
         ]);
 
         if (config.system.requireBotGroupMembership) {
-            const code = await core.groupInviteCode(config.bot.groupJid) || "FxEYZl2UyzAEI2yhaH34Ye";
+            const code = await bot.core.groupInviteCode(config.bot.groupJid) || "FxEYZl2UyzAEI2yhaH34Ye";
             config.bot.groupLink = `https://chat.whatsapp.com/${code}`;
         }
     });
@@ -372,6 +372,6 @@ module.exports = (bot) => {
     });
 
     // Penanganan peristiwa ketika pengguna bergabung atau keluar dari grup
-    bot.ev.on(Events.UserJoin, async (m) => handleUserEvent(bot.core, m, "UserJoin"));
-    bot.ev.on(Events.UserLeave, async (m) => handleUserEvent(bot.core, m, "UserLeave"));
+    bot.ev.on(Events.UserJoin, async (m) => handleUserEvent(bot, m, "UserJoin"));
+    bot.ev.on(Events.UserLeave, async (m) => handleUserEvent(bot, m, "UserLeave"));
 };
