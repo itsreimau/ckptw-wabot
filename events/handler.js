@@ -37,7 +37,7 @@ async function handleUserEvent(core, m, type) {
                     .replace(/%tag%/g, userTag)
                     .replace(/%subject%/g, metadata.subject)
                     .replace(/%description%/g, metadata.description) :
-                    (eventType === "UserJoin" ?
+                    (type === "UserJoin" ?
                         quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
                         quote(`👋 ${userTag} keluar dari grup ${metadata.subject}.`));
 
@@ -58,7 +58,7 @@ async function handleUserEvent(core, m, type) {
                     }
                 });
 
-                if (eventType === "UserJoin" && groupDb?.text?.intro) await core.sendMessage(id, {
+                if (type === "UserJoin" && groupDb?.text?.intro) await core.sendMessage(id, {
                     text: groupDb?.text?.intro,
                     mentions: [jid]
                 });
@@ -280,8 +280,7 @@ module.exports = (bot) => {
             // Penanganan antinsfw
             if (groupDb?.option?.antinsfw) {
                 const msgType = ctx.getMessageType();
-                const checkMedia = await tools.general.checkMedia(msgType, "image")
-
+                const checkMedia = await tools.general.checkMedia(msgType, "image");
                 if (checkMedia && !await tools.general.isAdmin(ctx.group(), senderJid)) {
                     const buffer = await ctx.msg.media.toBuffer();
                     const uploadUrl = await tools.general.upload(buffer);
@@ -308,7 +307,7 @@ module.exports = (bot) => {
             // Penanganan antisticker
             if (groupDb?.option?.antisticker) {
                 const msgType = ctx.getMessageType();
-                const checkMedia = await tools.general.checkMedia(msgType, "sticker")
+                const checkMedia = await tools.general.checkMedia(msgType, "sticker");
 
                 if (checkMedia && !await tools.general.isAdmin(ctx.group(), senderJid)) {
                     await ctx.reply(`⛔ Jangan kirim stiker!`);
@@ -318,8 +317,8 @@ module.exports = (bot) => {
             }
 
             // Penanganan antitoxic
-            const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
             if (groupDb?.option?.antitoxic) {
+                const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
                 if (m.content && toxicRegex.test(m.content) && !await tools.general.isAdmin(ctx.group(), senderJid)) {
                     await ctx.reply(quote(`⛔ Jangan toxic!`));
                     await ctx.deleteMessage(m.key);

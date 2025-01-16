@@ -123,18 +123,18 @@ function formatSize(byteCount) {
     return `${size.toFixed(2)} ${units[index]}`;
 }
 
-function generateUID(phoneNumber) {
-    if (typeof phoneNumber !== "string") {
-        phoneNumber = phoneNumber.toString();
+function generateUID(phon.id) {
+    if (typeof phon.id !== "string") {
+        phon.id = phon.id.toString();
     }
 
     let hash = 0;
-    for (let i = 0; i < phoneNumber.length; i++) {
-        const charCode = phoneNumber.charCodeAt(i);
+    for (let i = 0; i < phon.id.length; i++) {
+        const charCode = phon.id.charCodeAt(i);
         hash = (hash * 31 + charCode) % 1000000007;
     }
 
-    const uniquePart = phoneNumber.split("").reverse().join("").charCodeAt(0).toString(16);
+    const uniquePart = phon.id.split("").reverse().join("").charCodeAt(0).toString(16);
 
     return `${Math.abs(hash).toString(16).toLowerCase()}-${uniquePart}`;
 }
@@ -199,9 +199,9 @@ async function isBotAdmin(group) {
 }
 
 function isOwner(id) {
-    if (config.system.selfOwner) return config.bot.id === id || config.owner.number === id || config.owner.co.includes(id);
+    if (config.system.selfOwner) return config.bot.id === id || config.owner.id === id || config.owner.co.includes(id);
 
-    return config.owner.number === id || config.owner.co.includes(id);
+    return config.owner.id === id || config.owner.co.includes(id);
 }
 
 function isUrl(url) {
