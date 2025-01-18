@@ -29,9 +29,9 @@ module.exports = {
         }
 
         try {
-            const translation = await tools.general.translate(input, langCode);
+            const result = await tools.general.translate(input, langCode);
 
-            return await ctx.reply(translation);
+            return await ctx.reply(result);
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

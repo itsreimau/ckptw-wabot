@@ -249,6 +249,30 @@ function parseFlag(argsString, customRules = {}) {
     return options;
 }
 
+async function simulate(ctx, cmd, args) {
+    const commandPath = `../commands/${cmd.join("/")}.js`;
+
+    try {
+        const commandModule = require(commandPath);
+
+        const simulatedContext = {
+            ...ctx,
+            args: args.split(" "),
+            _used: ctx._used?.upsert ?
+                {
+                    command: cmdPath[1],
+                    prefix: "/"
+                } :
+                ctx._used
+        };
+
+        await commandModule.code(simulatedContext);
+    } catch (error) {
+        console.error(`[${config.pkg.name}] Error:`, error);
+        return null;
+    }
+}
+
 async function translate(text, to) {
     const apiUrl = api.createUrl("nyxs", "/tools/translate", {
         text,
@@ -312,6 +336,7 @@ module.exports = {
     isOwner,
     isUrl,
     parseFlag,
+    simulate,
     translate,
     ucword,
     upload

@@ -21,8 +21,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("vapis", "/api/txt2imgv1", {
-                q: input
+            const apiUrl = tools.api.createUrl("exodus", "/get/text2image", {
+                prompt: input
             });
 
             return await ctx.reply({

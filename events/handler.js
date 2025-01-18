@@ -150,6 +150,11 @@ module.exports = (bot) => {
             };
             await db.set(`user.${senderId}`, newUserDb);
 
+            // Penanganan simulate
+            if (m.content && m.content === "testing ping") {
+                await tools.general.simulate(ctx, ["information", "ping"], null);
+            }
+
             // Penanganan untuk perintah
             const isCmd = tools.general.isCmd(m.content, ctx._config);
             if (isCmd) {

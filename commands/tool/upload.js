@@ -24,10 +24,10 @@ module.exports = {
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const uploadUrl = await tools.general.upload(buffer);
+            const result = await tools.general.upload(buffer);
 
             return await ctx.reply(
-                `${quote(`URL: ${uploadUrl}`)}\n` +
+                `${quote(`URL: ${result}`)}\n` +
                 "\n" +
                 config.msg.footer
             );

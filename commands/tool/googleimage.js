@@ -23,8 +23,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("vapis", "/api/gimage", {
-                q: input
+            const apiUrl = tools.api.createUrl("exodus", "/search/gimage", {
+                query: input
             });
             const {
                 data

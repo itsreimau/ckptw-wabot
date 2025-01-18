@@ -5,6 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "ocr",
+    aliases: ["image2text", "imagetotext", "img2text", "imgtotext"],
     category: "tool",
     handler: {
         coin: 10
@@ -24,7 +25,7 @@ module.exports = {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
             const apiUrl = tools.api.createUrl("https://api.ocr.space", "/parse/imageurl", {
-                apikey: "8e65f273cd88957",
+                apikey: "helloworld", // APIKey disediakan oleh OCRSpace
                 url: uploadUrl
             });
             const {

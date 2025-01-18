@@ -3,6 +3,9 @@ const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"
     },
+    exodus: {
+        baseURL: "https://restapi.exoduscloud.my.id"
+    },
     fasturl: {
         baseURL: "https://fastrestapis.fasturl.link",
         APIKey: config.APIKey.fasturl

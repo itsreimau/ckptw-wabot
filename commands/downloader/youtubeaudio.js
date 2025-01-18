@@ -30,11 +30,11 @@ module.exports = {
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply({
                 audio: {
-                    url: data.downloads.url
+                    url: data.dl
                 },
                 mimetype: mime.lookup("mp3")
             });
