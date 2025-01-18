@@ -257,7 +257,7 @@ async function simulate(ctx, cmd, args) {
 
         const simulatedContext = {
             ...ctx,
-            args: args.split(" "),
+            args: args ? args.split(" ") || null,
             _used: ctx._used?.upsert ?
                 {
                     command: cmdPath[1],
