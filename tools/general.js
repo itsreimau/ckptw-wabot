@@ -312,7 +312,6 @@ module.exports = {
     isOwner,
     isUrl,
     parseFlag,
-    simulate,
     translate,
     ucword,
     upload
