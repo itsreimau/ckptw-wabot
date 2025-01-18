@@ -250,20 +250,17 @@ function parseFlag(argsString, customRules = {}) {
 }
 
 async function simulate(ctx, cmd, args) {
-    const commandPath = `../commands/${cmd.join("/")}.js`;
-
     try {
-        const commandModule = require(commandPath);
+        const commandModule = require(`../commands/${cmd.join("/")}.js`);
 
+        const simulatedCommand = {
+            command: cmd[1],
+            prefix: "/"
+        };
         const simulatedContext = {
             ...ctx,
-            args: args ? args.split(" ") || null,
-            _used: ctx._used?.upsert ?
-                {
-                    command: cmdPath[1],
-                    prefix: "/"
-                } :
-                ctx._used
+            args: args?.split(" ") || null,
+            _used: ctx._used?.upsert ? simulatedCommand : ctx._used
         };
 
         await commandModule.code(simulatedContext);
