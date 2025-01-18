@@ -249,21 +249,21 @@ function parseFlag(argsString, customRules = {}) {
     return options;
 }
 
-async function simulate(ctx, cmd, args) {
+async function simulate(rawCtx, cmd, args) {
     try {
-        const commandModule = require(`../commands/${cmd.join("/")}.js`);
+        const command = require(`../commands/${cmd.join("/")}.js`);
 
-        const simulatedCommand = {
+        const usedCmd = {
             command: cmd[1],
             prefix: "/"
         };
-        const simulatedContext = {
-            ...ctx,
+        const ctx = {
+            ...rawCtx,
             args: args?.split(" ") || null,
-            _used: ctx._used?.upsert ? simulatedCommand : ctx._used
+            _used: rawCtx._used?.upsert ? usedCmd : rawCtx._used
         };
 
-        await commandModule.code(simulatedContext);
+        await command.code(ctx);
     } catch (error) {
         console.error(`[${config.pkg.name}] Error:`, error);
         return null;
