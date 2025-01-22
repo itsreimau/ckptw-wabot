@@ -51,7 +51,7 @@ module.exports = {
                             url: selectedAnimated.url
                         },
                         mimetype: mime.lookup("mp4"),
-                        caption: Animation "
+                        caption: "Animation"
                     })
                 ]);
             }
