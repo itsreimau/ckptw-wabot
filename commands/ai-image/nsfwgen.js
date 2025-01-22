@@ -1,15 +1,13 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "metaanimate",
-    aliases: ["metaanim", "metavid"],
+    name: "nsfwgen",
     category: "ai-image",
     handler: {
-        coin: 10
+        premium: true
     },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
@@ -22,17 +20,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/aiimage/meta", {
-                prompt: "animated"
+            const apiUrl = tools.api.createUrl("fasturl", "/aiimage/nsfw", {
+                prompt: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
-            const result = tools.general.getRandomElement(data.result.animated_media);
 
             return await ctx.reply({
                 image: {
-                    url: result.url
+                    url: apiUrl
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +

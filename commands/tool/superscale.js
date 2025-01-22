@@ -14,6 +14,8 @@ module.exports = {
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
+        const input = ctx.args.join(" ") || null;
+
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
             tools.general.checkMedia(msgType, "image"),
