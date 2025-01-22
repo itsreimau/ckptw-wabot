@@ -7,8 +7,7 @@ const APIs = {
         baseURL: "https://restapi.exoduscloud.my.id"
     },
     fasturl: {
-        baseURL: "https://fastrestapis.fasturl.link",
-        APIKey: config.APIKey.fasturl
+        baseURL: "https://fastrestapis.fasturl.cloud"
     },
     gifted: {
         baseURL: "https://api.gifted.my.id",

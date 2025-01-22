@@ -30,6 +30,30 @@ module.exports = {
             const senderId = ctx.sender.jid.split(/[:@]/)[0];
             const uid = await db.get(`user.${senderId}.uid`) || "guest";
 
+            const replyAI = async (conversation) => {
+                if (!ctx.isGroup()) {
+                    return await ctx._client.relayMessage(
+                        ctx.id, {
+                            conversation
+                        }, {
+                            additionalNodes: [{
+                                    attrs: {
+                                        biz_bot: "1"
+                                    },
+                                    tag: "bot"
+                                },
+                                {
+                                    attrs: {},
+                                    tag: "biz"
+                                }
+                            ]
+                        }
+                    );
+                } else {
+                    return await ctx.reply(conversation);
+                }
+            };
+
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadUrl = await tools.general.upload(buffer);
@@ -41,27 +65,9 @@ module.exports = {
                 });
                 const {
                     data
-                } = await axios.get(apiUrl, {
-                    headers: {
-                        "x-api-key": tools.api.listUrl().fasturl.APIKey
-                    }
-                });
+                } = await axios.get(apiUrl);
 
-                if (!ctx.isGroup()) return await ctx._client.relayMessage(ctx.id, {
-                    conversation: data.response
-                }, {
-                    additionalNodes: [{
-                        attrs: {
-                            biz_bot: "1"
-                        },
-                        tag: "bot"
-                    }, {
-                        attrs: {},
-                        tag: "biz"
-                    }]
-                });
-
-                return await ctx.reply(data.response);
+                return await replyAI(data.response);
             } else {
                 const apiUrl = tools.api.createUrl("fasturl", "/aillm/gpt-4o", {
                     ask: input,
@@ -70,27 +76,9 @@ module.exports = {
                 });
                 const {
                     data
-                } = await axios.get(apiUrl, {
-                    headers: {
-                        "x-api-key": tools.api.listUrl().fasturl.APIKey
-                    }
-                });
+                } = await axios.get(apiUrl);
 
-                if (!ctx.isGroup()) return await ctx._client.relayMessage(ctx.id, {
-                    conversation: data.response
-                }, {
-                    additionalNodes: [{
-                        attrs: {
-                            biz_bot: "1"
-                        },
-                        tag: "bot"
-                    }, {
-                        attrs: {},
-                        tag: "biz"
-                    }]
-                });
-
-                return await ctx.reply(data.response);
+                return await replyAI(data.response);
             }
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);

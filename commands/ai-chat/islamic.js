@@ -27,11 +27,7 @@ module.exports = {
             });
             const {
                 data
-            } = await axios.get(apiUrl, {
-                headers: {
-                    "x-api-key": tools.api.listUrl().fasturl.APIKey
-                }
-            });
+            } = await axios.get(apiUrl);
 
             return await ctx.reply(data.response);
         } catch (error) {

@@ -7,8 +7,8 @@ const {
 } = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "brat",
-    aliases: ["sbrat", "stikerbrat", "stickerbrat"],
+    name: "bratvideo",
+    aliases: ["bratv", "bratvid", "sbratvid", "sbratvideo", "stickerbratvid", "stickerbratvideo", "stikerbratvid", "stikerbratvideo"],
     category: "maker",
     handler: {
         coin: 10
@@ -26,7 +26,7 @@ module.exports = {
         if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 50 kata!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://brat.caliphdev.com", "/api/brat", {
+            const apiUrl = tools.api.createUrl("https://brat.caliphdev.com", "/api/brat/animate", {
                 text: input
             });
 

@@ -118,14 +118,14 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("exodus", "/download/ytmp3", {
+                const downloadApiUrl = tools.api.createUrl("https://ytdl.axeel.my.id", "/api/download/audio", {
                     url: data.url
                 });
                 const downloadData = (await axios.get(downloadApiUrl)).data;
 
                 return await ctx.reply({
                     audio: {
-                        url: downloadData.dl
+                        url: downloadData.downloads.url
                     },
                     mimetype: mime.lookup("mp3")
                 });

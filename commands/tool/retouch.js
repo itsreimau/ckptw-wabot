@@ -1,14 +1,11 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "hd",
-    aliases: ["enhance", "enhancer", "hd", "hdr", "remini"],
-    category: "tools",
+    name: "retouch",
+    category: "tool",
     handler: {
         coin: 10
     },
@@ -25,35 +22,21 @@ module.exports = {
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const result = await upscale(buffer);
+            const uploadUrl = await tools.general.upload(buffer);
+            const apiUrl = tools.api.createUrl("fasturl", "/aiimage/imgretouch", {
+                url: uploadUrl
+            });
 
             return await ctx.reply({
-                image: result,
+                image: {
+                    url: apiUrl
+                },
                 mimetype: mime.lookup("png")
             });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
-            if (error.response && error.response.status !== 200) return await ctx.reply(config.msg.notFound);
+            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };
-
-// Dibuat oleh Axel (https://github.com/AxellNetwork)
-async function upscale(buffer) {
-    try {
-        const response = await axios.post("https://lexica.qewertyy.dev/upscale", {
-            image_data: Buffer.from(buffer, "base64").toString("base64"),
-            format: "binary"
-        }, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            responseType: "arraybuffer"
-        });
-        return Buffer.from(response.data);
-    } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
-        return null;
-    }
-}

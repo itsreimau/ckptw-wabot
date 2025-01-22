@@ -21,7 +21,7 @@ module.exports = {
                 data
             } = await axios.get(apiUrl);
 
-            await Promise.all([
+            return await Promise.all([
                 ctx.reply({
                     image: {
                         url: data.male

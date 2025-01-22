@@ -1,7 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const {
     Sticker,
     StickerTypes
@@ -36,16 +35,7 @@ module.exports = {
                 bgColor: "#444444"
             });
 
-            const {
-                data: buffer
-            } = await axios.get(apiUrl, {
-                responseType: "arraybuffer",
-                headers: {
-                    "x-api-key": tools.api.listUrl().fasturl.APIKey
-                }
-            });
-
-            const sticker = new Sticker(buffer, {
+            const sticker = new Sticker(apiUrl, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,

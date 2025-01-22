@@ -42,7 +42,7 @@ module.exports = {
                     if (isNaN(startAyat) || isNaN(endAyat) || startAyat < 1 || endAyat < startAyat) return await ctx.reply(quote(`❎ Rentang ayat tidak valid!`));
 
                     const verses = data.ayat.filter(d => d.nomorAyat >= startAyat && d.nomorAyat <= endAyat);
-                    if (verses.length === 0) return await ctx.reply(quote(`❎ Ayat dalam rentang ${startAyat}-${endAyat} tidak ada!`));
+                    if (!verses.length) return await ctx.reply(quote(`❎ Ayat dalam rentang ${startAyat}-${endAyat} tidak ada!`));
 
                     const versesText = verses.map(v =>
                         `${bold(`Ayat ${v.nomorAyat}:`)}\n` +

@@ -2,10 +2,12 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "bagoodex",
-    category: "ai-chat",
+    name: "metaimage",
+    aliases: ["metaimg"],
+    category: "ai-image",
     handler: {
         coin: 10
     },
@@ -16,22 +18,27 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used, "apa itu bot whatsapp?"))
+            quote(tools.msg.generateCommandExample(ctx._used, "moon"))
         );
 
         try {
-            const senderId = ctx.sender.jid.split(/[:@]/)[0];
-            const uid = await db.get(`user.${senderId}.uid`) || "guest";
-            const apiUrl = tools.api.createUrl("fasturl", "/aillm/bagoodex", {
-                ask: input,
-                style: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`, // Dapat diubah sesuai keinginan Anda
-                sessionId: uid
+            const apiUrl = tools.api.createUrl("fasturl", "/aiimage/meta", {
+                prompt: "image"
             });
             const {
                 data
             } = await axios.get(apiUrl);
+            const result = tools.general.getRandomElement(data.result.imagine_card[0].imagine_media);
 
-            return await ctx.reply(data.result);
+            return await ctx.reply({
+                image: {
+                    url: result.uri
+                },
+                mimetype: mime.lookup("png"),
+                caption: `${quote(`Prompt: ${input}`)}\n` +
+                    "\n" +
+                    config.msg.footer
+            });
         } catch (error) {
             console.error(`[${config.pkg.name}] Error:`, error);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

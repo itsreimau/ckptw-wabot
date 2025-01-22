@@ -22,8 +22,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/tiktoksearch", {
-                message: input
+            const apiUrl = tools.api.createUrl("exodus", "/search/tiktok", {
+                query: input
             });
             const {
                 data
