@@ -42,7 +42,7 @@ module.exports = {
                     config.msg.footer
             });
         } catch (error) {
-            console.error(`[${config.pkg.name}] Error:`, error);
+            consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return ctx.reply(config.msg.notFound);
             return ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }

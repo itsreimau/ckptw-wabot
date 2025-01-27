@@ -27,7 +27,7 @@ module.exports = {
 
             return await util.promisify(exec)("pm2 restart $(basename $(pwd))"); // PM2
         } catch (error) {
-            console.error(`[${config.pkg.name}] Error:`, error);
+            consolefy.error(`Error: ${error}`);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }

@@ -16,7 +16,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used, "halo dunia!"))
+            quote(tools.msg.generateCommandExample(ctx._used, "halo, dunia!"))
         );
 
         try {
@@ -51,7 +51,7 @@ module.exports = {
                         quoted: fakeText
                     });
                 } catch (error) {
-                    console.error(`[${config.pkg.name}] Error:`, error);
+                    consolefy.error(`Error: ${error}`);
                     failedGroupIds.push(groupId);
                 }
             }
@@ -59,7 +59,7 @@ module.exports = {
             const successCount = groupIds.length - failedGroupIds.length;
             return await ctx.editMessage(waitMsg.key, quote(`✅ Berhasil mengirim ke ${successCount} grup. Gagal mengirim ke ${failedGroupIds.length} grup.`));
         } catch (error) {
-            console.error(`[${config.pkg.name}] Error:`, error);
+            consolefy.error(`Error: ${error}`);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }

@@ -65,7 +65,7 @@ async function handleUserEvent(bot, m, type) {
             }
         }
     } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
+        consolefy.error(`Error: ${error}`);
         await bot.core.sendMessage(id, {
             text: quote(`⚠️ Terjadi kesalahan: ${error.message}`)
         });
@@ -75,7 +75,7 @@ async function handleUserEvent(bot, m, type) {
 module.exports = (bot) => {
     // Penanganan acara saat bot siap
     bot.ev.once(Events.ClientReady, async (m) => {
-        console.log(`[${config.pkg.name}] ${config.bot.name} by ${config.owner.name}, ready at ${m.user.id}`);
+        consolefy.success(`${config.bot.name} by ${config.owner.name}, ready at ${m.user.id}`);
 
         const botRestart = await db.get("bot.restart") || {};
         if (botRestart && botRestart.jid && botRestart.timestamp) {
@@ -125,9 +125,9 @@ module.exports = (bot) => {
 
         // Log pesan masuk
         if (isGroup) {
-            console.log(`[${config.pkg.name}] Incoming message from group: ${groupId}, by: ${senderId}`);
+            consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`);
         } else {
-            console.log(`[${config.pkg.name}] Incoming message from: ${senderId}`);
+            consolefy.info(`Incoming message from: ${senderId}`);
         }
 
         // Grup atau Pribadi
@@ -214,7 +214,7 @@ module.exports = (bot) => {
 
                         await ctx.reply(monospace(util.inspect(result)));
                     } catch (error) {
-                        console.error(`[${config.pkg.name}] Error:`, error);
+                        consolefy.error(`Error: ${error}`);
                         await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
                     }
                 }
@@ -228,7 +228,7 @@ module.exports = (bot) => {
 
                         await ctx.reply(monospace(output.stdout || output.stderr));
                     } catch (error) {
-                        console.error(`[${config.pkg.name}] Error:`, error);
+                        consolefy.error(`Error: ${error}`);
                         await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
                     }
                 }

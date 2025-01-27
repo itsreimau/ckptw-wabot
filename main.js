@@ -10,7 +10,7 @@ const {
 const path = require("path");
 
 // Pesan koneksi
-console.log(`[${config.pkg.name}] Connecting...`);
+consolefy.log(`Connecting...`);
 
 // Buat instance bot baru
 const bot = new Client({
@@ -34,4 +34,4 @@ const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
 cmd.load();
 
 // Luncurkan bot
-bot.launch().catch((error) => console.error(`[${config.pkg.name}] Error:`, error));
+bot.launch().catch((error) => consolefy.error(`Error: ${error}`));

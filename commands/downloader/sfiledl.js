@@ -45,7 +45,7 @@ module.exports = {
                 mimetype: mime.lookup(fileExtension) || "application/octet-stream"
             });
         } catch (error) {
-            console.error(`[${config.pkg.name}] Error:`, error);
+            consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }

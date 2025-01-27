@@ -12,7 +12,7 @@ async function checkAdmin(group, jid) {
         const members = await group.members();
         return members.some((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id === jid);
     } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
+        consolefy.error(`Error: ${error}`);
         return false;
     }
 }
@@ -261,7 +261,7 @@ async function translate(text, to) {
         } = await axios.get(apiUrl);
         return data.result;
     } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
+        consolefy.error(`Error: ${error}`);
         return null;
     }
 }
@@ -293,7 +293,7 @@ async function upload(buffer) {
 
         return url;
     } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
+        consolefy.error(`Error: ${error}`);
         return null;
     }
 }

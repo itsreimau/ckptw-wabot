@@ -31,7 +31,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Berhasil diturunkan dari admin menjadi anggota!`));
         } catch (error) {
-            console.error(`[${config.pkg.name}] Error:`, error);
+            consolefy.error(`Error: ${error}`);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }

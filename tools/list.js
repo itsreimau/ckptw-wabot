@@ -104,7 +104,7 @@ async function get(type) {
 
         return text;
     } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
+        consolefy.error(`Error: ${error}`);
         return null;
     }
 }

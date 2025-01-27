@@ -3,11 +3,19 @@ require("./config.js");
 const handler = require("./handler.js");
 const pkg = require("./package.json");
 const tools = require("./tools/exports.js");
+const {
+    Consolefy
+} = require("@mengkodingan/consolefy");
 const CFonts = require("cfonts");
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
 const SimplDB = require("simpl.db");
+
+// Buat consolefy
+const c = new Consolefy({
+    tag: pkg.name
+});
 
 // Buat basis data
 const db = new SimplDB();
@@ -18,10 +26,11 @@ if (!fs.existsSync(dbFile)) fs.writeFileSync(dbFile, JSON.stringify({}), "utf8")
 global.handler = handler;
 global.config.pkg = pkg;
 global.tools = tools;
+global.consolefy = c;
 global.db = db;
 
 // Memulai
-console.log(`[${pkg.name}] Starting...`);
+c.log(`Starting...`);
 
 // Tampilkan judul menggunakan CFonts
 CFonts.say(pkg.name, {
@@ -52,7 +61,7 @@ if (config.system.useServer) {
     });
 
     server.listen(port, () => {
-        console.log(`[${pkg.name}] Server is running at http://localhost:${port}`);
+        c.success(`Server is running at http://localhost:${port}`);
     });
 }
 

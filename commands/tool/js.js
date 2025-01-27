@@ -20,7 +20,7 @@ module.exports = {
 
         if (!script) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used, 'console.log("halo dunia!");'))
+            quote(tools.msg.generateCommandExample(ctx._used, 'console.log("halo, dunia!");'))
         );
 
         try {
@@ -68,7 +68,7 @@ module.exports = {
 
             await ctx.reply(monospace(output));
         } catch (error) {
-            console.error(`[${config.pkg.name}] Error:`, error);
+            consolefy.error(`Error: ${error}`);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }

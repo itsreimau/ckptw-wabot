@@ -32,7 +32,7 @@ module.exports = {
                 gifPlayback: ctx._used.command === "togif" ? true : false
             });
         } catch (error) {
-            console.error(`[${config.pkg.name}] Error:`, error);
+            consolefy.error(`Error: ${error}`);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
@@ -70,7 +70,7 @@ async function webp2mp4(blob) {
         } = new JSDOM(html2).window;
         return new URL(document2.querySelector("div#output > p.outfile > video > source").src, res2.request.res.responseUrl).toString();
     } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
+        consolefy.error(`Error: ${error}`);
         return null;
     }
 }

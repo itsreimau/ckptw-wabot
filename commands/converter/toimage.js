@@ -31,7 +31,7 @@ module.exports = {
                 mimetype: mime.lookup("png")
             });
         } catch (error) {
-            console.error(`[${config.pkg.name}] Error:`, error);
+            consolefy.error(`Error: ${error}`);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
@@ -69,7 +69,7 @@ async function webp2png(blob) {
         } = new JSDOM(html2).window;
         return new URL(document2.querySelector("div#output > p.outfile > img").src, res2.request.res.responseUrl).toString();
     } catch (error) {
-        console.error(`[${config.pkg.name}] Error:`, error);
+        consolefy.error(`Error: ${error}`);
         return null;
     }
 }

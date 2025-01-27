@@ -20,7 +20,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used, "en halo dunia!"))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx._used, "en halo, dunia!"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
 
@@ -46,7 +46,7 @@ module.exports = {
                 ptt: true
             });
         } catch (error) {
-            console.error(`[${config.pkg.name}] Error:`, error);
+            consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
