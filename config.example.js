@@ -10,7 +10,7 @@ const {
 global.config = {
     // Informasi bot dasar
     bot: {
-        name: "UmbrX", // Nama bot
+        name: "CKPTW", // Nama bot
         prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i, // Karakter awalan perintah yang diizinkan
         phoneNumber: "", // Nomor telepon bot (opsional jika menggunakan QR code)
         thumbnail: "https://itsreimau.is-a.dev/umbrx/dist/img/thumbnail/umbrx.jpg", // Gambar thumbnail bot
@@ -19,17 +19,25 @@ global.config = {
 
         // Konfigurasi autentikasi sesi bot
         authAdapter: {
-            adapter: "default", // Jenis adaptor autentikasi untuk menyimpan status sesi bot (pilihan: 'default', 'mysql')
+            adapter: "default", // Pilihan adapter: 'default', 'mysql', 'mongo', 'firebase'
 
-            // Konfigurasi database MySQL (jika menggunakan adapter 'mysql')
+            // Konfigurasi database MySQL
             mysql: {
-                host: "", // Nama host
-                port: "", // Nomor port (default: 3306)
-                user: "", // Nama pengguna (default: root)
-                password: "", // Kata sandi
-                database: "", // Nama database
-                tableName: "", // Nama table
-                session: "" // Nama tabel atau entitas untuk menyimpan data sesi
+                host: "localhost:3307", // Nama host 
+                user: "root", // Nama pengguna
+                password: "password123", // Kata sandi
+                database: "ckptw-wabot", // Nama database
+            },
+
+            // Konfigurasi MongoDB
+            mongodb: {
+                url: "mongodb://localhost:27017/ckptw-wabot" // URL
+            },
+
+            // Konfigurasi Firebase
+            firebase: {
+                tableName: "ckptw-wabot", // Nama tabel
+                session: "state" // Nama sesi
             }
         }
     },

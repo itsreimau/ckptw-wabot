@@ -43,7 +43,7 @@ module.exports = {
                     data
                 } = await axios.get(apiUrl);
 
-                return await replyAI(data.result);
+                return await ctx.reply(data.result);
             } else {
                 const apiUrl = tools.api.createUrl("fasturl", "/aillm/gpt-4o", {
                     ask: input,
@@ -54,7 +54,7 @@ module.exports = {
                     data
                 } = await axios.get(apiUrl);
 
-                return await replyAI(data.result);
+                return await ctx.reply(data.result);
             }
         } catch (error) {
             consolefy.error(`Error: ${error}`);

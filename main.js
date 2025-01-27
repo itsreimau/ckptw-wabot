@@ -5,12 +5,38 @@ const {
     CommandHandler
 } = require("@mengkodingan/ckptw");
 const {
-    useMySQLAuthState
-} = require("mysql-baileys");
+    useFireAuthState
+} = require("baileys-firebase");
+const {
+    useMongoAuthState
+} = require("baileys-mongodb");
+const {
+    useSqlAuthState
+} = require("baileys-mysql");
 const path = require("path");
 
 // Pesan koneksi
-consolefy.log(`Connecting...`);
+console.log(`Connecting...`);
+
+// Pilih adapter autentikasi
+const authAdapter = (() => {
+    const {
+        adapter,
+        mysql,
+        mongodb,
+        firebase
+    } = config.bot.authAdapter;
+    switch (adapter) {
+        case "mysql":
+            return useSqlAuthState(mysql);
+        case "mongodb":
+            return useMongoAuthState(mongodb.url);
+        case "firebase":
+            return useFireAuthState(firebase);
+        default:
+            return undefined;
+    }
+})();
 
 // Buat instance bot baru
 const bot = new Client({
@@ -23,7 +49,7 @@ const bot = new Client({
     printQRInTerminal: !config.system.usePairingCode,
     selfReply: config.system.selfReply,
     usePairingCode: config.system.usePairingCode,
-    authAdapter: config.bot.authAdapter.adapter === "mysql" ? useMySQLAuthState(config.bot.authAdapter.mysql) : undefined
+    authAdapter
 });
 
 // Penanganan events
@@ -34,4 +60,4 @@ const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
 cmd.load();
 
 // Luncurkan bot
-bot.launch().catch((error) => consolefy.error(`Error: ${error}`));
+bot.launch().catch((error) => console.error(`Error: ${error}`));
