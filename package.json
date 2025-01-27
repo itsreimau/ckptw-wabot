@@ -1,6 +1,6 @@
 {
   "name": "ckptw-wabot",
-  "version": "3.2.0",
+  "version": "3.2.5",
   "description": "WhatsApp Bot with @mengkodingan/ckptw.",
   "main": "index.js",
   "directories": {
@@ -10,6 +10,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "install:adapter": "node install-adapter.js",
     "start": "node .",
     "start:pm2": "pm2 start ./index.js --name $(basename $(pwd))"
   },
@@ -33,9 +34,6 @@
     "axios": "1.7.9",
     "cfonts": "^3.3.0",
     "cheerio": "^1.0.0",
-    "baileys-firebase": "^1.0.1",
-    "baileys-mongodb": "^1.0.9",
-    "baileys-mysql": "^1.0.4",
     "didyoumean": "^1.2.2",
     "file-type": "^16.5.4",
     "form-data": "^4.0.1",
@@ -48,5 +46,9 @@
     "util": "^0.12.5",
     "wa-sticker-formatter": "^4.4.4"
   },
-  "devDependencies": {}
+  "optionalDependencies": {
+    "baileys-mysql": "^1.0.4",
+    "baileys-mongodb": "^1.0.9",
+    "baileys-firebase": "^1.0.1"
+  }
 }

@@ -21,12 +21,12 @@ global.config = {
         authAdapter: {
             adapter: "default", // Pilihan adapter: 'default', 'mysql', 'mongo', 'firebase'
 
-            // Konfigurasi database MySQL
+            // Konfigurasi MySQL
             mysql: {
-                host: "localhost:3307", // Nama host 
+                host: "localhost:3306", // Nama host 
                 user: "root", // Nama pengguna
-                password: "password123", // Kata sandi
-                database: "ckptw-wabot", // Nama database
+                password: "admin123", // Kata sandi
+                database: "ckptw-wabot" // Nama database
             },
 
             // Konfigurasi MongoDB

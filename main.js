@@ -4,19 +4,7 @@ const {
     Client,
     CommandHandler
 } = require("@mengkodingan/ckptw");
-const {
-    useFireAuthState
-} = require("baileys-firebase");
-const {
-    useMongoAuthState
-} = require("baileys-mongodb");
-const {
-    useSqlAuthState
-} = require("baileys-mysql");
 const path = require("path");
-
-// Pesan koneksi
-console.log(`Connecting...`);
 
 // Pilih adapter autentikasi
 const authAdapter = (() => {
@@ -28,11 +16,11 @@ const authAdapter = (() => {
     } = config.bot.authAdapter;
     switch (adapter) {
         case "mysql":
-            return useSqlAuthState(mysql);
+            return require("baileys-mysql").useSqlAuthState(mysql);
         case "mongodb":
-            return useMongoAuthState(mongodb.url);
+            return require("baileys-mongodb").useMongoAuthState(mongodb.url);
         case "firebase":
-            return useFireAuthState(firebase);
+            return require("baileys-firebase").useFireAuthState(firebase);
         default:
             return undefined;
     }
