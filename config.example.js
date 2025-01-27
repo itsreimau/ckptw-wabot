@@ -15,7 +15,7 @@ global.config = {
         phoneNumber: "", // Nomor telepon bot (opsional jika menggunakan QR code)
         thumbnail: "https://itsreimau.is-a.dev/umbrx/dist/img/thumbnail/umbrx.jpg", // Gambar thumbnail bot
         website: "https://chat.whatsapp.com/FxEYZl2UyzAEI2yhaH34Ye", // Website untuk WhatsApp bot
-        groupJid: "" // JID untuk group bot (opsional jika tidak menggunakan requireBotGroupMembership)
+        groupJid: "", // JID untuk group bot (opsional jika tidak menggunakan requireBotGroupMembership)
 
         // Konfigurasi autentikasi sesi bot
         authAdapter: {

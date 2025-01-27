@@ -23,7 +23,7 @@ const bot = new Client({
     printQRInTerminal: !config.system.usePairingCode,
     selfReply: config.system.selfReply,
     usePairingCode: config.system.usePairingCode,
-    authAdapter: config.bot.authAdapter.adapter === "mysql" ? useMySQLAuthState(config.bot.authAdapter.mysql) : undefined;
+    authAdapter: config.bot.authAdapter.adapter === "mysql" ? useMySQLAuthState(config.bot.authAdapter.mysql) : undefined
 });
 
 // Penanganan events
