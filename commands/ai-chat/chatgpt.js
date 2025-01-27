@@ -30,30 +30,6 @@ module.exports = {
             const senderId = ctx.sender.jid.split(/[:@]/)[0];
             const uid = await db.get(`user.${senderId}.uid`) || "guest";
 
-            const replyAI = async (conversation) => {
-                if (!ctx.isGroup()) {
-                    return await ctx._client.relayMessage(
-                        ctx.id, {
-                            conversation
-                        }, {
-                            additionalNodes: [{
-                                    attrs: {
-                                        biz_bot: "1"
-                                    },
-                                    tag: "bot"
-                                },
-                                {
-                                    attrs: {},
-                                    tag: "biz"
-                                }
-                            ]
-                        }
-                    );
-                } else {
-                    return await ctx.reply(conversation);
-                }
-            };
-
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadUrl = await tools.general.upload(buffer);
