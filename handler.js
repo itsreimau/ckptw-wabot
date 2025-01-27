@@ -46,7 +46,7 @@ async function handler(ctx, options) {
 
     const cooldown = new Cooldown(ctx, config.system.cooldown);
     if (cooldown.onCooldown && !isOwner && !userDb?.premium) {
-        await ctx.reply(config.msg.cooldown);
+        await ctx.react("💤");
         return true;
     }
 

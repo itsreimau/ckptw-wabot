@@ -4,6 +4,9 @@ const {
     Client,
     CommandHandler
 } = require("@mengkodingan/ckptw");
+const {
+    useMySQLAuthState
+} = require("mysql-baileys");
 const path = require("path");
 
 // Pesan koneksi
@@ -19,7 +22,8 @@ const bot = new Client({
     readIncommingMsg: config.system.autoRead,
     printQRInTerminal: !config.system.usePairingCode,
     selfReply: config.system.selfReply,
-    usePairingCode: config.system.usePairingCode
+    usePairingCode: config.system.usePairingCode,
+    authAdapter: config.bot.authAdapter.adapter === "mysql" ? useMySQLAuthState(config.bot.authAdapter.mysql) : undefined;
 });
 
 // Penanganan events

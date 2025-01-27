@@ -16,6 +16,21 @@ global.config = {
         thumbnail: "https://itsreimau.is-a.dev/umbrx/dist/img/thumbnail/umbrx.jpg", // Gambar thumbnail bot
         website: "https://chat.whatsapp.com/FxEYZl2UyzAEI2yhaH34Ye", // Website untuk WhatsApp bot
         groupJid: "" // JID untuk group bot (opsional jika tidak menggunakan requireBotGroupMembership)
+
+        // Konfigurasi autentikasi sesi bot
+        authAdapter: {
+            adapter: "default", // Jenis adaptor autentikasi untuk menyimpan status sesi bot (pilihan: 'default', 'mysql')
+
+            // Konfigurasi database MySQL (jika menggunakan adapter 'mysql')
+            mysql: {
+                host: "", // Nama host
+                port: "", // Nomor port (default: 3306)
+                user: "", // Nama pengguna (default: root)
+                password: "", // Kata sandi
+                database: "", // Nama database
+                session: "" // Nama tabel atau entitas untuk menyimpan data sesi
+            }
+        }
     },
 
     // Pesan bot yang disesuaikan untuk situasi tertentu
@@ -24,7 +39,6 @@ global.config = {
         banned: quote("⛔ Tidak dapat memproses karena Anda telah dibanned oleh Owner!"), // Pesan untuk pengguna yang dibanned
         botAdmin: quote("⛔ Tidak dapat memproses karena bot bukan admin grup ini!"), // Pesan jika bot bukan admin di grup
         botGroupMembership: quote("⛔ Tidak dapat memproses karena Anda tidak bergabung dengan grup bot!"), // Pesan untuk pengguna yang tidak ada dalam grup
-        cooldown: quote("🔄 Perintah ini sedang dalam cooldown, tunggu..."), // Pesan saat cooldown perintah
         coin: quote("⛔ Tidak dapat memproses karena koin Anda tidak cukup!"), // Pesan ketika koin tidak cukup
         group: quote("⛔ Perintah hanya dapat diakses dalam grup!"), // Pesan untuk perintah grup
         owner: quote("⛔ Perintah hanya dapat diakses Owner!"), // Pesan untuk perintah yang hanya owner bisa akses

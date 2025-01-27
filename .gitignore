@@ -7,6 +7,9 @@ state/
 # Ignore config.js file
 config.js
 
+# Ignore config.js file
+setting.js
+
 # Ignore database.json file
 database.json
 
