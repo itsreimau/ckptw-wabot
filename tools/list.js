@@ -34,48 +34,76 @@ async function get(type) {
                 break;
             }
             case "claim": {
-                const data = ["daily", "weekly", "monthly", "yearly"];
+                const data = [
+                    "daily (Hadiah harian)",
+                    "weekly (Hadiah mingguan)",
+                    "monthly (Hadiah bulanan)",
+                    "yearly (Hadiah tahunan)"
+                ];
                 text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "fixdb": {
-                const data = ["user", "group", "menfess"];
+                const data = [
+                    "user (Data pengguna)",
+                    "group (Data grup)",
+                    "menfess (Data menfess)"
+                ];
                 text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "group": {
-                const data = ["open", "close", "lock", "unlock"];
+                const data = [
+                    "open (Buka grup)",
+                    "close (Tutup grup)",
+                    "lock (Kunci grup)",
+                    "unlock (Buka kunci grup)"
+                ];
                 text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "mode": {
-                const data = ["group", "private", "public", "self"];
+                const data = [
+                    "group (Mode group, hanya merespons dalam obrolan grup)",
+                    "private (Mode private, hanya merespons dalam obrolan pribadi)",
+                    "public (Mode publik, merespons dalam obrolan grup dan obrolan pribadi)",
+                    "self (Mode self, hanya merespons dirinya sendiri dan ownernya)"
+                ];
                 text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "osettext": {
                 const data = [
-                    "donate (Variabel yang tersedia: %tag%, %name%, %version%, %prefix%, %command%, %watermark%, %footer%, %readmore%)",
-                    "price (Variabel yang tersedia: %tag%, %name%, %version%, %prefix%, %command%, %watermark%, %footer%, %readmore%)"
+                    "donate (Variabel yang tersedia: %tag%, %name%, %version%, %prefix%, %command%, %watermark%, %footer%, %readmore%) (Atur teks donasi)",
+                    "price (Variabel yang tersedia: %tag%, %name%, %version%, %prefix%, %command%, %watermark%, %footer%, %readmore%) (Atur teks harga)"
                 ];
                 text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "setoption": {
-                const data = ["antilink", "antinsfw", "antisticker", "antitoxic", "autokick", "welcome"];
+                const data = [
+                    "antilink (Anti link)",
+                    "antinsfw (Anti NSFW, seperti pornografi)",
+                    "antisticker (Anti stiker)",
+                    "antitoxic (Anti toxic, seperti bahasa kasar)",
+                    "autokick (Dikeluarkan secara otomatis, jika ada yang melanggar salah satu opsi 'anti...')",
+                    "welcome (Sambutan member)"
+                ];
                 text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "setprofile": {
-                const data = ["autolevelup"];
+                const data = [
+                    "autolevelup (Otomatis naik level)"
+                ];
                 text = createList(data, d => `${quote(d)}`);
                 break;
             }
             case "settext": {
                 const data = [
-                    "goodbye (Variabel yang tersedia: %tag%, %subject%, %description%)",
-                    "intro",
-                    "welcome (Variabel yang tersedia: %tag%, %subject%, %description%)"
+                    "goodbye (Teks goodbye, variabel yang tersedia: %tag%, %subject%, %description%) (Atur pesan perpisahan)",
+                    "intro (Teks intro)",
+                    "welcome (Teks welcome, variabel yang tersedia: %tag%, %subject%, %description%) (Atur pesan selamat datang)"
                 ];
                 text = createList(data, d => `${quote(d)}`);
                 break;

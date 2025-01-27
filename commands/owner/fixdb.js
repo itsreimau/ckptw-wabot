@@ -27,114 +27,46 @@ module.exports = {
 
         try {
             const waitMsg = await ctx.reply(config.msg.wait);
-
             const dbJSON = await db.toJSON();
-            const {
-                user = {}, group = {}, menfess = {}
-            } = dbJSON;
+            const data = {
+                user: dbJSON.user || {},
+                group: dbJSON.group || {},
+                menfess: dbJSON.menfess || {}
+            };
+
+            const filteredData = (category, item) => {
+                const mappings = {
+                    user: ["afk", "banned", "coin", "lastClaim", "lastSentMsg", "level", "premium", "uid", "winGame", "xp"],
+                    group: ["text", "option"],
+                    menfess: ["from", "to"]
+                };
+
+                return Object.fromEntries(mappings[category].map(key => item[key] !== undefined ? [key, item[key]] : null).filter(Boolean));
+            };
+
+            const processData = async (category, data) => {
+                await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data ${category}...`));
+                Object.keys(data).forEach(async (id) => {
+                    const item = data[id] || {};
+                    const filtered = filteredData(category, item);
+
+                    if (!/^[0-9]$/.test(id)) {
+                        await db.delete(`${category}.${id}`);
+                    } else {
+                        await db.set(`${category}.${id}`, filtered);
+                    }
+                });
+            };
 
             switch (input) {
-                case "user": {
-                    await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data pengguna...`));
-                    Object.keys(user).forEach(async (userId) => {
-                        const userData = user[userId] || {};
-                        const {
-                            afk,
-                            banned,
-                            coin = 1000,
-                            lastClaim,
-                            level = 0,
-                            premium,
-                            uid,
-                            winGame,
-                            xp = 0
-                        } = userData;
-
-                        const filteredData = {
-                            ...(afk && {
-                                afk
-                            }),
-                            banned,
-                            coin,
-                            lastClaim,
-                            level,
-                            ...(premium && {
-                                premium
-                            }),
-                            ...(uid && {
-                                uid
-                            }),
-                            ...(winGame && {
-                                winGame
-                            }),
-                            xp
-                        };
-
-                        if (!/^[0-9]$/.test(userId)) {
-                            await db.delete(`user.${userId}`);
-                        } else {
-                            await db.set(`user.${userId}`, filteredData);
-                        }
-                    });
+                case "user":
+                case "group":
+                case "menfess":
+                    await processData(input, data[input]);
                     break;
-                }
 
-                case "group": {
-                    await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data grup...`));
-                    Object.keys(group).forEach(async (groupId) => {
-                        const groupData = group[groupId] || {};
-                        const {
-                            text,
-                            option
-                        } = groupData;
-
-                        const filteredGroupData = {
-                            ...(text && {
-                                text
-                            }),
-                            ...(option && {
-                                option
-                            })
-                        };
-
-                        if (!/^[0-9]$/.test(groupId)) {
-                            await db.delete(`group.${groupId}`);
-                        } else {
-                            await db.set(`group.${groupId}`, filteredGroupData);
-                        }
-                    });
-                    break;
-                }
-
-                case "menfess": {
-                    await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data menfess...`));
-                    Object.keys(menfess).forEach(async (conversationId) => {
-                        const {
-                            from,
-                            to
-                        } = menfess[conversationId] || {};
-
-                        const filteredMenfessData = {
-                            ...(from && {
-                                from
-                            }),
-                            ...(to && {
-                                to
-                            })
-                        };
-
-                        if (!/^[0-9]$/.test(conversationId)) {
-                            await db.delete(`menfess.${conversationId}`);
-                        } else {
-                            await db.set(`menfess.${conversationId}`, filteredMenfessData);
-                        }
-                    });
-                    break;
-                }
-
-                default: {
-                    return await ctx.reply(quote(`❎ Key '${input}' tidak valid!`));
-                }
+                default:
+                    return await ctx.reply(quote(`❎ Key "${input}" tidak valid!`));
             }
 
             return await ctx.editMessage(waitMsg.key, quote(`✅ Basis data berhasil dibersihkan untuk ${input}!`));

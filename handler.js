@@ -17,37 +17,41 @@ async function handler(ctx, options) {
     const isOwner = tools.general.isOwner(senderId);
     const userDb = await db.get(`user.${senderId}`) || {};
 
-    if (config.system.requireBotGroupMembership && !isOwner && !userDb?.premium) {
-        const botGroupMembersId = (await ctx.group()(config.bot.groupJid).members()).map(member => member.id.split("@")[0]);
-        if (!botGroupMembersId.includes(senderId)) {
-            await ctx.reply({
-                text: config.msg.botGroupMembership,
-                contextInfo: {
-                    externalAdReply: {
-                        mediaType: 1,
-                        previewType: 0,
-                        mediaUrl: config.bot.groupLink,
-                        title: config.msg.watermark,
-                        body: null,
-                        renderLargerThumbnail: true,
-                        thumbnailUrl: config.bot.thumbnail,
-                        sourceUrl: config.bot.groupLink
-                    },
-                }
-            });
+    if (userDb?.banned) {
+        if (!userDb.lastSentMsg.cooldown) {
+            await ctx.reply(config.msg.banned);
+            await db.set(`user.${senderId}.lastSentMsg.banned`, true);
+            return true;
+        } else {
+            await ctx.react("🚫");
             return true;
         }
     }
 
-    if (userDb?.banned) {
-        await ctx.reply(config.msg.banned);
-        return true;
-    }
-
     const cooldown = new Cooldown(ctx, config.system.cooldown);
     if (cooldown.onCooldown && !isOwner && !userDb?.premium) {
-        await ctx.react("💤");
-        return true;
+        if (!userDb.lastSentMsg.cooldown) {
+            await ctx.reply(config.msg.cooldown);
+            await db.set(`user.${senderId}.lastSentMsg.cooldown`, true);
+            return true;
+        } else {
+            await ctx.react("💤");
+            return true;
+        }
+    }
+
+    if (config.system.requireBotGroupMembership && ctx._used.command !== "botgroup" && !isOwner && !userDb?.premium) {
+        const botGroupMembersId = (await ctx.group()(config.bot.groupJid).members()).map(member => member.id.split("@")[0]);
+        if (!botGroupMembersId.includes(senderId)) {
+            if (!userDb.lastSentMsg.cooldown) {
+                await ctx.reply(config.msg.botGroupMembership);
+                await db.set(`user.${senderId}.lastSentMsg.requireBotGroupMembership`, true);
+                return true;
+            } else {
+                await ctx.react("🚫");
+                return true;
+            }
+        }
     }
 
     const checkOptions = {

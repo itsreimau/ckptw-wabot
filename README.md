@@ -30,7 +30,7 @@ Ikuti langkah-langkah berikut untuk mengatur dan menjalankan `ckptw-wabot`:
    ```
 
 3. **Konfigurasi:**
-   Ganti nama file `config.example.js` menjadi `config.js`, lalu perbarui nilai konfigurasi seperti nama bot, beberapa pesan, nomor pemilik (Owner), dll.
+   Ganti nama file `config.example.js` menjadi `config.js`, lalu perbarui nilai konfigurasi seperti nama bot, beberapa pesan, nomor owner, dll.
 
 4. **Menjalankan Bot:**
    ```bash
