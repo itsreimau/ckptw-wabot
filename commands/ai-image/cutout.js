@@ -13,10 +13,11 @@ module.exports = {
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
 
-        const modelData = (tools.api.createUrl("agatz", "/ai/cutout", {
+        const modelApiUrl = tools.api.createUrl("agatz", "/ai/cutout", {
             prompt: null,
             type: null
-        })).data;
+        });
+        const modelData = (axios.get(modelApiUrl)).data;
         const modelAvailable = modelData.error ? [] : modelData.error.match(/daftar: (.*)/)[1].split(", ");
 
         const input = ctx.args.join(" ") || null;
@@ -25,7 +26,7 @@ module.exports = {
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(tools.msg.generateCommandExample(ctx._used, "moon"))}\n` +
             `${quote(tools.msg.generatesFlagInformation({
-                "-m <nomor>": "Atur model dengan nomor (tersedia: " + modelAvailable.map((model, idx) => `${idx + 1}-${model.length}`).join(", ") + " | default: acak)."
+                "-m <nomor>": `Atur model dengan nomor (tersedia: ${modelAvailable.map((model, idx) => `${idx + 1}-${model.length}`).join(", ")} | default: acak).`
             }))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx._used.prefix + ctx._used.command} list`)} untuk melihat daftar.`]))
         );
@@ -52,7 +53,6 @@ module.exports = {
                 prompt: input,
                 type: flag.model
             });
-
             const {
                 data
             } = (await axios.get(apiUrl)).data;
