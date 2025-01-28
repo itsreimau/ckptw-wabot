@@ -23,15 +23,15 @@ module.exports = {
         ]);
 
         if (!checkMedia && !checkQuotedMedia) return ctx.reply(
-            `${quote(global.tools.msg.generateInstruction(["send", "reply"], "image"))}\n` +
-            quote(global.tools.msg.generatesFlagInformation({
+            `${quote(tools.msg.generateInstruction(["send", "reply"], "image"))}\n` +
+            quote(tools.msg.generatesFlagInformation({
                 "-r <number>": "Atur faktor resize (tersedia: 2, 4, 8, 16 | default: 2).",
                 "-a": "Atur jika gambar anime."
             }))
         );
 
         try {
-            const flag = global.tools.general.parseFlag(input, {
+            const flag = tools.general.parseFlag(input, {
                 "-r": {
                     type: "value",
                     key: "resize",

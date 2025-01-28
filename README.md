@@ -94,20 +94,9 @@ authAdapter: {
 
 Setelah memilih adapter yang diinginkan, jalankan perintah berikut untuk menginstal modul yang diperlukan:
 
-- **MySQL**:
-  ```bash
-  npm run install:adapter
-  ```
-
-- **MongoDB**:
-  ```bash
-  npm run install:adapter
-  ```
-
-- **Firebase**:
-  ```bash
-  npm run install:adapter
-  ```
+```bash
+npm run install:adapter
+```
 
 Perintah ini akan menginstal modul yang sesuai dengan konfigurasi adapter yang Anda pilih.
 

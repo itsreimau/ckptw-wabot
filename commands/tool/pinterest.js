@@ -23,8 +23,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("exodus", "/search/pinterest", {
-                query: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/pinsearch", {
+                message: input
             });
             const {
                 data
@@ -33,7 +33,7 @@ module.exports = {
 
             return await ctx.reply({
                 image: {
-                    url: result.src
+                    url: result.images_url
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +

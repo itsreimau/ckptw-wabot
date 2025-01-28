@@ -2,12 +2,10 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "tiktoksearch",
-    aliases: ["ttsearch", "vts", "vtsearch"],
-    category: "search",
+    name: "smartcontract",
+    category: "ai-chat",
     handler: {
         coin: 10
     },
@@ -18,23 +16,19 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used, "evangelion"))
+            quote(tools.msg.generateCommandExample(ctx._used, "apa itu bot whatsapp?"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/tiktoksearch", {
+            const apiUrl = tools.api.createUrl("agatz", "/api/smartcontract", {
                 message: input
             });
             const {
                 data
             } = (await axios.get(apiUrl)).data;
+            const result = data.split("\n").map(line => line.split(":")[1]?.replace(/\"/g, "").trim()).filter(Boolean).join("");
 
-            return await ctx.reply({
-                video: {
-                    url: data.no_watermark
-                },
-                mimetype: mime.lookup("mp4")
-            });
+            return await ctx.reply(result);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

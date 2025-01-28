@@ -28,15 +28,15 @@ const authAdapter = (() => {
 
 // Buat instance bot baru
 const bot = new Client({
-    WAVersion: [2, 3000, 1015901307],
-    autoMention: config.system.autoMention,
-    markOnlineOnConnect: config.system.alwaysOnline,
-    phoneNumber: config.bot.phoneNumber,
     prefix: config.bot.prefix,
     readIncommingMsg: config.system.autoRead,
     printQRInTerminal: !config.system.usePairingCode,
-    selfReply: config.system.selfReply,
+    markOnlineOnConnect: config.system.alwaysOnline,
+    phoneNumber: config.bot.phoneNumber,
     usePairingCode: config.system.usePairingCode,
+    selfReply: config.system.selfReply,
+    WAVersion: [2, 3000, 1015901307],
+    autoMention: config.system.autoMention,
     authAdapter
 });
 
