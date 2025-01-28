@@ -76,7 +76,6 @@ global.config = {
 
     // Kunci API
     APIKey: {
-        gifted: "gifted", // APIKey disediakan oleh Gifted Tech
         nexoracle: "free_key@maher_apis", // APIKey disediakan oleh Maher Zubair
         ssateam: "root" // APIKey disediakan oleh Fainshe
     },

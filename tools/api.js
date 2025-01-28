@@ -3,15 +3,14 @@ const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"
     },
+    bk9: {
+        baseURL: "https://bk9.fun"
+    },
     exodus: {
         baseURL: "https://restapi.exoduscloud.my.id"
     },
     fasturl: {
         baseURL: "https://fastrestapis.fasturl.cloud"
-    },
-    gifted: {
-        baseURL: "https://api.gifted.my.id",
-        APIKey: config.APIKey.gifted
     },
     itzpire: {
         baseURL: "https://itzpire.com"

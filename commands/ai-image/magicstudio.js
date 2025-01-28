@@ -1,13 +1,11 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "aiimagesearch",
-    aliases: ["aiimage", "aiimages", "aiimg", "aiimgs", "aiimgsearch"],
-    category: "search",
+    name: "magicstudio",
+    category: "ai-image",
     handler: {
         coin: 10
     },
@@ -22,22 +20,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("itzpire", "/ai/search-img", {
-                q: input
+            const apiUrl = tools.api.createUrl("bk9", "/ai/magicstudio", {
+                prompt: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
-            const result = tools.general.getRandomElement(data);
 
             return await ctx.reply({
                 image: {
-                    url: result.url
+                    url: apiUrl
                 },
                 mimetype: mime.lookup("png"),
-                caption: `${quote(`Prompt: ${result.prompt}`)}\n` +
-                    `${quote(`Sumber: ${result.source}`)}\n` +
-                    `${quote(`Kreator: ${result.user.displayName}`)}\n` +
+                caption: `${quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

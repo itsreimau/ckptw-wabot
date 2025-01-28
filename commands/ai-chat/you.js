@@ -4,7 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "smartcontract",
+    name: "you",
     category: "ai-chat",
     handler: {
         coin: 10
@@ -20,15 +20,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/smartcontract", {
-                message: input
+            const apiUrl = tools.api.createUrl("bk9", "/ai/you", {
+                q: input
             });
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
-            const result = data.split("\n").map(line => line.split(":")[1]?.replace(/\"/g, "").trim()).filter(Boolean).join("");
+            } = await axios.get(apiUrl);
 
-            return await ctx.reply(result);
+            return await ctx.reply(data.BK9);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

@@ -5,10 +5,10 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "pixelart",
+    name: "anipix",
     category: "ai-image",
     handler: {
-        coin: 10
+        premium: true
     },
     code: async (ctx) => {
         if (await handler(ctx, module.exports.handler)) return;
@@ -21,7 +21,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("itzpire", "/ai/pixelart", {
+            const apiUrl = tools.api.createUrl("itzpire", "/ai/anipix", {
                 prompt: input
             });
             const {

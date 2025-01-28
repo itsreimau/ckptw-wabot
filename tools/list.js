@@ -43,17 +43,6 @@ async function get(type) {
                 text = createList(data, d => `${quote(d)}`);
                 break;
             }
-            case "cutout": {
-                const data = (await axios.get(api.createUrl("agatz", "/ai/cutout", {
-                    prompt: null,
-                    type: null
-                })).catch(err => err.response?.data) || {}).match(/daftar: (.*)/)?.[1]?.split(", ") || [];
-                text = data.map((d, index) =>
-                    `${quote(`Indeks: ${index + 1}`)}\n` +
-                    `${quote(`Model: ${d}`)}`
-                ).join("\n");
-                break;
-            }
             case "fixdb": {
                 const data = [
                     "user (Data pengguna)",
