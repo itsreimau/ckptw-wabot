@@ -18,7 +18,7 @@ async function handler(ctx, options) {
     const userDb = await db.get(`user.${senderId}`) || {};
 
     if (userDb?.banned) {
-        if (!userDb.lastSentMsg.cooldown) {
+        if (!userDb.lastSentMsg.banned) {
             await ctx.reply(config.msg.banned);
             await db.set(`user.${senderId}.lastSentMsg.banned`, true);
             return true;
@@ -43,7 +43,7 @@ async function handler(ctx, options) {
     if (config.system.requireBotGroupMembership && ctx._used.command !== "botgroup" && !isOwner && !userDb?.premium) {
         const botGroupMembersId = (await ctx.group()(config.bot.groupJid).members()).map(member => member.id.split("@")[0]);
         if (!botGroupMembersId.includes(senderId)) {
-            if (!userDb.lastSentMsg.cooldown) {
+            if (!userDb.lastSentMsg.requireBotGroupMembership) {
                 await ctx.reply(config.msg.botGroupMembership);
                 await db.set(`user.${senderId}.lastSentMsg.requireBotGroupMembership`, true);
                 return true;
