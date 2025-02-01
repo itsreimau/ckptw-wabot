@@ -10,8 +10,6 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(

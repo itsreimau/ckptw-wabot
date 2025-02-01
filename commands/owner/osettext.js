@@ -11,8 +11,6 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         const key = ctx.args[0];
         const text = ctx.args.slice(1).join(" ");
 

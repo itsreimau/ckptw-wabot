@@ -12,8 +12,6 @@ module.exports = {
     category: "tool",
     permissions: {},
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         const [surat, ayat] = ctx.args;
 
         if (!surat && !ayat) return await ctx.reply(

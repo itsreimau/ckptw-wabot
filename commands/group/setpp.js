@@ -12,8 +12,6 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
             tools.general.checkMedia(msgType, "image"),

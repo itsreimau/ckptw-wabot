@@ -13,8 +13,6 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         try {
             const month = new Date().getMonth() + 1;
             const apiUrl = tools.api.createUrl("https://api-harilibur.vercel.app", "/api", {

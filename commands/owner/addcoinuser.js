@@ -10,8 +10,6 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         const userId = ctx.args[0];
         const coinAmount = parseInt(ctx.args[1], 10);
 

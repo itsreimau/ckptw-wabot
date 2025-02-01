@@ -7,8 +7,6 @@ module.exports = {
     category: "profile",
     permissions: {},
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         const input = ctx.args.join(" ") || null;
 
         try {

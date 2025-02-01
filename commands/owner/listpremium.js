@@ -10,8 +10,6 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         try {
             const users = (await db.toJSON()).user;
             const premiumUsers = [];

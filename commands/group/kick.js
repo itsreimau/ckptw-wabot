@@ -12,8 +12,6 @@ module.exports = {
         restrict: true
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         const senderJid = ctx.sender.jid;
         const senderId = senderJid.split(/[:@]/)[0];
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
@@ -26,7 +24,7 @@ module.exports = {
         });
 
         try {
-            if (await tools.general.isAdmin(ctx.group(), account)) return await ctx.reply(quote(`❎ Dia adalah admin grup!`));
+            if (await ctx.group().isAdmin(account)) return await ctx.reply(quote(`❎ Dia adalah admin grup!`));
 
             await ctx.group().kick([account]);
 

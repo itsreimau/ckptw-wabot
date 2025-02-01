@@ -11,8 +11,6 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         const url = ctx.args[0] || null;
 
         if (!url) return await ctx.reply(

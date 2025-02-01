@@ -9,8 +9,6 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         try {
             const senderJid = ctx.sender.jid;
             const senderId = senderJid.split(/[:@]/)[0];

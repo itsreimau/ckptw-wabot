@@ -7,16 +7,6 @@ const {
     fromBuffer
 } = require("file-type");
 
-async function checkAdmin(group, jid) {
-    try {
-        const members = await group.members();
-        return members.some((m) => (m.admin === "superadmin" || m.admin === "admin") && m.id === jid);
-    } catch (error) {
-        consolefy.error(`Error: ${error}`);
-        return false;
-    }
-}
-
 async function checkMedia(msgType, requiredMedia) {
     const mediaMap = {
         audio: "audioMessage",
@@ -187,17 +177,6 @@ function isCmd(content, config) {
     return false;
 }
 
-async function isAdmin(group, jid) {
-    const check = await checkAdmin(group, jid);
-    return check;
-}
-
-async function isBotAdmin(group) {
-    const jid = config.bot.jid;
-    const check = await checkAdmin(group, jid);
-    return check;
-}
-
 function isOwner(id) {
     if (config.system.selfOwner) return config.bot.id === id || config.owner.id === id || config.owner.co.includes(id);
 
@@ -307,8 +286,6 @@ module.exports = {
     generateUID,
     getRandomElement,
     isCmd,
-    isAdmin,
-    isBotAdmin,
     isOwner,
     isUrl,
     parseFlag,

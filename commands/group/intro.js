@@ -10,8 +10,6 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         try {
             const groupId = ctx.isGroup() ? ctx.id.split("@")[0] : null;
             const introText = await db.get(`group.${groupId}.text.intro`) || quote("❎ Grup ini tidak memiliki intro.");

@@ -10,8 +10,6 @@ module.exports = {
     category: "information",
     permissions: {},
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         try {
             const startTime = performance.now();
             const testMsg = await ctx.reply(quote("🚀 Menguji kecepatan..."));

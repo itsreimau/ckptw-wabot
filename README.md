@@ -172,9 +172,7 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
            private: Boolean // Apakah perintah ini hanya bisa digunakan dalam chat pribadi? (true/false)
        },
        code: async (ctx) => { // Fungsi yang dijalankan saat perintah ini dipanggil
-           if (await middleware(ctx, module.exports.permissions)) return; // Periksa izin pengguna. Jika benar, hentikan prosesnya karena tidak diperbolehkan
-
-           return await ctx.reply("Hello, World!"); // Jika tidak ada pembatasan, kirim pesan "Hello, World!" kepada pengguna
+           return await ctx.reply("Hello, World!"); // Kirim pesan "Hello, World!" kepada pengguna
        }
    };
    ```

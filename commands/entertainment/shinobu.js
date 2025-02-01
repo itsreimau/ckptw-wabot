@@ -11,8 +11,6 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         const apiUrl = tools.api.createUrl("https://api.waifu.pics", `/sfw/shinobu`);
 
         try {

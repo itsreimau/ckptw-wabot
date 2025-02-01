@@ -11,8 +11,6 @@ module.exports = {
     category: "converter",
     permissions: {},
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         if (!await tools.general.checkQuotedMedia(ctx.quoted, ["video"])) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
 
         try {

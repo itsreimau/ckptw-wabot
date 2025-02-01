@@ -11,8 +11,6 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         try {
             const code = await ctx.group().inviteCode();
             return await ctx.reply(`https://chat.whatsapp.com/${code}`);

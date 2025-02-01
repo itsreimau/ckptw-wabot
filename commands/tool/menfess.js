@@ -11,8 +11,6 @@ module.exports = {
         private: true
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         const [id, ...text] = ctx.args;
         const formattedId = id ? id.replace(/[^\d]/g, "") : null;
         const menfessText = text ? text.join(" ") : null;

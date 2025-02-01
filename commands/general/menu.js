@@ -12,8 +12,6 @@ module.exports = {
     category: "general",
     permissions: {},
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         try {
             const {
                 cmd

@@ -1,4 +1,5 @@
 // Modul dan dependensi yang diperlukan
+const middleware = require("./middleware.js");
 const events = require("./events/handler.js");
 const {
     Client,
@@ -42,6 +43,9 @@ const bot = new Client({
 
 // Penanganan events
 events(bot);
+
+// Penanganan middleware
+middleware(bot);
 
 // Buat penangan perintah dan muat perintah
 const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));

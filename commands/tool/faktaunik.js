@@ -11,8 +11,6 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         try {
             const apiUrl = tools.api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random");
             const {

@@ -14,8 +14,6 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         const emojisString = ctx.args.join("");
         const emojiRegex = /\p{Emoji}/gu;
         const emojis = Array.from(emojisString.matchAll(emojiRegex), (match) => match[0]);

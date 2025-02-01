@@ -1,6 +1,5 @@
 // Modul dan dependensi yang diperlukan
 require("./config.js");
-const middleware = require("./middleware.js");
 const pkg = require("./package.json");
 const tools = require("./tools/exports.js");
 const {
@@ -23,7 +22,6 @@ const dbFile = path.join(__dirname, "database.json");
 if (!fs.existsSync(dbFile)) fs.writeFileSync(dbFile, JSON.stringify({}), "utf8");
 
 // Atur konfigurasi ke global
-global.middleware = middleware;
 global.config.pkg = pkg;
 global.tools = tools;
 global.consolefy = c;

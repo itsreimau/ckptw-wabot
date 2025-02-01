@@ -9,8 +9,6 @@ module.exports = {
     category: "information",
     permissions: {},
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         try {
             const APIs = tools.api.listUrl();
             let resultText = "";

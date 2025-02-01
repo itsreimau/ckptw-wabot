@@ -10,8 +10,6 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        if (await middleware(ctx, module.exports.permissions)) return;
-
         const senderId = ctx.sender.jid.split(/[:@]/)[0];
         const winGame = await db.get(`user.${senderId}.winGame`) || 0;
 
