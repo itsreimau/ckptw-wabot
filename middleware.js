@@ -16,7 +16,6 @@ async function checkCoin(requiredCoin, senderId) {
 }
 
 module.exports = (bot) => {
-    // Penanganan middleware
     bot.use(async (ctx, next) => {
         const isGroup = ctx.isGroup();
         const isPrivate = !isGroup;
@@ -27,6 +26,8 @@ module.exports = (bot) => {
         if (isPrivate && botMode === "group") return;
         if (isGroup && botMode === "private") return;
         if (!tools.general.isOwner(senderId, true) && botMode === "self") return;
+
+        if (!ctx._used?.command) return await next();
 
         const isOwner = tools.general.isOwner(senderId);
         const userDb = await db.get(`user.${senderId}`) || {};
@@ -65,12 +66,10 @@ module.exports = (bot) => {
             }
         }
 
-        const command = Array.from(ctx._config.cmd.values()).find(cmd =>
-            cmd.name === ctx._used.name || (cmd.aliases && cmd.aliases.includes(ctx._used.name))
-        );
+        const command = [...ctx._config.cmd.values()].find(cmd => [cmd.name, ...(cmd.aliases || [])].includes(ctx._used.name));
         if (!command) return await next();
-        const permissions = command.permissions || {};
 
+        const permissions = command.permissions || {};
         const checkOptions = {
             admin: {
                 check: async () => isGroup && !await ctx.group().isSenderAdmin(),
