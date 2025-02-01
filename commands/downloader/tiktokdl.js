@@ -16,7 +16,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used, "https://example.com/ -a"))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx.used, "https://example.com/ -a"))}\n` +
             quote(tools.msg.generatesFlagInformation({
                 "-a": "Otomatis kirim audio."
             }))

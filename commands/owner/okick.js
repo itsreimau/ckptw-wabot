@@ -19,7 +19,7 @@ module.exports = {
 
         if (!account) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                quote(tools.msg.generateCommandExample(ctx._used, `@${senderId}`)),
+                quote(tools.msg.generateCommandExample(ctx.used, `@${senderId}`)),
             mentions: [senderJid]
         });
 

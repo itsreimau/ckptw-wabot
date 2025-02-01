@@ -165,7 +165,7 @@ module.exports = (bot) => {
 
                     xpToLevelUp = Math.floor(xpToLevelUp * 1.2);
 
-                    const profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+                    const profilePictureUrl = await ctx.core.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
                     if (userDb?.autolevelup) await ctx.reply({
                         text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
@@ -347,7 +347,7 @@ module.exports = (bot) => {
                     if (senderInConversation) {
                         const targetId = senderId === from ? `${to}@s.whatsapp.net` : `${from}@s.whatsapp.net`;
 
-                        await ctx._client.sendMessage(targetId, {
+                        await ctx.core.sendMessage(targetId, {
                             forward: m
                         });
 

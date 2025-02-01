@@ -14,12 +14,12 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used, "February 8th|Do you love me?"))
+            quote(tools.msg.generateCommandExample(ctx.used, "February 8th|Do you love me?"))
         );
 
         try {
             const [birthday, description] = input.split("|").map(i => i.trim());
-            const profilePictureUrl = await ctx._client.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+            const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
             const apiUrl = tools.api.createUrl("itzpire", "/maker/genshin-card", {
                 username: ctx.sender.pushName || "-",

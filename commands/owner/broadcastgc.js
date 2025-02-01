@@ -14,12 +14,12 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used, "halo, dunia!"))
+            quote(tools.msg.generateCommandExample(ctx.used, "halo, dunia!"))
         );
 
         try {
             const delay = ms => new Promise(res => setTimeout(res, ms));
-            const groupData = await ctx._client.groupFetchAllParticipating();
+            const groupData = await ctx.core.groupFetchAllParticipating();
             const groupIds = Object.values(groupData).map(g => g.id);
 
             const waitMsg = await ctx.reply(quote(`🔄 Mengirim siaran ke ${groupIds.length} grup, perkiraan waktu: ${(groupIds.length * 0.5 / 60).toFixed(2)} menit.`));

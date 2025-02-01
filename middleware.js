@@ -1,6 +1,7 @@
 const {
     Cooldown,
-    monospace
+    monospace,
+    quote
 } = require("@mengkodingan/ckptw");
 
 async function checkCoin(requiredCoin, senderId) {
@@ -62,7 +63,7 @@ module.exports = (bot) => {
             return;
         }
 
-        if (config.system.requireBotGroupMembership && ctx._used.command !== "botgroup" && !isOwner && !userDb?.premium) {
+        if (config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium) {
             const botGroupMembersId = (await ctx.group()(config.bot.groupJid).members()).map(member => member.id.split("@")[0]);
             if (!botGroupMembersId.includes(senderId)) {
                 if (!userDb.hasSentMsg?.requireBotGroupMembership) {

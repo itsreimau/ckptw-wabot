@@ -27,7 +27,7 @@ module.exports = {
 
             const userRank = leaderboardData.findIndex(user => user.id === senderId) + 1;
 
-            const profilePictureUrl = await ctx._client.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+            const profilePictureUrl = await ctx.core.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
             return await ctx.reply({
                 text: `${quote(`Nama: ${senderName || "-"}`)}\n` +

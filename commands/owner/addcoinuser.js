@@ -20,12 +20,12 @@ module.exports = {
 
         if (!user && isNaN(coinAmount)) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                quote(tools.msg.generateCommandExample(ctx._used, `@${senderId} 4`)),
+                quote(tools.msg.generateCommandExample(ctx.used, `@${senderId} 4`)),
             mentions: [senderJid]
         });
 
         try {
-            const [result] = await ctx._client.onWhatsApp(user);
+            const [result] = await ctx.core.onWhatsApp(user);
             if (!result.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp!`));
 
             await db.add(`user.${user.split("@")[0]}.coin`, coinAmount);

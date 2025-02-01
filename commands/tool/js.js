@@ -18,7 +18,7 @@ module.exports = {
 
         if (!script) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used, 'console.log("halo, dunia!");'))
+            quote(tools.msg.generateCommandExample(ctx.used, 'console.log("halo, dunia!");'))
         );
 
         try {

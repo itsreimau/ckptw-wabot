@@ -16,14 +16,14 @@ module.exports = {
 
         if (!input || isNaN(input)) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used, ctx.sender.jid.split(/[:@]/)[0]))
+            quote(tools.msg.generateCommandExample(ctx.used, ctx.sender.jid.split(/[:@]/)[0]))
         );
 
         try {
             const accountFormatted = input.replace(/[^\d]/g, "");
             const account = `${accountFormatted}@s.whatsapp.net`;
 
-            const [result] = await ctx._client.onWhatsApp(accountFormatted);
+            const [result] = await ctx.core.onWhatsApp(accountFormatted);
             if (!result.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp!`));
 
             await ctx.group().add([account]);

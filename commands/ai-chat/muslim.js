@@ -13,7 +13,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx._used, "apa itu bot whatsapp?"))
+            quote(tools.msg.generateCommandExample(ctx.used, "apa itu bot whatsapp?"))
         );
 
         try {

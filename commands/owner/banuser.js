@@ -19,12 +19,12 @@ module.exports = {
 
         if (!user) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                quote(tools.msg.generateCommandExample(ctx._used, `@${senderId}`)),
+                quote(tools.msg.generateCommandExample(ctx.used, `@${senderId}`)),
             mentions: [senderJid]
         });
 
         try {
-            const [result] = await ctx._client.onWhatsApp(user);
+            const [result] = await ctx.core.onWhatsApp(user);
             if (!result.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp!`));
 
             await db.set(`user.${user.split("@")[0]}.banned`, true);

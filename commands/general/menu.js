@@ -65,7 +65,7 @@ module.exports = {
                         if (cmd.permissions.premium) permissionsText += "Ⓟ";
                         if (cmd.permissions.private) permissionsText += "ⓟ";
 
-                        text += quote(monospace(`${ctx._used.prefix + cmd.name} ${permissionsText}`));
+                        text += quote(monospace(`${ctx.used.prefix + cmd.name} ${permissionsText}`));
                         text += "\n";
                     });
 

@@ -26,8 +26,8 @@ module.exports = {
                 video: {
                     url: result
                 },
-                mimetype: ctx._used.command === "togif" ? mime.lookup("gif") : mime.lookup("mp4"),
-                gifPlayback: ctx._used.command === "togif" ? true : false
+                mimetype: ctx.used.command === "togif" ? mime.lookup("gif") : mime.lookup("mp4"),
+                gifPlayback: ctx.used.command === "togif" ? true : false
             });
         } catch (error) {
             consolefy.error(`Error: ${error}`);

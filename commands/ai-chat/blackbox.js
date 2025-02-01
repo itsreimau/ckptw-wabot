@@ -15,7 +15,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], [ "image","text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx._used, "apa itu bot whatsapp?"))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx.used, "apa itu bot whatsapp?"))}\n` +
             quote(tools.msg.generateNotes(["AI ini dapat melihat media dan menjawab pertanyaan tentangnya. Kirim media dan tanyakan apa saja!"]))
         );
 
