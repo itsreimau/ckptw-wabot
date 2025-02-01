@@ -109,7 +109,7 @@ module.exports = (bot) => {
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
         const groupJid = isGroup ? ctx.id : null;
-        const groupId = isGroup ? ctx.tools.general.getID(ctx.id) : null;
+        const groupId = isGroup ? tools.general.getID(ctx.id) : null;
 
         // Basis data untuk pengguna dan grup
         const userDb = await db.get(`user.${senderId}`) || {};
