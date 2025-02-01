@@ -6,9 +6,9 @@ module.exports = {
     name: "donate",
     aliases: ["donasi"],
     category: "information",
-    handler: {},
+    permissions: {},
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         try {
             const senderJid = ctx.sender.jid;

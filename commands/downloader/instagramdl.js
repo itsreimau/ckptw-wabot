@@ -8,11 +8,11 @@ module.exports = {
     name: "instagramdl",
     aliases: ["ig", "igdl", "instagram"],
     category: "downloader",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        const status = await handler(ctx, module.exports.handler);
+        const status = await middleware(ctx, module.exports.permissions);
         if (status) return;
 
         const url = ctx.args[0] || null;

@@ -8,11 +8,11 @@ module.exports = {
     name: "alkitab",
     aliases: ["bible", "injil"],
     category: "tool",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const [abbr, chapter] = ctx.args;
 

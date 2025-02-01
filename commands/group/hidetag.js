@@ -6,12 +6,12 @@ module.exports = {
     name: "hidetag",
     aliases: ["ht"],
     category: "group",
-    handler: {
+    permissions: {
         admin: true,
         group: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const input = ctx.args.join(" ") || "Saya tidak tahu harus mengetik apa...";
 

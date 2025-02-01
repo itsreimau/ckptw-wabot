@@ -8,11 +8,11 @@ module.exports = {
     name: "tiktoksearch",
     aliases: ["ttsearch", "vts", "vtsearch"],
     category: "search",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const input = ctx.args.join(" ") || null;
 

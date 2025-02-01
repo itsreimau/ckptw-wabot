@@ -9,9 +9,9 @@ module.exports = {
     name: "toaudio",
     aliases: ["toaud", "tomp3"],
     category: "converter",
-    handler: {},
+    permissions: {},
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         if (!await tools.general.checkQuotedMedia(ctx.quoted, ["video"])) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
 

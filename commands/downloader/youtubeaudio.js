@@ -8,11 +8,11 @@ module.exports = {
     name: "youtubeaudio",
     aliases: ["yta", "ytaudio", "ytmp3"],
     category: "downloader",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const url = ctx.args[0] || null;
 

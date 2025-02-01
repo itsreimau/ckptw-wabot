@@ -3,7 +3,7 @@ const {
 } = require("@mengkodingan/ckptw");
 
 // Penanganan opsi khusus
-async function handler(ctx, options) {
+async function middleware(ctx, options) {
     const isGroup = ctx.isGroup();
     const isPrivate = !isGroup;
     const senderJid = ctx.sender.jid;
@@ -18,9 +18,9 @@ async function handler(ctx, options) {
     const userDb = await db.get(`user.${senderId}`) || {};
 
     if (userDb?.banned) {
-        if (!userDb.lastSentMsg.banned) {
+        if (!userDb.hasSentMsg?.banned) {
             await ctx.reply(config.msg.banned);
-            await db.set(`user.${senderId}.lastSentMsg.banned`, true);
+            await db.set(`user.${senderId}.hasSentMsg.banned`, true);
             return true;
         } else {
             await ctx.react("🚫");
@@ -30,9 +30,9 @@ async function handler(ctx, options) {
 
     const cooldown = new Cooldown(ctx, config.system.cooldown);
     if (cooldown.onCooldown && !isOwner && !userDb?.premium) {
-        if (!userDb.lastSentMsg.cooldown) {
+        if (!userDb.hasSentMsg?.cooldown) {
             await ctx.reply(config.msg.cooldown);
-            await db.set(`user.${senderId}.lastSentMsg.cooldown`, true);
+            await db.set(`user.${senderId}.hasSentMsg.cooldown`, true);
             return true;
         } else {
             await ctx.react("💤");
@@ -43,9 +43,9 @@ async function handler(ctx, options) {
     if (config.system.requireBotGroupMembership && ctx._used.command !== "botgroup" && !isOwner && !userDb?.premium) {
         const botGroupMembersId = (await ctx.group()(config.bot.groupJid).members()).map(member => member.id.split("@")[0]);
         if (!botGroupMembersId.includes(senderId)) {
-            if (!userDb.lastSentMsg.requireBotGroupMembership) {
+            if (!userDb.hasSentMsg?.requireBotGroupMembership) {
                 await ctx.reply(config.msg.botGroupMembership);
-                await db.set(`user.${senderId}.lastSentMsg.requireBotGroupMembership`, true);
+                await db.set(`user.${senderId}.hasSentMsg.requireBotGroupMembership`, true);
                 return true;
             } else {
                 await ctx.react("🚫");
@@ -117,4 +117,4 @@ async function checkCoin(requiredCoin, senderId) {
     return false;
 }
 
-module.exports = handler;
+module.exports = middleware;

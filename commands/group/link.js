@@ -6,12 +6,12 @@ module.exports = {
     name: "link",
     aliases: ["gclink", "grouplink"],
     category: "group",
-    handler: {
+    permissions: {
         botAdmin: true,
         group: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         try {
             const code = await ctx.group().inviteCode();

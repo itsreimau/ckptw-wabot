@@ -5,12 +5,12 @@ const {
 module.exports = {
     name: "intro",
     category: "group",
-    handler: {
+    permissions: {
         botAdmin: true,
         group: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         try {
             const groupId = ctx.isGroup() ? ctx.id.split("@")[0] : null;

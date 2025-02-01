@@ -6,11 +6,11 @@ const axios = require("axios");
 module.exports = {
     name: "iqtest",
     category: "entertainment",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const senderId = ctx.sender.jid.split(/[:@]/)[0];
         const winGame = await db.get(`user.${senderId}.winGame`) || 0;

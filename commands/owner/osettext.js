@@ -7,11 +7,11 @@ module.exports = {
     name: "osettext",
     aliases: ["osettxt"],
     category: "owner",
-    handler: {
+    permissions: {
         owner: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const key = ctx.args[0];
         const text = ctx.args.slice(1).join(" ");

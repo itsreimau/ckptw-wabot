@@ -8,11 +8,11 @@ module.exports = {
     name: "twitterdl",
     aliases: ["twitter", "twit", "twitdl"],
     category: "downloader",
-    handler: {
+    permissions: {
         premium: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const url = ctx.args[0] || null;
 

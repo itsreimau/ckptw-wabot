@@ -6,9 +6,9 @@ const {
 module.exports = {
     name: "claim",
     category: "profile",
-    handler: {},
+    permissions: {},
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const input = ctx.args.join(" ") || null;
 

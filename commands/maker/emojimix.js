@@ -10,11 +10,11 @@ module.exports = {
     name: "emojimix",
     aliases: ["emix"],
     category: "maker",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const emojisString = ctx.args.join("");
         const emojiRegex = /\p{Emoji}/gu;

@@ -10,9 +10,9 @@ module.exports = {
     name: "sticker",
     aliases: ["s", "stiker"],
     category: "converter",
-    handler: {},
+    permissions: {},
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([

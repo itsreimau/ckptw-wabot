@@ -154,7 +154,7 @@ Setelah proses autentikasi berhasil, bot siap untuk menerima dan merespons pesan
 
 Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
 
-1. Buat file JavaScript baru di folder `commands` dengan fungsionalitas yang diinginkan. Misalnya, buat file `test-helloworld.js`:
+1. Buat file JavaScript baru di folder `commands` dengan fungsionalitas yang diinginkan. Misalnya, buat file `test/helloworld.js`:
 
    ```javascript
    // commands/test/helloworld.js
@@ -162,7 +162,7 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
    module.exports = { // Mengatur dan membagikan fungsi untuk perintah "helloworld"
        name: "helloworld", // Nama perintah yang akan digunakan oleh pengguna
        category: "test", // Kategori untuk mengelompokkan perintah ini
-       handler: { // Pengaturan khusus untuk perintah ini
+       permissions: { // Pengaturan khusus untuk perintah ini
            admin: Boolean, // Apakah hanya admin grup yang bisa menggunakan perintah ini? (true/false)
            botAdmin: Boolean, // Apakah bot harus menjadi admin agar bisa menjalankan perintah ini? (true/false)
            coin: Number, // Jumlah koin yang diperlukan untuk menjalankan perintah ini
@@ -172,7 +172,7 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
            private: Boolean // Apakah perintah ini hanya bisa digunakan dalam chat pribadi? (true/false)
        },
        code: async (ctx) => { // Fungsi yang dijalankan saat perintah ini dipanggil
-           if (await handler(ctx, module.exports.handler)) return; // Periksa izin pengguna. Jika benar, hentikan prosesnya karena tidak diperbolehkan
+           if (await middleware(ctx, module.exports.permissions)) return; // Periksa izin pengguna. Jika benar, hentikan prosesnya karena tidak diperbolehkan
 
            return await ctx.reply("Hello, World!"); // Jika tidak ada pembatasan, kirim pesan "Hello, World!" kepada pengguna
        }

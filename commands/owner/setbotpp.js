@@ -6,11 +6,11 @@ module.exports = {
     name: "setbotpp",
     aliases: ["setboticon", "seticonbot", "setppbot"],
     category: "owner",
-    handler: {
+    permissions: {
         owner: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([

@@ -9,11 +9,11 @@ const session = new Map();
 module.exports = {
     name: "family100",
     category: "game",
-    handler: {
+    permissions: {
         group: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 

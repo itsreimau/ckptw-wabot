@@ -8,11 +8,11 @@ module.exports = {
     name: "gempa",
     aliases: ["gempabumi", "infogempa"],
     category: "tool",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const apiUrl = tools.api.createUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json");
 

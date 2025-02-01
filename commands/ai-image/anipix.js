@@ -7,11 +7,11 @@ const mime = require("mime-types");
 module.exports = {
     name: "anipix",
     category: "ai-image",
-    handler: {
+    permissions: {
         premium: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const input = ctx.args.join(" ") || null;
 

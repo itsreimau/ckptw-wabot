@@ -7,11 +7,11 @@ module.exports = {
     name: "faktaunik",
     aliases: ["fakta"],
     category: "tool",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         try {
             const apiUrl = tools.api.createUrl("https://uselessfacts.jsph.pl", "/api/v2/facts/random");

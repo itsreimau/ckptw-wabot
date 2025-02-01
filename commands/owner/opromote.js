@@ -5,13 +5,13 @@ const {
 module.exports = {
     name: "opromote",
     category: "owner",
-    handler: {
+    permissions: {
         botAdmin: true,
         group: true,
         owner: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const senderJid = ctx.sender.jid;
         const senderId = senderJid.split(/[:@]/)[0];

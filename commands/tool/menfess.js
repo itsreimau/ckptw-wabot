@@ -6,12 +6,12 @@ module.exports = {
     name: "menfess",
     aliases: ["conf", "confes", "confess", "menf", "menfes"],
     category: "tool",
-    handler: {
+    permissions: {
         coin: 10,
         private: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const [id, ...text] = ctx.args;
         const formattedId = id ? id.replace(/[^\d]/g, "") : null;

@@ -10,11 +10,11 @@ module.exports = {
     name: "js",
     aliases: ["javascript"],
     category: "tool",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const script = ctx.args.join(" ") || null;
 

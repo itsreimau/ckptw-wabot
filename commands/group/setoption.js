@@ -7,13 +7,13 @@ module.exports = {
     name: "setoption",
     aliases: ["setopt"],
     category: "group",
-    handler: {
+    permissions: {
         admin: true,
         botAdmin: true,
         group: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const input = ctx.args.join(" ") || null;
 

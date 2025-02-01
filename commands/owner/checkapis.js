@@ -7,11 +7,11 @@ module.exports = {
     name: "checkapis",
     aliases: ["cekapi", "checkapi"],
     category: "owner",
-    handler: {
+    permissions: {
         owner: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         try {
             const waitMsg = await ctx.reply(config.msg.wait);

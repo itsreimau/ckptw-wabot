@@ -5,14 +5,14 @@ const {
 module.exports = {
     name: "kick",
     category: "group",
-    handler: {
+    permissions: {
         admin: true,
         botAdmin: true,
         group: true,
         restrict: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const senderJid = ctx.sender.jid;
         const senderId = senderJid.split(/[:@]/)[0];

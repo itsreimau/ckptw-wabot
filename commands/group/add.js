@@ -5,14 +5,14 @@ const {
 module.exports = {
     name: "add",
     category: "group",
-    handler: {
+    permissions: {
         admin: true,
         botAdmin: true,
         group: true,
         restrict: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const input = ctx.args.join(" ") || null;
 

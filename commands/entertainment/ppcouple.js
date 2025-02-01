@@ -8,11 +8,11 @@ module.exports = {
     name: "ppcouple",
     aliases: ["ppcp"],
     category: "entertainment",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const apiUrl = tools.api.createUrl("sandipbaruwal", "/dp");
 

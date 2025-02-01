@@ -7,11 +7,11 @@ module.exports = {
     name: "ocr",
     aliases: ["image2text", "imagetotext", "img2text", "imgtotext"],
     category: "tool",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([

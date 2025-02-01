@@ -6,9 +6,9 @@ module.exports = {
     name: "tqto",
     aliases: ["thanksto"],
     category: "information",
-    handler: {},
+    permissions: {},
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         return await ctx.reply(
             `${quote("Allah SWT")}\n` +

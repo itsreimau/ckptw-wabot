@@ -7,11 +7,11 @@ module.exports = {
     name: "fixdb",
     aliases: ["fixdatabase"],
     category: "owner",
-    handler: {
+    permissions: {
         owner: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const input = ctx.args[0] || null;
 
@@ -36,7 +36,7 @@ module.exports = {
 
             const filteredData = (category, item) => {
                 const mappings = {
-                    user: ["afk", "banned", "coin", "lastClaim", "lastSentMsg", "level", "premium", "uid", "winGame", "xp"],
+                    user: ["afk", "banned", "coin", "lastClaim", "hasSentMsg", "level", "premium", "uid", "winGame", "xp"],
                     group: ["text", "option"],
                     menfess: ["from", "to"]
                 };

@@ -6,9 +6,9 @@ module.exports = {
     name: "uptime",
     aliases: ["runtime"],
     category: "information",
-    handler: {},
+    permissions: {},
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const uptime = tools.general.convertMsToDuration(Date.now() - config.bot.readyAt);
         return await ctx.reply(quote(`🚀 Bot telah aktif selama ${uptime}.`));

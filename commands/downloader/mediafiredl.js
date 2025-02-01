@@ -8,11 +8,11 @@ module.exports = {
     name: "mediafiredl",
     aliases: ["mediafire", "mf", "mfdl"],
     category: "downloader",
-    handler: {
+    permissions: {
         premium: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const url = ctx.args[0] || null;
 

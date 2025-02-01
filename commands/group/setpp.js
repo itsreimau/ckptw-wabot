@@ -6,13 +6,13 @@ module.exports = {
     name: "setpp",
     aliases: ["seticon"],
     category: "group",
-    handler: {
+    permissions: {
         admin: true,
         botAdmin: true,
         group: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([

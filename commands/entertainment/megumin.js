@@ -7,11 +7,11 @@ const mime = require("mime-types");
 module.exports = {
     name: "megumin",
     category: "entertainment",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const apiUrl = tools.api.createUrl("https://api.waifu.pics", `/sfw/megumin`);
 

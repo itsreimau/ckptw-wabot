@@ -6,11 +6,11 @@ module.exports = {
     name: "addpremuser",
     aliases: ["addprem", "apu"],
     category: "owner",
-    handler: {
+    permissions: {
         owner: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const userId = ctx.args[0];
 

@@ -6,11 +6,11 @@ module.exports = {
     name: "listbanned",
     aliases: ["listban"],
     category: "owner",
-    handler: {
+    permissions: {
         owner: true
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         try {
             const users = (await db.toJSON()).user;

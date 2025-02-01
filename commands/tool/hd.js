@@ -9,11 +9,11 @@ module.exports = {
     name: "hd",
     aliases: ["enhance", "enhancer", "hd", "hdr", "remini"],
     category: "tools",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([

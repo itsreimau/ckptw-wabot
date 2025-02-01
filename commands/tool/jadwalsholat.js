@@ -7,9 +7,9 @@ module.exports = {
     name: "jadwalsholat",
     aliases: ["sholat"],
     category: "tool",
-    handler: {},
+    permissions: {},
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const input = ctx.args.join(" ") || null;
 

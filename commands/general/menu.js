@@ -10,9 +10,9 @@ module.exports = {
     name: "menu",
     aliases: ["allmenu", "help", "list", "listmenu"],
     category: "general",
-    handler: {},
+    permissions: {},
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         try {
             const {
@@ -53,21 +53,21 @@ module.exports = {
                     .map(command => ({
                         name: command.name,
                         aliases: command.aliases,
-                        handler: command.handler || {}
+                        permissions: command.permissions || {}
                     }));
 
                 if (categoryCommands.length > 0) {
                     text += `◆ ${bold(tag[category])}\n`;
 
                     categoryCommands.forEach(cmd => {
-                        let handlerText = "";
-                        if (cmd.handler.coin) handlerText += "ⓒ";
-                        if (cmd.handler.group) handlerText += "Ⓖ";
-                        if (cmd.handler.owner) handlerText += "Ⓞ";
-                        if (cmd.handler.premium) handlerText += "Ⓟ";
-                        if (cmd.handler.private) handlerText += "ⓟ";
+                        let permissionsText = "";
+                        if (cmd.permissions.coin) permissionsText += "ⓒ";
+                        if (cmd.permissions.group) permissionsText += "Ⓖ";
+                        if (cmd.permissions.owner) permissionsText += "Ⓞ";
+                        if (cmd.permissions.premium) permissionsText += "Ⓟ";
+                        if (cmd.permissions.private) permissionsText += "ⓟ";
 
-                        text += quote(monospace(`${ctx._used.prefix + cmd.name} ${handlerText}`));
+                        text += quote(monospace(`${ctx._used.prefix + cmd.name} ${permissionsText}`));
                         text += "\n";
                     });
 

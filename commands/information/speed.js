@@ -8,9 +8,9 @@ const {
 module.exports = {
     name: "speed",
     category: "information",
-    handler: {},
+    permissions: {},
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         try {
             const startTime = performance.now();

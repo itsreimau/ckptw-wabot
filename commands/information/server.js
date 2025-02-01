@@ -7,9 +7,9 @@ const os = require("os");
 module.exports = {
     name: "server",
     category: "information",
-    handler: {},
+    permissions: {},
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const apiUrl = tools.api.createUrl("http://ip-api.com", "/json");
 

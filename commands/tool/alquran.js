@@ -10,9 +10,9 @@ module.exports = {
     name: "alquran",
     aliases: ["quran"],
     category: "tool",
-    handler: {},
+    permissions: {},
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const [surat, ayat] = ctx.args;
 

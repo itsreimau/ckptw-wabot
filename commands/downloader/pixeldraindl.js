@@ -7,11 +7,11 @@ module.exports = {
     name: "pixeldraindl",
     aliases: ["pd", "pddl", "pixeldrain"],
     category: "downloader",
-    handler: {
+    permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        if (await handler(ctx, module.exports.handler)) return;
+        if (await middleware(ctx, module.exports.permissions)) return;
 
         const url = ctx.args[0] || null;
 
