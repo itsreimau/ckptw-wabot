@@ -107,9 +107,9 @@ module.exports = (bot) => {
         const isPrivate = !isGroup;
 
         const senderJid = ctx.sender.jid;
-        const senderId = senderJid.split(/[:@]/)[0];
+        const senderId = ctx.sender.decodedJid;
         const groupJid = isGroup ? ctx.id : null;
-        const groupId = isGroup ? groupJid.split("@")[0] : null;
+        const groupId = isGroup ? ctx.decodedId : null;
 
         // Basis data untuk pengguna
         const userDb = await db.get(`user.${senderId}`) || {};

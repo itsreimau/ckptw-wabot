@@ -17,11 +17,11 @@ module.exports = {
         );
 
         try {
-            const senderId = ctx.sender.jid.split(/[:@]/)[0];
-            const uid = await db.get(`user.${senderId}.uid`) || "guest";
+            const senderId = ctx.sender.decodedJid;
+            const senderUid = await db.get(`user.${senderId}.uid`) || "guest";
             const apiUrl = tools.api.createUrl("fasturl", "/aillm/islamic", {
                 ask: input,
-                sessionId: uid
+                sessionId: senderUid
             });
             const {
                 data

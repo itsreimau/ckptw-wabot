@@ -10,7 +10,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const senderId = ctx.sender.jid.split(/[:@]/)[0];
+        const senderId = ctx.sender.decodedJid;
         const winGame = await db.get(`user.${senderId}.winGame`) || 0;
 
         let iqScore;

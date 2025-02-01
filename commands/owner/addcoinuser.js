@@ -14,7 +14,7 @@ module.exports = {
         const coinAmount = parseInt(ctx.args[1], 10);
 
         const senderJid = ctx.sender.jid;
-        const senderId = senderJid.split(/[:@]/)[0];
+        const senderId = ctx.sender.decodedJid;
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : (userId ? `${userId}@s.whatsapp.net` : null);
 

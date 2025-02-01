@@ -15,7 +15,7 @@ module.exports = {
         const formattedId = id ? id.replace(/[^\d]/g, "") : null;
         const menfessText = text ? text.join(" ") : null;
 
-        const senderId = ctx.sender.jid.split(/[:@]/)[0];
+        const senderId = ctx.sender.decodedJid;
 
         if (!formattedId && !menfessText) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +

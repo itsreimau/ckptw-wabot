@@ -11,7 +11,7 @@ module.exports = {
     },
     code: async (ctx) => {
         try {
-            const groupId = ctx.isGroup() ? ctx.id.split("@")[0] : null;
+            const groupId = ctx.isGroup() ? ctx.decodedId : null;
             const introText = await db.get(`group.${groupId}.text.intro`) || quote("❎ Grup ini tidak memiliki intro.");
 
             return await ctx.reply(introText);

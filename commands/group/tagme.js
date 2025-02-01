@@ -11,7 +11,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const senderJid = ctx.sender.jid;
-            const senderId = senderJid.split(/[:@]/)[0];
+            const senderId = ctx.sender.decodedJid;
 
             return await ctx.reply({
                 text: `@${senderId}`,

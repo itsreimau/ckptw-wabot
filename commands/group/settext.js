@@ -28,7 +28,7 @@ module.exports = {
         }
 
         try {
-            const groupId = ctx.isGroup() ? ctx.id.split("@")[0] : null;
+            const groupId = ctx.isGroup() ? decodedId : null;
             let setKey;
 
             switch (key.toLowerCase()) {

@@ -22,7 +22,7 @@ module.exports = (bot) => {
         const isGroup = ctx.isGroup();
         const isPrivate = !isGroup;
         const senderJid = ctx.sender.jid;
-        const senderId = senderJid.split(/[:@]/)[0];
+        const senderId = ctx.sender.decodedJid;
 
         const botMode = await db.get("bot.mode") || "public";
         if (isPrivate && botMode === "group") return;
@@ -56,7 +56,7 @@ module.exports = (bot) => {
         }
 
         if (config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium) {
-            const botGroupMembersId = (await ctx.group()(config.bot.groupJid).members()).map(member => member.id.split("@")[0]);
+            const botGroupMembersId = (await ctx.group(config.bot.groupJid).members()).map(member => member.id.split("@")[0]);
             if (!botGroupMembersId.includes(senderId)) {
                 if (!userDb.hasSentMsg?.requireBotGroupMembership) {
                     await ctx.reply(config.msg.botGroupMembership);

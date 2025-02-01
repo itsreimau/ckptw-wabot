@@ -18,7 +18,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.trim().toUpperCase();
-                const senderId = ctx.sender.jid.split(/[:@]/)[0];
+                const senderId = ctx.sender.decodedJid;
 
                 if (userAnswer === "Y") {
                     db.delete(`user.${senderId}`);

@@ -9,7 +9,7 @@ module.exports = {
     permissions: {},
     code: async (ctx) => {
         try {
-            const senderJid = ctx.sender.jid.split(/[:@]/)[0];
+            const senderJid = ctx.sender.decodedJid;
             const users = (await db.toJSON()).user;
 
             const leaderboardData = Object.entries(users)

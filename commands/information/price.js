@@ -10,7 +10,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const senderJid = ctx.sender.jid;
-            const senderId = senderJid.split(/[:@]/)[0];
+            const senderId = ctx.sender.decodedJid;
 
             const customText = await db.get(`bot.text.price`) || null;
             const text = customText ?

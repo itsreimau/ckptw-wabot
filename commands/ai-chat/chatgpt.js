@@ -25,8 +25,8 @@ module.exports = {
 
         try {
             const style = `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`; // Dapat diubah sesuai keinginan Anda
-            const senderId = ctx.sender.jid.split(/[:@]/)[0];
-            const uid = await db.get(`user.${senderId}.uid`) || "guest";
+            const senderId = ctx.sender.decodedJid;
+            const senderUid = await db.get(`user.${senderId}.uid`) || "guest";
 
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
@@ -35,7 +35,7 @@ module.exports = {
                     ask: input,
                     imageUrl: uploadUrl,
                     style,
-                    sessionId: uid
+                    sessionId: senderUid
                 });
                 const {
                     data
@@ -46,7 +46,7 @@ module.exports = {
                 const apiUrl = tools.api.createUrl("fasturl", "/aillm/gpt-4o", {
                     ask: input,
                     style,
-                    sessionId: uid
+                    sessionId: senderUid
                 });
                 const {
                     data
