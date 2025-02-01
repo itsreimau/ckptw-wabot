@@ -153,15 +153,6 @@ module.exports = (bot) => {
             // Penanganan untuk perintah
             const isCmd = tools.general.isCmd(m.content, ctx._config);
             if (isCmd) {
-                if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi pengetikan otomatis untuk perintah
-
-                // Did you mean?
-                const mean = isCmd.didyoumean;
-                const prefix = isCmd.prefix;
-                const input = isCmd.input;
-
-                if (mean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(prefix + mean)}.`));
-
                 // Penanganan XP & Level untuk pengguna
                 const xpGain = 10;
                 let xpToLevelUp = 100;
@@ -179,7 +170,7 @@ module.exports = (bot) => {
                     if (userDb?.autolevelup) await ctx.reply({
                         text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                             `${config.msg.readmore}\n` +
-                            quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
+                            quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${isCmd.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
                         contextInfo: {
                             externalAdReply: {
                                 mediaType: 1,

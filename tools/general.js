@@ -157,7 +157,7 @@ function isCmd(content, config) {
         return {
             msg: content,
             prefix,
-            cmd: cmdName,
+            name: cmdName,
             input
         };
     }

@@ -1,5 +1,6 @@
 const {
-    Cooldown
+    Cooldown,
+    monospace
 } = require("@mengkodingan/ckptw");
 
 async function checkCoin(requiredCoin, senderId) {
@@ -27,7 +28,15 @@ module.exports = (bot) => {
         if (isGroup && botMode === "private") return;
         if (!tools.general.isOwner(senderId, true) && botMode === "self") return;
 
-        if (!ctx._used?.command) return await next();
+        const isCmd = tools.general.isCmd(ctx.msg.content, ctx._config);
+        if (!isCmd) return;
+
+        if (config.system.autoTypingOnCmd && isCmd) await ctx.simulateTyping();
+
+        if (isCmd.didyoumean) {
+            await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd.prefix + isCmd.didyoumean)}.`));
+            return;
+        }
 
         const isOwner = tools.general.isOwner(senderId);
         const userDb = await db.get(`user.${senderId}`) || {};
@@ -66,7 +75,7 @@ module.exports = (bot) => {
             }
         }
 
-        const command = [...ctx._config.cmd.values()].find(cmd => [cmd.name, ...(cmd.aliases || [])].includes(ctx._used.name));
+        const command = [...ctx._config.cmd.values()].find(cmd => [cmd.name, ...(cmd.aliases || [])].includes(isCmd.name));
         if (!command) return await next();
 
         const permissions = command.permissions || {};
