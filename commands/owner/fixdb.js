@@ -48,7 +48,7 @@ module.exports = {
                     const item = data[id] || {};
                     const filtered = filteredData(category, item);
 
-                    if (!/^[0-9]$/.test(id)) {
+                    if (!/^\d+$/.test(id)) {
                         await db.delete(`${category}.${id}`);
                     } else {
                         await db.set(`${category}.${id}`, filtered);
