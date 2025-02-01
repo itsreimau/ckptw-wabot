@@ -153,6 +153,10 @@ module.exports = (bot) => {
             // Penanganan untuk perintah
             const isCmd = tools.general.isCmd(m.content, ctx._config);
             if (isCmd) {
+
+                // Penanganan 'Did you mean?' untuk perintah yang salah ketik
+                if (isCmd.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd.prefix + isCmd.didyoumean)}.`));
+
                 // Penanganan XP & Level untuk pengguna
                 const xpGain = 10;
                 let xpToLevelUp = 100;

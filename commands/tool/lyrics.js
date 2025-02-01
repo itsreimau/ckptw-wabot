@@ -19,18 +19,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/lirik", {
-                message: input
+            const apiUrl = tools.api.createUrl("diioffc", "/api/search/lirik", {
+                query: input
             });
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
 
             return await ctx.reply(
-                `${quote(`Judul: ${data.title}`)}\n` +
-                `${quote(`Album: ${data.album}`)}\n` +
+                `${quote(`Kueri: ${input}`)}\n` +
                 `${quote("─────")}\n` +
-                `${result.lyrics}\n` +
+                `${data.result.lyrics}\n` +
                 "\n" +
                 config.msg.footer
             );

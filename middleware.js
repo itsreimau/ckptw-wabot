@@ -29,25 +29,17 @@ module.exports = (bot) => {
         if (isGroup && botMode === "private") return;
         if (!tools.general.isOwner(senderId, true) && botMode === "self") return;
 
-        const isCmd = tools.general.isCmd(ctx.msg.content, ctx._config);
-        if (!isCmd) return;
-
-        if (config.system.autoTypingOnCmd && isCmd) await ctx.simulateTyping();
-
-        if (isCmd.didyoumean) {
-            await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd.prefix + isCmd.didyoumean)}.`));
-            return;
-        }
-
         const isOwner = tools.general.isOwner(senderId);
         const userDb = await db.get(`user.${senderId}`) || {};
+
+        if (config.system.autoTypingOnCmd) await ctx.simulateTyping();
 
         if (userDb?.banned) {
             if (!userDb.hasSentMsg?.banned) {
                 await ctx.reply(config.msg.banned);
                 await db.set(`user.${senderId}.hasSentMsg.banned`, true);
             } else {
-                await ctx.react("🚫");
+                await ctx.react(ctx.id, "🚫");
             }
             return;
         }
@@ -58,7 +50,7 @@ module.exports = (bot) => {
                 await ctx.reply(config.msg.cooldown);
                 await db.set(`user.${senderId}.hasSentMsg.cooldown`, true);
             } else {
-                await ctx.react("💤");
+                await ctx.react(ctx.id, "💤");
             }
             return;
         }
@@ -70,16 +62,15 @@ module.exports = (bot) => {
                     await ctx.reply(config.msg.botGroupMembership);
                     await db.set(`user.${senderId}.hasSentMsg.requireBotGroupMembership`, true);
                 } else {
-                    await ctx.react("🚫");
+                    await ctx.react(ctx.id, "🚫");
                 }
                 return;
             }
         }
 
-        const command = [...ctx._config.cmd.values()].find(cmd => [cmd.name, ...(cmd.aliases || [])].includes(isCmd.name));
-        if (!command) return await next();
-
+        const command = [...ctx._config.cmd.values()].find(cmd => [cmd.name, ...(cmd.aliases || [])].includes(ctx.used.command));
         const permissions = command.permissions || {};
+
         const checkOptions = {
             admin: {
                 check: async () => isGroup && !await ctx.group().isSenderAdmin(),

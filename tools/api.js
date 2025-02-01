@@ -6,6 +6,9 @@ const APIs = {
     bk9: {
         baseURL: "https://bk9.fun"
     },
+    diioffc: {
+        baseURL: "https://api.diioffc.web.id"
+    },
     exodus: {
         baseURL: "https://restapi.exoduscloud.my.id"
     },
