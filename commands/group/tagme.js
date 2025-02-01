@@ -11,7 +11,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const senderJid = ctx.sender.jid;
-            const senderId = ctx.sender.decodedJid;
+            const senderId = tools.general.getID(senderJid);
 
             return await ctx.reply({
                 text: `@${senderId}`,

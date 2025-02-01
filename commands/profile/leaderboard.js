@@ -9,7 +9,7 @@ module.exports = {
     permissions: {},
     code: async (ctx) => {
         try {
-            const senderJid = ctx.sender.decodedJid;
+            const senderId = tools.general.getID(ctx.sender.jid);
             const users = (await db.toJSON()).user;
 
             const leaderboardData = Object.entries(users)
@@ -20,7 +20,7 @@ module.exports = {
                 }))
                 .sort((a, b) => b.winGame - a.winGame || b.level - a.level);
 
-            const userRank = leaderboardData.findIndex(user => user.id === senderJid) + 1;
+            const userRank = leaderboardData.findIndex(user => user.id === senderId) + 1;
             const topUsers = leaderboardData.slice(0, 10);
             const userMentions = [];
             let resultText = "";
@@ -32,8 +32,8 @@ module.exports = {
 
             if (userRank > 10) {
                 const userStats = leaderboardData[userRank - 1];
-                resultText += quote(`${userRank}. @${senderJid} - Menang: ${userStats.winGame}, Level: ${userStats.level}\n`);
-                userMentions.push(`${senderJid}@s.whatsapp.net`);
+                resultText += quote(`${userRank}. @${senderId} - Menang: ${userStats.winGame}, Level: ${userStats.level}\n`);
+                userMentions.push(`${senderId}@s.whatsapp.net`);
             }
 
             return await ctx.reply({

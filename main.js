@@ -52,4 +52,4 @@ const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
 cmd.load();
 
 // Luncurkan bot
-bot.launch().catch((error) => console.error(`Error: ${error}`));
+bot.launch().catch((error) => consolefy.error(`Error: ${error}`));

@@ -10,7 +10,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const senderJid = ctx.sender.jid;
-            const senderId = ctx.sender.decodedJid;
+            const senderId = tools.general.getID(senderJid);
 
             const customText = await db.get(`bot.text.donate`) || null;
             const text = customText ?

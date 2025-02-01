@@ -11,7 +11,7 @@ module.exports = {
         try {
             const senderName = ctx.sender.pushName;
             const senderJid = ctx.sender.jid;
-            const senderId = ctx.sender.decodedJid;
+            const senderId = tools.general.getID(senderJid);
 
             const userDb = await db.get(`user.${senderId}`) || {};
 

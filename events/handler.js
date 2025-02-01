@@ -20,7 +20,7 @@ async function handleUserEvent(bot, m, type) {
     } = m;
 
     try {
-        const groupId = id.split("@")[0];
+        const groupId = tools.general.getID(id);
         const groupDb = await db.get(`group.${groupId}`) || {};
 
         if (groupDb?.option?.welcome) {
@@ -30,7 +30,7 @@ async function handleUserEvent(bot, m, type) {
                 const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
                 const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
-                const userTag = `@${jid.split("@")[0]}`;
+                const userTag = `@${tools.general.getID(jid)}`;
 
                 const text = customText ?
                     customText
@@ -88,7 +88,7 @@ module.exports = (bot) => {
         }
 
         // Tetapkan config pada bot
-        const id = m.user.id.split(":")[0];
+        const id = tools.general.getID(m.user.id);
         await Promise.all([
             config.bot.id = id,
             config.bot.jid = `${id}@s.whatsapp.net`,
@@ -107,13 +107,15 @@ module.exports = (bot) => {
         const isPrivate = !isGroup;
 
         const senderJid = ctx.sender.jid;
-        const senderId = ctx.sender.decodedJid;
+        const senderId = tools.general.getID(senderJid);
         const groupJid = isGroup ? ctx.id : null;
-        const groupId = isGroup ? ctx.decodedId : null;
+        const groupId = isGroup ? ctx.tools.general.getID(ctx.id) : null;
 
-        // Basis data untuk pengguna
+        // Basis data untuk pengguna dan grup
         const userDb = await db.get(`user.${senderId}`) || {};
+        const groupDb = await db.get(`group.${groupId}`) || {};
 
+        const isCmd = tools.general.isCmd(m.content, ctx._config);
         const isOwner = tools.general.isOwner(senderId);
         const isPremium = userDb?.premium;
 
@@ -151,9 +153,7 @@ module.exports = (bot) => {
             await db.set(`user.${senderId}`, newUserDb);
 
             // Penanganan untuk perintah
-            const isCmd = tools.general.isCmd(m.content, ctx._config);
             if (isCmd) {
-
                 // Penanganan 'Did you mean?' untuk perintah yang salah ketik
                 if (isCmd.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd.prefix + isCmd.didyoumean)}.`));
 
@@ -260,8 +260,6 @@ module.exports = (bot) => {
         if (isGroup) {
             if (m.key.fromMe) return;
 
-            const groupDb = await db.get(`group.${groupId}`) || {};
-
             // Penanganan antilink
             if (groupDb?.option?.antilink) {
                 const isUrl = await tools.general.isUrl(m.content);
@@ -321,8 +319,6 @@ module.exports = (bot) => {
         // Pribadi
         if (isPrivate) {
             if (m.key.fromMe) return;
-
-            const isCmd = tools.general.isCmd(m.content, ctx._config);
 
             // Penanganan menfess
             const allMenfessDb = await db.get("menfess") || {};

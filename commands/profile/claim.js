@@ -16,7 +16,7 @@ module.exports = {
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
-        const senderId = ctx.sender.decodedJid;
+        const senderId = tools.general.getID(ctx.sender.jid);
 
         const userDb = await db.get(`user.${senderId}`) || {};
 

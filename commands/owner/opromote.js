@@ -12,7 +12,7 @@ module.exports = {
     },
     code: async (ctx) => {
         const senderJid = ctx.sender.jid;
-        const senderId = ctx.sender.decodedJid;
+        const senderId = tools.general.getID(senderJid);
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const account = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : null;
 

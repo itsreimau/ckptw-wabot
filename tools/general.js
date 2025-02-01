@@ -129,6 +129,10 @@ function generateUID(id) {
     return `${Math.abs(hash).toString(16).toLowerCase()}-${uniquePart}`;
 }
 
+function getID(jid) {
+    return jid.split("@")[0].split(":")[0];
+}
+
 function getRandomElement(arr) {
     if (!arr.length) return null;
 
@@ -284,6 +288,7 @@ module.exports = {
     convertMsToDuration,
     formatSize,
     generateUID,
+    getID,
     getRandomElement,
     isCmd,
     isOwner,

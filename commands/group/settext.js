@@ -28,7 +28,7 @@ module.exports = {
         }
 
         try {
-            const groupId = ctx.isGroup() ? decodedId : null;
+            const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
             let setKey;
 
             switch (key.toLowerCase()) {

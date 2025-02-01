@@ -33,7 +33,7 @@ module.exports = {
                 "misc": "Miscellaneous"
             };
 
-            let text = `Hai @${ctx.sender.decodedJid}, berikut adalah daftar perintah yang tersedia!\n` +
+            let text = `Hai @${tools.general.getID(ctx.sender.jid)}, berikut adalah daftar perintah yang tersedia!\n` +
                 "\n" +
                 `${quote(`Tanggal: ${moment.tz(config.system.timeZone).locale("id").format("dddd, DD MMMM YYYY")}`)}\n` +
                 `${quote(`Waktu: ${moment.tz(config.system.timeZone).format("HH.mm.ss")}`)}\n` +

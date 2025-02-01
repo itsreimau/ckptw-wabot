@@ -14,7 +14,7 @@ module.exports = {
         const coinAmount = parseInt(ctx.args[1], 10);
 
         const senderJid = ctx.sender.jid;
-        const senderId = ctx.sender.decodedJid;
+        const senderId = tools.general.getID(senderJid);
         const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : (userId ? `${userId}@s.whatsapp.net` : null);
 
@@ -28,7 +28,7 @@ module.exports = {
             const [result] = await ctx.core.onWhatsApp(user);
             if (!result.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp!`));
 
-            await db.add(`user.${user.split("@")[0]}.coin`, coinAmount);
+            await db.add(`user.${tools.general.getID(user)}.coin`, coinAmount);
 
             await ctx.sendMessage(user, {
                 text: quote(`🎉 Anda telah menerima ${coinAmount} koin dari Owner!`)

@@ -22,7 +22,7 @@ module.exports = {
             const game = {
                 coin: 5,
                 timeout: 60000,
-                senderId: ctx.sender.decodedJid,
+                senderId: tools.general.getID(ctx.sender.jid),
                 answer: data.title.toUpperCase()
             };
 

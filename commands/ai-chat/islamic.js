@@ -17,7 +17,7 @@ module.exports = {
         );
 
         try {
-            const senderId = ctx.sender.decodedJid;
+            const senderId = tools.general.getID(ctx.sender.jid);
             const senderUid = await db.get(`user.${senderId}.uid`) || "guest";
             const apiUrl = tools.api.createUrl("fasturl", "/aillm/islamic", {
                 ask: input,

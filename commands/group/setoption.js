@@ -27,7 +27,7 @@ module.exports = {
         }
 
         if (ctx.args[0] === "status") {
-            const groupId = ctx.isGroup() ? decodedId : null;
+            const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
             const groupOption = await db.get(`group.${groupId}.option`) || {};
 
             return await ctx.reply(
@@ -43,7 +43,7 @@ module.exports = {
         }
 
         try {
-            const groupId = ctx.isGroup() ? decodedId : null;
+            const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
             let setKey;
 
             switch (input.toLowerCase()) {

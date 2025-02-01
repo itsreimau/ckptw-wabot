@@ -27,7 +27,7 @@ module.exports = {
                     allAnswered: 50
                 },
                 timeout: 90000,
-                senderId: ctx.sender.decodedJid,
+                senderId: tools.general.getID(ctx.sender.jid),
                 answers: new Set(data.jawaban.map(d => d.toUpperCase())),
                 participants: new Set()
             };
@@ -50,7 +50,7 @@ module.exports = {
             collector.on("collect", async (m) => {
                 const userAnswer = m.content.toUpperCase();
                 const participantJid = m.jid;
-                const participantId = participantJid.split("@")[0]
+                const participantId = tools.general.getID(participantJid);
 
                 if (game.answers.has(userAnswer)) {
                     game.answers.delete(userAnswer);
