@@ -22,7 +22,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("vapis", "/api/ssweb", {
+            const apiUrl = tools.api.createUrl("agung", "/api/ssweb2", {
                 url
             });
 

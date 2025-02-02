@@ -7,8 +7,8 @@ const {
 } = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "furbrat",
-    aliases: ["sfurbrat", "stikerfurbrat", "stickerfurbrat"],
+    name: "bratgif",
+    aliases: ["bratg", "bratgif", "bratv", "bratvid", "bratvideo", "sbratgif", "sbratvideo", "sbratvid", "stickerbratgif", "stickerbratvideo", "stickerbratvid", "stikerbratgif", "stikerbratvideo", "stikerbratvid"],
     category: "maker",
     permissions: {
         coin: 10
@@ -24,9 +24,8 @@ module.exports = {
         if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 10000 kata!`));
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/maker/furbrat", {
-                text: input,
-                mode: "image"
+            const apiUrl = tools.api.createUrl("https://brat.caliphdev.com", "/api/brat/animate", {
+                text: input
             });
 
             const sticker = new Sticker(apiUrl, {

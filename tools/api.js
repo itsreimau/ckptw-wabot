@@ -3,10 +3,13 @@ const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"
     },
+    agung: {
+        baseURL: "https://api.agungny.my.id"
+    },
     bk9: {
         baseURL: "https://bk9.fun"
     },
-    diioffc: {
+    diibot: {
         baseURL: "https://api.diioffc.web.id"
     },
     exodus: {
@@ -25,7 +28,7 @@ const APIs = {
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },
-    sandipbaruwal: {
+    otinxsandip: {
         baseURL: "https://sandipbaruwal.onrender.com"
     },
     siputzx: {

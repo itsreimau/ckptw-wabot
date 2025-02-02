@@ -12,7 +12,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const apiUrl = tools.api.createUrl("sandipbaruwal", "/dp");
+        const apiUrl = tools.api.createUrl("otinxsandip", "/dp");
 
         try {
             const {

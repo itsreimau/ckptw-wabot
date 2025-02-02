@@ -19,7 +19,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("sandipbaruwal", "/sim", {
+            const apiUrl = tools.api.createUrl("otinxsandip", "/sim", {
                 chat: input,
                 lang: ctx.sender.jid.startsWith("62") ? "id" : "en"
             });

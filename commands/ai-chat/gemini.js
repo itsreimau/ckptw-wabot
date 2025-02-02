@@ -28,7 +28,7 @@ module.exports = {
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadUrl = await tools.general.upload(buffer);
-                const apiUrl = tools.api.createUrl("sandipbaruwal", "/gemini2", {
+                const apiUrl = tools.api.createUrl("otinxsandip", "/gemini2", {
                     prompt: input,
                     url: uploadUrl
                 });
@@ -38,7 +38,7 @@ module.exports = {
 
                 return await ctx.reply(data.answer);
             } else {
-                const apiUrl = tools.api.createUrl("sandipbaruwal", "/gemini", {
+                const apiUrl = tools.api.createUrl("otinxsandip", "/gemini", {
                     prompt: input
                 });
                 const {

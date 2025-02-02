@@ -19,7 +19,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("exodus", "/get/text2image", {
+            const apiUrl = tools.api.createUrl("agung", "/api/text2img", {
                 prompt: input
             });
 

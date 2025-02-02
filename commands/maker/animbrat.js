@@ -7,8 +7,8 @@ const {
 } = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "furbrat",
-    aliases: ["sfurbrat", "stikerfurbrat", "stickerfurbrat"],
+    name: "animbrat",
+    aliases: ["sanimbrat", "stikeranimbrat", "stickeranimbrat"],
     category: "maker",
     permissions: {
         coin: 10
@@ -24,7 +24,7 @@ module.exports = {
         if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 10000 kata!`));
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/maker/furbrat", {
+            const apiUrl = tools.api.createUrl("fasturl", "/maker/animbrat", {
                 text: input,
                 mode: "image"
             });

@@ -1,11 +1,11 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "mora",
-    category: "ai-chat",
+    name: "seaart",
+    category: "ai-image",
     permissions: {
         coin: 10
     },
@@ -14,19 +14,23 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "apa itu bot whatsapp?"))
+            quote(tools.msg.generateCommandExample(ctx.used, "moon"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("diibot", "/api/ai/mora", {
-                query: input,
-                username: ctx.sender.pushName || "Guest"
+            const apiUrl = tools.api.createUrl("agung", "/api/seaart", {
+                prompt: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.result.message);
+            return await ctx.reply({
+                image: {
+                    url: apiUrl
+                },
+                mimetype: mime.lookup("png"),
+                caption: `${quote(`Prompt: ${input}`)}\n` +
+                    "\n" +
+                    config.msg.footer
+            });
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

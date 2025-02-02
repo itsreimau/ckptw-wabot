@@ -7,8 +7,8 @@ const {
 } = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "bratvideo",
-    aliases: ["bratv", "bratvid", "sbratvid", "sbratvideo", "stickerbratvid", "stickerbratvideo", "stikerbratvid", "stikerbratvideo"],
+    name: "furbratgif",
+    aliases: ["furbratg", "furbratgif", "furbratv", "furbratvid", "furbratvideo", "sfurbratgif", "sfurbratvideo", "sfurbratvid", "stickerfurbratgif", "stickerfurbratvideo", "stickerfurbratvid", "stikerfurbratgif", "stikerfurbratvideo", "stikerfurbratvid"],
     category: "maker",
     permissions: {
         coin: 10
@@ -21,11 +21,12 @@ module.exports = {
             quote(tools.msg.generateCommandExample(ctx.used, "get in the fucking robot, shinji!"))
         );
 
-        if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 50 kata!`));
+        if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 10000 kata!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://brat.caliphdev.com", "/api/brat/animate", {
-                text: input
+            const apiUrl = tools.api.createUrl("fasturl", "/maker/furbrat", {
+                text: input,
+                mode: "animated"
             });
 
             const sticker = new Sticker(apiUrl, {

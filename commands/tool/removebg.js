@@ -1,7 +1,6 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -23,16 +22,13 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
-            const apiUrl = tools.api.createUrl("nyxs", "/tools/removebg", {
+            const apiUrl = tools.api.createUrl("agung", "/api/removebg", {
                 url: uploadUrl
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 image: {
-                    url: data.result
+                    url: apiUrl
                 },
                 mimetype: mime.lookup("png")
             });

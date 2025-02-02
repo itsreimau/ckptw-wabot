@@ -18,7 +18,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("diioffc", "/api/ai/luminai", {
+            const apiUrl = tools.api.createUrl("diibot", "/api/ai/luminai", {
                 query: input
             });
             const {

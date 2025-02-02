@@ -20,7 +20,7 @@ module.exports = {
         try {
             const senderId = tools.general.getID(ctx.sender.jid);
             const senderUid = await db.get(`user.${senderId}.uid`) || "guest";
-            const apiUrl = tools.api.createUrl("diioffc", "/api/ai/alicia", {
+            const apiUrl = tools.api.createUrl("diibot", "/api/ai/alicia", {
                 query: input,
                 user: senderUid
             });
