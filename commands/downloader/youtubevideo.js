@@ -23,7 +23,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("itzpire", "/download/youtube/v1", {
+            const apiUrl = tools.api.createUrl("itzpire", "/download/youtube/v3", {
                 url
             });
             const {
@@ -32,7 +32,7 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    url: data.mp4Url
+                    url: data.mp4
                 },
                 mimetype: mime.lookup("mp4")
             });

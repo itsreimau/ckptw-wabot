@@ -116,14 +116,14 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const apiUrl = tools.api.createUrl("itzpire", "/download/youtube/v1", {
+                const downloadApiUrl = tools.api.createUrl("itzpire", "/download/youtube/v3", {
                     url: data.url
                 });
                 const downloadData = (await axios.get(downloadApiUrl)).data.data;
 
                 return await ctx.reply({
                     audio: {
-                        url: downloadData.mp3Url
+                        url: downloadData.mp3
                     },
                     mimetype: mime.lookup("mp3")
                 });
