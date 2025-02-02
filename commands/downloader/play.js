@@ -116,14 +116,14 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("https://ytdl.axeel.my.id", "/api/download/audio", {
+                const apiUrl = tools.api.createUrl("itzpire", "/download/youtube/v1", {
                     url: data.url
                 });
-                const downloadData = (await axios.get(downloadApiUrl)).data;
+                const downloadData = (await axios.get(downloadApiUrl)).data.data;
 
                 return await ctx.reply({
                     audio: {
-                        url: downloadData.downloads.url
+                        url: downloadData.mp3Url
                     },
                     mimetype: mime.lookup("mp3")
                 });

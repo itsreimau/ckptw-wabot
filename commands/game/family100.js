@@ -16,10 +16,11 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/games/family100");
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/family100.json");
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
+            const result = tools.general.getRandomElement(data);
 
             const game = {
                 coin: {
@@ -28,14 +29,14 @@ module.exports = {
                 },
                 timeout: 90000,
                 senderId: tools.general.getID(ctx.sender.jid),
-                answers: new Set(data.jawaban.map(d => d.toUpperCase())),
+                answers: new Set(result.jawaban.map(d => d.toUpperCase())),
                 participants: new Set()
             };
 
             session.set(ctx.id, true);
 
             await ctx.reply(
-                `${quote(`Soal: ${data.soal}`)}\n` +
+                `${quote(`Soal: ${result.soal}`)}\n` +
                 `${quote(`Jumlah jawaban: ${game.answers.size}`)}\n` +
                 `${quote(`Batas waktu ${game.timeout / 1000} detik`)}\n` +
                 `${quote("Ketik 'surrender' untuk menyerah.")}\n` +

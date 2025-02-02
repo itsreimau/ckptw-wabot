@@ -18,15 +18,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/llama33", {
-                prompt: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`, // Dapat diubah sesuai keinginan Anda
-                text: input
+            const senderId = tools.general.getID(ctx.sender.jid);
+            const senderUid = await db.get(`user.${senderId}.uid`) || "guest";
+            const apiUrl = tools.api.createUrl("bk9", "/ai/llama3", {
+                q: input,
+                userId: senderUid
             });
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
 
-            return await ctx.reply(data);
+            return await ctx.reply(data.BK9);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

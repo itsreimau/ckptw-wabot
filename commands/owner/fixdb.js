@@ -35,7 +35,7 @@ module.exports = {
             const filteredData = (category, item) => {
                 const mappings = {
                     user: ["afk", "banned", "coin", "lastClaim", "hasSentMsg", "level", "premium", "uid", "winGame", "xp"],
-                    group: ["text", "option"],
+                    group: ["mute", "text", "option"],
                     menfess: ["from", "to"]
                 };
 

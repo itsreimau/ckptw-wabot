@@ -109,21 +109,23 @@ module.exports = (bot) => {
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
         const groupJid = isGroup ? ctx.id : null;
-        const groupId = isGroup ? tools.general.getID(ctx.id) : null;
-
-        // Basis data untuk pengguna dan grup
-        const userDb = await db.get(`user.${senderId}`) || {};
-        const groupDb = await db.get(`group.${groupId}`) || {};
+        const groupId = isGroup ? tools.general.getID(groupJid) : null;
 
         const isCmd = tools.general.isCmd(m.content, ctx._config);
         const isOwner = tools.general.isOwner(senderId);
-        const isPremium = userDb?.premium;
+
+        // Mengambil basis data
+        const userDb = await db.get(`user.${senderId}`) || {};
+        const groupDb = await db.get(`group.${groupId}`) || {};
+        const botDb = await db.get("bot") || {};
 
         // Penanganan pada mode bot
-        const botMode = await db.get("bot.mode") || "public";
-        if (isPrivate && botMode === "group") return;
-        if (isGroup && botMode === "private") return;
-        if (!isOwner && botMode === "self") return;
+        if (isPrivate && botDb.mode === "group") return;
+        if (isGroup && botDb.mode === "private") return;
+        if (!isOwner && botDb.mode === "self") return;
+
+        // Penanganan mute
+        if (groupDb.mute) return;
 
         // Log pesan masuk
         if (isGroup) {
@@ -136,21 +138,6 @@ module.exports = (bot) => {
         if (isGroup || isPrivate) {
             // Penangan pada ukuran basis data
             config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A";
-
-            // Penanganan basis data pengguna
-            const {
-                coin,
-                level,
-                ...otherUserDb
-            } = userDb || {};
-            const newUserDb = {
-                coin: (isOwner || isPremium) ? 0 : tools.general.clamp(coin || 1000, 0, 10000),
-                level: tools.general.clamp(level || 0, 0, 100),
-                uid: userDb?.uid || tools.general.generateUID(senderId),
-                xp: userDb?.xp || 0,
-                ...otherUserDb
-            };
-            await db.set(`user.${senderId}`, newUserDb);
 
             // Penanganan untuk perintah
             if (isCmd) {

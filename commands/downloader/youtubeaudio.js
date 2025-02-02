@@ -23,16 +23,16 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("https://ytdl.axeel.my.id", "/api/download/audio", {
+            const apiUrl = tools.api.createUrl("itzpire", "/download/youtube/v1", {
                 url
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply({
                 audio: {
-                    url: data.downloads.url
+                    url: data.mp3Url
                 },
                 mimetype: mime.lookup("mp3")
             });

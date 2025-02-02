@@ -15,23 +15,24 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/games/tebakbendera");
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tebakbendera2.json");
             const {
                 data
             } = await axios.get(apiUrl);
+            const result = tools.general.getRandomElement(data);
 
             const game = {
                 coin: 5,
                 timeout: 60000,
                 senderId: tools.general.getID(ctx.sender.jid),
-                answer: data.name.toUpperCase()
+                answer: result.name.toUpperCase()
             };
 
             session.set(ctx.id, true);
 
             await ctx.reply({
                 image: {
-                    url: data.img
+                    url: result.img
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Bonus: ${game.coin} Koin`)}\n` +

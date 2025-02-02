@@ -15,26 +15,27 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/games/tebakgambar");
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tebakgambar.json");
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
+            const result = tools.general.getRandomElement(data);
 
             const game = {
                 coin: 5,
                 timeout: 60000,
                 senderId: tools.general.getID(ctx.sender.jid),
-                answer: data.jawaban.toUpperCase()
+                answer: result.jawaban.toUpperCase()
             };
 
             session.set(ctx.id, true);
 
             await ctx.reply({
                 image: {
-                    url: data.img
+                    url: result.img
                 },
                 mimetype: mime.lookup("png"),
-                caption: `${quote(`Deskripsi: ${data.deskripsi}`)}\n` +
+                caption: `${quote(`Deskripsi: ${result.deskripsi}`)}\n` +
                     `${quote(`Bonus: ${game.coin} Koin`)}\n` +
                     `${quote(`Batas waktu: ${game.timeout / 1000} detik`)}\n` +
                     `${quote("Ketik 'hint' untuk bantuan.")}\n` +

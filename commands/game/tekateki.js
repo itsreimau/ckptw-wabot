@@ -14,22 +14,23 @@ module.exports = {
         if (session.has(ctx.id)) return await ctx.reply(quote(`🎮 Sesi permainan sedang berjalan!`));
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/games/tekateki");
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tekateki.json");
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
+            const result = tools.general.getRandomElement(data);
 
             const game = {
                 coin: 5,
                 timeout: 60000,
                 senderId: tools.general.getID(ctx.sender.jid),
-                answer: data.jawaban.toUpperCase()
+                answer: result.jawaban.toUpperCase()
             };
 
             session.set(ctx.id, true);
 
             await ctx.reply(
-                `${quote(`Soal: ${data.soal}`)}\n` +
+                `${quote(`Soal: ${result.soal}`)}\n` +
                 `${quote(`Bonus: ${game.coin} Koin`)}\n` +
                 `${quote(`Batas waktu: ${game.timeout / 1000} detik`)}\n` +
                 `${quote("Ketik 'hint' untuk bantuan.")}\n` +

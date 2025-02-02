@@ -4,7 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "claude",
+    name: "deepseek",
     category: "ai-chat",
     permissions: {
         coin: 10
@@ -18,17 +18,15 @@ module.exports = {
         );
 
         try {
-            const senderId = tools.general.getID(ctx.sender.jid);
-            const senderUid = await db.get(`user.${senderId}.uid`) || "guest";
-            const apiUrl = tools.api.createUrl("bk9", "/ai/claude-sonnet", {
-                q: input,
-                userId: senderUid
+            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/deepseek", {
+                prompt: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`, // Dapat diubah sesuai keinginan Anda
+                message: input
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl)).data;
 
-            return await ctx.reply(data.BK9);
+            return await ctx.reply(data);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

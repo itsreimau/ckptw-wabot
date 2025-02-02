@@ -4,7 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "claude",
+    name: "esia",
     category: "ai-chat",
     permissions: {
         coin: 10
@@ -18,17 +18,14 @@ module.exports = {
         );
 
         try {
-            const senderId = tools.general.getID(ctx.sender.jid);
-            const senderUid = await db.get(`user.${senderId}.uid`) || "guest";
-            const apiUrl = tools.api.createUrl("bk9", "/ai/claude-sonnet", {
-                q: input,
-                userId: senderUid
+            const apiUrl = tools.api.createUrl("diioffc", "/api/ai/esia", {
+                query: input
             });
             const {
                 data
             } = await axios.get(apiUrl);
 
-            return await ctx.reply(data.BK9);
+            return await ctx.reply(data.result.message);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

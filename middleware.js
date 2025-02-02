@@ -4,6 +4,7 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 
+// Fungsi untuk mengecek apakah pengguna memiliki cukup koin
 async function checkCoin(requiredCoin, senderId) {
     const isOwner = tools.general.isOwner(senderId);
     const userDb = await db.get(`user.${senderId}`) || {};
@@ -17,23 +18,35 @@ async function checkCoin(requiredCoin, senderId) {
     return false;
 }
 
+// Middleware utama bot
 module.exports = (bot) => {
     bot.use(async (ctx, next) => {
         const isGroup = ctx.isGroup();
         const isPrivate = !isGroup;
+
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
-
-        const botMode = await db.get("bot.mode") || "public";
-        if (isPrivate && botMode === "group") return;
-        if (isGroup && botMode === "private") return;
-        if (!tools.general.isOwner(senderId, true) && botMode === "self") return;
+        const groupJid = isGroup ? ctx.id : null;
+        const groupId = isGroup ? tools.general.getID(groupJid) : null;
 
         const isOwner = tools.general.isOwner(senderId);
+
+        // Mengambil basis data
         const userDb = await db.get(`user.${senderId}`) || {};
+        const groupDb = await db.get(`group.${groupId}`) || {};
+        const botDb = await db.get("bot") || {};
 
-        if (config.system.autoTypingOnCmd) await ctx.simulateTyping();
+        // Penanganan pada mode bot
+        if (isPrivate && botDb.mode === "group") return;
+        if (isGroup && botDb.mode === "private") return;
+        if (!isOwner && botDb.mode === "self") return;
 
+        // Penanganan mute
+        if (groupDb.mute && ctx.used.command !== "unmute") return;
+
+        if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi mengetik jika diaktifkan
+
+        // Cek apakah pengguna diblokir
         if (userDb?.banned) {
             if (!userDb.hasSentMsg?.banned) {
                 await ctx.reply(config.msg.banned);
@@ -44,6 +57,7 @@ module.exports = (bot) => {
             return;
         }
 
+        // Sistem cooldown untuk mencegah spam
         const cooldown = new Cooldown(ctx, config.system.cooldown);
         if (cooldown.onCooldown && !isOwner && !userDb?.premium) {
             if (!userDb.hasSentMsg?.cooldown) {
@@ -55,6 +69,7 @@ module.exports = (bot) => {
             return;
         }
 
+        // Cek apakah pengguna wajib menjadi anggota grup bot
         if (config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium) {
             const botGroupMembersId = (await ctx.group(config.bot.groupJid).members()).map(member => tools.general.getID(member.id));
             if (!botGroupMembersId.includes(senderId)) {
@@ -68,6 +83,7 @@ module.exports = (bot) => {
             }
         }
 
+        // Cek izin untuk menjalankan perintah tertentu
         const command = [...ctx._config.cmd.values()].find(cmd => [cmd.name, ...(cmd.aliases || [])].includes(ctx.used.command));
         const permissions = command.permissions || {};
 
@@ -106,6 +122,7 @@ module.exports = (bot) => {
             }
         };
 
+        // Loop untuk mengecek semua izin yang diperlukan
         for (const [option, {
                 check,
                 msg
@@ -116,6 +133,6 @@ module.exports = (bot) => {
             }
         }
 
-        await next();
+        await next(); // Lanjut ke proses berikutnya jika semua izin terpenuhi
     });
 };
