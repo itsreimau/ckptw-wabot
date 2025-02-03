@@ -23,7 +23,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const result = ytmp4.convert(url);
+            const result = await ytmp4.convert(url);
 
             return await ctx.reply({
                 video: {

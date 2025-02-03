@@ -116,7 +116,7 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const apiUrl = tools.api.createUrl("nasirxml", "/download/ytmp3", {
+                const downloadApiUrl = tools.api.createUrl("nasirxml", "/download/ytmp3", {
                     url: data.url
                 });
                 const downloadData = (await axios.get(downloadApiUrl)).data;
