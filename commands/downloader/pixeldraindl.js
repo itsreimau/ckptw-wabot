@@ -8,7 +8,7 @@ module.exports = {
     aliases: ["pd", "pddl", "pixeldrain"],
     category: "downloader",
     permissions: {
-        coin: 10
+        premium: true
     },
     code: async (ctx) => {
         const url = ctx.args[0] || null;

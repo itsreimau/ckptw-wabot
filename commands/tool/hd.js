@@ -37,7 +37,7 @@ module.exports = {
     }
 };
 
-// Dibuat oleh Axel (https://github.com/AxellNetwork)
+// Oleh Axel (https://github.com/AxellNetwork)
 async function upscale(buffer) {
     try {
         const response = await axios.post("https://lexica.qewertyy.dev/upscale", {

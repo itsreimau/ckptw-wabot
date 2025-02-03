@@ -116,14 +116,14 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("agung", "/api/youtube-audio", {
+                const apiUrl = tools.api.createUrl("nasirxml", "/download/ytmp3", {
                     url: data.url
                 });
                 const downloadData = (await axios.get(downloadApiUrl)).data;
 
                 return await ctx.reply({
                     audio: {
-                        url: downloadData.result.dl
+                        url: downloadData.result.downloadUrl
                     },
                     mimetype: mime.lookup("mp3")
                 });

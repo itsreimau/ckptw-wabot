@@ -25,6 +25,9 @@ const APIs = {
         baseURL: "https://api.nexoracle.com",
         APIKey: config.APIKey.nexoracle
     },
+    nasirxml: {
+        baseURL: "https://api.nasirxml.my.id"
+    },
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },

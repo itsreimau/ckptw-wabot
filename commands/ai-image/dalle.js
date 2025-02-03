@@ -1,14 +1,13 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "anipix",
+    name: "dalle",
     category: "ai-image",
     permissions: {
-        premium: true
+
     },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
@@ -19,16 +18,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("itzpire", "/ai/anipix", {
+            const apiUrl = tools.api.createUrl("nasirxml", "/ai/dalle3", {
                 prompt: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 image: {
-                    url: data.result
+                    url: apiUrl
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +

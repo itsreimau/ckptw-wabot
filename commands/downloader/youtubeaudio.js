@@ -23,7 +23,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agung", "/api/youtube-audio", {
+            const apiUrl = tools.api.createUrl("nasirxml", "/download/ytmp3", {
                 url
             });
             const {
@@ -32,7 +32,7 @@ module.exports = {
 
             return await ctx.reply({
                 audio: {
-                    url: data.result.dl
+                    url: data.result.downloadUrl
                 },
                 mimetype: mime.lookup("mp3")
             });

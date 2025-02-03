@@ -36,7 +36,7 @@ module.exports = {
     }
 };
 
-// Dibuat oleh UdeanDev (https://github.com/udeannn)
+// Oleh UdeanDev (https://github.com/udeannn)
 async function webp2mp4(blob) {
     try {
         const form = new FormData();

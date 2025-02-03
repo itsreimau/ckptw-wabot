@@ -18,7 +18,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/flux", {
+            const apiUrl = tools.api.createUrl("nasirxml", "/ai/ai-image", {
                 prompt: input
             });
 
