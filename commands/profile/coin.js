@@ -9,7 +9,7 @@ module.exports = {
     permissions: {},
     code: async (ctx) => {
         try {
-            const userCoin = await db.get(`user.${senderId}.coin`) || 0;
+            const userCoin = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.coin`) || 0;
 
             return await ctx.reply(quote(`💰 Anda memiliki ${userCoin} koin tersisa.`));
         } catch (error) {
