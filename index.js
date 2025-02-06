@@ -21,6 +21,12 @@ const db = new SimplDB();
 const dbFile = path.join(__dirname, "database.json");
 if (!fs.existsSync(dbFile)) fs.writeFileSync(dbFile, JSON.stringify({}), "utf8");
 
+// Pengecekan dan penghapusan folder auth pada adaptor 'default' jika kosong
+if (config.bot.authAdapter.adapter === "default") {
+    const authDir = path.resolve(__dirname, config.bot.authAdapter.default.authDir);
+    if (fs.existsSync(authDir) && !fs.readdirSync(authDir).length) fs.rmdirSync(authDir);
+}
+
 // Atur konfigurasi ke global
 global.config.pkg = pkg;
 global.tools = tools;

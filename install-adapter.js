@@ -1,8 +1,14 @@
 // Modul dan dependensi yang diperlukan
 require("./config.js");
+const pkg = require("./package.json");
 const {
     execSync
 } = require("child_process");
+
+// Buat consolefy
+const consolefy = new Consolefy({
+    tag: pkg.name
+});
 
 // Mendapatkan adapter autentikasi dari konfigurasi
 const {
@@ -18,10 +24,10 @@ const modules = {
 
 // Pasang modul jika adapter ditemukan dalam daftar
 if (modules[adapter]) {
-    console.log(`Installing ${adapter} module...`);
+    Consolefy.log(`Installing ${adapter} module...`);
     execSync(`npm install ${modules[adapter]} --no-save`, {
         stdio: "inherit"
     });
 } else {
-    console.log("No database module required or adapter is not set.");
+    Consolefy.log("No database module required or adapter is not set.");
 }

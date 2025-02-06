@@ -38,7 +38,7 @@ module.exports = {
             await ctx.reply(
                 `${quote(`Soal: ${result.soal}`)}\n` +
                 `${quote(`Jumlah jawaban: ${game.answers.size}`)}\n` +
-                `${quote(`Batas waktu ${game.timeout / 1000} detik`)}\n` +
+                `${quote(`Batas waktu ${tools.general.convertMsToDuration(game.timeout)}`)}\n` +
                 `${quote("Ketik 'surrender' untuk menyerah.")}\n` +
                 "\n" +
                 config.msg.footer

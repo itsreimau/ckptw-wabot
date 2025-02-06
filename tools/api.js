@@ -46,6 +46,9 @@ const APIs = {
     },
     vapis: {
         baseURL: "https://vapis.my.id"
+    },
+    zpi: {
+        baseURL: "https://zpi.my.id"
     }
 };
 

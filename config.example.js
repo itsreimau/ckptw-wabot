@@ -21,6 +21,11 @@ global.config = {
         authAdapter: {
             adapter: "default", // Pilihan adapter: 'default', 'mysql', 'mongo', 'firebase'
 
+            // Konfigurasi default
+            default: {
+                authDir: "state"
+            },
+
             // Konfigurasi MySQL
             mysql: {
                 host: "localhost:3306", // Nama host 

@@ -37,7 +37,7 @@ module.exports = {
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Deskripsi: ${result.deskripsi}`)}\n` +
                     `${quote(`Bonus: ${game.coin} Koin`)}\n` +
-                    `${quote(`Batas waktu: ${game.timeout / 1000} detik`)}\n` +
+                    `${quote(`Batas waktu: ${tools.general.convertMsToDuration(game.timeout)}`)}\n` +
                     `${quote("Ketik 'hint' untuk bantuan.")}\n` +
                     `${quote("Ketik 'surrender' untuk menyerah.")}\n` +
                     "\n" +

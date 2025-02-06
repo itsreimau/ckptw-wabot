@@ -32,6 +32,7 @@ const bot = new Client({
     prefix: config.bot.prefix,
     readIncommingMsg: config.system.autoRead,
     printQRInTerminal: !config.system.usePairingCode,
+    authDir: config.bot.authAdapter.adapter === "default" ? path.resolve(__dirname, config.bot.authAdapter.default.authDir) : null,
     markOnlineOnConnect: config.system.alwaysOnline,
     phoneNumber: config.bot.phoneNumber,
     usePairingCode: config.system.usePairingCode,
