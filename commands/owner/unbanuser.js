@@ -10,12 +10,11 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const userId = ctx.args.join(" ") || null;
+        const userId = ctx.args[0];
 
+        const user = ctx.quoted?.senderJid || ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || (userId ? `${userId}@s.whatsapp.net` : null);
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
-        const mentionedJids = ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-        const user = Array.isArray(mentionedJids) && mentionedJids.length > 0 ? mentionedJids[0] : (userId ? `${userId}@s.whatsapp.net` : null);
 
         if (!user) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +

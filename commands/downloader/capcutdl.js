@@ -23,16 +23,16 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("zpi", "/v1/download/capcut", {
+            const apiUrl = tools.api.createUrl("agungny", "/api/capcut", {
                 url
             });
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
 
             return await ctx.reply({
                 video: {
-                    url: data.media.video
+                    url: data.result.videoUrl
                 },
                 mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +

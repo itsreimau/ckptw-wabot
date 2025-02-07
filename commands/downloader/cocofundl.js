@@ -5,11 +5,11 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "twitterdl",
-    aliases: ["twitter", "twit", "twitdl"],
+    name: "cocofundl",
+    aliases: ["cocofun"],
     category: "downloader",
     permissions: {
-        premium: true
+        coin: 10
     },
     code: async (ctx) => {
         const url = ctx.args[0] || null;
@@ -23,7 +23,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/twitter", {
+            const apiUrl = tools.api.createUrl("agatz", "/api/cocofun", {
                 url
             });
             const {
@@ -32,7 +32,7 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    url: data.video_hd || data.video_sd
+                    url: data.no_watermark
                 },
                 mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +

@@ -18,9 +18,6 @@ const APIs = {
     fasturl: {
         baseURL: "https://fastrestapis.fasturl.cloud"
     },
-    itzpire: {
-        baseURL: "https://itzpire.com"
-    },
     nexoracle: {
         baseURL: "https://api.nexoracle.com",
         APIKey: config.APIKey.nexoracle
@@ -46,9 +43,6 @@ const APIs = {
     },
     vapis: {
         baseURL: "https://vapis.my.id"
-    },
-    zpi: {
-        baseURL: "https://zpi.my.id"
     }
 };
 

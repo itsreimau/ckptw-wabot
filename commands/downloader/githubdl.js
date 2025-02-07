@@ -2,14 +2,13 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "twitterdl",
-    aliases: ["twitter", "twit", "twitdl"],
+    name: "githubdl",
+    aliases: ["gitclone"],
     category: "downloader",
     permissions: {
-        premium: true
+        coin: 10
     },
     code: async (ctx) => {
         const url = ctx.args[0] || null;
@@ -23,21 +22,22 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/twitter", {
+            const apiUrl = tools.api.createUrl("diioffc", "/api/download/gitclone", {
                 url
             });
             const {
                 data
-            } = (await axios.get(apiUrl)).data;
+            } = await axios.get(apiUrl);
 
             return await ctx.reply({
-                video: {
-                    url: data.video_hd || data.video_sd
+                document: {
+                    url: data.result.urllink
                 },
-                mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
-                    config.msg.footer
+                    config.msg.footer,
+                fileName: data.result.filename,
+                mimetype: mime.lookup(data.result.filename) || "application/octet-stream"
             });
         } catch (error) {
             consolefy.error(`Error: ${error}`);
