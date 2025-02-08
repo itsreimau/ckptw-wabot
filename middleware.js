@@ -5,12 +5,9 @@ const {
 
 // Fungsi untuk mengecek apakah pengguna memiliki cukup koin
 async function checkCoin(requiredCoin, senderId) {
-    const {
-        isOwner
-    } = tools.general;
     const userDb = await db.get(`user.${senderId}`) || {};
 
-    if (isOwner(senderId) || userDb.premium) return false;
+    if (tools.general.isOwner(senderId) || userDb.premium) return false;
     if ((userDb.coin || 0) < requiredCoin) return true;
 
     await db.subtract(`user.${senderId}.coin`, requiredCoin);

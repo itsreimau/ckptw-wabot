@@ -94,7 +94,7 @@ module.exports = (bot) => {
 
     // Penanganan event ketika pesan muncul
     bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
-        const ctx.senderId = tools.general.getID(ctx.sender.jid);
+        const senderId = tools.general.getID(ctx.sender.jid);
         const groupId = ctx.isGroup ? tools.general.getID(ctx.id) : {};
 
         const isCmd = tools.general.isCmd(m.content, ctx.bot);
