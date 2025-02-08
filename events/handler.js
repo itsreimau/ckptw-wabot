@@ -173,7 +173,7 @@ module.exports = (bot) => {
         }
 
         // Penanganan AFK: Pengguna yang disebutkan
-        const userJids = ctx.quoted?.ctx.senderJid || m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+        const userJids = ctx.quoted.senderJid || m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         if (userJids?.length) {
             for (const mentionJid of userJids) {
                 const userAFK = await db.get(`user.${mentionJid}.afk`) || {};
