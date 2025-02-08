@@ -94,116 +94,86 @@ module.exports = (bot) => {
 
     // Penanganan event ketika pesan muncul
     bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
+        // Variabel umum
         const isGroup = ctx.isGroup();
         const isPrivate = !isGroup;
-
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
         const groupJid = isGroup ? ctx.id : null;
         const groupId = isGroup ? tools.general.getID(groupJid) : null;
-
         const isOwner = tools.general.isOwner(senderId);
         const isCmd = tools.general.isCmd(m.content, ctx.bot);
 
+        // Mengambil basis data
         const botDb = await db.get("bot") || {};
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
 
-        if ((botDb.mode === "group" && !ctx.isGroup) || (botDb.mode === "private" && ctx.isGroup) || (botDb.mode === "self" && !isOwner)) return; // Penanganan mode bot
+        if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return; // Penanganan mode bot
 
         if (groupDb.mute) return; // Penanganan mode mute pada grup
 
-        ctx.isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
+        isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
 
-        // Penanganan perintah
-        if (isCmd) {
+        // Grup atau Pribadi
+        if (isGroup || isPrivate) {
+            config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"; // Penangan pada ukuran basis data
+
             if (isCmd.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd.prefix + isCmd.didyoumean)}.`)); // Did you mean?
 
-            // Penanganan XP & Level untuk pengguna
-            const xpGain = 10;
-            const xpToLevelUp = 100;
-
-            let newUserXp = (userDb?.xp || 0) + xpGain;
-            if (newUserXp >= xpToLevelUp) {
-                let newUserLevel = (userDb?.level || 0) + 1;
-                newUserXp -= xpToLevelUp;
-
-                const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-
-                if (userDb?.autolevelup) await ctx.reply({
-                    text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n${config.msg.readmore}\n${quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${isCmd.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]))}`,
-                    contextInfo: {
-                        externalAdReply: {
-                            mediaType: 1,
-                            previewType: 0,
-                            mediaUrl: config.bot.website,
-                            title: config.msg.watermark,
-                            renderLargerThumbnail: true,
-                            thumbnailUrl: profilePictureUrl || config.bot.thumbnail,
-                            sourceUrl: config.bot.website
-                        }
+            // Perintah khusus Owner
+            if (isOwner && m.content) {
+                // Perintah Eval: Jalankan kode JavaScript
+                if (m.content.startsWith("==> ") || m.content.startsWith("=> ")) {
+                    const code = m.content.slice(m.content.startsWith("==> ") ? 4 : 3);
+                    try {
+                        const result = await eval(m.content.startsWith("==> ") ? `(async () => { ${code} })()` : code);
+                        await ctx.reply(monospace(util.inspect(result)));
+                    } catch (error) {
+                        consolefy.error(`Error: ${error}`);
+                        await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
                     }
-                });
+                }
 
-                await db.set(`user.${senderId}.xp`, newUserXp);
-                await db.set(`user.${senderId}.level`, newUserLevel);
-            } else {
-                await db.set(`user.${senderId}.xp`, newUserXp);
-            }
-        }
-
-        // Perintah khusus Owner
-        if (isOwner && m.content) {
-            // Perintah Eval: Jalankan kode JavaScript
-            if (m.content.startsWith("==> ") || m.content.startsWith("=> ")) {
-                const code = m.content.slice(m.content.startsWith("==> ") ? 4 : 3);
-                try {
-                    const result = await eval(m.content.startsWith("==> ") ? `(async () => { ${code} })()` : code);
-                    await ctx.reply(monospace(util.inspect(result)));
-                } catch (error) {
-                    consolefy.error(`Error: ${error}`);
-                    await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+                // Perintah Exec: Jalankan perintah shell
+                if (m.content.startsWith("$ ")) {
+                    const command = m.content.slice(2);
+                    try {
+                        const output = await util.promisify(exec)(command);
+                        await ctx.reply(monospace(output.stdout || output.stderr));
+                    } catch (error) {
+                        consolefy.error(`Error: ${error}`);
+                        await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+                    }
                 }
             }
 
-            // Perintah Exec: Jalankan perintah shell
-            if (m.content.startsWith("$ ")) {
-                const command = m.content.slice(2);
-                try {
-                    const output = await util.promisify(exec)(command);
-                    await ctx.reply(monospace(output.stdout || output.stderr));
-                } catch (error) {
-                    consolefy.error(`Error: ${error}`);
-                    await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            // Penanganan AFK: Pengguna yang disebutkan
+            const userJids = ctx.quoted?.senderJid || m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+            if (userJids?.length) {
+                for (const mentionJid of userJids) {
+                    const userAFK = await db.get(`user.${mentionJid}.afk`) || {};
+                    if (userAFK?.reason && userAFK?.timestamp) {
+                        const timeago = tools.general.convertMsToDuration(Date.now() - userAFK.timestamp);
+                        await ctx.reply(quote(`📴 Dia sedang AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
+                    }
                 }
             }
-        }
 
-        // Penanganan AFK: Pengguna yang disebutkan
-        const userJids = ctx.quoted.senderJid || m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-        if (userJids?.length) {
-            for (const mentionJid of userJids) {
-                const userAFK = await db.get(`user.${mentionJid}.afk`) || {};
-                if (userAFK?.reason && userAFK?.timestamp) {
-                    const timeago = tools.general.convertMsToDuration(Date.now() - userAFK.timestamp);
-                    await ctx.reply(quote(`📴 Dia sedang AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
+            // Menghapus status AFK pengguna
+            const userAFK = await db.get(`user.${senderId}.afk`) || {};
+            if (userAFK?.reason && userAFK?.timestamp) {
+                const timeElapsed = Date.now() - userAFK.timestamp;
+                if (timeElapsed > 3000) {
+                    const timeago = tools.general.convertMsToDuration(timeElapsed);
+                    await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
+                    await db.delete(`user.${senderId}.afk`);
                 }
-            }
-        }
-
-        // Menghapus status AFK pengguna
-        const userAFK = await db.get(`user.${senderId}.afk`) || {};
-        if (userAFK?.reason && userAFK?.timestamp) {
-            const timeElapsed = Date.now() - userAFK.timestamp;
-            if (timeElapsed > 3000) {
-                const timeago = tools.general.convertMsToDuration(timeElapsed);
-                await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
-                await db.delete(`user.${senderId}.afk`);
             }
         }
 
         // Penanganan grup
-        if (ctx.isGroup && !m.key.fromMe) {
+        if (isGroup && !m.key.fromMe) {
             if (groupDb?.option?.antilink && await tools.general.isUrl(m.content) && !await ctx.group().isctx.senderAdmin()) {
                 await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
                 await ctx.deleteMessage(key);
