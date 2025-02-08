@@ -19,15 +19,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("toxicdevil", "/search/wikipedia", {
-                lang: "id",
+            const apiUrl = tools.api.createUrl("bk9", "/search/wiki", {
                 query: input
             });
-            const data = (await axios.get(apiUrl)).data.result;
+            const data = (await axios.get(apiUrl)).data.BK9[0];
 
             return await ctx.reply(
-                `${quote(data.info)}\n` +
-                `${quote(`Baca selengkapnya di: ${data.url}`)}\n` +
+                `${quote(data.BK9)}\n` +
                 "\n" +
                 config.msg.footer
             );

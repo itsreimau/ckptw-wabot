@@ -21,11 +21,9 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/megpt", {
                 message: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
-            return await ctx.reply(data);
+            return await ctx.reply(result);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

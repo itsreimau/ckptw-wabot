@@ -26,11 +26,11 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/mediafire", {
                 url
             });
-            const data = (await axios.get(apiUrl)).data.data[0];
+            const result = (await axios.get(apiUrl)).data.data[0];
 
             return await ctx.reply({
                 document: {
-                    url: data.link
+                    url: result.link
                 },
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +

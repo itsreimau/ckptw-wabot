@@ -21,11 +21,9 @@ module.exports = {
             const apiUrl = tools.api.createUrl("siputzx", "/api/ai/venice", {
                 prompt: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data.message;
 
-            return await ctx.reply(data.message);
+            return await ctx.reply(result);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

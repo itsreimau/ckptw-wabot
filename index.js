@@ -1,6 +1,10 @@
-// Modul dan dependensi yang diperlukan
+// Import modul dan dependensi
 require("./config.js");
-const pkg = require("./package.json");
+const {
+    name: pkgName,
+    description,
+    author
+} = require("./package.json");
 const tools = require("./tools/exports.js");
 const {
     Consolefy
@@ -13,61 +17,58 @@ const SimplDB = require("simpl.db");
 
 // Buat consolefy
 const c = new Consolefy({
-    tag: pkg.name
+    tag: pkgName
 });
 
 // Buat basis data
-const db = new SimplDB();
 const dbFile = path.join(__dirname, "database.json");
-if (!fs.existsSync(dbFile)) fs.writeFileSync(dbFile, JSON.stringify({}), "utf8");
+if (!fs.existsSync(dbFile)) fs.writeFileSync(dbFile, "{}", "utf8");
+const db = new SimplDB();
 
-// Pengecekan dan penghapusan folder auth pada adaptor 'default' jika kosong
+// Pengecekan dan penghapusan folder auth jika kosong
 if (config.bot.authAdapter.adapter === "default") {
     const authDir = path.resolve(__dirname, config.bot.authAdapter.default.authDir);
-    if (fs.existsSync(authDir) && !fs.readdirSync(authDir).length) fs.rmdirSync(authDir);
+    if (fs.existsSync(authDir) && !fs.readdirSync(authDir).length) fs.rmSync(authDir, {
+        recursive: true,
+        force: true
+    });
 }
 
 // Atur konfigurasi ke global
-global.config.pkg = pkg;
-global.tools = tools;
-global.consolefy = c;
-global.db = db;
+Object.assign(global, {
+    config,
+    tools,
+    consolefy: c,
+    db
+});
 
-// Memulai
-c.log(`Starting...`);
+c.log("Starting..."); // Memulai
 
 // Tampilkan judul menggunakan CFonts
-CFonts.say(pkg.name, {
+CFonts.say(pkgName, {
     font: "chrome",
     align: "center",
     gradient: ["red", "magenta"]
 });
 
 // Menampilkan informasi paket
-const authorName = pkg.author.name || pkg.author;
 CFonts.say(
-    `'${pkg.description}'\n` +
-    `By ${authorName}`, {
+    `'${description}'\n` +
+    `By ${author}`, {
         font: "console",
         align: "center",
         gradient: ["red", "magenta"]
     }
 );
 
-// Fungsi untuk menjalankan server jika diaktifkan
+// Jalankan server jika diaktifkan
 if (config.system.useServer) {
-    const port = config.system.port;
-    const server = http.createServer((req, res) => {
-        res.writeHead(200, {
-            "Content-Type": "text/plain"
-        });
-        res.end(`${pkg.name} is running on port ${port}`);
-    });
-
-    server.listen(port, () => {
+    const {
+        port
+    } = config.system;
+    http.createServer((_, res) => res.end(`${pkgName} is running on port ${port}`)).listen(port, () => {
         c.success(`Server is running at http://localhost:${port}`);
     });
 }
 
-// Impor dan jalankan modul utama
-require("./main.js");
+require("./main.js"); // Impor dan jalankan modul utama

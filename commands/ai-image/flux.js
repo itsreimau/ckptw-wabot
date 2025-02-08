@@ -18,8 +18,9 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nasirxml", "/ai/ai-image", {
-                prompt: input
+            const apiUrl = tools.api.createUrl("fasturl", "/aiimage/flux/schnell", {
+                prompt: input,
+                size: "1024x1024"
             });
 
             return await ctx.reply({

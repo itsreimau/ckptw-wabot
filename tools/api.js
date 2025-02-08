@@ -18,10 +18,6 @@ const APIs = {
     fasturl: {
         baseURL: "https://fastrestapis.fasturl.cloud"
     },
-    nexoracle: {
-        baseURL: "https://api.nexoracle.com",
-        APIKey: config.APIKey.nexoracle
-    },
     nasirxml: {
         baseURL: "https://api.nasirxml.my.id"
     },
@@ -33,13 +29,6 @@ const APIs = {
     },
     siputzx: {
         baseURL: "https://api.siputzx.my.id"
-    },
-    ssateam: {
-        baseURL: "https://api.ssateam.my.id",
-        APIKey: config.APIKey.ssateam
-    },
-    toxicdevil: {
-        baseURL: "https://toxicdevilapi.vercel.app"
     },
     vapis: {
         baseURL: "https://vapis.my.id"

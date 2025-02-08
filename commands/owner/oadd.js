@@ -20,13 +20,12 @@ module.exports = {
         );
 
         try {
-            const accountFormatted = input.replace(/[^\d]/g, "");
-            const account = `${accountFormatted}@s.whatsapp.net`;
+            const accountJid = `${input.replace(/[^\d]/g, "")}@s.whatsapp.net`;
 
-            const [result] = await ctx.core.onWhatsApp(accountFormatted);
+            const [result] = await ctx.core.onWhatsApp(accountJid);
             if (!result.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp!`));
 
-            await ctx.group().add([account]);
+            await ctx.group().add([accountJid]);
 
             return await ctx.reply(quote(`✅ Berhasil ditambahkan!`));
         } catch (error) {

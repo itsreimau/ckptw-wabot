@@ -11,7 +11,7 @@ module.exports = {
     category: "converter",
     permissions: {},
     code: async (ctx) => {
-        if (!await tools.general.checkQuotedMedia(ctx.quoted, ["video"])) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
+        if (!await tools.general.checkQuotedMedia(ctx.quoted, ["video"])) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["video"])));
 
         try {
             const buffer = await ctx.quoted.media.toBuffer()

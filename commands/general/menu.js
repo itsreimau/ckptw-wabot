@@ -15,7 +15,7 @@ module.exports = {
         try {
             const {
                 cmd
-            } = ctx._config;
+            } = ctx.bot;
             const tag = {
                 "ai-chat": "AI (Chat)",
                 "ai-image": "AI (Image)",

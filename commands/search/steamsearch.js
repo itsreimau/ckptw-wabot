@@ -19,18 +19,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/steams", {
-                message: input
+            const apiUrl = tools.api.createUrl("fasturl", "/search/steam", {
+                query: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const data = (await axios.get(apiUrl)).data.result;
 
-            const resultText = (await Promise.all(data.map(async (d) =>
-                `${quote(`Nama: ${d.judul}`)}\n` +
-                `${quote(`Rilis: ${d.rilis.trim()}`)}\n` +
-                `${quote(`Rating: ${await tools.general.translate(d.rating, "id")}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`))).join(
+            const resultText = data.map((d) =>
+                `${quote(`Nama: ${d.name}`)}\n` +
+                `${quote(`Harga: ${d.price}`)}\n` +
+                `${quote(`Skor: ${d.score}`)}\n` +
+                `${quote(`Platform: ${d.platform}`)}`
+            ).join(
                 "\n" +
                 `${quote("─────")}\n`
             );

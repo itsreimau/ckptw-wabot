@@ -23,11 +23,9 @@ module.exports = {
                 ask: input,
                 sessionId: senderUid
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data.result;
 
-            return await ctx.reply(data.response);
+            return await ctx.reply(result);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

@@ -32,20 +32,16 @@ module.exports = {
                     prompt: input,
                     url: uploadUrl
                 });
-                const {
-                    data
-                } = await axios.get(apiUrl);
+                const result = (await axios.get(apiUrl)).data.answer;
 
-                return await ctx.reply(data.answer);
+                return await ctx.reply(result);
             } else {
                 const apiUrl = tools.api.createUrl("otinxsandip", "/gemini", {
                     prompt: input
                 });
-                const {
-                    data
-                } = await axios.get(apiUrl);
+                const result = (await axios.get(apiUrl)).data.answer;
 
-                return await ctx.reply(data.answer);
+                return await ctx.reply(result);
             }
         } catch (error) {
             consolefy.error(`Error: ${error}`);

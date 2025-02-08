@@ -24,11 +24,9 @@ module.exports = {
                 q: input,
                 userId: senderUid
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data.BK9;
 
-            return await ctx.reply(data.BK9);
+            return await ctx.reply(result);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

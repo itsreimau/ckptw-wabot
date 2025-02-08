@@ -24,11 +24,9 @@ module.exports = {
                 query: input,
                 user: senderUid
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data.result.message;
 
-            return await ctx.reply(data.result.message);
+            return await ctx.reply(result);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

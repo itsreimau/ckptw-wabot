@@ -1,5 +1,8 @@
 // Modul dan dependensi yang diperlukan
-const pkg = require("./package.json");
+const {
+    name: pkgName,
+    version
+} = require("./package.json");
 const {
     monospace,
     italic,
@@ -61,7 +64,7 @@ global.config = {
         private: quote("⛔ Perintah hanya dapat diakses dalam obrolan pribadi!"), // Pesan untuk perintah obrolan pribadi
         restrict: quote("⛔ Perintah ini telah dibatasi karena alasan keamanan!"), // Pesan pembatasan perintah
 
-        watermark: `@${pkg.name} / v${pkg.version}`, // Watermark nama dan versi pada bot
+        watermark: `@${pkgName} / v${version}`, // Watermark nama dan versi pada bot
         footer: italic("Developed by ItsReimau"), // Footer di pesan bot
         readmore: "\u200E".repeat(4001), // String read more
         note: "“Lorem ipsum dolor sit amet, tenebris in umbra, vitae ad mortem.”", // Catatan
@@ -77,12 +80,6 @@ global.config = {
         organization: "", // Nama organisasi owner bot
         id: "", // Nomor telepon owner bot
         co: [""] // Nomor co-owner bot
-    },
-
-    // Kunci API
-    APIKey: {
-        nexoracle: "free_key@maher_apis", // APIKey disediakan oleh Maher Zubair
-        ssateam: "root" // APIKey disediakan oleh Fainshe
     },
 
     // Stiker bot

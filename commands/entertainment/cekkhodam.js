@@ -23,8 +23,7 @@ module.exports = {
             const {
                 data
             } = await axios.get(apiUrl);
-            const list = data.split("\n").filter(d => d.trim().length > 0);
-            const khodam = tools.general.getRandomElement(list);
+            const khodam = tools.general.getRandomElement(data.trim().split("\n").filter(Boolean));
 
             return await ctx.reply(
                 `${quote(`Nama: ${input}`)}\n` +

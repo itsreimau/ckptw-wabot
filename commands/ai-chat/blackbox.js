@@ -36,21 +36,17 @@ module.exports = {
                     model,
                     imageUrl: uploadUrl
                 });
-                const {
-                    data
-                } = await axios.get(apiUrl);
+                const result = (await axios.get(apiUrl)).data.result;
 
-                return await ctx.reply(data.response);
+                return await ctx.reply(result);
             } else {
                 const apiUrl = tools.api.createUrl("fasturl", "/aillm/blackbox", {
                     ask: input,
                     model
                 });
-                const {
-                    data
-                } = await axios.get(apiUrl);
+                const result = (await axios.get(apiUrl)).data.result;
 
-                return await ctx.reply(data.response);
+                return await ctx.reply(result);
             }
         } catch (error) {
             consolefy.error(`Error: ${error}`);

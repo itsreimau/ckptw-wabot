@@ -37,22 +37,18 @@ module.exports = {
                     style,
                     sessionId: senderUid
                 });
-                const {
-                    data
-                } = await axios.get(apiUrl);
+                const result = (await axios.get(apiUrl)).data.result;
 
-                return await ctx.reply(data.result);
+                return await ctx.reply(result);
             } else {
                 const apiUrl = tools.api.createUrl("fasturl", "/aillm/gpt-4o", {
                     ask: input,
                     style,
                     sessionId: senderUid
                 });
-                const {
-                    data
-                } = await axios.get(apiUrl);
+                const result = (await axios.get(apiUrl)).data.result;
 
-                return await ctx.reply(data.result);
+                return await ctx.reply(result);
             }
         } catch (error) {
             consolefy.error(`Error: ${error}`);

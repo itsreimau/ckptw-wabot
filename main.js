@@ -1,56 +1,52 @@
-// Modul dan dependensi yang diperlukan
+// Import modul dan dependensi
+const path = require("path");
 const middleware = require("./middleware.js");
 const events = require("./events/handler.js");
 const {
     Client,
     CommandHandler
 } = require("@mengkodingan/ckptw");
-const path = require("path");
+
+// Konfigurasi bot
+const {
+    bot: botConfig,
+    system
+} = config;
+const {
+    prefix,
+    phoneNumber,
+    authAdapter
+} = botConfig;
 
 // Pilih adapter autentikasi
-const authAdapter = (() => {
-    const {
-        adapter,
-        mysql,
-        mongodb,
-        firebase
-    } = config.bot.authAdapter;
-    switch (adapter) {
-        case "mysql":
-            return require("baileys-mysql").useSqlAuthState(mysql);
-        case "mongodb":
-            return require("baileys-mongodb").useMongoAuthState(mongodb.url);
-        case "firebase":
-            return require("baileys-firebase").useFireAuthState(firebase);
-        default:
-            return undefined;
-    }
-})();
+const adapters = {
+    mysql: () => require("baileys-mysql").useSqlAuthState(authAdapter.mysql),
+    mongodb: () => require("baileys-mongodb").useMongoAuthState(authAdapter.mongodb.url),
+    firebase: () => require("baileys-firebase").useFireAuthState(authAdapter.firebase),
+};
+const selectedAuthAdapter = adapters[authAdapter.adapter] ? adapters[authAdapter.adapter]() : null;
 
-// Buat instance bot baru
+// Buat instance bot
 const bot = new Client({
-    prefix: config.bot.prefix,
-    readIncommingMsg: config.system.autoRead,
-    printQRInTerminal: !config.system.usePairingCode,
-    authDir: config.bot.authAdapter.adapter === "default" ? path.resolve(__dirname, config.bot.authAdapter.default.authDir) : null,
-    markOnlineOnConnect: config.system.alwaysOnline,
-    phoneNumber: config.bot.phoneNumber,
-    usePairingCode: config.system.usePairingCode,
-    selfReply: config.system.selfReply,
+    prefix,
+    phoneNumber,
+    authAdapter: selectedAuthAdapter,
+    authDir: authAdapter.adapter === "default" ? path.resolve(__dirname, authAdapter.default.authDir) : null,
+    readIncommingMsg: system.autoRead,
+    printQRInTerminal: !system.usePairingCode,
+    markOnlineOnConnect: system.alwaysOnline,
+    usePairingCode: system.usePairingCode,
+    selfReply: system.selfReply,
+    autoMention: system.autoMention,
     WAVersion: [2, 3000, 1015901307],
-    autoMention: config.system.autoMention,
-    authAdapter
 });
 
-// Penanganan events
+// Inisialisasi event dan middleware
 events(bot);
-
-// Penanganan middleware
 middleware(bot);
 
-// Buat penangan perintah dan muat perintah
+// Muat dan jalankan command handler
 const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
 cmd.load();
 
-// Luncurkan bot
-bot.launch().catch((error) => consolefy.error(`Error: ${error}`));
+bot.launch().catch(error => consolefy.error(`Error: ${error}`)); // Luncurkan bot dengan penanganan error

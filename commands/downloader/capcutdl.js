@@ -26,13 +26,11 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agungny", "/api/capcut", {
                 url
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
                 video: {
-                    url: data.result.videoUrl
+                    url: result.videoUrl
                 },
                 mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +

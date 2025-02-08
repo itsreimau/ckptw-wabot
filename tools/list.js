@@ -1,3 +1,4 @@
+// Import modul dan dependensi
 const api = require("./api.js");
 const {
     bold,
