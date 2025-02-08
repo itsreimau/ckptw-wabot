@@ -148,26 +148,27 @@ module.exports = (bot) => {
                 }
             }
 
-            // Penanganan AFK: Pengguna yang disebutkan
-            const userAFKJids = ctx.quoted?.senderJid || m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
-            if (userAFKJids && userAFKJids.length > 0) {
+            // Penanganan AFK: Pengguna yang disebutkan atau di-quote
+            const userAFKJids = ctx.quoted?.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
+            if (userAFKJids.length > 0) {
                 for (const userAFKJid of userAFKJids) {
-                    const userAFK = await db.get(`user.${tools.general.getID(userAFKJid)}.afk`) || {};
-                    if (userAFK && userAFK.reason && userAFK.timestamp) {
+                    const userAFK = await db.get(`user.${userAFKJid}.afk`) || {};
+                    if (userAFK?.reason && userAFK?.timestamp) {
                         const timeago = tools.general.convertMsToDuration(Date.now() - userAFK.timestamp);
                         await ctx.reply(quote(`📴 Dia sedang AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                     }
                 }
             }
 
-            // Menghapus status AFK pengguna
-            const userAFK = await db.get(`user.${senderId}.afk`) || {};
+            // Penanganan AFK: Menghapus status AFK pengguna yang mengirim pesan
+            const senderID = tools.general.getID(senderId);
+            const userAFK = await db.get(`user.${senderID}.afk`) || {};
             if (userAFK?.reason && userAFK?.timestamp) {
                 const timeElapsed = Date.now() - userAFK.timestamp;
                 if (timeElapsed > 3000) {
                     const timeago = tools.general.convertMsToDuration(timeElapsed);
                     await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
-                    await db.delete(`user.${senderId}.afk`);
+                    await db.delete(`user.${senderID}.afk`);
                 }
             }
         }
