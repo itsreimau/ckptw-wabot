@@ -94,25 +94,19 @@ module.exports = (bot) => {
 
     // Penanganan event ketika pesan muncul
     bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
-        const {
-            isGroup,
-            sender,
-            content,
-            key
-        } = ctx;
-        const senderId = tools.general.getID(sender.jid);
-        const groupId = isGroup ? tools.general.getID(ctx.id) : null;
+        const ctx.senderId = tools.general.getID(ctx.sender.jid);
+        const groupId = ctx.isGroup ? tools.general.getID(ctx.id) : {};
 
-        const isCmd = tools.general.isCmd(content, ctx.bot);
-        const isOwner = tools.general.isOwner(senderId);
+        const isCmd = tools.general.isCmd(m.content, ctx.bot);
+        const isOwner = tools.general.isOwner(ctx.senderId);
         const groupDb = await db.get(`group.${groupId}`) || {};
         const botDb = await db.get("bot") || {};
 
-        if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return; // Penanganan mode bot
+        if ((botDb.mode === "group" && !ctx.isGroup) || (botDb.mode === "private" && ctx.isGroup) || (botDb.mode === "self" && !isOwner)) return; // Penanganan mode bot
 
         if (groupDb.mute) return; // Penanganan mode mute pada grup
 
-        isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
+        ctx.isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${ctx.senderId}`) : consolefy.info(`Incoming message from: ${ctx.senderId}`); // Log pesan masuk
 
         // Penanganan perintah
         if (isCmd) {
@@ -127,7 +121,7 @@ module.exports = (bot) => {
                 let newUserLevel = (userDb?.level || 0) + 1;
                 newUserXp -= xpToLevelUp;
 
-                const profilePictureUrl = await ctx.core.profilePictureUrl(sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+                const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
                 if (userDb?.autolevelup) await ctx.reply({
                     text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n${config.msg.readmore}\n${quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${isCmd.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]))}`,
@@ -144,20 +138,20 @@ module.exports = (bot) => {
                     }
                 });
 
-                await db.set(`user.${senderId}.xp`, newUserXp);
-                await db.set(`user.${senderId}.level`, newUserLevel);
+                await db.set(`user.${ctx.senderId}.xp`, newUserXp);
+                await db.set(`user.${ctx.senderId}.level`, newUserLevel);
             } else {
-                await db.set(`user.${senderId}.xp`, newUserXp);
+                await db.set(`user.${ctx.senderId}.xp`, newUserXp);
             }
         }
 
         // Perintah khusus Owner
-        if (isOwner && content) {
+        if (isOwner && m.content) {
             // Perintah Eval: Jalankan kode JavaScript
-            if (content.startsWith("==> ") || content.startsWith("=> ")) {
-                const code = content.slice(content.startsWith("==> ") ? 4 : 3);
+            if (m.content.startsWith("==> ") || m.content.startsWith("=> ")) {
+                const code = m.content.slice(m.content.startsWith("==> ") ? 4 : 3);
                 try {
-                    const result = await eval(content.startsWith("==> ") ? `(async () => { ${code} })()` : code);
+                    const result = await eval(m.content.startsWith("==> ") ? `(async () => { ${code} })()` : code);
                     await ctx.reply(monospace(util.inspect(result)));
                 } catch (error) {
                     consolefy.error(`Error: ${error}`);
@@ -166,8 +160,8 @@ module.exports = (bot) => {
             }
 
             // Perintah Exec: Jalankan perintah shell
-            if (content.startsWith("$ ")) {
-                const command = content.slice(2);
+            if (m.content.startsWith("$ ")) {
+                const command = m.content.slice(2);
                 try {
                     const output = await util.promisify(exec)(command);
                     await ctx.reply(monospace(output.stdout || output.stderr));
@@ -179,7 +173,7 @@ module.exports = (bot) => {
         }
 
         // Penanganan AFK: Pengguna yang disebutkan
-        const userJids = ctx.quoted?.senderJid || m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
+        const userJids = ctx.quoted?.ctx.senderJid || m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
         if (userJids?.length) {
             for (const mentionJid of userJids) {
                 const userAFK = await db.get(`user.${mentionJid}.afk`) || {};
@@ -191,28 +185,28 @@ module.exports = (bot) => {
         }
 
         // Menghapus status AFK pengguna
-        const userAFK = await db.get(`user.${senderId}.afk`) || {};
+        const userAFK = await db.get(`user.${ctx.senderId}.afk`) || {};
         if (userAFK?.reason && userAFK?.timestamp) {
             const timeElapsed = Date.now() - userAFK.timestamp;
             if (timeElapsed > 3000) {
                 const timeago = tools.general.convertMsToDuration(timeElapsed);
                 await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
-                await db.delete(`user.${senderId}.afk`);
+                await db.delete(`user.${ctx.senderId}.afk`);
             }
         }
 
         // Penanganan grup
-        if (isGroup && !key.fromMe) {
-            if (groupDb?.option?.antilink && await tools.general.isUrl(content) && !await ctx.group().isSenderAdmin()) {
+        if (ctx.isGroup && !m.key.fromMe) {
+            if (groupDb?.option?.antilink && await tools.general.isUrl(m.content) && !await ctx.group().isctx.senderAdmin()) {
                 await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
                 await ctx.deleteMessage(key);
-                if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([sender.jid]);
+                if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
             }
 
             // Penanganan antinsfw
             if (groupDb?.option?.antinsfw) {
                 const checkMedia = await tools.general.checkMedia(ctx.getMessageType(), "image");
-                if (checkMedia && !await ctx.group().isSenderAdmin()) {
+                if (checkMedia && !await ctx.group().isctx.senderAdmin()) {
                     const buffer = await ctx.msg.media.toBuffer();
                     const uploadUrl = await tools.general.upload(buffer);
                     const apiUrl = tools.api.createUrl("fasturl", "/tool/imagechecker", {
@@ -225,7 +219,7 @@ module.exports = (bot) => {
                     if (data.results.status === "NSFW") {
                         await ctx.reply(`⛔ Jangan kirim NSFW!`);
                         await ctx.deleteMessage(key);
-                        if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([sender.jid]);
+                        if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                     }
                 }
             }
@@ -233,26 +227,26 @@ module.exports = (bot) => {
             // Penanganan antisticker
             if (groupDb?.option?.antisticker) {
                 const checkMedia = await tools.general.checkMedia(ctx.getMessageType(), "sticker");
-                if (checkMedia && !await ctx.group().isSenderAdmin()) {
+                if (checkMedia && !await ctx.group().isctx.senderAdmin()) {
                     await ctx.reply(`⛔ Jangan kirim stiker!`);
                     await ctx.deleteMessage(key);
-                    if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([sender.jid]);
+                    if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                 }
             }
 
             // Penanganan antitoxic
             if (groupDb?.option?.antitoxic) {
                 const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
-                if (content && toxicRegex.test(content) && !await ctx.group().isSenderAdmin()) {
+                if (m.content && toxicRegex.test(m.content) && !await ctx.group().isctx.senderAdmin()) {
                     await ctx.reply(quote(`⛔ Jangan toxic!`));
                     await ctx.deleteMessage(key);
-                    if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([sender.jid]);
+                    if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                 }
             }
         }
 
         // Penanganan menfess di pesan pribadi
-        if (isPrivate && !key.fromMe) {
+        if (isPrivate && !m.key.fromMe) {
             const allMenfessDb = await db.get("menfess") || {};
             if (!isCmd || isCmd.didyoumean) {
                 const menfessEntries = Object.entries(allMenfessDb);
@@ -261,15 +255,15 @@ module.exports = (bot) => {
                         from,
                         to
                     } = menfessData;
-                    if (senderId === from || senderId === to) {
-                        if (content.match(/\b(delete|stop)\b/i)) {
+                    if (ctx.senderId === from || ctx.senderId === to) {
+                        if (m.content.match(/\b(delete|stop)\b/i)) {
                             await ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
-                            await ctx.sendMessage(`${senderId === from ? to : from}@s.whatsapp.net`, {
+                            await ctx.sendMessage(`${ctx.senderId === from ? to : from}@s.whatsapp.net`, {
                                 text: quote("✅ Pesan menfess telah dihapus!")
                             });
                             await db.delete(`menfess.${conversationId}`);
                         } else {
-                            await ctx.core.sendMessage(senderId === from ? `${to}@s.whatsapp.net` : `${from}@s.whatsapp.net`, {
+                            await ctx.core.sendMessage(ctx.senderId === from ? `${to}@s.whatsapp.net` : `${from}@s.whatsapp.net`, {
                                 forward: m
                             });
                         }

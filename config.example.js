@@ -1,4 +1,4 @@
-// Modul dan dependensi yang diperlukan
+// Import modul dan dependensi
 const {
     name: pkgName,
     version

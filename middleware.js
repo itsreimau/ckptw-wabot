@@ -20,110 +20,122 @@ async function checkCoin(requiredCoin, senderId) {
 // Middleware utama bot
 module.exports = (bot) => {
     bot.use(async (ctx, next) => {
-        const {
-            isGroup,
-            sender,
-            used,
-            group,
-            react,
-            reply,
-            simulateTyping
-        } = ctx;
-        const senderId = tools.general.getID(sender.jid);
+        const senderId = tools.general.getID(ctx.sender.jid);
         const isOwner = tools.general.isOwner(senderId);
+        const isGroup = ctx.isGroup;
 
         const userDb = await db.get(`user.${senderId}`) || {};
-        const groupDb = isGroup ? (await db.get(`group.${ctx.id}`) || {}) : {};
+        const groupDb = await db.get(`group.${groupId}`) || {};
         const botDb = await db.get("bot") || {};
 
-        if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return; // Mode bot (group, private, self)
+        // Mode bot (group, private, self)
+        if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return;
 
-        if (groupDb.mute && used.command !== "unmute") return; // Mode mute pada grup
+        // Mode mute pada grup
+        if (groupDb.mute && ctx.used.command !== "unmute") return;
 
-        if (config.system.autoTypingOnCmd) await simulateTyping(); // Simulasi mengetik jika diaktifkan
+        // Simulasi mengetik jika diaktifkan
+        if (config.system.autoTypingOnCmd) await ctx.simulateTyping();
 
         // Pengecekan pengguna (banned, cooldown, keanggotaan grup bot)
-        const restrictions = {
-            banned: {
-                check: userDb.banned,
+        const restrictions = [{
+                condition: userDb.banned,
                 msg: config.msg.banned,
-                reaction: "🚫"
+                reaction: "🚫",
+                key: "banned",
             },
-            cooldown: {
-                check: !isOwner && !userDb.premium && new Cooldown(ctx, config.system.cooldown).onCooldown,
+            {
+                condition: !isOwner && !userDb.premium && new Cooldown(ctx, config.system.cooldown).onCooldown,
                 msg: config.msg.cooldown,
-                reaction: "💤"
+                reaction: "💤",
+                key: "cooldown",
             },
-            requireBotGroupMembership: {
-                check: config.system.requireBotGroupMembership && used.command !== "botgroup" && !isOwner && !userDb.premium && !(await group(config.bot.groupJid).members()).some(member => tools.general.getID(member.id) === senderId),
+            {
+                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb.premium && !await ctx.group(config.bot.groupJid).members().some(member => tools.general.getID(member.id) === senderId),
                 msg: config.msg.botGroupMembership,
-                reaction: "🚫"
+                reaction: "🚫",
+                key: "requireBotGroupMembership",
             }
-        };
+        ];
 
-        for (const [key, {
-                check,
+        for (const {
+                condition,
                 msg,
-                reaction
-            }] of Object.entries(restrictions)) {
-            if (check) {
+                reaction,
+                key
+            }
+            of restrictions) {
+            if (condition) {
                 if (!userDb.hasSentMsg?.[key]) {
-                    await reply(msg);
+                    await ctx.reply(msg);
                     await db.set(`user.${senderId}.hasSentMsg.${key}`, true);
                 } else {
-                    await react(ctx.id, reaction);
+                    await ctx.react(ctx.id, reaction);
                 }
                 return;
             }
         }
 
         // Pengecekan izin command
-        const command = [...ctx.bot.cmd.values()].find(cmd => [cmd.name, ...(cmd.aliases || [])].includes(used.command));
+        const command = [...ctx.bot.cmd.values()]
+            .find(cmd => [cmd.name, ...(cmd.aliases || [])].includes(ctx.used.command));
+
+        if (!command) return next(); // Jika tidak ada command yang cocok, lanjutkan
+
         const {
             permissions = {}
-        } = command || {};
+        } = command;
 
-        const permissionChecks = {
-            admin: {
-                check: isGroup && !(await group().isSenderAdmin()),
-                msg: config.msg.admin
+        const permissionChecks = [{
+                key: "admin",
+                condition: isGroup && !await ctx.group().isSenderAdmin(),
+                msg: config.msg.admin,
             },
-            botAdmin: {
-                check: isGroup && !(await group().isBotAdmin()),
-                msg: config.msg.botAdmin
+            {
+                key: "botAdmin",
+                condition: isGroup && !await ctx.group().isBotAdmin(),
+                msg: config.msg.botAdmin,
             },
-            coin: {
-                check: permissions.coin && config.system.useCoin && (await checkCoin(permissions.coin, senderId)),
-                msg: config.msg.coin
+            {
+                key: "coin",
+                condition: permissions.coin && config.system.useCoin && await checkCoin(permissions.coin, senderId),
+                msg: config.msg.coin,
             },
-            group: {
-                check: !isGroup,
-                msg: config.msg.group
+            {
+                key: "group",
+                condition: !isGroup,
+                msg: config.msg.group,
             },
-            owner: {
-                check: !isOwner,
-                msg: config.msg.owner
+            {
+                key: "owner",
+                condition: !isOwner,
+                msg: config.msg.owner,
             },
-            premium: {
-                check: !isOwner && !userDb.premium,
-                msg: config.msg.premium
+            {
+                key: "premium",
+                condition: !isOwner && !userDb.premium,
+                msg: config.msg.premium,
             },
-            private: {
-                check: isGroup,
-                msg: config.msg.private
+            {
+                key: "private",
+                condition: isGroup,
+                msg: config.msg.private,
             },
-            restrict: {
-                check: config.system.restrict,
-                msg: config.msg.restrict
+            {
+                key: "restrict",
+                condition: config.system.restrict,
+                msg: config.msg.restrict,
             }
-        };
+        ];
 
-        for (const [key, {
-                check,
+        for (const {
+                key,
+                condition,
                 msg
-            }] of Object.entries(permissionChecks)) {
-            if (permissions[key] && check) {
-                await reply(msg);
+            }
+            of permissionChecks) {
+            if (permissions[key] && condition) {
+                await ctx.reply(msg);
                 return;
             }
         }
