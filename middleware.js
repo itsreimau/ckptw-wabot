@@ -87,7 +87,7 @@ module.exports = (bot) => {
                 key: "cooldown",
             },
             {
-                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb.premium && !await ctx.group(config.bot.groupJid).members().some(member => tools.general.getID(member.id) === senderId),
+                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb.premium && !(await ctx.group(config.bot.groupJid).members()).some(member => tools.general.getID(member.id) === senderId),
                 msg: config.msg.botGroupMembership,
                 reaction: "🚫",
                 key: "requireBotGroupMembership",
