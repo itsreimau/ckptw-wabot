@@ -94,13 +94,13 @@ module.exports = (bot) => {
 
     // Penanganan event ketika pesan muncul
     bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
-        const isGroup = ctx.isGroup;
+        const isGroup = ctx.isGroup();
         const isPrivate = !isGroup;
 
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
-        const groupId = isGroup ? ctx.id : null;
-        const groupId = isGroup ? tools.general.getID(ctx.id) : null;
+        const groupJid = isGroup ? ctx.id : null;
+        const groupId = isGroup ? tools.general.getID(groupJid) : null;
 
         const isOwner = tools.general.isOwner(senderId);
         const isCmd = tools.general.isCmd(m.content, ctx.bot);
