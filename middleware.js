@@ -17,13 +17,20 @@ async function checkCoin(requiredCoin, senderId) {
 // Middleware utama bot
 module.exports = (bot) => {
     bot.use(async (ctx, next) => {
-        const senderId = tools.general.getID(ctx.sender.jid);
-        const isOwner = tools.general.isOwner(senderId);
         const isGroup = ctx.isGroup;
+        const isPrivate = !isGroup;
 
+        const senderJid = ctx.sender.jid;
+        const senderId = tools.general.getID(senderJid);
+        const groupId = isGroup ? ctx.id : null;
+        const groupId = isGroup ? tools.general.getID(ctx.id) : null;
+
+        const isOwner = tools.general.isOwner(senderId);
+        const isCmd = tools.general.isCmd(m.content, ctx.bot);
+
+        const botDb = await db.get("bot") || {};
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
-        const botDb = await db.get("bot") || {};
 
         // Mode bot (group, private, self)
         if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return;

@@ -94,19 +94,26 @@ module.exports = (bot) => {
 
     // Penanganan event ketika pesan muncul
     bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
-        const senderId = tools.general.getID(ctx.sender.jid);
-        const groupId = ctx.isGroup ? tools.general.getID(ctx.id) : {};
+        const isGroup = ctx.isGroup;
+        const isPrivate = !isGroup;
 
+        const senderJid = ctx.sender.jid;
+        const senderId = tools.general.getID(senderJid);
+        const groupId = isGroup ? ctx.id : null;
+        const groupId = isGroup ? tools.general.getID(ctx.id) : null;
+
+        const isOwner = tools.general.isOwner(senderId);
         const isCmd = tools.general.isCmd(m.content, ctx.bot);
-        const isOwner = tools.general.isOwner(ctx.senderId);
-        const groupDb = await db.get(`group.${groupId}`) || {};
+
         const botDb = await db.get("bot") || {};
+        const userDb = await db.get(`user.${senderId}`) || {};
+        const groupDb = await db.get(`group.${groupId}`) || {};
 
         if ((botDb.mode === "group" && !ctx.isGroup) || (botDb.mode === "private" && ctx.isGroup) || (botDb.mode === "self" && !isOwner)) return; // Penanganan mode bot
 
         if (groupDb.mute) return; // Penanganan mode mute pada grup
 
-        ctx.isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${ctx.senderId}`) : consolefy.info(`Incoming message from: ${ctx.senderId}`); // Log pesan masuk
+        ctx.isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
 
         // Penanganan perintah
         if (isCmd) {
@@ -138,10 +145,10 @@ module.exports = (bot) => {
                     }
                 });
 
-                await db.set(`user.${ctx.senderId}.xp`, newUserXp);
-                await db.set(`user.${ctx.senderId}.level`, newUserLevel);
+                await db.set(`user.${senderId}.xp`, newUserXp);
+                await db.set(`user.${senderId}.level`, newUserLevel);
             } else {
-                await db.set(`user.${ctx.senderId}.xp`, newUserXp);
+                await db.set(`user.${senderId}.xp`, newUserXp);
             }
         }
 
@@ -185,13 +192,13 @@ module.exports = (bot) => {
         }
 
         // Menghapus status AFK pengguna
-        const userAFK = await db.get(`user.${ctx.senderId}.afk`) || {};
+        const userAFK = await db.get(`user.${senderId}.afk`) || {};
         if (userAFK?.reason && userAFK?.timestamp) {
             const timeElapsed = Date.now() - userAFK.timestamp;
             if (timeElapsed > 3000) {
                 const timeago = tools.general.convertMsToDuration(timeElapsed);
                 await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
-                await db.delete(`user.${ctx.senderId}.afk`);
+                await db.delete(`user.${senderId}.afk`);
             }
         }
 
@@ -255,15 +262,15 @@ module.exports = (bot) => {
                         from,
                         to
                     } = menfessData;
-                    if (ctx.senderId === from || ctx.senderId === to) {
+                    if (senderId === from || senderId === to) {
                         if (m.content.match(/\b(delete|stop)\b/i)) {
                             await ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
-                            await ctx.sendMessage(`${ctx.senderId === from ? to : from}@s.whatsapp.net`, {
+                            await ctx.sendMessage(`${senderId === from ? to : from}@s.whatsapp.net`, {
                                 text: quote("✅ Pesan menfess telah dihapus!")
                             });
                             await db.delete(`menfess.${conversationId}`);
                         } else {
-                            await ctx.core.sendMessage(ctx.senderId === from ? `${to}@s.whatsapp.net` : `${from}@s.whatsapp.net`, {
+                            await ctx.core.sendMessage(senderId === from ? `${to}@s.whatsapp.net` : `${from}@s.whatsapp.net`, {
                                 forward: m
                             });
                         }
