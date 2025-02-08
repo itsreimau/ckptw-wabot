@@ -26,7 +26,7 @@ module.exports = (bot) => {
         const groupId = isGroup ? tools.general.getID(groupJid) : null;
 
         const isOwner = tools.general.isOwner(senderId);
-        const isCmd = tools.general.isCmd(m.content, ctx.bot);
+        const isCmd = tools.general.isCmd(content, ctx.bot);
 
         const botDb = await db.get("bot") || {};
         const userDb = await db.get(`user.${senderId}`) || {};
