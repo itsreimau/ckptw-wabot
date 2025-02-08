@@ -33,6 +33,7 @@ module.exports = {
             return await ctx.reply(
                 `${quote(`Antilink: ${groupOption.antilink ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Antinsfw: ${groupOption.antinsfw ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${quote(`Antispam: ${groupOption.antispam ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Antisticker: ${groupOption.antisticker ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Antitoxic: ${groupOption.antitoxic ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Autokick: ${groupOption.autokick ? "Aktif" : "Nonaktif"}`)}\n` +
@@ -52,6 +53,9 @@ module.exports = {
                     break;
                 case "antinsfw":
                     setKey = `group.${groupId}.option.antinsfw`;
+                    break;
+                case "antispam":
+                    setKey = `group.${groupId}.option.antispam`;
                     break;
                 case "antisticker":
                     setKey = `group.${groupId}.option.antisticker`;

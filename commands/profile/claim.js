@@ -17,7 +17,6 @@ module.exports = {
         );
 
         const senderId = tools.general.getID(ctx.sender.jid);
-
         const userDb = await db.get(`user.${senderId}`) || {};
 
         if (input === "list") {
@@ -26,6 +25,8 @@ module.exports = {
         }
 
         if (!claimRewards[input]) return await ctx.reply(quote(`❎ Hadiah tidak valid!`));
+
+        if (tools.general.isOwner(senderId) && userDb?.premium) return await ctx.reply(quote("❎ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
 
         const requiredLevel = claimRewards[input].level || 0;
         if (userDb?.level < requiredLevel) return await ctx.reply(quote(`❎ Anda perlu mencapai level ${requiredLevel} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userDb?.level || 0}.`));
@@ -36,8 +37,6 @@ module.exports = {
         const remainingTime = claimRewards[input].cooldown - timePassed;
 
         if (remainingTime > 0) return await ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input}. Tunggu ${tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
-
-        if (tools.general.isOwner(senderId) && userDb?.premium) return await ctx.reply(quote("❎ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
 
         try {
             const rewardCoin = (userDb?.coin || 0) + claimRewards[input].reward;

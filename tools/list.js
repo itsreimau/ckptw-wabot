@@ -85,6 +85,7 @@ async function get(type) {
                 const data = [
                     "antilink (Anti link)",
                     "antinsfw (Anti NSFW, seperti pornografi)",
+                    "antispam (Anti spam)",
                     "antisticker (Anti stiker)",
                     "antitoxic (Anti toxic, seperti bahasa kasar)",
                     "autokick (Dikeluarkan secara otomatis, jika ada yang melanggar salah satu opsi 'anti...')",

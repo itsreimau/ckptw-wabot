@@ -153,7 +153,7 @@ module.exports = (bot) => {
             if (userAFKJids && userAFKJids.length > 0) {
                 for (const userAFKJid of userAFKJids) {
                     const userAFK = (await db.get(`user.${userAFKJid}.afk`)) || {};
-                    if (userAFK.timestamp) {
+                    if (userAFK && userAFK.reason && userAFK.timestamp) {
                         const timeago = tools.general.convertMsToDuration(Date.now() - userAFK.timestamp);
                         await ctx.reply(quote(`📴 Dia sedang AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                     }
@@ -174,9 +174,11 @@ module.exports = (bot) => {
 
         // Penanganan grup
         if (isGroup && !m.key.fromMe) {
+            const now = Date.now();
+
             if (groupDb?.option?.antilink && await tools.general.isUrl(m.content) && !await ctx.group().isctx.senderAdmin()) {
                 await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
-                await ctx.deleteMessage(key);
+                await ctx.deleteMessage(m.key);
                 if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
             }
 
@@ -195,9 +197,31 @@ module.exports = (bot) => {
 
                     if (data.results.status === "NSFW") {
                         await ctx.reply(`⛔ Jangan kirim NSFW!`);
-                        await ctx.deleteMessage(key);
+                        await ctx.deleteMessage(m.key);
                         if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                     }
+                }
+            }
+
+            // Penanganan antispam
+            if (groupDb?.option?.antispam) {
+                const key = `group.${groupId}.spam.${senderId}`;
+                const {
+                    count = 0, lastMessageTime = 0
+                } = db.get(key) || {};
+                const timeDiff = now - lastMessageTime;
+                const newCount = timeDiff < 5000 ? count + 1 : 1;
+
+                db.set(key, {
+                    count: newCount,
+                    lastMessageTime: now
+                });
+
+                if (newCount > 5) {
+                    await ctx.reply(quote(`⛔ Jangan spam!`));
+                    await ctx.deleteMessage(m.key);
+                    if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
+                    db.delete(key);
                 }
             }
 
@@ -206,7 +230,7 @@ module.exports = (bot) => {
                 const checkMedia = await tools.general.checkMedia(ctx.getMessageType(), "sticker");
                 if (checkMedia && !await ctx.group().isctx.senderAdmin()) {
                     await ctx.reply(`⛔ Jangan kirim stiker!`);
-                    await ctx.deleteMessage(key);
+                    await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                 }
             }
@@ -216,7 +240,7 @@ module.exports = (bot) => {
                 const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
                 if (m.content && toxicRegex.test(m.content) && !await ctx.group().isctx.senderAdmin()) {
                     await ctx.reply(quote(`⛔ Jangan toxic!`));
-                    await ctx.deleteMessage(key);
+                    await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                 }
             }
