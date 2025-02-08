@@ -152,7 +152,7 @@ module.exports = (bot) => {
             const userAFKJids = ctx.quoted?.senderJid || m.message?.extendedTextMessage?.contextInfo?.mentionedJid;
             if (userAFKJids && userAFKJids.length > 0) {
                 for (const userAFKJid of userAFKJids) {
-                    const userAFK = (await db.get(`user.${userAFKJid}.afk`)) || {};
+                    const userAFK = await db.get(`user.${tools.general.getID(userAFKJid)}.afk`) || {};
                     if (userAFK && userAFK.reason && userAFK.timestamp) {
                         const timeago = tools.general.convertMsToDuration(Date.now() - userAFK.timestamp);
                         await ctx.reply(quote(`📴 Dia sedang AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
