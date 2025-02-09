@@ -132,7 +132,7 @@ module.exports = (bot) => {
                 ...otherUserDb
             } = userDb || {};
             const newUserDb = {
-                coin: (isOwner || isPremium) ? 0 : tools.general.clamp(coin || 1000, 0, 10000),
+                coin: (isOwner || userDb?.premium) ? 0 : tools.general.clamp(coin || 1000, 0, 10000),
                 level: tools.general.clamp(level || 0, 0, 100),
                 uid: userDb?.uid || tools.general.generateUID(senderId),
                 xp: userDb?.xp || 0,
