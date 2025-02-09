@@ -37,7 +37,7 @@ npm install
 
 ### 3. Konfigurasi
 
-Ganti nama file `config.example.js` menjadi `config.js`, lalu sesuaikan konfigurasi seperti nama bot, pesan default, nomor pemilik bot, dan lain-lain.
+Ganti nama file `config.example.js` menjadi `config.js`, lalu sesuaikan konfigurasi seperti nama bot, pesan default, nomor owner bot, dan lain-lain.
 
 ## Adapter Penyimpanan
 
@@ -167,7 +167,7 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
            botAdmin: Boolean, // Apakah bot harus menjadi admin agar bisa menjalankan perintah ini? (true/false)
            coin: Number, // Jumlah koin yang diperlukan untuk menjalankan perintah ini
            group: Boolean, // Apakah perintah ini hanya bisa digunakan di dalam grup? (true/false)
-           owner: Boolean, // Apakah hanya pemilik bot yang bisa menggunakan perintah ini? (true/false)
+           owner: Boolean, // Apakah hanya owner bot yang bisa menggunakan perintah ini? (true/false)
            premium: Boolean, // Apakah hanya pengguna premium yang bisa menggunakan perintah ini? (true/false)
            private: Boolean // Apakah perintah ini hanya bisa digunakan dalam chat pribadi? (true/false)
        },

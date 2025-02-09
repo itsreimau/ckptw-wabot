@@ -1,11 +1,11 @@
-// Import modul dan dependensi
+// Impor modul dan dependensi yang diperlukan
 const {
     Cooldown,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
 
-// Fungsi untuk mengecek apakah pengguna memiliki cukup koin
+// Fungsi untuk mengecek apakah pengguna memiliki cukup koin sebelum menggunakan perintah tertentu
 async function checkCoin(requiredCoin, senderId) {
     const userDb = await db.get(`user.${senderId}`) || {};
 
@@ -28,18 +28,18 @@ module.exports = (bot) => {
         const groupId = isGroup ? tools.general.getID(groupJid) : null;
         const isOwner = tools.general.isOwner(senderId);
 
-        // Mengambil basis data
+        // Mengambil data bot, pengguna, dan grup dari database
         const botDb = await db.get("bot") || {};
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
 
-        if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return; // Mode bot (group, private, self)
+        // Pengecekan mode bot (group, private, self) dan mode mute grup
+        if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return;
+        if (groupDb.mute && ctx.used.command !== "unmute") return;
 
-        if (groupDb.mute && ctx.used.command !== "unmute") return; // Mode mute pada grup
+        if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi mengetik jika diaktifkan dalam konfigurasi
 
-        if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi mengetik jika diaktifkan
-
-        // Penanganan XP & Level untuk pengguna
+        // Menambah XP pengguna dan menangani level-up
         const xpGain = 10;
         const xpToLevelUp = 100;
 
@@ -73,7 +73,7 @@ module.exports = (bot) => {
             await db.set(`user.${senderId}.xp`, newUserXp);
         }
 
-        // Pengecekan pengguna (banned, cooldown, keanggotaan grup bot)
+        // Pengecekan kondisi pengguna
         const restrictions = [{
                 condition: userDb.banned,
                 msg: config.msg.banned,
@@ -112,10 +112,9 @@ module.exports = (bot) => {
             }
         }
 
-        // Pengecekan izin command
+        // Pengecekan izin
         const command = [...ctx.bot.cmd.values()].find(cmd => [cmd.name, ...(cmd.aliases || [])].includes(ctx.used.command));
-        if (!command) return next(); // Jika tidak ada command yang cocok, lanjutkan
-
+        if (!command) return next();
         const {
             permissions = {}
         } = command;
@@ -173,6 +172,6 @@ module.exports = (bot) => {
             }
         }
 
-        await next(); // Lanjut ke proses berikutnya jika semua izin terpenuhi
+        await next(); // Lanjut ke proses berikutnya jika semua kondisi pengguna dan izin terpenuhi
     });
 };

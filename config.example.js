@@ -1,4 +1,4 @@
-// Import modul dan dependensi
+// Impor modul dan dependensi yang diperlukan
 const {
     name: pkgName,
     version
@@ -52,11 +52,11 @@ global.config = {
 
     // Pesan bot yang disesuaikan untuk situasi tertentu
     msg: {
-        admin: quote("⛔ Perintah hanya dapat diakses oleh admin grup!"), // Pesan ketika perintah hanya untuk admin
+        admin: quote("⛔ Perintah hanya dapat diakses oleh admin grup!"), // Pesan saat perintah hanya untuk admin
         banned: quote("⛔ Tidak dapat memproses karena Anda telah dibanned oleh Owner!"), // Pesan untuk pengguna yang dibanned
         botAdmin: quote("⛔ Tidak dapat memproses karena bot bukan admin grup ini!"), // Pesan jika bot bukan admin di grup
         botGroupMembership: quote("⛔ Tidak dapat memproses karena Anda tidak bergabung dengan grup bot! Ketik '/botgroup' untuk mendapatkan tautan grup bot."), // Pesan untuk pengguna yang tidak ada dalam grup
-        coin: quote("⛔ Tidak dapat memproses karena koin Anda tidak cukup!"), // Pesan ketika koin tidak cukup
+        coin: quote("⛔ Tidak dapat memproses karena koin Anda tidak cukup!"), // Pesan saat koin tidak cukup
         cooldown: quote("🔄 Perintah ini sedang dalam cooldown, tunggu..."), // Pesan saat cooldown perintah
         group: quote("⛔ Perintah hanya dapat diakses dalam grup!"), // Pesan untuk perintah grup
         owner: quote("⛔ Perintah hanya dapat diakses Owner!"), // Pesan untuk perintah yang hanya owner bisa akses
@@ -91,6 +91,7 @@ global.config = {
     // Sistem bot
     system: {
         alwaysOnline: true, // Bot selalu berstatus "online"
+        antiCall: true, // Bot secara otomatis membanned orang yang menelepon
         autoMention: true, // Bot otomatis mention seseorang dalam pesan yang dikirim
         autoRead: true, // Bot baca pesan otomatis
         autoTypingOnCmd: true, // Tampilkan status "sedang mengetik" saat memproses perintah

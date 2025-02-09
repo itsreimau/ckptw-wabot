@@ -1,4 +1,4 @@
-// Import modul dan dependensi
+// Impor modul dan dependensi yang diperlukan
 const api = require("./api.js");
 const axios = require("axios");
 const cheerio = require("cheerio");

@@ -25,7 +25,16 @@ module.exports = {
             const [result] = await ctx.core.onWhatsApp(accountJid);
             if (!result.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp!`));
 
-            await ctx.group().add([accountJid]);
+            await ctx.group().add([accountJid]).then(async (results) => {
+                const result = results[0];
+                if (result.status == 408) return ctx.reply(quote("❎ Akun ini sepertinya baru saja keluar dari grup ini."));
+                if (result.status == 401) return ctx.reply(quote("❎ Akun ini sepertinya telah memblokir bot ini!"));
+                if (result.status == "409") return ctx.reply(quote("❎ Akun ini sudah ada di grup."));
+                if (result.status == "500") return ctx.reply(quote("❎ Grupnya penuh."));
+                if (result.status === "403") return await ctx.sendMessage(result.jid, {
+                    text: quote(`👋 Hai, saya diminta untuk menambahkan Anda ke grup tetapi terjadi kesalahan. Bisakah kamu bergabung sendiri? https://chat.whatsapp.com/${result.content[0].attrs.code}`)
+                });
+            });;
 
             return await ctx.reply(quote(`✅ Berhasil ditambahkan!`));
         } catch (error) {

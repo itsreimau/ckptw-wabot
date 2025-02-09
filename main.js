@@ -1,13 +1,13 @@
-// Import modul dan dependensi
-const path = require("path");
+// Impor modul dan dependensi yang diperlukan
 const middleware = require("./middleware.js");
 const events = require("./events/handler.js");
 const {
     Client,
     CommandHandler
 } = require("@mengkodingan/ckptw");
+const path = require("path");
 
-// Konfigurasi bot
+// Konfigurasi bot dari file 'config.js'
 const {
     bot: botConfig,
     system
@@ -18,7 +18,7 @@ const {
     authAdapter
 } = botConfig;
 
-// Pilih adapter autentikasi
+// Pilih adapter autentikasi sesuai dengan konfigurasi
 const adapters = {
     mysql: () => require("baileys-mysql").useSqlAuthState(authAdapter.mysql),
     mongodb: () => require("baileys-mongodb").useMongoAuthState(authAdapter.mongodb.url),
@@ -26,7 +26,7 @@ const adapters = {
 };
 const selectedAuthAdapter = adapters[authAdapter.adapter] ? adapters[authAdapter.adapter]() : null;
 
-// Buat instance bot
+// Buat instance bot dengan pengaturan yang sesuai
 const bot = new Client({
     prefix,
     phoneNumber,
@@ -49,4 +49,4 @@ middleware(bot);
 const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
 cmd.load();
 
-bot.launch().catch(error => consolefy.error(`Error: ${error}`)); // Luncurkan bot dengan penanganan error
+bot.launch().catch(error => consolefy.error(`Error: ${error}`)); // Luncurkan bot

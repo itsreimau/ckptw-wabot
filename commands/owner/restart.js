@@ -14,18 +14,19 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
+        if (!process.env.PM2_HOME) return await ctx.reply(quote("❎ Bot tidak berjalan di bawah PM2. Restart manual diperlukan."));
+
         try {
             const waitMsg = await ctx.reply(config.msg.wait);
-
             await db.set(`bot.restart`, {
                 jid: ctx.id,
                 key: waitMsg.key,
                 timestamp: Date.now()
             });
 
-            return await util.promisify(exec)("pm2 restart $(basename $(pwd))"); // PM2
+            return await util.promisify(exec)("pm2 restart $(basename $(pwd))"); // Hanya berfungsi saat menggunakan PM2
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
+            console.error(`Error: ${error}`);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }

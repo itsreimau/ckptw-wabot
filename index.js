@@ -1,4 +1,4 @@
-// Import modul dan dependensi
+// Impor modul dan dependensi yang diperlukan
 require("./config.js");
 const {
     name: pkgName,
@@ -15,43 +15,44 @@ const http = require("http");
 const path = require("path");
 const SimplDB = require("simpl.db");
 
-// Buat consolefy
+// Inisialisasi Consolefy untuk logging
 const c = new Consolefy({
     tag: pkgName
 });
 
-// Buat basis data
+// Inisialisasi SimplDB untuk Database
 const dbFile = path.join(__dirname, "database.json");
 if (!fs.existsSync(dbFile)) fs.writeFileSync(dbFile, "{}", "utf8");
 const db = new SimplDB();
 
-// Pengecekan dan penghapusan folder auth jika kosong
+// Hapus folder autentikasi jika kosong (untuk bot dengan adapter default)
 if (config.bot.authAdapter.adapter === "default") {
     const authDir = path.resolve(__dirname, config.bot.authAdapter.default.authDir);
-    if (fs.existsSync(authDir) && !fs.readdirSync(authDir).length) fs.rmSync(authDir, {
-        recursive: true,
-        force: true
-    });
+    if (fs.existsSync(authDir) && !fs.readdirSync(authDir).length) {
+        fs.rmSync(authDir, {
+            recursive: true,
+            force: true
+        });
+    }
 }
 
-// Atur konfigurasi ke global
 Object.assign(global, {
     config,
     tools,
     consolefy: c,
     db
-});
+}); // Tetapkan konfigurasi dan alat ke variabel global
 
-c.log("Starting..."); // Memulai
+c.log("Memulai..."); // Logging proses awal
 
-// Tampilkan judul menggunakan CFonts
+// Tampilkan nama proyek
 CFonts.say(pkgName, {
     font: "chrome",
     align: "center",
     gradient: ["red", "magenta"]
 });
 
-// Menampilkan informasi paket
+// Tampilkan deskripsi dan informasi pengembang
 CFonts.say(
     `'${description}'\n` +
     `By ${author}`, {
@@ -61,14 +62,15 @@ CFonts.say(
     }
 );
 
-// Jalankan server jika diaktifkan
+// Jalankan server jika diaktifkan dalam konfigurasi
 if (config.system.useServer) {
     const {
         port
     } = config.system;
-    http.createServer((_, res) => res.end(`${pkgName} is running on port ${port}`)).listen(port, () => {
-        c.success(`Server is running at http://localhost:${port}`);
-    });
+    http.createServer((_, res) => res.end(`${pkgName} berjalan di port ${port}`))
+        .listen(port, () => {
+            c.success(`Server aktif di http://localhost:${port}`);
+        });
 }
 
-require("./main.js"); // Impor dan jalankan modul utama
+require("./main.js"); // Jalankan modul utama

@@ -23,12 +23,12 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("https://fbdown.vercel.app", "/api/get", {
+            const apiUrl = tools.api.createUrl("agatz", "/api/facebook", {
                 url
             });
             const {
                 data
-            } = await axios.get(apiUrl);
+            } = (await axios.get(apiUrl));
 
             return await ctx.reply({
                 video: {

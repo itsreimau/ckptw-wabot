@@ -1,11 +1,9 @@
-// Import modul dan dependensi
+// Impor modul dan dependensi yang diperlukan
 const {
+    Events,
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    Events
-} = require("@mengkodingan/ckptw/lib/Constant");
 const axios = require("axios");
 const {
     exec
@@ -13,47 +11,55 @@ const {
 const fs = require("fs");
 const util = require("util");
 
-// Utilitas
+// Fungsi untuk menangani event pengguna bergabung/keluar grup
 async function handleUserEvent(bot, m, type) {
     const {
         id,
         participants
     } = m;
+
     try {
         const groupId = tools.general.getID(id);
         const groupDb = await db.get(`group.${groupId}`) || {};
 
         if (groupDb?.option?.welcome) {
             const metadata = await bot.core.groupMetadata(id);
-            const customText = groupDb?.text?.[type === "UserJoin" ? "welcome" : "goodbye"];
-            const userTag = `@${tools.general.getID(participants[0])}`;
 
-            const text = customText ?
-                customText.replace(/%tag%/g, userTag).replace(/%subject%/g, metadata.subject).replace(/%description%/g, metadata.description) :
-                quote(type === "UserJoin" ?
-                    `👋 Selamat datang ${userTag} di grup ${metadata.subject}!` :
-                    `👋 ${userTag} keluar dari grup ${metadata.subject}.`);
+            for (const jid of participants) {
+                const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
-            await bot.core.sendMessage(id, {
-                text,
-                contextInfo: {
-                    mentionedJid: [participants[0]],
-                    externalAdReply: {
-                        mediaType: 1,
-                        previewType: 0,
-                        mediaUrl: config.bot.website,
-                        title: config.msg.watermark,
-                        renderLargerThumbnail: true,
-                        thumbnailUrl: await bot.core.profilePictureUrl(participants[0], "image").catch(() => config.bot.thumbnail),
-                        sourceUrl: config.bot.website
-                    }
-                }
-            });
+                const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
+                const userTag = `@${tools.general.getID(jid)}`;
 
-            if (type === "UserJoin" && groupDb?.text?.intro) {
+                const text = customText ?
+                    customText
+                    .replace(/%tag%/g, userTag)
+                    .replace(/%subject%/g, metadata.subject)
+                    .replace(/%description%/g, metadata.description) :
+                    (type === "UserJoin" ?
+                        quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
+                        quote(`👋 ${userTag} keluar dari grup ${metadata.subject}.`));
+
                 await bot.core.sendMessage(id, {
-                    text: groupDb.text.intro,
-                    mentions: [participants[0]]
+                    text,
+                    contextInfo: {
+                        mentionedJid: [jid],
+                        externalAdReply: {
+                            mediaType: 1,
+                            previewType: 0,
+                            mediaUrl: config.bot.website,
+                            title: config.msg.watermark,
+                            body: null,
+                            renderLargerThumbnail: true,
+                            thumbnailUrl: profilePictureUrl || config.bot.thumbnail,
+                            sourceUrl: config.bot.website
+                        }
+                    }
+                });
+
+                if (type === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(id, {
+                    text: groupDb?.text?.intro,
+                    mentions: [jid]
                 });
             }
         }
@@ -67,7 +73,7 @@ async function handleUserEvent(bot, m, type) {
 
 // Events utama bot
 module.exports = (bot) => {
-    // Penanganan event saat bot siap
+    // Event saat bot siap
     bot.ev.once(Events.ClientReady, async (m) => {
         consolefy.success(`${config.bot.name} by ${config.owner.name}, ready at ${m.user.id}`);
         const botRestart = await db.get("bot.restart") || {};
@@ -92,7 +98,7 @@ module.exports = (bot) => {
         };
     });
 
-    // Penanganan event ketika pesan muncul
+    // Event saat bot menerima pesan
     bot.ev.on(Events.MessagesUpsert, async (m, ctx) => {
         // Variabel umum
         const isGroup = ctx.isGroup();
@@ -119,11 +125,26 @@ module.exports = (bot) => {
         if (isGroup || isPrivate) {
             config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"; // Penangan pada ukuran basis data
 
+            // Penanganan basis data pengguna
+            const {
+                coin,
+                level,
+                ...otherUserDb
+            } = userDb || {};
+            const newUserDb = {
+                coin: (isOwner || isPremium) ? 0 : tools.general.clamp(coin || 1000, 0, 10000),
+                level: tools.general.clamp(level || 0, 0, 100),
+                uid: userDb?.uid || tools.general.generateUID(senderId),
+                xp: userDb?.xp || 0,
+                ...otherUserDb
+            };
+            await db.set(`user.${senderId}`, newUserDb);
+
             if (isCmd.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd.prefix + isCmd.didyoumean)}.`)); // Did you mean?
 
             // Perintah khusus Owner
             if (isOwner && m.content) {
-                // Perintah Eval: Jalankan kode JavaScript
+                // Perintah Eval (Jalankan kode JavaScript)
                 if (m.content.startsWith("==> ") || m.content.startsWith("=> ")) {
                     const code = m.content.slice(m.content.startsWith("==> ") ? 4 : 3);
                     try {
@@ -135,7 +156,7 @@ module.exports = (bot) => {
                     }
                 }
 
-                // Perintah Exec: Jalankan perintah shell
+                // Perintah Exec: (Jalankan perintah shell)
                 if (m.content.startsWith("$ ")) {
                     const command = m.content.slice(2);
                     try {
@@ -148,7 +169,7 @@ module.exports = (bot) => {
                 }
             }
 
-            // Penanganan AFK: Pengguna yang disebutkan atau di-quote
+            // Penanganan AFK (Pengguna yang disebutkan atau di-quote)
             const userAFKJids = ctx.quoted?.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
             if (userAFKJids.length > 0) {
                 for (const userAFKJid of userAFKJids) {
@@ -160,7 +181,7 @@ module.exports = (bot) => {
                 }
             }
 
-            // Penanganan AFK: Menghapus status AFK pengguna yang mengirim pesan
+            // Penanganan AFK (Menghapus status AFK pengguna yang mengirim pesan)
             const senderID = tools.general.getID(senderId);
             const userAFK = await db.get(`user.${senderID}.afk`) || {};
             if (userAFK?.reason && userAFK?.timestamp) {
@@ -173,10 +194,11 @@ module.exports = (bot) => {
             }
         }
 
-        // Penanganan grup
+        // Penanganan obrolan grup
         if (isGroup && !m.key.fromMe) {
             const now = Date.now();
 
+            // Penanganan antilink 
             if (groupDb?.option?.antilink && await tools.general.isUrl(m.content) && !await ctx.group().isctx.senderAdmin()) {
                 await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
                 await ctx.deleteMessage(m.key);
@@ -192,9 +214,7 @@ module.exports = (bot) => {
                     const apiUrl = tools.api.createUrl("fasturl", "/tool/imagechecker", {
                         url: uploadUrl
                     });
-                    const {
-                        data
-                    } = await axios.get(apiUrl);
+                    const result await axios.get(apiUrl);
 
                     if (data.results.status === "NSFW") {
                         await ctx.reply(`⛔ Jangan kirim NSFW!`);
@@ -247,8 +267,9 @@ module.exports = (bot) => {
             }
         }
 
-        // Penanganan menfess di pesan pribadi
+        // Penanganan obrolan pribadi
         if (isPrivate && !m.key.fromMe) {
+            // Penanganan menfess
             const allMenfessDb = await db.get("menfess") || {};
             if (!isCmd || isCmd.didyoumean) {
                 const menfessEntries = Object.entries(allMenfessDb);
@@ -275,7 +296,37 @@ module.exports = (bot) => {
         }
     });
 
-    // Penanganan peristiwa pengguna bergabung atau keluar dari grup
+    // Event saat bot menerima panggilan
+    bot.ev.on(Events.Call, async (calls) => {
+        if (!config.system.antiCall) return;
+
+        for (let call of calls) {
+            if (call.status !== "offer") continue;
+
+            const vcard = new VCardBuilder()
+                .setFullName(config.owner.name)
+                .setOrg(config.owner.organization)
+                .setNumber(config.owner.id).build();
+            let rejectionMessage = await bot.core.sendMessage(call.from, {
+                text: `Saat ini, kami tidak dapat menerima panggilan ${call.isVideo ? 'video' : 'suara'}.\n` +
+                    `Jika Anda memerlukan bantuan, silakan menghubungi Owner.`,
+                mentions: [call.from]
+            });
+            await bot.core.sendMessage(call.from, {
+                contacts: {
+                    displayName: config.owner.name,
+                    contacts: [{
+                        vcard
+                    }]
+                }
+            }, {
+                quoted: rejectionMessage
+            });
+            await bot.core.rejectCall(call.id, call.from);
+        }
+    });
+
+    // Event saat pengguna bergabung atau keluar dari grup
     bot.ev.on(Events.UserJoin, async (m) => handleUserEvent(bot, m, "UserJoin"));
     bot.ev.on(Events.UserLeave, async (m) => handleUserEvent(bot, m, "UserLeave"));
 };
