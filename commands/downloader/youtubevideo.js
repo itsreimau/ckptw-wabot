@@ -26,13 +26,11 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agung", "/api/youtube-video", {
                 url
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data.result.downloadUrl;
 
             return await ctx.reply({
                 video: {
-                    url: data.result.downloadUrl
+                    url: result
                 },
                 mimetype: mime.lookup("mp4")
             });

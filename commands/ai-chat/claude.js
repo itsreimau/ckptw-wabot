@@ -18,8 +18,7 @@ module.exports = {
         );
 
         try {
-            const senderId = tools.general.getID(ctx.sender.jid);
-            const senderUid = await db.get(`user.${senderId}.uid`) || "guest";
+            const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
             const apiUrl = tools.api.createUrl("bk9", "/ai/claude-sonnet", {
                 q: input,
                 userId: senderUid

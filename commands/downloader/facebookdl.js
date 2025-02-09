@@ -28,7 +28,7 @@ module.exports = {
             });
             const {
                 data
-            } = (await axios.get(apiUrl));
+            } = (await axios.get(apiUrl)).data;
 
             return await ctx.reply({
                 video: {

@@ -22,12 +22,12 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const videoId = new URL(url).searchParams.get("id");
-            const videoUrl = `https://cdn.videy.co/${videoId}.mp4`;
+            const id = new URL(url).searchParams.get("id");
+            const result = `https://cdn.videy.co/${id}.mp4`;
 
             return await ctx.reply({
                 video: {
-                    url: videoUrl
+                    url: result
                 },
                 mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +

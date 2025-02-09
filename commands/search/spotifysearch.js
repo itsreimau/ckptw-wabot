@@ -20,19 +20,15 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/search/tracks", {
+            const apiUrl = tools.api.createUrl("archive", "/search/spotify", {
                 q: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const data = (await axios.get(apiUrl)).data.result;
 
             const resultText = data.map((d) =>
-                `${quote(`Judul: ${d.title}`)}\n` +
-                `${quote(`Artis: ${d.artist}`)}\n` +
-                `${quote(`Album: ${d.album}`)}\n` +
-                `${quote(`Durasi: ${d.duration}`)}\n` +
-                `${quote(`URL: ${d.url}`)}`
+                `${quote(`Judul: ${d.trackName}`)}\n` +
+                `${quote(`Artis: ${d.artistName}`)}\n` +
+                `${quote(`URL: ${d.externalUrl}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

@@ -26,13 +26,11 @@ module.exports = {
             const apiUrl = tools.api.createUrl("siputzx", "/api/d/soundcloud", {
                 url
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data.url;
 
             return await ctx.reply({
                 audio: {
-                    url: data.url
+                    url: result
                 },
                 mimetype: mime.lookup("mp3")
             });

@@ -26,9 +26,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("vapis", "/api/igdl", {
                 url
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
             for (const media of data) {
                 const isImage = media.type === "image";

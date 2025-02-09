@@ -23,16 +23,14 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("nasirxml", "/download/ytmp3", {
+            const apiUrl = tools.api.createUrl("agung", "/api/youtube-audio", {
                 url
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data.result.downloadUrl;
 
             return await ctx.reply({
                 audio: {
-                    url: data.result.downloadUrl
+                    url: result
                 },
                 mimetype: mime.lookup("mp3")
             });

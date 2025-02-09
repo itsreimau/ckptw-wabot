@@ -18,8 +18,7 @@ module.exports = {
         );
 
         try {
-            const senderId = tools.general.getID(ctx.sender.jid);
-            const senderUid = await db.get(`user.${senderId}.uid`) || "guest";
+            const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
             const apiUrl = tools.api.createUrl("fasturl", "/aillm/bagoodex", {
                 ask: input,
                 style: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`, // Dapat diubah sesuai keinginan Anda

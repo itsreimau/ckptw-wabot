@@ -4,7 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "llama",
+    name: "qwen",
     category: "ai-chat",
     permissions: {
         coin: 10
@@ -18,12 +18,11 @@ module.exports = {
         );
 
         try {
-            const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
-            const apiUrl = tools.api.createUrl("bk9", "/ai/llama3", {
-                q: input,
-                userId: senderUid
+            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/qwen257b", {
+                prompt: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`, // Dapat diubah sesuai keinginan Anda
+                text: input
             });
-            const result = (await axios.get(apiUrl)).data.BK9;
+            const result = (await axios.get(apiUrl)).data.data;
 
             return await ctx.reply(result);
         } catch (error) {

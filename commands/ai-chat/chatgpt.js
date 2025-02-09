@@ -25,8 +25,7 @@ module.exports = {
 
         try {
             const style = `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`; // Dapat diubah sesuai keinginan Anda
-            const senderId = tools.general.getID(ctx.sender.jid);
-            const senderUid = await db.get(`user.${senderId}.uid`) || "guest";
+            const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
 
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();

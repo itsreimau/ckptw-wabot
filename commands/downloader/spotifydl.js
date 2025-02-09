@@ -22,13 +22,14 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("https://spotifyapi.caliphdev.com", "/api/download/track", {
+            const apiUrl = tools.api.createUrl("archive", "/api/download/track", {
                 url
             });
+            const result = (await axios.get(apiUrl)).data.result.data.download;
 
             return await ctx.reply({
                 audio: {
-                    url: apiUrl
+                    url: result
                 },
                 mimetype: mime.lookup("mp3"),
                 caption: `${quote(`URL: ${url}`)}\n` +
