@@ -75,7 +75,7 @@ module.exports = {
             }
 
             if (source === "spotify") {
-                const searchApiUrl = tools.api.createUrl("archive", "/api/search/tracks", {
+                const searchApiUrl = tools.api.createUrl("archive", "/download/spotify", {
                     q: query
                 });
                 const searchData = (await axios.get(searchApiUrl)).data.result;
@@ -89,7 +89,7 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("archive", "/api/download/track", {
+                const downloadApiUrl = tools.api.createUrl("archive", "/search/spotify", {
                     url: result.url
                 });
                 const downloadResult = (await axios.get(downloadApiUrl)).data.result.data.download;

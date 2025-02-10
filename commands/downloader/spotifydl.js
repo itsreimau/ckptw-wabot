@@ -22,7 +22,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/download/track", {
+            const apiUrl = tools.api.createUrl("archive", "/download/spotify", {
                 url
             });
             const result = (await axios.get(apiUrl)).data.result.data.download;
