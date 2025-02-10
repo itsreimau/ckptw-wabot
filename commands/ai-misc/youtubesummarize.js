@@ -7,7 +7,9 @@ module.exports = {
     name: "youtubesummarize",
     aliases: ["ytsummarize"],
     category: "ai-misc",
-    permissions: {},
+    permissions: {
+        coin: 10
+    },
     code: async (ctx) => {
         const url = ctx.args[0] || null;
 

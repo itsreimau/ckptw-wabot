@@ -6,7 +6,9 @@ const axios = require("axios");
 module.exports = {
     name: "lepton",
     category: "ai-chat",
-    permissions: {},
+    permissions: {
+        coin: 10
+    },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 

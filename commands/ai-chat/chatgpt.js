@@ -7,7 +7,9 @@ module.exports = {
     name: "chatgpt",
     aliases: ["ai", "chatai", "gpt", "openai"],
     category: "ai-chat",
-    permissions: {},
+    permissions: {
+        coin: 10
+    },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 

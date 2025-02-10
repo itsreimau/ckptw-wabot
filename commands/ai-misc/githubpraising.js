@@ -7,7 +7,9 @@ module.exports = {
     name: "githubpraising",
     aliases: ["ghpraising"],
     category: "ai-misc",
-    permissions: {},
+    permissions: {
+        coin: 10
+    },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 
