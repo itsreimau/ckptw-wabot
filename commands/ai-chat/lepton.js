@@ -6,9 +6,7 @@ const axios = require("axios");
 module.exports = {
     name: "lepton",
     category: "ai-chat",
-    permissions: {
-        coin: 10
-    },
+    permissions: {},
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 
@@ -18,10 +16,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/lepton", {
-                text: input
+            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/lepton", {
+                ask: input
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.result.answer;
 
             return await ctx.reply(result);
         } catch (error) {

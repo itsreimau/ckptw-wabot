@@ -4,12 +4,10 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "githubdl",
-    aliases: ["ghdl", "gitclone"],
-    category: "downloader",
-    permissions: {
-        coin: 10
-    },
+    name: "youtubesummarize",
+    aliases: ["ytsummarize"],
+    category: "ai-misc",
+    permissions: {},
     code: async (ctx) => {
         const url = ctx.args[0] || null;
 
@@ -22,23 +20,13 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("diioffc", "/api/download/gitclone", {
-                url
+            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/ytsummarize-v1", {
+                url,
+                language: ctx.sender.jid.startsWith("62") ? "indonesian" : "english"
             });
-            const {
-                result
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.result.shortsummarize;
 
-            return await ctx.reply({
-                document: {
-                    url: result.urllink
-                },
-                caption: `${quote(`URL: ${url}`)}\n` +
-                    "\n" +
-                    config.msg.footer,
-                fileName: result.filename,
-                mimetype: mime.lookup(result.filename) || "application/octet-stream"
-            });
+            return await ctx.reply(result);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

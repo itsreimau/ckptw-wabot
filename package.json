@@ -1,6 +1,6 @@
 {
   "name": "ckptw-wabot",
-  "version": "3.8.3",
+  "version": "3.8.4",
   "description": "WhatsApp Bot with @mengkodingan/ckptw.",
   "main": "index.js",
   "directories": {
@@ -39,7 +39,7 @@
     "form-data": "^4.0.1",
     "jimp": "^0.16.1",
     "jsdom": "^26.0.0",
-    "link-preview-js": "^3.0.13",
+    "link-preview-js": "^3.0.14",
     "mime-types": "^2.1.35",
     "moment-timezone": "^0.5.47",
     "simpl.db": "^2.13.0",

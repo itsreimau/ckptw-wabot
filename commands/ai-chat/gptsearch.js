@@ -4,8 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "chatgpt",
-    aliases: ["ai", "chatai", "gpt", "openai"],
+    name: "gptsearch",
     category: "ai-chat",
     permissions: {},
     code: async (ctx) => {
@@ -30,7 +29,7 @@ module.exports = {
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadUrl = await tools.general.upload(buffer);
-                const apiUrl = tools.api.createUrl("fasturl", "/aillm/gpt-4o", {
+                const apiUrl = tools.api.createUrl("fasturl", "/aillm/gptsearch", {
                     ask: input,
                     style,
                     imageUrl: uploadUrl,
@@ -40,7 +39,7 @@ module.exports = {
 
                 return await ctx.reply(result);
             } else {
-                const apiUrl = tools.api.createUrl("fasturl", "/aillm/gpt-4o", {
+                const apiUrl = tools.api.createUrl("fasturl", "/aillm/gptsearch", {
                     ask: input,
                     style,
                     sessionId: senderUid

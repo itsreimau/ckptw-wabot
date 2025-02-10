@@ -4,7 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "aoyo",
+    name: "felo",
     category: "ai-chat",
     permissions: {},
     code: async (ctx) => {
@@ -16,7 +16,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/aoyo", {
+            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/felo", {
                 ask: input
             });
             const result = (await axios.get(apiUrl)).data.result.answer;

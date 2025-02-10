@@ -19,8 +19,6 @@ module.exports = {
             `${quote("Caliph Dev (https://github.com/caliph91)")}\n` +
             `${quote("ZTRdiamond (https://github.com/ZTRdiamond)")}\n` +
             `${quote("FastURL (alias Hikaru) (https://github.com/fasturl)")}\n` +
-            `${quote("ZTRdiamond (https://github.com/ZTRdiamond)")}\n` +
-            `${quote("Agungny (https://github.com/Agungny08)")}\n` +
             `${quote("Dan kepada semua pihak yang telah membantu dalam pengembangan bot ini.")}\n` +
             "\n" +
             config.msg.footer

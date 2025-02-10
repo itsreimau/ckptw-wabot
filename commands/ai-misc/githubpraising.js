@@ -4,25 +4,25 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "feloai",
-    aliases: ["felo"],
-    category: "ai-chat",
-    permissions: {
-        coin: 10
-    },
+    name: "githubpraising",
+    aliases: ["ghpraising"],
+    category: "ai-misc",
+    permissions: {},
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "apa itu bot whatsapp?"))
+            quote(tools.msg.generateCommandExample(ctx.used, "itsreimau"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/felo", {
-                query: input
+            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/github/praising", {
+                username: input,
+                profile: "false",
+                language: ctx.sender.jid.startsWith("62") ? "id" : "en"
             });
-            const result = (await axios.get(apiUrl)).data.data.answer;
+            const result = (await axios.get(apiUrl)).data.result.praising;
 
             return await ctx.reply(result);
         } catch (error) {

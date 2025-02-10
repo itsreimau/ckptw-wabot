@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "githubsearch",
-    aliases: ["github", "githubs"],
+    aliases: ["gh", "ghs", "github", "githubs"],
     category: "search",
     permissions: {
         coin: 10
