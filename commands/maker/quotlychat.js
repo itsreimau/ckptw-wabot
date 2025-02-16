@@ -25,15 +25,13 @@ module.exports = {
 
         try {
             const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-
             const apiUrl = tools.api.createUrl("fasturl", "/maker/quotly", {
                 name: ctx.sender.pushName || "-",
                 text: input,
                 avatar: profilePictureUrl,
                 bgColor: "#444444"
             });
-
-            const sticker = new Sticker(apiUrl, {
+            const result = new Sticker(apiUrl, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,
@@ -42,7 +40,7 @@ module.exports = {
                 quality: 50
             });
 
-            return await ctx.reply(await sticker.toMessage());
+            return await ctx.reply(await result.toMessage());
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

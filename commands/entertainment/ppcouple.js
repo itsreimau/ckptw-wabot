@@ -15,20 +15,18 @@ module.exports = {
         const apiUrl = tools.api.createUrl("otinxsandip", "/dp");
 
         try {
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data;
 
             return await Promise.all([
                 ctx.reply({
                     image: {
-                        url: data.male
+                        url: result.male
                     },
                     mimetype: mime.lookup("png")
                 }),
                 ctx.reply({
                     image: {
-                        url: data.female
+                        url: result.female
                     },
                     mimetype: mime.lookup("png")
                 })

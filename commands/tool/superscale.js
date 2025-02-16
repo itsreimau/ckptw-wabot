@@ -20,7 +20,7 @@ module.exports = {
             tools.general.checkQuotedMedia(ctx.quoted, "image")
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return ctx.reply(
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send", "reply"], "image"))}\n` +
             quote(tools.msg.generatesFlagInformation({
                 "-r <number>": "Atur faktor resize (tersedia: 2, 4, 8, 16 | default: 2).",
@@ -49,13 +49,11 @@ module.exports = {
                 resize: flag.resize || 2,
                 anime: flag.anime
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
                 image: {
-                    url: data.result
+                    url: result
                 },
                 mimetype: mime.lookup("png")
             });

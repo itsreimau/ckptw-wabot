@@ -32,13 +32,11 @@ module.exports = {
                 text: input,
                 to: langCode
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
                 audio: {
-                    url: data.result
+                    url: result
                 },
                 mimetype: mime.lookup("mp3"),
                 ptt: true

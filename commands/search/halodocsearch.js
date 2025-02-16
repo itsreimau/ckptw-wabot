@@ -22,12 +22,12 @@ module.exports = {
             const apiUrl = tools.api.createUrl("diioffc", "/api/search/halodoc", {
                 query: input
             });
-            const data = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.result;
 
-            const resultText = data.map((d) =>
-                `${quote(`Judul: ${d.judul}`)}\n` +
-                `${quote(`Deskripsi: ${d.deskripsi}`)}\n` +
-                `${quote(`URL: ${d.tautan}`)}`
+            const resultText = result.map((r) =>
+                `${quote(`Judul: ${r.judul}`)}\n` +
+                `${quote(`Deskripsi: ${r.deskripsi}`)}\n` +
+                `${quote(`URL: ${r.tautan}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

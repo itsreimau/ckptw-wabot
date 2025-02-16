@@ -22,10 +22,10 @@ module.exports = {
             const apiUrl = tools.api.createUrl("bk9", "/search/wiki", {
                 query: input
             });
-            const data = (await axios.get(apiUrl)).data.BK9[0];
+            const result = (await axios.get(apiUrl)).data.BK9[0].BK9;
 
             return await ctx.reply(
-                `${quote(data.BK9)}\n` +
+                `${quote(result)}\n` +
                 "\n" +
                 config.msg.footer
             );

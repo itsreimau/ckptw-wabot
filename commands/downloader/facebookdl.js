@@ -26,13 +26,11 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/facebook", {
                 url
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
             return await ctx.reply({
                 video: {
-                    url: data.hd || data.sd
+                    url: result.hd || result.sd
                 },
                 mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
@@ -41,8 +39,8 @@ module.exports = {
             });
         } catch (error) {
             consolefy.error(`Error: ${error}`);
-            if (error.status !== 200) return ctx.reply(config.msg.notFound);
-            return ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
+            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

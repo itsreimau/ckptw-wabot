@@ -15,23 +15,21 @@ module.exports = {
         const apiUrl = tools.api.createUrl("https://data.bmkg.go.id", "/DataMKG/TEWS/autogempa.json");
 
         try {
-            const {
-                gempa
-            } = (await axios.get(apiUrl)).data.Infogempa;
+            const result = (await axios.get(apiUrl)).data.Infogempa.gempa;
 
             return await ctx.reply({
                 image: {
-                    url: tools.api.createUrl("https://data.bmkg.go.id", `/DataMKG/TEWS/${gempa.Shakemap}`)
+                    url: tools.api.createUrl("https://data.bmkg.go.id", `/DataMKG/TEWS/${result.Shakemap}`)
                 },
                 mimetype: mime.lookup("png"),
-                caption: `${quote(gempa.Wilayah)}\n` +
+                caption: `${quote(result.Wilayah)}\n` +
                     `${quote("─────")}\n` +
-                    `${quote(`Tanggal: ${gempa.Tanggal}`)}\n` +
-                    `${quote(`Potensi: ${gempa.Potensi}`)}\n` +
-                    `${quote(`Magnitude: ${gempa.Magnitude}`)}\n` +
-                    `${quote(`Kedalaman: ${gempa.Kedalaman}`)}\n` +
-                    `${quote(`Koordinat: ${gempa.Coordinates}`)}\n` +
-                    `${quote(`Dirasakan: ${gempa.Dirasakan}`)}\n` +
+                    `${quote(`Tanggal: ${result.Tanggal}`)}\n` +
+                    `${quote(`Potensi: ${result.Potensi}`)}\n` +
+                    `${quote(`Magnitude: ${result.Magnitude}`)}\n` +
+                    `${quote(`Kedalaman: ${result.Kedalaman}`)}\n` +
+                    `${quote(`Koordinat: ${result.Coordinates}`)}\n` +
+                    `${quote(`Dirasakan: ${result.Dirasakan}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

@@ -20,14 +20,11 @@ module.exports = {
 
         try {
             const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/SazumiVicky/cek-khodam/main/khodam/list.txt", {});
-            const {
-                data
-            } = await axios.get(apiUrl);
-            const khodam = tools.general.getRandomElement(data.trim().split("\n").filter(Boolean));
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.trim().split("\n").filter(Boolean));
 
             return await ctx.reply(
                 `${quote(`Nama: ${input}`)}\n` +
-                `${quote(`Khodam: ${khodam}`)}\n` +
+                `${quote(`Khodam: ${result}`)}\n` +
                 "\n" +
                 config.msg.footer
             );

@@ -22,12 +22,12 @@ module.exports = {
             const apiUrl = tools.api.createUrl("vapis", "/api/sfilesrc", {
                 q: input
             });
-            const data = (await axios.get(apiUrl)).data.data.files;
+            const result = (await axios.get(apiUrl)).data.data.files;
 
-            const resultText = data.map((d) =>
-                `${quote(`Nama: ${d.title}`)}\n` +
-                `${quote(`Ukuran: ${d.size}`)}\n` +
-                `${quote(`URL: ${d.id}`)}`
+            const resultText = result.map((r) =>
+                `${quote(`Nama: ${r.title}`)}\n` +
+                `${quote(`Ukuran: ${r.size}`)}\n` +
+                `${quote(`URL: ${r.id}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

@@ -17,10 +17,7 @@ module.exports = {
 
         try {
             const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/family100.json");
-            const {
-                data
-            } = await axios.get(apiUrl);
-            const result = tools.general.getRandomElement(data);
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data);
 
             const game = {
                 coin: {
@@ -67,8 +64,8 @@ module.exports = {
                     if (game.answers.size === 0) {
                         session.delete(ctx.id);
                         for (const participant of game.participants) {
-                            await db.add(`user.${participant}.coin`, game.coin.allAnswered);
-                            await db.add(`user.${participant}.winGame`, 1);
+                            db.add(`user.${participant}.coin`, game.coin.allAnswered);
+                            db.add(`user.${participant}.winGame`, 1);
                         }
                         await ctx.reply(quote(`🎉 Selamat! Semua jawaban telah terjawab! Setiap anggota yang menjawab mendapat ${game.coin.allAnswered} koin.`));
                         return collector.stop();

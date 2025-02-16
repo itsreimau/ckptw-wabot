@@ -23,11 +23,9 @@ module.exports = {
                 chat: input,
                 lang: ctx.sender.jid.startsWith("62") ? "id" : "en"
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data.answer;
 
-            return await ctx.reply(data.answer);
+            return await ctx.reply(result);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

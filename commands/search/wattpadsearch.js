@@ -22,16 +22,14 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/wattpad", {
                 message: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
-            const resultText = data.map((d) =>
-                `${quote(`Nama: ${d.title}`)}\n` +
-                `${quote(`Deskripsi: ${d.desc}`)}\n` +
-                `${quote(`Vote: ${d.vote}`)}\n` +
-                `${quote(`Bab: ${d.chapter}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
+            const resultText = result.map((r) =>
+                `${quote(`Nama: ${r.title}`)}\n` +
+                `${quote(`Deskripsi: ${r.desc}`)}\n` +
+                `${quote(`Vote: ${r.vote}`)}\n` +
+                `${quote(`Bab: ${r.chapter}`)}\n` +
+                `${quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

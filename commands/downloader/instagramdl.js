@@ -28,7 +28,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.data;
 
-            for (const media of data) {
+            for (const media of result) {
                 const isImage = media.type === "image";
                 const mediaType = isImage ? "image" : "video";
                 const extension = isImage ? "png" : "mp4";
@@ -42,7 +42,7 @@ module.exports = {
             }
         } catch (error) {
             consolefy.error(`Error: ${error}`);
-            if (error.status !== 200) return ctx.reply(config.msg.notFound);
+            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${errorMessage}`));
         }
     }

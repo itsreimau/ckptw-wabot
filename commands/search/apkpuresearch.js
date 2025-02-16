@@ -22,15 +22,13 @@ module.exports = {
             const apiUrl = tools.api.createUrl("vapis", "/api/apkpure", {
                 q: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
-            const resultText = data.map((d) =>
-                `${quote(`Nama: ${d.title}`)}\n` +
-                `${quote(`Pengembang: ${d.developer}`)}\n` +
-                `${quote(`Rating: ${d.rating}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
+            const resultText = result.map((r) =>
+                `${quote(`Nama: ${r.title}`)}\n` +
+                `${quote(`Pengembang: ${r.developer}`)}\n` +
+                `${quote(`Rating: ${r.rating}`)}\n` +
+                `${quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

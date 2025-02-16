@@ -36,12 +36,13 @@ if (config.bot.authAdapter.adapter === "default") {
     }
 }
 
+// Tetapkan konfigurasi dan alat ke variabel global
 Object.assign(global, {
     config,
     tools,
     consolefy: c,
     db
-}); // Tetapkan konfigurasi dan alat ke variabel global
+});
 
 c.log("Memulai..."); // Logging proses awal
 

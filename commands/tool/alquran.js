@@ -29,9 +29,7 @@ module.exports = {
 
         try {
             const apiUrl = tools.api.createUrl("https://equran.id", `/api/v2/surat/${surat}`);
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
             if (ayat) {
                 if (ayat.includes("-")) {
@@ -39,7 +37,7 @@ module.exports = {
 
                     if (isNaN(startAyat) || isNaN(endAyat) || startAyat < 1 || endAyat < startAyat) return await ctx.reply(quote(`❎ Rentang ayat tidak valid!`));
 
-                    const verses = data.ayat.filter(d => d.nomorAyat >= startAyat && d.nomorAyat <= endAyat);
+                    const verses = result.ayat.filter(d => d.nomorAyat >= startAyat && d.nomorAyat <= endAyat);
                     if (!verses.length) return await ctx.reply(quote(`❎ Ayat dalam rentang ${startAyat}-${endAyat} tidak ada!`));
 
                     const versesText = verses.map(v =>
@@ -48,8 +46,8 @@ module.exports = {
                         `${italic(v.teksIndonesia)}`
                     ).join("\n");
                     return await ctx.reply(
-                        `${bold(`Surah ${data.namaLatin}`)}\n` +
-                        `${quote(data.arti)}\n` +
+                        `${bold(`Surah ${result.namaLatin}`)}\n` +
+                        `${quote(result.arti)}\n` +
                         `${quote("─────")}\n` +
                         `${versesText}\n` +
                         "\n" +
@@ -60,7 +58,7 @@ module.exports = {
                 const singleAyat = parseInt(ayat);
                 if (isNaN(singleAyat) || singleAyat < 1) return await ctx.reply(quote(`❎ Ayat harus berupa nomor yang valid dan lebih besar dari 0!`));
 
-                const verse = data.ayat.find(d => d.nomorAyat === singleAyat);
+                const verse = result.ayat.find(d => d.nomorAyat === singleAyat);
                 if (!verse) return await ctx.reply(quote(`❎ Ayat ${singleAyat} tidak ada!`));
 
                 return await ctx.reply(
@@ -71,14 +69,14 @@ module.exports = {
                 );
             }
 
-            const versesText = data.ayat.map(d =>
+            const versesText = result.ayat.map(d =>
                 `${bold(`Ayat ${d.nomorAyat}:`)}\n` +
                 `${d.teksArab} (${d.teksLatin})\n` +
                 `${italic(d.teksIndonesia)}`
             ).join("\n");
             return await ctx.reply(
-                `${bold(`Surah ${data.namaLatin}`)}\n` +
-                `${quote(data.arti)}\n` +
+                `${bold(`Surah ${result.namaLatin}`)}\n` +
+                `${quote(result.arti)}\n` +
                 `${quote("─────")}\n` +
                 `${versesText}\n` +
                 "\n" +

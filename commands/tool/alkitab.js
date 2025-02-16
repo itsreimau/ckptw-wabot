@@ -27,20 +27,18 @@ module.exports = {
 
         try {
             const apiUrl = tools.api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`);
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
-            const resultText = data.verses.map((d) =>
-                `${quote(`Ayat: ${d.verse}`)}\n` +
-                `${quote(`${d.content}`)}`
+            const resultText = result.verses.map((r) =>
+                `${quote(`Ayat: ${r.verse}`)}\n` +
+                `${quote(`${r.content}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`
             );
             return await ctx.reply(
-                `${quote(`Nama: ${data.book.name}`)}\n` +
-                `${quote(`Bab: ${data.book.chapter}`)}\n` +
+                `${quote(`Nama: ${result.book.name}`)}\n` +
+                `${quote(`Bab: ${result.book.chapter}`)}\n` +
                 `${quote("─────")}\n` +
                 `${resultText}\n` +
                 "\n" +

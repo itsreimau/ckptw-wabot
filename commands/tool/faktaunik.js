@@ -13,10 +13,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const apiUrl = tools.api.createUrl("https://cinnabar.icaksh.my.id", "/public/daily/tawiki");
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
-            const result = tools.general.getRandomElement(data.info);
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.info);
 
             return await ctx.reply(quote(`Tahukah Anda? ${result.tahukah_anda}`));
         } catch (error) {

@@ -22,21 +22,19 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/kodepos", {
                 message: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
-            const resultText = data.map((d) =>
-                `${quote(`ID: ${d.id}`)}\n` +
-                `${quote(`Kode Kemendagri: ${d.kode_kemendagri}`)}\n` +
-                `${quote(`Kode Pos: ${d.kode_pos}`)}\n` +
-                `${quote(`Kelurahan: ${d.kelurahan}`)}\n` +
-                `${quote(`Kecamatan: ${d.kecamatan}`)}\n` +
-                `${quote(`Kota: ${d.kota}`)}\n` +
-                `${quote(`Zona Waktu: ${d.zona_waktu}`)}\n` +
-                `${quote(`Lintang: ${d.lintang}`)}\n` +
-                `${quote(`Bujur: ${d.bujur}`)}\n` +
-                `${quote(`Elevasi: ${d.elevasi}`)}`
+            const resultText = result.map((r) =>
+                `${quote(`ID: ${r.id}`)}\n` +
+                `${quote(`Kode Kemendagri: ${r.kode_kemendagri}`)}\n` +
+                `${quote(`Kode Pos: ${r.kode_pos}`)}\n` +
+                `${quote(`Kelurahan: ${r.kelurahan}`)}\n` +
+                `${quote(`Kecamatan: ${r.kecamatan}`)}\n` +
+                `${quote(`Kota: ${r.kota}`)}\n` +
+                `${quote(`Zona Waktu: ${r.zona_waktu}`)}\n` +
+                `${quote(`Lintang: ${r.lintang}`)}\n` +
+                `${quote(`Bujur: ${r.bujur}`)}\n` +
+                `${quote(`Elevasi: ${r.elevasi}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

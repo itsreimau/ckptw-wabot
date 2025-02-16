@@ -14,13 +14,11 @@ module.exports = {
         const apiUrl = tools.api.createUrl("https://api.waifu.pics", `/sfw/shinobu`);
 
         try {
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data.url;
 
             return await ctx.reply({
                 image: {
-                    url: data.url
+                    url: result
                 },
                 mimetype: mime.lookup("png")
             });

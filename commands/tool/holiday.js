@@ -18,13 +18,11 @@ module.exports = {
             const apiUrl = tools.api.createUrl("https://api-harilibur.vercel.app", "/api", {
                 month
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data;
 
-            const resultText = data.reverse().map((d) => {
-                const formattedDate = moment.tz(d.holiday_date, "Asia/Jakarta").locale("id").format("dddd, DD MMMM YYYY");
-                return `${bold(d.holiday_name)}\n` +
+            const resultText = result.reverse().map((r) => {
+                const formattedDate = moment.tz(r.holiday_date, "Asia/Jakarta").locale("id").format("dddd, DD MMMM YYYY");
+                return `${bold(r.holiday_name)}\n` +
                     quote(formattedDate);
             }).join(
                 "\n" +

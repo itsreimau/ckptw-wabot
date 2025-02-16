@@ -23,12 +23,12 @@ module.exports = {
             const apiUrl = tools.api.createUrl("archive", "/search/spotify", {
                 q: input
             });
-            const data = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.result;
 
-            const resultText = data.map((d) =>
-                `${quote(`Judul: ${d.trackName}`)}\n` +
-                `${quote(`Artis: ${d.artistName}`)}\n` +
-                `${quote(`URL: ${d.externalUrl}`)}`
+            const resultText = result.map((r) =>
+                `${quote(`Judul: ${r.trackName}`)}\n` +
+                `${quote(`Artis: ${r.artistName}`)}\n` +
+                `${quote(`URL: ${r.externalUrl}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

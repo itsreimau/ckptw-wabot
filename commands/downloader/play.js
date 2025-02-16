@@ -51,18 +51,17 @@ module.exports = {
                 const searchApiUrl = tools.api.createUrl("siputzx", "/api/s/soundcloud", {
                     query
                 });
-                const searchData = (await axios.get(searchApiUrl)).data.data;
-                const result = searchData[searchIndex];
+                const searchResult = (await axios.get(searchApiUrl)).data.data[searchIndex];
 
                 await ctx.reply(
-                    `${quote(`Judul: ${result.permalink}`)}\n` +
-                    `${quote(`URL: ${result.link}`)}\n` +
+                    `${quote(`Judul: ${searchResult.permalink}`)}\n` +
+                    `${quote(`URL: ${searchResult.link}`)}\n` +
                     "\n" +
                     config.msg.footer
                 );
 
                 const downloadApiUrl = tools.api.createUrl("siputzx", "/api/d/soundcloud", {
-                    url: result.link
+                    url: searchResult.link
                 });
                 const downloadResult = (await axios.get(downloadApiUrl)).data.data.url;
 
@@ -78,19 +77,18 @@ module.exports = {
                 const searchApiUrl = tools.api.createUrl("archive", "/download/spotify", {
                     q: query
                 });
-                const searchData = (await axios.get(searchApiUrl)).data.result;
-                const result = searchData[searchIndex];
+                const searchResult = (await axios.get(searchApiUrl)).data.result[searchIndex];
 
                 await ctx.reply(
-                    `${quote(`Judul: ${result.trackName}`)}\n` +
-                    `${quote(`Artis: ${result.artistName}`)}\n` +
-                    `${quote(`URL: ${result.externalUrl}`)}\n` +
+                    `${quote(`Judul: ${searchResult.trackName}`)}\n` +
+                    `${quote(`Artis: ${searchResult.artistName}`)}\n` +
+                    `${quote(`URL: ${searchResult.externalUrl}`)}\n` +
                     "\n" +
                     config.msg.footer
                 );
 
                 const downloadApiUrl = tools.api.createUrl("archive", "/search/spotify", {
-                    url: result.url
+                    url: searchResult.url
                 });
                 const downloadResult = (await axios.get(downloadApiUrl)).data.result.data.download;
 
@@ -106,19 +104,18 @@ module.exports = {
                 const searchApiUrl = tools.api.createUrl("agatz", "/api/ytsearch", {
                     message: query
                 });
-                const searchData = (await axios.get(searchApiUrl)).data.data;
-                const result = searchData[searchIndex];
+                const searchResult = (await axios.get(searchApiUrl)).data.data[searchIndex];
 
                 await ctx.reply(
-                    `${quote(`Judul: ${result.title}`)}\n` +
-                    `${quote(`Artis: ${result.author.name}`)}\n` +
-                    `${quote(`URL: ${result.url}`)}\n` +
+                    `${quote(`Judul: ${searchResult.title}`)}\n` +
+                    `${quote(`Artis: ${searchResult.author.name}`)}\n` +
+                    `${quote(`URL: ${searchResult.url}`)}\n` +
                     "\n" +
                     config.msg.footer
                 );
 
                 const downloadApiUrl = tools.api.createUrl("agung", "/api/youtube-audio", {
-                    url: result.url
+                    url: searchResult.url
                 });
                 const downloadResult = (await axios.get(downloadApiUrl)).data.result.downloadUrl;
 

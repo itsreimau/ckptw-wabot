@@ -22,18 +22,16 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/github", {
                 message: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
-            const resultText = data.map((d) =>
-                `${quote(`Nama: ${d.fullName}`)}\n` +
-                `${quote(`Deskripsi: ${d.description}`)}\n` +
-                `${quote(`Watchers: ${d.watchers}`)}\n` +
-                `${quote(`Jumlah Stargazers: ${d.stargazersCount}`)}\n` +
-                `${quote(`Issues terbuka: ${d.openIssues}`)}\n` +
-                `${quote(`Forks: ${d.forks}`)}\n` +
-                `${quote(`URL: ${d.htmlUrl}`)}`
+            const resultText = result.map((r) =>
+                `${quote(`Nama: ${r.fullName}`)}\n` +
+                `${quote(`Deskripsi: ${r.description}`)}\n` +
+                `${quote(`Watchers: ${r.watchers}`)}\n` +
+                `${quote(`Jumlah Stargazers: ${r.stargazersCount}`)}\n` +
+                `${quote(`Issues terbuka: ${r.openIssues}`)}\n` +
+                `${quote(`Forks: ${r.forks}`)}\n` +
+                `${quote(`URL: ${r.htmlUrl}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

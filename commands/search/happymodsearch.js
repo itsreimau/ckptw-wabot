@@ -22,12 +22,12 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/happymod", {
                 message: input
             });
-            const data = (await axios.get(apiUrl)).data.data.hsl;
+            const result = (await axios.get(apiUrl)).data.data.hsl;
 
-            const resultText = data.map((d) =>
-                `${quote(`Nama: ${d.name}`)}\n` +
-                `${quote(`Versi: ${d.version.slice(0, -1)}`)}\n` +
-                `${quote(`URL: ${d.url}`)}`
+            const resultText = result.map((r) =>
+                `${quote(`Nama: ${r.name}`)}\n` +
+                `${quote(`Versi: ${r.version.slice(0, -1)}`)}\n` +
+                `${quote(`URL: ${r.url}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

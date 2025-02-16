@@ -26,11 +26,9 @@ module.exports = {
                 apikey: "helloworld", // APIKey disediakan oleh OCRSpace
                 url: uploadUrl
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data.ParsedResults[0].ParsedText;
 
-            return await ctx.reply(data.ParsedResults[0].ParsedText);
+            return await ctx.reply(result);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

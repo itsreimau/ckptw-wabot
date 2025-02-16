@@ -26,11 +26,9 @@ module.exports = {
             const apiUrl = tools.api.createUrl("fasturl", "/aiimage/imagetoprompt", {
                 url: uploadUrl
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data.result;
 
-            return await ctx.reply(data.result);
+            return await ctx.reply(result);
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

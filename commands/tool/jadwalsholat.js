@@ -20,16 +20,14 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/jadwalsholat", {
                 kota: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
             return await ctx.reply(
-                `${quote(`Subuh: ${data.subuh}`)}\n` +
-                `${quote(`Dhuhur: ${data.dhuhur}`)}\n` +
-                `${quote(`Ashar: ${data.ashar}`)}\n` +
-                `${quote(`Maghrib: ${data.maghrib}`)}\n` +
-                `${quote(`Isya: ${data.isya}`)}\n` +
+                `${quote(`Subuh: ${result.subuh}`)}\n` +
+                `${quote(`Dhuhur: ${result.dhuhur}`)}\n` +
+                `${quote(`Ashar: ${result.ashar}`)}\n` +
+                `${quote(`Maghrib: ${result.maghrib}`)}\n` +
+                `${quote(`Isya: ${result.isya}`)}\n` +
                 "\n" +
                 config.msg.footer
             );

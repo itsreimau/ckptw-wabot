@@ -38,7 +38,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("https://api.memegen.link", `/images/custom/${top}/${bottom}.png`, {
                 background: uploadUrl
             });
-            const sticker = new Sticker(apiUrl, {
+            const result = new Sticker(apiUrl, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,
@@ -47,7 +47,7 @@ module.exports = {
                 quality: 50
             });
 
-            return await ctx.reply(await sticker.toMessage());
+            return await ctx.reply(await result.toMessage());
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

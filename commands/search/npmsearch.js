@@ -22,16 +22,14 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/npm", {
                 message: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
-            const resultText = data.map((d) =>
-                `${quote(`Nama: ${d.name}`)}\n` +
-                `${quote(`Versi: ${d.version}`)}\n` +
-                `${quote(`Dekripsi: ${d.description}`)}\n` +
-                `${quote(`Author: ${d.author}`)}\n` +
-                `${quote(`URL: ${d.npmLink}`)}`
+            const resultText = result.map((r) =>
+                `${quote(`Nama: ${r.name}`)}\n` +
+                `${quote(`Versi: ${r.version}`)}\n` +
+                `${quote(`Dekripsi: ${r.description}`)}\n` +
+                `${quote(`Author: ${r.author}`)}\n` +
+                `${quote(`URL: ${r.npmLink}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

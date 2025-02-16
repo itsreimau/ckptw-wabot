@@ -26,27 +26,23 @@ module.exports = {
             const apiUrl = tools.api.createUrl("vapis", "/api/threads", {
                 url
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data.media;
 
-            if (data.media && data.media.length > 0) {
-                for (const media of data.media) {
-                    if (media.type === "Video" && media.videoUrl) {
-                        await ctx.reply({
-                            video: {
-                                url: media.videoUrl
-                            },
-                            mimetype: mime.lookup("mp4")
-                        });
-                    } else if (media.type === "Image" && media.url) {
-                        await ctx.reply({
-                            image: {
-                                url: media.url
-                            },
-                            mimetype: mime.lookup("png")
-                        });
-                    }
+            for (const media of result) {
+                if (media.type === "Video" && media.videoUrl) {
+                    await ctx.reply({
+                        video: {
+                            url: media.videoUrl
+                        },
+                        mimetype: mime.lookup("mp4")
+                    });
+                } else if (media.type === "Image" && media.url) {
+                    await ctx.reply({
+                        image: {
+                            url: media.url
+                        },
+                        mimetype: mime.lookup("png")
+                    });
                 }
             }
         } catch (error) {

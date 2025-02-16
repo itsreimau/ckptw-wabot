@@ -22,21 +22,18 @@ module.exports = {
             const apiUrl = tools.api.createUrl("https://api.jikan.moe", "/v4/manga", {
                 q: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
-            const info = data.data[0];
+            const result = (await axios.get(apiUrl)).data.data[0];
 
             return await ctx.reply(
-                `${quote(`Judul: ${info.title}`)}\n` +
-                `${quote(`Judul (Inggris): ${info.title_english}`)}\n` +
-                `${quote(`Judul (Jepang): ${info.title_japanese}`)}\n` +
-                `${quote(`Tipe: ${info.type}`)}\n` +
-                `${quote(`Bab: ${info.chapters}`)}\n` +
-                `${quote(`Volume: ${info.volumes}`)}\n` +
-                `${quote(`URL: ${info.url}`)}\n` +
+                `${quote(`Judul: ${result.title}`)}\n` +
+                `${quote(`Judul (Inggris): ${result.title_english}`)}\n` +
+                `${quote(`Judul (Jepang): ${result.title_japanese}`)}\n` +
+                `${quote(`Tipe: ${result.type}`)}\n` +
+                `${quote(`Bab: ${result.chapters}`)}\n` +
+                `${quote(`Volume: ${result.volumes}`)}\n` +
+                `${quote(`URL: ${result.url}`)}\n` +
                 `${quote("─────")}\n` +
-                `${await tools.general.translate(info.synopsis, "id", ).translation}\n` +
+                `${await tools.general.translate(result.synopsis, "id", ).translation}\n` +
                 "\n" +
                 config.msg.footer
             );

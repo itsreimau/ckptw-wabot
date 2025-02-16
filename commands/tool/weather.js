@@ -22,29 +22,27 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/cuaca", {
                 message: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
             return await ctx.reply(
-                `${quote(`Lokasi: ${data.location.name}, ${data.location.region}, ${data.location.country}`)}\n` +
-                `${quote(`Latitude: ${data.location.lat}`)}\n` +
-                `${quote(`Longitude: ${data.location.lon}`)}\n` +
-                `${quote(`Zona Waktu: ${data.location.tz_id}`)}\n` +
-                `${quote(`Waktu Lokal: ${data.location.localtime}`)}\n` +
+                `${quote(`Lokasi: ${result.location.name}, ${result.location.region}, ${result.location.country}`)}\n` +
+                `${quote(`Latitude: ${result.location.lat}`)}\n` +
+                `${quote(`Longitude: ${result.location.lon}`)}\n` +
+                `${quote(`Zona Waktu: ${result.location.tz_id}`)}\n` +
+                `${quote(`Waktu Lokal: ${result.location.localtime}`)}\n` +
                 `${quote("─────")}\n` +
-                `${quote(`Cuaca: ${await tools.general.translate(data.current.condition.text, "id")}`)}\n` +
-                `${quote(`Suhu Saat Ini: ${data.current.temp_c}°C (${data.current.temp_f}°F)`)}\n` +
-                `${quote(`Terasa Seperti: ${data.current.feelslike_c}°C (${data.current.feelslike_f}°F)`)}\n` +
-                `${quote(`Kelembaban: ${data.current.humidity}%`)}\n` +
-                `${quote(`Kecepatan Angin: ${data.current.wind_kph} kph (${data.current.wind_mph} mph)`)}\n` +
-                `${quote(`Arah Angin: ${data.current.wind_dir} (${data.current.wind_degree}°)`)}\n` +
-                `${quote(`Tekanan Udara: ${data.current.pressure_mb} mb (${data.current.pressure_in} in)`)}\n` +
-                `${quote(`Curah Hujan: ${data.current.precip_mm} mm (${data.current.precip_in} in)`)}\n` +
-                `${quote(`Kondisi Langit: ${data.current.cloud}% awan`)}\n` +
-                `${quote(`Indeks UV: ${data.current.uv}`)}\n` +
-                `${quote(`Jarak Pandang: ${data.current.vis_km} km (${data.current.vis_miles} mil)`)}\n` +
-                `${quote(`Hembusan Angin: ${data.current.gust_kph} kph (${data.current.gust_mph} mph)`)}\n` +
+                `${quote(`Cuaca: ${await tools.general.translate(result.current.condition.text, "id")}`)}\n` +
+                `${quote(`Suhu Saat Ini: ${result.current.temp_c}°C (${result.current.temp_f}°F)`)}\n` +
+                `${quote(`Terasa Seperti: ${result.current.feelslike_c}°C (${result.current.feelslike_f}°F)`)}\n` +
+                `${quote(`Kelembaban: ${result.current.humidity}%`)}\n` +
+                `${quote(`Kecepatan Angin: ${result.current.wind_kph} kph (${result.current.wind_mph} mph)`)}\n` +
+                `${quote(`Arah Angin: ${result.current.wind_dir} (${result.current.wind_degree}°)`)}\n` +
+                `${quote(`Tekanan Udara: ${result.current.pressure_mb} mb (${result.current.pressure_in} in)`)}\n` +
+                `${quote(`Curah Hujan: ${result.current.precip_mm} mm (${result.current.precip_in} in)`)}\n` +
+                `${quote(`Kondisi Langit: ${result.current.cloud}% awan`)}\n` +
+                `${quote(`Indeks UV: ${result.current.uv}`)}\n` +
+                `${quote(`Jarak Pandang: ${result.current.vis_km} km (${result.current.vis_miles} mil)`)}\n` +
+                `${quote(`Hembusan Angin: ${result.current.gust_kph} kph (${result.current.gust_mph} mph)`)}\n` +
                 "\n" +
                 config.msg.footer
             );

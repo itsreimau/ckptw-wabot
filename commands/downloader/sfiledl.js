@@ -26,15 +26,13 @@ module.exports = {
             const apiUrl = tools.api.createUrl("vapis", "/api/sfiledl", {
                 url
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
-            const fileName = path.basename(data.dl.split("&")[0]);
+            const result = (await axios.get(apiUrl)).data.data;
+            const fileName = path.basename(result.dl.split("&")[0]);
             const fileExtension = path.extname(fileName).slice(1);
 
             return await ctx.reply({
                 document: {
-                    url: data.download
+                    url: result.download
                 },
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +

@@ -23,25 +23,23 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/ytsearch", {
                 message: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
-            const resultText = data.map((d) => {
-                switch (d.type) {
+            const resultText = result.map((r) => {
+                switch (r.type) {
                     case "video":
-                        return `${quote(`Judul: ${d.title}`)}\n` +
-                            `${quote(`Durasi: ${d.timestamp}`)}\n` +
-                            `${quote(`Diunggah: ${d.ago}`)}\n` +
-                            `${quote(`Dilihat: ${d.views}`)}\n` +
-                            `${quote(`URL: ${d.url}`)}`;
+                        return `${quote(`Judul: ${r.title}`)}\n` +
+                            `${quote(`Durasi: ${r.timestamp}`)}\n` +
+                            `${quote(`Diunggah: ${r.ago}`)}\n` +
+                            `${quote(`Dilihat: ${r.views}`)}\n` +
+                            `${quote(`URL: ${r.url}`)}`;
                     case "channel":
-                        return `${quote(`Saluran: ${d.title}`)}\n` +
-                            `${quote(`Subscriber: ${d.subCountLabel} (${d.subCount})`)}\n` +
-                            `${quote(`Jumlah video: ${d.videoCount}`)}\n` +
-                            `${quote(`URL: ${d.url}`)}`;
+                        return `${quote(`Saluran: ${r.title}`)}\n` +
+                            `${quote(`Subscriber: ${r.subCountLabel} (${r.subCount})`)}\n` +
+                            `${quote(`Jumlah video: ${r.videoCount}`)}\n` +
+                            `${quote(`URL: ${r.url}`)}`;
                 }
-            }).filter((d) => d).join(
+            }).filter((r) => d).join(
                 "\n" +
                 `${quote("─────")}\n`
             );

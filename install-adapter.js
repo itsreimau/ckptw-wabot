@@ -8,7 +8,7 @@ const {
 } = require("child_process");
 
 // Buat consolefy
-const c = new Consolefy({
+const consolefy = new Consolefy({
     tag: pkgName
 });
 
@@ -26,10 +26,10 @@ const modules = {
 
 // Pasang modul jika adapter ditemukan dalam daftar
 if (modules[adapter]) {
-    Consolefy.log(`Installing ${adapter} module...`);
+    consolefy.log(`Installing ${adapter} module...`);
     execSync(`npm install ${modules[adapter]} --no-save`, {
         stdio: "inherit"
     });
 } else {
-    Consolefy.log("No database module required or adapter is not set.");
+    consolefy.log("No database module required or adapter is not set.");
 }

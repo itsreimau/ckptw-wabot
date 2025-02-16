@@ -23,10 +23,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("bk9", "/download/igs", {
                 username: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
-            const result = Array.from(new Map(data.BK9.map(media => [media.url, media])).values());
+            const result = Array.from(new Map((await axios.get(apiUrl)).data.BK9.map(media => [media.url, media])).values());
 
             for (const media of result) {
                 const isImage = media.type === "image";

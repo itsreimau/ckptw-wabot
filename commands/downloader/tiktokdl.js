@@ -40,24 +40,22 @@ module.exports = {
             const apiUrl = tools.api.createUrl("https://api.tiklydown.eu.org", "/api/download", {
                 url
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
+            const result = (await axios.get(apiUrl)).data;
 
             if (mediaType === "audio") {
                 return await ctx.reply({
                     audio: {
-                        url: data.music.play_url
+                        url: result.music.play_url
                     },
                     mimetype: mime.lookup("mp3")
                 });
             }
 
             if (mediaType === "video_image") {
-                if (data.video?.noWatermark) {
+                if (result.video?.noWatermark) {
                     return await ctx.reply({
                         video: {
-                            url: data.video.noWatermark
+                            url: result.video.noWatermark
                         },
                         mimetype: mime.lookup("mp4"),
                         caption: `${quote(`URL: ${url}`)}\n` +
@@ -66,8 +64,8 @@ module.exports = {
                     });
                 }
 
-                if (data.images && data.images.length > 0) {
-                    for (const image of data.images) {
+                if (result.images && result.images.length > 0) {
+                    for (const image of result.images) {
                         await ctx.reply({
                             image: {
                                 url: image.url

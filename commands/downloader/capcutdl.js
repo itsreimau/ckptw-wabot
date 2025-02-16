@@ -39,8 +39,8 @@ module.exports = {
             });
         } catch (error) {
             consolefy.error(`Error: ${error}`);
-            if (error.status !== 200) return ctx.reply(config.msg.notFound);
-            return ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
+            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
 };

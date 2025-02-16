@@ -22,17 +22,15 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/bukalapak", {
                 message: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
-            const resultText = data.map((d) =>
-                `${quote(`Nama: ${d.title}`)}\n` +
-                `${quote(`Rating: ${d.rating}`)}\n` +
-                `${quote(`Terjual: ${d.terjual}`)}\n` +
-                `${quote(`Harga: ${d.harga}`)}\n` +
-                `${quote(`Toko: ${d.store.nama} - ${d.store.lokasi} (${d.store.link})`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
+            const resultText = result.map((r) =>
+                `${quote(`Nama: ${r.title}`)}\n` +
+                `${quote(`Rating: ${r.rating}`)}\n` +
+                `${quote(`Terjual: ${r.terjual}`)}\n` +
+                `${quote(`Harga: ${r.harga}`)}\n` +
+                `${quote(`Toko: ${r.store.nama} - ${r.store.lokasi} (${r.store.link})`)}\n` +
+                `${quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

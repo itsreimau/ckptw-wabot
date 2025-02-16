@@ -24,10 +24,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("exodus", "/search/gimage", {
                 query: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
-            const result = tools.general.getRandomElement(data);
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.data);
 
             return await ctx.reply({
                 image: {

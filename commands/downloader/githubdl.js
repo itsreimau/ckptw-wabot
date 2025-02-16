@@ -25,9 +25,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("diioffc", "/api/download/gitclone", {
                 url
             });
-            const {
-                result
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
                 document: {

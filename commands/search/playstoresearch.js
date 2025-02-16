@@ -22,15 +22,13 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/playstore", {
                 message: input
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
-            const resultText = data.map((d) =>
-                `${quote(`Nama: ${d.nama}`)}\n` +
-                `${quote(`Pengembang: ${d.developer}`)}\n` +
-                `${quote(`Rating: ${d.rate2}`)}\n` +
-                `${quote(`URL: ${d.link}`)}`
+            const resultText = result.map((r) =>
+                `${quote(`Nama: ${r.nama}`)}\n` +
+                `${quote(`Pengembang: ${r.developer}`)}\n` +
+                `${quote(`Rating: ${r.rate2}`)}\n` +
+                `${quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

@@ -15,10 +15,7 @@ module.exports = {
 
         try {
             const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tekateki.json");
-            const {
-                data
-            } = await axios.get(apiUrl);
-            const result = tools.general.getRandomElement(data);
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data);
 
             const game = {
                 coin: 5,
@@ -49,8 +46,8 @@ module.exports = {
                 if (userAnswer === game.answer) {
                     session.delete(ctx.id);
                     await Promise.all([
-                        await db.add(`user.${game.senderId}.coin`, game.coin),
-                        await db.add(`user.${game.senderId}.winGame`, 1)
+                        db.add(`user.${game.senderId}.coin`, game.coin),
+                        db.add(`user.${game.senderId}.winGame`, 1)
                     ]);
                     await ctx.sendMessage(
                         ctx.id, {

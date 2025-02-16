@@ -24,10 +24,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("archive", "/search/pinterest", {
                 q: input
             });
-            const {
-                data
-            } = await axios.get(apiUrl);
-            const result = tools.general.getRandomElement(data.result.images);
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result.images);
 
             return await ctx.reply({
                 image: {

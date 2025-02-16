@@ -22,13 +22,13 @@ module.exports = {
             const apiUrl = tools.api.createUrl("fasturl", "/search/steam", {
                 query: input
             });
-            const data = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.result;
 
-            const resultText = data.map((d) =>
-                `${quote(`Nama: ${d.name}`)}\n` +
-                `${quote(`Harga: ${d.price}`)}\n` +
-                `${quote(`Skor: ${d.score}`)}\n` +
-                `${quote(`Platform: ${d.platform}`)}`
+            const resultText = result.map((r) =>
+                `${quote(`Nama: ${r.name}`)}\n` +
+                `${quote(`Harga: ${r.price}`)}\n` +
+                `${quote(`Skor: ${r.score}`)}\n` +
+                `${quote(`Platform: ${r.platform}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

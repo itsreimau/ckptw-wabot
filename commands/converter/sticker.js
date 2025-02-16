@@ -22,7 +22,7 @@ module.exports = {
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const sticker = new Sticker(buffer, {
+            const result = new Sticker(buffer, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,
@@ -31,7 +31,7 @@ module.exports = {
                 quality: 50
             });
 
-            return await ctx.reply(await sticker.toMessage());
+            return await ctx.reply(await result.toMessage());
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
