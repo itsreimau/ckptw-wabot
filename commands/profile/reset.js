@@ -9,22 +9,22 @@ module.exports = {
         private: true
     },
     code: async (ctx) => {
-        try {
-            await ctx.reply(quote("🤖 Apakah Anda yakin ingin mereset data Anda? Langkah ini akan menghapus seluruh data yang tersimpan dan tidak dapat dikembalikan. Ketik 'y' untuk melanjutkan atau 'n' untuk membatalkan."));
+        await ctx.reply(quote("🤖 Apakah Anda yakin ingin mereset data Anda? Langkah ini akan menghapus seluruh data yang tersimpan dan tidak dapat dikembalikan. Ketik 'y' untuk melanjutkan atau 'n' untuk membatalkan."));
 
+        try {
             const collector = ctx.MessageCollector({
                 time: 60000
             });
 
             collector.on("collect", async (m) => {
-                const userAnswer = m.content.trim().toUpperCase();
+                const userAnswer = m.content.trim().toLowerCase();
                 const senderId = tools.general.getID(ctx.sender.jid);
 
-                if (userAnswer === "Y") {
+                if (userAnswer === "y") {
                     db.delete(`user.${senderId}`);
                     await ctx.reply(quote("✅ Data Anda berhasil direset. Semua data telah dihapus!"));
                     collector.stop();
-                } else if (userAnswer === "N") {
+                } else if (userAnswer === "n") {
                     await ctx.reply(quote("❌ Proses reset data telah dibatalkan."));
                     collector.stop();
                 }

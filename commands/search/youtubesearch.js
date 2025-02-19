@@ -39,7 +39,7 @@ module.exports = {
                             `${quote(`Jumlah video: ${r.videoCount}`)}\n` +
                             `${quote(`URL: ${r.url}`)}`;
                 }
-            }).filter((r) => d).join(
+            }).filter((r) => r).join(
                 "\n" +
                 `${quote("─────")}\n`
             );

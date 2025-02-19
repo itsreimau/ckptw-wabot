@@ -4,7 +4,7 @@ const {
 
 module.exports = {
     name: "omute",
-    category: "group",
+    category: "owner",
     permissions: {
         group: true,
         owner: true

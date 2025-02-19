@@ -25,13 +25,14 @@ module.exports = {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const result = await upscale(buffer);
 
+            if (!result) return await ctx.reply(config.msg.notFound);
+
             return await ctx.reply({
                 image: result,
                 mimetype: mime.lookup("png")
             });
         } catch (error) {
             consolefy.error(`Error: ${error}`);
-            if (error.response && error.response.status !== 200) return await ctx.reply(config.msg.notFound);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }

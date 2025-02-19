@@ -4,7 +4,7 @@ const {
 
 module.exports = {
     name: "ounmute",
-    category: "group",
+    category: "owner",
     permissions: {
         admin: true,
         group: true

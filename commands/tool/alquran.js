@@ -37,13 +37,13 @@ module.exports = {
 
                     if (isNaN(startAyat) || isNaN(endAyat) || startAyat < 1 || endAyat < startAyat) return await ctx.reply(quote(`❎ Rentang ayat tidak valid!`));
 
-                    const verses = result.ayat.filter(d => d.nomorAyat >= startAyat && d.nomorAyat <= endAyat);
+                    const verses = result.ayat.filter(r => r.nomorAyat >= startAyat && r.nomorAyat <= endAyat);
                     if (!verses.length) return await ctx.reply(quote(`❎ Ayat dalam rentang ${startAyat}-${endAyat} tidak ada!`));
 
-                    const versesText = verses.map(v =>
-                        `${bold(`Ayat ${v.nomorAyat}:`)}\n` +
-                        `${v.teksArab} (${v.teksLatin})\n` +
-                        `${italic(v.teksIndonesia)}`
+                    const versesText = verses.map(r =>
+                        `${bold(`Ayat ${r.nomorAyat}:`)}\n` +
+                        `${r.teksArab} (${r.teksLatin})\n` +
+                        `${italic(r.teksIndonesia)}`
                     ).join("\n");
                     return await ctx.reply(
                         `${bold(`Surah ${result.namaLatin}`)}\n` +
@@ -58,7 +58,7 @@ module.exports = {
                 const singleAyat = parseInt(ayat);
                 if (isNaN(singleAyat) || singleAyat < 1) return await ctx.reply(quote(`❎ Ayat harus berupa nomor yang valid dan lebih besar dari 0!`));
 
-                const verse = result.ayat.find(d => d.nomorAyat === singleAyat);
+                const verse = result.ayat.find(r => r.nomorAyat === singleAyat);
                 if (!verse) return await ctx.reply(quote(`❎ Ayat ${singleAyat} tidak ada!`));
 
                 return await ctx.reply(
@@ -69,10 +69,10 @@ module.exports = {
                 );
             }
 
-            const versesText = result.ayat.map(d =>
-                `${bold(`Ayat ${d.nomorAyat}:`)}\n` +
-                `${d.teksArab} (${d.teksLatin})\n` +
-                `${italic(d.teksIndonesia)}`
+            const versesText = result.ayat.map(r =>
+                `${bold(`Ayat ${r.nomorAyat}:`)}\n` +
+                `${r.teksArab} (${r.teksLatin})\n` +
+                `${italic(r.teksIndonesia)}`
             ).join("\n");
             return await ctx.reply(
                 `${bold(`Surah ${result.namaLatin}`)}\n` +

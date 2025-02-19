@@ -22,7 +22,7 @@ module.exports = {
                 coin: 5,
                 timeout: 60000,
                 senderId: tools.general.getID(ctx.sender.jid),
-                answer: result.unsur.toUpperCase()
+                answer: result.unsur.toLowerCase()
             };
 
             session.set(ctx.id, true);
@@ -42,7 +42,7 @@ module.exports = {
             });
 
             collector.on("collect", async (m) => {
-                const userAnswer = m.content.toUpperCase();
+                const userAnswer = m.content.toLowerCase();
 
                 if (userAnswer === game.answer) {
                     session.delete(ctx.id);
@@ -59,18 +59,18 @@ module.exports = {
                         }
                     );
                     return collector.stop();
-                } else if (userAnswer === "HINT") {
-                    const clue = game.answer.replace(/[AIUEO]/g, "_");
+                } else if (userAnswer === "hint") {
+                    const clue = game.answer.replace(/[AIUEO]/g, "_").toUpperCase();
                     await ctx.sendMessage(ctx.id, {
                         text: monospace(clue)
                     }, {
                         quoted: m
                     });
-                } else if (userAnswer === "SURRENDER") {
+                } else if (userAnswer === "surrender") {
                     session.delete(ctx.id);
                     await ctx.reply(
                         `${quote("🏳️ Anda menyerah!")}\n` +
-                        quote(`Jawabannya adalah ${game.answer}.`)
+                        quote(`Jawabannya adalah ${game.answer.toUpperCase()}.`)
                     );
                     return collector.stop();
                 }
@@ -81,7 +81,7 @@ module.exports = {
                     session.delete(ctx.id);
                     return await ctx.reply(
                         `${quote("⏱ Waktu habis!")}\n` +
-                        quote(`Jawabannya adalah ${game.answer}.`)
+                        quote(`Jawabannya adalah ${game.answer.toUpperCase()}.`)
                     );
                 }
             });

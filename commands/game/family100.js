@@ -26,7 +26,7 @@ module.exports = {
                 },
                 timeout: 90000,
                 senderId: tools.general.getID(ctx.sender.jid),
-                answers: new Set(result.jawaban.map(d => d.toUpperCase())),
+                answers: new Set(result.jawaban.map(d => d.toLowerCase())),
                 participants: new Set()
             };
 
@@ -46,7 +46,7 @@ module.exports = {
             });
 
             collector.on("collect", async (m) => {
-                const userAnswer = m.content.toUpperCase();
+                const userAnswer = m.content.toLowerCase();
                 const participantJid = m.jid;
                 const participantId = tools.general.getID(participantJid);
 
@@ -70,7 +70,7 @@ module.exports = {
                         await ctx.reply(quote(`🎉 Selamat! Semua jawaban telah terjawab! Setiap anggota yang menjawab mendapat ${game.coin.allAnswered} koin.`));
                         return collector.stop();
                     }
-                } else if (userAnswer === "SURRENDER") {
+                } else if (userAnswer === "surrender") {
                     session.delete(ctx.id);
                     await ctx.reply(
                         `${quote("🏳️ Anda menyerah!")}\n` +
@@ -81,7 +81,7 @@ module.exports = {
             });
 
             collector.on("end", async () => {
-                const remaining = [...game.answers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1");
+                const remaining = [...game.answers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1").toUpperCase();
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
