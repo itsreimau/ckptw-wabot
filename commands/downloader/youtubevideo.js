@@ -1,7 +1,9 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const {
+    downloadVideo
+} = require("hybrid-ytdl");
 const mime = require("mime-types");
 
 module.exports = {
@@ -23,10 +25,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("vreden", "/api/ytmp4", {
-                url
-            });
-            const result = (await axios.get(apiUrl)).data.result.download.url;
+            const result = (await downloadVideo(url)).downloadUrl;
 
             return await ctx.reply({
                 video: {

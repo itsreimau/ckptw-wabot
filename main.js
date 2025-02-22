@@ -26,6 +26,8 @@ const adapters = {
 };
 const selectedAuthAdapter = adapters[authAdapter.adapter] ? adapters[authAdapter.adapter]() : null;
 
+consolefy.log("Connecting..."); // Logging proses koneksi
+
 // Buat instance bot dengan pengaturan yang sesuai
 const bot = new Client({
     prefix,

@@ -75,22 +75,22 @@ module.exports = (bot) => {
 
         // Pengecekan kondisi pengguna
         const restrictions = [{
+                key: "banned",
                 condition: userDb.banned,
                 msg: config.msg.banned,
-                reaction: "🚫",
-                key: "banned",
+                reaction: "🚫"
             },
             {
+                key: "cooldown",
                 condition: !isOwner && !userDb.premium && new Cooldown(ctx, config.system.cooldown).onCooldown,
                 msg: config.msg.cooldown,
-                reaction: "💤",
-                key: "cooldown",
+                reaction: "💤"
             },
             {
+                key: "requireBotGroupMembership",
                 condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb.premium && !(await ctx.group(config.bot.groupJid).members()).some(member => tools.general.getID(member.id) === senderId),
                 msg: config.msg.botGroupMembership,
-                reaction: "🚫",
-                key: "requireBotGroupMembership",
+                reaction: "🚫"
             }
         ];
 
@@ -121,42 +121,42 @@ module.exports = (bot) => {
         const permissionChecks = [{
                 key: "admin",
                 condition: isGroup && !await ctx.group().isSenderAdmin(),
-                msg: config.msg.admin,
+                msg: config.msg.admin
             },
             {
                 key: "botAdmin",
                 condition: isGroup && !await ctx.group().isBotAdmin(),
-                msg: config.msg.botAdmin,
+                msg: config.msg.botAdmin
             },
             {
                 key: "coin",
                 condition: permissions.coin && config.system.useCoin && await checkCoin(permissions.coin, senderId),
-                msg: config.msg.coin,
+                msg: config.msg.coin
             },
             {
                 key: "group",
                 condition: !isGroup,
-                msg: config.msg.group,
+                msg: config.msg.group
             },
             {
                 key: "owner",
                 condition: !isOwner,
-                msg: config.msg.owner,
+                msg: config.msg.owner
             },
             {
                 key: "premium",
                 condition: !isOwner && !userDb.premium,
-                msg: config.msg.premium,
+                msg: config.msg.premium
             },
             {
                 key: "private",
                 condition: isGroup,
-                msg: config.msg.private,
+                msg: config.msg.private
             },
             {
                 key: "restrict",
                 condition: config.system.restrict,
-                msg: config.msg.restrict,
+                msg: config.msg.restrict
             }
         ];
 

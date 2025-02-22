@@ -1,7 +1,9 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
+const {
+    downloadAudio
+} = require("hybrid-ytdl");
 const mime = require("mime-types");
 
 module.exports = {
@@ -23,10 +25,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agung", "/api/youtube-audio", {
-                url
-            });
-            const result = (await axios.get(apiUrl)).data.result.downloadUrl;
+            const result = (await downloadAudio(url)).downloadUrl;
 
             return await ctx.reply({
                 audio: {

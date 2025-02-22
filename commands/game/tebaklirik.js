@@ -56,9 +56,9 @@ module.exports = {
                     );
                     return collector.stop();
                 } else if (userAnswer === "hint") {
-                    const clue = game.answer.replace(/[AIUEO]/g, "_").toUpperCase();
+                    const clue = game.answer.replace(/[AIUEO]/g, "_");
                     await ctx.sendMessage(ctx.id, {
-                        text: monospace(clue)
+                        text: monospace(clue.toUpperCase())
                     }, {
                         quoted: m
                     });
@@ -66,7 +66,7 @@ module.exports = {
                     session.delete(ctx.id);
                     await ctx.reply(
                         `${quote("🏳️ Anda menyerah!")}\n` +
-                        quote(`Jawabannya adalah ${game.answer.toUpperCase()}.`)
+                        quote(`Jawabannya adalah ${game.answer}.`)
                     );
                     return collector.stop();
                 }
@@ -77,7 +77,7 @@ module.exports = {
                     session.delete(ctx.id);
                     return await ctx.reply(
                         `${quote("⏱ Waktu habis!")}\n` +
-                        quote(`Jawabannya adalah ${game.answer.toUpperCase()}.`)
+                        quote(`Jawabannya adalah ${game.answer}.`)
                     );
                 }
             });

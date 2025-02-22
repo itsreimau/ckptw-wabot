@@ -2,6 +2,9 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const {
+    downloadAudio
+} = require("hybrid-ytdl");
 const mime = require("mime-types");
 
 module.exports = {
@@ -114,10 +117,7 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("agung", "/api/youtube-audio", {
-                    url: searchResult.url
-                });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.result.downloadUrl;
+                const downloadResult = (await downloadAudio(searchResult.url)).downloadUrl;
 
                 return await ctx.reply({
                     audio: {

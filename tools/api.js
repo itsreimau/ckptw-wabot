@@ -33,6 +33,9 @@ const APIs = {
     siputzx: {
         baseURL: "https://api.siputzx.my.id"
     },
+    skyzo: {
+        baseURL: "https://api.simplebot.my.id"
+    },
     vapis: {
         baseURL: "https://vapis.my.id"
     },

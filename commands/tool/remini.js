@@ -21,7 +21,7 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
-            const apiUrl = tools.api.createUrl("agung", "/api/remini", {
+            const apiUrl = tools.api.createUrl("skyzo", "/api/tools/remini", {
                 url: uploadUrl
             });
 

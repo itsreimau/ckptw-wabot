@@ -115,9 +115,7 @@ function formatSize(byteCount) {
 }
 
 function generateUID(id) {
-    if (typeof id !== "string") {
-        id = id.toString();
-    }
+    if (!id) return false;
 
     let hash = 0;
     for (let i = 0; i < id.length; i++) {
@@ -194,7 +192,7 @@ function isUrl(url) {
 }
 
 function parseFlag(argsString, customRules = {}) {
-    if (!argsString || argsString.trim() === "") return false;
+    if (!argsString) return false;
 
     const options = {};
     let input = [];
@@ -251,7 +249,7 @@ async function translate(text, to) {
 }
 
 function ucword(str) {
-    if (!str || str.trim() === "") return false;
+    if (!str) return false;
 
     return str.toLowerCase().replace(/\b(\w)/g, (s) => s.toUpperCase());
 }

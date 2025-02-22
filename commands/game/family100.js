@@ -81,7 +81,7 @@ module.exports = {
             });
 
             collector.on("end", async () => {
-                const remaining = [...game.answers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1").toUpperCase();
+                const remaining = [...game.answers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1");
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);

@@ -44,7 +44,7 @@ Object.assign(global, {
     db
 });
 
-c.log("Memulai..."); // Logging proses awal
+c.log("Starting..."); // Logging proses awal
 
 // Tampilkan nama proyek
 CFonts.say(pkgName, {
@@ -68,10 +68,7 @@ if (config.system.useServer) {
     const {
         port
     } = config.system;
-    http.createServer((_, res) => res.end(`${pkgName} berjalan di port ${port}`))
-        .listen(port, () => {
-            c.success(`Server aktif di http://localhost:${port}`);
-        });
+    http.createServer((_, res) => res.end(`${pkgName} berjalan di port ${port}`)).listen(port, () => c.success(`${pkgName} runs on http://localhost:${port}`));
 }
 
 require("./main.js"); // Jalankan modul utama
