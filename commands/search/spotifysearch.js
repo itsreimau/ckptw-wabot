@@ -20,10 +20,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/search/spotify", {
-                q: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/spotify", {
+                message: input
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.data;
 
             const resultText = result.map((r) =>
                 `${quote(`Judul: ${r.trackName}`)}\n` +

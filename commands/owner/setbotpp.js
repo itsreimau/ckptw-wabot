@@ -22,7 +22,7 @@ module.exports = {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             await ctx.core.updateProfilePicture(ctx.core.user.id, buffer);
 
-            return await ctx.reply(quote(`✅ Berhasil mengubah gambar profil foto grup!`));
+            return await ctx.reply(quote(`✅ Berhasil mengubah gambar profil bot!`));
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));

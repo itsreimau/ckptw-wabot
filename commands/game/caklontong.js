@@ -60,7 +60,7 @@ module.exports = {
                     );
                     return collector.stop();
                 } else if (userAnswer === "hint") {
-                    const clue = game.answer.replace(/[AIUEO]/g, "_");
+                    const clue = game.answer.replace(/[aiueo]/g, "_");
                     await ctx.sendMessage(ctx.id, {
                         text: monospace(clue.toUpperCase())
                     }, {
