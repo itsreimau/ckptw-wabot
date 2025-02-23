@@ -2,7 +2,8 @@
 const {
     Events,
     monospace,
-    quote
+    quote,
+    VCardBuilder
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const {
