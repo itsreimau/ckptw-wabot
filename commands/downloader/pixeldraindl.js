@@ -25,19 +25,17 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/pixeldrain", {
                 url
             });
-            const {
-                data
-            } = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
             return await ctx.reply({
                 document: {
-                    url: data.download
+                    url: result.download
                 },
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer,
-                fileName: data.name,
-                mimetype: data.mime_type || "application/octet-stream"
+                fileName: result.name,
+                mimetype: result.mime_type || "application/octet-stream"
             });
         } catch (error) {
             consolefy.error(`Error: ${error}`);

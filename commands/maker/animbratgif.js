@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: "animbratgif",
-    aliases: ["animbratg", "animbratgif", "animbratv", "animbratvid", "animbratvideo", "sanimbratgif", "sanimbratvideo", "sanimbratvid", "stickeranimbratgif", "stickeranimbratvideo", "stickeranimbratvid", "stikeranimbratgif", "stikeranimbratvideo", "stikeranimbratvid"],
+    aliases: ["animbratg", "animbratv", "animbratvid", "animbratvideo", "sanimbratgif", "sanimbratvideo", "sanimbratvid", "stickeranimbratgif", "stickeranimbratvideo", "stickeranimbratvid", "stikeranimbratgif", "stikeranimbratvideo", "stikeranimbratvid"],
     category: "maker",
     permissions: {
         coin: 10

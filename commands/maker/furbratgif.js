@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: "furbratgif",
-    aliases: ["furbratg", "furbratgif", "furbratv", "furbratvid", "furbratvideo", "sfurbratgif", "sfurbratvideo", "sfurbratvid", "stickerfurbratgif", "stickerfurbratvideo", "stickerfurbratvid", "stikerfurbratgif", "stikerfurbratvideo", "stikerfurbratvid"],
+    aliases: ["furbratg", "furbratv", "furbratvid", "furbratvideo", "sfurbratgif", "sfurbratvideo", "sfurbratvid", "stickerfurbratgif", "stickerfurbratvideo", "stickerfurbratvid", "stikerfurbratgif", "stikerfurbratvideo", "stikerfurbratvid"],
     category: "maker",
     permissions: {
         coin: 10

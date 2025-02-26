@@ -30,7 +30,7 @@ consolefy.log("Connecting..."); // Logging proses koneksi
 
 // Buat instance bot dengan pengaturan yang sesuai
 const bot = new Client({
-    prefix,
+    botConfig.prefix,
     phoneNumber,
     authAdapter: selectedAuthAdapter,
     authDir: authAdapter.adapter === "default" ? path.resolve(__dirname, authAdapter.default.authDir) : null,

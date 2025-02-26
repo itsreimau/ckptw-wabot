@@ -17,7 +17,6 @@ module.exports = {
                 customText
                 .replace(/%tag%/g, `@${senderId}`)
                 .replace(/%name%/g, config.bot.name)
-                .replace(/%version%/g, config.pkg.version)
                 .replace(/%prefix%/g, ctx.used.prefix)
                 .replace(/%command%/g, ctx.used.command)
                 .replace(/%watermark%/g, config.msg.watermark)

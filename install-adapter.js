@@ -1,15 +1,13 @@
-// Import modul dan dependensi
+// Impor modul dan dependensi yang diperlukan
 require("./config.js");
-const {
-    name: pkgName
-} = require("./package.json");
+const pkg = require("./package.json");
 const {
     execSync
 } = require("child_process");
 
 // Buat consolefy
 const consolefy = new Consolefy({
-    tag: pkgName
+    tag: pkg.name
 });
 
 // Mendapatkan adapter autentikasi dari konfigurasi

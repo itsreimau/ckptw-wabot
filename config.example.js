@@ -1,8 +1,5 @@
 // Impor modul dan dependensi yang diperlukan
-const {
-    name: pkgName,
-    version
-} = require("./package.json");
+const pkg = require("./package.json");
 const {
     monospace,
     italic,
@@ -64,7 +61,7 @@ global.config = {
         private: quote("⛔ Perintah hanya dapat diakses dalam obrolan pribadi!"), // Pesan untuk perintah obrolan pribadi
         restrict: quote("⛔ Perintah ini telah dibatasi karena alasan keamanan!"), // Pesan pembatasan perintah
 
-        watermark: `@${pkgName} / v${version}`, // Watermark nama dan versi pada bot
+        watermark: `@${pkg.name} / v${pkg.version}`, // Watermark nama dan versi pada bot
         footer: italic("Developed by ItsReimau"), // Footer di pesan bot
         readmore: "\u200E".repeat(4001), // String read more
         note: "“Lorem ipsum dolor sit amet, tenebris in umbra, vitae ad mortem.”", // Catatan

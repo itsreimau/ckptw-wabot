@@ -115,9 +115,9 @@ module.exports = (bot) => {
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
 
-        if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return; // Penanganan mode bot
-
-        if (groupDb.mute) return; // Penanganan mode mute pada grup
+        // Pengecekan mode bot (group, private, self) dan mode mute grup
+        if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return;
+        if (groupDb.mute && !["unmute", "ounmute"].includes(ctx.used.command)) return;
 
         isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
 
@@ -195,8 +195,8 @@ module.exports = (bot) => {
         }
 
         // Penanganan obrolan grup
-        if (isGroup && !m.key.fromMe) {
-            const now = Date.now();
+        if (isGroup) {
+            if (m.key.fromMe) return;
 
             // Penanganan antilink 
             if (groupDb?.option?.antilink && await tools.general.isUrl(m.content) && !await ctx.group().isSenderAdmin()) {
@@ -225,6 +225,7 @@ module.exports = (bot) => {
             }
 
             // Penanganan antispam
+            const now = Date.now();
             if (groupDb?.option?.antispam) {
                 const key = `group.${groupId}.spam.${senderId}`;
                 const {
@@ -286,7 +287,7 @@ module.exports = (bot) => {
                             });
                             await db.delete(`menfess.${conversationId}`);
                         } else {
-                            await ctx.core.sendMessage(senderId === from ? `${to}@s.whatsapp.net` : `${from}@s.whatsapp.net`, {
+                            await ctx.core.sendMessage(`${senderId === from ? to : from}@s.whatsapp.net`, {
                                 forward: m
                             });
                         }

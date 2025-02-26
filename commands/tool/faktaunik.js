@@ -11,8 +11,9 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
+        const apiUrl = tools.api.createUrl("https://cinnabar.icaksh.my.id", "/public/daily/tawiki");
+
         try {
-            const apiUrl = tools.api.createUrl("https://cinnabar.icaksh.my.id", "/public/daily/tawiki");
             const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.info);
 
             return await ctx.reply(quote(`Tahukah Anda? ${result.tahukah_anda}`));

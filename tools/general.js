@@ -9,6 +9,8 @@ const {
 } = require("file-type");
 
 async function checkMedia(msgType, requiredMedia) {
+    if (!msgType || !requiredMedia) return false;
+
     const mediaMap = {
         audio: "audioMessage",
         contact: "contactMessage",
@@ -38,6 +40,8 @@ async function checkMedia(msgType, requiredMedia) {
 }
 
 async function checkQuotedMedia(quoted, requiredMedia) {
+    if (!quoted || !requiredMedia) return false;
+
     const quotedMediaMap = {
         audio: quoted.audioMessage,
         contact: quoted.contactMessage,
@@ -66,6 +70,8 @@ async function checkQuotedMedia(quoted, requiredMedia) {
 }
 
 function clamp(value, min, max) {
+    if (!value || !min || !max) return value;
+
     return Math.max(min, Math.min(max, value));
 }
 
@@ -129,11 +135,13 @@ function generateUID(id) {
 }
 
 function getID(jid) {
+    if (!jid) return false;
+
     return jid.split("@")[0].split(":")[0];
 }
 
 function getRandomElement(arr) {
-    if (!arr.length) return null;
+    if (!arr || !arr.length) return null;
 
     const randomIndex = Math.floor(Math.random() * arr.length);
     return arr[randomIndex];

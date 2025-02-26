@@ -1,10 +1,6 @@
 // Impor modul dan dependensi yang diperlukan
 require("./config.js");
-const {
-    name: pkgName,
-    description,
-    author
-} = require("./package.json");
+const pkg = require("./package.json");
 const tools = require("./tools/exports.js");
 const {
     Consolefy
@@ -17,7 +13,7 @@ const SimplDB = require("simpl.db");
 
 // Inisialisasi Consolefy untuk logging
 const c = new Consolefy({
-    tag: pkgName
+    tag: pkg.name
 });
 
 // Inisialisasi SimplDB untuk Database
@@ -47,7 +43,7 @@ Object.assign(global, {
 c.log("Starting..."); // Logging proses awal
 
 // Tampilkan nama proyek
-CFonts.say(pkgName, {
+CFonts.say(pkg.name, {
     font: "chrome",
     align: "center",
     gradient: ["red", "magenta"]
@@ -55,8 +51,8 @@ CFonts.say(pkgName, {
 
 // Tampilkan deskripsi dan informasi pengembang
 CFonts.say(
-    `'${description}'\n` +
-    `By ${author}`, {
+    `'${pkg.description}'\n` +
+    `By ${pkg.author}`, {
         font: "console",
         align: "center",
         gradient: ["red", "magenta"]
@@ -68,7 +64,7 @@ if (config.system.useServer) {
     const {
         port
     } = config.system;
-    http.createServer((_, res) => res.end(`${pkgName} berjalan di port ${port}`)).listen(port, () => c.success(`${pkgName} runs on http://localhost:${port}`));
+    http.createServer((_, res) => res.end(`${pkg.name} berjalan di port ${port}`)).listen(port, () => c.success(`${pkg.name} runs on http://localhost:${port}`));
 }
 
 require("./main.js"); // Jalankan modul utama

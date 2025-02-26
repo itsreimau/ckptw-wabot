@@ -25,7 +25,9 @@ module.exports = {
             const result = (await axios.get(apiUrl)).data.BK9[0].BK9;
 
             return await ctx.reply(
-                `${quote(result)}\n` +
+                `${quote(`Kueri: ${input}`)}\n` +
+                `${quote("─────")}\n` +
+                `${result}\n` +
                 "\n" +
                 config.msg.footer
             );

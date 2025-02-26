@@ -13,11 +13,12 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
+        const month = new Date().getMonth() + 1;
+        const apiUrl = tools.api.createUrl("https://api-harilibur.vercel.app", "/api", {
+            month
+        });
+
         try {
-            const month = new Date().getMonth() + 1;
-            const apiUrl = tools.api.createUrl("https://api-harilibur.vercel.app", "/api", {
-                month
-            });
             const result = (await axios.get(apiUrl)).data;
 
             const resultText = result.reverse().map((r) => {
