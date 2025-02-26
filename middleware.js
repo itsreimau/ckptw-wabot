@@ -33,7 +33,7 @@ module.exports = (bot) => {
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
 
-        // Pengecekan mode bot (group, private, self) dan mode mute grup
+        // Pengecekan mode bot (group, private, self) dan perintah unmute
         if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return;
         if (groupDb.mute && !["unmute", "ounmute"].includes(ctx.used.command)) return;
 

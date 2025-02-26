@@ -79,7 +79,8 @@ module.exports = (bot) => {
         consolefy.success(`${config.bot.name} by ${config.owner.name}, ready at ${m.user.id}`);
         const botRestart = await db.get("bot.restart") || {};
 
-        if (botRestart?.jid && botRestart.timestamp) {
+        // Mulai ulang bot
+        if (botRestart?.jid && botRestart?.timestamp) {
             const timeago = tools.general.convertMsToDuration(Date.now() - botRestart.timestamp);
             await bot.core.sendMessage(botRestart.jid, {
                 text: quote(`✅ Berhasil dimulai ulang! Membutuhkan waktu ${timeago}.`),
@@ -116,9 +117,7 @@ module.exports = (bot) => {
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
 
-        // Pengecekan mode bot (group, private, self) dan mode mute grup
-        if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return;
-        if (groupDb.mute && !["unmute", "ounmute"].includes(ctx.used.command)) return;
+        if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return; // Pengecekan mode bot (group, private, self)
 
         isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
 
@@ -141,7 +140,7 @@ module.exports = (bot) => {
             };
             await db.set(`user.${senderId}`, newUserDb);
 
-            if (isCmd.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd.prefix + isCmd.didyoumean)}.`)); // Did you mean?
+            if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd?.prefix + isCmd?.didyoumean)}.`)); // Did you mean?
 
             // Perintah khusus Owner
             if (isOwner && m.content) {
@@ -173,6 +172,8 @@ module.exports = (bot) => {
             // Penanganan AFK (Pengguna yang disebutkan atau di-quote)
             const userAFKJids = ctx.quoted?.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
             if (userAFKJids.length > 0) {
+                if (m.key.fromMe) return;
+
                 for (const userAFKJid of userAFKJids) {
                     const userAFK = await db.get(`user.${userAFKJid}.afk`) || {};
                     if (userAFK?.reason && userAFK?.timestamp) {
@@ -273,7 +274,7 @@ module.exports = (bot) => {
         if (isPrivate && !m.key.fromMe) {
             // Penanganan menfess
             const allMenfessDb = await db.get("menfess") || {};
-            if (!isCmd || isCmd.didyoumean) {
+            if (!isCmd || isCmd?.didyoumean) {
                 const menfessEntries = Object.entries(allMenfessDb);
                 for (const [conversationId, menfessData] of menfessEntries) {
                     const {

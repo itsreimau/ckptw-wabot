@@ -45,7 +45,10 @@ module.exports = {
 
                 if (userAnswer === game.answer) {
                     session.delete(ctx.id);
-                    db.add(`user.${game.senderId}.coin`, game.coin);
+                    await Promise.all([
+                        db.add(`user.${game.senderId}.coin`, game.coin),
+                        db.add(`user.${game.senderId}.winGame`, 1)
+                    ]);
                     await ctx.sendMessage(
                         ctx.id, {
                             text: `${quote("💯 Benar!")}\n` +

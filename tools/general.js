@@ -100,7 +100,7 @@ function convertMsToDuration(ms) {
 }
 
 function formatSize(byteCount) {
-    if (byteCount === 0) return "0 Bytes";
+    if (!byteCount) return "0 yBytes";
 
     const units = ["yBytes", "zBytes", "aBytes", "fBytes", "pBytes", "nBytes", "µBytes", "mBytes", "Bytes", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
 
@@ -240,6 +240,8 @@ function parseFlag(argsString, customRules = {}) {
 }
 
 async function translate(text, to) {
+    if (!text || !to) return value;
+
     const apiUrl = api.createUrl("nyxs", "/tools/translate", {
         text,
         to
@@ -256,10 +258,10 @@ async function translate(text, to) {
     }
 }
 
-function ucword(str) {
-    if (!str) return false;
+function ucword(text) {
+    if (!text) return false;
 
-    return str.toLowerCase().replace(/\b(\w)/g, (s) => s.toUpperCase());
+    return text.toLowerCase().replace(/\b(\w)/g, (s) => s.toUpperCase());
 }
 
 async function upload(buffer) {

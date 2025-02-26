@@ -13,8 +13,6 @@ const {
     system
 } = config;
 const {
-    prefix,
-    phoneNumber,
     authAdapter
 } = botConfig;
 
@@ -30,8 +28,8 @@ consolefy.log("Connecting..."); // Logging proses koneksi
 
 // Buat instance bot dengan pengaturan yang sesuai
 const bot = new Client({
-    prefix,
-    phoneNumber,
+    prefix: botConfig.prefix,
+    phoneNumber: botConfig.phoneNumber,
     authAdapter: selectedAuthAdapter,
     authDir: authAdapter.adapter === "default" ? path.resolve(__dirname, authAdapter.default.authDir) : null,
     readIncommingMsg: system.autoRead,
