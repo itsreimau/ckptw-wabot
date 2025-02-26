@@ -118,7 +118,7 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadResult = (await downloadAudio(searchResult.url)).downloadUrl;
+                const downloadResult = (await downloadAudio(searchResult.url, "128", "api2")).downloadUrl;
 
                 return await ctx.reply({
                     audio: {

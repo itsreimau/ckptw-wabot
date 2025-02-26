@@ -71,10 +71,11 @@ module.exports = {
                         return collector.stop();
                     }
                 } else if (userAnswer === "surrender") {
+                    const answer = [...game.answers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1");
                     session.delete(ctx.id);
                     await ctx.reply(
                         `${quote("🏳️ Anda menyerah!")}\n` +
-                        quote(`Jawabannya adalah ${game.answer}.`)
+                        quote(`Jawabannya adalah ${answer}.`)
                     );
                     return collector.stop();
                 }

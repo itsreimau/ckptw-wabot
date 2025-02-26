@@ -70,7 +70,7 @@ module.exports = {
                     session.delete(ctx.id);
                     await ctx.reply(
                         `${quote("🏳️ Anda menyerah!")}\n` +
-                        quote(`Jawabannya adalah ${game.answer}.`)
+                        quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)
                     );
                     return collector.stop();
                 }
@@ -81,7 +81,7 @@ module.exports = {
                     session.delete(ctx.id);
                     return await ctx.reply(
                         `${quote("⏱ Waktu habis!")}\n` +
-                        quote(`Jawabannya adalah ${game.answer}.`)
+                        quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)
                     );
                 }
             });
