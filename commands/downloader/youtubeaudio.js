@@ -25,7 +25,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const result = (await downloadAudio(url, "128", "api2")).downloadUrl;
+            const result = (await downloadAudio(url)).downloadUrl;
 
             return await ctx.reply({
                 audio: {

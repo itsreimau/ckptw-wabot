@@ -25,7 +25,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const result = (await downloadVideo(url, "720", "api2")).downloadUrl;
+            const result = (await downloadVideo(url)).downloadUrl;
 
             return await ctx.reply({
                 video: {
