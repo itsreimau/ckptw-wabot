@@ -4,7 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "luminai",
+    name: "lilychan",
     category: "ai-chat",
     permissions: {
         coin: 10
@@ -18,10 +18,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/ai/luminai", {
+            const apiUrl = tools.api.createUrl("archive", "/ai/lilychan", {
                 text: input
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.result.message;
 
             return await ctx.reply(result);
         } catch (error) {

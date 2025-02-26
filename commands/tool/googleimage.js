@@ -21,14 +21,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("exodus", "/search/gimage", {
-                query: input
+            const apiUrl = tools.api.createUrl("archive", "/search/googleimg", {
+                q: input
             });
-            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.data);
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result);
 
             return await ctx.reply({
                 image: {
-                    url: result.url
+                    url: result
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +

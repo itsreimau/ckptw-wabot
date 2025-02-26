@@ -15,9 +15,6 @@ const APIs = {
     diibot: {
         baseURL: "https://api.diioffc.web.id"
     },
-    exodus: {
-        baseURL: "https://restapi.exoduscloud.my.id"
-    },
     fasturl: {
         baseURL: "https://fastrestapis.fasturl.cloud"
     },
@@ -38,9 +35,6 @@ const APIs = {
     },
     vapis: {
         baseURL: "https://vapis.my.id"
-    },
-    vreden: {
-        baseURL: "https://api.vreden.my.id"
     }
 };
 
