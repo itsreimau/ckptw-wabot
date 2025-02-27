@@ -22,13 +22,13 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
-            const apiUrl = tools.api.createUrl("agung", "/api/toreal", {
+            const result = tools.api.createUrl("agung", "/api/toreal", {
                 url: uploadUrl
             });
 
             return await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: result
                 },
                 mimetype: mime.lookup("png")
             });

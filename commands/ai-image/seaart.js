@@ -18,13 +18,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agung", "/api/seaart", {
+            const result = tools.api.createUrl("agung", "/api/seaart", {
                 prompt: input
             });
 
             return await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: result
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +

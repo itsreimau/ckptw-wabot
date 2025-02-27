@@ -19,13 +19,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/stable-diffusion", {
+            const result = tools.api.createUrl("siputzx", "/api/ai/stable-diffusion", {
                 prompt: input
             });
 
             return await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: result
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +

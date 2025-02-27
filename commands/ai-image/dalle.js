@@ -16,13 +16,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nasirxml", "/ai/dalle3", {
+            const result = tools.api.createUrl("nasirxml", "/ai/dalle3", {
                 prompt: input
             });
 
             return await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: result
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +

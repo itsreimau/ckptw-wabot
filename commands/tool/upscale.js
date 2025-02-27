@@ -38,14 +38,14 @@ module.exports = {
 
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer);
-            const apiUrl = tools.api.createUrl("fasturl", "/aiimage/upscale", {
+            const result = tools.api.createUrl("fasturl", "/aiimage/upscale", {
                 imageUrl: uploadUrl,
                 resize: flag.resize || 2
             });
 
             return await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: result
                 },
                 mimetype: mime.lookup("png")
             });

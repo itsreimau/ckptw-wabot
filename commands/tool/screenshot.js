@@ -22,13 +22,13 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agung", "/api/ssweb2", {
+            const result = tools.api.createUrl("agung", "/api/ssweb2", {
                 url
             });
 
             return await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: result
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`URL: ${url}`)}\n` +

@@ -18,14 +18,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/aiimage/flux/schnell", {
+            const result = tools.api.createUrl("fasturl", "/aiimage/flux/schnell", {
                 prompt: input,
                 size: "1024x1024"
             });
 
             return await ctx.reply({
                 image: {
-                    url: apiUrl
+                    url: result
                 },
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +
