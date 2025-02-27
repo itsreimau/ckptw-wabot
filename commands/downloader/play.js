@@ -115,14 +115,14 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("https://ytdownloader.nvlgroup.my.id", "/audio", {
+                const downloadResult = tools.api.createUrl("https://ytdownloader.nvlgroup.my.id", "/audio", {
                     url: searchResult.url,
                     bitrate: "128"
                 });
 
                 return await ctx.reply({
                     audio: {
-                        url: downloadApiUrl
+                        url: downloadResult
                     },
                     mimetype: mime.lookup("mp3")
                 });

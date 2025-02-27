@@ -24,7 +24,7 @@ module.exports = {
         try {
             const result = tools.api.createUrl("https://ytdownloader.nvlgroup.my.id", "/download", {
                 url,
-                resolution: 720
+                resolution: "720"
             });
 
             return await ctx.reply({
