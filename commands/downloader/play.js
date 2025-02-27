@@ -116,7 +116,7 @@ module.exports = {
                 );
 
                 const downloadApiUrl = tools.api.createUrl("fasturl", "/downup/ytmp3", {
-                    searchResult.url
+                    url: searchResult.url
                 });
                 const downloadResult = (await axios.get(downloadApiUrl)).data.result.media;
 
