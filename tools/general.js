@@ -1,12 +1,8 @@
 // Impor modul dan dependensi yang diperlukan
 const api = require("./api.js");
+const uploader = require("@zanixongroup/uploader");
 const axios = require("axios");
-const cheerio = require("cheerio");
 const didyoumean = require("didyoumean");
-const FormData = require("form-data");
-const {
-    fromBuffer
-} = require("file-type");
 
 async function checkMedia(msgType, requiredMedia) {
     if (!msgType || !requiredMedia) return false;
@@ -264,28 +260,30 @@ function ucword(text) {
     return text.toLowerCase().replace(/\b(\w)/g, (s) => s.toUpperCase());
 }
 
-async function upload(buffer) {
+async function upload(buffer, type, host) {
+    const hosts = {
+        any: ["FastUrl", "Litterbox", "Catbox", "Uguu"],
+        image: ["Pomf", "Quax", "Ryzen", "Shojib", "Erhabot", "TmpErhabot"],
+        video: ["Pomf", "Quax", "Videy", "Ryzen", "TmpErhabot"],
+        audio: ["Pomf", "Quax", "Ryzen", "TmpErhabot"]
+    };
+
     try {
-        const {
-            ext
-        } = await fromBuffer(buffer);
+        if (host) {
+            if (!hosts[type] || !hosts[type].includes(host)) return `Host '${host}' tidak mendukung tipe '${type}'`;
+            return await uploader[host](buffer);
+        }
 
-        let form = new FormData();
-        form.append("file", buffer, `tmp.${ext}`);
-
-        const apiUrl = api.createUrl("https://uploader.nyxs.pw", "/upload", {});
-        const response = await axios.post(apiUrl, form, {
-            headers: {
-                ...form.getHeaders()
+        for (const h of (hosts[type] || hosts.any)) {
+            try {
+                const url = await uploader[h](buffer);
+                if (url) return url;
+            } catch (err) {
+                continue;
             }
-        });
-
-        const $ = cheerio.load(response.data);
-        const url = $("a").attr("href");
-
-        return url;
+        }
     } catch (error) {
-        consolefy.error(`Error: ${error}`);
+        consolefy.error(`Error: ${error.message}`);
         return null;
     }
 }

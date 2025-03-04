@@ -22,7 +22,7 @@ module.exports = {
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const result = await tools.general.upload(buffer);
+            const result = await tools.general.upload(buffer, "any");
 
             return await ctx.reply(
                 `${quote(`URL: ${result}`)}\n` +

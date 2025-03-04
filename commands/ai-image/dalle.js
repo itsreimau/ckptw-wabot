@@ -16,7 +16,7 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("nasirxml", "/ai/dalle3", {
+            const result = tools.api.createUrl("https://api.nasirxml.my.id", "/ai/dalle3", {
                 prompt: input
             });
 

@@ -19,7 +19,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("diioffc", "/api/search/halodoc", {
+            const apiUrl = tools.api.createUrl("diibot", "/api/search/halodoc", {
                 query: input
             });
             const result = (await axios.get(apiUrl)).data.result;

@@ -129,12 +129,13 @@ module.exports = (bot) => {
             const {
                 coin,
                 level,
+                uid,
                 ...otherUserDb
             } = userDb || {};
             const newUserDb = {
                 coin: (isOwner || userDb?.premium) ? 0 : tools.general.clamp(coin || 1000, 0, 10000),
                 level: tools.general.clamp(level || 0, 0, 100),
-                uid: userDb?.uid || tools.general.generateUID(senderId),
+                uid: uid === tools.general.generateUID(senderId) ? uid : tools.general.generateUID(senderId),
                 xp: userDb?.xp || 0,
                 ...otherUserDb
             };
@@ -212,7 +213,7 @@ module.exports = (bot) => {
                 const checkMedia = await tools.general.checkMedia(ctx.getMessageType(), "image");
                 if (checkMedia && !await ctx.group().isSenderAdmin()) {
                     const buffer = await ctx.msg.media.toBuffer();
-                    const uploadUrl = await tools.general.upload(buffer);
+                    const uploadUrl = await tools.general.upload(buffer, "image");
                     const apiUrl = tools.api.createUrl("fasturl", "/tool/imagechecker", {
                         url: uploadUrl
                     });
@@ -311,7 +312,7 @@ module.exports = (bot) => {
                 .setOrg(config.owner.organization)
                 .setNumber(config.owner.id).build();
             let rejectionMessage = await bot.core.sendMessage(call.from, {
-                text: `Saat ini, kami tidak dapat menerima panggilan ${call.isVideo ? 'video' : 'suara'}.\n` +
+                text: `Saat ini, kami tidak dapat menerima panggilan ${call.isVideo ? "video" : "suara"}.\n` +
                     `Jika Anda memerlukan bantuan, silakan menghubungi Owner.`,
                 mentions: [call.from]
             });

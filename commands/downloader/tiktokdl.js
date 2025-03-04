@@ -37,37 +37,35 @@ module.exports = {
         try {
             const mediaType = flag.audio ? "audio" : "video_image";
 
-            const apiUrl = tools.api.createUrl("agatz", "/api/tiktok", {
+            const apiUrl = tools.api.createUrl("https://api.tiklydown.eu.org", "/api/download", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data;
 
             if (mediaType === "audio") {
                 return await ctx.reply({
                     audio: {
-                        url: result.music_info.url
+                        url: result.music.play_url
                     },
                     mimetype: mime.lookup("mp3")
                 });
             }
 
             if (mediaType === "video_image") {
-                const video = result.data.find(video => video.type === "nowatermark_hd") || result.data.find(video => video.type === "nowatermark");
+                if (result.video?.noWatermark) {
+                    return await ctx.reply({
+                        video: {
+                            url: result.video.noWatermark
+                        },
+                        mimetype: mime.lookup("mp4"),
+                        caption: `${quote(`URL: ${url}`)}\n` +
+                            "\n" +
+                            config.msg.footer
+                    });
+                }
 
-                return await ctx.reply({
-                    video: {
-                        url: video.url
-                    },
-                    mimetype: mime.lookup("mp4"),
-                    caption: `${quote(`URL: ${url}`)}\n\n` + config.msg.footer
-                });
-            }
-
-            if (mediaType === "video_image") {
-                const images = result.data.filter(item => item.type === "photo");
-
-                if (images.length > 0) {
-                    for (const image of images) {
+                if (result.images && result.images.length > 0) {
+                    for (const image of result.images) {
                         await ctx.reply({
                             image: {
                                 url: image.url

@@ -21,10 +21,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/search/googleimg", {
-                q: input
+            const apiUrl = tools.api.createUrl("diioffc", "/api/search/gimage", {
+                query: input
             });
-            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result);
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result).link;
 
             return await ctx.reply({
                 image: {

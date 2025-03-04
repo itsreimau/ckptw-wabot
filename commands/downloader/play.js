@@ -115,10 +115,10 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadResult = tools.api.createUrl("https://ytdownloader.nvlgroup.my.id", "/audio", {
-                    url: searchResult.url,
-                    bitrate: "128"
+                const downloadResult = tools.api.createUrl("agung", "/api/youtube-audiov2", {
+                    url: searchResult.url
                 });
+                const downloadResult = (await axios.get(downloadApiUrl)).data.result.url;
 
                 return await ctx.reply({
                     audio: {

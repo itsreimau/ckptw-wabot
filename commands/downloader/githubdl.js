@@ -22,7 +22,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("diioffc", "/api/download/gitclone", {
+            const apiUrl = tools.api.createUrl("diibot", "/api/download/gitclone", {
                 url
             });
             const result = (await axios.get(apiUrl)).data.result;

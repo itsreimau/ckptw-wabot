@@ -34,7 +34,7 @@ module.exports = {
             [top, bottom] = bottom ? [top || "_", bottom] : ["_", top || "_"];
 
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const uploadUrl = await tools.general.upload(buffer);
+            const uploadUrl = await tools.general.upload(buffer, "image");
             const apiUrl = tools.api.createUrl("https://api.memegen.link", `/images/custom/${top}/${bottom}.png`, {
                 background: uploadUrl
             });

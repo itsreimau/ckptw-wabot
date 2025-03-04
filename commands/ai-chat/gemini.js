@@ -27,7 +27,7 @@ module.exports = {
         try {
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-                const uploadUrl = await tools.general.upload(buffer);
+                const uploadUrl = await tools.general.upload(buffer, "image");
                 const apiUrl = tools.api.createUrl("otinxsandip", "/gemini2", {
                     prompt: input,
                     url: uploadUrl

@@ -23,7 +23,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agungny", "/api/capcut", {
+            const apiUrl = tools.api.createUrl("agung", "/api/capcut", {
                 url
             });
             const result = (await axios.get(apiUrl)).data.result.videoUrl;

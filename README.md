@@ -1,4 +1,4 @@
-# ckptw-wabot (Rebirth)
+# ckptw-wabot (Rebuild)
 
 `ckptw-wabot` adalah bot WhatsApp yang dibangun menggunakan library [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/). Bot ini memungkinkan Anda untuk mengotomatisasi berbagai tugas di WhatsApp dan mendukung arsitektur modular melalui sistem perintah (command).
 
