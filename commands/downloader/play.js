@@ -115,7 +115,7 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadResult = tools.api.createUrl("agung", "/api/youtube-audiov2", {
+                const downloadApiUrl = tools.api.createUrl("agung", "/api/youtube-audiov2", {
                     url: searchResult.url
                 });
                 const downloadResult = (await axios.get(downloadApiUrl)).data.result.url;
