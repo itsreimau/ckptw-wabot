@@ -46,7 +46,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const participantAnswer = m.content.toLowerCase();
-                const participantId = tools.general.getID(m.jid);
+                const participarticipantId = tools.general.getID(m.sender);
 
                 if (game.answers.has(participantAnswer)) {
                     game.answers.delete(participantAnswer);
