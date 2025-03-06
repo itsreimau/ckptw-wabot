@@ -17,14 +17,14 @@ module.exports = {
             });
 
             collector.on("collect", async (m) => {
-                const userAnswer = m.content.trim().toLowerCase();
+                const message = m.content.trim().toLowerCase();
                 const senderId = tools.general.getID(ctx.sender.jid);
 
-                if (userAnswer === "y") {
+                if (message === "y") {
                     db.delete(`user.${senderId}`);
                     await ctx.reply(quote("✅ Data Anda berhasil direset. Semua data telah dihapus!"));
                     collector.stop();
-                } else if (userAnswer === "n") {
+                } else if (message === "n") {
                     await ctx.reply(quote("❌ Proses reset data telah dibatalkan."));
                     collector.stop();
                 }

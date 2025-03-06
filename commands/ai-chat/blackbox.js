@@ -31,7 +31,7 @@ module.exports = {
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadUrl = await tools.general.upload(buffer, "image");
-                const apiUrl = tools.api.createUrl("fasturl", "/aillm/blackbox", {
+                const apiUrl = tools.api.createUrl("fast", "/aillm/blackbox", {
                     ask: input,
                     model,
                     imageUrl: uploadUrl
@@ -40,7 +40,7 @@ module.exports = {
 
                 return await ctx.reply(result);
             } else {
-                const apiUrl = tools.api.createUrl("fasturl", "/aillm/blackbox", {
+                const apiUrl = tools.api.createUrl("fast", "/aillm/blackbox", {
                     ask: input,
                     model
                 });

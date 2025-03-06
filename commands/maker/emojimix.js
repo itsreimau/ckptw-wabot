@@ -25,7 +25,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/maker/emojimix", {
+            const apiUrl = tools.api.createUrl("fast", "/maker/emojimix", {
                 emoji1,
                 emoji2
             });

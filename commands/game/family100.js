@@ -25,7 +25,6 @@ module.exports = {
                     allAnswered: 50
                 },
                 timeout: 90000,
-                senderId: tools.general.getID(ctx.sender.jid),
                 answers: new Set(result.jawaban.map(d => d.toLowerCase())),
                 participants: new Set()
             };
@@ -46,17 +45,16 @@ module.exports = {
             });
 
             collector.on("collect", async (m) => {
-                const userAnswer = m.content.toLowerCase();
-                const participantJid = m.jid;
-                const participantId = tools.general.getID(participantJid);
+                const participantAnswer = m.content.toLowerCase();
+                const participantId = tools.general.getID(m.jid);
 
-                if (game.answers.has(userAnswer)) {
-                    game.answers.delete(userAnswer);
+                if (game.answers.has(participantAnswer)) {
+                    game.answers.delete(participantAnswer);
                     game.participants.add(participantId);
 
                     await db.add(`user.${participantId}.coin`, game.coin.answered);
                     await ctx.sendMessage(ctx.id, {
-                        text: quote(`✅ ${tools.general.ucword(userAnswer)} benar! Jawaban tersisa: ${game.answers.size}`)
+                        text: quote(`✅ ${tools.general.ucword(participantAnswer)} benar! Jawaban tersisa: ${game.answers.size}`)
                     }, {
                         quoted: m
                     });
@@ -70,7 +68,7 @@ module.exports = {
                         await ctx.reply(quote(`🎉 Selamat! Semua jawaban telah terjawab! Setiap anggota yang menjawab mendapat ${game.coin.allAnswered} koin.`));
                         return collector.stop();
                     }
-                } else if (userAnswer === "surrender") {
+                } else if (participantAnswer === "surrender") {
                     const answer = [...game.answers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1");
                     session.delete(ctx.id);
                     await ctx.reply(

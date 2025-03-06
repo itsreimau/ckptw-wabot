@@ -21,7 +21,6 @@ module.exports = {
             const game = {
                 coin: 5,
                 timeout: 60000,
-                senderId: tools.general.getID(ctx.sender.jid),
                 answer: result.jawaban.toLowerCase()
             };
 
@@ -46,13 +45,14 @@ module.exports = {
             });
 
             collector.on("collect", async (m) => {
-                const userAnswer = m.content.toLowerCase();
+                const participantAnswer = m.content.toLowerCase();
+                const participantId = tools.general.getID(m.jid);
 
-                if (userAnswer === game.answer) {
+                if (participantAnswer === game.answer) {
                     session.delete(ctx.id);
                     await Promise.all([
-                        db.add(`user.${game.senderId}.coin`, game.coin),
-                        db.add(`user.${game.senderId}.winGame`, 1)
+                        db.add(`user.${participantId}.coin`, game.coin),
+                        db.add(`user.${participantId}.winGame`, 1)
                     ]);
                     await ctx.sendMessage(
                         ctx.id, {
@@ -63,14 +63,14 @@ module.exports = {
                         }
                     );
                     return collector.stop();
-                } else if (userAnswer === "hint") {
+                } else if (participantAnswer === "hint") {
                     const clue = game.answer.replace(/[aiueo]/g, "_");
                     await ctx.sendMessage(ctx.id, {
                         text: monospace(clue.toUpperCase())
                     }, {
                         quoted: m
                     });
-                } else if (userAnswer === "surrender") {
+                } else if (participantAnswer === "surrender") {
                     session.delete(ctx.id);
                     await ctx.reply(
                         `${quote("🏳️ Anda menyerah!")}\n` +

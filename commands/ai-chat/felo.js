@@ -18,7 +18,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/felo", {
+            const apiUrl = tools.api.createUrl("fast", "/aiexperience/felo", {
                 ask: input
             });
             const result = (await axios.get(apiUrl)).data.result.answer;

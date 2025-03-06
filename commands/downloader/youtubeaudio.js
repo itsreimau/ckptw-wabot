@@ -23,10 +23,10 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agung", "/api/youtube-audiov2", {
+            const apiUrl = tools.api.createUrl("cloud", "/api/download/ytmp3", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.result.url;
+            const result = (await axios.get(apiUrl)).data.metadata.download_url;
 
             return await ctx.reply({
                 audio: {

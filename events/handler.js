@@ -127,16 +127,17 @@ module.exports = (bot) => {
 
             // Penanganan basis data pengguna
             const {
-                coin,
-                level,
-                uid,
+                coin: userCoin,
+                level: userLevel = 1,
+                uid: userUid,
+                xp: userXp = 0,
                 ...otherUserDb
             } = userDb || {};
             const newUserDb = {
-                coin: (isOwner || userDb?.premium) ? 0 : tools.general.clamp(coin || 1000, 0, 10000),
-                level: tools.general.clamp(level || 0, 0, 100),
-                uid: uid === tools.general.generateUID(senderId) ? uid : tools.general.generateUID(senderId),
-                xp: userDb?.xp || 0,
+                coin: (isOwner || userDb?.premium) ? 0 : (Number.isFinite(userCoin) ? tools.general.clamp(userCoin, 0, 10000) : 1000),
+                uid: userUid === tools.general.generateUID(senderId) ? userUid : tools.general.generateUID(senderId),
+                xp: userXp,
+                level: userLevel,
                 ...otherUserDb
             };
             await db.set(`user.${senderId}`, newUserDb);
@@ -214,7 +215,7 @@ module.exports = (bot) => {
                 if (checkMedia && !await ctx.group().isSenderAdmin()) {
                     const buffer = await ctx.msg.media.toBuffer();
                     const uploadUrl = await tools.general.upload(buffer, "image");
-                    const apiUrl = tools.api.createUrl("fasturl", "/tool/imagechecker", {
+                    const apiUrl = tools.api.createUrl("fast", "/tool/imagechecker", {
                         url: uploadUrl
                     });
                     const result = (await axios.get(apiUrl)).data.result.status;

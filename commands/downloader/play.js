@@ -115,10 +115,10 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("agung", "/api/youtube-audiov2", {
+                const downloadApiUrl = tools.api.createUrl("cloud", "/api/download/ytmp3", {
                     url: searchResult.url
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.result.url;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.metadata.download_url;
 
                 return await ctx.reply({
                     audio: {

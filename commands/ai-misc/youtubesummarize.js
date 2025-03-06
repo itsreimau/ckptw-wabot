@@ -22,7 +22,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/ytsummarize-v1", {
+            const apiUrl = tools.api.createUrl("fast", "/aiexperience/ytsummarize-v1", {
                 url,
                 language: ctx.sender.jid.startsWith("62") ? "indonesian" : "english"
             });

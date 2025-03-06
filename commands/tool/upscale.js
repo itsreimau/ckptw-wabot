@@ -38,7 +38,7 @@ module.exports = {
 
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const result = tools.api.createUrl("fasturl", "/aiimage/upscale", {
+            const result = tools.api.createUrl("fast", "/aiimage/upscale", {
                 imageUrl: uploadUrl,
                 resize: flag.resize || 2
             });
