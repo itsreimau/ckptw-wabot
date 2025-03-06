@@ -46,7 +46,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const participantAnswer = m.content.toLowerCase();
-                const participarticipantId = tools.general.getID(m.sender);
+                const participantId = tools.general.getID(m.sender);
 
                 if (participantAnswer === game.answer) {
                     session.delete(ctx.id);
