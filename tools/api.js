@@ -1,3 +1,4 @@
+// Daftar API gratis
 const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"

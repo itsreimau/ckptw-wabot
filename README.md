@@ -157,6 +157,7 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
 
    module.exports = { // Mengatur dan membagikan fungsi untuk perintah "helloworld"
        name: "helloworld", // Nama perintah yang akan digunakan oleh pengguna
+       aliases: ["hello"], // Nama alternatif yang bisa digunakan untuk memanggil perintah ini
        category: "test", // Kategori untuk mengelompokkan perintah ini
        permissions: { // Pengaturan khusus untuk perintah ini
            admin: Boolean, // Apakah hanya admin grup yang bisa menggunakan perintah ini? (true/false)
