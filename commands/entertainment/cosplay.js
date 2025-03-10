@@ -6,7 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "cosplay",
-    aliases: ["cosplayer"]
+    aliases: ["cosplayer"],
     category: "entertainment",
     permissions: {
         coin: 10

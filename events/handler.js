@@ -127,8 +127,8 @@ module.exports = (bot) => {
 
             // Penanganan basis data pengguna
             if (isOwner || userDb?.premium) db.set(`user.${senderId}.coin`, 0);
-            else if (userDb?.coin === undefined || !Number.isFinite(userDb?.coin)) userDb?.coin !== 0 && db.set(`user.${senderId}.coin`, 100);
-            else if (userDb?.coin > 10000) db.set(`user.${senderId}.coin`, 10000);
+            if (userDb?.coin !== 0 && (userDb?.coin === undefined || !Number.isFinite(userDb?.coin))) db.set(`user.${senderId}.coin`, 100);
+            if (userDb?.coin > 10000) db.set(`user.${senderId}.coin`, 10000);
             if (userDb?.uid !== tools.general.generateUID(senderId)) db.set(`user.${senderId}.uid`, tools.general.generateUID(senderId));
 
             if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd?.prefix + isCmd?.didyoumean)}.`)); // Did you mean?
