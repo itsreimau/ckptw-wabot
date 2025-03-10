@@ -1,26 +1,19 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "carbon",
-    category: "maker",
+    name: "cosplay",
+    aliases: ["cosplayer"]
+    category: "entertainment",
     permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || null;
-
-        if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, 'consolefy.log("halo, dunia!");'))
-        );
-
         try {
-            const result = tools.api.createUrl("archive", "/maker/carbon", {
-                text: input
-            });
+            const result = tools.api.createUrl("archive", `/asupan/cosplay`);
 
             return await ctx.reply({
                 image: {
@@ -34,4 +27,4 @@ module.exports = {
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }
-};
+}

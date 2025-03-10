@@ -41,10 +41,8 @@ module.exports = {
         try {
             const rewardCoin = (userDb?.coin || 0) + claimRewards[input].reward;
 
-            await Promise.all([
-                db.set(`user.${senderId}.coin`, rewardCoin),
-                db.set(`user.${senderId}.lastClaim.${input}`, currentTime)
-            ]);
+            await db.set(`user.${senderId}.coin`, rewardCoin);
+            await db.set(`user.${senderId}.lastClaim.${input}`, currentTime);
 
             return await ctx.reply(quote(`✅ Anda berhasil mengklaim hadiah ${input} sebesar ${claimRewards[input].reward} koin! Koin saat ini: ${rewardCoin}.`));
         } catch (error) {

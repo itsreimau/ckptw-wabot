@@ -21,7 +21,7 @@ module.exports = {
                 const senderId = tools.general.getID(ctx.sender.jid);
 
                 if (message === "y") {
-                    db.delete(`user.${senderId}`);
+                    await db.delete(`user.${senderId}`);
                     await ctx.reply(quote("✅ Data Anda berhasil direset. Semua data telah dihapus!"));
                     collector.stop();
                 } else if (message === "n") {

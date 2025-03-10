@@ -86,7 +86,7 @@ module.exports = (bot) => {
                 text: quote(`✅ Berhasil dimulai ulang! Membutuhkan waktu ${timeago}.`),
                 edit: botRestart.key
             });
-            db.delete("bot.restart");
+            await db.delete("bot.restart");
         }
 
         // Tetapkan config pada bot
@@ -126,21 +126,10 @@ module.exports = (bot) => {
             config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"; // Penangan pada ukuran basis data
 
             // Penanganan basis data pengguna
-            const {
-                coin: userCoin,
-                level: userLevel = 1,
-                uid: userUid,
-                xp: userXp = 0,
-                ...otherUserDb
-            } = userDb || {};
-            const newUserDb = {
-                coin: (isOwner || userDb?.premium) ? 0 : (Number.isFinite(userCoin) ? tools.general.clamp(userCoin, 0, 10000) : 1000),
-                uid: userUid === tools.general.generateUID(senderId) ? userUid : tools.general.generateUID(senderId),
-                xp: userXp,
-                level: userLevel,
-                ...otherUserDb
-            };
-            await db.set(`user.${senderId}`, newUserDb);
+            if (isOwner || userDb?.premium) db.set(`user.${senderId}.coin`, 0);
+            else if (userDb?.coin === undefined || !Number.isFinite(userDb?.coin)) userDb?.coin !== 0 && db.set(`user.${senderId}.coin`, 100);
+            else if (userDb?.coin > 10000) db.set(`user.${senderId}.coin`, 10000);
+            if (userDb?.uid !== tools.general.generateUID(senderId)) db.set(`user.${senderId}.uid`, tools.general.generateUID(senderId));
 
             if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd?.prefix + isCmd?.didyoumean)}.`)); // Did you mean?
 
@@ -234,11 +223,11 @@ module.exports = (bot) => {
                 const key = `group.${groupId}.spam.${senderId}`;
                 const {
                     count = 0, lastMessageTime = 0
-                } = db.get(key) || {};
+                } = await db.get(key) || {};
                 const timeDiff = now - lastMessageTime;
                 const newCount = timeDiff < 5000 ? count + 1 : 1;
 
-                db.set(key, {
+                await db.set(key, {
                     count: newCount,
                     lastMessageTime: now
                 });
@@ -247,7 +236,7 @@ module.exports = (bot) => {
                     await ctx.reply(quote(`⛔ Jangan spam!`));
                     await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
-                    db.delete(key);
+                    await db.delete(key);
                 }
             }
 
