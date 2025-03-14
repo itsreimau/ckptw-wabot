@@ -29,14 +29,16 @@ module.exports = {
             const result = (await axios.get(apiUrl)).data.data.media;
 
             for (const media of result) {
-                if (media.type === "Video" && media.videoUrl) {
+                const mediaType = media.type.toLowerCase;
+
+                if (mediaType === "video" && media.videoUrl) {
                     await ctx.reply({
                         video: {
                             url: media.videoUrl
                         },
                         mimetype: mime.lookup("mp4")
                     });
-                } else if (media.type === "Image" && media.url) {
+                } else if (mediaType === "image" && media.url) {
                     await ctx.reply({
                         image: {
                             url: media.url

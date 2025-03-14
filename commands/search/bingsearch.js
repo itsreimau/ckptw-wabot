@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "googlesearch",
-    aliases: ["google", "googles"],
+    name: "bingsearch",
+    aliases: ["bing", "bings"],
     category: "search",
     permissions: {
         coin: 10
@@ -19,7 +19,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fast", "/search/gsearch", {
+            const apiUrl = tools.api.createUrl("fast", "/search/bingsearch", {
                 ask: input
             });
             const result = (await axios.get(apiUrl)).data.result;

@@ -28,7 +28,8 @@ module.exports = {
                 `${quote(`Nama: ${r.name}`)}\n` +
                 `${quote(`Harga: ${r.price}`)}\n` +
                 `${quote(`Skor: ${r.score}`)}\n` +
-                `${quote(`Platform: ${r.platform}`)}`
+                `${quote(`Platform: ${r.platform}`)}` +
+                `${quote(`URL: ${r.url}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

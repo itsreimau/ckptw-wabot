@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "googlesearch",
-    aliases: ["google", "googles"],
+    name: "kbbisearch",
+    aliases: ["kbbi", "kbbis"],
     category: "search",
     permissions: {
         coin: 10
@@ -15,19 +15,20 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "evangelion"))
+            quote(tools.msg.generateCommandExample(ctx.used, "bogor"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fast", "/search/gsearch", {
-                ask: input
+            const apiUrl = tools.api.createUrl("fast", "/search/kbbi", {
+                word: input
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.result.definitions;
 
             const resultText = result.map((r) =>
-                `${quote(`Judul: ${r.title}`)}\n` +
-                `${quote(`Deskripsi: ${r.description}`)}\n` +
-                `${quote(`URL: ${r.link}`)}`
+                `${quote(`Istilah: ${r.term}`)}\n` +
+                `${quote(`Pengucapan: ${r.pronunciation}`)}\n` +
+                `${quote(`Golongan: ${r.class}`)}\n` +
+                `${quote(`Arti: ${r.meaning}`)}\n`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

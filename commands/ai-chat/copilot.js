@@ -20,20 +20,26 @@ module.exports = {
 
         try {
             const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
-            const apiUrl = tools.api.createUrl("fast", "/api/ai/copilot", {
+            const apiUrl = tools.api.createUrl("fast", "/aillm/copilot", {
                 ask: input,
                 style: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`, // Dapat diubah sesuai keinginan Anda
                 sessionId: senderUid
             });
             const result = (await axios.get(apiUrl)).data.result;
+            const imageUrl = result.images?.url;
+            const captionText = result.text;
 
-            return await ctx.reply(result.images?.url ? {
-                image: {
-                    url: result.images.url
-                },
-                mimetype: mime.lookup("png"),
-                caption: result.text
-            } : result.text);
+            if (imageUrl) {
+                return await ctx.reply({
+                    image: {
+                        url: imageUrl
+                    },
+                    mimetype: mime.lookup("png"),
+                    caption: captionText
+                });
+            } else {
+                return await ctx.reply(captionText);
+            }
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             if (error.status !== 200) return await ctx.reply(config.msg.notFound);

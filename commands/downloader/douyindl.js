@@ -1,37 +1,38 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "googleimage",
-    aliases: ["gimage"],
-    category: "tool",
+    name: "douyindl",
+    category: "downloader",
     permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || null;
+        const url = ctx.args[0] || null;
 
-        if (!input) return await ctx.reply(
+        if (!url) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "moon"))
+            quote(tools.msg.generateCommandExample(ctx.used, "https://example.com/"))
         );
 
+        const isUrl = await tools.general.isUrl(url);
+        if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
+
         try {
-            const apiUrl = tools.api.createUrl("fast", "/search/gimage", {
-                ask: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/douyin", {
+                url
             });
-            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.data).image;
+            const result = JSON.parse((await axios.get(apiUrl)).data.data);
 
             return await ctx.reply({
-                image: {
-                    url: result
+                video: {
+                    url: result.Video_HD || result.Video
                 },
-                mimetype: mime.lookup("png"),
-                caption: `${quote(`Kueri: ${input}`)}\n` +
+                mimetype: mime.lookup("mp4"),
+                caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

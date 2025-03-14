@@ -4,7 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "mistral",
+    name: "perplexity",
     category: "ai-chat",
     permissions: {
         coin: 10
@@ -18,10 +18,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/mistral-7b-instruct-v0.2", {
-                content: input
+            const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
+            const apiUrl = tools.api.createUrl("fast", "/aillm/perplexity", {
+                ask: input,
+                style: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`, // Dapat diubah sesuai keinginan Anda
+                model: "sonar-deep-research",
+                sessionId: senderUid
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply(result);
         } catch (error) {

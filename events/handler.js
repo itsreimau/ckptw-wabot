@@ -207,9 +207,9 @@ module.exports = (bot) => {
                     const apiUrl = tools.api.createUrl("fast", "/tool/imagechecker", {
                         url: uploadUrl
                     });
-                    const result = (await axios.get(apiUrl)).data.result.status;
+                    const result = (await axios.get(apiUrl)).data.result.status.toLowerCase();
 
-                    if (result === "NSFW") {
+                    if (result === "nsfw") {
                         await ctx.reply(`⛔ Jangan kirim NSFW!`);
                         await ctx.deleteMessage(m.key);
                         if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
