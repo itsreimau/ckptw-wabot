@@ -26,7 +26,7 @@ module.exports = {
                 sessionId: senderUid
             });
             const result = (await axios.get(apiUrl)).data.result;
-            const imageUrl = result.images?.url;
+            const imageUrl = result.images[0]?.url;
             const captionText = result.text;
 
             if (imageUrl) {
