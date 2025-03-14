@@ -12,9 +12,6 @@ const APIs = {
     bk9: {
         baseURL: "https://bk9.fun"
     },
-    cloud: {
-        baseURL: "https://rest.cloudkuimages.xyz"
-    },
     diibot: {
         baseURL: "https://api.diioffc.web.id"
     },

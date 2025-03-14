@@ -4,7 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "sindy",
+    name: "lepton",
     category: "ai-chat",
     permissions: {
         coin: 10
@@ -18,12 +18,12 @@ module.exports = {
         );
 
         try {
-            const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
-            const apiUrl = tools.api.createUrl("diibot", "/api/ai/sindy", {
-                query: input,
-                user: senderUid
+            const apiUrl = tools.api.createUrl("fast", "/aiexperience/hika", {
+                ask: input,
+                type: "fullchat",
+                language: ctx.sender.jid.startsWith("62") ? "id" : "en"
             });
-            const result = (await axios.get(apiUrl)).data.result.message;
+            const result = (await axios.get(apiUrl)).data.result.chat;
 
             return await ctx.reply(result);
         } catch (error) {

@@ -16,24 +16,22 @@ module.exports = {
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
-        const senderId = tools.general.getID(ctx.sender.jid);
-        const userDb = await db.get(`user.${senderId}`) || {};
-
         if (input === "list") {
             const listText = await tools.list.get("claim");
             return await ctx.reply(listText);
         }
 
-        if (!claimRewards[input]) return await ctx.reply(quote(`❎ Hadiah tidak valid!`));
+        const senderId = tools.general.getID(ctx.sender.jid);
+        const userDb = await db.get(`user.${senderId}`) || {};
 
         if (tools.general.isOwner(senderId) && userDb?.premium) return await ctx.reply(quote("❎ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
 
-        const requiredLevel = claimRewards[input].level || 0;
-        if (userDb?.level < requiredLevel) return await ctx.reply(quote(`❎ Anda perlu mencapai level ${requiredLevel} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userDb?.level || 0}.`));
+        if (userDb?.level < claimRewards[input].level || 0) return await ctx.reply(quote(`❎ Anda perlu mencapai level ${requiredLevel} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userDb?.level || 0}.`));
 
-        const lastClaimTime = userDb?.lastClaim?.[input] || 0;
+        if (!claimRewards[input]) return await ctx.reply(quote(`❎ Hadiah tidak valid!`));
+
         const currentTime = Date.now();
-        const timePassed = currentTime - lastClaimTime;
+        const timePassed = currentTime - userDb?.lastClaim?.[input] || 0;
         const remainingTime = claimRewards[input].cooldown - timePassed;
 
         if (remainingTime > 0) return await ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input}. Tunggu ${tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));

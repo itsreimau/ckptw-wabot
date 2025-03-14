@@ -5,6 +5,7 @@ const {
 
 module.exports = {
     name: "mode",
+    alises: ["m"],
     category: "owner",
     permissions: {
         owner: true

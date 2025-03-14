@@ -13,10 +13,6 @@ module.exports = {
             const senderJid = ctx.sender.jid;
             const senderId = tools.general.getID(senderJid);
 
-            const userDb = await db.get(`user.${senderId}`) || {};
-
-            const isOwner = tools.general.isOwner(senderId);
-
             const leaderboardData = Object.entries((await db.toJSON()).user)
                 .map(([id, data]) => ({
                     id,
@@ -25,8 +21,9 @@ module.exports = {
                 }))
                 .sort((a, b) => b.winGame - a.winGame || b.level - a.level);
 
+            const userDb = await db.get(`user.${senderId}`) || {};
             const userRank = leaderboardData.findIndex(user => user.id === senderId) + 1;
-
+            const isOwner = tools.general.isOwner(senderId);
             const profilePictureUrl = await ctx.core.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
             return await ctx.reply({

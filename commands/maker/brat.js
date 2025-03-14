@@ -24,8 +24,9 @@ module.exports = {
         if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 10000 kata!`));
 
         try {
-            const apiUrl = tools.api.createUrl("https://brat.caliphdev.com", "/api/brat", {
-                text: input
+            const apiUrl = tools.api.createUrl("fast", "/maker/brat/animated", {
+                text: input,
+                mode: "image"
             });
             const result = new Sticker(apiUrl, {
                 pack: config.sticker.packname,

@@ -115,10 +115,10 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("cloud", "/api/download/ytmp3", {
+                const downloadApiUrl = tools.api.createUrl("fast", "/downup/ytmp3", {
                     url: searchResult.url
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.metadata.download_url;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.result.media;
 
                 return await ctx.reply({
                     audio: {
