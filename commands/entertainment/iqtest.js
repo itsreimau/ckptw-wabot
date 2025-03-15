@@ -5,6 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "iqtest",
+    aliases: ["iq", "testiq"],
     category: "entertainment",
     permissions: {
         coin: 10

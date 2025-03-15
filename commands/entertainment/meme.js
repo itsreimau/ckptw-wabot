@@ -6,6 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "meme",
+    aliases: ["memes"],
     category: "entertainment",
     permissions: {
         coin: 10

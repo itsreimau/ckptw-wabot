@@ -4,7 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "lepton",
+    name: "hika",
+    aliases: ["hikachat", "hikaru"],
     category: "ai-chat",
     permissions: {
         coin: 10

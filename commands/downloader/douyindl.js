@@ -6,6 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "douyindl",
+    aliases: ["douyin"],
     category: "downloader",
     permissions: {
         coin: 10
