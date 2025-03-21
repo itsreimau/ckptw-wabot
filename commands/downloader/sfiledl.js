@@ -2,8 +2,8 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime");
-const path = require("path");
+const mime = require("mime-types");
+const path = require("node:path");
 
 module.exports = {
     name: "sfiledl",

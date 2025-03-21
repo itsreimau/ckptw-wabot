@@ -8,9 +8,9 @@ const {
 const axios = require("axios");
 const {
     exec
-} = require("child_process");
-const fs = require("fs");
-const util = require("util");
+} = require("node:child_process");
+const fs = require("node:fs");
+const util = require("node:util");
 
 // Fungsi untuk menangani event pengguna bergabung/keluar grup
 async function handleUserEvent(bot, m, type) {
@@ -176,7 +176,7 @@ module.exports = (bot) => {
 
             // Penanganan AFK (Menghapus status AFK pengguna yang mengirim pesan)
             const senderID = tools.general.getID(senderId);
-            const userAFK = await db.get(`user.${senderID}.afk`) || {};
+            const userAFK = userDb?.afk || {};
             if (userAFK?.reason && userAFK?.timestamp) {
                 const timeElapsed = Date.now() - userAFK.timestamp;
                 if (timeElapsed > 3000) {

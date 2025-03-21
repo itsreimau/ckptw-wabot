@@ -6,9 +6,9 @@ const {
     Consolefy
 } = require("@mengkodingan/consolefy");
 const CFonts = require("cfonts");
-const fs = require("fs");
-const http = require("http");
-const path = require("path");
+const fs = require("node:fs");
+const http = require("node:http");
+const path = require("node:path");
 const SimplDB = require("simpl.db");
 
 // Inisialisasi Consolefy untuk logging

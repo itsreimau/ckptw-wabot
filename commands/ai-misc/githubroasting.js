@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "githubroasting",
-    aliases: ["ghroasting"],
+    aliases: ["ghroast", "ghroasting", "githubroast"],
     category: "ai-misc",
     permissions: {
         coin: 10

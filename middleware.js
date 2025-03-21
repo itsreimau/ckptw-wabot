@@ -9,8 +9,8 @@ const {
 async function checkCoin(requiredCoin, senderId) {
     const userDb = await db.get(`user.${senderId}`) || {};
 
-    if (tools.general.isOwner(senderId) || userDb.premium) return false;
-    if ((userDb.coin || 0) < requiredCoin) return true;
+    if (tools.general.isOwner(senderId) || userDb?.premium) return false;
+    if ((userDb?.coin || 0) < requiredCoin) return true;
 
     await db.subtract(`user.${senderId}.coin`, requiredCoin);
     return false;
@@ -33,9 +33,9 @@ module.exports = (bot) => {
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
 
-        // Pengecekan mode bot (group, private, self) dan perintah unmute
+        // Pengecekan mode bot (group, private, self) dan sistem mute/unmute
         if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return;
-        if (groupDb.mute && !["unmute", "ounmute"].includes(ctx.used.command)) return;
+        if (groupDb.mute && !["unmute", "ounmute"].includes(ctx.used.command) && !isOwner) return;
 
         if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi mengetik jika diaktifkan dalam konfigurasi
 
@@ -76,19 +76,19 @@ module.exports = (bot) => {
         // Pengecekan kondisi pengguna
         const restrictions = [{
                 key: "banned",
-                condition: userDb.banned,
+                condition: userDb?.banned,
                 msg: config.msg.banned,
                 reaction: "🚫"
             },
             {
                 key: "cooldown",
-                condition: !isOwner && !userDb.premium && new Cooldown(ctx, config.system.cooldown).onCooldown,
+                condition: !isOwner && !userDb?.premium && new Cooldown(ctx, config.system.cooldown).onCooldown,
                 msg: config.msg.cooldown,
                 reaction: "💤"
             },
             {
                 key: "requireBotGroupMembership",
-                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb.premium && !(await ctx.group(config.bot.groupJid).members()).some(member => tools.general.getID(member.id) === senderId),
+                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium && !(await ctx.group(config.bot.groupJid).members()).some(member => tools.general.getID(member.id) === senderId),
                 msg: config.msg.botGroupMembership,
                 reaction: "🚫"
             }
@@ -102,7 +102,7 @@ module.exports = (bot) => {
             }
             of restrictions) {
             if (condition) {
-                if (!userDb.hasSentMsg?.[key]) {
+                if (!userDb?.hasSentMsg?.[key]) {
                     await ctx.reply(msg);
                     await db.set(`user.${senderId}.hasSentMsg.${key}`, true);
                 } else {
@@ -145,7 +145,7 @@ module.exports = (bot) => {
             },
             {
                 key: "premium",
-                condition: !isOwner && !userDb.premium,
+                condition: !isOwner && !userDb?.premium,
                 msg: config.msg.premium
             },
             {

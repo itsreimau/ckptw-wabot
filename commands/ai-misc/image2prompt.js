@@ -6,7 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "image2prompt",
-    aliases: ["image2prompt", "imagetoprompt", "imgtoprompt"],
+    aliases: ["imagetoprompt", "imgtoprompt"],
     category: "ai-misc",
     permissions: {
         coin: 10

@@ -4,7 +4,7 @@ const {
 const {
     exec
 } = require("child_process");
-const util = require("util");
+const util = require("node:util");
 
 module.exports = {
     name: "restart",

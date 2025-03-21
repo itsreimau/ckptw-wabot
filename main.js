@@ -5,7 +5,7 @@ const {
     Client,
     CommandHandler
 } = require("@mengkodingan/ckptw");
-const path = require("path");
+const path = require("node:path");
 
 // Konfigurasi bot dari file 'config.js'
 const {
