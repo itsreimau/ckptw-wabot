@@ -22,7 +22,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("fast", "/search/itchio", {
                 name: input
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map((r) =>
                 `${quote(`Nama: ${r.title}`)}\n` +

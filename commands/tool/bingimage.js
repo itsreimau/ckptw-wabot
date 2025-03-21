@@ -24,7 +24,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("fast", "/search/bingimage", {
                 ask: input
             });
-            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.data).imageUrl;
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result).imageUrl;
 
             return await ctx.reply({
                 image: {

@@ -22,7 +22,7 @@ module.exports = {
             const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
             const apiUrl = tools.api.createUrl("fast", "/aillm/copilot", {
                 ask: input,
-                style: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`, // Dapat diubah sesuai keinginan Anda
+                style: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging. Never mention anyone other than ${ctx.sender.pushName}.`, // Dapat diubah sesuai keinginan Anda
                 sessionId: senderUid
             });
             const result = (await axios.get(apiUrl)).data.result;

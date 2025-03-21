@@ -1,3 +1,4 @@
+// Ekspor modul atau fungsi yang diperlukan
 const tools = {
     api: require("./api.js"),
     general: require("./general.js"),

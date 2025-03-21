@@ -29,7 +29,7 @@ module.exports = {
             const result = (await axios.get(apiUrl)).data.data.media;
 
             for (const media of result) {
-                const mediaType = media.type.toLowerCase;
+                const mediaType = media.type.toLowerCase();
 
                 if (mediaType === "video" && media.videoUrl) {
                     await ctx.reply({
