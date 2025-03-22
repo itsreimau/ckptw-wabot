@@ -23,6 +23,8 @@ async function handleUserEvent(bot, m, type) {
         const groupId = tools.general.getID(id);
         const groupDb = await db.get(`group.${groupId}`) || {};
 
+        if (groupDb?.mute) return;
+
         if (groupDb?.option?.welcome) {
             const metadata = await bot.core.groupMetadata(id);
 
@@ -117,7 +119,8 @@ module.exports = (bot) => {
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
 
-        if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return; // Pengecekan mode bot (group, private, self)
+        if ((botDb?.mode === "group" && !isGroup) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return; // Pengecekan mode bot (group, private, self)
+        if (groupDb?.mute && !isOwner) return;
 
         isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
 

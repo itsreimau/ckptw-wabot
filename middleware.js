@@ -34,8 +34,8 @@ module.exports = (bot) => {
         const groupDb = await db.get(`group.${groupId}`) || {};
 
         // Pengecekan mode bot (group, private, self) dan sistem mute/unmute
-        if ((botDb.mode === "group" && !isGroup) || (botDb.mode === "private" && isGroup) || (botDb.mode === "self" && !isOwner)) return;
-        if (groupDb.mute && !["unmute", "ounmute"].includes(ctx.used.command) && !isOwner) return;
+        if ((botDb?.mode === "group" && !isGroup) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
+        if (groupDb?.mute && !["unmute", "ounmute"].includes(ctx.used.command) && !isOwner) return;
 
         if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi mengetik jika diaktifkan dalam konfigurasi
 

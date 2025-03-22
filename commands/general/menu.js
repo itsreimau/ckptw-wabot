@@ -78,7 +78,6 @@ module.exports = {
 
             const fakeText = {
                 key: {
-                    fromMe: false,
                     participant: "13135550002@s.whatsapp.net",
                     remoteJid: "status@broadcast"
                 },

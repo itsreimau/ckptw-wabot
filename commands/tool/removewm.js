@@ -4,7 +4,7 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "toanime",
+    name: "removewm",
     category: "tool",
     permissions: {
         coin: 10
@@ -21,8 +21,8 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const result = tools.api.createUrl("fast", "/aiimage/toanime", {
-                imageUrl: uploadUrl
+            const result = tools.api.createUrl("fast", "/aiimage/imgremovewm", {
+                url: uploadUrl
             });
 
             return await ctx.reply({

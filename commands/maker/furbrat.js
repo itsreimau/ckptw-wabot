@@ -28,7 +28,6 @@ module.exports = {
                 text: input,
                 mode: "image"
             });
-
             const result = new Sticker(apiUrl, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,

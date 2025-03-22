@@ -21,7 +21,7 @@ module.exports = {
         try {
             const apiUrl = tools.api.createUrl("fast", "/aiexperience/github/roasting", {
                 username: input,
-                profile: "false",
+                profile: false,
                 language: ctx.sender.jid.startsWith("62") ? "id" : "en"
             });
             const result = (await axios.get(apiUrl)).data.result.roasting;

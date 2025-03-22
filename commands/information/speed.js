@@ -3,7 +3,7 @@ const {
 } = require("@mengkodingan/ckptw");
 const {
     performance
-} = require("perf_hooks");
+} = require("node:perf_hooks");
 
 module.exports = {
     name: "speed",

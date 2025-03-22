@@ -127,7 +127,7 @@ function generateUID(id) {
 
     const uniquePart = id.split("").reverse().join("").charCodeAt(0).toString(16);
 
-    return `${Math.abs(hash).toString(16).toLowerCase()}-${uniquePart}_${formatBotName(config.bot.name)}`;
+    return `${Math.abs(hash).toString(16).toLowerCase()}-${uniquePart}_${formatBotName(config.bot.name)}-wabot`;
 }
 
 function getID(jid) {
@@ -243,12 +243,11 @@ function parseFlag(argsString, customRules = {}) {
 async function translate(text, to) {
     if (!text || !to) return null;
 
-    const apiUrl = api.createUrl("nyxs", "/tools/translate", {
-        text,
-        to
-    });
-
     try {
+        const apiUrl = api.createUrl("nyxs", "/tools/translate", {
+            text,
+            to
+        });
         const {
             data
         } = await axios.get(apiUrl);

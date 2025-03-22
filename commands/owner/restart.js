@@ -3,7 +3,7 @@ const {
 } = require("@mengkodingan/ckptw");
 const {
     exec
-} = require("child_process");
+} = require("node:child_process");
 const util = require("node:util");
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        if (!process.env.PM2_HOME) return await ctx.reply(quote("❎ Bot tidak berjalan di bawah PM2. Restart manual diperlukan."));
+        if (!process.env.PM2_HOME) return await ctx.reply(quote("❎ Bot tidak berjalan di bawah PM2! Restart manual diperlukan."));
 
         try {
             const waitMsg = await ctx.reply(config.msg.wait);
