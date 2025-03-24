@@ -16,9 +16,10 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx.used, "https://example.com/ -a"))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx.used, "https://example.com/ -a -hd"))}\n` +
             quote(tools.msg.generatesFlagInformation({
-                "-a": "Otomatis kirim audio."
+                "-a": "Kirim audio",
+                "-hd": "Pilih resolusi HD"
             }))
         );
 
@@ -26,6 +27,10 @@ module.exports = {
             "-a": {
                 type: "boolean",
                 key: "audio"
+            },
+            "-hd": {
+                type: "boolean",
+                key: "hd"
             }
         });
 
@@ -52,14 +57,16 @@ module.exports = {
             }
 
             if (mediaType === "video_image") {
-                const video = result.data.find(video => video.type === "nowatermark_hd") || result.data.find(video => video.type === "nowatermark");
+                const video = flag.hd ? result.data.find(video => video.type === "nowatermark_hd") : result.data.find(video => video.type === "nowatermark");
 
                 return await ctx.reply({
                     video: {
                         url: video.url
                     },
                     mimetype: mime.lookup("mp4"),
-                    caption: `${quote(`URL: ${url}`)}\n\n` + config.msg.footer
+                    caption: `${quote(`URL: ${url}`)}\n` +
+                        "\n" +
+                        config.msg.footer
                 });
             }
 

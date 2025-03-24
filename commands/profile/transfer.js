@@ -15,7 +15,7 @@ module.exports = {
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
 
-        if (!userJid && isNaN(coinAmount)) return await ctx.reply({
+        if ((!userJid || coinAmount) || isNaN(coinAmount)) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
                 quote(tools.msg.generateCommandExample(ctx.used, `@${senderId} 8`)),
             mentions: [senderJid]

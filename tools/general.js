@@ -146,44 +146,31 @@ function getRandomElement(arr) {
 function isCmd(content, config) {
     if (!content || !config) return null;
 
-    const prefixRegex = new RegExp(config.prefix, "i");
-
-    if (!prefixRegex.test(content)) return false;
-
     const prefix = content.charAt(0);
+    if (!new RegExp(config.prefix, "i").test(content)) return false;
+
     const [cmdName, ...inputArray] = content.slice(1).trim().toLowerCase().split(/\s+/);
     const input = inputArray.join(" ");
 
-    const cmd = config.cmd;
-    const listCmd = Array.from(cmd.values()).flatMap(command => {
-        const aliases = Array.isArray(command.aliases) ? command.aliases : [];
-        return [command.name, ...aliases];
-    });
+    const commands = Array.from(config.cmd.values());
+    const matchedCmd = commands.find(c => c.name === cmdName || c.aliases?.includes(cmdName));
 
-    const matchedCmd = cmd.get(cmdName) || Array.from(cmd.values()).find(c => c.aliases && c.aliases.includes(cmdName));
+    if (matchedCmd) return {
+        msg: content,
+        prefix,
+        name: cmdName,
+        input
+    };
 
-    if (matchedCmd) {
-        return {
-            msg: content,
-            prefix,
-            name: cmdName,
-            input
-        };
-    }
+    const mean = didyoumean(cmdName, commands.flatMap(c => [c.name, ...(c.aliases || [])]));
 
-    const mean = didyoumean(cmdName, listCmd);
-
-    if (mean) {
-        return {
-            msg: content,
-            prefix,
-            cmd: cmdName,
-            input,
-            didyoumean: mean
-        };
-    }
-
-    return false;
+    return mean ? {
+        msg: content,
+        prefix,
+        cmd: cmdName,
+        input,
+        didyoumean: mean
+    } : false;
 }
 
 function isOwner(id) {

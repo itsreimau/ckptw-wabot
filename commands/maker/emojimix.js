@@ -19,7 +19,7 @@ module.exports = {
         const emojis = Array.from(emojisString.matchAll(emojiRegex), (match) => match[0]);
         const [emoji1, emoji2] = emojis.slice(0, 2);
 
-        if (!emoji1 && !emoji2) return await ctx.reply(
+        if (!emoji1 || !emoji2) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.msg.generateCommandExample(ctx.used, "😱 🤓"))
         );

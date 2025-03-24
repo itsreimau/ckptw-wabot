@@ -22,7 +22,7 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send", "reply"], "image"))}\n` +
             quote(tools.msg.generatesFlagInformation({
-                "-r <number>": "Atur faktor resize (tersedia: 2, 4, 8, 16 | default: 2)."
+                "-r <number>": "Atur faktor resize (tersedia: 2, 4, 8, 16 | default: 2)"
             }))
         );
 
