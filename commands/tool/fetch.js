@@ -88,7 +88,7 @@ module.exports = {
 
             return await ctx.reply(json ? walkJSON(json) : text);
         } catch (error) {
-            console.error(`Error: ${error}`);
+            consolefy.error(`Error: ${error}`);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
         }
     }

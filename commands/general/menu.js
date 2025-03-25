@@ -95,9 +95,8 @@ module.exports = {
                     mentionedJid: [ctx.sender.jid],
                     externalAdReply: {
                         title: config.msg.watermark,
-                        mediaType: 1,
+                        mediaType: "IMAGE",
                         thumbnailUrl: config.bot.thumbnail,
-                        mediaUrl: config.bot.website,
                         sourceUrl: config.bot.website,
                         renderLargerThumbnail: true
                     },
