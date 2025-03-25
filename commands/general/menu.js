@@ -76,7 +76,7 @@ module.exports = {
 
             text += config.msg.footer;
 
-            const fakeText = {
+            const fakeQuotedText = {
                 key: {
                     participant: "13135550002@s.whatsapp.net",
                     remoteJid: "status@broadcast"
@@ -94,21 +94,19 @@ module.exports = {
                 contextInfo: {
                     mentionedJid: [ctx.sender.jid],
                     externalAdReply: {
-                        mediaType: 1,
-                        previewType: 0,
-                        mediaUrl: config.bot.website,
                         title: config.msg.watermark,
-                        body: null,
-                        renderLargerThumbnail: true,
+                        mediaType: 1,
                         thumbnailUrl: config.bot.thumbnail,
-                        sourceUrl: config.bot.website
+                        mediaUrl: config.bot.website,
+                        sourceUrl: config.bot.website,
+                        renderLargerThumbnail: true
                     },
                     forwardingScore: 9999,
                     isForwarded: true
                 },
                 mentions: [ctx.sender.jid]
             }, {
-                quoted: fakeText
+                quoted: fakeQuotedText
             });
         } catch (error) {
             consolefy.error(`Error: ${error}`);

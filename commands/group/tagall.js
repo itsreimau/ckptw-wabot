@@ -22,11 +22,11 @@ module.exports = {
                 };
             });
 
-            const mentionText = mentions.map(m => m.tag).join(" ");
+            const resultText = mentions.map(m => m.tag).join(" ");
             return await ctx.reply({
                 text: `${input}\n` +
                     `${config.msg.readmore}─────\n` +
-                    `${mentionText}`,
+                    resultText,
                 mentions: mentions.map(m => m.mention)
             });
         } catch (error) {

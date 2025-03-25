@@ -27,7 +27,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.result;
             const imageUrl = result.images[0]?.url;
-            const captionText = result.text;
+            const resultText = result.text;
 
             if (imageUrl) {
                 return await ctx.reply({
@@ -35,10 +35,10 @@ module.exports = {
                         url: imageUrl
                     },
                     mimetype: mime.lookup("png"),
-                    caption: captionText
+                    caption: resultText
                 });
             } else {
-                return await ctx.reply(captionText);
+                return await ctx.reply(resultText);
             }
         } catch (error) {
             consolefy.error(`Error: ${error}`);

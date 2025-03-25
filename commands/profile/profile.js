@@ -38,14 +38,13 @@ module.exports = {
                     config.msg.footer,
                 contextInfo: {
                     externalAdReply: {
-                        mediaType: 1,
-                        previewType: 0,
-                        mediaUrl: config.bot.website,
                         title: config.msg.watermark,
-                        body: null,
-                        renderLargerThumbnail: true,
+                        previewType: "PHOTO",
+                        mediaType: 1,
                         thumbnailUrl: profilePictureUrl,
-                        sourceUrl: config.bot.website
+                        mediaUrl: config.bot.website,
+                        sourceUrl: config.bot.website,
+                        renderLargerThumbnail: true
                     }
                 }
             });

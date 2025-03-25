@@ -48,14 +48,13 @@ async function handleUserEvent(bot, m, type) {
                     contextInfo: {
                         mentionedJid: [jid],
                         externalAdReply: {
-                            mediaType: 1,
-                            previewType: 0,
-                            mediaUrl: config.bot.website,
                             title: config.msg.watermark,
-                            body: null,
-                            renderLargerThumbnail: true,
-                            thumbnailUrl: profilePictureUrl || config.bot.thumbnail,
-                            sourceUrl: config.bot.website
+                            previewType: "PHOTO",
+                            mediaType: 1,
+                            thumbnailUrl: profilePictureUrl,
+                            mediaUrl: config.bot.website,
+                            sourceUrl: config.bot.website,
+                            renderLargerThumbnail: true
                         }
                     }
                 });

@@ -33,7 +33,7 @@ module.exports = {
         try {
             if (formattedId === senderId) return await ctx.reply(quote(`❎ Tidak dapat digunakan pada diri Anda sendiri.`));
 
-            const fakeText = {
+            const fakeQuotedText = {
                 key: {
                     participant: "13135550002@s.whatsapp.net",
                     remoteJid: "status@broadcast"
@@ -52,7 +52,7 @@ module.exports = {
                     `${config.msg.readmore}\n` +
                     quote("Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik 'delete' atau 'stop'.")
             }, {
-                quoted: fakeText
+                quoted: fakeQuotedText
             });
 
             await db.set(`menfess.${Date.now()}`, {
