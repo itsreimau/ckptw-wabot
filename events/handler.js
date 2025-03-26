@@ -24,44 +24,34 @@ async function handleUserEvent(bot, m, type) {
         const groupDb = await db.get(`group.${groupId}`) || {};
 
         if (groupDb?.mute) return;
+        if (!groupDb?.option?.welcome) return;
 
-        if (groupDb?.option?.welcome) {
-            const metadata = await bot.core.groupMetadata(id);
+        const metadata = await bot.core.groupMetadata(id);
 
-            for (const jid of participants) {
-                const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+        for (const jid of participants) {
+            const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
-                const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
-                const userTag = `@${tools.general.getID(jid)}`;
+            const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
+            const userTag = `@${tools.general.getID(jid)}`;
 
-                const text = customText ?
-                    customText
-                    .replace(/%tag%/g, userTag)
-                    .replace(/%subject%/g, metadata.subject)
-                    .replace(/%description%/g, metadata.description) :
-                    (type === "UserJoin" ?
-                        quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
-                        quote(`👋 ${userTag} keluar dari grup ${metadata.subject}.`));
+            const text = customText ?
+                customText
+                .replace(/%tag%/g, userTag)
+                .replace(/%subject%/g, metadata.subject)
+                .replace(/%description%/g, metadata.description) :
+                (type === "UserJoin" ?
+                    quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
+                    quote(`👋 ${userTag} keluar dari grup ${metadata.subject}.`));
 
-                await bot.core.sendMessage(id, {
-                    text,
-                    contextInfo: {
-                        mentionedJid: [jid],
-                        externalAdReply: {
-                            title: config.msg.watermark,
-                            mediaType: "VIDEO",
-                            thumbnailUrl: profilePictureUrl,
-                            sourceUrl: config.bot.website,
-                            renderLargerThumbnail: true
-                        }
-                    }
-                });
+            await bot.core.sendMessage(id, {
+                text,
+                mentions: [jid]
+            });
 
-                if (type === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(id, {
-                    text: groupDb?.text?.intro,
-                    mentions: [jid]
-                });
-            }
+            if (type === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(id, {
+                text: groupDb?.text?.intro,
+                mentions: [jid]
+            });
         }
     } catch (error) {
         consolefy.error(`Error: ${error}`);
@@ -95,7 +85,7 @@ module.exports = (bot) => {
             id,
             jid: `${id}@s.whatsapp.net`,
             readyAt: bot.readyAt,
-            groupLink: config.system.requireBotGroupMembership ? `https://chat.whatsapp.com/${await bot.core.groupInviteCode(config.bot.groupJid) || "FxEYZl2UyzAEI2yhaH34Ye"}` : undefined
+            groupLink: await bot.core.groupInviteCode(config.bot.groupJid).then(code => `https://chat.whatsapp.com/${code}`).catch(() => "https://chat.whatsapp.com/FxEYZl2UyzAEI2yhaH34Ye")
         };
     });
 
@@ -181,8 +171,8 @@ module.exports = (bot) => {
                 const timeElapsed = Date.now() - userAFK.timestamp;
                 if (timeElapsed > 3000) {
                     const timeago = tools.general.convertMsToDuration(timeElapsed);
-                    await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                     await db.delete(`user.${senderID}.afk`);
+                    await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                 }
             }
         }
@@ -193,8 +183,8 @@ module.exports = (bot) => {
 
             // Penanganan antilink 
             if (groupDb?.option?.antilink && await tools.general.isUrl(m.content) && !await ctx.group().isSenderAdmin()) {
-                await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
                 await ctx.deleteMessage(m.key);
+                await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
                 if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
             }
 
@@ -210,8 +200,8 @@ module.exports = (bot) => {
                     const result = (await axios.get(apiUrl)).data.result.status.toLowerCase();
 
                     if (result === "nsfw") {
-                        await ctx.reply(`⛔ Jangan kirim NSFW!`);
                         await ctx.deleteMessage(m.key);
+                        await ctx.reply(`⛔ Jangan kirim NSFW!`);
                         if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                     }
                 }
@@ -233,8 +223,8 @@ module.exports = (bot) => {
                 });
 
                 if (newCount > 5) {
-                    await ctx.reply(quote(`⛔ Jangan spam!`));
                     await ctx.deleteMessage(m.key);
+                    await ctx.reply(quote(`⛔ Jangan spam!`));
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                     await db.delete(key);
                 }
@@ -244,8 +234,8 @@ module.exports = (bot) => {
             if (groupDb?.option?.antisticker) {
                 const checkMedia = await tools.general.checkMedia(ctx.getMessageType(), "sticker");
                 if (checkMedia && !await ctx.group().isSenderAdmin()) {
-                    await ctx.reply(`⛔ Jangan kirim stiker!`);
                     await ctx.deleteMessage(m.key);
+                    await ctx.reply(`⛔ Jangan kirim stiker!`);
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                 }
             }
@@ -254,8 +244,8 @@ module.exports = (bot) => {
             if (groupDb?.option?.antitoxic) {
                 const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
                 if (m.content && toxicRegex.test(m.content) && !await ctx.group().isSenderAdmin()) {
-                    await ctx.reply(quote(`⛔ Jangan toxic!`));
                     await ctx.deleteMessage(m.key);
+                    await ctx.reply(quote(`⛔ Jangan toxic!`));
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                 }
             }
@@ -297,16 +287,18 @@ module.exports = (bot) => {
         for (let call of calls) {
             if (call.status !== "offer") continue;
 
+            await bot.core.rejectCall(call.id, call.from);
+            let rejectionMessage = await bot.core.sendMessage(call.from, {
+                text: `Saat ini, kami tidak dapat menerima panggilan ${call.isVideo ? "video" : "suara"}.\n` +
+                    `Jika Anda memerlukan bantuan, silakan menghubungi Owner!`,
+                mentions: [call.from]
+            });
+
             const vcard = new VCardBuilder()
                 .setFullName(config.owner.name)
                 .setOrg(config.owner.organization)
                 .setNumber(config.owner.id).build();
-            let rejectionMessage = await bot.core.sendMessage(call.from, {
-                text: `Saat ini, kami tidak dapat menerima panggilan ${call.isVideo ? "video" : "suara"}.\n` +
-                    `Jika Anda memerlukan bantuan, silakan menghubungi Owner.`,
-                mentions: [call.from]
-            });
-            await bot.core.sendMessage(call.from, {
+            return await bot.core.sendMessage(call.from, {
                 contacts: {
                     displayName: config.owner.name,
                     contacts: [{
@@ -316,7 +308,6 @@ module.exports = (bot) => {
             }, {
                 quoted: rejectionMessage
             });
-            await bot.core.rejectCall(call.id, call.from);
         }
     });
 

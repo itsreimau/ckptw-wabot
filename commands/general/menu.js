@@ -4,6 +4,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const mime = require("mime-types");
 const moment = require("moment-timezone");
 
 module.exports = {
@@ -90,19 +91,11 @@ module.exports = {
             };
 
             return await ctx.sendMessage(ctx.id, {
-                text,
-                contextInfo: {
-                    mentionedJid: [ctx.sender.jid],
-                    externalAdReply: {
-                        title: config.msg.watermark,
-                        mediaType: "IMAGE",
-                        thumbnailUrl: config.bot.thumbnail,
-                        sourceUrl: config.bot.website,
-                        renderLargerThumbnail: true
-                    },
-                    forwardingScore: 9999,
-                    isForwarded: true
+                image: {
+                    url: config.bot.thumbnail
                 },
+                mimetype: mime.lookup("png"),
+                caption: text,
                 mentions: [ctx.sender.jid]
             }, {
                 quoted: fakeQuotedText

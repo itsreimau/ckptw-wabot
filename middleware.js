@@ -50,20 +50,11 @@ module.exports = (bot) => {
 
             const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
-            if (userDb?.autolevelup) await ctx.reply({
-                text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
-                    `${config.msg.readmore}\n` +
-                    quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
-                contextInfo: {
-                    externalAdReply: {
-                        title: config.msg.watermark,
-                        mediaType: "VIDEO",
-                        thumbnailUrl: profilePictureUrl,
-                        sourceUrl: config.bot.website,
-                        renderLargerThumbnail: true
-                    }
-                }
-            });
+            if (userDb?.autolevelup) await ctx.reply(
+                `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
+                `${config.msg.readmore}\n` +
+                quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]))
+            );
 
             await db.set(`user.${senderId}.xp`, newUserXp);
             await db.set(`user.${senderId}.level`, newUserLevel);

@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const mime = require("mime-types");
 
 module.exports = {
     name: "profile",
@@ -27,7 +28,11 @@ module.exports = {
             const profilePictureUrl = await ctx.core.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
             return await ctx.reply({
-                text: `${quote(`Nama: ${senderName || "-"}`)}\n` +
+                image: {
+                    url: profilePictureUrl
+                },
+                mimetype: mime.lookup("png"),
+                caption: `${quote(`Nama: ${senderName || "-"}`)}\n` +
                     `${quote(`Status: ${isOwner ? "Owner" : userDb?.premium ? "Premium" : "Freemium" || "-"}`)}\n` +
                     `${quote(`Level: ${userDb?.level || "-"}`)}\n` +
                     `${quote(`XP: ${userDb?.xp || "-"}`)}\n` +
@@ -35,16 +40,7 @@ module.exports = {
                     `${quote(`Peringkat: ${userRank || "-"}`)}\n` +
                     `${quote(`Menang: ${userDb?.winGame || "-"}`)}\n` +
                     "\n" +
-                    config.msg.footer,
-                contextInfo: {
-                    externalAdReply: {
-                        title: config.msg.watermark,
-                        mediaType: "VIDEO",
-                        thumbnailUrl: profilePictureUrl,
-                        sourceUrl: config.bot.website,
-                        renderLargerThumbnail: true
-                    }
-                }
+                    config.msg.footer
             });
         } catch (error) {
             consolefy.error(`Error: ${error}`);

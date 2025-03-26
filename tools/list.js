@@ -13,7 +13,10 @@ async function get(type) {
         let text = "";
 
         const createList = (data, formatter) =>
-            `${data.map(formatter).join(`\n${quote("─────")}\n`)}\n` +
+            `${data.map(formatter).join(
+                "\n" +`
+                ${quote("─────")}\n`
+                )}\n` +
             "\n" +
             config.msg.footer;
 

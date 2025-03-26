@@ -3,11 +3,11 @@ const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"
     },
-    archive: {
-        baseURL: "https://archive-ui.tanakadomp.biz.id"
-    },
     agung: {
         baseURL: "https://api.agungny.my.id"
+    },
+    archive: {
+        baseURL: "https://archive-ui.tanakadomp.biz.id"
     },
     bk9: {
         baseURL: "https://bk9.fun"
@@ -29,6 +29,9 @@ const APIs = {
     },
     vapis: {
         baseURL: "https://vapis.my.id"
+    },
+    velyn: {
+        baseURL: "https://www.velyn.biz.id"
     }
 };
 
