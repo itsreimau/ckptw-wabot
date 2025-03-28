@@ -19,8 +19,6 @@ module.exports = {
                 .replace(/%name%/g, config.bot.name)
                 .replace(/%prefix%/g, ctx.used.prefix)
                 .replace(/%command%/g, ctx.used.command)
-                .replace(/%watermark%/g, config.msg.watermark)
-                .replace(/%watermark%/g, config.msg.watermark)
                 .replace(/%footer%/g, config.msg.footer)
                 .replace(/%readmore%/g, config.msg.readmore) :
                 `${quote("083838039693 (DANA)")}\n` +

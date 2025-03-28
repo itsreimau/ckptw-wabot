@@ -78,8 +78,8 @@ async function get(type) {
             }
             case "osettext": {
                 const data = [
-                    "donate (Variabel yang tersedia: %tag%, %name%, %prefix%, %command%, %watermark%, %footer%, %readmore%) (Atur teks donasi)",
-                    "price (Variabel yang tersedia: %tag%, %name%, %prefix%, %command%, %watermark%, %footer%, %readmore%) (Atur teks harga)"
+                    "donate (Variabel yang tersedia: %tag%, %name%, %prefix%, %command%, %footer%, %readmore%) (Atur teks donasi)",
+                    "price (Variabel yang tersedia: %tag%, %name%, %prefix%, %command%, %footer%, %readmore%) (Atur teks harga)"
                 ];
                 text = createList(data, d => `${quote(d)}`);
                 break;

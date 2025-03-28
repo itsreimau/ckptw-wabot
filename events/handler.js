@@ -6,6 +6,7 @@ const {
     VCardBuilder
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const mime = require("mime-types");
 const {
     exec
 } = require("node:child_process");
@@ -32,7 +33,8 @@ async function handleUserEvent(bot, m, type) {
             const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
             const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
-            const userTag = `@${tools.general.getID(jid)}`;
+            const userId = `@${tools.general.getID(jid)}`;
+            const userTag = `@${userId}`;
 
             const text = customText ?
                 customText
@@ -42,9 +44,19 @@ async function handleUserEvent(bot, m, type) {
                 (type === "UserJoin" ?
                     quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
                     quote(`👋 ${userTag} keluar dari grup ${metadata.subject}.`));
+            const canvas = tools.api.createUrl("fast", "/canvas/welcome", {
+                avatar: profilePictureUrl,
+                background: config.bot.thumbnail,
+                title: m.eventsType === "UserJoin" ? "WELCOME" : "GOODBYE",
+                description: userId
+            });
 
             await bot.core.sendMessage(id, {
-                text,
+                image: {
+                    url: canvas
+                },
+                mimetype: mime.lookup("png"),
+                caption: text,
                 mentions: [jid]
             });
 
@@ -165,13 +177,12 @@ module.exports = (bot) => {
             }
 
             // Penanganan AFK (Menghapus status AFK pengguna yang mengirim pesan)
-            const senderID = tools.general.getID(senderId);
             const userAFK = userDb?.afk || {};
             if (userAFK?.reason && userAFK?.timestamp) {
                 const timeElapsed = Date.now() - userAFK.timestamp;
                 if (timeElapsed > 3000) {
                     const timeago = tools.general.convertMsToDuration(timeElapsed);
-                    await db.delete(`user.${senderID}.afk`);
+                    await db.delete(`user.${senderId}.afk`);
                     await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                 }
             }
