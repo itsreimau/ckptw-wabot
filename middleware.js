@@ -53,7 +53,7 @@ module.exports = (bot) => {
             const canvas = tools.api.createUrl("fast", "/canvas/levelup", {
                 avatar: profilePictureUrl,
                 background: config.bot.thumbnail,
-                username: senderName,
+                username: ctx.sender.pushName,
                 currentLevel: userDb?.level,
                 nextLevel: newUserLevel
             });
