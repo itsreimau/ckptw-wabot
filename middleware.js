@@ -4,6 +4,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const mime = require("mime-types");
 
 // Fungsi untuk mengecek apakah pengguna memiliki cukup koin sebelum menggunakan perintah tertentu
 async function checkCoin(requiredCoin, senderId) {
@@ -51,25 +52,20 @@ module.exports = (bot) => {
             const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
             const canvas = tools.api.createUrl("fast", "/canvas/levelup", {
                 avatar: profilePictureUrl,
-                background: (await tools.general.resizeWithBlur(config.bot.thumbnail, 600, 150)).url,
+                background: config.bot.thumbnail,
                 username: ctx.sender.pushName,
                 currentLevel: userDb?.level,
                 nextLevel: newUserLevel
             });
 
             if (userDb?.autolevelup) await ctx.reply({
-                text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
+                image: {
+                    url: canvas
+                },
+                mimetype: mime.lookup("png"),
+                caption: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                     `${config.msg.readmore}\n` +
                     quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
-                contextInfo: {
-                    externalAdReply: {
-                        title: config.bot.name,
-                        mediaType: 1,
-                        thumbnailUrl: (await tools.general.resizeWithBlur(canvas, 1200, 630)).url,
-                        sourceUrl: config.bot.groupLink,
-                        renderLargerThumbnail: true
-                    }
-                }
             });
 
             await db.set(`user.${senderId}.xp`, newUserXp);
