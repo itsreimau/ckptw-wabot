@@ -56,8 +56,7 @@ async function handleUserEvent(bot, m, type) {
                     url: canvas
                 },
                 mimetype: mime.lookup("png"),
-                caption: text
-            }, {
+                caption: text,
                 mentions: [jid]
             });
 
@@ -302,8 +301,7 @@ module.exports = (bot) => {
             await bot.core.rejectCall(call.id, call.from);
             let rejectionMessage = await bot.core.sendMessage(call.from, {
                 text: `Saat ini, kami tidak dapat menerima panggilan ${call.isVideo ? "video" : "suara"}.\n` +
-                    `Jika Anda memerlukan bantuan, silakan menghubungi Owner!`,
-                mentions: [call.from]
+                    `Jika Anda memerlukan bantuan, silakan menghubungi Owner!`
             });
 
             const vcard = new VCardBuilder()
