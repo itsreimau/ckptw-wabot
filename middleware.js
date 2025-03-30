@@ -4,7 +4,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const mime = require("mime-types");
 
 // Fungsi untuk mengecek apakah pengguna memiliki cukup koin sebelum menggunakan perintah tertentu
 async function checkCoin(requiredCoin, senderId) {
@@ -59,13 +58,19 @@ module.exports = (bot) => {
             });
 
             if (userDb?.autolevelup) await ctx.reply({
-                image: {
-                    url: canvas
-                },
-                mimetype: mime.lookup("png"),
-                caption: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
+                text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                     `${config.msg.readmore}\n` +
-                    quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]))
+                    quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
+                contextInfo: {
+                    externalAdReply: {
+                        title: config.bot.name,
+                        body: config.msg.note,
+                        mediaType: 1,
+                        thumbnailUrl: canvas,
+                        sourceUrl: config.bot.groupLink,
+                        renderLargerThumbnail: true
+                    }
+                }
             });
 
             await db.set(`user.${senderId}.xp`, newUserXp);
