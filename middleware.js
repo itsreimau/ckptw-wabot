@@ -51,7 +51,7 @@ module.exports = (bot) => {
             const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
             const canvas = tools.api.createUrl("fast", "/canvas/levelup", {
                 avatar: profilePictureUrl,
-                background: config.bot.thumbnail,
+                background: (await tools.general.resizeWithBlur(config.bot.thumbnail, 600, 150)).url,
                 username: ctx.sender.pushName,
                 currentLevel: userDb?.level,
                 nextLevel: newUserLevel
@@ -64,9 +64,8 @@ module.exports = (bot) => {
                 contextInfo: {
                     externalAdReply: {
                         title: config.bot.name,
-                        body: config.msg.note,
                         mediaType: 1,
-                        thumbnailUrl: canvas,
+                        thumbnailUrl: (await tools.general.resizeWithBlur(canvas, 1200, 630)).url,
                         sourceUrl: config.bot.groupLink,
                         renderLargerThumbnail: true
                     }

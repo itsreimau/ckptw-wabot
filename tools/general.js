@@ -3,6 +3,7 @@ const api = require("./api.js");
 const uploader = require("@zanixongroup/uploader");
 const axios = require("axios");
 const didyoumean = require("didyoumean");
+const Jimp = require("jimp");
 
 function formatBotName(botName) {
     if (!botName) return null;
@@ -227,6 +228,25 @@ function parseFlag(argsString, customRules = {}) {
     return options;
 }
 
+async function resizeWithBlur(input, width, height) {
+    try {
+        const image = await Jimp.read(input);
+        const bg = image.clone().resize(width, height).blur(20);
+
+        image.scaleToFit(width, height);
+        bg.composite(image, (width - image.bitmap.width) / 2, (height - image.bitmap.height) / 2);
+
+        const buffer = await bg.getBufferAsync(Jimp.MIME_JPEG);
+        return {
+            url: await upload(buffer, "image"),
+            buffer
+        };
+    } catch (error) {
+        consolefy.error(`Error: ${error}`);
+        return null;
+    }
+}
+
 async function translate(text, to) {
     if (!text || !to) return null;
 
@@ -293,6 +313,7 @@ module.exports = {
     isOwner,
     isUrl,
     parseFlag,
+    resizeWithBlur,
     translate,
     ucword,
     upload

@@ -45,7 +45,7 @@ async function handleUserEvent(bot, m, type) {
                     quote(`👋 ${userTag} keluar dari grup ${metadata.subject}.`));
             const canvas = tools.api.createUrl("fast", "/canvas/welcome", {
                 avatar: profilePictureUrl,
-                background: config.bot.thumbnail,
+                background: (await tools.general.resizeWithBlur(config.bot.thumbnail, 700, 350)).url,
                 title: type === "UserJoin" ? "WELCOME" : "GOODBYE",
                 description: userId
             });
@@ -56,9 +56,8 @@ async function handleUserEvent(bot, m, type) {
                     mentionedJid: [jid],
                     externalAdReply: {
                         title: config.bot.name,
-                        body: config.msg.note,
                         mediaType: 1,
-                        thumbnailUrl: canvas,
+                        thumbnailUrl: (await tools.general.resizeWithBlur(canvas, 1200, 630)).url,
                         sourceUrl: config.bot.groupLink,
                         renderLargerThumbnail: true
                     }

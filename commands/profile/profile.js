@@ -27,7 +27,8 @@ module.exports = {
             const profilePictureUrl = await ctx.core.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
             const canvas = tools.api.createUrl("fast", "/canvas/rank", {
                 avatar: profilePictureUrl,
-                background: config.bot.thumbnail,
+                background: (await tools.general.resizeWithBlur(config.bot.thumbnail, 850, 300)).url,
+                ,
                 username: senderName,
                 status: "online",
                 level: userDb?.level,
@@ -49,9 +50,8 @@ module.exports = {
                 contextInfo: {
                     externalAdReply: {
                         title: config.bot.name,
-                        body: config.msg.note,
                         mediaType: 1,
-                        thumbnailUrl: canvas,
+                        thumbnailUrl: (await tools.general.resizeWithBlur(canvas, 1200, 630)).url,
                         sourceUrl: config.bot.groupLink,
                         renderLargerThumbnail: true
                     }
