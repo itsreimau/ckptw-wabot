@@ -28,7 +28,6 @@ module.exports = {
             const canvas = tools.api.createUrl("fast", "/canvas/rank", {
                 avatar: profilePictureUrl,
                 background: (await tools.general.resizeWithBlur(config.bot.thumbnail, 850, 300)).url,
-                ,
                 username: senderName,
                 status: "online",
                 level: userDb?.level,
