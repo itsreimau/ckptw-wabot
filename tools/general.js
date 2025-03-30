@@ -230,7 +230,17 @@ function parseFlag(argsString, customRules = {}) {
 
 async function resizeWithBlur(input, width, height) {
     try {
-        const image = await Jimp.read(input);
+        let image;
+
+        if (isUrl(input)) {
+            const response = await axios.get(input, {
+                responseType: "arraybuffer"
+            });
+            image = await Jimp.read(response.data);
+        } else {
+            image = await Jimp.read(input);
+        }
+
         const bg = image.clone().resize(width, height).blur(20);
 
         image.scaleToFit(width, height);
@@ -242,7 +252,7 @@ async function resizeWithBlur(input, width, height) {
             buffer
         };
     } catch (error) {
-        consolefy.error(`Error: ${error}`);
+        consolefy.error(`Error: ${error.message}`);
         return null;
     }
 }
