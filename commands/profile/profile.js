@@ -37,21 +37,27 @@ module.exports = {
                 requiredXp: "100"
             });
 
-            return await ctx.reply({
-                image: {
-                    url: canvas
-                },
-                mimetype: mime.lookup("png"),
-                caption: `${quote(`Nama: ${senderName}`)}\n` +
-                    `${quote(`Status: ${isOwner ? "Owner" : userDb?.premium ? "Premium" : "Freemium"}`)}\n` +
-                    `${quote(`Level: ${userDb?.level}`)}\n` +
-                    `${quote(`XP: ${userDb?.xp}/100`)}\n` +
-                    `${quote(`Koin: ${isOwner || userDb?.premium ? "Tak terbatas" : userDb?.coin}`)}\n` +
-                    `${quote(`Peringkat: ${userRank}`)}\n` +
-                    `${quote(`Menang: ${userDb?.winGame || 0}`)}\n` +
-                    "\n" +
-                    config.msg.footer
-            });
+            const text = `${quote(`Nama: ${senderName}`)}\n` +
+                `${quote(`Status: ${isOwner ? "Owner" : userDb?.premium ? "Premium" : "Freemium"}`)}\n` +
+                `${quote(`Level: ${userDb?.level}`)}\n` +
+                `${quote(`XP: ${userDb?.xp}/100`)}\n` +
+                `${quote(`Koin: ${isOwner || userDb?.premium ? "Tak terbatas" : userDb?.coin}`)}\n` +
+                `${quote(`Peringkat: ${userRank}`)}\n` +
+                `${quote(`Menang: ${userDb?.winGame || 0}`)}\n` +
+                "\n" +
+                config.msg.footer;
+
+            try {
+                return await ctx.reply({
+                    image: {
+                        url: canvas
+                    },
+                    mimetype: mime.lookup("png"),
+                    caption: text
+                });
+            } catch (error) {
+                if (error.status !== 200) return await ctx.reply(text);
+            }
         } catch (error) {
             consolefy.error(`Error: ${error}`);
             return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
