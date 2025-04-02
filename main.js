@@ -38,7 +38,7 @@ const bot = new Client({
     usePairingCode: system.usePairingCode,
     selfReply: system.selfReply,
     autoMention: system.autoMention,
-    WAVersion: [2, 3000, 1015901307],
+    WAVersion: [2, 3000, 1015901307]
 });
 
 // Inisialisasi event dan middleware

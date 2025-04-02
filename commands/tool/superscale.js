@@ -46,8 +46,8 @@ module.exports = {
             const uploadUrl = await tools.general.upload(buffer, "image");
             const apiUrl = tools.api.createUrl("fast", "/aiimage/superscale", {
                 imageUrl: uploadUrl,
-                resize: flag.resize || 2,
-                anime: flag.anime
+                resize: flag?.resize || 2,
+                anime: flag?.anime
             });
             const result = (await axios.get(apiUrl)).data.result;
 

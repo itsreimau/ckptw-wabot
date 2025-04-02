@@ -40,7 +40,7 @@ module.exports = {
             const uploadUrl = await tools.general.upload(buffer, "image");
             const result = tools.api.createUrl("fast", "/aiimage/upscale", {
                 imageUrl: uploadUrl,
-                resize: flag.resize || 2
+                resize: flag?.resize || 2
             });
 
             return await ctx.reply({

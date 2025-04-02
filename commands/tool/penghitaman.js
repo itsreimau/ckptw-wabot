@@ -2,11 +2,11 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "negro",
+    name: "penghitaman",
+    aliases: ["hitamkan"],
     category: "tool",
     permissions: {
         coin: 10
@@ -23,7 +23,7 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send", "reply"], "image"))}\n` +
             quote(tools.msg.generatesFlagInformation({
-                "-f <number>": "Atur filter negro (tersedia: coklat, hitam, nerd, piggy, carbon, botak | default: coklat)"
+                "-f <number>": "Atur filter hitam (tersedia: coklat, hitam, nerd, piggy, carbon, botak | default: coklat)"
             }))
         );
 
@@ -36,14 +36,14 @@ module.exports = {
                     parser: (val) => val
                 }
             });
-            const filter = flag.filter || "coklat";
+            const filter = flag?.filter || "coklat";
 
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
-            const apiUrl = tools.api.createUrl("https://negro.consulting", "/api/process-image", {});
-            const result = (await axios.post(apiUrl, {
-                imageData: buffer.toString("base64"),
+            const uploadUrl = await tools.general.upload(buffer, "image");
+            const result = tools.api.createUrl("http://negroify.wosib11334.serv00.net", "/api/penghitaman", {
+                imageUrl: uploadUrl,
                 filter
-            })).data.processedImageUrl;
+            });
 
             return await ctx.reply({
                 image: {

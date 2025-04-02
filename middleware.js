@@ -65,7 +65,7 @@ module.exports = (bot) => {
                 mimetype: mime.lookup("png"),
                 caption: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                     `${config.msg.readmore}\n` +
-                    quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
+                    quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]))
             });
 
             await db.set(`user.${senderId}.xp`, newUserXp);
