@@ -28,7 +28,7 @@ module.exports = {
         );
 
         try {
-            const flag = parseFlag(input, {
+            const flag = tools.cmd.parseFlag(input, {
                 "-f": {
                     type: "value",
                     key: "filter",
