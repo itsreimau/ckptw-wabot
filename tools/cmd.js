@@ -149,7 +149,7 @@ function generateNotes(notes) {
     return notesInfo;
 }
 
-function handleError(ctx, error, useAxios) {
+async function handleError(ctx, error, useAxios) {
     consolefy.error(`Error: ${error}`);
     if (config.system.reportErrorToOwner) await ctx.replyWithJid(`${config.owner.id}@s.whatsapp.net`, {
         text: `${quote(`⚠️ Terjadi kesalahan:`)}\n` +
