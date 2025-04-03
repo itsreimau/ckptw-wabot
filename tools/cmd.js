@@ -155,6 +155,7 @@ async function handleError(ctx, error, useAxios) {
     consolefy.error(`Error: ${errorText}`);
     if (config.system.reportErrorToOwner) await ctx.replyWithJid(`${config.owner.id}@s.whatsapp.net`, {
         text: `${quote(`⚠️ Terjadi kesalahan:`)}\n` +
+            `${quote("─────")}\n` +
             monospace(errorText)
     });
     if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
