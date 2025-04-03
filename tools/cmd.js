@@ -3,6 +3,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const util = require("node:util");
 
 async function checkMedia(msgType, requiredMedia) {
     if (!msgType || !requiredMedia) return false;
@@ -150,54 +151,53 @@ function generateNotes(notes) {
 }
 
 async function handleError(ctx, error, useAxios) {
-    consolefy.error(`Error: ${error}`);
+    const errorText = util.format(error);
+    consolefy.error(`Error: ${errorText}`);
     if (config.system.reportErrorToOwner) await ctx.replyWithJid(`${config.owner.id}@s.whatsapp.net`, {
         text: `${quote(`⚠️ Terjadi kesalahan:`)}\n` +
-            monospace(error)
+            monospace(errorText)
     });
     if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
     return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
 }
 
 function parseFlag(argsString, customRules = {}) {
-    if (!argsString) return null;
+    if (!argsString) return {
+        input: ""
+    };
 
     const options = {};
-    let input = [];
+    const input = [];
 
-    const args = argsString.split(" ");
+    const args = argsString.trim().split(/\s+/);
 
     for (let i = 0; i < args.length; i++) {
         const arg = args[i];
-        let isFlag = false;
 
-        for (const flag in customRules) {
-            if (arg === flag) {
-                const rule = customRules[flag];
-                isFlag = true;
+        if (customRules[arg]) {
+            const rule = customRules[arg];
 
-                if (rule.type === "value") {
-                    const value = args[i + 1];
-                    if (value && rule.validator(value)) {
-                        options[rule.key] = rule.parser(value);
-                        i++;
-                    }
-                } else if (rule.type === "boolean") {
-                    options[rule.key] = true;
+            if (rule.type === "value") {
+                const value = args[i + 1];
+
+                if (value && rule.validator(value)) {
+                    options[rule.key] = rule.parser(value);
+                    i++;
+                } else {
+                    options[rule.key] = rule.default || null;
                 }
-                break;
+            } else if (rule.type === "boolean") {
+                options[rule.key] = true;
             }
-        }
-
-        if (!isFlag) {
+        } else {
             input.push(arg);
         }
     }
 
     options.input = input.join(" ");
-
-    return options || null;
+    return options;
 }
+
 
 module.exports = {
     checkMedia,
