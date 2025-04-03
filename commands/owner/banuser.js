@@ -17,8 +17,8 @@ module.exports = {
         const senderId = tools.general.getID(senderJid);
 
         if (!userJid) return await ctx.reply({
-            text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                quote(tools.msg.generateCommandExample(ctx.used, `@${senderId}`)),
+            text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+                quote(tools.cmd.generateCommandExample(ctx.used, `@${senderId}`)),
             mentions: [senderJid]
         });
 
@@ -33,8 +33,7 @@ module.exports = {
             });
             return await ctx.reply(quote(`✅ Berhasil dibanned!`));
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            tools.cmd.handleError(ctx, error, false)
         }
     }
 };

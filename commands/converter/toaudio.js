@@ -11,7 +11,7 @@ module.exports = {
     category: "converter",
     permissions: {},
     code: async (ctx) => {
-        if (!await tools.general.checkQuotedMedia(ctx.quoted, ["video"])) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["video"])));
+        if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["video"])) return await ctx.reply(quote(tools.cmd.generateInstruction(["reply"], ["video"])));
 
         try {
             const buffer = await ctx.quoted?.media.toBuffer()
@@ -24,8 +24,7 @@ module.exports = {
                 mimetype: mime.lookup("mp3")
             });
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            tools.cmd.handleError(ctx, error, false)
         }
     }
 };

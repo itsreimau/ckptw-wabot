@@ -14,8 +14,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "ckptw-wabot"))
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, "ckptw-wabot"))
         );
 
         try {
@@ -23,8 +23,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Berhasil mengubah nama grup!`));
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            tools.cmd.handleError(ctx, error, false)
         }
     }
 };

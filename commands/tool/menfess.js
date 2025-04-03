@@ -18,9 +18,9 @@ module.exports = {
         const senderId = tools.general.getID(ctx.sender.jid);
 
         if (!formattedId && !menfessText) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx.used, `${senderId} halo, dunia!`))}\n` +
-            quote(tools.msg.generateNotes(["Jangan gunakan spasi pada angka. Contoh: +62 8123-4567-8910, seharusnya +628123-4567-8910"]))
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.cmd.generateCommandExample(ctx.used, `${senderId} halo, dunia!`))}\n` +
+            quote(tools.cmd.generateNotes(["Jangan gunakan spasi pada angka. Contoh: +62 8123-4567-8910, seharusnya +628123-4567-8910"]))
         );
 
         const allMenfessDb = await db.get("menfess") || {};
@@ -62,8 +62,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Pesan berhasil terkirim! Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik 'delete' atau 'stop'.`));
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            tools.cmd.handleError(ctx, error, false)
         }
     }
 };

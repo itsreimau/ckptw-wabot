@@ -15,11 +15,11 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send", "reply"], ["text", "sticker"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "i want to be a cat|just meow meow"))
+            `${quote(tools.cmd.generateInstruction(["send", "reply"], ["text", "sticker"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, "i want to be a cat|just meow meow"))
         );
 
-        if (!await tools.general.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], ["sticker"])));
+        if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], ["sticker"])));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
@@ -35,8 +35,7 @@ module.exports = {
 
             return await ctx.reply(await result.toMessage());
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            tools.cmd.handleError(ctx, error, false)
         }
     }
 };

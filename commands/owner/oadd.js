@@ -15,8 +15,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input || isNaN(input)) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, tools.general.getID(ctx.sender.jid)))
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, tools.general.getID(ctx.sender.jid)))
         );
 
         try {
@@ -29,8 +29,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Berhasil ditambahkan!`));
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            tools.cmd.handleError(ctx, error, false)
         }
     }
 };

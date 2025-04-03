@@ -17,8 +17,8 @@ module.exports = {
         const script = ctx.args.join(" ") || null;
 
         if (!script) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, 'console.log("halo, dunia!");'))
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, 'console.log("halo, dunia!");'))
         );
 
         try {
@@ -66,8 +66,7 @@ module.exports = {
 
             await ctx.reply(monospace(output));
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            tools.cmd.handleError(ctx, error, false)
         }
     }
 };

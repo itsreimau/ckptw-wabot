@@ -18,8 +18,8 @@ module.exports = {
         const senderId = tools.general.getID(senderJid);
 
         if ((!userJid || !coinAmount) || isNaN(coinAmount)) return await ctx.reply({
-            text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                quote(tools.msg.generateCommandExample(ctx.used, `@${senderId} 8`)),
+            text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+                quote(tools.cmd.generateCommandExample(ctx.used, `@${senderId} 8`)),
             mentions: [senderJid]
         });
 
@@ -34,8 +34,7 @@ module.exports = {
             });
             return await ctx.reply(quote(`✅ Berhasil menambahkan ${coinAmount} koin kepada pengguna!`));
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            tools.cmd.handleError(ctx, error, false)
         }
     }
 };

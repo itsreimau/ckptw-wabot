@@ -92,6 +92,7 @@ global.config = {
         autoTypingOnCmd: true, // Tampilkan status "sedang mengetik" saat memproses perintah
         cooldown: 10 * 1000, // Jeda antar perintah (ms)
         port: 3000, // Port (jika pakai server)
+        reportErrorToOwner: true, // Laporkan kesalahan ke owner bot
         restrict: false, // Batasi akses perintah
         requireBotGroupMembership: false, // Harus gabung grup bot
         selfOwner: false, // Bot jadi owner sendiri

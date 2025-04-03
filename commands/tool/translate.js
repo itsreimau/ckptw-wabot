@@ -16,9 +16,9 @@ module.exports = {
         let langCode = ctx.args[0]?.length === 2 ? ctx.args[0] : "id";
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx.used, "en halo, dunia!"))}\n` +
-            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.cmd.generateCommandExample(ctx.used, "en halo, dunia!"))}\n` +
+            quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (ctx.args[0] === "list") {
@@ -31,9 +31,7 @@ module.exports = {
 
             return await ctx.reply(result);
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            return await tools.cmd.handleError(ctx, error, true);
         }
     }
 };

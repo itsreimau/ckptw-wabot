@@ -4,26 +4,25 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "removebg",
-    aliases: ["rbg"],
-    category: "tool",
+    name: "sharpen",
+    category: "ai-misc",
     permissions: {
         coin: 10
     },
     code: async (ctx) => {
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.general.checkMedia(msgType, "image"),
-            tools.general.checkQuotedMedia(ctx.quoted, "image")
+            tools.cmd.checkMedia(msgType, "image"),
+            tools.cmd.checkQuotedMedia(ctx.quoted, "image")
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], "image")));
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], "image")));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const result = tools.api.createUrl("fast", "/aiimage/removebg", {
-                imageUrl: uploadUrl
+            const result = tools.api.createUrl("fast", "/aiimage/imgsharpen", {
+                url: uploadUrl
             });
 
             return await ctx.reply({
@@ -33,9 +32,7 @@ module.exports = {
                 mimetype: mime.lookup("png")
             });
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            return await tools.cmd.handleError(ctx, error, true);
         }
     }
 };

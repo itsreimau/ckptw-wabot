@@ -59,8 +59,7 @@ module.exports = {
                 if (error.status !== 200) return await ctx.reply(text);
             }
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            tools.cmd.handleError(ctx, error, false)
         }
     }
 };

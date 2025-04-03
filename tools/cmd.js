@@ -4,6 +4,67 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 
+async function checkMedia(msgType, requiredMedia) {
+    if (!msgType || !requiredMedia) return false;
+
+    const mediaMap = {
+        audio: "audioMessage",
+        contact: "contactMessage",
+        document: ["documentMessage", "documentWithCaptionMessage"],
+        gif: "videoMessage",
+        image: "imageMessage",
+        liveLocation: "liveLocationMessage",
+        location: "locationMessage",
+        payment: "paymentMessage",
+        poll: "pollMessage",
+        product: "productMessage",
+        ptt: "audioMessage",
+        reaction: "reactionMessage",
+        sticker: "stickerMessage",
+        video: "videoMessage",
+        viewOnce: "viewOnceMessageV2"
+    };
+
+    const mediaList = Array.isArray(requiredMedia) ? requiredMedia : [requiredMedia];
+
+    return mediaList.some(media => {
+        if (media === "document") {
+            return mediaMap[media].includes(msgType);
+        }
+        return msgType === mediaMap[media];
+    });
+}
+
+async function checkQuotedMedia(quoted, requiredMedia) {
+    if (!quoted || !requiredMedia) return false;
+
+    const quotedMediaMap = {
+        audio: quoted.audioMessage,
+        contact: quoted.contactMessage,
+        document: quoted.documentMessage || quoted.documentWithCaptionMessage,
+        gif: quoted.videoMessage,
+        image: quoted.imageMessage,
+        liveLocation: quoted.liveLocationMessage,
+        location: quoted.locationMessage,
+        payment: quoted.paymentMessage,
+        poll: quoted.pollMessage,
+        product: quoted.productMessage,
+        ptt: quoted.audioMessage,
+        reaction: quoted.reactionMessage,
+        sticker: quoted.stickerMessage,
+        text: quoted.conversation || quoted.extendedTextMessage?.text,
+        video: quoted.videoMessage,
+        viewOnce: quoted.viewOnceMessageV2
+    };
+
+    const mediaList = Array.isArray(requiredMedia) ? requiredMedia : [requiredMedia];
+
+    return mediaList.some(media => {
+        const mediaContent = quotedMediaMap[media];
+        return media === "text" ? mediaContent && mediaContent.length > 0 : mediaContent;
+    });
+}
+
 function generateInstruction(actions, mediaTypes) {
     if (!actions || !actions.length) return "'actions' yang diperlukan harus ditentukan!";
 
@@ -88,9 +149,22 @@ function generateNotes(notes) {
     return notesInfo;
 }
 
+function handleError(ctx, error, useAxios) {
+    consolefy.error(`Error: ${error}`);
+    if (config.system.reportErrorToOwner) await ctx.replyWithJid(`${config.owner.id}@s.whatsapp.net`, {
+        text: `${quote(`⚠️ Terjadi kesalahan:`)}\n` +
+            monospace(error)
+    });
+    if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
+    return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+}
+
 module.exports = {
+    checkMedia,
+    checkQuotedMedia,
     generateInstruction,
     generateCommandExample,
     generatesFlagInformation,
-    generateNotes
+    generateNotes,
+    handleError
 };

@@ -11,9 +11,9 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx.used, "daily"))}\n` +
-            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.cmd.generateCommandExample(ctx.used, "daily"))}\n` +
+            quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (input === "list") {
@@ -44,8 +44,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Anda berhasil mengklaim hadiah ${input} sebesar ${claimRewards[input].reward} koin! Koin saat ini: ${rewardCoin}.`));
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            tools.cmd.handleError(ctx, error, false)
         }
     }
 };

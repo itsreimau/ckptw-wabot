@@ -7,7 +7,7 @@ const mime = require("mime-types");
 module.exports = {
     name: "penghitaman",
     aliases: ["hitamkan"],
-    category: "tool",
+    category: "ai-misc",
     permissions: {
         coin: 10
     },
@@ -16,13 +16,13 @@ module.exports = {
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.general.checkMedia(msgType, "image"),
-            tools.general.checkQuotedMedia(ctx.quoted, "image")
+            tools.cmd.checkMedia(msgType, "image"),
+            tools.cmd.checkQuotedMedia(ctx.quoted, "image")
         ]);
 
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send", "reply"], "image"))}\n` +
-            quote(tools.msg.generatesFlagInformation({
+            `${quote(tools.cmd.generateInstruction(["send", "reply"], "image"))}\n` +
+            quote(tools.cmd.generatesFlagInformation({
                 "-f <number>": "Atur filter hitam (tersedia: coklat, hitam, nerd, piggy, carbon, botak | default: coklat)"
             }))
         );
@@ -55,9 +55,7 @@ module.exports = {
                     config.msg.footer
             });
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            return await tools.cmd.handleError(ctx, error, true);
         }
     }
 };

@@ -14,8 +14,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "itsreimau"))
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, "itsreimau"))
         );
 
         try {
@@ -28,9 +28,7 @@ module.exports = {
 
             return await ctx.reply(result);
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            return await tools.cmd.handleError(ctx, error, true);
         }
     }
 };

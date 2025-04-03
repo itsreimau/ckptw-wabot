@@ -13,8 +13,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "halo, dunia!"))
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, "halo, dunia!"))
         );
 
         try {
@@ -48,7 +48,6 @@ module.exports = {
                         quoted: fakeQuotedText
                     });
                 } catch (error) {
-                    consolefy.error(`Error: ${error}`);
                     failedGroupIds.push(groupId);
                 }
             }
@@ -56,8 +55,7 @@ module.exports = {
             const successCount = groupIds.length - failedGroupIds.length;
             return await ctx.editMessage(waitMsg.key, quote(`✅ Berhasil mengirim ke ${successCount} grup. Gagal mengirim ke ${failedGroupIds.length} grup.`));
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            tools.cmd.handleError(ctx, error, false)
         }
     }
 };

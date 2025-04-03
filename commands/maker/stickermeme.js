@@ -17,17 +17,17 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "i want to be a cat|just meow meow"))
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, "i want to be a cat|just meow meow"))
         );
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.general.checkMedia(msgType, "image"),
-            tools.general.checkQuotedMedia(ctx.quoted, "image")
+            tools.cmd.checkMedia(msgType, "image"),
+            tools.cmd.checkQuotedMedia(ctx.quoted, "image")
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], "image")));
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], "image")));
 
         try {
             let [top, bottom] = input.split("|").map(i => i.trim());
@@ -49,9 +49,7 @@ module.exports = {
 
             return await ctx.reply(await result.toMessage());
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            return await tools.cmd.handleError(ctx, error, true);
         }
     }
 };

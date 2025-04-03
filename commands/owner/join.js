@@ -13,8 +13,8 @@ module.exports = {
         const url = ctx.args[0] || null;
 
         if (!url) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "https://example.com/"))
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, "https://example.com/"))
         );
 
         const isUrl = await tools.general.isUrl(url);
@@ -35,8 +35,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Berhasil bergabung dengan grup!`));
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            tools.cmd.handleError(ctx, error, false)
         }
     }
 };

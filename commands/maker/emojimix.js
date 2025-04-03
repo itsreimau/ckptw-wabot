@@ -20,8 +20,8 @@ module.exports = {
         const [emoji1, emoji2] = emojis.slice(0, 2);
 
         if (!emoji1 || !emoji2) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "😱 🤓"))
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, "😱 🤓"))
         );
 
         try {
@@ -40,9 +40,7 @@ module.exports = {
 
             return await ctx.reply(await result.toMessage());
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            if (error.status !== 200) return await ctx.reply(config.msg.notFound);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            return await tools.cmd.handleError(ctx, error, true);
         }
     }
 };

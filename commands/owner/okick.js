@@ -17,8 +17,8 @@ module.exports = {
         const accountJid = ctx.quoted?.senderJid || ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
 
         if (!accountJid) return await ctx.reply({
-            text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                quote(tools.msg.generateCommandExample(ctx.used, `@${senderId}`)),
+            text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+                quote(tools.cmd.generateCommandExample(ctx.used, `@${senderId}`)),
             mentions: [senderJid]
         });
 
@@ -29,8 +29,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Berhasil dikeluarkan!`));
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
-            return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+            tools.cmd.handleError(ctx, error, false)
         }
     }
 };
