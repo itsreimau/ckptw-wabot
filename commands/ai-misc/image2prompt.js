@@ -21,9 +21,9 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], "image")));
 
         try {
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const apiUrl = tools.api.createUrl("fast", "/aiimage/imagetoprompt-v2", {
+            const apiUrl = tools.api.createUrl("fast", "/aiimage/imagetoprompt-v1", {
                 url: uploadUrl
             });
             const result = (await axios.get(apiUrl)).data.result;

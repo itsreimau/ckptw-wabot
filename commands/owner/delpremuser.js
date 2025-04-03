@@ -12,7 +12,7 @@ module.exports = {
     code: async (ctx) => {
         const userId = ctx.args[0];
 
-        const userJid = ctx.quoted?.senderJid || ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || (userId ? `${userId}@s.whatsapp.net` : null);
+        const userJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || (userId ? `${userId}@s.whatsapp.net` : null);
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
 

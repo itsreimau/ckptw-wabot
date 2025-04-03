@@ -13,7 +13,7 @@ module.exports = {
         const userId = ctx.args[0];
         const coinAmount = parseInt(ctx.args[1], 10);
 
-        const userJid = ctx.quoted?.senderJid || ctx.msg?.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || (userId ? `${userId}@s.whatsapp.net` : null);
+        const userJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || (userId ? `${userId}@s.whatsapp.net` : null);
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
 

@@ -27,7 +27,7 @@ module.exports = {
         );
 
         try {
-            const flag = tools.general.parseFlag(input, {
+            const flag = tools.cmd.parseFlag(input, {
                 "-r": {
                     type: "value",
                     key: "resize",
@@ -36,11 +36,11 @@ module.exports = {
                 }
             });
 
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
             const result = tools.api.createUrl("fast", "/aiimage/upscale", {
                 imageUrl: uploadUrl,
-                resize: flag?.resize || 2
+                resize: flag.resize || 2
             });
 
             return await ctx.reply({

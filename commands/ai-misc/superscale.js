@@ -29,7 +29,7 @@ module.exports = {
         );
 
         try {
-            const flag = tools.general.parseFlag(input, {
+            const flag = tools.cmd.parseFlag(input, {
                 "-r": {
                     type: "value",
                     key: "resize",
@@ -42,12 +42,12 @@ module.exports = {
                 }
             });
 
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
             const apiUrl = tools.api.createUrl("fast", "/aiimage/superscale", {
                 imageUrl: uploadUrl,
-                resize: flag?.resize || 2,
-                anime: flag?.anime
+                resize: flag.resize || 2,
+                anime: flag.anime
             });
             const result = (await axios.get(apiUrl)).data.result;
 

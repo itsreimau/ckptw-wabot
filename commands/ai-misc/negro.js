@@ -5,8 +5,8 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "penghitaman",
-    aliases: ["hitamkan"],
+    name: "negro",
+    aliases: ["hitamkan", "penghitaman"],
     category: "ai-misc",
     permissions: {
         coin: 10
@@ -23,24 +23,24 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send", "reply"], "image"))}\n` +
             quote(tools.cmd.generatesFlagInformation({
-                "-f <number>": "Atur filter hitam (tersedia: coklat, hitam, nerd, piggy, carbon, botak | default: coklat)"
+                "-f <text>": "Atur filter hitam (tersedia: brown, black, nerd, piggy, carbon, bald | default: brown)"
             }))
         );
 
         try {
-            const flag = tools.general.parseFlag(input, {
+            const flag = tools.cmd.parseFlag(input, {
                 "-f": {
                     type: "value",
                     key: "filter",
-                    validator: (val) => /^[coklat|hitam|nerd|piggy|carbon|botak]$/.test(val),
+                    validator: (val) => /^[brown|black|nerd|piggy|carbon|bald]$/.test(val),
                     parser: (val) => val
                 }
             });
-            const filter = flag?.filter || "coklat";
+            const filter = flag.filter || "brown";
 
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const result = tools.api.createUrl("http://negroify.wosib11334.serv00.net", "/api/penghitaman", {
+            const result = tools.api.createUrl("fast", "/aiimage/negro", {
                 imageUrl: uploadUrl,
                 filter
             });

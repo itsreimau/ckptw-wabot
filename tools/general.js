@@ -126,46 +126,6 @@ function isUrl(url) {
     return urlRegex.test(url);
 }
 
-function parseFlag(argsString, customRules = {}) {
-    if (!argsString) return null;
-
-    const options = {};
-    let input = [];
-
-    const args = argsString.split(" ");
-
-    for (let i = 0; i < args.length; i++) {
-        const arg = args[i];
-        let isFlag = false;
-
-        for (const flag in customRules) {
-            if (arg === flag) {
-                const rule = customRules[flag];
-                isFlag = true;
-
-                if (rule.type === "value") {
-                    const value = args[i + 1];
-                    if (value && rule.validator(value)) {
-                        options[rule.key] = rule.parser(value);
-                        i++;
-                    }
-                } else if (rule.type === "boolean") {
-                    options[rule.key] = true;
-                }
-                break;
-            }
-        }
-
-        if (!isFlag) {
-            input.push(arg);
-        }
-    }
-
-    options.input = input.join(" ");
-
-    return options;
-}
-
 async function translate(text, to) {
     if (!text || !to) return null;
 
@@ -174,10 +134,8 @@ async function translate(text, to) {
             text,
             to
         });
-        const {
-            data
-        } = await axios.get(apiUrl);
-        return data.result;
+        const result = (await axios.get(apiUrl)).data.result;
+        return result;
     } catch (error) {
         consolefy.error(`Error: ${error}`);
         return null;
@@ -229,7 +187,6 @@ module.exports = {
     isCmd,
     isOwner,
     isUrl,
-    parseFlag,
     translate,
     ucword,
     upload

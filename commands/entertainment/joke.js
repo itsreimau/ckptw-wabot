@@ -14,7 +14,7 @@ module.exports = {
         const apiUrl = tools.api.createUrl("https://candaan-api.vercel.app", "/api/text/random", {});
 
         try {
-            const result = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.data;
 
             return await ctx.reply(result);
         } catch (error) {

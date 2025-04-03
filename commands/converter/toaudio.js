@@ -14,7 +14,7 @@ module.exports = {
         if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["video"])) return await ctx.reply(quote(tools.cmd.generateInstruction(["reply"], ["video"])));
 
         try {
-            const buffer = await ctx.quoted?.media.toBuffer()
+            const buffer = await ctx.quoted.media.toBuffer()
             const result = buffer ? await video2audio(buffer) : null;
 
             if (!result) return await ctx.reply(config.msg.notFound);

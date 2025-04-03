@@ -129,7 +129,7 @@
 
                 // Penanganan basis data pengguna
                 if (isOwner || userDb?.premium) db.set(`user.${senderId}.coin`, 0);
-                if (userDb?.coin !== 0 && (userDb?.coin === undefined || !Number.isFinite(userDb?.coin))) db.set(`user.${senderId}.coin`, 100);
+                if (userDb?.coin !== 0 && (userDb.coin === undefined || !Number.isFinite(userDb.coin))) db.set(`user.${senderId}.coin`, 100);
                 if (userDb?.coin > 10000) db.set(`user.${senderId}.coin`, 10000);
                 if (userDb?.uid !== tools.general.generateUID(senderId)) db.set(`user.${senderId}.uid`, tools.general.generateUID(senderId));
 
@@ -163,7 +163,7 @@
                 }
 
                 // Penanganan AFK (Pengguna yang disebutkan atau di-quote)
-                const userAFKJids = ctx.quoted?.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
+                const userAFKJids = ctx.quoted.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
                 if (userAFKJids.length > 0) {
                     if (m.key.fromMe) return;
 

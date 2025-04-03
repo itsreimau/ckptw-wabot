@@ -112,7 +112,7 @@ async function get(type) {
                 break;
             }
             case "translate": {
-                const data = (await axios.get(api.createUrl("nyxs", "/tools/translate", {})).catch(err => err.response?.data?.available_languange)) || [];
+                const data = (await axios.get(api.createUrl("nyxs", "/tools/translate", {})).catch(err => err.response.data.available_languange)) || [];
                 text = createList(data, d =>
                     `${quote(`Kode: ${d.code}`)}\n` +
                     `${quote(`Bahasa: ${d.bahasa}`)}`

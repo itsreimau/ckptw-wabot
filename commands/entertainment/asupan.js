@@ -11,7 +11,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const apiUrl = tools.api.createUrl("agatz", `/api/asupan`);
+        const apiUrl = tools.api.createUrl("agatz", "/api/asupan");
 
         try {
             const result = (await axios.get(apiUrl)).data.data;

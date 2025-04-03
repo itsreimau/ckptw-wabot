@@ -17,7 +17,7 @@ module.exports = {
         if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(quote(tools.cmd.generateInstruction(["reply"], ["sticker"])));
 
         try {
-            const buffer = await ctx.quoted?.media.toBuffer()
+            const buffer = await ctx.quoted.media.toBuffer()
             const result = buffer ? await webp2mp4(buffer) : null;
 
             if (!result) return await ctx.reply(config.msg.notFound);

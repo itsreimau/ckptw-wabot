@@ -24,7 +24,7 @@ module.exports = {
         );
 
         try {
-            const flag = tools.general.parseFlag(input, {
+            const flag = tools.cmd.parseFlag(input, {
                 "-i": {
                     type: "value",
                     key: "index",
@@ -39,9 +39,9 @@ module.exports = {
                 }
             });
 
-            const searchIndex = flag?.index || 0;
-            const query = flag?.input;
-            let source = flag?.source || "youtube";
+            const searchIndex = flag.index || 0;
+            const query = flag.input;
+            let source = flag.source || "youtube";
 
             if (!["soundcloud", "spotify", "youtube"].includes(source)) {
                 source = "youtube";

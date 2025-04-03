@@ -11,7 +11,7 @@ async function checkCoin(requiredCoin, senderId) {
     const userDb = await db.get(`user.${senderId}`) || {};
 
     if (tools.general.isOwner(senderId) || userDb?.premium) return false;
-    if ((userDb?.coin || 0) < requiredCoin) return true;
+    if ((userDb.coin || 0) < requiredCoin) return true;
 
     await db.subtract(`user.${senderId}.coin`, requiredCoin);
     return false;

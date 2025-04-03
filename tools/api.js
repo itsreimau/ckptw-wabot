@@ -3,9 +3,6 @@ const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"
     },
-    agung: {
-        baseURL: "https://api.agungny.my.id"
-    },
     archive: {
         baseURL: "https://archive-ui.tanakadomp.biz.id"
     },

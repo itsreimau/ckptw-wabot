@@ -23,7 +23,7 @@ module.exports = {
             }))
         );
 
-        const flag = tools.general.parseFlag(input, {
+        const flag = tools.cmd.parseFlag(input, {
             "-a": {
                 type: "boolean",
                 key: "audio"
@@ -34,13 +34,13 @@ module.exports = {
             }
         });
 
-        const url = flag?.input || null;
+        const url = flag.input || null;
 
         const isUrl = await tools.general.isUrl(url);
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const mediaType = flag?.audio ? "audio" : "video_image";
+            const mediaType = flag.audio ? "audio" : "video_image";
 
             const apiUrl = tools.api.createUrl("agatz", "/api/tiktok", {
                 url
@@ -57,7 +57,7 @@ module.exports = {
             }
 
             if (mediaType === "video_image") {
-                const video = flag?.hd ? result.data.find(video => video.type === "nowatermark_hd") : result.data.find(video => video.type === "nowatermark");
+                const video = flag.hd ? result.data.find(video => video.type === "nowatermark_hd") : result.data.find(video => video.type === "nowatermark");
 
                 return await ctx.reply({
                     video: {

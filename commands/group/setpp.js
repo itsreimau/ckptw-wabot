@@ -21,7 +21,7 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], "image")));
 
         try {
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             await ctx.core.updateProfilePicture(ctx.id, buffer);
 
             return await ctx.reply(quote(`✅ Berhasil mengubah gambar profil grup!`));
