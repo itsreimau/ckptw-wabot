@@ -35,7 +35,7 @@ module.exports = {
                     validator: (val) => /^(brown|black|nerd|piggy|carbon|bald)$/.test(val),
                     parser: (val) => val
                 }
-            }) || {};
+            });
 
             const filter = flag.filter || "brown";
 
