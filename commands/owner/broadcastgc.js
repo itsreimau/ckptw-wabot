@@ -10,7 +10,7 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || null;
+        const input = ctx.args.join(" ") || ctx.quoted.conversation || ctx.quoted.extendedTextMessage?.text || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
