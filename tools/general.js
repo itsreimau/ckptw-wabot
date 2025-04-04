@@ -152,21 +152,20 @@ async function upload(buffer, type, host = "FastUrl") {
     if (!buffer || !type) return null;
 
     const hosts = {
-        any: ["FastUrl", "Litterbox", "Catbox", "Uguu", "Pomf", "Quax", "Ryzen", "Shojib", "Erhabot", "TmpErhabot", "Videy"],
+        any: ["FastUrl", "Litterbox", "Catbox", "Uguu"],
         image: ["Pomf", "Quax", "Ryzen", "Shojib", "Erhabot", "TmpErhabot"],
         video: ["Pomf", "Quax", "Videy", "Ryzen", "TmpErhabot"],
         audio: ["Pomf", "Quax", "Ryzen", "TmpErhabot"]
     };
 
-    host = host?.toLowerCase() || config.system.uploaderHost?.toLowerCase();
-    const validHosts = type === "any" ? hosts.any.map(h => h.toLowerCase()) : (hosts[type] || []).map(h => h.toLowerCase());
-    const validHost = validHosts.find(h => h === host);
+    host = host.toLowerCase();
+    const isValid = hosts.any.some(h => h.toLowerCase() === host) || (hosts[type] || []).some(h => h.toLowerCase() === host);
 
-    if (!validHost) return `Host '${host}' tidak mendukung tipe '${type}'`;
+    if (!isValid) return `Host '${host}' tidak mendukung tipe '${type}'`;
 
     try {
-        const url = await uploader[validHost](buffer);
-        return url || `Gagal mengupload ke '${validHost}'`;
+        const url = await uploader[host](buffer);
+        return url || `Gagal mengupload ke '${host}'`;
     } catch (err) {
         consolefy.error(`Error: ${err}`);
         return null;
