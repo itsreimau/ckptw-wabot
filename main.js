@@ -38,8 +38,7 @@ const bot = new Client({
     markOnlineOnConnect: system.alwaysOnline,
     usePairingCode: system.usePairingCode,
     selfReply: system.selfReply,
-    autoMention: system.autoMention,
-    WAVersion: [2, 3000, 1015901307]
+    autoMention: system.autoMention
 });
 
 // Inisialisasi event dan middleware
