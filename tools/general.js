@@ -148,8 +148,8 @@ function ucword(text) {
     return text.toLowerCase().replace(/\b(\w)/g, (s) => s.toUpperCase());
 }
 
-async function upload(buffer, type, host = "FastUrl") {
-    if (!buffer || !type) return null;
+async function upload(buffer, type = "any", host = "FastUrl") {
+    if (!buffer) return null;
 
     const hosts = {
         any: ["FastUrl", "Litterbox", "Catbox", "Uguu"],
@@ -158,14 +158,14 @@ async function upload(buffer, type, host = "FastUrl") {
         audio: ["Pomf", "Quax", "Ryzen", "TmpErhabot"]
     };
 
-    host = host.toLowerCase();
-    const isValid = hosts.any.some(h => h.toLowerCase() === host) || (hosts[type] || []).some(h => h.toLowerCase() === host);
+    const allHosts = [...hosts.any, ...(hosts[type] || [])];
+    const realHost = allHosts.find(h => h.toLowerCase() === host.toLowerCase());
 
-    if (!isValid) return `Host '${host}' tidak mendukung tipe '${type}'`;
+    if (!realHost) return `Host '${host}' tidak mendukung tipe '${type}'`;
 
     try {
-        const url = await uploader[host](buffer);
-        return url || `Gagal mengupload ke '${host}'`;
+        const url = await uploader[realHost](buffer);
+        return url || `Gagal mengupload ke '${realHost}'`;
     } catch (err) {
         consolefy.error(`Error: ${err}`);
         return null;
