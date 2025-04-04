@@ -11,7 +11,7 @@ async function checkCoin(requiredCoin, senderId) {
     const userDb = await db.get(`user.${senderId}`) || {};
 
     if (tools.general.isOwner(senderId) || userDb?.premium) return false;
-    if ((userDb.coin || 0) < requiredCoin) return true;
+    if ((userDb?.coin || 0) < requiredCoin) return true;
 
     await db.subtract(`user.${senderId}.coin`, requiredCoin);
     return false;
@@ -37,8 +37,6 @@ module.exports = (bot) => {
         // Pengecekan mode bot (group, private, self) dan sistem mute/unmute
         if ((botDb?.mode === "group" && !isGroup) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
         if (groupDb?.mute && !["unmute", "ounmute"].includes(ctx.used.command) && !isOwner) return;
-
-        if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi mengetik jika diaktifkan dalam konfigurasi
 
         // Menambah XP pengguna dan menangani level-up
         const xpGain = 10;
@@ -104,6 +102,7 @@ module.exports = (bot) => {
             of restrictions) {
             if (condition) {
                 if (!userDb?.hasSentMsg?.[key]) {
+                    if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi mengetik jika diaktifkan dalam konfigurasi
                     await ctx.reply(msg);
                     return await db.set(`user.${senderId}.hasSentMsg.${key}`, true);
                 } else {
@@ -177,6 +176,7 @@ module.exports = (bot) => {
             of permissionChecks) {
             if (permissions[key] && condition) {
                 if (!userDb?.hasSentMsg?.[key]) {
+                    if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi mengetik jika diaktifkan dalam konfigurasi
                     await ctx.reply(msg);
                     return await db.set(`user.${senderId}.hasSentMsg.${key}`, true);
                 } else if (reaction) {

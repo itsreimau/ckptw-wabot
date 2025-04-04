@@ -31,17 +31,17 @@ module.exports = {
                 background: config.bot.thumbnail,
                 username: senderName,
                 status: "online",
-                level: userDb.level,
+                level: userDb?.level,
                 rank: userRank,
-                currentXp: userDb.xp,
+                currentXp: userDb?.xp,
                 requiredXp: "100"
             });
 
             const text = `${quote(`Nama: ${senderName}`)}\n` +
                 `${quote(`Status: ${isOwner ? "Owner" : userDb?.premium ? "Premium" : "Freemium"}`)}\n` +
-                `${quote(`Level: ${userDb.level}`)}\n` +
-                `${quote(`XP: ${userDb.xp}/100`)}\n` +
-                `${quote(`Koin: ${isOwner || userDb?.premium ? "Tak terbatas" : userDb.coin}`)}\n` +
+                `${quote(`Level: ${userDb?.level}`)}\n` +
+                `${quote(`XP: ${userDb?.xp}/100`)}\n` +
+                `${quote(`Koin: ${isOwner || userDb?.premium ? "Tak terbatas" : userDb?.coin}`)}\n` +
                 `${quote(`Peringkat: ${userRank}`)}\n` +
                 `${quote(`Menang: ${userDb?.winGame || 0}`)}\n` +
                 "\n" +

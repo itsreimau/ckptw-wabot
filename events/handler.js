@@ -129,7 +129,7 @@ module.exports = (bot) => {
 
             // Penanganan basis data pengguna
             if (isOwner || userDb?.premium) db.set(`user.${senderId}.coin`, 0);
-            if (userDb?.coin !== 0 && (userDb.coin === undefined || !Number.isFinite(userDb.coin))) db.set(`user.${senderId}.coin`, 100);
+            if (userDb?.coin !== 0 && (userDb?.coin === undefined || !Number.isFinite(userDb?.coin))) db.set(`user.${senderId}.coin`, 100);
             if (userDb?.coin > 10000) db.set(`user.${senderId}.coin`, 10000);
             if (userDb?.uid !== tools.general.generateUID(senderId)) db.set(`user.${senderId}.uid`, tools.general.generateUID(senderId));
 

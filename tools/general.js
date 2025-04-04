@@ -83,16 +83,16 @@ function getRandomElement(arr) {
     return arr[randomIndex];
 }
 
-function isCmd(content, config) {
-    if (!content || !config) return null;
+function isCmd(content, bot) {
+    if (!content || !bot) return null;
 
     const prefix = content.charAt(0);
-    if (!new RegExp(config.prefix, "i").test(content)) return false;
+    if (!new RegExp(bot.prefix, "i").test(content)) return false;
 
     const [cmdName, ...inputArray] = content.slice(1).trim().toLowerCase().split(/\s+/);
     const input = inputArray.join(" ");
 
-    const commands = Array.from(config.cmd.values());
+    const commands = Array.from(bot.cmd.values());
     const matchedCmd = commands.find(c => c.name === cmdName || c.aliases?.includes(cmdName));
 
     if (matchedCmd) return {

@@ -31,15 +31,15 @@ module.exports = {
         if (userDb?.level < claimRewards[input].level) return await ctx.reply(quote(`❎ Anda perlu mencapai level ${claimRewards[input].level} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userDb?.level || 0}.`));
 
         const currentTime = Date.now();
-        userDb.lastClaim = userDb.lastClaim || {};
-        const lastClaimTime = userDb.lastClaim[input] || 0;
+        userDb?.lastClaim = userDb?.lastClaim || {};
+        const lastClaimTime = userDb?.lastClaim[input] || 0;
         const timePassed = currentTime - lastClaimTime;
         const remainingTime = claimRewards[input].cooldown - timePassed;
 
         if (remainingTime > 0) return await ctx.reply(quote(`⏳ Anda telah mengklaim hadiah ${input}. Tunggu ${tools.general.convertMsToDuration(remainingTime)} untuk mengklaim lagi.`));
 
         try {
-            const rewardCoin = (userDb.coin || 0) + claimRewards[input].reward;
+            const rewardCoin = (userDb?.coin || 0) + claimRewards[input].reward;
             await db.set(`user.${senderId}.coin`, rewardCoin);
             await db.set(`user.${senderId}.lastClaim.${input}`, currentTime);
 

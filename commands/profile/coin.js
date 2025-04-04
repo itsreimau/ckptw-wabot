@@ -14,7 +14,7 @@ module.exports = {
         if (tools.general.isOwner(senderId) || userDb?.premium) return await ctx.reply(quote("🤑 Anda memiliki koin tak terbatas."));
 
         try {
-            const userCoin = userDb.coin || 0;
+            const userCoin = userDb?.coin || 0;
 
             return await ctx.reply(quote(`💰 Anda memiliki ${userCoin} koin tersisa.`));
         } catch (error) {
