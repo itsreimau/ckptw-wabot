@@ -31,7 +31,7 @@ module.exports = {
         if (userDb?.level < claimRewards[input].level) return await ctx.reply(quote(`❎ Anda perlu mencapai level ${claimRewards[input].level} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userDb?.level || 0}.`));
 
         const currentTime = Date.now();
-        userDb?.lastClaim = userDb?.lastClaim || {};
+        userDb.lastClaim = userDb?.lastClaim || {};
         const lastClaimTime = userDb?.lastClaim[input] || 0;
         const timePassed = currentTime - lastClaimTime;
         const remainingTime = claimRewards[input].cooldown - timePassed;
