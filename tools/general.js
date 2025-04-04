@@ -148,7 +148,7 @@ function ucword(text) {
     return text.toLowerCase().replace(/\b(\w)/g, (s) => s.toUpperCase());
 }
 
-async function upload(buffer, type, host) {
+async function upload(buffer, type, host = "FastUrl") {
     if (!buffer || !type) return null;
 
     const hosts = {
