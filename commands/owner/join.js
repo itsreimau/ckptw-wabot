@@ -22,14 +22,14 @@ module.exports = {
 
         try {
             const urlCode = new URL(url).pathname.split("/").pop();
-            const [joinResult] = await ctx.groups.acceptInvite(urlCode);
-            if (joinResult.data === 400) return await ctx.reply(quote(`❎ Grup tidak ditemukan.`));
-            if (joinResult.data === 401) return await ctx.reply(quote(`❎ Bot telah dikeluarkan dari grup itu.`));
-            if (joinResult.data === 409) return await ctx.reply(quote(`❎ Bot telah bergabung dengan grup.`));
-            if (joinResult.data === 410) return await ctx.reply(quote(`❎ URL grup telah disetel ulang.`));
-            if (joinResult.data === 500) return await ctx.reply(quote(`❎ Grup penuh!`));
+            const [result] = await ctx.groups.acceptInvite(urlCode);
+            if (result.data === 400) return await ctx.reply(quote(`❎ Grup tidak ditemukan.`));
+            if (result.data === 401) return await ctx.reply(quote(`❎ Bot telah dikeluarkan dari grup itu.`));
+            if (result.data === 409) return await ctx.reply(quote(`❎ Bot telah bergabung dengan grup.`));
+            if (result.data === 410) return await ctx.reply(quote(`❎ URL grup telah disetel ulang.`));
+            if (result.data === 500) return await ctx.reply(quote(`❎ Grup penuh!`));
 
-            await ctx.sendMessage(res, {
+            await ctx.sendMessage(result, {
                 text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${config.bot.name}, dimiliki oleh ${config.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)
             });
 
