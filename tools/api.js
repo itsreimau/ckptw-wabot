@@ -1,3 +1,5 @@
+const util = require("node:util");
+
 // Daftar API gratis
 const APIs = {
     agatz: {
@@ -53,7 +55,7 @@ function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
 
         return apiUrl.toString();
     } catch (error) {
-        consolefy.error(`Error: ${error}`);
+        consolefy.error(`Error: ${util.format(error)}`);
         return null;
     }
 }

@@ -6,6 +6,7 @@ const {
     CommandHandler
 } = require("@mengkodingan/ckptw");
 const path = require("node:path");
+const util = require("node:util");
 
 // Konfigurasi bot dari file 'config.js'
 const {
@@ -49,4 +50,4 @@ middleware(bot);
 const cmd = new CommandHandler(bot, path.resolve(__dirname, "commands"));
 cmd.load();
 
-bot.launch().catch(error => consolefy.error(`Error: ${error}`)); // Luncurkan bot
+bot.launch().catch(error => consolefy.error(`Error: ${util.format(error)}`)); // Luncurkan bot

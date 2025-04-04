@@ -4,6 +4,7 @@ const {
 const axios = require("axios");
 const FormData = require("form-data");
 const mime = require("mime-types");
+const util = require("node:util");
 
 module.exports = {
     name: "toaudio",
@@ -70,7 +71,7 @@ async function video2audio(buffer) {
             }
         };
     } catch (error) {
-        consolefy.error(`Error: ${error}`);
+        consolefy.error(`Error: ${util.format(error)}`);
         return null;
     }
 }

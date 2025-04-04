@@ -3,6 +3,7 @@ const api = require("./api.js");
 const uploader = require("@zanixongroup/uploader");
 const axios = require("axios");
 const didyoumean = require("didyoumean");
+const util = require("node:util");
 
 const formatBotName = (botName) => {
     if (!botName) return null;
@@ -166,8 +167,8 @@ async function upload(buffer, type = "any", host = "FastUrl") {
     try {
         const url = await uploader[realHost](buffer);
         return url || `Gagal mengupload ke '${realHost}'`;
-    } catch (err) {
-        consolefy.error(`Error: ${err}`);
+    } catch (error) {
+        consolefy.error(`Error: ${util.format(error)}`);
         return null;
     }
 }

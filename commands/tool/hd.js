@@ -7,6 +7,7 @@ const mime = require("mime-types");
 const {
     Buffer
 } = require("node:buffer");
+const util = require("node:util");
 
 module.exports = {
     name: "hd",
@@ -54,7 +55,7 @@ async function upscale(buffer) {
         });
         return Buffer.from(response.data);
     } catch (error) {
-        consolefy.error(`Error: ${error}`);
+        consolefy.error(`Error: ${util.format(error)}`);
         return null;
     }
 }

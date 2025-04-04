@@ -7,6 +7,7 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const util = require("node:util");
 
 async function get(type) {
     try {
@@ -135,7 +136,7 @@ async function get(type) {
 
         return text;
     } catch (error) {
-        consolefy.error(`Error: ${error}`);
+        consolefy.error(`Error: ${util.format(error)}`);
         return null;
     }
 }
