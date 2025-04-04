@@ -18,7 +18,7 @@ global.config = {
 
         // Konfigurasi autentikasi sesi bot
         authAdapter: {
-            adapter: "default", // Pilihan adapter: 'default', 'mysql', 'mongo', 'firebase'
+            adapter: "default", // Adapter untuk menyimpan sesi (Pilihan adapter: default, mysql, mongo, firebase)
 
             // Konfigurasi default
             default: {
@@ -98,6 +98,7 @@ global.config = {
         selfOwner: false, // Bot jadi owner sendiri
         selfReply: true, // Bot balas pesan bot sendiri
         timeZone: "Asia/Jakarta", // Zona waktu bot
+        uploaderHost: "FastUrl", // Host uploader untuk menyimpan media (Tersedia: FastUrl, litterbox, Catbox, Uguu, Quax, Pomf, Quax, Ryzen, Shojib, Erhabot, TmpErhabot, Videy)
         useCoin: true, // Pakai koin
         usePairingCode: false, // Pakai kode pairing untuk koneksi
         useServer: false // Jalankan bot dengan server
