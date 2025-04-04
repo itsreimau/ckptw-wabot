@@ -105,11 +105,10 @@ module.exports = (bot) => {
             if (condition) {
                 if (!userDb?.hasSentMsg?.[key]) {
                     await ctx.reply(msg);
-                    await db.set(`user.${senderId}.hasSentMsg.${key}`, true);
+                    return await db.set(`user.${senderId}.hasSentMsg.${key}`, true);
                 } else {
-                    await ctx.react(ctx.id, reaction);
+                    return await ctx.react(ctx.id, reaction);
                 }
-                return;
             }
         }
 
@@ -122,53 +121,67 @@ module.exports = (bot) => {
         const permissionChecks = [{
                 key: "admin",
                 condition: isGroup && !await ctx.group().isSenderAdmin(),
-                msg: config.msg.admin
+                msg: config.msg.admin,
+                reaction: "🛡️"
             },
             {
                 key: "botAdmin",
                 condition: isGroup && !await ctx.group().isBotAdmin(),
-                msg: config.msg.botAdmin
+                msg: config.msg.botAdmin,
+                reaction: "🤖"
             },
             {
                 key: "coin",
                 condition: permissions.coin && config.system.useCoin && await checkCoin(permissions.coin, senderId),
-                msg: config.msg.coin
+                msg: config.msg.coin,
+                reaction: "💰"
             },
             {
                 key: "group",
                 condition: !isGroup,
-                msg: config.msg.group
+                msg: config.msg.group,
+                reaction: "👥"
             },
             {
                 key: "owner",
                 condition: !isOwner,
-                msg: config.msg.owner
+                msg: config.msg.owner,
+                reaction: "👑"
             },
             {
                 key: "premium",
                 condition: !isOwner && !userDb?.premium,
-                msg: config.msg.premium
+                msg: config.msg.premium,
+                reaction: "💎"
             },
             {
                 key: "private",
                 condition: isGroup,
-                msg: config.msg.private
+                msg: config.msg.private,
+                reaction: "📩"
             },
             {
                 key: "restrict",
                 condition: config.system.restrict,
-                msg: config.msg.restrict
+                msg: config.msg.restrict,
+                reaction: "🚫"
             }
         ];
 
         for (const {
                 key,
                 condition,
-                msg
+                msg,
+                reaction
             }
             of permissionChecks) {
             if (permissions[key] && condition) {
-                return await ctx.reply(msg);
+                if (!userDb?.hasSentMsg?.[key]) {
+                    await ctx.reply(msg);
+                    return await db.set(`user.${senderId}.hasSentMsg.${key}`, true);
+                } else if (reaction) {
+                    return await ctx.react(ctx.id, reaction);
+                }
             }
         }
 
