@@ -72,6 +72,8 @@ module.exports = (bot) => {
             await db.set(`user.${senderId}.xp`, newUserXp);
         }
 
+        if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi mengetik jika diaktifkan dalam konfigurasi
+
         // Pengecekan kondisi pengguna
         const restrictions = [{
                 key: "banned",
@@ -102,7 +104,6 @@ module.exports = (bot) => {
             of restrictions) {
             if (condition) {
                 if (!userDb?.hasSentMsg?.[key]) {
-                    if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi mengetik jika diaktifkan dalam konfigurasi
                     await ctx.reply(msg);
                     return await db.set(`user.${senderId}.hasSentMsg.${key}`, true);
                 } else {
@@ -176,7 +177,6 @@ module.exports = (bot) => {
             of permissionChecks) {
             if (permissions[key] && condition) {
                 if (!userDb?.hasSentMsg?.[key]) {
-                    if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi mengetik jika diaktifkan dalam konfigurasi
                     await ctx.reply(msg);
                     return await db.set(`user.${senderId}.hasSentMsg.${key}`, true);
                 } else if (reaction) {
