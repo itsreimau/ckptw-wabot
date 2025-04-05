@@ -11,7 +11,7 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const accountJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
+        const accountJid = ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || ctx.quoted.senderJid || null;
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
 

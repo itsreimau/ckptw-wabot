@@ -282,7 +282,7 @@ module.exports = (bot) => {
                         to
                     } = menfessData;
                     if (senderId === from || senderId === to) {
-                        if (m.content.match(/\b(delete|stop)\b/i)) {
+                        if (m.content && m.content.match(/\b(delete|stop)\b/i)) {
                             await ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
                             await ctx.sendMessage(`${senderId === from ? to : from}@s.whatsapp.net`, {
                                 text: quote("✅ Pesan menfess telah dihapus!")

@@ -14,20 +14,18 @@ module.exports = {
         if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["viewOnce"])) return await ctx.reply(quote(tools.cmd.generateInstruction(["reply"], ["viewOnce"])));
 
         try {
-            const quoted = ctx.quoted.viewOnceMessageV2?.message;
-            const messageType = Object.keys(quoted)[0];
-            const media = await ctx.downloadContentFromMessage(quoted[messageType], messageType.slice(0, -7));
+            const msgType = ctx.getMessageType();
+            const buffer = await ctx.quoted.media.toBuffer();
 
-            let buffer = Buffer.from([]);
-            for await (const chunk of media) {
-                buffer = Buffer.concat([buffer, chunk]);
-            }
-
-            if (messageType === MessageType.imageMessage) {
+            if (msgType === MessageType.audioMessage) {
+                await ctx.reply({
+                    audio: buffer
+                });
+            } else if (msgType === MessageType.imageMessage) {
                 await ctx.reply({
                     image: buffer
                 });
-            } else if (messageType === MessageType.videoMessage) {
+            } else if (msgType === MessageType.videoMessage) {
                 await ctx.reply({
                     video: buffer
                 });

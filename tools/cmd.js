@@ -5,66 +5,77 @@ const {
 } = require("@mengkodingan/ckptw");
 const util = require("node:util");
 
-async function checkMedia(msgType, requiredMedia) {
-    if (!msgType || !requiredMedia) return false;
-
-    const mediaMap = {
-        audio: "audioMessage",
-        contact: "contactMessage",
-        document: ["documentMessage", "documentWithCaptionMessage"],
-        gif: "videoMessage",
-        image: "imageMessage",
-        liveLocation: "liveLocationMessage",
-        location: "locationMessage",
-        payment: "paymentMessage",
-        poll: "pollMessage",
-        product: "productMessage",
-        ptt: "audioMessage",
-        reaction: "reactionMessage",
-        sticker: "stickerMessage",
-        video: "videoMessage",
-        viewOnce: "viewOnceMessageV2"
-    };
+async function checkMedia(msgTypeContent, requiredMedia) {
+    if (!msgTypeContent || !requiredMedia) return false;
 
     const mediaList = Array.isArray(requiredMedia) ? requiredMedia : [requiredMedia];
 
     return mediaList.some(media => {
-        if (media === "document") {
-            return mediaMap[media].includes(msgType);
+        if (media === "document") return msgTypeContent.documentMessage || msgTypeContent.documentWithCaptionMessage;
+
+        if (media === "viewOnce") {
+            const typesWithViewOnce = ["imageMessage", "videoMessage", "audioMessage"];
+            return typesWithViewOnce.some(type => msgTypeContent[type]?.viewOnce);
         }
-        return msgType === mediaMap[media];
+
+        const mediaMap = {
+            audio: "audioMessage",
+            contact: "contactMessage",
+            document: ["documentMessage", "documentWithCaptionMessage"],
+            gif: "videoMessage",
+            image: "imageMessage",
+            liveLocation: "liveLocationMessage",
+            location: "locationMessage",
+            payment: "paymentMessage",
+            poll: "pollMessage",
+            product: "productMessage",
+            ptt: "audioMessage",
+            reaction: "reactionMessage",
+            sticker: "stickerMessage",
+            video: "videoMessage"
+        };
+
+        const type = mediaMap[media];
+        if (Array.isArray(type)) return type.some(t => msgTypeContent[t]);
+
+        return !!msgTypeContent[type];
     });
 }
 
 async function checkQuotedMedia(quoted, requiredMedia) {
     if (!quoted || !requiredMedia) return false;
 
-    const quotedMediaMap = {
-        audio: quoted.audioMessage,
-        contact: quoted.contactMessage,
-        document: quoted.documentMessage || quoted.documentWithCaptionMessage,
-        gif: quoted.videoMessage,
-        image: quoted.imageMessage,
-        liveLocation: quoted.liveLocationMessage,
-        location: quoted.locationMessage,
-        payment: quoted.paymentMessage,
-        poll: quoted.pollMessage,
-        product: quoted.productMessage,
-        ptt: quoted.audioMessage,
-        reaction: quoted.reactionMessage,
-        sticker: quoted.stickerMessage,
-        text: quoted.conversation || quoted.extendedTextMessage?.text,
-        video: quoted.videoMessage,
-        viewOnce: quoted.viewOnceMessageV2
-    };
-
     const mediaList = Array.isArray(requiredMedia) ? requiredMedia : [requiredMedia];
 
     return mediaList.some(media => {
+        if (media === "viewOnce") {
+            const typesWithViewOnce = ["imageMessage", "videoMessage", "audioMessage"];
+            return typesWithViewOnce.some(type => quoted[type]?.viewOnce);
+        }
+
+        const quotedMediaMap = {
+            audio: quoted.audioMessage,
+            contact: quoted.contactMessage,
+            document: quoted.documentMessage || quoted.documentWithCaptionMessage,
+            gif: quoted.videoMessage,
+            image: quoted.imageMessage,
+            liveLocation: quoted.liveLocationMessage,
+            location: quoted.locationMessage,
+            payment: quoted.paymentMessage,
+            poll: quoted.pollMessage,
+            product: quoted.productMessage,
+            ptt: quoted.audioMessage,
+            reaction: quoted.reactionMessage,
+            sticker: quoted.stickerMessage,
+            text: quoted.conversation || quoted.extendedTextMessage?.text,
+            video: quoted.videoMessage
+        };
+
         const mediaContent = quotedMediaMap[media];
-        return media === "text" ? mediaContent && mediaContent.length > 0 : mediaContent;
+        return media === "text" ? mediaContent && mediaContent.length > 0 : !!mediaContent;
     });
 }
+
 
 function generateInstruction(actions, mediaTypes) {
     if (!actions || !actions.length) return "'actions' yang diperlukan harus ditentukan!";
