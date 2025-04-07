@@ -69,11 +69,11 @@ module.exports = {
                         return collector.stop();
                     }
                 } else if (participantAnswer === "surrender") {
-                    const answer = [...game.answers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1");
+                    const remaining = [...game.answers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1");
                     session.delete(ctx.id);
                     await ctx.reply(
                         `${quote("🏳️ Anda menyerah!")}\n` +
-                        quote(`Jawabannya adalah ${answer}.`)
+                        quote(`Jawaban yang belum terjawab adalah ${remaining}.`)
                     );
                     return collector.stop();
                 }
@@ -86,12 +86,12 @@ module.exports = {
                     session.delete(ctx.id);
                     return await ctx.reply(
                         `${quote("⏱ Waktu habis!")}\n` +
-                        quote(`Jawaban yang belum terjawab adalah: ${remaining}`)
+                        quote(`Jawaban yang belum terjawab adalah ${remaining}`)
                     );
                 }
             });
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

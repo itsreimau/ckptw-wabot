@@ -18,7 +18,7 @@ module.exports = {
 
             return await ctx.reply(quote(`💰 Anda memiliki ${userCoin} koin tersisa.`));
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

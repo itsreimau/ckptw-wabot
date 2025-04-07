@@ -66,7 +66,7 @@ module.exports = {
 
             await ctx.reply(monospace(output));
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

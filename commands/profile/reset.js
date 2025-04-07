@@ -32,7 +32,7 @@ module.exports = {
 
             collector.on("end", async () => {});
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

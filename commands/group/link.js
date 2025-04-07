@@ -15,7 +15,7 @@ module.exports = {
             const code = await ctx.group().inviteCode();
             return await ctx.reply(`https://chat.whatsapp.com/${code}`);
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

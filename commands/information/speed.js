@@ -16,7 +16,7 @@ module.exports = {
             const responseTime = (performance.now() - startTime).toFixed(2);
             await ctx.editMessage(testMsg.key, quote(`🚀 Merespon dalam ${responseTime} ms.`));
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

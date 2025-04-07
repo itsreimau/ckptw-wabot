@@ -23,7 +23,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Berhasil mengubah nama grup!`));
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

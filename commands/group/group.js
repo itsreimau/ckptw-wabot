@@ -45,7 +45,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Berhasil mengubah setelan grup!`));
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

@@ -5,7 +5,6 @@ const {
     Client,
     CommandHandler
 } = require("@mengkodingan/ckptw");
-require("node:events").EventEmitter.defaultMaxListeners = 20;
 const path = require("node:path");
 const util = require("node:util");
 

@@ -33,7 +33,7 @@ module.exports = {
 
             return await ctx.reply(await result.toMessage());
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

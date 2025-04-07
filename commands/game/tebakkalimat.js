@@ -20,7 +20,7 @@ module.exports = {
             const game = {
                 coin: 5,
                 timeout: 60000,
-                answer: result.jawaban.toLowerCase()
+                answer: result.jawaban.toLowerCase().trim()
             };
 
             session.set(ctx.id, true);
@@ -83,7 +83,7 @@ module.exports = {
                 }
             });
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

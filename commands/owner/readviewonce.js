@@ -14,24 +14,34 @@ module.exports = {
         if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["viewOnce"])) return await ctx.reply(quote(tools.cmd.generateInstruction(["reply"], ["viewOnce"])));
 
         try {
-            const msgType = ctx.getMessageType();
+            const type = ctx.getMessageType();
+            const msg = ctx.quoted[type];
             const buffer = await ctx.quoted.media.toBuffer();
 
-            if (msgType === MessageType.audioMessage) {
+            const options = {
+                mimetype: msg.mimetype,
+                caption: msg.caption || ""
+            };
+
+            if (type === MessageType.audioMessage) {
                 await ctx.reply({
-                    audio: buffer
+                    audio: buffer,
+                    mimetype: msg.mimetype,
+                    ptt: true
                 });
-            } else if (msgType === MessageType.imageMessage) {
+            } else if (type === MessageType.imageMessage) {
                 await ctx.reply({
-                    image: buffer
+                    image: buffer,
+                    ...options
                 });
-            } else if (msgType === MessageType.videoMessage) {
+            } else if (type === MessageType.videoMessage) {
                 await ctx.reply({
-                    video: buffer
+                    video: buffer,
+                    ...options
                 });
             }
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

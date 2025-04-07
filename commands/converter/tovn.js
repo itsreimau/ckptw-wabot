@@ -24,7 +24,7 @@ module.exports = {
                 ptt: true
             });
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

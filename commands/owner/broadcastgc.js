@@ -10,7 +10,7 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || ctx.quoted.conversation || ctx.quoted.extendedTextMessage?.text || null;
+        const input = ctx.args.join(" ") || Object.values(ctx.quoted || {}).find(msg => msg?.caption || msg?.text)?.caption || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
@@ -55,7 +55,7 @@ module.exports = {
             const successCount = groupIds.length - failedGroupIds.length;
             return await ctx.editMessage(waitMsg.key, quote(`✅ Berhasil mengirim ke ${successCount} grup. Gagal mengirim ke ${failedGroupIds.length} grup.`));
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

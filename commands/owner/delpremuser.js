@@ -33,7 +33,7 @@ module.exports = {
             });
             return await ctx.reply(quote(`✅ Berhasil dihapus sebagai pengguna Premium!`));
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

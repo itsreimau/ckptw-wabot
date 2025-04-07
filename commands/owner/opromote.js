@@ -28,7 +28,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Berhasil ditingkatkan dari anggota menjadi admin!`));
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

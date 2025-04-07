@@ -12,7 +12,7 @@ module.exports = {
     },
     code: async (ctx) => {
         const key = ctx.args[0];
-        const text = ctx.args.slice(1).join(" ");
+        const text = ctx.args.slice(1).join(" ") || Object.values(ctx.quoted || {}).find(msg => msg?.caption || msg?.text)?.caption;
 
         if (!key && !text) return await ctx.reply(
             `${quote(`${tools.cmd.generateInstruction(["send"], ["text"])}`)}\n` +
@@ -39,7 +39,7 @@ module.exports = {
             await db.set(setKey, text);
             return await ctx.reply(quote(`✅ Pesan untuk key '${key}' berhasil disimpan!`));
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

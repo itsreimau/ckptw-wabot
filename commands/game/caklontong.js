@@ -65,10 +65,12 @@ module.exports = {
                         quoted: m
                     });
                 } else if (participantAnswer === "surrender") {
+                    const description = result.deskripsi;
                     session.delete(ctx.id);
                     await ctx.reply(
                         `${quote("🏳️ Anda menyerah!")}\n` +
-                        quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)
+                        `${quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)}\n` +
+                        quote(description)
                     );
                     return collector.stop();
                 }
@@ -87,7 +89,7 @@ module.exports = {
                 }
             });
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

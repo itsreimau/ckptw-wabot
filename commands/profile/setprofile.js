@@ -41,7 +41,7 @@ module.exports = {
             const statusText = newStatus ? "diaktifkan" : "dinonaktifkan";
             return await ctx.reply(quote(`✅ Fitur '${input}' berhasil ${statusText}!`));
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

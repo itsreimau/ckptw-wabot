@@ -25,7 +25,7 @@ module.exports = {
                 mimetype: mime.lookup("mp3")
             });
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

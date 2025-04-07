@@ -31,7 +31,7 @@ module.exports = {
                 gifPlayback: ctx.used.command === "togif" ? true : false
             });
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };

@@ -10,7 +10,6 @@ const mime = require("mime-types");
 const {
     exec
 } = require("node:child_process");
-require("node:events").EventEmitter.defaultMaxListeners = 50;
 const fs = require("node:fs");
 const util = require("node:util");
 

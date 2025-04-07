@@ -59,7 +59,7 @@ module.exports = {
                 if (error.status !== 200) return await ctx.reply(text);
             }
         } catch (error) {
-            tools.cmd.handleError(ctx, error, false)
+            return await tools.cmd.handleError(ctx, error, false);
         }
     }
 };
