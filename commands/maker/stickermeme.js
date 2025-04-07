@@ -23,11 +23,11 @@ module.exports = {
 
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.cmd.checkMedia(msgType, "image"),
-            tools.cmd.checkQuotedMedia(ctx.quoted, "image")
+            tools.cmd.checkMedia(msgType, ["image", "sticker"]),
+            tools.cmd.checkQuotedMedia(ctx.quoted, ["image", "sticker"])
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], "image")));
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], ["image", "sticker"])));
 
         try {
             let [top, bottom] = input.split("|").map(i => i.trim());

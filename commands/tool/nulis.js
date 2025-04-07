@@ -5,7 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "nulis",
-    category: "ai-image",
+    category: "tool",
     permissions: {},
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;

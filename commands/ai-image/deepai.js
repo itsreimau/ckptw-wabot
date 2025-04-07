@@ -18,7 +18,7 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("https://api.crafters.biz.id", "/ai-img/deepai", {
+            const result = tools.api.createUrl("crafters", "/ai-img/deepai", {
                 text: input
             });
 

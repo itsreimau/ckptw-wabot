@@ -18,6 +18,9 @@ module.exports = {
             `${quote("Nyx Altair (https://github.com/NyxAltair)")}\n` +
             `${quote("Fatahillah Al makarim (https://github.com/ZTRdiamond)")}\n` +
             `${quote("FastURL (alias Hikaru) (https://github.com/fasturl)")}\n` +
+            `${quote("BochilGaming (https://github.com/BochilGaming)")}\n` +
+            `${quote("Lann (https://github.com/ERLANRAHMAT)")}\n` +
+            `${quote("Aine (https://github.com/Aiinne)")}\n` +
             `${quote("Dan kepada semua pihak yang telah membantu dalam pengembangan bot ini.")}\n` +
             "\n" +
             config.msg.footer

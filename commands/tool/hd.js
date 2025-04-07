@@ -4,10 +4,6 @@ const {
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
-const {
-    Buffer
-} = require("node:buffer");
-const util = require("node:util");
 
 module.exports = {
     name: "hd",
@@ -27,35 +23,21 @@ module.exports = {
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
-            const result = await upscale(buffer);
-
-            if (!result) return await ctx.reply(config.msg.notFound);
+            const uploadUrl = await tools.general.upload(buffer, "image");
+            const apiUrl = tools.api.createUrl("crafters", "/tools/pxpic", {
+                url: uploadUrl,
+                type: "upscale"
+            });
+            const result = (await axios.get(apiUrl)).data.result.resultImageUrl;
 
             return await ctx.reply({
-                image: result,
+                image: {
+                    url: result
+                },
                 mimetype: mime.lookup("png")
             });
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error, true);
         }
     }
 };
-
-// Oleh Axel (https://github.com/AxellNetwork)
-async function upscale(buffer) {
-    try {
-        const response = await axios.post("https://lexica.qewertyy.dev/upscale", {
-            image_data: Buffer.from(buffer, "base64").toString("base64"),
-            format: "binary"
-        }, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            responseType: "arraybuffer"
-        });
-        return Buffer.from(response.data);
-    } catch (error) {
-        consolefy.error(`Error: ${util.format(error)}`);
-        return null;
-    }
-}

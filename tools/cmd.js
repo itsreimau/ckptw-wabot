@@ -5,77 +5,48 @@ const {
 } = require("@mengkodingan/ckptw");
 const util = require("node:util");
 
-async function checkMedia(msgTypeContent, requiredMedia) {
-    if (!msgTypeContent || !requiredMedia) return false;
+async function checkMedia(type, required) {
+    if (!type || !required) return false;
 
-    const mediaList = Array.isArray(requiredMedia) ? requiredMedia : [requiredMedia];
+    const mediaMap = {
+        audio: "audioMessage",
+        document: ["documentMessage", "documentWithCaptionMessage"],
+        gif: "videoMessage",
+        image: "imageMessage",
+        ptt: "audioMessage",
+        sticker: "stickerMessage",
+        video: "videoMessage"
+    };
+
+    const mediaList = Array.isArray(required) ? required : [required];
 
     return mediaList.some(media => {
-        if (media === "document") return msgTypeContent.documentMessage || msgTypeContent.documentWithCaptionMessage;
-
-        if (media === "viewOnce") {
-            const typesWithViewOnce = ["imageMessage", "videoMessage", "audioMessage"];
-            return typesWithViewOnce.some(type => msgTypeContent[type]?.viewOnce);
-        }
-
-        const mediaMap = {
-            audio: "audioMessage",
-            contact: "contactMessage",
-            document: ["documentMessage", "documentWithCaptionMessage"],
-            gif: "videoMessage",
-            image: "imageMessage",
-            liveLocation: "liveLocationMessage",
-            location: "locationMessage",
-            payment: "paymentMessage",
-            poll: "pollMessage",
-            product: "productMessage",
-            ptt: "audioMessage",
-            reaction: "reactionMessage",
-            sticker: "stickerMessage",
-            video: "videoMessage"
-        };
-
-        const type = mediaMap[media];
-        if (Array.isArray(type)) return type.some(t => msgTypeContent[t]);
-
-        return !!msgTypeContent[type];
+        if (media === "document") return mediaMap[media].includes(type);
+        return type === mediaMap[media];
     });
 }
 
-async function checkQuotedMedia(quoted, requiredMedia) {
-    if (!quoted || !requiredMedia) return false;
+async function checkQuotedMedia(type, required) {
+    if (!type || !required) return false;
 
-    const mediaList = Array.isArray(requiredMedia) ? requiredMedia : [requiredMedia];
+    const typeMediaMap = {
+        audio: type.audioMessage,
+        document: type.documentMessage || type.documentWithCaptionMessage,
+        gif: type.videoMessage,
+        image: type.imageMessage,
+        ptt: type.audioMessage,
+        sticker: type.stickerMessage,
+        text: type.conversation || type.extendedTextMessage?.text,
+        video: type.videoMessage
+    };
+
+    const mediaList = Array.isArray(required) ? required : [required];
 
     return mediaList.some(media => {
-        if (media === "viewOnce") {
-            const typesWithViewOnce = ["imageMessage", "videoMessage", "audioMessage"];
-            return typesWithViewOnce.some(type => quoted[type]?.viewOnce);
-        }
-
-        const quotedMediaMap = {
-            audio: quoted.audioMessage,
-            contact: quoted.contactMessage,
-            document: quoted.documentMessage || quoted.documentWithCaptionMessage,
-            gif: quoted.videoMessage,
-            image: quoted.imageMessage,
-            liveLocation: quoted.liveLocationMessage,
-            location: quoted.locationMessage,
-            payment: quoted.paymentMessage,
-            poll: quoted.pollMessage,
-            product: quoted.productMessage,
-            ptt: quoted.audioMessage,
-            reaction: quoted.reactionMessage,
-            sticker: quoted.stickerMessage,
-            text: quoted.conversation || quoted.extendedTextMessage?.text,
-            video: quoted.videoMessage
-        };
-
-        const mediaContent = quotedMediaMap[media];
-        return media === "text" ? mediaContent && mediaContent.length > 0 : !!mediaContent;
+        const mediaContent = typeMediaMap[media];
+        return media === "text" ? mediaContent && mediaContent.length > 0 : mediaContent;
     });
 }
-
 
 function generateInstruction(actions, mediaTypes) {
     if (!actions || !actions.length) return "'actions' yang diperlukan harus ditentukan!";
@@ -91,19 +62,11 @@ function generateInstruction(actions, mediaTypes) {
 
     const mediaTypeTranslations = {
         "audio": "audio",
-        "contact": "kontak",
         "document": "dokumen",
         "gif": "GIF",
         "image": "gambar",
-        "liveLocation": "lokasi langsung",
-        "location": "lokasi",
-        "payment": "pembayaran",
-        "poll": "polling",
-        "product": "produk",
         "ptt": "pesan suara",
-        "reaction": "reaksi",
         "sticker": "stiker",
-        "templateMessage": "pesan template",
         "text": "teks",
         "video": "video",
         "viewOnce": "sekali lihat"

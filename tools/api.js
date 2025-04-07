@@ -11,6 +11,9 @@ const APIs = {
     bk9: {
         baseURL: "https://bk9.fun"
     },
+    crafters: {
+        baseURL: "https://api.crafters.biz.id"
+    },
     diibot: {
         baseURL: "https://api.diioffc.web.id"
     },
