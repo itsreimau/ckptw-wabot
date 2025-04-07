@@ -75,6 +75,8 @@ async function handleUserEvent(bot, m, type) {
 
 // Events utama bot
 module.exports = (bot) => {
+    bot.ev.setMaxListeners(config.system.maxListeners); // Tetapkan max listeners untuk events
+
     // Event saat bot siap
     bot.ev.once(Events.ClientReady, async (m) => {
         consolefy.success(`${config.bot.name} by ${config.owner.name}, ready at ${m.user.id}`);

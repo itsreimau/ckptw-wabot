@@ -47,7 +47,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.data;
 
-            if (mediaType === "audio") {
+            if (result.music_info && mediaType === "audio") {
                 return await ctx.reply({
                     audio: {
                         url: result.music_info.url
@@ -56,32 +56,30 @@ module.exports = {
                 });
             }
 
-            if (mediaType === "video_image") {
-                const video = flag.hd ? result.data.find(video => video.type === "nowatermark_hd") : result.data.find(video => video.type === "nowatermark");
+            if (result.data && mediaType === "video_image") {
+                const videoType = flag.hd ? "nowatermark_hd" : "nowatermark";
+                const video = result.data.find(v => v.type === videoType);
 
-                return await ctx.reply({
-                    video: {
-                        url: video.url
-                    },
-                    mimetype: mime.lookup("mp4"),
-                    caption: `${quote(`URL: ${url}`)}\n` +
-                        "\n" +
-                        config.msg.footer
-                });
-            }
+                if (video) {
+                    return await ctx.reply({
+                        video: {
+                            url: video.url
+                        },
+                        mimetype: mime.lookup("mp4"),
+                        caption: `${quote(`URL: ${url}`)}\n` +
+                            "\n" +
+                            config.msg.footer
+                    });
+                }
 
-            if (mediaType === "video_image") {
                 const images = result.data.filter(item => item.type === "photo");
-
-                if (images.length > 0) {
-                    for (const image of images) {
-                        await ctx.reply({
-                            image: {
-                                url: image.url
-                            },
-                            mimetype: mime.lookup("png")
-                        });
-                    }
+                for (const image of images) {
+                    await ctx.reply({
+                        image: {
+                            url: image.url
+                        },
+                        mimetype: mime.lookup("png")
+                    });
                 }
             }
         } catch (error) {
