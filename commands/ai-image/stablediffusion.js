@@ -5,7 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "stablediffusion",
-    aliases: ["diff", "diffusion"],
+    aliases: ["diff", "diffusion", "sdxl"],
     category: "ai-image",
     permissions: {
         coin: 10
@@ -19,8 +19,9 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("siputzx", "/api/ai/stable-diffusion", {
-                prompt: input
+            const result = tools.api.createUrl("fast", "/aiimage/stablediffusion", {
+                prompt: input,
+                model: "stable-diffusion-xl-base"
             });
 
             return await ctx.reply({

@@ -5,7 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "remini",
-    category: "ai-misc",
+    category: "tool",
     permissions: {
         coin: 10
     },
@@ -21,8 +21,8 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const result = tools.api.createUrl("velyn", "/api/tools/remini", {
-                url: uploadUrl
+            const result = tools.api.createUrl("crafters", "/tools/remini", {
+                imageUrl: uploadUrl
             });
 
             return await ctx.reply({

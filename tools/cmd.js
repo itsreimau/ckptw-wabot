@@ -13,7 +13,6 @@ async function checkMedia(type, required) {
         document: ["documentMessage", "documentWithCaptionMessage"],
         gif: "videoMessage",
         image: "imageMessage",
-        ptt: "audioMessage",
         sticker: "stickerMessage",
         video: "videoMessage"
     };
@@ -34,7 +33,6 @@ async function checkQuotedMedia(type, required) {
         document: type.documentMessage || type.documentWithCaptionMessage,
         gif: type.videoMessage,
         image: type.imageMessage,
-        ptt: type.audioMessage,
         sticker: type.stickerMessage,
         text: type.conversation || type.extendedTextMessage?.text,
         video: type.videoMessage
@@ -43,8 +41,15 @@ async function checkQuotedMedia(type, required) {
     const mediaList = Array.isArray(required) ? required : [required];
 
     return mediaList.some(media => {
-        const mediaContent = typeMediaMap[media];
-        return media === "text" ? mediaContent && mediaContent.length > 0 : mediaContent;
+        if (media === "text") {
+            const mediaContent = typeMediaMap.text;
+            return mediaContent && mediaContent.length > 0;
+        } else if (media === "viewOnce") {
+            const viewOnceMediaKeys = ["audioMessage", "imageMessage", "videoMessage"];
+            return viewOnceMediaKeys.some(key => type[key]?.viewOnce === true);
+        } else {
+            return !!typeMediaMap[media];
+        }
     });
 }
 
@@ -65,7 +70,6 @@ function generateInstruction(actions, mediaTypes) {
         "document": "dokumen",
         "gif": "GIF",
         "image": "gambar",
-        "ptt": "pesan suara",
         "sticker": "stiker",
         "text": "teks",
         "video": "video",

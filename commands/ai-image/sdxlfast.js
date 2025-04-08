@@ -4,9 +4,11 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "nulis",
-    category: "tool",
-    permissions: {},
+    name: "sdxlfast",
+    category: "ai-image",
+    permissions: {
+        coin: 10
+    },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 
@@ -16,8 +18,9 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("crafters", "/tools/tulisbuku", {
-                query: input
+            const result = tools.api.createUrl("fast", "/aiimage/stablediffusion", {
+                prompt: input,
+                model: "stable-diffusion-xl-fast"
             });
 
             return await ctx.reply({

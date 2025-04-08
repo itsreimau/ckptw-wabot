@@ -18,8 +18,9 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("siputzx", "/api/ai/dreamshaper", {
-                prompt: input
+            const result = tools.api.createUrl("fast", "/aiimage/stablediffusion", {
+                prompt: input,
+                model: "dreamshaper-8-base"
             });
 
             return await ctx.reply({

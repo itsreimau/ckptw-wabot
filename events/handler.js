@@ -121,7 +121,7 @@ module.exports = (bot) => {
         const groupDb = await db.get(`group.${groupId}`) || {};
 
         if ((botDb?.mode === "group" && !isGroup) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return; // Pengecekan mode bot (group, private, self)
-        if (groupDb?.mute && !isOwner) return;
+        if (groupDb?.mute && (!isOwner || !await ctx.group().isSenderAdmin())) return;
 
         isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
 
@@ -277,21 +277,22 @@ module.exports = (bot) => {
             // Penanganan menfess
             const allMenfessDb = await db.get("menfess") || {};
             if (!isCmd || isCmd?.didyoumean) {
-                const menfessEntries = Object.entries(allMenfessDb);
-                for (const [conversationId, menfessData] of menfessEntries) {
-                    const {
+                for (const [conversationId, {
                         from,
                         to
-                    } = menfessData;
+                    }] of Object.entries(allMenfessDb)) {
                     if (senderId === from || senderId === to) {
-                        if (m.content && m.content.match(/\b(delete|stop)\b/i)) {
-                            await ctx.reply(quote("✅ Pesan menfess telah dihapus!"));
-                            await ctx.sendMessage(`${senderId === from ? to : from}@s.whatsapp.net`, {
-                                text: quote("✅ Pesan menfess telah dihapus!")
+                        const targetId = `${senderId === from ? to : from}@s.whatsapp.net`;
+
+                        if (m.content?.match(/\b(delete|stop)\b/i)) {
+                            const replyText = quote("✅ Pesan menfess telah dihapus!");
+                            await ctx.reply(replyText);
+                            await ctx.sendMessage(targetId, {
+                                text: replyText
                             });
                             await db.delete(`menfess.${conversationId}`);
                         } else {
-                            await ctx.core.sendMessage(`${senderId === from ? to : from}@s.whatsapp.net`, {
+                            await ctx.core.sendMessage(targetId, {
                                 forward: m
                             });
                         }

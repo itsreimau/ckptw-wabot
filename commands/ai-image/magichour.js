@@ -4,8 +4,7 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "stabilityai",
-    aliases: ["stability"],
+    name: "magichour",
     category: "ai-image",
     permissions: {
         coin: 10
@@ -19,7 +18,7 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("siputzx", "/api/ai/stabilityai", {
+            const result = tools.api.createUrl("crafters", "/ai-img/magichour", {
                 prompt: input
             });
 

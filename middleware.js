@@ -36,7 +36,7 @@ module.exports = (bot) => {
 
         // Pengecekan mode bot (group, private, self) dan sistem mute/unmute
         if ((botDb?.mode === "group" && !isGroup) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
-        if (groupDb?.mute && !["unmute", "ounmute"].includes(ctx.used.command) && !isOwner) return;
+        if (groupDb?.mute && (!isOwner || !await ctx.group().isSenderAdmin())) return;
 
         // Menambah XP pengguna dan menangani level-up
         const xpGain = 10;
