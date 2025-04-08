@@ -10,7 +10,7 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || (q => q?.conversation || q?.text || q?.caption)(Object.values(ctx.quoted || {}).find(v => typeof v === "object")) || null;
+        const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean); || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +

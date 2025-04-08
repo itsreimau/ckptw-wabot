@@ -23,7 +23,7 @@ module.exports = {
         }
 
         try {
-            const senderId = tools.general.getID(ctx.sender.jid);;
+            const senderId = tools.general.getID(ctx.sender.jid);
             let setKey;
 
             switch (input.toLowerCase()) {
