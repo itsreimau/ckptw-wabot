@@ -49,7 +49,7 @@ module.exports = {
             await ctx.sendMessage(`${formattedId}@s.whatsapp.net`, {
                 text: `${menfessText}\n` +
                     `${config.msg.readmore}\n` +
-                    quote("Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik 'delete' atau 'stop'.")
+                    quote("Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik 'delete' atau 'stop'."),
                 contextInfo: {
                     forwardingScore: 9999,
                     isForwarded: true
