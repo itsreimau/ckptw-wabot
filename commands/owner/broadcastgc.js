@@ -47,7 +47,7 @@ module.exports = {
                             url: config.bot.thumbnail
                         },
                         mimetype: mime.lookup("png"),
-                        caption: input
+                        caption: input,
                         contextInfo: {
                             forwardingScore: 9999,
                             isForwarded: true
