@@ -4,6 +4,7 @@ const {
 const {
     exec
 } = require("node:child_process");
+const process = require("node:process");
 const util = require("node:util");
 
 module.exports = {

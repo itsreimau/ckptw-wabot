@@ -177,7 +177,6 @@ function parseFlag(argsString, customRules = {}) {
     return options;
 }
 
-
 module.exports = {
     checkMedia,
     checkQuotedMedia,

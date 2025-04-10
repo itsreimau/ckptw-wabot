@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const mime = require("mime-types");
 
 module.exports = {
     name: "broadcastgc",
@@ -37,13 +38,20 @@ module.exports = {
                         message: {
                             extendedTextMessage: {
                                 text: config.msg.note,
-                                title: config.bot.name,
-                                thumbnailUrl: config.bot.thumbnail
+                                title: config.bot.name
                             }
                         }
                     };
                     await ctx.sendMessage(groupId, {
-                        text: input
+                        image: {
+                            url: config.bot.thumbnail
+                        },
+                        mimetype: mime.lookup("png"),
+                        caption: input
+                        contextInfo: {
+                            forwardingScore: 9999,
+                            isForwarded: true
+                        },
                     }, {
                         quoted: fakeQuotedText
                     });

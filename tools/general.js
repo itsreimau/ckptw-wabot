@@ -2,7 +2,7 @@
 const api = require("./api.js");
 const uploader = require("@zanixongroup/uploader");
 const axios = require("axios");
-const didyoumean = require("didyoumean");
+const didYouMean = require("didyoumean");
 const util = require("node:util");
 
 const formatBotName = (botName) => {
@@ -102,7 +102,7 @@ function isCmd(content, bot) {
         input
     };
 
-    const mean = didyoumean(cmdName, commands.flatMap(c => [c.name, ...(c.aliases || [])]));
+    const mean = didYouMean(cmdName, commands.flatMap(c => [c.name, ...(c.aliases || [])]));
 
     return mean ? {
         msg: content,

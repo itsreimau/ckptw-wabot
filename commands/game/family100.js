@@ -3,6 +3,7 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
+const didYouMean = require("didyoumean");
 
 const session = new Map();
 
@@ -76,6 +77,8 @@ module.exports = {
                         quote(`Jawaban yang belum terjawab adalah ${remaining}.`)
                     );
                     return collector.stop();
+                } else if (didYouMean(participantAnswer, [game.answer]) === game.answer) {
+                    await ctx.reply(quote("Sedikit lagi."));
                 }
             });
 

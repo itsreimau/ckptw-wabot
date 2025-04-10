@@ -40,7 +40,7 @@ module.exports = {
                 `${quote(`Tanggal: ${moment.tz(config.system.timeZone).locale("id").format("dddd, DD MMMM YYYY")}`)}\n` +
                 `${quote(`Waktu: ${moment.tz(config.system.timeZone).format("HH.mm.ss")}`)}\n` +
                 "\n" +
-                `${quote(`Uptime: ${tools.general.convertMsToDuration(Date.now() - config.bot.readyAt)}`)}\n` +
+                `${quote(`Bot Uptime: ${tools.general.convertMsToDuration(Date.now() - config.bot.readyAt)}`)}\n` +
                 `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
                 `${quote(`Library: @mengkodingan/ckptw`)}\n` +
                 "\n" +
@@ -96,7 +96,11 @@ module.exports = {
                 },
                 mimetype: mime.lookup("png"),
                 caption: text,
-                mentions: [ctx.sender.jid]
+                contextInfo: {
+                    mentionedJid: [ctx.sender.jid],
+                    forwardingScore: 9999,
+                    isForwarded: true
+                },
             }, {
                 quoted: fakeQuotedText
             });

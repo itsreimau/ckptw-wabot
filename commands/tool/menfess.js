@@ -41,8 +41,7 @@ module.exports = {
                 message: {
                     extendedTextMessage: {
                         text: "Seseorang telah mengirimimu pesan menfess.",
-                        title: config.bot.name,
-                        thumbnailUrl: config.bot.thumbnail
+                        title: config.bot.name
                     }
                 }
             };
@@ -51,6 +50,10 @@ module.exports = {
                 text: `${menfessText}\n` +
                     `${config.msg.readmore}\n` +
                     quote("Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik 'delete' atau 'stop'.")
+                contextInfo: {
+                    forwardingScore: 9999,
+                    isForwarded: true
+                },
             }, {
                 quoted: fakeQuotedText
             });
