@@ -76,7 +76,7 @@ module.exports = {
                     );
                     return collector.stop();
                 } else if (didYouMean(participantAnswer, [game.answer]) === game.answer) {
-                    await ctx.reply(quote("Sedikit lagi."));
+                    await ctx.reply(quote("🎯 Sedikit lagi."));
                 }
             });
 
