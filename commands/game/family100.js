@@ -66,19 +66,29 @@ module.exports = {
                             await db.add(`user.${participant}.coin`, game.coin.allAnswered);
                             await db.add(`user.${participant}.winGame`, 1);
                         }
-                        await ctx.reply(quote(`🎉 Selamat! Semua jawaban telah terjawab! Setiap anggota yang menjawab mendapat ${game.coin.allAnswered} koin.`));
+                        await ctx.sendMessage(ctx.id, {
+                            text: quote(`🎉 Selamat! Semua jawaban telah terjawab! Setiap anggota yang menjawab mendapat ${game.coin.allAnswered} koin.`)
+                        }, {
+                            quoted: m
+                        });
                         return collector.stop();
                     }
                 } else if (participantAnswer === "surrender") {
                     const remaining = [...game.answers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1");
                     session.delete(ctx.id);
-                    await ctx.reply(
-                        `${quote("🏳️ Anda menyerah!")}\n` +
-                        quote(`Jawaban yang belum terjawab adalah ${remaining}.`)
-                    );
+                    await ctx.sendMessage(ctx.id, {
+                        text: `${quote("🏳️ Anda menyerah!")}\n` +
+                            quote(`Jawaban yang belum terjawab adalah ${remaining}.`)
+                    }, {
+                        quoted: m
+                    });
                     return collector.stop();
                 } else if (didYouMean(participantAnswer, [game.answer]) === game.answer) {
-                    await ctx.reply(quote("🎯 Sedikit lagi."));
+                    await ctx.sendMessage(ctx.id, {
+                        text: quote("🎯 Sedikit lagi!")
+                    }, {
+                        quoted: m
+                    });
                 }
             });
 

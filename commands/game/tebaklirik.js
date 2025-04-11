@@ -66,13 +66,19 @@ module.exports = {
                     });
                 } else if (participantAnswer === "surrender") {
                     session.delete(ctx.id);
-                    await ctx.reply(
-                        `${quote("🏳️ Anda menyerah!")}\n` +
-                        quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)
-                    );
+                    await ctx.sendMessage(ctx.id, {
+                        text: `${quote("🏳️ Anda menyerah!")}\n` +
+                            quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)
+                    }, {
+                        quoted: m
+                    });
                     return collector.stop();
                 } else if (didYouMean(participantAnswer, [game.answer]) === game.answer) {
-                    await ctx.reply(quote("🎯 Sedikit lagi."));
+                    await ctx.sendMessage(ctx.id, {
+                        text: quote("🎯 Sedikit lagi!")
+                    }, {
+                        quoted: m
+                    });
                 }
             });
 

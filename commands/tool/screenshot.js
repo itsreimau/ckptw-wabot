@@ -22,7 +22,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const result = tools.api.createUrl("diioffc", "/api/tools/sspc", {
+            const result = tools.api.createUrl("diibot", "/api/tools/sspc", {
                 url
             });
 

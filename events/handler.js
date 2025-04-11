@@ -121,7 +121,7 @@ module.exports = (bot) => {
         const groupDb = await db.get(`group.${groupId}`) || {};
 
         if ((botDb?.mode === "group" && !isGroup) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return; // Pengecekan mode bot (group, private, self)
-        if (groupDb?.mute && (!isOwner || !await ctx.group().isSenderAdmin())) return;
+        if (groupDb?.mute && (!isOwner && !await ctx.group().isSenderAdmin())) return;
 
         isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
 

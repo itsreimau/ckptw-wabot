@@ -68,14 +68,20 @@ module.exports = {
                 } else if (participantAnswer === "surrender") {
                     const description = result.deskripsi;
                     session.delete(ctx.id);
-                    await ctx.reply(
-                        `${quote("🏳️ Anda menyerah!")}\n` +
-                        `${quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)}\n` +
-                        quote(description)
-                    );
+                    await ctx.sendMessage(ctx.id, {
+                        text: `${quote("🏳️ Anda menyerah!")}\n` +
+                            `${quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)}\n` +
+                            quote(description)
+                    }, {
+                        quoted: m
+                    });
                     return collector.stop();
                 } else if (didYouMean(participantAnswer, [game.answer]) === game.answer) {
-                    await ctx.reply(quote("🎯 Sedikit lagi."));
+                    await ctx.sendMessage(ctx.id, {
+                        text: quote("🎯 Sedikit lagi!")
+                    }, {
+                        quoted: m
+                    });
                 }
             });
 
