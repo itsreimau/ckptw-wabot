@@ -51,14 +51,20 @@ async function handleUserEvent(bot, m, type) {
                 description: userId
             });
 
-            await bot.core.sendMessage(id, {
-                image: {
-                    url: canvas
-                },
-                mimetype: mime.lookup("png"),
-                caption: text,
-                mentions: [jid]
-            });
+            try {
+                await bot.core.sendMessage(id, {
+                    image: {
+                        url: canvas
+                    },
+                    mimetype: mime.lookup("png"),
+                    caption: text,
+                    mentions: [jid]
+                });
+            } catch (error) {
+                if (error.status !== 200) await bot.core.sendMessage(id, {
+                    text
+                });
+            }
 
             if (type === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(id, {
                 text: groupDb?.text?.intro,

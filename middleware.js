@@ -47,24 +47,31 @@ module.exports = (bot) => {
             let newUserLevel = (userDb?.level || 0) + 1;
             newUserXp -= xpToLevelUp;
 
-            const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-            const canvas = tools.api.createUrl("fast", "/canvas/levelup", {
-                avatar: profilePictureUrl,
-                background: config.bot.thumbnail,
-                username: ctx.sender.pushName,
-                currentLevel: userDb?.level,
-                nextLevel: newUserLevel
-            });
-
-            if (userDb?.autolevelup) await ctx.reply({
-                image: {
-                    url: canvas
-                },
-                mimetype: mime.lookup("png"),
-                caption: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
+            if (userDb?.autolevelup) {
+                const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+                const canvas = tools.api.createUrl("fast", "/canvas/levelup", {
+                    avatar: profilePictureUrl,
+                    background: config.bot.thumbnail,
+                    username: ctx.sender.pushName,
+                    currentLevel: userDb?.level,
+                    nextLevel: newUserLevel
+                });
+                const text = `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                     `${config.msg.readmore}\n` +
-                    quote(tools.cmd.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]))
-            });
+                    quote(tools.cmd.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]));
+
+                try {
+                    await ctx.reply({
+                        image: {
+                            url: canvas
+                        },
+                        mimetype: mime.lookup("png"),
+                        caption: text
+                    });
+                } catch (error) {
+                    if (error.status !== 200) await ctx.reply(text);
+                }
+            }
 
             await db.set(`user.${senderId}.xp`, newUserXp);
             await db.set(`user.${senderId}.level`, newUserLevel);
