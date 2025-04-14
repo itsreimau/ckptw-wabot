@@ -19,10 +19,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/lirik", {
-                message: input
+            const apiUrl = tools.api.createUrl("https://api.ureshii.my.id", "/api/search/lirikgoogle", {
+                title: input
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data;
 
             return await ctx.reply(
                 `${quote(`Judul: ${result.title}`)}\n` +

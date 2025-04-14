@@ -25,7 +25,8 @@ module.exports = {
         try {
             if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote(`❎ Dia adalah admin grup!`));
 
-            await ctx.group().kick([accountJid]);
+            const [result] = await ctx.group().kick([accountJid]);
+            if (result.status !== 200) return await ctx.reply(quote(`❎ Gagal mengeluarkan!`));
 
             return await ctx.reply(quote(`✅ Berhasil dikeluarkan!`));
         } catch (error) {

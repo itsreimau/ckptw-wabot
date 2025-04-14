@@ -121,9 +121,7 @@ function generateNotes(notes) {
     if (!Array.isArray(notes)) return "'notes' harus berupa string!";
 
     const notesInfo = "Catatan:\n" +
-        notes.map(note =>
-            quote(`• ${note}`)
-        ).join("\n");
+        notes.map(note => quote(`• ${note}`)).join("\n");
 
     return notesInfo;
 }

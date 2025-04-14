@@ -19,7 +19,7 @@ const {
 const modules = {
     mysql: "baileys-mysql",
     mongodb: "baileys-mongodb",
-    firebase: "baileys-firebase",
+    firebase: "baileys-firebase"
 };
 
 // Pasang modul jika adapter ditemukan dalam daftar

@@ -39,7 +39,7 @@ module.exports = {
 
             const text = `${quote(`Nama: ${senderName}`)}\n` +
                 `${quote(`Status: ${isOwner ? "Owner" : userDb?.premium ? "Premium" : "Freemium"}`)}\n` +
-                `${quote(`Level: ${userDb?.level}`)}\n` +
+                `${quote(`Level: ${userDb?.level || "0"}`)}\n` +
                 `${quote(`XP: ${userDb?.xp}/100`)}\n` +
                 `${quote(`Koin: ${isOwner || userDb?.premium ? "Tak terbatas" : userDb?.coin}`)}\n` +
                 `${quote(`Peringkat: ${userRank}`)}\n` +

@@ -21,7 +21,7 @@ const {
 const adapters = {
     mysql: () => require("baileys-mysql").useSqlAuthState(authAdapter.mysql),
     mongodb: () => require("baileys-mongodb").useMongoAuthState(authAdapter.mongodb.url),
-    firebase: () => require("baileys-firebase").useFireAuthState(authAdapter.firebase),
+    firebase: () => require("baileys-firebase").useFireAuthState(authAdapter.firebase)
 };
 const selectedAuthAdapter = adapters[authAdapter.adapter] ? adapters[authAdapter.adapter]() : null;
 
