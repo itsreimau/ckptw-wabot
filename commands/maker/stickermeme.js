@@ -18,7 +18,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "i want to be a cat|just meow meow"))
+            quote(tools.cmd.generateCommandExample(ctx.used, "get in the fucking robot|shinji!"))
         );
 
         const msgType = ctx.getMessageType();

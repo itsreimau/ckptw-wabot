@@ -1,14 +1,12 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "hd",
-    aliases: ["hd", "hdr"],
-    category: "tool",
+    name: "hijabkan",
+    aliases: ["penghijaban"],
+    category: "ai-misc",
     permissions: {
         coin: 10
     },
@@ -24,10 +22,9 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const apiUrl = tools.api.createUrl("zell", "/tools/hd", {
-                url: uploadUrl
+            const result = tools.api.createUrl("zell", "/ai/hijabkan", {
+                imageUrl: uploadUrl
             });
-            const result = (await axios.get(apiUrl)).data.result.upscaled;
 
             return await ctx.reply({
                 image: {

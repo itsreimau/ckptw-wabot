@@ -21,9 +21,9 @@ module.exports = {
             mentions: [senderJid]
         });
 
-        try {
-            if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote(`❎ Dia adalah admin grup!`));
+        if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote(`❎ Dia adalah admin grup!`));
 
+        try {
             await ctx.group().promote([accountJid]);
 
             return await ctx.reply(quote(`✅ Berhasil ditingkatkan dari anggota menjadi admin!`));

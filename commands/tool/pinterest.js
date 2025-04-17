@@ -1,5 +1,4 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");

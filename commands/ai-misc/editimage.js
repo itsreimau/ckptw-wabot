@@ -1,18 +1,23 @@
 const {
-    monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "hd",
-    aliases: ["hd", "hdr"],
-    category: "tool",
+    name: "editimage",
+    aliases: ["editimg"],
+    category: "ai-misc",
     permissions: {
         coin: 10
     },
     code: async (ctx) => {
+        const input = ctx.args.join(" ") || null;
+
+        if (!input) return await ctx.reply(
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, "make it evangelion art style"))
+        );
+
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
             tools.cmd.checkMedia(msgType, "image"),
@@ -24,10 +29,10 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const apiUrl = tools.api.createUrl("zell", "/tools/hd", {
-                url: uploadUrl
+            const result = tools.api.createUrl("zell", "/ai/editimg", {
+                imageUrl: uploadUrl,
+                prompt: input
             });
-            const result = (await axios.get(apiUrl)).data.result.upscaled;
 
             return await ctx.reply({
                 image: {

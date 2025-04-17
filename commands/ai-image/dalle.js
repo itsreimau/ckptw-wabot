@@ -16,8 +16,8 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("https://api.nasirxml.my.id", "/ai/dalle3", {
-                prompt: input
+            const result = tools.api.createUrl("davidcyril", "/ai/dalle", {
+                text: input
             });
 
             return await ctx.reply({

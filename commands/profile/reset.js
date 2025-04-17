@@ -1,4 +1,5 @@
 const {
+    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 
@@ -9,7 +10,7 @@ module.exports = {
         private: true
     },
     code: async (ctx) => {
-        await ctx.reply(quote("🤖 Apakah Anda yakin ingin mereset data Anda? Langkah ini akan menghapus seluruh data yang tersimpan dan tidak dapat dikembalikan. Ketik 'y' untuk melanjutkan atau 'n' untuk membatalkan."));
+        await ctx.reply(quote(`🤖 Apakah Anda yakin ingin mereset data Anda? Langkah ini akan menghapus seluruh data yang tersimpan dan tidak dapat dikembalikan. Ketik ${monospace("y")} untuk melanjutkan atau ${monospace("n")} untuk membatalkan.`));
 
         try {
             const collector = ctx.MessageCollector({

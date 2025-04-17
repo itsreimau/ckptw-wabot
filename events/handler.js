@@ -24,7 +24,7 @@ async function handleUserEvent(bot, m, type) {
         const groupId = tools.general.getID(id);
         const groupDb = await db.get(`group.${groupId}`) || {};
 
-        if (groupDb?.mute) return;
+        if (groupDb?.mutebot) return;
         if (!groupDb?.option?.welcome) return;
 
         const metadata = await bot.core.groupMetadata(id);
@@ -62,7 +62,8 @@ async function handleUserEvent(bot, m, type) {
                 });
             } catch (error) {
                 if (error.status !== 200) await bot.core.sendMessage(id, {
-                    text
+                    text,
+                    mentions: [jid]
                 });
             }
 
@@ -126,8 +127,12 @@ module.exports = (bot) => {
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
 
-        if ((botDb?.mode === "group" && !isGroup) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return; // Pengecekan mode bot (group, private, self)
-        if (groupDb?.mute && (!isOwner && !await ctx.group().isSenderAdmin())) return;
+        const muteList = groupDb.mute || [];
+
+        // Pengecekan mode bot (group, private, self) dan sistem mute
+        if ((botDb?.mode === "group" && !isGroup) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
+        if (groupDb?.mutebot && (!isOwner && !await ctx.group().isSenderAdmin())) return;
+        if (muteList.includes(senderId)) return await ctx.deleteMessage(m.key);
 
         isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
 

@@ -16,7 +16,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send", "reply"], ["text", "sticker"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "i want to be a cat|just meow meow"))
+            quote(tools.cmd.generateCommandExample(ctx.used, "get in the fucking robot|shinji!"))
         );
 
         if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], ["sticker"])));

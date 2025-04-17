@@ -34,9 +34,12 @@ module.exports = (bot) => {
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
 
-        // Pengecekan mode bot (group, private, self) dan sistem mute/unmute
+        const muteList = groupDb.mute || [];
+
+        // Pengecekan mode bot (group, private, self) dan sistem mute
         if ((botDb?.mode === "group" && !isGroup) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
-        if (groupDb?.mute && (!isOwner && !await ctx.group().isSenderAdmin())) return;
+        if (groupDb?.mutebot && (!isOwner && !await ctx.group().isSenderAdmin())) return;
+        if (muteList.includes(senderId)) return;
 
         // Menambah XP pengguna dan menangani level-up
         const xpGain = 10;

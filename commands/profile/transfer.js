@@ -21,10 +21,10 @@ module.exports = {
             mentions: [senderJid]
         });
 
-        try {
-            const [isOnWhatsApp] = await ctx.core.onWhatsApp(userJid);
-            if (!isOnWhatsApp.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp!`));
+        const [isOnWhatsApp] = await ctx.core.onWhatsApp(userJid);
+        if (!isOnWhatsApp.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp!`));
 
+        try {
             const senderCoin = await db.get(`user.${senderId}.coin`) || {};
 
             if (senderCoin < coinAmount) return await ctx.reply(quote(`❎ Koin Anda tidak mencukupi untuk transfer ini!`));

@@ -1,4 +1,5 @@
 const {
+    monospace,
     quote
 } = require("@mengkodingan/ckptw");
 
@@ -30,9 +31,9 @@ module.exports = {
         if (isSenderInMenfess) return await ctx.reply(quote(`❎ Anda tidak dapat mengirim menfess karena Anda sudah terlibat dalam percakapan lain.`));
         if (isReceiverInMenfess) return await ctx.reply(quote(`❎ Anda tidak dapat mengirim menfess kepada pengguna ini karena dia sedang terlibat dalam percakapan lain.`));
 
-        try {
-            if (formattedId === senderId) return await ctx.reply(quote(`❎ Tidak dapat digunakan pada diri Anda sendiri.`));
+        if (formattedId === senderId) return await ctx.reply(quote(`❎ Tidak dapat digunakan pada diri Anda sendiri.`));
 
+        try {
             const fakeQuotedText = {
                 key: {
                     participant: "13135550002@s.whatsapp.net",
@@ -49,7 +50,7 @@ module.exports = {
             await ctx.sendMessage(`${formattedId}@s.whatsapp.net`, {
                 text: `${menfessText}\n` +
                     `${config.msg.readmore}\n` +
-                    quote("Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik 'delete' atau 'stop'."),
+                    quote(`Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik ${monospace("delete")} atau ${monospace("stop")}.`),
                 contextInfo: {
                     forwardingScore: 9999,
                     isForwarded: true
@@ -63,7 +64,7 @@ module.exports = {
                 to: formattedId
             });
 
-            return await ctx.reply(quote(`✅ Pesan berhasil terkirim! Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik 'delete' atau 'stop'.`));
+            return await ctx.reply(quote(`✅ Pesan berhasil terkirim! Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik ${monospace("delete")} atau ${monospace("stop")}.`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

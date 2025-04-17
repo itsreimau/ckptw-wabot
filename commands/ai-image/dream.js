@@ -6,7 +6,9 @@ const mime = require("mime-types");
 module.exports = {
     name: "dream",
     category: "ai-image",
-    permissions: {},
+    permissions: {
+        coin: 10
+    },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 

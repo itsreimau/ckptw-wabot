@@ -11,6 +11,9 @@ const APIs = {
     bk9: {
         baseURL: "https://bk9.fun"
     },
+    davidcyril: {
+        baseURL: "https://apis.davidcyriltech.my.id"
+    },
     crafters: {
         baseURL: "https://api.crafters.biz.id"
     },
@@ -19,6 +22,9 @@ const APIs = {
     },
     fast: {
         baseURL: "https://fastrestapis.fasturl.cloud"
+    },
+    nekorinn: {
+        baseURL: "https://api.nekorinn.my.id"
     },
     nyxs: {
         baseURL: "https://api.nyxs.pw"
@@ -31,6 +37,9 @@ const APIs = {
     },
     vapis: {
         baseURL: "https://vapis.my.id"
+    },
+    zell: {
+        baseURL: "https://apizell.web.id"
     }
 };
 

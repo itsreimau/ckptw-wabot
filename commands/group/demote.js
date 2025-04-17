@@ -21,9 +21,9 @@ module.exports = {
             mentions: [senderJid]
         });
 
-        try {
-            if (!await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote(`❎ Dia adalah anggota!`));
+        if (!await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote(`❎ Dia adalah anggota!`));
 
+        try {
             await ctx.group().demote([accountJid]);
 
             return await ctx.reply(quote(`✅ Berhasil diturunkan dari admin menjadi anggota!`));

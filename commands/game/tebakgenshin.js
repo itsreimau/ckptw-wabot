@@ -35,8 +35,8 @@ module.exports = {
                 caption: `${quote(`Deskripsi: ${result.deskripsi}`)}\n` +
                     `${quote(`Bonus: ${game.coin} Koin`)}\n` +
                     `${quote(`Batas waktu: ${tools.general.convertMsToDuration(game.timeout)}`)}\n` +
-                    `${quote("Ketik 'hint' untuk bantuan.")}\n` +
-                    `${quote("Ketik 'surrender' untuk menyerah.")}\n` +
+                    `${quote(`Ketik ${monospace("hint")} untuk bantuan.`)}\n` +
+                    `${quote(`Ketik ${monospace("surrender")} untuk menyerah.`)}\n` +
                     "\n" +
                     config.msg.footer
             });

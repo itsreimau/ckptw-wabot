@@ -4,8 +4,7 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "text2img",
-    aliases: ["text2image", "texttoimage", "texttoimg"],
+    name: "animagine",
     category: "ai-image",
     permissions: {
         coin: 10
@@ -19,7 +18,7 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("nekorinn", "/ai-img/text2img", {
+            const result = tools.api.createUrl("nekorinn", "/ai-img/animagine-3.1", {
                 text: input
             });
 

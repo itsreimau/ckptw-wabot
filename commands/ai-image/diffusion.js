@@ -4,8 +4,8 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "text2img",
-    aliases: ["text2image", "texttoimage", "texttoimg"],
+    name: "diffusion",
+    aliases: ["diff"],
     category: "ai-image",
     permissions: {
         coin: 10
@@ -19,8 +19,8 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("nekorinn", "/ai-img/text2img", {
-                text: input
+            const result = tools.api.createUrl("davidcyril", "/diffusion", {
+                prompt: input
             });
 
             return await ctx.reply({
