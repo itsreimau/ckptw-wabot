@@ -9,7 +9,7 @@ module.exports = {
     aliases: ["superscaler"],
     category: "ai-misc",
     permissions: {
-        coin: 10
+        premium: true
     },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;

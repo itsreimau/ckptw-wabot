@@ -9,7 +9,7 @@ module.exports = {
     aliases: ["douyin"],
     category: "downloader",
     permissions: {
-        coin: 10
+        premium: true
     },
     code: async (ctx) => {
         const url = ctx.args[0] || null;

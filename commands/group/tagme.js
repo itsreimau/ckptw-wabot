@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@mengkodingan/ckptw");
-
 module.exports = {
     name: "tagme",
     category: "group",
