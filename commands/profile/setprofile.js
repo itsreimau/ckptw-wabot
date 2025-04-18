@@ -31,7 +31,7 @@ module.exports = {
                     setKey = `user.${senderId}.autolevelup`;
                     break;
                 default:
-                    return await ctx.reply(quote(`❎ Teks tidak valid.`));
+                    return await ctx.reply(quote("❎ Teks tidak valid."));
             }
 
             const currentStatus = await db.get(setKey) || false;

@@ -25,11 +25,11 @@ module.exports = {
 
         if (accountId === config.bot.id) return await ctx.reply(quote(`❎ Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} bot`)} untuk me-mute bot.`));
 
-        if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote(`❎ Dia adalah admin grup!`));
+        if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote("❎ Dia adalah admin grup!"));
 
         if (ctx.args[0] === "bot") {
             await db.set(`group.${groupId}.mutebot`, true);
-            return await ctx.reply(quote(`✅ Berhasil me-mute grup ini dari bot!`));
+            return await ctx.reply(quote("✅ Berhasil me-mute grup ini dari bot!"));
         }
 
         try {
@@ -40,7 +40,7 @@ module.exports = {
 
             await db.set(`group.${groupId}.mute`, muteList);
 
-            return await ctx.reply(quote(`✅ Berhasil me-mute pengguna dari grup ini!`));
+            return await ctx.reply(quote("✅ Berhasil me-mute pengguna dari grup ini!"));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

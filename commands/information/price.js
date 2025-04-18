@@ -12,7 +12,7 @@ module.exports = {
             const senderJid = ctx.sender.jid;
             const senderId = tools.general.getID(senderJid);
 
-            const customText = await db.get(`bot.text.price`) || null;
+            const customText = await db.get("bot.text.price") || null;
             const text = customText ?
                 customText
                 .replace(/%tag%/g, `@${senderId}`)

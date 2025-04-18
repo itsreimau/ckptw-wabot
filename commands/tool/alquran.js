@@ -25,7 +25,7 @@ module.exports = {
             return await ctx.reply(listText);
         }
 
-        if (isNaN(surat) || surat < 1 || surat > 114) return await ctx.reply(quote(`❎ Surah harus berupa nomor antara 1 dan 114!`));
+        if (isNaN(surat) || surat < 1 || surat > 114) return await ctx.reply(quote("❎ Surah harus berupa nomor antara 1 dan 114!"));
 
         try {
             const apiUrl = tools.api.createUrl("https://equran.id", `/api/v2/surat/${surat}`);
@@ -35,7 +35,7 @@ module.exports = {
                 if (ayat.includes("-")) {
                     const [startAyat, endAyat] = ayat.split("-").map(Number);
 
-                    if (isNaN(startAyat) || isNaN(endAyat) || startAyat < 1 || endAyat < startAyat) return await ctx.reply(quote(`❎ Rentang ayat tidak valid!`));
+                    if (isNaN(startAyat) || isNaN(endAyat) || startAyat < 1 || endAyat < startAyat) return await ctx.reply(quote("❎ Rentang ayat tidak valid!"));
 
                     const verses = result.ayat.filter(r => r.nomorAyat >= startAyat && r.nomorAyat <= endAyat);
                     if (!verses.length) return await ctx.reply(quote(`❎ Ayat dalam rentang ${startAyat}-${endAyat} tidak ada!`));
@@ -56,7 +56,7 @@ module.exports = {
                 }
 
                 const singleAyat = parseInt(ayat);
-                if (isNaN(singleAyat) || singleAyat < 1) return await ctx.reply(quote(`❎ Ayat harus berupa nomor yang valid dan lebih besar dari 0!`));
+                if (isNaN(singleAyat) || singleAyat < 1) return await ctx.reply(quote("❎ Ayat harus berupa nomor yang valid dan lebih besar dari 0!"));
 
                 const verse = result.ayat.find(r => r.nomorAyat === singleAyat);
                 if (!verse) return await ctx.reply(quote(`❎ Ayat ${singleAyat} tidak ada!`));

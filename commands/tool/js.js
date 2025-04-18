@@ -37,7 +37,7 @@ module.exports = {
 
                 childProcess.stdout.on("data", (chunk) => {
                     if (outputData.length >= 1024 * 1024) {
-                        resolve(quote(`❎ Kode mencapai batas penggunaan memori!`));
+                        resolve(quote("❎ Kode mencapai batas penggunaan memori!"));
                         childProcess.kill();
                     }
                     outputData += chunk.toString();
@@ -59,7 +59,7 @@ module.exports = {
                 });
 
                 setTimeout(() => {
-                    resolve(quote(`❎ Kode mencapai batas waktu output!`));
+                    resolve(quote("❎ Kode mencapai batas waktu output!"));
                     childProcess.kill();
                 }, 10000);
             });

@@ -8,7 +8,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const apiUrl = tools.api.createUrl("https://api.waifu.pics", `/sfw/megumin`);
+        const apiUrl = tools.api.createUrl("https://api.waifu.pics", "/sfw/megumin");
 
         try {
             const result = (await axios.get(apiUrl)).data.url;

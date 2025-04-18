@@ -30,7 +30,7 @@ module.exports = {
 
             switch (key.toLowerCase()) {
                 case "price":
-                    setKey = `bot.text.price`;
+                    setKey = "bot.text.price";
                     break;
                 default:
                     return await ctx.reply(quote(`❎ Key '${key}' tidak valid!`));

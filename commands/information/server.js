@@ -43,7 +43,7 @@ module.exports = {
                 `${quote("─────")}\n` +
                 `${quote(`Bot Uptime: ${tools.general.convertMsToDuration(Date.now() - startTime)}`)}\n` +
                 `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
-                `${quote(`Library: @mengkodingan/ckptw`)}\n` +
+                `${quote("Library: @mengkodingan/ckptw")}\n` +
                 "\n" +
                 config.msg.footer
             );

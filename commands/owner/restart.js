@@ -19,7 +19,7 @@ module.exports = {
 
         try {
             const waitMsg = await ctx.reply(config.msg.wait);
-            await db.set(`bot.restart`, {
+            await db.set("bot.restart", {
                 jid: ctx.id,
                 key: waitMsg.key,
                 timestamp: Date.now()

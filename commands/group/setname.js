@@ -21,7 +21,7 @@ module.exports = {
         try {
             await ctx.group().updateSubject(input);
 
-            return await ctx.reply(quote(`✅ Berhasil mengubah nama grup!`));
+            return await ctx.reply(quote("✅ Berhasil mengubah nama grup!"));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

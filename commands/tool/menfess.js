@@ -28,10 +28,10 @@ module.exports = {
         const isSenderInMenfess = Object.values(allMenfessDb).some(m => m.from === senderId || m.to === senderId);
         const isReceiverInMenfess = Object.values(allMenfessDb).some(m => m.from === formattedId || m.to === formattedId);
 
-        if (isSenderInMenfess) return await ctx.reply(quote(`❎ Anda tidak dapat mengirim menfess karena Anda sudah terlibat dalam percakapan lain.`));
-        if (isReceiverInMenfess) return await ctx.reply(quote(`❎ Anda tidak dapat mengirim menfess kepada pengguna ini karena dia sedang terlibat dalam percakapan lain.`));
+        if (isSenderInMenfess) return await ctx.reply(quote("❎ Anda tidak dapat mengirim menfess karena Anda sudah terlibat dalam percakapan lain."));
+        if (isReceiverInMenfess) return await ctx.reply(quote("❎ Anda tidak dapat mengirim menfess kepada pengguna ini karena dia sedang terlibat dalam percakapan lain."));
 
-        if (formattedId === senderId) return await ctx.reply(quote(`❎ Tidak dapat digunakan pada diri Anda sendiri.`));
+        if (formattedId === senderId) return await ctx.reply(quote("❎ Tidak dapat digunakan pada diri Anda sendiri."));
 
         try {
             const fakeQuotedText = {

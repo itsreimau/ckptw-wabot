@@ -21,12 +21,12 @@ module.exports = {
             mentions: [senderJid]
         });
 
-        if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote(`❎ Dia adalah admin grup!`));
+        if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote("❎ Dia adalah admin grup!"));
 
         try {
             await ctx.group().promote([accountJid]);
 
-            return await ctx.reply(quote(`✅ Berhasil ditingkatkan dari anggota menjadi admin!`));
+            return await ctx.reply(quote("✅ Berhasil ditingkatkan dari anggota menjadi admin!"));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

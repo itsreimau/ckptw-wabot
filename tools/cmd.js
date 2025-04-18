@@ -130,12 +130,12 @@ async function handleError(ctx, error, useAxios) {
     const errorText = util.format(error);
     consolefy.error(`Error: ${errorText}`);
     if (config.system.reportErrorToOwner) await ctx.replyWithJid(`${config.owner.id}@s.whatsapp.net`, {
-        text: `${quote(`⚠️ Terjadi kesalahan:`)}\n` +
+        text: `${quote("⚠️ Terjadi kesalahan:")}\n` +
             `${quote("─────")}\n` +
             monospace(errorText)
     });
     if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
-    return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+    return await ctx.reply(quote("⚠️ Terjadi kesalahan: ${error.message}"));
 }
 
 function parseFlag(argsString, customRules = {}) {

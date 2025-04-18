@@ -8,7 +8,7 @@ module.exports = {
     },
     code: async (ctx) => {
         try {
-            const result = tools.api.createUrl("nekorinn", `/waifuim/uniform`);
+            const result = tools.api.createUrl("nekorinn", "/waifuim/uniform");
 
             return await ctx.reply({
                 image: {

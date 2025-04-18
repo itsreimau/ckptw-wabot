@@ -24,7 +24,7 @@ module.exports = {
         });
 
         const [isOnWhatsApp] = await ctx.core.onWhatsApp(userJid);
-        if (!isOnWhatsApp.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp!`));
+        if (!isOnWhatsApp.exists) return await ctx.reply(quote("❎ Akun tidak ada di WhatsApp!"));
 
         try {
             await db.add(`user.${tools.general.getID(userJid)}.coin`, coinAmount);

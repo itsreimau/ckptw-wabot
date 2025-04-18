@@ -23,15 +23,15 @@ module.exports = {
         });
 
         const [isOnWhatsApp] = await ctx.core.onWhatsApp(userJid);
-        if (!isOnWhatsApp.exists) return await ctx.reply(quote(`❎ Akun tidak ada di WhatsApp!`));
+        if (!isOnWhatsApp.exists) return await ctx.reply(quote("❎ Akun tidak ada di WhatsApp!"));
 
         try {
             await db.set(`user.${tools.general.getID(userJid)}.banned`, true);
 
             await ctx.sendMessage(userJid, {
-                text: quote(`🎉 Anda telah dibanned oleh Owner!`)
+                text: quote("🎉 Anda telah dibanned oleh Owner!")
             });
-            return await ctx.reply(quote(`✅ Berhasil dibanned!`));
+            return await ctx.reply(quote("✅ Berhasil dibanned!"));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

@@ -9,7 +9,7 @@ module.exports = {
     },
     code: async (ctx) => {
         try {
-            const result = tools.api.createUrl("nekorinn", `/waifuim/milf`);
+            const result = tools.api.createUrl("nekorinn", "/waifuim/milf");
 
             return await ctx.reply({
                 image: {

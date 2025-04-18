@@ -21,7 +21,7 @@ module.exports = {
             quote(tools.cmd.generateCommandExample(ctx.used, "get in the fucking robot, shinji!"))
         );
 
-        if (input.length > 10000) return await ctx.reply(quote(`❎ Maksimal 10000 kata!`));
+        if (input.length > 10000) return await ctx.reply(quote("❎ Maksimal 10000 kata!"));
 
         try {
             const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");

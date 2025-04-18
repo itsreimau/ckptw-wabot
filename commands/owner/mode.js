@@ -39,7 +39,7 @@ module.exports = {
                     await db.set("bot.mode", "self");
                     break;
                 default:
-                    return await ctx.reply(quote(`❎ Teks tidak valid.`));
+                    return await ctx.reply(quote("❎ Teks tidak valid."));
             }
 
             return await ctx.reply(quote(`✅ Berhasil mengubah mode ke ${input}!`));

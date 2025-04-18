@@ -40,10 +40,10 @@ module.exports = {
                     await ctx.group().unlock();
                     break;
                 default:
-                    return await ctx.reply(quote(`❎ Teks tidak valid!`));
+                    return await ctx.reply(quote("❎ Teks tidak valid!"));
             }
 
-            return await ctx.reply(quote(`✅ Berhasil mengubah setelan grup!`));
+            return await ctx.reply(quote("✅ Berhasil mengubah setelan grup!"));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

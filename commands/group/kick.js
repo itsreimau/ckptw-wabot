@@ -22,13 +22,13 @@ module.exports = {
             mentions: [senderJid]
         });
 
-        if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote(`❎ Dia adalah admin grup!`));
+        if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote("❎ Dia adalah admin grup!"));
 
         try {
             const [result] = await ctx.group().kick([accountJid]);
-            if (result.status !== 200) return await ctx.reply(quote(`❎ Gagal mengeluarkan!`));
+            if (result.status !== 200) return await ctx.reply(quote("❎ Gagal mengeluarkan!"));
 
-            return await ctx.reply(quote(`✅ Berhasil dikeluarkan!`));
+            return await ctx.reply(quote("✅ Berhasil dikeluarkan!"));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

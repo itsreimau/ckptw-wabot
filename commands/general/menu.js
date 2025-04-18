@@ -42,7 +42,7 @@ module.exports = {
                 "\n" +
                 `${quote(`Bot Uptime: ${tools.general.convertMsToDuration(Date.now() - config.bot.readyAt)}`)}\n` +
                 `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
-                `${quote(`Library: @mengkodingan/ckptw`)}\n` +
+                `${quote("Library: @mengkodingan/ckptw")}\n` +
                 "\n" +
                 `${italic("Jangan lupa berdonasi agar bot tetap online!")}\n` +
                 `${config.msg.readmore}\n`;

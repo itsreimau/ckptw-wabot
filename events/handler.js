@@ -160,7 +160,7 @@ module.exports = (bot) => {
                         const errorText = util.format(error);
                         consolefy.error(`Error: ${errorText}`);
                         await ctx.reply(
-                            `${quote(`⚠️ Terjadi kesalahan:`)}\n` +
+                            `${quote("⚠️ Terjadi kesalahan:")}\n` +
                             `${quote("─────")}\n` +
                             monospace(errorText)
                         );
@@ -177,7 +177,7 @@ module.exports = (bot) => {
                         const errorText = util.format(error);
                         consolefy.error(`Error: ${errorText}`);
                         await ctx.reply(
-                            `${quote(`⚠️ Terjadi kesalahan:`)}\n` +
+                            `${quote("⚠️ Terjadi kesalahan:")}\n` +
                             `${quote("─────")}\n` +
                             monospace(errorText)
                         );
@@ -218,7 +218,7 @@ module.exports = (bot) => {
             // Penanganan antilink 
             if (groupDb?.option?.antilink && await tools.general.isUrl(m.content) && !await ctx.group().isSenderAdmin()) {
                 await ctx.deleteMessage(m.key);
-                await ctx.reply(quote(`⛔ Jangan kirim tautan!`));
+                await ctx.reply(quote("⛔ Jangan kirim tautan!"));
                 if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
             }
 
@@ -235,7 +235,7 @@ module.exports = (bot) => {
 
                     if (result === "nsfw") {
                         await ctx.deleteMessage(m.key);
-                        await ctx.reply(`⛔ Jangan kirim NSFW!`);
+                        await ctx.reply("⛔ Jangan kirim NSFW!");
                         if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                     }
                 }
@@ -258,7 +258,7 @@ module.exports = (bot) => {
 
                 if (newCount > 5) {
                     await ctx.deleteMessage(m.key);
-                    await ctx.reply(quote(`⛔ Jangan spam!`));
+                    await ctx.reply(quote("⛔ Jangan spam!"));
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                     await db.delete(key);
                 }
@@ -269,7 +269,7 @@ module.exports = (bot) => {
                 const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "sticker");
                 if (checkMedia && !await ctx.group().isSenderAdmin()) {
                     await ctx.deleteMessage(m.key);
-                    await ctx.reply(`⛔ Jangan kirim stiker!`);
+                    await ctx.reply("⛔ Jangan kirim stiker!");
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                 }
             }
@@ -279,7 +279,7 @@ module.exports = (bot) => {
                 const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
                 if (m.content && toxicRegex.test(m.content) && !await ctx.group().isSenderAdmin()) {
                     await ctx.deleteMessage(m.key);
-                    await ctx.reply(quote(`⛔ Jangan toxic!`));
+                    await ctx.reply(quote("⛔ Jangan toxic!"));
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
                 }
             }
@@ -325,7 +325,7 @@ module.exports = (bot) => {
             await bot.core.rejectCall(call.id, call.from);
             let rejectionMessage = await bot.core.sendMessage(call.from, {
                 text: `Saat ini, kami tidak dapat menerima panggilan ${call.isVideo ? "video" : "suara"}.\n` +
-                    `Jika Anda memerlukan bantuan, silakan menghubungi Owner!`
+                    "Jika Anda memerlukan bantuan, silakan menghubungi Owner!"
             });
 
             const vcard = new VCardBuilder()
