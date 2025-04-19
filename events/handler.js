@@ -127,7 +127,7 @@ module.exports = (bot) => {
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
 
-        const muteList = groupDb.mute || [];
+        const muteList = groupDb?.mute || [];
 
         // Pengecekan mode bot (group, private, self) dan sistem mute
         if ((botDb?.mode === "group" && !isGroup) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
