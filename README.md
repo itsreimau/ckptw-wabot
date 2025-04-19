@@ -2,7 +2,15 @@
 
 `ckptw-wabot` adalah bot WhatsApp yang dibangun menggunakan library [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/). Bot ini memungkinkan Anda untuk mengotomatisasi berbagai tugas di WhatsApp dan mendukung arsitektur modular melalui sistem perintah (command).
 
-## Fitur Utama
+## Disclaimer
+
+`ckptw-wabot` **tidak berafiliasi dengan WhatsApp, Meta, atau pihak manapun**. Ini adalah proyek **open-source** yang dibuat untuk keperluan edukasi dan pengembangan.
+
+Bot ini menggunakan **API tidak resmi (Unofficial WhatsApp API)**, sehingga **berpotensi menyebabkan akun WhatsApp dibanned**.
+
+Gunakan dengan bijak dan tanggung sendiri risikonya. Kami **tidak bertanggung jawab atas penyalahgunaan atau kerugian yang ditimbulkan** dari penggunaan proyek ini.
+
+## Key Features
 
 - **Penanganan Pesan:** Bot dapat menangani pesan yang masuk dan memberikan respons sesuai kebutuhan.
 - **Penanganan Perintah:** Bot dapat menangani perintah yang dikirim oleh pengguna dan menjalankan tindakan yang sesuai.
@@ -10,11 +18,11 @@
 - **Penanganan Media:** Mendukung pengiriman dan penerimaan berbagai media seperti gambar, video, dan dokumen.
 - **Sistem Perintah Modular:** Bot mudah diperluas dengan menambahkan perintah baru sesuai kebutuhan Anda.
 
-## Cara Memulai
+## How to Get Started
 
 Ikuti langkah-langkah berikut untuk mengatur dan menjalankan `ckptw-wabot`:
 
-### 1. Kloning Repositori
+### 1. Cloning Repository
 
 Pertama, kloning repositori dan masuk ke direktori proyek:
 
@@ -23,7 +31,7 @@ git clone https://github.com/itsreimau/ckptw-wabot.git
 cd ckptw-wabot
 ```
 
-### 2. Instalasi Dependensi
+### 2. Dependency Installation
 
 Instal semua dependensi yang dibutuhkan dengan perintah berikut:
 
@@ -31,62 +39,19 @@ Instal semua dependensi yang dibutuhkan dengan perintah berikut:
 npm install
 ```
 
-### 3. Konfigurasi
+### 3. Configuration
 
 Ganti nama file `config.example.js` menjadi `config.js`, lalu sesuaikan konfigurasi seperti nama bot, pesan default, nomor owner bot, dan lain-lain.
 
-## Adapter Penyimpanan
+## Storage Adapter
 
 `ckptw-wabot` mendukung penyimpanan sesi autentikasi menggunakan pilihan database: **MySQL**, **MongoDB**, dan **Firebase**. Pilih dan atur database sesuai preferensi Anda dengan langkah-langkah berikut:
 
-### 1. Pilih Adapter Database
+### 1. Select Database Adapter
 
-Pada file konfigurasi `config.js`, sesuaikan bagian `authAdapter` dengan adapter database yang Anda pilih. Berikut adalah contoh konfigurasi untuk masing-masing database:
+Pada file konfigurasi `config.js`, sesuaikan bagian `authAdapter` dengan adapter database yang Anda pilih.
 
-#### MySQL
-
-```javascript
-authAdapter: {
-    adapter: "mysql", // Pilihan adapter: 'default', 'mysql', 'mongo', 'firebase'
-
-    // Konfigurasi MySQL
-    mysql: {
-        host: "localhost:3306", // Nama host 
-        user: "root", // Nama pengguna 
-        password: "admin123", // Kata sandi
-        database: "ckptw-wabot" // Nama database 
-    }
-}
-```
-
-#### MongoDB
-
-```javascript
-authAdapter: {
-    adapter: "mongodb", // Pilihan adapter: 'default', 'mysql', 'mongo', 'firebase'
-
-    // Konfigurasi MongoDB
-    mongodb: {
-        url: "mongodb://localhost:27017/ckptw-wabot" // URL
-    }
-}
-```
-
-#### Firebase
-
-```javascript
-authAdapter: {
-    adapter: "firebase", // Pilihan adapter: 'default', 'mysql', 'mongo', 'firebase'
-
-    // Konfigurasi Firebase
-    firebase: {
-        tableName: "ckptw-wabot", // Nama tabel
-        session: "state" // Nama sesi
-    }
-}
-```
-
-### 2. Instal Modul Database
+### 2. Install Database Module
 
 Setelah memilih adapter yang diinginkan, jalankan perintah berikut untuk menginstal modul yang diperlukan:
 
@@ -96,7 +61,7 @@ npm run install:adapter
 
 Perintah ini akan menginstal modul yang sesuai dengan konfigurasi adapter yang Anda pilih.
 
-### 3. Pastikan Database Aktif
+### 3. Make sure Database is Active
 
 Pastikan server database Anda aktif dan dapat diakses sebelum menjalankan bot. Periksa hal-hal berikut:
 
@@ -104,11 +69,11 @@ Pastikan server database Anda aktif dan dapat diakses sebelum menjalankan bot. P
 - Untuk **MongoDB**, pastikan URL yang dimasukkan dapat terhubung ke server MongoDB Anda.
 - Untuk **Firebase**, pastikan kredensial akun layanan yang diunduh dari Google Firebase Console telah dimasukkan dengan benar.
 
-## Menjalankan Bot
+## Running Bot
 
 Setelah konfigurasi selesai, Anda dapat menjalankan bot dengan dua opsi berikut:
 
-### 1. Jalankan Secara Langsung
+### 1. Run Directly
 
 Untuk menjalankan bot secara langsung di terminal, gunakan perintah:
 
@@ -118,7 +83,7 @@ npm start
 
 Bot akan berjalan hingga Anda menutup terminal atau menghentikannya secara manual.
 
-### 2. Jalankan dengan PM2
+### 2. Run with PM2
 
 Jika Anda ingin menjalankan bot sebagai layanan latar belakang (background process) yang tetap aktif meskipun terminal ditutup, gunakan PM2:
 
@@ -126,17 +91,17 @@ Jika Anda ingin menjalankan bot sebagai layanan latar belakang (background proce
 npm run start:pm2
 ```
 
-## Autentikasi WhatsApp
+## WhatsApp Authentication
 
 Ada dua metode autentikasi yang dapat digunakan untuk menghubungkan bot ke akun WhatsApp Anda:
 
-### 1. Menggunakan Kode Pairing
+### 1. Using Pairing Code
 
 - Setelah bot dijalankan, kode pairing akan ditampilkan di terminal.
 - Buka aplikasi WhatsApp di ponsel, pilih menu **Perangkat Tertaut**, lalu ketuk **Tautkan Perangkat**.
 - Masukkan kode pairing yang ditampilkan di terminal untuk menautkan akun WhatsApp dengan bot.
 
-### 2. Menggunakan Kode QR
+### 2. Using QR Code
 
 - Setelah bot dijalankan, kode QR akan muncul di terminal.
 - Buka aplikasi WhatsApp di ponsel, pilih menu **Perangkat Tertaut**, lalu ketuk **Tautkan Perangkat**.
@@ -144,9 +109,9 @@ Ada dua metode autentikasi yang dapat digunakan untuk menghubungkan bot ke akun 
 
 Setelah proses autentikasi berhasil, bot siap untuk menerima dan merespons pesan sesuai dengan perintah yang diberikan.
 
-## Kustomisasi
+## Customization
 
-### Menambahkan Perintah Baru
+### Added New Commands
 
 Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
 
@@ -176,11 +141,11 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
 
 2. Perintah ini dapat dipicu dengan mengirimkan `/helloworld` di chat.
 
-### Dokumentasi Lengkap
+### Complete Documentation
 
 Untuk informasi lebih lanjut mengenai penggunaan library `@mengkodingan/ckptw`, kunjungi [dokumentasi ckptw](https://ckptw.mengkodingan.my.id/).
 
-## Kontribusi
+## Contribution
 
 Kami sangat terbuka untuk kontribusi! Jika Anda menemukan bug atau memiliki ide untuk fitur baru, jangan ragu untuk membuka issue atau mengirimkan pull request.
 
