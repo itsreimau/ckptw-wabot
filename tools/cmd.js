@@ -135,7 +135,7 @@ async function handleError(ctx, error, useAxios) {
             monospace(errorText)
     });
     if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
-    return await ctx.reply(quote("⚠️ Terjadi kesalahan: ${error.message}"));
+    return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
 }
 
 function parseFlag(argsString, customRules = {}) {

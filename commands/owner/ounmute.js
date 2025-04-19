@@ -36,7 +36,7 @@ module.exports = {
             const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
             let muteList = await db.get(`group.${groupId}.mute`) || [];
 
-            muteList = muteList.filter(item => item !== accountIdc);
+            muteList = muteList.filter(item => item !== accountId);
 
             await db.set(`group.${groupId}.mute`, muteList);
 
