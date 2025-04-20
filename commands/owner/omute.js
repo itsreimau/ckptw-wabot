@@ -15,6 +15,12 @@ module.exports = {
         const accountId = tools.general.getID(accountJid);
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
+        const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
+
+        if (ctx.args[0] === "bot") {
+            await db.set(`group.${groupId}.mutebot`, true);
+            return await ctx.reply(quote("✅ Berhasil me-mute grup ini dari bot!"));
+        }
 
         if (!accountJid) return await ctx.reply({
             text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
@@ -27,13 +33,7 @@ module.exports = {
 
         if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote("❎ Dia adalah admin grup!"));
 
-        if (ctx.args[0] === "bot") {
-            await db.set(`group.${groupId}.mutebot`, true);
-            return await ctx.reply(quote("✅ Berhasil me-mute grup ini dari bot!"));
-        }
-
         try {
-            const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
             const muteList = await db.get(`group.${groupId}.mute`) || [];
 
             if (!muteList.includes(accountId)) muteList.push(accountId);

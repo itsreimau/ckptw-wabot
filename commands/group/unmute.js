@@ -15,6 +15,7 @@ module.exports = {
         const accountId = tools.general.getID(accountJid);
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
+        const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
 
         if (ctx.args[0] === "bot") {
             await db.set(`group.${groupId}.mutebot`, false);
@@ -33,7 +34,6 @@ module.exports = {
         if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote("❎ Dia adalah admin grup!"));
 
         try {
-            const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
             let muteList = await db.get(`group.${groupId}.mute`) || [];
 
             muteList = muteList.filter(item => item !== accountId);
