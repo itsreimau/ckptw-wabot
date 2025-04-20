@@ -38,7 +38,7 @@ module.exports = {
 
             return await ctx.reply({
                 image: {
-                    url:
+                    url: result
                 },
                 mimetype: mime.lookup("png")
             });
