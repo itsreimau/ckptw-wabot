@@ -6,7 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "twitterdl",
-    aliases: ["twitter", "twit", "twitdl"],
+    aliases: ["twitter", "twit", "twitdl", "x", "xdl"],
     category: "downloader",
     permissions: {
         premium: true
@@ -23,14 +23,14 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/twitter", {
+            const apiUrl = tools.api.createUrl("archive", "/download/twitter", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.result.downloads.find(d => d.quality.includes("720p"));;
 
             return await ctx.reply({
                 video: {
-                    url: result.video_hd || result.video_sd
+                    url: result.url
                 },
                 mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
