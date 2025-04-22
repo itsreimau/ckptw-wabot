@@ -73,7 +73,13 @@ async function handleUserEvent(bot, m, type) {
             });
         }
     } catch (error) {
-        consolefy.error(`Error: ${util.format(error)}`);
+        const errorText = util.format(error);
+        consolefy.error(`Error: ${errorText}`);
+        if (config.system.reportErrorToOwner) await bot.core.sendMessage(`${config.owner.id}@s.whatsapp.net`, {
+            text: `${quote("⚠️ Terjadi kesalahan:")}\n` +
+                `${quote("─────")}\n` +
+                monospace(errorText)
+        });
         await bot.core.sendMessage(id, {
             text: quote(`⚠️ Terjadi kesalahan: ${error.message}`)
         });

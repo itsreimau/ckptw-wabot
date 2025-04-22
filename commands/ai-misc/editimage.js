@@ -3,6 +3,9 @@ const {
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
 const mime = require("mime-types");
+const {
+    Buffer
+} = require("node:buffer");
 
 module.exports = {
     name: "editimage",
@@ -37,9 +40,7 @@ module.exports = {
             const result = Buffer.from((await axios.get(apiUrl)).data.result.image.base64, "base64");
 
             return await ctx.reply({
-                image: {
-                    url: result
-                },
+                image: result,
                 mimetype: mime.lookup("png")
             });
         } catch (error) {
