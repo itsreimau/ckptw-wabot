@@ -5,8 +5,7 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "photorealistic",
-    aliases: ["picsart", "realistic"],
+    name: "dbuzz",
     category: "ai-image",
     permissions: {
         coin: 10
@@ -20,10 +19,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/ai-img/photorealistic13", {
-                text: input
+            const apiUrl = tools.api.createUrl("zell", "/ai/text2image4", {
+                prompt: input
             });
-            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result);
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
                 image: {

@@ -21,12 +21,12 @@ module.exports = {
             quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, `Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} status`)} untuk melihat status.`]))
         );
 
-        if (ctx.args[0] === "list") {
+        if (input === "list") {
             const listText = await tools.list.get("setoption");
             return await ctx.reply(listText);
         }
 
-        if (ctx.args[0] === "status") {
+        if (input === "status") {
             const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
             const groupOption = await db.get(`group.${groupId}.option`) || {};
 

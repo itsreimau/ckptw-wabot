@@ -16,10 +16,11 @@ module.exports = {
             `${quote("Serv00 (https://serv00.com/)")}\n` +
             `${quote("─────")}\n` +
             `${quote("Fatahillah Al makarim (https://github.com/ZTRdiamond)")}\n` +
-            `${quote("JastinXyz (https://github.com/JastinXyz)")}\n` +
+            `${quote("Jastin Linggar Tama (https://github.com/JastinXyz)")}\n` +
             `${quote("Techwiz (https://github.com/techwiz37)")}\n` +
             `${quote("─────")}\n` +
             `${quote("Idul (https://github.com/aidulcandra)")}\n` +
+            `${quote("Rippanteq7 (https://github.com/Rippanteq7)")}\n` +
             `${quote("UdeanDev (https://github.com/udeannn)")}\n` +
             `${quote("─────")}\n` +
             `${quote("agatzdev (https://github.com/agatdwi)")}\n` +
@@ -31,6 +32,7 @@ module.exports = {
             `${quote("Lann (https://github.com/ERLANRAHMAT)")}\n` +
             `${quote("Nyx Altair (https://github.com/NyxAltair)")}\n` +
             `${quote("OtinXSandip (https://github.com/OtinXSandip)")}\n` +
+            `${quote("Randyy (https://github.com/rynxzyy)")}\n` +
             `${quote("siputzx (https://github.com/siputzx)")}\n` +
             `${quote("Siraj (https://github.com/BK9dev)")}\n` +
             `${quote("swndyyyyyy (https://github.com/swndyy)")}\n` +

@@ -12,12 +12,24 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const url = ctx.args[0] || null;
+        const input = ctx.args.join(" ") || null;
 
-        if (!url) return await ctx.reply(
+        if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "https://example.com/"))
+            `${quote(tools.cmd.generateCommandExample(ctx.used, "https://example.com/ -d"))}\n` +
+            quote(tools.cmd.generatesFlagInformation({
+                "-d": "Kirim sebagai dokuman"
+            }))
         );
+
+        const flag = tools.cmd.parseFlag(input, {
+            "-d": {
+                type: "boolean",
+                key: "document"
+            }
+        });
+
+        const url = flag.input || null;
 
         const isUrl = await tools.general.isUrl(url);
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
@@ -27,6 +39,14 @@ module.exports = {
                 url
             });
             const result = (await axios.get(apiUrl)).data.result.media;
+
+            if (flag?.document) return await ctx.reply({
+                document: {
+                    url: result
+                },
+                fileName: "audio.mp3",
+                mimetype: mime.lookup("mp3")
+            });
 
             return await ctx.reply({
                 audio: {

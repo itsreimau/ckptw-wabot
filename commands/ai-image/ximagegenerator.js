@@ -1,10 +1,12 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "magichour",
+    name: "ximagegenerator",
+    aliases: ["xart"],
     category: "ai-image",
     permissions: {
         coin: 10
@@ -18,9 +20,10 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("crafters", "/ai-img/magichour", {
+            const apiUrl = tools.api.createUrl("zell", "/ai/text2image2", {
                 prompt: input
             });
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
                 image: {

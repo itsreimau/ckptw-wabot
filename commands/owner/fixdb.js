@@ -33,26 +33,93 @@ module.exports = {
 
             const filteredData = (category, item) => {
                 const mappings = {
-                    user: ["afk", "banned", "coin", "lastClaim", "hasSentMsg", "level", "premium", "uid", "winGame", "xp"],
-                    group: ["mute", "text", "option"],
-                    menfess: ["from", "to"]
+                    user: {
+                        afk: {
+                            reason: "string",
+                            timestamp: "number"
+                        },
+                        banned: "boolean",
+                        coin: "number",
+                        lastClaim: {
+                            daily: "number",
+                            weekly: "number",
+                            monthly: "number",
+                            yearly: "number"
+                        },
+                        hasSentMsg: {
+                            banned: "boolean",
+                            cooldown: "boolean",
+                            admin: "boolean",
+                            botAdmin: "boolean",
+                            coin: "boolean",
+                            group: "boolean",
+                            owner: "boolean",
+                            premium: "boolean",
+                            private: "boolean",
+                            restrict: "boolean"
+                        },
+                        level: "number",
+                        premium: "boolean",
+                        uid: "string",
+                        winGame: "number",
+                        xp: "number"
+                    },
+                    group: {
+                        mute: "object", // assuming array
+                        text: {
+                            goodbye: "string",
+                            intro: "string",
+                            welcome: "string"
+                        },
+                        option: {
+                            antilink: "boolean",
+                            antinfsw: "boolean",
+                            antisticker: "boolean",
+                            antitoxic: "boolean",
+                            autokick: "boolean",
+                            welcome: "boolean"
+                        },
+                        spam: "object" // assuming array
+                    },
+                    menfess: {
+                        from: "string",
+                        to: "string"
+                    }
                 };
 
-                return Object.fromEntries(mappings[category].map(key => item[key] !== undefined ? [key, item[key]] : null).filter(Boolean));
+                const validate = (obj, map) => {
+                    if (typeof map === "string") {
+                        return typeof obj === map;
+                    } else if (typeof map === "object") {
+                        if (typeof obj !== "object" || obj === null) return false;
+                        const result = {};
+                        for (const key in map) {
+                            if (validate(obj[key], map[key])) {
+                                result[key] = obj[key];
+                            }
+                        }
+                        return result;
+                    }
+                    return false;
+                };
+
+                const schema = mappings[category];
+                const result = validate(item, schema);
+                return result || {};
             };
 
             const processData = async (category, data) => {
                 await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data ${category}...`));
-                Object.keys(data).forEach(async (id) => {
+                for (const id of Object.keys(data)) {
                     const item = data[id] || {};
                     const filtered = filteredData(category, item);
 
-                    if (!/^\d+$/.test(id)) {
+                    if (!/^\d+$/.test(id) || Object.keys(filtered).length === 0) {
                         await db.delete(`${category}.${id}`);
                     } else {
                         await db.set(`${category}.${id}`, filtered);
                     }
-                });
+                }
             };
 
             switch (input) {

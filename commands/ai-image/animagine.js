@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -18,9 +19,10 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("nekorinn", "/ai-img/animagine-3.1", {
+            const apiUrl = tools.api.createUrl("nekorinn", "/ai-img/animagine-xl-3.1", {
                 text: input
             });
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result);
 
             return await ctx.reply({
                 image: {

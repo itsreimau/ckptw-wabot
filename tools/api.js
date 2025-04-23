@@ -32,6 +32,10 @@ const APIs = {
     otinxsandip: {
         baseURL: "https://sandipbaruwal.onrender.com"
     },
+    shizo: {
+        baseURL: "https://api.shizo.top",
+        APIKey: "shizo"
+    },
     siputzx: {
         baseURL: "https://api.siputzx.my.id"
     },

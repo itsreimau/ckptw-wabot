@@ -20,7 +20,7 @@ module.exports = {
             quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Untuk teks satu baris, ketik saja langsung ke perintah. Untuk teks dengan baris baru, balas pesan yang berisi teks tersebut ke perintah."]))
         );
 
-        if (ctx.args[0] === "list") {
+        if (key === "list") {
             const listText = await tools.list.get("osettext");
             return await ctx.reply(listText);
         }

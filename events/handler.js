@@ -150,7 +150,9 @@ module.exports = (bot) => {
             if (isOwner || userDb?.premium) db.set(`user.${senderId}.coin`, 0);
             if (userDb?.coin !== 0 && (userDb?.coin === undefined || !Number.isFinite(userDb?.coin))) db.set(`user.${senderId}.coin`, 100);
             if (userDb?.coin > 10000) db.set(`user.${senderId}.coin`, 10000);
-            if (userDb?.uid !== tools.general.generateUID(senderId)) db.set(`user.${senderId}.uid`, tools.general.generateUID(senderId));
+            const uid = tools.general.generateUID(senderId);
+            if (userDb?.uid !== uid) db.set(`user.${senderId}.uid`, uid);
+            if (!userDb?.username) db.set(`user.${senderId}.username`, `@user_${uid}`);
 
             if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd?.prefix + isCmd?.didyoumean)}.`)); // Did you mean?
 
@@ -249,24 +251,32 @@ module.exports = (bot) => {
 
             // Penanganan antispam
             const now = Date.now();
+
             if (groupDb?.option?.antispam) {
-                const key = `group.${groupId}.spam.${senderId}`;
+                const key = `group.${groupId}.spam`;
+                const spamData = await db.get(key) || {};
+
                 const {
-                    count = 0, lastMessageTime = 0
-                } = await db.get(key) || {};
+                    count = 0,
+                        lastMessageTime = 0
+                } = spamData[senderId] || {};
+
                 const timeDiff = now - lastMessageTime;
                 const newCount = timeDiff < 5000 ? count + 1 : 1;
 
-                await db.set(key, {
+                spamData[senderId] = {
                     count: newCount,
                     lastMessageTime: now
-                });
+                };
+
+                await db.set(key, spamData);
 
                 if (newCount > 5) {
                     await ctx.deleteMessage(m.key);
                     await ctx.reply(quote("⛔ Jangan spam!"));
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
-                    await db.delete(key);
+                    delete spamData[senderId];
+                    await db.set(key, spamData);
                 }
             }
 

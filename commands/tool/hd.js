@@ -7,7 +7,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "hd",
-    aliases: ["hd", "hdr"],
+    aliases: ["hd", "hdr", "remini"],
     category: "tool",
     permissions: {
         coin: 10
@@ -24,10 +24,10 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const apiUrl = tools.api.createUrl("zell", "/tools/hd", {
+            const apiUrl = tools.api.createUrl("https://exonity.tech", "/api/ai/upscale", {
                 url: uploadUrl
             });
-            const result = (await axios.get(apiUrl)).data.result.upscaled;
+            const result = (await axios.get(apiUrl)).data.result.data.downloadUrls[0];
 
             return await ctx.reply({
                 image: {

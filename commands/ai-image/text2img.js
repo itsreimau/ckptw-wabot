@@ -19,8 +19,9 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("nekorinn", "/ai-img/text2img", {
-                text: input
+            const result = tools.api.createUrl("nekorinn", "/ai-img/text2img-v2", {
+                text: input,
+                ratio: "1:1"
             });
 
             return await ctx.reply({

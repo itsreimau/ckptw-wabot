@@ -17,29 +17,43 @@ module.exports = {
             quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
-        if (ctx.args[0] === "list") {
+        if (input === "list") {
             const listText = await tools.list.get("setprofile");
             return await ctx.reply(listText);
         }
 
         try {
             const senderId = tools.general.getID(ctx.sender.jid);
-            let setKey;
+            const args = ctx.args;
+            const command = args[0]?.toLowerCase();
 
-            switch (input.toLowerCase()) {
-                case "autolevelup":
-                    setKey = `user.${senderId}.autolevelup`;
-                    break;
+            switch (command) {
+                case "username": {
+                    const input = args.slice(1).join(" ").trim();
+                    if (!input) return await ctx.reply(quote("❎ Mohon masukkan username yang ingin digunakan."));
+
+                    const allUsers = await db.get("user") || {};
+                    const usernameTaken = Object.values(allUsers).some(user => user.username === input);
+                    if (usernameTaken) return await ctx.reply(quote("❎ Username tersebut sudah digunakan oleh pengguna lain."));
+
+                    const username = `@${input}`
+                    await db.set(`user.${senderId}.username`, username);
+                    return await ctx.reply(quote(`✅ Username berhasil diubah menjadi '${username}'!`));
+                }
+
+                case "autolevelup": {
+                    const setKey = `user.${senderId}.autolevelup`;
+                    const currentStatus = await db.get(setKey) || false;
+                    const newStatus = !currentStatus;
+                    await db.set(setKey, newStatus);
+
+                    const statusText = newStatus ? "diaktifkan" : "dinonaktifkan";
+                    return await ctx.reply(quote(`✅ Fitur '${command}' berhasil ${statusText}!`));
+                }
+
                 default:
                     return await ctx.reply(quote("❎ Teks tidak valid."));
             }
-
-            const currentStatus = await db.get(setKey) || false;
-            const newStatus = !currentStatus;
-            await db.set(setKey, newStatus);
-
-            const statusText = newStatus ? "diaktifkan" : "dinonaktifkan";
-            return await ctx.reply(quote(`✅ Fitur '${input}' berhasil ${statusText}!`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

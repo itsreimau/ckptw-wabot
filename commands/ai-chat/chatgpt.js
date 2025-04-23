@@ -40,7 +40,7 @@ module.exports = {
 
                 return await ctx.reply(result);
             } else {
-                const apiUrl = tools.api.createUrl("fast", "/aillm/gpt-4", {
+                const apiUrl = tools.api.createUrl("fast", "/aillm/gpt-4o", {
                     ask: input,
                     style,
                     sessionId: senderUid

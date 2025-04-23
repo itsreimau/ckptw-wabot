@@ -1,12 +1,15 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "nulis",
-    category: "tool",
-    permissions: {},
+    name: "netwrck",
+    category: "ai-image",
+    permissions: {
+        coin: 10
+    },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 
@@ -16,9 +19,10 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("crafters", "/tools/tulisbuku", {
-                query: input
+            const apiUrl = tools.api.createUrl("nekorinn", "/ai-img/netwrck-img", {
+                text: input
             });
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result);
 
             return await ctx.reply({
                 image: {

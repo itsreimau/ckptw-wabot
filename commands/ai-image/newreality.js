@@ -1,10 +1,11 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "deepai",
+    name: "newreality",
     category: "ai-image",
     permissions: {
         coin: 10
@@ -18,9 +19,10 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("crafters", "/ai-img/deepai", {
+            const apiUrl = tools.api.createUrl("nekorinn", "/ai-img/new-reality", {
                 text: input
             });
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result);
 
             return await ctx.reply({
                 image: {

@@ -15,6 +15,7 @@ module.exports = {
             const leaderboardData = Object.entries(users)
                 .map(([id, data]) => ({
                     id,
+                    username: data.username || null,
                     level: data.level || 0,
                     winGame: data.winGame || 0
                 }))
@@ -22,25 +23,25 @@ module.exports = {
 
             const userRank = leaderboardData.findIndex(user => user.id === senderId) + 1;
             const topUsers = leaderboardData.slice(0, 10);
-            const userMentions = [];
             let resultText = "";
 
             topUsers.forEach((user, index) => {
-                resultText += quote(`${index + 1}. @${user.id} - Menang: ${user.winGame}, Level: ${user.level}\n`);
-                userMentions.push(`${user.id}@s.whatsapp.net`);
+                const isSelf = user.id === senderId;
+                const displayName = isSelf ? `@${user.id}` : user.username ? user.username : `@${user.id}`;
+                resultText += quote(`${index + 1}. ${displayName} - Menang: ${user.winGame}, Level: ${user.level}\n`);
             });
 
             if (userRank > 10) {
                 const userStats = leaderboardData[userRank - 1];
-                resultText += quote(`${userRank}. @${senderId} - Menang: ${userStats.winGame}, Level: ${userStats.level}\n`);
-                userMentions.push(`${senderId}@s.whatsapp.net`);
+                const displayName = `@${senderId}`;
+                resultText += quote(`${userRank}. ${displayName} - Menang: ${userStats.winGame}, Level: ${userStats.level}\n`);
             }
 
             return await ctx.reply({
                 text: `${resultText.trim()}\n` +
                     "\n" +
                     config.msg.footer,
-                mentions: userMentions
+                mentions: [`${senderId}@s.whatsapp.net`]
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);

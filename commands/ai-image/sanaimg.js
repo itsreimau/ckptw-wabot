@@ -4,7 +4,7 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "stablediffusion",
+    name: "sanaimg",
     category: "ai-image",
     permissions: {
         coin: 10
@@ -18,10 +18,9 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/ai-img/stable-diffusion-3.5", {
+            const result = tools.api.createUrl("nekorinn", "/ai-img/sana-ai", {
                 text: input
             });
-            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result);
 
             return await ctx.reply({
                 image: {
