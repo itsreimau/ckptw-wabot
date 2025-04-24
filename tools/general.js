@@ -1,6 +1,5 @@
 // Impor modul dan dependensi yang diperlukan
 const api = require("./api.js");
-const uploader = require("@zanixongroup/uploader");
 const axios = require("axios");
 const didYouMean = require("didyoumean");
 const util = require("node:util");
@@ -10,6 +9,36 @@ const formatBotName = (botName) => {
     botName = botName.toLowerCase();
     return botName.replace(/[aiueo0-9\W_]/g, "");
 }
+
+const uploader = async () => {
+    const fetch = require('node-fetch');
+  const FormData = require('form-data');
+  const { fromBuffer } = require('file-type');
+  /**
+  * Upload image to url
+  * Supported mimetype:
+  * - `image/jpeg`
+  * - `image/jpg`
+  * - `image/png`
+  * - `video/mp4`
+  * - `all files`
+  * @param {Buffer} buffer Image Buffer
+  */
+  
+  module.exports = async (buffer) => {
+    let { ext } = await fromBuffer(buffer);
+    const bodyForm = new FormData();
+    bodyForm.append("file", buffer, "file." + ext);
+    
+    const response = await fetch("https://file.idnet.my.id/api/upload.php", {
+      method: "POST",
+      body: bodyForm,
+    });
+  
+    const result = await response.json();
+    return result.file.url;
+  }
+  }
 
 function convertMsToDuration(ms) {
     if (ms < 1000) return "kurang satu detik";
