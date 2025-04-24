@@ -6,6 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "portraitrealistic",
+    aliases: ["portraitreal"],
     category: "ai-image",
     permissions: {
         coin: 10

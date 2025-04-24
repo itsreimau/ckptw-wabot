@@ -27,7 +27,7 @@ module.exports = {
 
             topUsers.forEach((user, index) => {
                 const isSelf = user.id === senderId;
-                const displayName = isSelf ? `@${user.id}` : user.username ? user.username : `@${user.id}`;
+                const displayName = isSelf ? `@${user.id}` : user.username ? user.username : `${user.id}`;
                 resultText += quote(`${index + 1}. ${displayName} - Menang: ${user.winGame}, Level: ${user.level}\n`);
             });
 

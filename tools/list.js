@@ -97,7 +97,8 @@ async function get(type) {
             }
             case "setprofile": {
                 const data = [
-                    "autolevelup (Otomatis naik level)"
+                    "autolevelup (Otomatis naik level)",
+                    "username (Nama pengguna)"
                 ];
                 text = createList(data, d => `${quote(d)}`);
                 break;

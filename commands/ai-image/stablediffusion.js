@@ -5,6 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "stablediffusion",
+    aliases: ["sd"],
     category: "ai-image",
     permissions: {
         coin: 10

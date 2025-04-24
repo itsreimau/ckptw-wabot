@@ -6,6 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "epicart",
+    aliases: ["epic"],
     category: "ai-image",
     permissions: {
         coin: 10

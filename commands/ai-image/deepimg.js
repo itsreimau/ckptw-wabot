@@ -5,6 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "deepimg",
+    aliases: ["deep"],
     category: "ai-image",
     permissions: {
         coin: 10

@@ -5,7 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "hijabkan",
-    aliases: ["penghijaban"],
+    aliases: ["hijab", "penghijaban"],
     category: "ai-misc",
     permissions: {
         coin: 10

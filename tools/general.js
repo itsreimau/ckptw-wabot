@@ -56,7 +56,7 @@ function formatSize(byteCount) {
     return `${size.toFixed(2)} ${units[index]}`;
 }
 
-function generateUID(id) {
+function generateUID(id, withBotName) {
     if (!id) return null;
 
     let hash = 0;
@@ -66,8 +66,10 @@ function generateUID(id) {
     }
 
     const uniquePart = id.split("").reverse().join("").charCodeAt(0).toString(16);
+    let uid = `${Math.abs(hash).toString(16).toLowerCase()}-${uniquePart}`;
+    if (withBotName) uid += `_${formatBotName(config.bot.name)}-wabot`;
 
-    return `${Math.abs(hash).toString(16).toLowerCase()}-${uniquePart}_${formatBotName(config.bot.name)}-wabot`;
+    return uid;
 }
 
 function getID(jid) {
@@ -153,8 +155,8 @@ async function upload(buffer, type = "any", host = "FastUrl") {
     if (!buffer) return null;
 
     const hosts = {
-        any: ["FastUrl", "Litterbox", "Catbox", "Uguu"],
-        image: ["Pomf", "Quax", "Ryzen", "Shojib", "Erhabot", "TmpErhabot"],
+        any: ["FastUrl", "Litterbox", "Catbox", "Uguu", "Cloudku"],
+        image: ["Pomf", "Quax", "Ryzen", "Shojib", "Erhabot", "TmpErhabot", "IDNet"],
         video: ["Pomf", "Quax", "Videy", "Ryzen", "TmpErhabot"],
         audio: ["Pomf", "Quax", "Ryzen", "TmpErhabot"]
     };
