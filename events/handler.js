@@ -150,7 +150,7 @@ module.exports = (bot) => {
             if (isOwner || userDb?.premium) db.set(`user.${senderId}.coin`, 0);
             if (userDb?.coin !== 0 && (userDb?.coin === undefined || !Number.isFinite(userDb?.coin))) db.set(`user.${senderId}.coin`, 100);
             if (userDb?.coin > 10000) db.set(`user.${senderId}.coin`, 10000);
-            if (userDb?.uid !== uid) db.set(`user.${senderId}.uid`, tools.general.generateUID(senderId, true));
+            if (userDb?.uid !== tools.general.generateUID(senderId, true)) db.set(`user.${senderId}.uid`, tools.general.generateUID(senderId, true));
             if (!userDb?.username) db.set(`user.${senderId}.username`, `@user_${tools.general.generateUID(senderId, false)}`);
 
             if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd?.prefix + isCmd?.didyoumean)}.`)); // Did you mean?
