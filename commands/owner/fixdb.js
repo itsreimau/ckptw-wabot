@@ -61,11 +61,12 @@ module.exports = {
                         level: "number",
                         premium: "boolean",
                         uid: "string",
+                        username: "string",
                         winGame: "number",
                         xp: "number"
                     },
                     group: {
-                        mute: "object", // assuming array
+                        mute: "object",
                         text: {
                             goodbye: "string",
                             intro: "string",
@@ -79,7 +80,7 @@ module.exports = {
                             autokick: "boolean",
                             welcome: "boolean"
                         },
-                        spam: "object" // assuming array
+                        spam: "object"
                     },
                     menfess: {
                         from: "string",
