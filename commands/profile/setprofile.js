@@ -32,6 +32,8 @@ module.exports = {
                     const input = args.slice(1).join(" ").trim();
                     if (!input) return await ctx.reply(quote("❎ Mohon masukkan username yang ingin digunakan."));
 
+                    if (/[^a-zA-Z0-9._-]/.test(input)) return await ctx.reply(quote("❎ Username hanya boleh berisi huruf, angka, titik (.), underscore (_) dan tanda hubung (-)."));
+
                     const allUsers = await db.get("user") || {};
                     const usernameTaken = Object.values(allUsers).some(user => user.username === input);
                     if (usernameTaken) return await ctx.reply(quote("❎ Username tersebut sudah digunakan oleh pengguna lain."));
