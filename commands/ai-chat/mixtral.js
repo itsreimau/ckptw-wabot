@@ -7,7 +7,7 @@ module.exports = {
     name: "mixtral",
     category: "ai-chat",
     permissions: {
-        coin: 10
+        premium: true
     },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;

@@ -7,7 +7,7 @@ module.exports = {
     name: "openchat",
     category: "ai-chat",
     permissions: {
-        coin: 10
+        premium: true
     },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;

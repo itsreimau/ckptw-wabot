@@ -155,7 +155,7 @@ async function upload(buffer, type = "any", host = "FastUrl") {
     if (!buffer) return null;
 
     const hosts = {
-        any: ["FastUrl", "Litterbox", "Catbox", "Uguu", "Cloudku"],
+        any: ["FastUrl", "Litterbox", "Catbox", "Uguu", "Cloudku", "Nyxs"],
         image: ["Pomf", "Quax", "Ryzen", "Shojib", "Erhabot", "TmpErhabot", "IDNet"],
         video: ["Pomf", "Quax", "Videy", "Ryzen", "TmpErhabot"],
         audio: ["Pomf", "Quax", "Ryzen", "TmpErhabot"]

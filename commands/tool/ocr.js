@@ -23,7 +23,7 @@ module.exports = {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
             const apiUrl = tools.api.createUrl("https://api.ocr.space", "/parse/imageurl", {
-                apikey: "helloworld", // APIKey disediakan oleh OCRSpace
+                apikey: "helloworld",
                 url: uploadUrl
             });
             const result = (await axios.get(apiUrl)).data.ParsedResults[0].ParsedText;

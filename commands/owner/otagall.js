@@ -26,7 +26,7 @@ module.exports = {
             return await ctx.reply({
                 text: `${input}\n` +
                     `${config.msg.readmore}─────\n` +
-                    mentionText,
+                    resultText,
                 mentions: mentions.map(m => m.mention)
             });
         } catch (error) {

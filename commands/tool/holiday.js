@@ -14,7 +14,7 @@ module.exports = {
     },
     code: async (ctx) => {
         const month = new Date().getMonth() + 1;
-        const apiUrl = tools.api.createUrl("https://api-harilibur.vercel.app", "/api", {
+        const apiUrl = tools.api.createUrl("https://dayoffapi.vercel.app", "/api", {
             month
         });
 
@@ -22,8 +22,8 @@ module.exports = {
             const result = (await axios.get(apiUrl)).data;
 
             const resultText = result.reverse().map((r) => {
-                const formattedDate = moment.tz(r.holiday_date, "Asia/Jakarta").locale("id").format("dddd, DD MMMM YYYY");
-                return `${bold(r.holiday_name)}\n` +
+                const formattedDate = moment.tz(r.tanggal, "Asia/Jakarta").locale("id").format("dddd, DD MMMM YYYY");
+                return `${bold(r.keterangan)}\n` +
                     quote(formattedDate);
             }).join(
                 "\n" +

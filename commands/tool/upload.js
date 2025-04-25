@@ -23,7 +23,7 @@ module.exports = {
             `${quote(tools.cmd.generateInstruction(["send", "reply"], ["audio", "document", "image", "video", "sticker"]))}\n` +
             quote(tools.cmd.generatesFlagInformation({
                 "-t <text>": "Atur tipe media (tersedia: any, image, video, audio | default: any)",
-                "-h <text>": "Atur host uploader (tersedia: catbox, cloudku, erhabot, fasturl, idnet, litterbox, pomf, quax, quax, ryzen, shojib, tmperhabot, uguu, videy | default: fasturl)"
+                "-h <text>": "Atur host uploader (tersedia: catbox, cloudku, erhabot, fasturl, idnet, litterbox, nyxs, pomf, quax, quax, ryzen, shojib, tmperhabot, uguu, videy | default: fasturl)"
             }))
         );
 
@@ -38,7 +38,7 @@ module.exports = {
                 "-h": {
                     type: "value",
                     key: "host",
-                    validator: (val) => /^(catbox|cloudku|erhabot|fasturl|idnet|litterbox|pomf|quax|quax|ryzen|shojib|tmperhabot|uguu|videy)$/.test(val),
+                    validator: (val) => /^(catbox|cloudku|erhabot|fasturl|idnet|litterbox|nyxs|pomf|quax|quax|ryzen|shojib|tmperhabot|uguu|videy)$/.test(val),
                     parser: (val) => val
                 }
             });
