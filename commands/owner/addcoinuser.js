@@ -10,12 +10,11 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
+        const mentionedJid = ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
         const userId = ctx.args[0];
-        const coinAmount = parseInt(ctx.args[!!ctx.quoted?.senderJid ? 0 : 1], 10);
-
-        const userJid = ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || (userId ? `${userId}@s.whatsapp.net` : null) || ctx.quoted?.senderJid;
-        const senderJid = ctx.sender.jid;
-        const senderId = tools.general.getID(senderJid);
+        const userJid = mentionedJid || (userId ? `${userId}@s.whatsapp.net` : null) || ctx.quoted.senderJid;
+        const senderId = tools.general.getID(ctx.sender.jid);
+        const coinAmount = parseInt(ctx.args[mentionedJid ? 1 : 0], 10);
 
         if ((!userJid || !coinAmount) || isNaN(coinAmount)) return await ctx.reply({
             text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +

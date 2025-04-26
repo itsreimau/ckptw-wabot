@@ -14,7 +14,7 @@ module.exports = {
     },
     code: async (ctx) => {
         const key = ctx.args[0];
-        const text = ctx.args.slice(1).join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean)
+        const text = ctx.args.slice(1).join(" ") || ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean)
 
         if (!key && !text) return await ctx.reply(
             `${quote(`${tools.cmd.generateInstruction(["send"], ["text"])}`)}\n` +

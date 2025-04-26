@@ -12,7 +12,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        let input = ctx.args.slice(ctx.args[0]?.length === 2 ? 1 : 0).join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || null;
+        let input = ctx.args.slice(ctx.args[0]?.length === 2 ? 1 : 0).join(" ") || ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || null;
         let langCode = ctx.args[0]?.length === 2 ? ctx.args[0] : "id";
 
         if (!input) return await ctx.reply(
