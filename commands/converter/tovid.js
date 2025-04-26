@@ -2,16 +2,11 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const FormData = require("form-data");
-const {
-    JSDOM
-} = require("jsdom");
 const mime = require("mime-types");
-const util = require("node:util");
 
 module.exports = {
     name: "tovideo",
-    aliases: ["togif", "tomp4", "tovid"],
+    aliases: ["tomp4", "tovid"],
     category: "converter",
     permissions: {},
     code: async (ctx) => {
@@ -19,56 +14,20 @@ module.exports = {
 
         try {
             const buffer = await ctx.quoted.media.toBuffer()
-            const result = buffer ? await webp2mp4(buffer) : null;
-
-            if (!result) return await ctx.reply(config.msg.notFound);
+            const uploadUrl = await tools.general.upload(buffer, "any");
+            const apiUrl = tools.api.createUrl("bk9", "/converter/webpToMp4", {
+                url: uploadUrl
+            });
+            const result = (await axios.get(apiUrl)).data.BK9;
 
             return await ctx.reply({
                 video: {
                     url: result
                 },
-                mimetype: ctx.used.command === "togif" ? mime.lookup("gif") : mime.lookup("mp4"),
-                gifPlayback: ctx.used.command === "togif" ? true : false
+                mimetype: mime.lookup("mp4")
             });
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error, true);
         }
     }
 };
-
-// Oleh UdeanDev (https://github.com/udeannn)
-async function webp2mp4(blob) {
-    try {
-        const form = new FormData();
-        form.append("new-image", blob, "image.webp");
-
-        const res = await axios.post("https://ezgif.com/webp-to-mp4", form, {
-            headers: form.getHeaders()
-        });
-
-        const html = res.data;
-        const {
-            document
-        } = new JSDOM(html).window;
-        const form2 = new FormData();
-        const obj = {};
-
-        for (const input of document.querySelectorAll("form input[name]")) {
-            obj[input.name] = input.value;
-            form2.append(input.name, input.value);
-        }
-
-        const res2 = await axios.post(`https://ezgif.com/webp-to-mp4/${obj.file}`, form2, {
-            headers: form2.getHeaders()
-        });
-
-        const html2 = res2.data;
-        const {
-            document: document2
-        } = new JSDOM(html2).window;
-        return new URL(document2.querySelector("div#output > p.outfile > video > source").src, res2.request.res.responseUrl).toString();
-    } catch (error) {
-        consolefy.error(`Error: ${util.format(error)}`);
-        return null;
-    }
-}

@@ -12,66 +12,30 @@ module.exports = {
     category: "converter",
     permissions: {},
     code: async (ctx) => {
-        if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["video"])) return await ctx.reply(quote(tools.cmd.generateInstruction(["reply"], ["video"])));
+        const msgType = ctx.getMessageType();
+        const [checkMedia, checkQuotedMedia] = await Promise.all([
+            tools.cmd.checkMedia(msgType, ["video"]),
+            tools.cmd.checkQuotedMedia(ctx.quoted, ["video"])
+        ]);
+
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], ["video"])));
 
         try {
             const buffer = await ctx.quoted.media.toBuffer()
-            const result = buffer ? await video2audio(buffer) : null;
-
-            if (!result) return await ctx.reply(config.msg.notFound);
+            const uploadUrl = await tools.general.upload(buffer, "video");
+            const apiUrl = tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/converter", {
+                url: uploadUrl
+            });
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
-                audio: result.data.audio,
+                audio: {
+                    url: result
+                },
                 mimetype: mime.lookup("mp3")
             });
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error, true);
         }
     }
 };
-
-// Oleh ZTRdiamond (https://github.com/ZTRdiamond)
-async function video2audio(buffer) {
-    try {
-        if (!buffer) throw new Error("Buffer is undefined.");
-        if (!Buffer.isBuffer(buffer)) throw new Error("Invalid buffer input!");
-
-        const form = new FormData();
-        form.append("userfile", buffer, `${Date.now()}.mp4`);
-
-        const uploadResponse = await axios.post("https://service5.coolutils.org/upload.php", form, {
-            headers: form.getHeaders()
-        });
-
-        const uploadedFile = uploadResponse.data;
-        if (!uploadedFile) throw new Error("Failed to upload media for conversion.");
-
-        const payload = new URLSearchParams({
-            Flag: "6",
-            srcfile: uploadedFile,
-            Ref: "/convert/MP4-to-MP3",
-            fmt: "mp3",
-            resize_constraint: "on"
-        });
-
-        const conversionResponse = await axios.post("https://service5.coolutils.org/movie_convert.php", payload.toString(), {
-            headers: {
-                Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            responseType: "arraybuffer"
-        });
-
-        if (!Buffer.isBuffer(conversionResponse.data)) throw new Error("Conversion response is not a valid buffer.");
-
-        return {
-            status: true,
-            data: {
-                audio: Buffer.from(conversionResponse.data, "binary")
-            }
-        };
-    } catch (error) {
-        consolefy.error(`Error: ${util.format(error)}`);
-        return null;
-    }
-}

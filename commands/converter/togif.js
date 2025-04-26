@@ -5,8 +5,7 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "toimage",
-    aliases: ["toimg", "topng"],
+    name: "togif",
     category: "converter",
     permissions: {},
     code: async (ctx) => {
@@ -15,16 +14,17 @@ module.exports = {
         try {
             const buffer = await ctx.quoted.media.toBuffer()
             const uploadUrl = await tools.general.upload(buffer, "any");
-            const apiUrl = tools.api.createUrl("bk9", "/converter/webpToPng", {
+            const apiUrl = tools.api.createUrl("bk9", "/converter/webpToGif", {
                 url: uploadUrl
             });
             const result = (await axios.get(apiUrl)).data.BK9;
 
             return await ctx.reply({
-                image: {
+                video: {
                     url: result
                 },
-                mimetype: mime.lookup("png")
+                mimetype: mime.lookup("gif"),
+                gifPlayback: true
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
