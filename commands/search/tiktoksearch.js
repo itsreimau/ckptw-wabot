@@ -6,7 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "tiktoksearch",
-    aliases: ["ttsearch", "vts", "vtsearch"],
+    aliases: ["tiktoks", "ttsearch", "vts", "vtsearch"],
     category: "search",
     permissions: {
         coin: 10

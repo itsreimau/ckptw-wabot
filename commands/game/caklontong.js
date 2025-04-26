@@ -98,7 +98,7 @@ module.exports = {
                 }
             });
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error, true);
         }
     }
 };
