@@ -7,7 +7,7 @@ module.exports = {
     name: "imagen",
     category: "ai-image",
     permissions: {
-        coin: 10
+        premium: true
     },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;

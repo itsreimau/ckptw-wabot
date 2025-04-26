@@ -34,6 +34,7 @@ async function handleUserEvent(bot, m, type) {
 
             const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
             const userId = tools.general.getID(jid);
+            const userName = await db.get(`user.${userId}.username`) || null;
             const userTag = `@${userId}`;
 
             const text = customText ?
@@ -48,7 +49,7 @@ async function handleUserEvent(bot, m, type) {
                 avatar: profilePictureUrl,
                 background: config.bot.thumbnail,
                 title: type === "UserJoin" ? "WELCOME" : "GOODBYE",
-                description: userId
+                description: userName || userId
             });
 
             try {
