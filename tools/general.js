@@ -7,6 +7,7 @@ const util = require("node:util");
 
 const formatBotName = (botName) => {
     if (!botName) return null;
+
     botName = botName.toLowerCase();
     return botName.replace(/[aiueo0-9\W_]/g, "");
 }
