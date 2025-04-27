@@ -8,7 +8,6 @@ const {
 
 module.exports = {
     name: "attp",
-    aliases: ["atp", "rgb"],
     category: "maker",
     permissions: {
         coin: 10
