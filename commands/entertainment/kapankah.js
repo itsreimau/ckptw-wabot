@@ -2,20 +2,29 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 
-function getRandom(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-}  
-
-module.exports = { 
-    name: "kapankah", 
-    aliases: ["kapan"], 
+module.exports = {
+    name: "kapankah",
+    aliases: ["kapan"],
     category: "entertainment",
-    permissions: { 
+    permissions: {
         coin: 5
     },
-    code: async (ctx) => { 
+    code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 
-        return await ctx.reply(quote(`*Pertanyaan:* kapankah ${input} \n`) +
-quote(`*Jawaban:*  ${Math.floor(Math.random() * 60 + 1)} ${getRandom(['detik', 'menit', 'jam', 'hari', 'minggu', 'bulan', 'tahun', 'dekade', 'abad'])} lagi ...`) + '\n \n' + config.msg.footer)}
+        if (!input) return await ctx.reply(
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, "evangelion itu peak?"))
+        );
+
+        try {
+            const randomNumber = Math.floor(Math.random() * 60 + 1);
+            const times = ["detik", "menit", "jam", "hari", "minggu", "bulan", "tahun", "dekade", "abad"];
+            const time = tools.general.getRandomElement(time);
+
+            return await ctx.reply(quote(`${randomNumber} ${time} lagi ...`));
+        } catch (error) {
+            return await tools.cmd.handleError(ctx, error, false);
+        }
+    }
 };

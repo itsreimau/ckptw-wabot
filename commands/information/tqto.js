@@ -20,6 +20,7 @@ module.exports = {
             `${quote("Techwiz (https://github.com/techwiz37)")}\n` +
             `${quote("─────")}\n` +
             `${quote("Idul (https://github.com/aidulcandra)")}\n` +
+            `${quote("Kyluxx (https://github.com/Kyluxx)")}\n` +
             `${quote("Rippanteq7 (https://github.com/Rippanteq7)")}\n` +
             `${quote("UdeanDev (https://github.com/udeannn)")}\n` +
             `${quote("─────")}\n` +

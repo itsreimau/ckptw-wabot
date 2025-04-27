@@ -2,10 +2,6 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 
-function getRandom(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-}
-
 module.exports = {
     name: "jadian",
     aliases: ["jodoh"],
@@ -15,19 +11,18 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || quote("👋 Halo, Dunia!");
-
         try {
             const members = await ctx.group().members();
             const mentions = members.map(m => m.id);
-            let a = getRandom(members).id.split('@')[0]
-            let b
-            do{ 
-                b = getRandom(members).id.split('@')[0]
-            }while (b === a)
+
+            const a = tools.general.getID(tools.general.getRandomElement(members).id);
+            let b;
+            do {
+                b = tools.general.getID(tools.general.getRandomElement(members).id)
+            } while (b === a)
 
             return await ctx.reply({
-                text: quote(`@${a} ❤️ @${b} \n \n`) + config.msg.footer,
+                text: quote(`@${a} ❤️ @${b}`),
                 mentions: [a, b]
             });
         } catch (error) {

@@ -2,18 +2,28 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 
-module.exports = { 
-    name: "how", 
-    aliases: ["segimana"], 
+module.exports = {
+    name: "how",
+    aliases: ["segimana"],
     category: "entertainment",
-    permissions: { 
+    permissions: {
         coin: 5
     },
-    code: async (ctx) => { 
+    code: async (ctx) => {
         const types = ctx.args[0] || null;
         const input = ctx.args[1] || null;
 
-        return await ctx.reply(quote(`Pertanyaan : how ${types} is *${input}*` + '\n' +
-quote(`Jawab : *${input}* is *${Math.floor(Math.random() * 100)}*% ${types.toUpperCase()}`) + '\n \n' + config.msg.footer));
+        if (!input) return await ctx.reply(
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, "femboy itsreimau"))
+        );
+
+        try {
+            const randomNumber = Math.floor(Math.random() * 100);
+
+            return await ctx.reply(quote(`${input} itu ${randomNumber}% ${tools.genenral.ucword(types)}`));
+        } catch (error) {
+            return await tools.cmd.handleError(ctx, error, false);
+        }
     }
 };
