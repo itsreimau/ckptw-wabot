@@ -20,7 +20,7 @@ module.exports = {
         try {
             const randomNumber = Math.floor(Math.random() * 60 + 1);
             const times = ["detik", "menit", "jam", "hari", "minggu", "bulan", "tahun", "dekade", "abad"];
-            const time = tools.general.getRandomElement(time);
+            const time = tools.general.getRandomElement(times);
 
             return await ctx.reply(quote(`${randomNumber} ${time} lagi ...`));
         } catch (error) {

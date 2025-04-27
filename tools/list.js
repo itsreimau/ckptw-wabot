@@ -64,6 +64,23 @@ async function get(type) {
                 text = createList(data, d => `${quote(d)}`);
                 break;
             }
+            case "how": {
+                const data = [
+                    "howgay (Seberapa gay)",
+                    "howpintar (Seberapa pintar)",
+                    "howcantik (Seberapa cantik)",
+                    "howganteng (Seberapa ganteng)",
+                    "howgabut (Seberapa gabut)",
+                    "howgila (Seberapa gila)",
+                    "howlesbi (Seberapa lesbi)",
+                    "howstress (Seberapa stress)",
+                    "howbucin (Seberapa bucin)",
+                    "howjones (Seberapa jones)",
+                    "howsadboy (Seberapa sadboy)"
+                ];
+                text = createList(data, d => `${quote(d)}`);
+                break;
+            }
             case "mode": {
                 const data = [
                     "group (Mode group, hanya merespons dalam obrolan grup)",
