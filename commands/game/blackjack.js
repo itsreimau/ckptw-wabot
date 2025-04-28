@@ -1,10 +1,10 @@
 // blackjack.js
 const { monospace, quote } = require("@mengkodingan/ckptw");
 
-// session map to prevent multiple games in same chat
+// prevent multiple games in same chat
 const sessions = new Map();
 
-// build a standard deck
+// create a standard 52-card deck
 function createDeck() {
   const suits = ['♠', '♥', '♣', '♦'];
   const ranks = [
@@ -23,13 +23,11 @@ function createDeck() {
     { name: 'K', value: 10 }
   ];
   const deck = [];
-  for (let suit of suits) for (let r of ranks) {
-    deck.push({ name: `${r.name}${suit}`, value: r.value });
-  }
+  for (let suit of suits) for (let r of ranks) deck.push({ name: `${r.name}${suit}`, value: r.value });
   return deck;
 }
 
-// shuffle with Fisher-Yates
+// Fisher–Yates shuffle
 function shuffle(deck) {
   for (let i = deck.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -37,7 +35,7 @@ function shuffle(deck) {
   }
 }
 
-// calculate best score, treating Aces as 11 or 1
+// calculate best hand score (Aces as 1 or 11)
 function calcScore(hand) {
   let total = hand.reduce((sum, c) => sum + c.value, 0);
   let aces = hand.filter(c => c.name.startsWith('A')).length;
@@ -52,109 +50,114 @@ module.exports = {
   name: "blackjack",
   category: "game",
   aliases: ["bj"],
+  permissions: {},
   code: async (ctx) => {
     const chatId = ctx.id;
     if (sessions.has(chatId)) {
-      return ctx.reply(quote("🎲 Permainan Blackjack sedang berlangsung!"));
+      return ctx.reply(quote(`❎ Permainan Blackjack sedang berlangsung!`));
     }
     sessions.set(chatId, true);
 
     try {
-      // parse bet amount
+      // parse bet
       const betArg = ctx.args[0];
       const bet = parseInt(betArg, 10);
       if (!betArg || isNaN(bet) || bet < 10) {
         sessions.delete(chatId);
-        return ctx.reply(
-          quote(`Usage: ${monospace(ctx.used.prefix + ctx.used.command)} <taruhan 10 atau lebih>`)
-        );
+        return ctx.reply(quote(`Usage: ${monospace(ctx.used.prefix + ctx.used.command)} <taruhan (>=10)>`));
       }
 
-      const userId = tools.general.getID(ctx.sender.jid);
-      const userDb = (await db.get(`user.${userId}`)) || {};
+      // check balance
+      const playerJid = ctx.sender.jid;
+      const playerId = tools.general.getID(playerJid);
+      const userDb = (await db.get(`user.${playerId}`)) || {};
       const coins = userDb.coin || 0;
       if (coins < bet) {
         sessions.delete(chatId);
         return ctx.reply(quote("❎ Anda tidak memiliki cukup koin untuk bertaruh!"));
       }
+      // deduct bet up front
+      await db.add(`user.${playerId}.coin`, -bet);
 
-      // deduct bet
-      await db.add(`user.${userId}.coin`, -bet);
-
-      // prepare deck and hands
-      const deck = createDeck();
-      shuffle(deck);
+      // prepare deck & hands
+      const deck = createDeck(); shuffle(deck);
       const player = [deck.pop(), deck.pop()];
       const dealer = [deck.pop(), deck.pop()];
 
-      // initial display
+      // initial reveal: show one dealer card and show total
+      const dealerScore = calcScore(dealer);
       await ctx.reply(
-        `${quote(`Dealer: ${monospace(dealer[0].name)} ❓`)}\n` +
-        `${quote(`Anda: ${monospace(player.map(c => c.name).join(', '))} (Total: ${calcScore(player)})`)}\n` +
-        `${quote(`Ketik ${monospace('hit')} atau ${monospace('stand')}.`)}`
+        quote(
+          `${monospace(dealer[0].name)} ❓`+
+          `\n${monospace(player.map(c=>c.name).join(' '))} (Total: ${calcScore(player)})`+
+          `\nKetik ${monospace('hit')} atau ${monospace('stand')}. Hanya ${monospace('@'+playerId)} yang dapat merespon.`
+        )
       );
 
-      // collector
+      // collector for actions (only from player)
       const collector = ctx.MessageCollector({ time: 60000 });
       collector.on('collect', async m => {
+        // ignore others
+        if (m.sender !== playerJid) return;
         const cmd = m.content.toLowerCase();
-        if (cmd !== 'hit' && cmd !== 'stand') return;
+        if (!['hit','stand'].includes(cmd)) return;
 
-        // player action
+        // HIT action
         if (cmd === 'hit') {
           player.push(deck.pop());
-          const score = calcScore(player);
-          if (score > 21) {
-            // bust
+          const playerScoreNew = calcScore(player);
+          if (playerScoreNew > 21) {
+            // bust: reveal both totals and end
+            const text =
+              `💥 BUST! Anda mengambil ${monospace(player.at(-1).name)}.` +
+              `\n${monospace(dealer.map(c=>c.name).join(' '))} (Total: ${dealerScore})` +
+              `\n${monospace(player.map(c=>c.name).join(' '))} (Total: ${playerScoreNew})` +
+              `\nAnda kalah ${monospace(bet+'')} koin.`;
             sessions.delete(chatId);
-            await ctx.sendMessage(chatId, {
-              text: quote(
-                `💥 BUST! Anda mengambil ${monospace(player.at(-1).name)}.` +
-                `\nTotal Anda: ${score}. Anda kalah ${bet} koin.`
-              )
-            }, { quoted: m });
-            collector.stop();
-          } else {
-            // still in game
-            await ctx.sendMessage(chatId, {
-              text: quote(
-                `Anda mengambil ${monospace(player.at(-1).name)}. Total Anda sekarang ${score}.` +
-                `\nKetik ${monospace('hit')} atau ${monospace('stand')}.`
-              )
-            }, { quoted: m });
+            await ctx.sendMessage(chatId, { text: quote(text) }, { quoted: m });
+            return collector.stop();
           }
+          // still in game: show new card
+          await ctx.sendMessage(chatId, {
+            text: quote(
+              `${monospace(dealer[0].name)} ❓` +
+              `\nAnda mengambil ${monospace(player.at(-1).name)}.` +
+              `\n${monospace(player.map(c=>c.name).join(' '))} (Total: ${playerScoreNew})` +
+              `\nKetik ${monospace('hit')} atau ${monospace('stand')} (hanya Anda).`
+            )
+          }, { quoted: m });
+
         } else {
-          // stand: dealer draws
-          let dealerScore = calcScore(dealer);
-          while (dealerScore < 17) {
+          // STAND: only called by player
+          // dealer draws until >=17
+          let dealerScoreFinal = calcScore(dealer);
+          while (dealerScoreFinal < 17) {
             dealer.push(deck.pop());
-            dealerScore = calcScore(dealer);
+            dealerScoreFinal = calcScore(dealer);
           }
-
-          const playerScore = calcScore(player);
+          const playerScoreFinal = calcScore(player);
           let resultMsg;
-          if (dealerScore > 21 || playerScore > dealerScore) {
-            // player wins
-            await db.add(`user.${userId}.coin`, bet * 2);
-            resultMsg = `🎉 Anda menang! Anda: ${playerScore}, Dealer: ${dealerScore}. Anda mendapat ${bet} koin.`;
-          } else if (playerScore === dealerScore) {
-            // push: return bet
-            await db.add(`user.${userId}.coin`, bet);
-            resultMsg = `🤝 Push! Anda: ${playerScore}, Dealer: ${dealerScore}. Taruhan dikembalikan.`;
+          if (dealerScoreFinal > 21 || playerScoreFinal > dealerScoreFinal) {
+            await db.add(`user.${playerId}.coin`, bet * 2);
+            resultMsg = `🎉 Anda menang!`;
+          } else if (playerScoreFinal === dealerScoreFinal) {
+            await db.add(`user.${playerId}.coin`, bet);
+            resultMsg = `🤝 Draw!`;
           } else {
-            // dealer wins
-            resultMsg = `💔 Anda kalah! Anda: ${playerScore}, Dealer: ${dealerScore}. Anda kehilangan ${bet} koin.`;
+            resultMsg = `💔 Anda kalah!`;
           }
 
+          // final summary
+          const summary =
+            `${monospace(dealer.map(c=>c.name).join(' '))} (Total: ${dealerScoreFinal})` +
+            `\n${monospace(player.map(c=>c.name).join(' '))} (Total: ${playerScoreFinal})` +
+            `\n${resultMsg} ${resultMsg.includes('menang')?`Anda mendapat ${bet} koin.`:resultMsg.includes('Draw')?`Taruhan Anda dikembalikan.`:`Anda kalah ${bet} koin.`}`;
           sessions.delete(chatId);
-          await ctx.sendMessage(chatId, { text: quote(resultMsg) }, { quoted: m });
-          collector.stop();
+          await ctx.sendMessage(chatId, { text: quote(summary) }, { quoted: m });
+          return collector.stop();
         }
       });
-
-      collector.on('end', () => {
-        sessions.delete(chatId);
-      });
+      collector.on('end', () => { sessions.delete(chatId); });
 
     } catch (e) {
       sessions.delete(chatId);
