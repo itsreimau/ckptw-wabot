@@ -32,6 +32,9 @@ module.exports = {
                 case "price":
                     setKey = "bot.text.price";
                     break;
+                case "donate":
+                    setKey = "bot.text.donate";
+                    break;
                 default:
                     return await ctx.reply(quote(`❎ Key '${key}' tidak valid!`));
             }
