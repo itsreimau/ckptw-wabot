@@ -7,7 +7,7 @@ const chanceTable = {
   bamboo:   { common:70, uncommon:20, rare:8,  epic:2,  mythic:0 },
   iron:     { common:60, uncommon:25, rare:10, epic:4,  mythic:1 },
   gold:     { common:50, uncommon:30, rare:12, epic:6,  mythic:2 },
-  iridium:  { common:40, uncommon:30, rare:15, epic:10, mythic:5 },
+  iridium:  { common:38, uncommon:30, rare:17, epic:11, mythic:4 },
 };
 const rewardTable = { common: 5, uncommon:10, rare:25, epic:50, mythic:100 };
 
@@ -27,8 +27,6 @@ function getFishRarity(rod) {
 module.exports = {
   name: "fish",
   category: "game",
-  permissions: {},
-
   code: async (ctx) => { 
     const userId = tools.general.getID(ctx.sender.jid);
     const now = Date.now();
