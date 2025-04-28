@@ -19,7 +19,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/maker/nulis", {
+            const result = tools.api.createUrl("archive", "/api/maker/nulis", {
                 text: input
             });
 
