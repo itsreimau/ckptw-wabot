@@ -12,8 +12,8 @@ module.exports = {
     // mapping upgrade: current → { next level, price }
     const upgradeMap = {
       bamboo:  { next: "iron",    price: 500 },
-      iron:    { next: "gold",    price: 1000 },
-      gold:    { next: "iridium", price: 5000 }
+      iron:    { next: "gold",    price: 2000 },
+      gold:    { next: "iridium", price: 8000 }
     };
 
     // baca atau inisialisasi level pancingan sekarang (default bamboo)
