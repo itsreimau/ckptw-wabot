@@ -9,7 +9,7 @@ module.exports = {
     },
     code: async (ctx) => {
         try {
-            const result = tools.api.createUrl("archive", "/asupan/cosplay");
+            const result = tools.api.createUrl("archive", "/api/random/cosplay");
 
             return await ctx.reply({
                 image: {
@@ -21,4 +21,4 @@ module.exports = {
             return await tools.cmd.handleError(ctx, error, true);
         }
     }
-}
+};

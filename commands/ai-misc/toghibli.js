@@ -21,9 +21,8 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const result = tools.api.createUrl("fast", "/aiimage/ghibli", {
-                imageUrl: uploadUrl,
-                type: "png"
+            const result = tools.api.createUrl("https://fgsi1-restapi.hf.space", "/api/ai/toGhibli", {
+                url: uploadUrl
             });
 
             return await ctx.reply({

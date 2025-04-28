@@ -23,7 +23,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/download/twitter", {
+            const apiUrl = tools.api.createUrl("archive", "/api/download/twitter", {
                 url
             });
             const result = (await axios.get(apiUrl)).data.result.downloads.find(d => d.quality.includes("720p"));;

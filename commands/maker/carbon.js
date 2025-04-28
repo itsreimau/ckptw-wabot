@@ -18,7 +18,7 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("archive", "/maker/carbon", {
+            const result = tools.api.createUrl("archive", "/api/maker/carbon", {
                 text: input
             });
 

@@ -16,23 +16,19 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "moon"))
+            quote(tools.cmd.generateCommandExample(ctx.used, "evangelion itu peak!"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/search/pinterest", {
-                q: input
+            const apiUrl = tools.api.createUrl("archive", "/api/maker/nulis", {
+                text: input
             });
-            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result).image;
 
             return await ctx.reply({
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("png"),
-                caption: `${quote(`Kueri: ${input}`)}\n` +
-                    "\n" +
-                    config.msg.footer
+                mimetype: mime.lookup("png")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

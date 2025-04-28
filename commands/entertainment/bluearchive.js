@@ -2,7 +2,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "bluearchive",
-    aliases: ["ba", "bac"],
+    aliases: ["ba"],
     category: "entertainment",
     permissions: {
         coin: 10
@@ -21,4 +21,4 @@ module.exports = {
             return await tools.cmd.handleError(ctx, error, true);
         }
     }
-}
+};
