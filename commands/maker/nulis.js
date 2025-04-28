@@ -5,8 +5,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "pinterest",
-    aliases: ["pin", "pint"],
+    name: "nulis",
+    aliases: ["write"],
     category: "tool",
     permissions: {
         coin: 10
@@ -20,10 +20,9 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/maker/nulis", {
+            const result = tools.api.createUrl("archive", "/api/maker/nulis", {
                 text: input
             });
-
             return await ctx.reply({
                 image: {
                     url: result
