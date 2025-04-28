@@ -18,7 +18,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/venice", {
+            const apiUrl = tools.api.createUrl("https://api.siputzx.my.id", "/api/ai/venice", {
                 prompt: input
             });
             const result = (await axios.get(apiUrl)).data.message;

@@ -34,7 +34,6 @@ module.exports = {
             `${quote("Nyx Altair (https://github.com/NyxAltair)")}\n` +
             `${quote("OtinXSandip (https://github.com/OtinXSandip)")}\n` +
             `${quote("Randyy (https://github.com/rynxzyy)")}\n` +
-            `${quote("siputzx (https://github.com/siputzx)")}\n` +
             `${quote("Siraj (https://github.com/BK9dev)")}\n` +
             `${quote("swndyyyyyy (https://github.com/swndyy)")}\n` +
             `${quote("─────")}\n` +

@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "yahoosearch",
-    aliases: ["yahoo", "yahoos"],
+    name: "kusonimesearch",
+    aliases: ["kusonime", "kusonimes"],
     category: "search",
     permissions: {
         coin: 10
@@ -19,15 +19,15 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/search/yahoosearch", {
-                query: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/kusonime", {
+                message: input
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.data;
 
             const resultText = result.map((r) =>
                 `${quote(`Judul: ${r.title}`)}\n` +
-                `${quote(`Deskripsi: ${r.snippet}`)}\n` +
-                `${quote(`URL: ${r.link}`)}`
+                `${quote(`Genre: ${r.genre}`)}\n` +
+                `${quote(`URL: ${r.url}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

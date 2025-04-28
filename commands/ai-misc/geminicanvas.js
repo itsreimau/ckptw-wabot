@@ -1,11 +1,11 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "editimage",
-    aliases: ["editimg"],
+    name: "geminicanvas",
     category: "ai-misc",
     permissions: {
         premium: true
@@ -29,16 +29,14 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const result = tools.api.createUrl("zell", "/ai/editimg", {
-                imageUrl: uploadUrl,
-                prompt: input
-
+            const apiUrl = tools.api.createUrl("nekorinn", "/ai/gemini-canvas", {
+                text: input,
+                imageUrl: uploadUrl
             });
+            const result = Buffer.from((await axios.get(apiUrl)).data.result.image.base64, "base64");
 
             return await ctx.reply({
-                image: {
-                    url: result
-                },
+                image: result,
                 mimetype: mime.lookup("png")
             });
         } catch (error) {

@@ -33,9 +33,6 @@ const APIs = {
         baseURL: "https://api.shizo.top",
         APIKey: "shizo"
     },
-    siputzx: {
-        baseURL: "https://api.siputzx.my.id"
-    },
     vapis: {
         baseURL: "https://vapis.my.id"
     },

@@ -8,7 +8,7 @@ const mime = require("mime-types");
 module.exports = {
     name: "gsmarenasearch",
     aliases: ["gsmarena", "gsmarenas"],
-    category: "tool",
+    category: "search",
     permissions: {
         coin: 10
     },

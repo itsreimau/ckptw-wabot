@@ -5,9 +5,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "pinterest",
-    aliases: ["pin", "pint"],
-    category: "tool",
+    name: "nulis",
+    category: "maker",
     permissions: {
         coin: 10
     },

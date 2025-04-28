@@ -23,10 +23,10 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("siputzx", "/api/d/soundcloud", {
+            const apiUrl = tools.api.createUrl("agatz", "/api/soundclouddl", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.data.url;
+            const result = (await axios.get(apiUrl)).data.download;
 
             return await ctx.reply({
                 audio: {

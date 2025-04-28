@@ -48,22 +48,22 @@ module.exports = {
             }
 
             if (source === "soundcloud") {
-                const searchApiUrl = tools.api.createUrl("siputzx", "/api/s/soundcloud", {
-                    query
+                const searchApiUrl = tools.api.createUrl("agatz", "/api/soundcloud", {
+                    message: query
                 });
                 const searchResult = (await axios.get(searchApiUrl)).data.data[searchIndex];
 
                 await ctx.reply(
-                    `${quote(`Judul: ${searchResult.permalink}`)}\n` +
+                    `${quote(`Judul: ${searchResult.judul}`)}\n` +
                     `${quote(`URL: ${searchResult.link}`)}\n` +
                     "\n" +
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("siputzx", "/api/d/soundcloud", {
-                    url: searchResult.link
+                const downloadApiUrl = tools.api.createUrl("agatz", "/api/soundclouddl", {
+                    url
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.data.url;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.download;
 
                 return await ctx.reply({
                     audio: {
