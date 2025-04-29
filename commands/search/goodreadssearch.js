@@ -22,7 +22,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("archive", "/api/search/goodreads", {
                 query: input
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map((r) =>
                 `${quote(`Judul: ${r.title}`)}\n` +

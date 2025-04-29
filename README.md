@@ -43,7 +43,7 @@ npm install
 
 Ganti nama file `config.example.js` menjadi `config.js`, lalu sesuaikan konfigurasi seperti nama bot, pesan default, nomor owner bot, dan lain-lain.
 
-## Storage Adapter
+## Authentication Adapter
 
 `ckptw-wabot` mendukung penyimpanan sesi autentikasi menggunakan pilihan database: **MySQL**, **MongoDB**, dan **Firebase**. Pilih dan atur database sesuai preferensi Anda dengan langkah-langkah berikut:
 

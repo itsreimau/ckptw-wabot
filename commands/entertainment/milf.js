@@ -21,4 +21,4 @@ module.exports = {
             return await tools.cmd.handleError(ctx, error, true);
         }
     }
-}
+};

@@ -1,14 +1,14 @@
-# Ignore node_modules directory
+# Abaikan direktori 'node_modules'
 node_modules/
 
-# Ignore state directory
+# Abaikan direktori 'state'
 state/
 
-# Ignore config.js file
+# Abaikan file 'config.js'
 config.js
 
-# Ignore database.json file
+# Abaikan file 'database.json'
 database.json
 
-# Ignore package-lock.js file
+# Abaikan file 'package-lock.js'
 package-lock.json
