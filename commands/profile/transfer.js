@@ -23,11 +23,13 @@ module.exports = {
         const [isOnWhatsApp] = await ctx.core.onWhatsApp(userJid);
         if (!isOnWhatsApp.exists) return await ctx.reply(quote("❎ Akun tidak ada di WhatsApp!"));
 
+        const userDb = await db.get(`user.${senderId}`) || {};
+
+        if (tools.general.isOwner(senderId) || userDb?.premium) return await ctx.reply(quote("❎ Koin tak terbatas tidak dapat ditransfer."));
+
+        if (userDb?.coin < coinAmount) return await ctx.reply(quote("❎ Koin Anda tidak mencukupi untuk transfer ini!"));
+
         try {
-            const senderCoin = await db.get(`user.${senderId}.coin`) || 0;
-
-            if (senderCoin < coinAmount) return await ctx.reply(quote("❎ Koin Anda tidak mencukupi untuk transfer ini!"));
-
             await db.add(`user.${tools.general.getID(userJid)}.coin`, coinAmount);
             await db.subtract(`user.${senderId}.coin`, coinAmount);
 
