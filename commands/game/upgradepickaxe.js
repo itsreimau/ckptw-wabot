@@ -6,61 +6,96 @@ module.exports = {
   category: "game",
   code: async (ctx) => {
     const userId = tools.general.getID(ctx.sender.jid);
+    const input = ctx.args[0]?.toLowerCase() || null;
 
-    // mapping upgrade: current → { next level, price }
+    // urutan level pickaxe
+    const levels = ["stone", "iron", "golden", "iridium"];
+    // mapping upgrade: current → { next, price }
     const upgradeMap = {
-      stone:   { next: "iron",    price: 500 },
-      iron:    { next: "golden",  price: 2000 },
-      golden:  { next: "iridium", price: 8000 }
+      stone:  { next: "iron",    price: 500 },
+      iron:   { next: "golden",  price: 2000 },
+      golden: { next: "iridium", price: 8000 }
     };
 
-    // baca atau inisialisasi level pickaxe sekarang (default stone)
+    // .upick list: tampilkan shop pickaxe
+    if (input === "list") {
+      const listItems = levels.map(level => {
+        const info = upgradeMap[level];
+        if (info) {
+          return `${monospace(level)} → ${monospace(info.next)} : ${info.price} koin`;
+        }
+        return `${monospace(level)} : MAX LEVEL`;
+      }).join("\n");
+
+      return ctx.reply(
+        quote(`🛒 Shop Pickaxe Upgrade:`) +
+        `
+${listItems}` +
+        `
+
+Gunakan ${monospace(ctx.used.prefix + ctx.used.command + ' <level>')} untuk upgrade pickaxe.`
+      );
+    }
+
+    // fetch atau inisialisasi current pickaxe (default stone)
     let current = (await db.get(`user.${userId}.pickaxe`))?.toLowerCase();
     if (!current) {
       current = "stone";
       await db.set(`user.${userId}.pickaxe`, current);
     }
 
-    // cek apakah ada level selanjutnya
-    const info = upgradeMap[current];
-    if (!info) {
+    // tanpa arg: show status
+    if (!input) {
       return ctx.reply(
-        quote(`⚠️ Pickaxe-mu sudah paling tinggi: ${monospace(current)}`)
+        quote(`⛏️ Pickaxe saat ini: ${monospace(current)}`) +
+        `
+Gunakan ${monospace(ctx.used.prefix + ctx.used.command + ' list')} untuk daftar.`
       );
     }
 
-    // ambil data user
-    const userDb = (await db.get(`user.${userId}`)) || {};
-    const coins = userDb.coin || 0;
-    const isPremium = userDb.premium;
-    const isOwner = tools.general.isOwner(userId);
-
-    let costMessage = "";
-    // jika bukan premium atau owner, harus bayar
-    if (!isPremium && !isOwner) {
-      if (coins < info.price) {
-        return ctx.reply(
-          quote(
-            `💔 Koinmu kurang! Butuh ${monospace(info.price)} untuk upgrade ke ${monospace(info.next)}.`
-          )
-        );
-      }
-      // kurangi koin
-      await db.add(`user.${userId}.coin`, -info.price);
-      costMessage = `- ${monospace(info.price + " koin")}`;
-    } else {
-      costMessage = `🔓 Gratis upgrade untuk ${isOwner ? "Owner" : "Premium User"}!`;
+    // validasi level input
+    if (!levels.includes(input)) {
+      return ctx.reply(quote(`❎ Level '${input}' tidak valid!`));
     }
 
-    // lakukan upgrade
-    await db.set(`user.${userId}.pickaxe`, info.next);
+    const currentIndex = levels.indexOf(current);
+    const targetIndex = levels.indexOf(input);
 
-    // konfirmasi ke user
+    // sudah di level ini
+    if (targetIndex === currentIndex) {
+      return ctx.reply(quote(`⚠️ Pickaxe-mu sudah di level ${monospace(current)}.`));
+    }
+    // skip level
+    if (targetIndex > currentIndex + 1) {
+      return ctx.reply(quote(`⚠️ Kamu tidak bisa lompat dari ${monospace(current)} ke ${monospace(input)}.`));
+    }
+    // downgrade
+    if (targetIndex < currentIndex) {
+      return ctx.reply(quote(`⚠️ Kamu tidak bisa menurunkan level pickaxe.`));
+    }
+
+    // proper upgrade
+    const info = upgradeMap[current];
+    const userDb = (await db.get(`user.${userId}`)) || {};
+    const coins = userDb.coin || 0;
+    const isOwner = tools.general.isOwner(userId);
+    const isPremium = userDb.premium;
+    let costMsg = "";
+
+    if (!isOwner && !isPremium) {
+      if (coins < info.price) {
+        return ctx.reply(quote(`💔 Koinmu kurang! Butuh ${monospace(info.price)} untuk upgrade ke ${monospace(info.next)}.`));
+      }
+      await db.add(`user.${userId}.coin`, -info.price);
+      costMsg = `- ${monospace(info.price + ' koin')}`;
+    } else {
+      costMsg = `🔓 Gratis upgrade untuk ${isOwner ? 'Owner' : 'Premium User'}!`;
+    }
+
+    await db.set(`user.${userId}.pickaxe`, info.next);
     return ctx.reply(
-      quote(
-        `✅ Upgrade sukses! Pickaxe-mu sekarang: ${monospace(info.next)}.` +
-        `\n${costMessage}`
-      )
+      quote(`✅ Upgrade sukses! Pickaxe-mu sekarang: ${monospace(info.next)}.` +
+            `\n${costMsg}`)
     );
   }
 };
