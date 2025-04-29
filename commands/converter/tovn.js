@@ -14,8 +14,6 @@ module.exports = {
         try {
             const result = await ctx.quoted.media.toBuffer()
 
-            if (!result) return await ctx.reply(config.msg.notFound);
-
             return await ctx.reply({
                 audio: result,
                 mimetype: mime.lookup("ptt"),

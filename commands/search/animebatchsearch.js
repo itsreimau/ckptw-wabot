@@ -22,7 +22,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("agatz", "/api/animebatch", {
                 message: input
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.data.data;
 
             const resultText = result.map((r) =>
                 `${quote(`Judul: ${r.title}`)}\n` +
