@@ -33,7 +33,7 @@ module.exports = {
                 `${quote(`Volume: ${result.volumes}`)}\n` +
                 `${quote(`URL: ${result.url}`)}\n` +
                 `${quote("─────")}\n` +
-                `${await tools.general.translate(result.synopsis, "id", ).translation}\n` +
+                `${ctx.sender.jid.startsWith("62") ? await tools.general.translate(result.synopsis, "id" ) : result.synopsis}\n` +
                 "\n" +
                 config.msg.footer
             );

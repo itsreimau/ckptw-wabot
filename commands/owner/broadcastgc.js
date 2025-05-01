@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -44,8 +45,10 @@ module.exports = {
                         }
                     };
                     await ctx.sendMessage(groupId, {
-                        image: {
-                            url: config.bot.thumbnail
+                        vidoe: {
+                            url: (await axios.get(tools.api.createUrl("bk9", "/converter/png2gif", {
+                                url: config.bot.thumbnail
+                            }))).data.BK9
                         },
                         mimetype: mime.lookup("png"),
                         caption: input,

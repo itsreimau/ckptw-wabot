@@ -6,7 +6,7 @@ const APIs = {
         baseURL: "https://api.agatz.xyz"
     },
     archive: {
-        baseURL: "https://www.archive-ui.biz.id"
+        baseURL: "https://archive.lick.eu.org"
     },
     bk9: {
         baseURL: "https://bk9.fun"

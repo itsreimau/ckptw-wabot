@@ -4,6 +4,7 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 const moment = require("moment-timezone");
 
@@ -91,11 +92,14 @@ module.exports = {
             };
 
             return await ctx.sendMessage(ctx.id, {
-                image: {
-                    url: config.bot.thumbnail
+                video: {
+                    url: (await axios.get(tools.api.createUrl("bk9", "/converter/png2gif", {
+                        url: config.bot.thumbnail
+                    }))).data.BK9
                 },
                 mimetype: mime.lookup("png"),
                 caption: text,
+                gifPlayback: true,
                 contextInfo: {
                     mentionedJid: [ctx.sender.jid],
                     forwardingScore: 9999,

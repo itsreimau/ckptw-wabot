@@ -26,7 +26,7 @@ module.exports = {
         try {
             const randomNumber = Math.floor(Math.random() * 100);
 
-            return await ctx.reply(quote(`${input} itu ${randomNumber}% ${(ctx.used.command.replace("how", "")).toLowerCase()}`));
+            return await ctx.reply(quote(`${input} itu ${randomNumber}% ${(ctx.used.command.replace("how", "")).toLowerCase()}.`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

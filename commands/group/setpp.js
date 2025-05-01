@@ -1,9 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const {
-    Jimp
-} = require("jimp");
+const Jimp = require("jimp");
 
 module.exports = {
     name: "setpp",

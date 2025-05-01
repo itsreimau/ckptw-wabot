@@ -4,13 +4,14 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 // Fungsi untuk mengecek apakah pengguna memiliki cukup koin sebelum menggunakan perintah tertentu
 async function checkCoin(requiredCoin, senderId) {
     const userDb = await db.get(`user.${senderId}`) || {};
 
-    if (tools.general.isOwner(senderId) || userDb?.premium) return false;
+    if (tools.general.isOwner(senderId, ctx.msg.key.id) || userDb?.premium) return false;
     if ((userDb?.coin || 0) < requiredCoin) return true;
 
     await db.subtract(`user.${senderId}.coin`, requiredCoin);
@@ -27,7 +28,7 @@ module.exports = (bot) => {
         const senderId = tools.general.getID(senderJid);
         const groupJid = isGroup ? ctx.id : null;
         const groupId = isGroup ? tools.general.getID(groupJid) : null;
-        const isOwner = tools.general.isOwner(senderId);
+        const isOwner = tools.general.isOwner(senderId, ctx.msg.key.id);
 
         // Mengambil data bot, pengguna, dan grup dari database
         const botDb = await db.get("bot") || {};
@@ -65,11 +66,14 @@ module.exports = (bot) => {
 
                 try {
                     await ctx.reply({
-                        image: {
-                            url: canvas
+                        video: {
+                            url: (await axios.get(tools.api.createUrl("bk9", "/converter/png2gif", {
+                                url: canvas
+                            }))).data.BK9
                         },
                         mimetype: mime.lookup("png"),
-                        caption: text
+                        caption: text,
+                        gifPlayback: true
                     });
                 } catch (error) {
                     if (error.status !== 200) await ctx.reply(text);

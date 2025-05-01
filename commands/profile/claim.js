@@ -24,7 +24,7 @@ module.exports = {
         const senderId = tools.general.getID(ctx.sender.jid);
         const userDb = await db.get(`user.${senderId}`) || {};
 
-        if (tools.general.isOwner(senderId) || userDb?.premium) return await ctx.reply(quote("❎ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
+        if (tools.general.isOwner(senderId, ctx.msg.key.id) || userDb?.premium) return await ctx.reply(quote("❎ Anda sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
 
         if (!claimRewards[input]) return await ctx.reply(quote("❎ Hadiah tidak valid!"));
 

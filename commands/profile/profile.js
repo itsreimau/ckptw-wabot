@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -24,7 +25,7 @@ module.exports = {
 
             const userDb = await db.get(`user.${senderId}`) || {};
             const userRank = leaderboardData.findIndex(user => user.id === senderId) + 1;
-            const isOwner = tools.general.isOwner(senderId);
+            const isOwner = tools.general.isOwner(senderId, ctx.msg.key.id);
             const profilePictureUrl = await ctx.core.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
             const canvas = tools.api.createUrl("fast", "/canvas/rank", {
                 avatar: profilePictureUrl,
@@ -50,11 +51,14 @@ module.exports = {
 
             try {
                 return await ctx.reply({
-                    image: {
-                        url: canvas
+                    video: {
+                        url: (await axios.get(tools.api.createUrl("bk9", "/converter/png2gif", {
+                            url: canvas
+                        }))).data.BK9
                     },
                     mimetype: mime.lookup("png"),
-                    caption: text
+                    caption: text,
+                    gifPlayback: true
                 });
             } catch (error) {
                 if (error.status !== 200) return await ctx.reply(text);

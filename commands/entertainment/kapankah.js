@@ -22,7 +22,7 @@ module.exports = {
             const times = ["detik", "menit", "jam", "hari", "minggu", "bulan", "tahun", "dekade", "abad"];
             const time = tools.general.getRandomElement(times);
 
-            return await ctx.reply(quote(`${randomNumber} ${time} lagi ...`));
+            return await ctx.reply(quote(`${randomNumber} ${time} lagi...`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

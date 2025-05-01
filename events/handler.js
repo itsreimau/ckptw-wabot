@@ -15,21 +15,17 @@ const util = require("node:util");
 
 // Fungsi untuk menangani event pengguna bergabung/keluar grup
 async function handleUserEvent(bot, m, type) {
-    const {
-        id,
-        participants
-    } = m;
+    const groupJid = m.id;
+    const groupId = tools.general.getID(m.id);
+    const groupDb = await db.get(`group.${groupId}`) || {};
+
+    if (groupDb?.mutebot) return;
+    if (!groupDb?.option?.welcome) return;
 
     try {
-        const groupId = tools.general.getID(id);
-        const groupDb = await db.get(`group.${groupId}`) || {};
+        const metadata = await bot.core.groupMetadata(groupJid);
 
-        if (groupDb?.mutebot) return;
-        if (!groupDb?.option?.welcome) return;
-
-        const metadata = await bot.core.groupMetadata(id);
-
-        for (const jid of participants) {
+        for (const jid of m.participants) {
             const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
             const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
@@ -54,11 +50,14 @@ async function handleUserEvent(bot, m, type) {
 
             try {
                 await bot.core.sendMessage(id, {
-                    image: {
-                        url: canvas
+                    video: {
+                        url: (await axios.get(tools.api.createUrl("bk9", "/converter/png2gif", {
+                            url: canvas
+                        }))).data.BK9
                     },
                     mimetype: mime.lookup("png"),
                     caption: text,
+                    gifPlayback: true,
                     mentions: [jid]
                 });
             } catch (error) {
@@ -81,7 +80,7 @@ async function handleUserEvent(bot, m, type) {
                 `${quote("─────")}\n` +
                 monospace(errorText)
         });
-        await bot.core.sendMessage(id, {
+        await bot.core.sendMessage(groupJid, {
             text: quote(`⚠️ Terjadi kesalahan: ${error.message}`)
         });
     }
@@ -126,7 +125,7 @@ module.exports = (bot) => {
         const senderId = tools.general.getID(senderJid);
         const groupJid = isGroup ? ctx.id : null;
         const groupId = isGroup ? tools.general.getID(groupJid) : null;
-        const isOwner = tools.general.isOwner(senderId);
+        const isOwner = tools.general.isOwner(senderId, m.key.id);
         const isCmd = tools.general.isCmd(m.content, ctx.bot);
 
         // Mengambil basis data
@@ -157,7 +156,7 @@ module.exports = (bot) => {
             if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd?.prefix + isCmd?.didyoumean)}.`)); // Did you mean?
 
             // Perintah khusus Owner
-            if (isOwner && m.content) {
+            if (m.content && isOwner) {
                 // Perintah Eval (Jalankan kode JavaScript)
                 if (m.content.startsWith("==> ") || m.content.startsWith("=> ")) {
                     const code = m.content.slice(m.content.startsWith("==> ") ? 4 : 3);
@@ -250,19 +249,17 @@ module.exports = (bot) => {
             }
 
             // Penanganan antispam
-            const now = Date.now();
-
             if (groupDb?.option?.antispam) {
+                const now = Date.now();
                 const key = `group.${groupId}.spam`;
                 const spamData = await db.get(key) || {};
-
-                const {
+                const data = spamData[senderId] || {
                     count = 0,
-                        lastMessageTime = 0
-                } = spamData[senderId] || {};
+                    lastMessageTime = 0
+                };
 
-                const timeDiff = now - lastMessageTime;
-                const newCount = timeDiff < 5000 ? count + 1 : 1;
+                const timeDiff = now - data.lastMessageTime;
+                const newCount = timeDiff < 5000 ? data.count + 1 : 1;
 
                 spamData[senderId] = {
                     count: newCount,
