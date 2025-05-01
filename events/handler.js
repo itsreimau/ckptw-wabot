@@ -254,8 +254,8 @@ module.exports = (bot) => {
                 const key = `group.${groupId}.spam`;
                 const spamData = await db.get(key) || {};
                 const data = spamData[senderId] || {
-                    count = 0,
-                    lastMessageTime = 0
+                    count: 0,
+                    lastMessageTime: 0
                 };
 
                 const timeDiff = now - data.lastMessageTime;
