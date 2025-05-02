@@ -8,10 +8,10 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 // Fungsi untuk mengecek apakah pengguna memiliki cukup koin sebelum menggunakan perintah tertentu
-async function checkCoin(requiredCoin, senderId) {
+async function checkCoin(requiredCoin, senderId, messageId) {
     const userDb = await db.get(`user.${senderId}`) || {};
 
-    if (tools.general.isOwner(senderId, ctx.msg.key.id) || userDb?.premium) return false;
+    if (tools.general.isOwner(senderId, messageId) || userDb?.premium) return false;
     if ((userDb?.coin || 0) < requiredCoin) return true;
 
     await db.subtract(`user.${senderId}.coin`, requiredCoin);
@@ -147,7 +147,7 @@ module.exports = (bot) => {
             },
             {
                 key: "coin",
-                condition: permissions.coin && config.system.useCoin && await checkCoin(permissions.coin, senderId),
+                condition: permissions.coin && config.system.useCoin && await checkCoin(permissions.coin, senderId, ctx.msg.key.id),
                 msg: config.msg.coin,
                 reaction: "💰"
             },
