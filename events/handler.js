@@ -52,7 +52,7 @@ async function handleUserEvent(bot, m, type) {
                 const url = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
                     url: canvas
                 }))).data.result;
-                await bot.core.sendMessage(id, {
+                await bot.core.sendMessage(groupJid, {
                     video: {
                         url
                     },
@@ -62,13 +62,13 @@ async function handleUserEvent(bot, m, type) {
                     mentions: [jid]
                 });
             } catch (error) {
-                if (error.status !== 200) await bot.core.sendMessage(id, {
+                if (error.status !== 200) await bot.core.sendMessage(groupJid, {
                     text,
                     mentions: [jid]
                 });
             }
 
-            if (type === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(id, {
+            if (type === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(groupJid, {
                 text: groupDb?.text?.intro,
                 mentions: [jid]
             });

@@ -9,7 +9,7 @@ module.exports = {
     aliases: ["threads"],
     category: "downloader",
     permissions: {
-        coin: 10
+        oremium: true
     },
     code: async (ctx) => {
         const url = ctx.args[0] || null;

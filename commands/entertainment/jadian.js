@@ -8,7 +8,6 @@ module.exports = {
     aliases: ["jodoh"],
     category: "entertainment",
     permissions: {
-        coin: 5,
         group: true
     },
     code: async (ctx) => {

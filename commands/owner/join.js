@@ -22,10 +22,10 @@ module.exports = {
 
         try {
             const urlCode = new URL(url).pathname.split("/").pop();
-            await ctx.groups.acceptInvite(urlCode);
-
-            await ctx.sendMessage(result, {
-                text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${config.bot.name}, dimiliki oleh ${config.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)
+            await ctx.groups.acceptInvite(urlCode).then(result => {
+                await ctx.sendMessage(result, {
+                    text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${config.bot.name}, dimiliki oleh ${config.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)
+                });
             });
 
             return await ctx.reply(quote("✅ Berhasil bergabung dengan grup!"));
