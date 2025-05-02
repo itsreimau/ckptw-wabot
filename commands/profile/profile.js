@@ -56,7 +56,7 @@ module.exports = {
                             url: canvas
                         }))).data.BK9
                     },
-                    mimetype: mime.lookup("png"),
+                    mimetype: mime.lookup("gif"),
                     caption: text,
                     gifPlayback: true
                 });

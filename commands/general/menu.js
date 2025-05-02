@@ -97,7 +97,7 @@ module.exports = {
                         url: config.bot.thumbnail
                     }))).data.BK9
                 },
-                mimetype: mime.lookup("png"),
+                mimetype: mime.lookup("gif"),
                 caption: text,
                 gifPlayback: true,
                 contextInfo: {

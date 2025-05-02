@@ -50,7 +50,7 @@ module.exports = {
                                 url: config.bot.thumbnail
                             }))).data.BK9
                         },
-                        mimetype: mime.lookup("png"),
+                        mimetype: mime.lookup("gif"),
                         caption: input,
                         contextInfo: {
                             forwardingScore: 9999,
