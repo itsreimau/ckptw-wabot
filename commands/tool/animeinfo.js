@@ -24,6 +24,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.data[0];
 
+            const synopsis = ctx.sender.jid.startsWith("62") ? await tools.general.translate(result.synopsis, "id") : result.synopsis;
             return await ctx.reply(
                 `${quote(`Judul: ${result.title}`)}\n` +
                 `${quote(`Judul (Inggris): ${result.title_english}`)}\n` +
@@ -33,7 +34,7 @@ module.exports = {
                 `${quote(`Durasi: ${result.duration}`)}\n` +
                 `${quote(`URL: ${result.url}`)}\n` +
                 `${quote("─────")}\n` +
-                `${ctx.sender.jid.startsWith("62") ? await tools.general.translate(result.synopsis, "id" ) : result.synopsis}\n` +
+                `${synopsis}\n` +
                 "\n" +
                 config.msg.footer
             );

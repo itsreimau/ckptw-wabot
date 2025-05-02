@@ -44,14 +44,17 @@ module.exports = {
                             }
                         }
                     };
+                    const url = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
+                        url: config.bot.thumbnail
+                    }))).data.result;
+
                     await ctx.sendMessage(groupId, {
-                        vidoe: {
-                            url: (await axios.get(tools.api.createUrl("bk9", "/converter/png2gif", {
-                                url: config.bot.thumbnail
-                            }))).data.BK9
+                        video: {
+                            url
                         },
-                        mimetype: mime.lookup("gif"),
+                        mimetype: mime.lookup("mp4"),
                         caption: input,
+                        gifPlayback: true,
                         contextInfo: {
                             forwardingScore: 9999,
                             isForwarded: true

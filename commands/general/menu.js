@@ -90,14 +90,15 @@ module.exports = {
                     }
                 }
             };
+            const url = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
+                url: config.bot.thumbnail
+            }))).data.result;
 
             return await ctx.sendMessage(ctx.id, {
                 video: {
-                    url: (await axios.get(tools.api.createUrl("bk9", "/converter/png2gif", {
-                        url: config.bot.thumbnail
-                    }))).data.BK9
+                    url
                 },
-                mimetype: mime.lookup("gif"),
+                mimetype: mime.lookup("mp4"),
                 caption: text,
                 gifPlayback: true,
                 contextInfo: {

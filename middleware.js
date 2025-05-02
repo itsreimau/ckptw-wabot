@@ -65,13 +65,14 @@ module.exports = (bot) => {
                     quote(tools.cmd.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]));
 
                 try {
+                    const url = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
+                        url: canvas
+                    }))).data.result;
                     await ctx.reply({
                         video: {
-                            url: (await axios.get(tools.api.createUrl("bk9", "/converter/png2gif", {
-                                url: canvas
-                            }))).data.BK9
+                            url
                         },
-                        mimetype: mime.lookup("gif"),
+                        mimetype: mime.lookup("mp4"),
                         caption: text,
                         gifPlayback: true
                     });

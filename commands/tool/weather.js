@@ -24,6 +24,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.data;
 
+            const currentCondition = ctx.sender.jid.startsWith("62") ? await tools.general.translate(result.current.condition.text, "id") : result.current.condition.text;
             return await ctx.reply(
                 `${quote(`Lokasi: ${result.location.name}, ${result.location.region}, ${result.location.country}`)}\n` +
                 `${quote(`Latitude: ${result.location.lat}`)}\n` +
@@ -31,7 +32,7 @@ module.exports = {
                 `${quote(`Zona Waktu: ${result.location.tz_id}`)}\n` +
                 `${quote(`Waktu Lokal: ${result.location.localtime}`)}\n` +
                 `${quote("─────")}\n` +
-                `${quote(`Cuaca: ${await tools.general.translate(result.current.condition.text, "id")}`)}\n` +
+                `${quote(`Cuaca: ${currentCondition}`)}\n` +
                 `${quote(`Suhu Saat Ini: ${result.current.temp_c}°C (${result.current.temp_f}°F)`)}\n` +
                 `${quote(`Terasa Seperti: ${result.current.feelslike_c}°C (${result.current.feelslike_f}°F)`)}\n` +
                 `${quote(`Kelembaban: ${result.current.humidity}%`)}\n` +
