@@ -85,8 +85,7 @@ module.exports = {
                 },
                 message: {
                     extendedTextMessage: {
-                        text: config.msg.note,
-                        title: config.bot.name
+                        text: config.msg.note
                     }
                 }
             };
@@ -105,6 +104,10 @@ module.exports = {
                     mentionedJid: [ctx.sender.jid],
                     forwardingScore: 9999,
                     isForwarded: true
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: config.bot.newsletterJid,
+                        newsletterName: config.bot.name
+                    }
                 },
             }, {
                 quoted: fakeQuotedText

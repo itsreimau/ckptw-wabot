@@ -34,7 +34,6 @@ module.exports = (bot) => {
         const botDb = await db.get("bot") || {};
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
-
         const muteList = groupDb?.mute || [];
 
         // Pengecekan mode bot (group, private, self) dan sistem mute
@@ -74,7 +73,16 @@ module.exports = (bot) => {
                         },
                         mimetype: mime.lookup("mp4"),
                         caption: text,
-                        gifPlayback: true
+                        gifPlayback: true,
+                        contextInfo: {
+                            mentionedJid: [jid],
+                            forwardingScore: 9999,
+                            isForwarded: true,
+                            forwardedNewsletterMessageInfo: {
+                                newsletterJid: config.bot.newsletterJid,
+                                newsletterName: config.bot.name
+                            }
+                        }
                     });
                 } catch (error) {
                     if (error.status !== 200) await ctx.reply(text);

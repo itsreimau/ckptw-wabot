@@ -18,7 +18,8 @@ module.exports = {
 
         if ((!userJid || !coinAmount) || isNaN(coinAmount)) return await ctx.reply({
             text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-                quote(tools.cmd.generateCommandExample(ctx.used, `@${senderId} 8`)),
+                `${quote(tools.cmd.generateCommandExample(ctx.used, `@${senderId} 8`))}\n` +
+                quote(tools.cmd.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai target akun."])),
             mentions: [senderJid]
         });
 

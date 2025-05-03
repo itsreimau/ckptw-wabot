@@ -14,12 +14,12 @@ module.exports = {
     },
     code: async (ctx) => {
         const key = ctx.args[0];
-        const text = ctx.args.slice(1).join(" ") || ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean)
+        const text = ctx.args.slice(1).join(" ") || ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || null;
 
         if (!key && !text) return await ctx.reply(
             `${quote(`${tools.cmd.generateInstruction(["send"], ["text"])}`)}\n` +
             `${quote(tools.cmd.generateCommandExample(ctx.used, "welcome Selamat datang di grup!"))}\n` +
-            quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Untuk teks satu baris, ketik saja langsung ke perintah. Untuk teks dengan baris baru, balas pesan yang berisi teks tersebut ke perintah."]))
+            quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Balas atau quote pesan untuk menjadikan teks sebagai target input, jika teks memerlukan baris baru."]))
         );
 
         if (key === "list") {

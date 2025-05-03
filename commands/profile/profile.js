@@ -38,7 +38,7 @@ module.exports = {
                 requiredXp: "100"
             });
 
-            const text = `${quote(`Nama WhatsApp: ${senderName}`)}\n` +
+            const text = `${quote(`Nama: ${senderName}`)}\n` +
                 `${quote(`Username: ${userDb?.username}`)}\n` +
                 `${quote(`Status: ${isOwner ? "Owner" : userDb?.premium ? "Premium" : "Freemium"}`)}\n` +
                 `${quote(`Level: ${userDb?.level || 0}`)}\n` +

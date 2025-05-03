@@ -9,12 +9,12 @@ module.exports = {
     category: "ai-chat",
     permissions: {},
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || null;
+        const input = ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], [ "image","text"]))}\n` +
             `${quote(tools.cmd.generateCommandExample(ctx.used, "apa itu bot whatsapp?"))}\n` +
-            quote(tools.cmd.generateNotes(["AI ini dapat melihat media dan menjawab pertanyaan tentangnya. Kirim media dan tanyakan apa saja!"]))
+            quote(tools.cmd.generateNotes(["AI ini dapat melihat gambar dan menjawab pertanyaan tentang gambar tersebut.", "Balas atau quote pesan untuk menjadikan teks sebagai target input, jika teks memerlukan baris baru."]))
         );
 
         const msgType = ctx.getMessageType();

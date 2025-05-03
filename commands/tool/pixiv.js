@@ -11,18 +11,19 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || null;
+        const input = ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "moon"))
+            `${quote(tools.cmd.generateCommandExample(ctx.used, "moon"))}\n` +
+            quote(tools.cmd.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai target input, jika teks memerlukan baris baru."]))
         );
 
         try {
             const apiUrl = tools.api.createUrl("nekorinn", "/nsfw/pixiv", {
-                query: input
+                q: input
             });
-            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.hasil).imageUrl;
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result).imageUrl;
 
             return await ctx.reply({
                 image: {

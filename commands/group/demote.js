@@ -11,13 +11,14 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        const accountJid = ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || ctx.quoted.senderJid || null;
+        const accountJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
 
         if (!accountJid) return await ctx.reply({
             text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-                quote(tools.cmd.generateCommandExample(ctx.used, `@${senderId}`)),
+                `${quote(tools.cmd.generateCommandExample(ctx.used, `@${senderId}`))}\n` +
+                quote(tools.cmd.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai target akun."])),
             mentions: [senderJid]
         });
 

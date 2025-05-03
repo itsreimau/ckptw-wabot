@@ -82,7 +82,6 @@ module.exports = {
                 await ctx.reply(
                     `${quote(`Judul: ${searchResult.trackName}`)}\n` +
                     `${quote(`Artis: ${searchResult.artistName}`)}\n` +
-                    `${quote(`Album: ${searchResult.albumName}`)}\n` +
                     `${quote(`URL: ${searchResult.externalUrl}`)}\n` +
                     "\n" +
                     config.msg.footer

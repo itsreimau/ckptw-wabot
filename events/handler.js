@@ -59,7 +59,15 @@ async function handleUserEvent(bot, m, type) {
                     mimetype: mime.lookup("mp4"),
                     caption: text,
                     gifPlayback: true,
-                    mentions: [jid]
+                    contextInfo: {
+                        mentionedJid: [jid],
+                        forwardingScore: 9999,
+                        isForwarded: true,
+                        forwardedNewsletterMessageInfo: {
+                            newsletterJid: config.bot.newsletterJid,
+                            newsletterName: config.bot.name
+                        }
+                    }
                 });
             } catch (error) {
                 if (error.status !== 200) await bot.core.sendMessage(groupJid, {
@@ -133,7 +141,6 @@ module.exports = (bot) => {
         const botDb = await db.get("bot") || {};
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
-
         const muteList = groupDb?.mute || [];
 
         // Pengecekan mode bot (group, private, self) dan sistem mute
@@ -269,7 +276,7 @@ module.exports = (bot) => {
 
                 await db.set(key, spamData);
 
-                if (newCount > 5) {
+                if (newCount > 5 && !await ctx.group().isSenderAdmin()) {
                     await ctx.deleteMessage(m.key);
                     await ctx.reply(quote("⛔ Jangan spam!"));
                     if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);

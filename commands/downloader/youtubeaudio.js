@@ -18,7 +18,7 @@ module.exports = {
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(tools.cmd.generateCommandExample(ctx.used, "https://example.com/ -d"))}\n` +
             quote(tools.cmd.generatesFlagInformation({
-                "-d": "Kirim sebagai dokuman"
+                "-d": "Kirim sebagai dokumen"
             }))
         );
 

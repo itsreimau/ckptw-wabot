@@ -12,12 +12,12 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || null;
+        const input = ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(tools.cmd.generateCommandExample(ctx.used, "halo, dunia!"))}\n` +
-            quote(tools.cmd.generateNotes(["Untuk teks satu baris, ketik saja langsung ke perintah. Untuk teks dengan baris baru, balas pesan yang berisi teks tersebut ke perintah."]))
+            quote(tools.cmd.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai target input, jika teks memerlukan baris baru."]))
         );
 
         try {
@@ -39,8 +39,7 @@ module.exports = {
                         },
                         message: {
                             extendedTextMessage: {
-                                text: config.msg.note,
-                                title: config.bot.name
+                                text: config.msg.note
                             }
                         }
                     };
@@ -57,7 +56,11 @@ module.exports = {
                         gifPlayback: true,
                         contextInfo: {
                             forwardingScore: 9999,
-                            isForwarded: true
+                            isForwarded: true,
+                            forwardedNewsletterMessageInfo: {
+                                newsletterJid: config.bot.newsletterJid,
+                                newsletterName: config.bot.name
+                            }
                         },
                     }, {
                         quoted: fakeQuotedText
