@@ -103,7 +103,7 @@ module.exports = {
                 contextInfo: {
                     mentionedJid: [ctx.sender.jid],
                     forwardingScore: 9999,
-                    isForwarded: true
+                    isForwarded: true,
                     forwardedNewsletterMessageInfo: {
                         newsletterJid: config.bot.newsletterJid,
                         newsletterName: config.bot.name
