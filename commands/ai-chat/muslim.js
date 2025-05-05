@@ -19,7 +19,7 @@ module.exports = {
 
         try {
             const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
-            const apiUrl = tools.api.createUrl("fast", "/aillm/muslim", {
+            const apiUrl = tools.api.createUrl("fasturl", "/aillm/muslim", {
                 ask: input,
                 sessionId: senderUid
             });

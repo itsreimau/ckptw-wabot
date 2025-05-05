@@ -27,7 +27,7 @@ module.exports = {
             const userRank = leaderboardData.findIndex(user => user.id === senderId) + 1;
             const isOwner = tools.general.isOwner(senderId, ctx.msg.key.id);
             const profilePictureUrl = await ctx.core.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-            const canvas = tools.api.createUrl("fast", "/canvas/rank", {
+            const canvas = tools.api.createUrl("fasturl", "/canvas/rank", {
                 avatar: profilePictureUrl,
                 background: config.bot.thumbnail,
                 username: senderName,

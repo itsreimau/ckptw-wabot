@@ -20,7 +20,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fast", "/aiexperience/hika", {
+            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/hika", {
                 ask: input,
                 type: "fullchat",
                 language: ctx.sender.jid.startsWith("62") ? "id" : "en"

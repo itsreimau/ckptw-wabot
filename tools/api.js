@@ -17,7 +17,7 @@ const APIs = {
     diibot: {
         baseURL: "https://api.diioffc.web.id"
     },
-    fast: {
+    fasturl: {
         baseURL: "https://fastrestapis.fasturl.cloud"
     },
     nekorinn: {

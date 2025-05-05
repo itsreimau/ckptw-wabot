@@ -19,7 +19,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fast", "/aiexperience/github/praising", {
+            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/github/praising", {
                 username: input,
                 profile: false,
                 language: ctx.sender.jid.startsWith("62") ? "id" : "en"

@@ -52,7 +52,7 @@ module.exports = (bot) => {
 
             if (userDb?.autolevelup) {
                 const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-                const canvas = tools.api.createUrl("fast", "/canvas/levelup", {
+                const canvas = tools.api.createUrl("fasturl", "/canvas/levelup", {
                     avatar: profilePictureUrl,
                     background: config.bot.thumbnail,
                     username: ctx.sender.pushName,
@@ -115,6 +115,12 @@ module.exports = (bot) => {
                 condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium && !(await ctx.group(config.bot.groupJid).members()).some(member => tools.general.getID(member.id) === senderId),
                 msg: config.msg.botGroupMembership,
                 reaction: "🚫"
+            },
+            {
+                key: "gamerestrict",
+                condition: groupDb?.option?.gamerestrict && ctx.bot.cmd.has(ctx.used.command) && ctx.bot.cmd.get(ctx.used.command).category === "game",
+                msg: config.msg.gamerestrict,
+                reaction: "🎮"
             }
         ];
 

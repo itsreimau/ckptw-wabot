@@ -55,6 +55,7 @@ global.config = {
         botGroupMembership: quote(`⛔ Tidak dapat memproses karena Anda tidak bergabung dengan grup bot! Ketik ${monospace("/botgroup")} untuk mendapatkan tautan grup bot.`),
         coin: quote("⛔ Tidak dapat memproses karena koin Anda tidak cukup!"), // Pesan saat koin tidak cukup
         cooldown: quote("🔄 Perintah ini sedang dalam cooldown, tunggu..."), // Pesan saat cooldown perintah
+        gamerestrict: quote("⛔ Tidak dapat memproses karena grup ini membatasi game!"),
         group: quote("⛔ Perintah hanya dapat diakses dalam grup!"), // Pesan untuk perintah grup
         owner: quote("⛔ Perintah hanya dapat diakses Owner!"), // Pesan untuk perintah yang hanya owner bisa akses
         premium: quote("⛔ Tidak dapat memproses karena Anda bukan pengguna Premium!"), // Pesan jika pengguna bukan Premium

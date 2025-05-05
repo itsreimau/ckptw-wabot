@@ -27,16 +27,10 @@ module.exports = {
         try {
             switch (input.toLowerCase()) {
                 case "group":
-                    await db.set("bot.mode", "group");
-                    break;
                 case "private":
-                    await db.set("bot.mode", "private");
-                    break;
                 case "public":
-                    await db.set("bot.mode", "public");
-                    break;
                 case "self":
-                    await db.set("bot.mode", "self");
+                    await db.set("bot.mode", input.toLowerCase());
                     break;
                 default:
                     return await ctx.reply(quote("❎ Teks tidak valid."));

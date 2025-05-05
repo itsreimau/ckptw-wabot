@@ -31,12 +31,18 @@ module.exports = {
             const groupOption = await db.get(`group.${groupId}.option`) || {};
 
             return await ctx.reply(
+                `${quote(`Antiaudio: ${groupOption.antiaudio ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${quote(`Antidocument: ${groupOption.antidocument ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${quote(`Antigif: ${groupOption.antigif ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${quote(`Antiimage: ${groupOption.antiimage ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Antilink: ${groupOption.antilink ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Antinsfw: ${groupOption.antinsfw ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Antispam: ${groupOption.antispam ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Antisticker: ${groupOption.antisticker ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Antitoxic: ${groupOption.antitoxic ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${quote(`Antivideo: ${groupOption.antivideo ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Autokick: ${groupOption.autokick ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${quote(`Gamerestrict: ${groupOption.gamerestrict ? "Aktif" : "Nonaktif"}`)}\n` +
                 `${quote(`Welcome: ${groupOption.welcome ? "Aktif" : "Nonaktif"}`)}\n` +
                 "\n" +
                 config.msg.footer
@@ -48,26 +54,20 @@ module.exports = {
             let setKey;
 
             switch (input.toLowerCase()) {
+                case "antiaudio":
+                case "antidocument":
+                case "antigif":
+                case "antiimage":
                 case "antilink":
-                    setKey = `group.${groupId}.option.antilink`;
-                    break;
                 case "antinsfw":
-                    setKey = `group.${groupId}.option.antinsfw`;
-                    break;
                 case "antispam":
-                    setKey = `group.${groupId}.option.antispam`;
-                    break;
                 case "antisticker":
-                    setKey = `group.${groupId}.option.antisticker`;
-                    break;
                 case "antitoxic":
-                    setKey = `group.${groupId}.option.antitoxic`;
-                    break;
+                case "antivideo":
                 case "autokick":
-                    setKey = `group.${groupId}.option.autokick`;
-                    break;
+                case "gamerestrict":
                 case "welcome":
-                    setKey = `group.${groupId}.option.welcome`;
+                    setKey = `group.${groupId}.option.${input.toLowerCase()}`;
                     break;
                 default:
                     return await ctx.reply(quote(`❎ Key '${input}' tidak valid!`));

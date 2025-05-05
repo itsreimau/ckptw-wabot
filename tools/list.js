@@ -101,12 +101,18 @@ async function get(type) {
             }
             case "setoption": {
                 const data = [
+                    "antiaudio (Anti audio)",
+                    "Antidocument (Anti dokumen)",
+                    "Antigif (Anti GIF)",
+                    "Antiimage (Anti gambar)",
                     "antilink (Anti link)",
                     "antinsfw (Anti NSFW, seperti pornografi)",
                     "antispam (Anti spam)",
                     "antisticker (Anti stiker)",
+                    "antivideo (Anti video)",
                     "antitoxic (Anti toxic, seperti bahasa kasar)",
                     "autokick (Dikeluarkan secara otomatis, jika ada yang melanggar salah satu opsi 'anti...')",
+                    "gamerestrict (Anggota dilarang bermain game)",
                     "welcome (Sambutan member)"
                 ];
                 text = createList(data, d => `${quote(d)}`);

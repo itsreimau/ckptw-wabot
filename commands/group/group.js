@@ -28,16 +28,10 @@ module.exports = {
         try {
             switch (input.toLowerCase()) {
                 case "open":
-                    await ctx.group().open();
-                    break;
                 case "close":
-                    await ctx.group().close();
-                    break;
                 case "lock":
-                    await ctx.group().lock();
-                    break;
                 case "unlock":
-                    await ctx.group().unlock();
+                    await ctx.group()[input.toLowerCase()]();
                     break;
                 default:
                     return await ctx.reply(quote("❎ Teks tidak valid!"));

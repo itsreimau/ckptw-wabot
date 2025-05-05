@@ -25,7 +25,7 @@ module.exports = {
         if (input.length > 10000) return await ctx.reply(quote("❎ Maksimal 10000 kata!"));
 
         try {
-            const apiUrl = tools.api.createUrl("fast", "/maker/brat/animated", {
+            const apiUrl = tools.api.createUrl("fasturl", "/maker/brat/animated", {
                 text: input,
                 mode: "animated"
             });

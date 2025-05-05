@@ -19,7 +19,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fast", "/search/gsearch", {
+            const apiUrl = tools.api.createUrl("fasturl", "/search/gsearch", {
                 ask: input
             });
             const result = (await axios.get(apiUrl)).data.result;

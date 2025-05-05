@@ -29,11 +29,9 @@ module.exports = {
             let setKey;
 
             switch (key.toLowerCase()) {
-                case "price":
-                    setKey = "bot.text.price";
-                    break;
                 case "donate":
-                    setKey = "bot.text.donate";
+                case "price":
+                    setKey = `bot.text.${input.toLowerCase()}`;
                     break;
                 default:
                     return await ctx.reply(quote(`❎ Key '${key}' tidak valid!`));

@@ -21,7 +21,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fast", "/search/gimage", {
+            const apiUrl = tools.api.createUrl("fasturl", "/search/gimage", {
                 ask: input
             });
             const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result).image;

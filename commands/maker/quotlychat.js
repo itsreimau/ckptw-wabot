@@ -26,7 +26,7 @@ module.exports = {
 
         try {
             const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-            const apiUrl = tools.api.createUrl("fast", "/maker/quotly", {
+            const apiUrl = tools.api.createUrl("fasturl", "/maker/quotly", {
                 name: ctx.sender.pushName,
                 text: input,
                 avatar: profilePictureUrl,

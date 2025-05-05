@@ -25,7 +25,7 @@ module.exports = {
         if (input.length > 10000) return await ctx.reply(quote("❎ Maksimal 10000 kata!"));
 
         try {
-            const apiUrl = tools.api.createUrl("fast", "/maker/animbrat", {
+            const apiUrl = tools.api.createUrl("fasturl", "/maker/animbrat", {
                 text: input,
                 mode: "image"
             });

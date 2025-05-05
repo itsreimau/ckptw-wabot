@@ -73,11 +73,17 @@ module.exports = {
                             welcome: "string"
                         },
                         option: {
+                            antiaudio: "boolean",
+                            antidocument: "boolean",
+                            antigif: "boolean",
+                            antiimage: "boolean",
                             antilink: "boolean",
                             antinfsw: "boolean",
                             antisticker: "boolean",
                             antitoxic: "boolean",
+                            antivideo: "boolean",
                             autokick: "boolean",
+                            gamerestrict: "boolean",
                             welcome: "boolean"
                         },
                         spam: "object"

@@ -21,7 +21,7 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const apiUrl = tools.api.createUrl("fast", "/aiimage/imgrestore", {
+            const apiUrl = tools.api.createUrl("fasturl", "/aiimage/imgrestore", {
                 result: uploadUrl
             });
 
