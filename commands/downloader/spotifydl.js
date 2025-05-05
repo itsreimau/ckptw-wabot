@@ -23,10 +23,10 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/spotifydl", {
+            const apiUrl = tools.api.createUrl("fasturl", "/downup/spotifydown", {
                 url
             });
-            const result = JSON.parse((await axios.get(apiUrl)).data.data).url_audio_v1;
+            const result = (await axios.get(downloadApiUrl)).data.result.metadata.link;
 
             return await ctx.reply({
                 audio: {

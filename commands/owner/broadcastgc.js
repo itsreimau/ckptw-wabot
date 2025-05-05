@@ -6,13 +6,13 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "broadcastgc",
-    aliases: ["bcgc"],
+    aliases: ["bc", "bcgc"],
     category: "owner",
     permissions: {
         owner: true
     },
     code: async (ctx) => {
-        const input = ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || ctx.args.join(" ") || null;
+        const input = ctx.args.join(" ") || ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || null;;
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
@@ -43,28 +43,45 @@ module.exports = {
                             }
                         }
                     };
-                    const url = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
-                        url: config.bot.thumbnail
-                    }))).data.result;
 
-                    await ctx.sendMessage(groupId, {
-                        video: {
-                            url
-                        },
-                        mimetype: mime.lookup("mp4"),
-                        caption: input,
-                        gifPlayback: true,
-                        contextInfo: {
-                            forwardingScore: 9999,
-                            isForwarded: true,
-                            forwardedNewsletterMessageInfo: {
-                                newsletterJid: config.bot.newsletterJid,
-                                newsletterName: config.bot.name
-                            }
-                        },
-                    }, {
-                        quoted: fakeQuotedText
-                    });
+                    try {
+                        const url = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
+                            url: config.bot.thumbnail
+                        }))).data.result;
+                        await ctx.sendMessage(groupId, {
+                            video: {
+                                url
+                            },
+                            mimetype: mime.lookup("mp4"),
+                            caption: input,
+                            gifPlayback: true,
+                            contextInfo: {
+                                forwardingScore: 9999,
+                                isForwarded: true,
+                                forwardedNewsletterMessageInfo: {
+                                    newsletterJid: config.bot.newsletterJid,
+                                    newsletterName: config.bot.name
+                                }
+                            },
+                        }, {
+                            quoted: fakeQuotedText
+                        });
+                    } catch (error) {
+                        if (error.status !== 200)
+                            await ctx.sendMessage(groupId, {
+                                text: input,
+                                contextInfo: {
+                                    forwardingScore: 9999,
+                                    isForwarded: true,
+                                    forwardedNewsletterMessageInfo: {
+                                        newsletterJid: config.bot.newsletterJid,
+                                        newsletterName: config.bot.name
+                                    }
+                                },
+                            }, {
+                                quoted: fakeQuotedText
+                            });
+                    }
                 } catch (error) {
                     failedGroupIds.push(groupId);
                 }

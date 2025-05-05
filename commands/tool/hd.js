@@ -33,7 +33,7 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("png")
+                mimetype: mime.lookup("jpeg")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

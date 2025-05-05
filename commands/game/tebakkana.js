@@ -38,12 +38,12 @@ module.exports = {
 
             let question, answer, clue;
             if (Math.random() < 0.5) {
-                question = `Apa bentuk romaji dari "${entry.furigana || entry.word}"?`;
-                answer = entry.romaji;
+                question = `Apa bentuk romaji dari "${result.furigana || result.word}"?`;
+                answer = result.romaji;
                 clue = entry.romaji.replace(/[aiueo]/g, "_").toLowerCase();
             } else {
-                question = `Tuliskan kana untuk romaji "${entry.romaji}"`;
-                answer = entry.furigana || entry.word;
+                question = `Tuliskan kana untuk romaji "${result.romaji}"`;
+                answer = result.furigana || result.word;
                 clue = answer.replace(/[あいうえおアイウエオ]/g, "_");
             }
 

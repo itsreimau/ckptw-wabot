@@ -32,7 +32,6 @@ module.exports = {
             const result = tools.api.createUrl("zell", "/ai/editimg", {
                 imageUrl: uploadUrl,
                 prompt: input
-
             });
 
             return await ctx.reply({

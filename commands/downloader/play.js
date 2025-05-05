@@ -19,7 +19,7 @@ module.exports = {
             `${quote(tools.cmd.generateCommandExample(ctx.used, "komm susser tod -i 8 -s spotify"))}\n` +
             quote(tools.cmd.generatesFlagInformation({
                 "-i <number>": "Pilihan pada data indeks",
-                "-s <text>": "Sumber untuk memutar lagu (tersedia: soundcloud, spotify, youtube | default: youtube)"
+                "-s <text>": "Sumber untuk memutar lagu (tersedia: applemusic, soundcloud, spotify, youtube | default: youtube)"
             }))
         );
 
@@ -43,8 +43,35 @@ module.exports = {
             const query = flag.input;
             let source = flag.source || "youtube";
 
-            if (!["soundcloud", "spotify", "youtube"].includes(source)) {
+            if (!["applemusic", "soundcloud", "spotify", "youtube"].includes(source)) {
                 source = "youtube";
+            }
+
+            if (source === "applemusic") {
+                const searchApiUrl = tools.api.createUrl("fasturl", "/music/applemusic", {
+                    query: input
+                });
+                const searchResult = (await axios.get(searchApiUrl)).data.result[searchIndex];
+
+                await ctx.reply(
+                    `${quote(`Judul: ${searchResult.title}`)}\n` +
+                    `${quote(`Artis: ${searchResult.artist}`)}\n` +
+                    `${quote(`URL: ${searchResult.link}`)}\n` +
+                    "\n" +
+                    config.msg.footer
+                );
+
+                const downloadApiUrl = tools.api.createUrl("fasturl", "/downup/applemusicdown", {
+                    url: searchResult.link
+                });
+                const downloadResult = (await axios.get(downloadApiUrl)).data.result.downloadUrl;
+
+                return await ctx.reply({
+                    audio: {
+                        url: downloadResult
+                    },
+                    mimetype: mime.lookup("mp3"),
+                });
             }
 
             if (source === "soundcloud") {
@@ -87,10 +114,10 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("agatz", "/api/spotifydl", {
+                const downloadApiUrl = tools.api.createUrl("fasturl", "/downup/spotifydown", {
                     url: searchResult.externalUrl
                 });
-                const downloadResult = (JSON.parse((await axios.get(downloadApiUrl)).data.data)).url_audio_v1;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.result.metadata.link;
 
                 return await ctx.reply({
                     audio: {

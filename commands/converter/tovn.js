@@ -16,7 +16,7 @@ module.exports = {
 
             return await ctx.reply({
                 audio: result,
-                mimetype: mime.lookup("ptt"),
+                mimetype: mime.lookup("mp3"),
                 ptt: true
             });
         } catch (error) {

@@ -21,7 +21,7 @@ module.exports = {
                 image: {
                     url: tools.api.createUrl("https://data.bmkg.go.id", `/DataMKG/TEWS/${result.Shakemap}`)
                 },
-                mimetype: mime.lookup("png"),
+                mimetype: mime.lookup("jpg"),
                 caption: `${quote(result.Wilayah)}\n` +
                     `${quote("─────")}\n` +
                     `${quote(`Tanggal: ${result.Tanggal}`)}\n` +

@@ -2,14 +2,12 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "instagramdl",
-    aliases: ["ig", "igdl", "instagram"],
+    name: "sfiledl",
     category: "downloader",
     permissions: {
-        coin: 10
+        premium: true
     },
     code: async (ctx) => {
         const url = ctx.args[0] || null;
@@ -23,23 +21,21 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("vapis", "/api/igdl", {
+            const apiUrl = tools.api.createUrl("archive", "/api/download/sfile", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.result;
 
-            for (const media of result) {
-                const isImage = media.type === "image";
-                const mediaType = isImage ? "image" : "video";
-                const extension = isImage ? "jpg" : "mp4";
-
-                await ctx.reply({
-                    [mediaType]: {
-                        url: media.url
-                    },
-                    mimetype: mime.lookup(extension)
-                });
-            }
+            return await ctx.reply({
+                document: {
+                    url: result.download.url
+                },
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    config.msg.footer,
+                fileName: result.metadata.filename,
+                mimetype: result.metadata.mimetype || "application/octet-stream"
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

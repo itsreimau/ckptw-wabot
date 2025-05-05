@@ -78,7 +78,7 @@ module.exports = {
                         image: {
                             url: image.url
                         },
-                        mimetype: mime.lookup("png")
+                        mimetype: mime.lookup("jpg")
                     });
                 }
             }

@@ -28,7 +28,7 @@ module.exports = {
             for (const media of result) {
                 const isImage = media.type === "image";
                 const mediaType = isImage ? "image" : "video";
-                const extension = isImage ? "png" : "mp4";
+                const extension = isImage ? "jpg" : "mp4";
 
                 await ctx.reply({
                     [mediaType]: {

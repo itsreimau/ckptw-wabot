@@ -1,17 +1,17 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "nulis",
+    name: "write",
+    aliases: ["nulis", "tulis"],
     category: "maker",
     permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || ctx.args.join(" ") || null;
+        const input = ctx.args.join(" ") || ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || null;;
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
@@ -20,7 +20,7 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("archive", "/api/maker/nulis", {
+            const result = tools.api.createUrl("archive", "/api/maker/write", {
                 text: input
             });
 

@@ -5,7 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "colorize",
-    category: "tool",
+    category: "ai-misc",
     permissions: {
         coin: 10
     },
@@ -29,7 +29,7 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("png")
+                mimetype: mime.lookup("jpeg")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

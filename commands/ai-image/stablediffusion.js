@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -11,7 +12,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || ctx.args.join(" ") || null;
+        const input = ctx.args.join(" ") || ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || null;;
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
@@ -29,7 +30,7 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("png"),
+                mimetype: mime.lookup("jpeg"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer

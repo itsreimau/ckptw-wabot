@@ -2,11 +2,11 @@ const {
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
-const mime = require("mime-types");
+const mime = require("mimetypes");
 
 module.exports = {
     name: "animagine",
-    category: "ai-image",
+    category: "aiimage",
     permissions: {
         premium: true
     },
@@ -20,7 +20,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/ai-img/animagine-xl-3.1", {
+            const apiUrl = tools.api.createUrl("nekorinn", "/aiimg/animaginexl3.1", {
                 text: input
             });
             const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result);
@@ -29,7 +29,7 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("png"),
+                mimetype: mime.lookup("jpeg"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer

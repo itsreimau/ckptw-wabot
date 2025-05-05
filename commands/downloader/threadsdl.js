@@ -43,7 +43,7 @@ module.exports = {
                         image: {
                             url: media.url
                         },
-                        mimetype: mime.lookup("png")
+                        mimetype: mime.lookup("jpg")
                     });
                 }
             }

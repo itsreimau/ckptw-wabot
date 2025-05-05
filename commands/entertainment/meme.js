@@ -21,7 +21,7 @@ module.exports = {
                 image: {
                     url: result.url
                 },
-                mimetype: mime.lookup("png"),
+                mimetype: mime.lookup("jpeg"),
                 caption: `${quote(`Sumber: ${result.source}`)}\n` +
                     "\n" +
                     config.msg.footer

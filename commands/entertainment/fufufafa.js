@@ -20,7 +20,7 @@ module.exports = {
                 image: {
                     url: result.image_url
                 },
-                mimetype: mime.lookup("png"),
+                mimetype: mime.lookup("jpg"),
                 caption: `${quote(`Doksli: ${result.doksli}`)}\n` +
                     "\n" +
                     config.msg.footer

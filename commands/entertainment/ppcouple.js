@@ -19,13 +19,13 @@ module.exports = {
                     image: {
                         url: result.male
                     },
-                    mimetype: mime.lookup("png")
+                    mimetype: mime.lookup("jpg")
                 }),
                 ctx.reply({
                     image: {
                         url: result.female
                     },
-                    mimetype: mime.lookup("png")
+                    mimetype: mime.lookup("jpg")
                 })
             ]);
         } catch (error) {

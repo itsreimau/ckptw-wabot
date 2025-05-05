@@ -12,7 +12,7 @@ module.exports = {
         premium: true
     },
     code: async (ctx) => {
-        const input = ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || ctx.args.join(" ") || null;
+        const input = ctx.args.join(" ") || ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || null;;
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
@@ -30,7 +30,7 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("png"),
+                mimetype: mime.lookup("jpg"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer
