@@ -21,7 +21,8 @@ module.exports = {
             const game = {
                 coin: 5,
                 timeout: 60000,
-                answer: result.jawaban.toLowerCase()
+                answer: result.jawaban.toLowerCase(),
+                description: result.deskripsi
             };
 
             session.set(ctx.id, true);
@@ -51,7 +52,7 @@ module.exports = {
                     await ctx.sendMessage(
                         ctx.id, {
                             text: `${quote("💯 Benar!")}\n` +
-                                `${quote(result.deskripsi)}\n` +
+                                `${quote(game.description)}\n` +
                                 quote(`+${game.coin} Koin`)
                         }, {
                             quoted: m
@@ -66,12 +67,11 @@ module.exports = {
                         quoted: m
                     });
                 } else if (participantAnswer === "surrender") {
-                    const description = result.deskripsi;
                     session.delete(ctx.id);
                     await ctx.sendMessage(ctx.id, {
                         text: `${quote("🏳️ Anda menyerah!")}\n` +
                             `${quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)}\n` +
-                            quote(description)
+                            quote(game.description)
                     }, {
                         quoted: m
                     });
@@ -86,14 +86,12 @@ module.exports = {
             });
 
             collector.on("end", async () => {
-                const description = result.deskripsi;
-
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
                     return await ctx.reply(
                         `${quote("⏱ Waktu habis!")}\n` +
                         `${quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)}\n` +
-                        quote(description)
+                        quote(game.description)
                     );
                 }
             });

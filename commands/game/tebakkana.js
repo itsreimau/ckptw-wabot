@@ -1,102 +1,130 @@
-const { quote, monospace } = require("@mengkodingan/ckptw");
-const fetch = require("node-fetch");
+const {
+    monospace,
+    quote
+} = require("@mengkodingan/ckptw");
+const axios = require("axios");
+const didYouMean = require("didyoumean");
 
 const session = new Map();
 
-function pickRandom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
 module.exports = {
-  name: "tebakkana",
-  category: "game",
-  description: "Quiz kana ↔ romaji untuk JLPT (misal: .kana n5)",
-  code: async (ctx) => {
-    const arg = (ctx.args[0] || '').toLowerCase();
-    const levelMap = { n5: 5, n4: 4, n3: 3, n2: 2, n1: 1 };
-    const lvl = levelMap[arg];
-    if (!lvl) return ctx.reply(quote("❎ Gunakan: .kana <level> (n5, n4, n3, n2, n1)"));
+    name: "tebakkana",
+    category: "game",
+    permissions: {},
+    code: async (ctx) => {
+        if (session.has(ctx.id)) return await ctx.reply(quote("🎮 Sesi permainan sedang berjalan!"));
 
-    if (session.has(ctx.id)) return ctx.reply(quote("❗ Masih ada sesi kuis yang berlangsung!"));
+        const level = parseInt(ctx.args[0], 10) || null;
 
-    try {
-      const res = await fetch(`https://jlpt-vocab-api.vercel.app/api/words?level=${lvl}&limit=662`);
-      const json = await res.json();
-      const pool = json.words;
+        if (!level) return await ctx.reply(
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.cmd.generateCommandExample(ctx.used, "1"))}\n` +
+            quote(tools.cmd.generateNotes(["Selain 1, bisa 2, 3, 4, dan 5."]))
+        );
 
-      if (!pool.length) return ctx.reply(quote(`❎ Tidak ada data untuk level ${arg}`));
+        try {
+            const limit = {
+                1: 3463,
+                2: 1831,
+                3: 1797,
+                4: 632,
+                5: 662
+            } [level];
+            const apiUrl = tools.api.createUrl("https://jlpt-vocab-api.vercel.app", "/api/words", {
+                level,
+                limit
+            });
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.words);
 
-      const entry = pickRandom(pool);
-      const toRomaji = Math.random() < 0.5;
-      let question, answer, hint;
-      if (toRomaji) {
-        question = `Apa romaji untuk: ${entry.furigana || entry.word}`;
-        answer = entry.romaji;
-        hint = entry.romaji.replace(/[aiueo]/g, '_');
-      } else {
-        question = `Tulis kana untuk romaji: ${entry.romaji}`;
-        answer = entry.furigana || entry.word;
-        hint = answer.replace(/[あいうえおアイウエオ]/g, '_');
-      }
+            let question, answer, clue;
+            if (Math.random() < 0.5) {
+                question = `Apa bentuk romaji dari "${entry.furigana || entry.word}"?`;
+                answer = entry.romaji;
+                clue = entry.romaji.replace(/[aiueo]/g, "_").toLowerCase();
+            } else {
+                question = `Tuliskan kana untuk romaji "${entry.romaji}"`;
+                answer = entry.furigana || entry.word;
+                clue = answer.replace(/[あいうえおアイウエオ]/g, "_");
+            }
 
-      const game = {
-        answer: answer.toLowerCase(),
-        meaning: entry.meaning,
-        hint,
-        timeout: 60000
-      };
+            const game = {
+                coin: 5,
+                timeout: 60000,
+                answer: result.jawaban.toLowerCase(),
+                description: ctx.sender.jid.startsWith("62") ? await tools.general.translate(result.meaning, "id") : result.meaning
+            };
 
-      session.set(ctx.id, true);
+            session.set(ctx.id, true);
 
-      await ctx.reply(
-        `${quote(`🔤 Quiz (${arg.toUpperCase()}):`)}\n` +
-        `${question}\n\n` +
-        `${quote(`💡 Gunakan ${monospace("hint")} untuk bantuan, atau ${monospace("surrender")} untuk menyerah.`)}\n` +
-        `${quote(`⏳ Batas waktu: ${game.timeout / 1000} detik.`)}`
-      );
+            await ctx.reply(
+                `${quote(`Soal: ${question}`)}\n` +
+                `${quote(`Bonus: ${game.coin} Koin`)}\n` +
+                `${quote(`Batas waktu: ${tools.general.convertMsToDuration(game.timeout)}`)}\n` +
+                `${quote(`Ketik ${monospace("hint")} untuk bantuan.`)}\n` +
+                `${quote(`Ketik ${monospace("surrender")} untuk menyerah.`)}\n` +
+                "\n" +
+                config.msg.footer
+            );
 
-      const collector = ctx.MessageCollector({ time: game.timeout });
+            const collector = ctx.MessageCollector({
+                time: game.timeout
+            });
 
-      collector.on("collect", async (m) => {
-        const msg = m.content.toLowerCase();
-        const id = tools.general.getID(m.sender);
+            collector.on("collect", async (m) => {
+                const participantAnswer = m.content.toLowerCase();
+                const participantId = tools.general.getID(m.sender);
 
-        if (msg === game.answer) {
-          session.delete(ctx.id);
-          await db.add(`user.${id}.winGame`, 1);
-          await db.add(`user.${id}.credz`, 5);
-          await ctx.sendMessage(ctx.id, {
-            text: quote(`✅ Benar! +5 Credz \n${game.answer} (${game.meaning})`),
-          }, { quoted: m });
-          return collector.stop();
-        } else if (msg === "hint") {
-          await ctx.sendMessage(ctx.id, {
-            text: quote(`🔍 Hint: ${monospace(game.hint)}`)
-          }, { quoted: m });
-        } else if (msg === "surrender") {
-          session.delete(ctx.id);
-          await ctx.sendMessage(ctx.id, {
-            text: quote(`🏳️ Menyerah! Jawabannya: ${game.answer} (${game.meaning})`)
-          }, { quoted: m });
-          return collector.stop();
+                if (participantAnswer === game.answer) {
+                    session.delete(ctx.id);
+                    await db.add(`user.${participantId}.coin`, game.coin);
+                    await db.add(`user.${participantId}.winGame`, 1);
+                    await ctx.sendMessage(
+                        ctx.id, {
+                            text: `${quote("💯 Benar!")}\n` +
+                                `${quote(game.description)}\n` +
+                                quote(`+${game.coin} Koin`)
+                        }, {
+                            quoted: m
+                        }
+                    );
+                    return collector.stop();
+                } else if (participantAnswer === "hint") {
+                    await ctx.sendMessage(ctx.id, {
+                        text: monospace(clue)
+                    }, {
+                        quoted: m
+                    });
+                } else if (participantAnswer === "surrender") {
+                    session.delete(ctx.id);
+                    await ctx.sendMessage(ctx.id, {
+                        text: `${quote("🏳️ Anda menyerah!")}\n` +
+                            `${quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)}\n` +
+                            quote(game.description)
+                    }, {
+                        quoted: m
+                    });
+                    return collector.stop();
+                } else if (didYouMean(participantAnswer, [game.answer]) === game.answer) {
+                    await ctx.sendMessage(ctx.id, {
+                        text: quote("🎯 Sedikit lagi!")
+                    }, {
+                        quoted: m
+                    });
+                }
+            });
+
+            collector.on("end", async () => {
+                if (session.has(ctx.id)) {
+                    session.delete(ctx.id);
+                    return await ctx.reply(
+                        `${quote("⏱ Waktu habis!")}\n` +
+                        `${quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)}\n` +
+                        quote(game.description)
+                    );
+                }
+            });
+        } catch (error) {
+            return await tools.cmd.handleError(ctx, error, true);
         }
-      });
-
-      collector.on("end", async () => {
-        if (session.has(ctx.id)) {
-          session.delete(ctx.id);
-          await ctx.reply(
-            `${quote("⏱ Waktu habis!")}\nJawabannya: ${game.answer} (${game.meaning})`
-          );
-        }
-      });
-
-    } catch (err) {
-      session.delete(ctx.id);
-      return ctx.reply(
-        quote("❎ Gagal mengambil data dari API. Pastikan koneksi internet aktif.")
-      );
     }
-  }
 };
-
