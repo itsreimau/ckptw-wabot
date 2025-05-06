@@ -285,7 +285,7 @@ module.exports = (bot) => {
                 }
             }
 
-            // Penanganan antisticker
+            // Penanganan antimedia
             for (const type of ["audio", "document", "gif", "image", "sticker", "video"]) {
                 if (groupDb?.option?.[`anti${type}`]) {
                     const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), type);
