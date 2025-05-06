@@ -4,11 +4,11 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "nekopoisearch",
-    aliases: ["nekopoi", "nekopois"],
+    name: "lk21search",
+    aliases: ["lk21", "lk21s"],
     category: "search",
     permissions: {
-        premium: true
+        coin: 10
     },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
@@ -19,14 +19,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/nsfw/nekopoi-search", {
+            const apiUrl = tools.api.createUrl("fasturl", "/search/lk21", {
+                action: "search",
                 query: input
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map((r) =>
                 `${quote(`Judul: ${r.title}`)}\n` +
-                `${quote(`Tipe: ${r.type}`)}\n` +
+                `${quote(`Genre: ${r.genres}`)}\n` +
+                `${quote(`Negara: ${r.country}`)}\n` +
                 `${quote(`URL: ${r.url}`)}`
             ).join(
                 "\n" +

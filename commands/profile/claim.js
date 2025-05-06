@@ -28,6 +28,8 @@ module.exports = {
 
         if (!claimRewards[input]) return await ctx.reply(quote("❎ Hadiah tidak valid!"));
 
+        if (!userDb || Object.keys(userDb).length === 0) return await ctx.reply(quote("❎ Anda belum memiliki profil atau baru mereset data. Anda harus mencapai level tertentu sebelum bisa mengklaim hadiah ini."));
+
         if (userDb?.level < claimRewards[input].level) return await ctx.reply(quote(`❎ Anda perlu mencapai level ${claimRewards[input].level} untuk mengklaim hadiah ini. Level Anda saat ini adalah ${userDb?.level || 0}.`));
 
         const currentTime = Date.now();
