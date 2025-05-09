@@ -25,7 +25,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("fasturl", "/downup/applemusicdown", {
                 url
             });
-            const result = (await axios.get(downloadApiUrl)).data.result.downloadUrl;
+            const result = (await axios.get(apiUrl)).data.result.downloadUrl;
 
             return await ctx.reply({
                 audio: {

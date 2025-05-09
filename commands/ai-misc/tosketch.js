@@ -64,7 +64,7 @@ module.exports = {
                     url: result
                 },
                 mimetype: mime.lookup("png"),
-                caption: `${quote(`Gaya: ${filter}`)}\n` +
+                caption: `${quote(`Gaya: ${style}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

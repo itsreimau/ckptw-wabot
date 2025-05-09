@@ -46,7 +46,7 @@ module.exports = {
 
             await db.set(key, warnings);
 
-            return await ctx.reply(quote(`✅ Warning dikurangi. Sekarang warning @${accountId} menjadi ${newWarning}/5.`), {
+            return await ctx.reply(quote(`✅ Warning dikurangi! Sekarang warning @${accountId} menjadi ${newWarning}/5.`), {
                 mentions: [accountJid]
             });
         } catch (error) {
