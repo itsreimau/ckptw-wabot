@@ -9,7 +9,8 @@ module.exports = {
     permissions: {
         admin: true,
         botAdmin: true,
-        group: true
+        group: true,
+        restrict: true
     },
     code: async (ctx) => {
         const accountJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
@@ -39,7 +40,7 @@ module.exports = {
 
             await db.set(key, warnings);
 
-            return await ctx.reply(`⚠️ Warning diberikan. Sekarang warning @${accountId} menjadi ${newWarning}/5.`, {
+            return await ctx.reply(quote(`⚠️ Warning diberikan. Sekarang warning @${accountId} menjadi ${newWarning}/5.`), {
                 mentions: [accountJid]
             });
         } catch (error) {

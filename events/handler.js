@@ -276,7 +276,7 @@ module.exports = (bot) => {
 
                     if (result === "nsfw") {
                         await ctx.deleteMessage(m.key);
-                        await ctx.reply("⛔ Jangan kirim NSFW!");
+                        await ctx.reply(quote("⛔ Jangan kirim NSFW!"));
                         if (!config.system.restrict && groupDb?.option?.autokick) {
                             await ctx.group().kick([senderJid]);
                         } else {
@@ -325,7 +325,7 @@ module.exports = (bot) => {
                     const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), type);
                     if (checkMedia && !await ctx.group().isSenderAdmin()) {
                         await ctx.deleteMessage(m.key);
-                        await ctx.reply(`⛔ Jangan kirim ${type}!`);
+                        await ctx.reply(quote(`⛔ Jangan kirim ${type}!`));
                         if (!config.system.restrict && groupDb?.option?.autokick) {
                             await ctx.group().kick([senderJid]);
                         } else {

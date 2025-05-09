@@ -4,12 +4,12 @@ const {
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: "unwarning",
-    category: "group",
+    name: "owarning",
+    category: "owner",
     permissions: {
-        admin: true,
         botAdmin: true,
         group: true,
+        owner: true,
         restrict: true
     },
     code: async (ctx) => {
@@ -22,31 +22,25 @@ module.exports = {
         if (!accountJid) return await ctx.reply({
             text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
                 `${quote(tools.cmd.generateCommandExample(ctx.used, `@${senderId}`))}\n` +
-                quote(tools.cmd.generateNotes(["Balas atau kutip pesan untuk menghapus warning dari pengguna."])),
+                quote(tools.cmd.generateNotes(["Balas atau kutip pesan untuk memberikan warning ke pengguna."])),
             mentions: [senderJid]
         });
 
-        if (accountId === config.bot.id) return await ctx.reply(quote(`❎ Tidak bisa mengubah warning bot.`));
+        if (accountId === config.bot.id) return await ctx.reply(quote(`❎ Tidak bisa memberikan warning ke bot.`));
 
-        if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote("❎ Tidak bisa mengubah warning admin grup!"));
+        if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote("❎ Tidak bisa memberikan warning ke admin grup!"));
 
         try {
             const key = `group.${groupId}.warnings`;
             const warnings = await db.get(key) || {};
             const current = warnings[accountId] || 0;
+            const newWarning = current + 1;
 
-            if (current <= 0) return await ctx.reply(quote("✅ Pengguna ini tidak memiliki warning."));
-
-            const newWarning = current - 1;
-            if (newWarning <= 0) {
-                delete warnings[accountId];
-            } else {
-                warnings[accountId] = newWarning;
-            }
+            warnings[accountId] = newWarning;
 
             await db.set(key, warnings);
 
-            return await ctx.reply(quote(`✅ Warning dikurangi. Sekarang warning @${accountId} menjadi ${newWarning}/5.`), {
+            return await ctx.reply(quote(`⚠️ Warning diberikan. Sekarang warning @${accountId} menjadi ${newWarning}/5.`), {
                 mentions: [accountJid]
             });
         } catch (error) {

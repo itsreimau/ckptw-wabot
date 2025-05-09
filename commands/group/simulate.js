@@ -33,11 +33,11 @@ module.exports = {
             switch (input.toLowerCase()) {
                 case "j":
                 case "join":
-                    return await handleUserEvent(ctx, m, "userJoin");
+                    return await handleUserEvent(ctx, m, "UserJoin");
                     break;
                 case "l":
                 case "leave":
-                    return await handleUserEvent(ctx, m, "userLeave");
+                    return await handleUserEvent(ctx, m, "UserLeave");
                     break;
                 default:
                     return await ctx.reply(quote(`❎ Key '${key}' tidak valid!`));

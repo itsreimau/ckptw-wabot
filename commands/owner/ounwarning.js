@@ -4,12 +4,12 @@ const {
 } = require("@mengkodingan/ckptw");
 
 module.exports = {
-    name: "unwarning",
-    category: "group",
+    name: "ounwarning",
+    category: "owner",
     permissions: {
-        admin: true,
         botAdmin: true,
         group: true,
+        owner: true,
         restrict: true
     },
     code: async (ctx) => {
