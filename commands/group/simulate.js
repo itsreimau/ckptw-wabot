@@ -33,7 +33,8 @@ module.exports = {
             switch (input.toLowerCase()) {
                 case "j":
                 case "join":
-                    return await handleUserEvent(ctx, m, "userJoin")
+                    return await handleUserEvent(ctx, m, "userJoin");
+                    break;
                 case "l":
                 case "leave":
                     return await handleUserEvent(ctx, m, "userLeave");
