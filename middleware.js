@@ -51,19 +51,19 @@ module.exports = (bot) => {
             newUserXp -= xpToLevelUp;
 
             if (userDb?.autolevelup) {
-                const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-                const canvas = tools.api.createUrl("fasturl", "/canvas/levelup", {
-                    avatar: profilePictureUrl,
-                    background: config.bot.thumbnail,
-                    username: ctx.sender.pushName,
-                    currentLevel: userDb?.level,
-                    nextLevel: newUserLevel
-                });
                 const text = `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                     `${config.msg.readmore}\n` +
                     quote(tools.cmd.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]));
 
                 try {
+                    const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+                    const canvas = tools.api.createUrl("fasturl", "/canvas/levelup", {
+                        avatar: profilePictureUrl,
+                        background: config.bot.thumbnail,
+                        username: ctx.sender.pushName,
+                        currentLevel: userDb?.level,
+                        nextLevel: newUserLevel
+                    });
                     const url = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
                         url: canvas
                     }))).data.result;

@@ -8,6 +8,7 @@ module.exports = {
     category: "group",
     permissions: {
         admin: true,
+        botAdmin: true,
         group: true
     },
     code: async (ctx) => {

@@ -41,14 +41,14 @@ async function handleUserEvent(bot, m, type) {
                 (type === "UserJoin" ?
                     quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
                     quote(`👋 ${userTag} keluar dari grup ${metadata.subject}.`));
-            const canvas = tools.api.createUrl("fasturl", "/canvas/welcome", {
-                avatar: profilePictureUrl,
-                background: config.bot.thumbnail,
-                title: type === "UserJoin" ? "WELCOME" : "GOODBYE",
-                description: userName || userId
-            });
 
             try {
+                const canvas = tools.api.createUrl("fasturl", "/canvas/welcome", {
+                    avatar: profilePictureUrl,
+                    background: config.bot.thumbnail,
+                    title: type === "UserJoin" ? "WELCOME" : "GOODBYE",
+                    description: userName || userId
+                });
                 const url = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
                     url: canvas
                 }))).data.result;
@@ -92,6 +92,28 @@ async function handleUserEvent(bot, m, type) {
         await bot.core.sendMessage(groupJid, {
             text: quote(`⚠️ Terjadi kesalahan: ${error.message}`)
         });
+    }
+}
+
+// Fungsi untuk menambahkan warning
+async function addWarning(ctx, senderId, groupId) {
+    const key = `group.${groupId}.warnings`;
+    const warnings = await db.get(key) || {};
+    const current = warnings[senderId] || 0;
+
+    const newWarning = current + 1;
+    warnings[senderId] = newWarning;
+    await db.set(key, warnings);
+
+    await ctx.reply(quote(`⚠️ Warning ${newWarning}/5 untuk @${ctx.sender.username || senderJid.split("@")[0]}`), {
+        mentions: [senderJid]
+    });
+
+    if (newWarning >= 5) {
+        await ctx.reply(quote("⛔ Kamu telah menerima 5 warning dan akan dikeluarkan dari grup!"));
+        if (!config.system.restrict) await ctx.group().kick([senderJid]);
+        delete warnings[senderId];
+        await db.set(key, warnings);
     }
 }
 
@@ -230,11 +252,15 @@ module.exports = (bot) => {
         if (isGroup) {
             if (m.key.fromMe) return;
 
-            // Penanganan antilink 
+            // Penanganan antilink
             if (groupDb?.option?.antilink && await tools.general.isUrl(m.content) && !await ctx.group().isSenderAdmin()) {
                 await ctx.deleteMessage(m.key);
                 await ctx.reply(quote("⛔ Jangan kirim tautan!"));
-                if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
+                if (!config.system.restrict && groupDb?.option?.autokick) {
+                    await ctx.group().kick([senderJid]);
+                } else {
+                    await addWarning(senderId, groupId, ctx);
+                }
             }
 
             // Penanganan antinsfw
@@ -251,7 +277,11 @@ module.exports = (bot) => {
                     if (result === "nsfw") {
                         await ctx.deleteMessage(m.key);
                         await ctx.reply("⛔ Jangan kirim NSFW!");
-                        if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
+                        if (!config.system.restrict && groupDb?.option?.autokick) {
+                            await ctx.group().kick([senderJid]);
+                        } else {
+                            await addWarning(senderId, groupId, ctx);
+                        }
                     }
                 }
             }
@@ -279,7 +309,11 @@ module.exports = (bot) => {
                 if (newCount > 5 && !await ctx.group().isSenderAdmin()) {
                     await ctx.deleteMessage(m.key);
                     await ctx.reply(quote("⛔ Jangan spam!"));
-                    if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
+                    if (!config.system.restrict && groupDb?.option?.autokick) {
+                        await ctx.group().kick([senderJid]);
+                    } else {
+                        await addWarning(senderId, groupId, ctx);
+                    }
                     delete spamData[senderId];
                     await db.set(key, spamData);
                 }
@@ -292,7 +326,11 @@ module.exports = (bot) => {
                     if (checkMedia && !await ctx.group().isSenderAdmin()) {
                         await ctx.deleteMessage(m.key);
                         await ctx.reply(`⛔ Jangan kirim ${type}!`);
-                        if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
+                        if (!config.system.restrict && groupDb?.option?.autokick) {
+                            await ctx.group().kick([senderJid]);
+                        } else {
+                            await addWarning(senderId, groupId, ctx);
+                        }
                     }
                 }
             }
@@ -303,7 +341,11 @@ module.exports = (bot) => {
                 if (m.content && toxicRegex.test(m.content) && !await ctx.group().isSenderAdmin()) {
                     await ctx.deleteMessage(m.key);
                     await ctx.reply(quote("⛔ Jangan toxic!"));
-                    if (!config.system.restrict && groupDb?.option?.autokick) await ctx.group().kick([ctx.sender.jid]);
+                    if (!config.system.restrict && groupDb?.option?.autokick) {
+                        await ctx.group().kick([senderJid]);
+                    } else {
+                        await addWarning(senderId, groupId, ctx);
+                    }
                 }
             }
         }
@@ -372,3 +414,4 @@ module.exports = (bot) => {
     bot.ev.on(Events.UserJoin, async (m) => handleUserEvent(bot, m, "UserJoin"));
     bot.ev.on(Events.UserLeave, async (m) => handleUserEvent(bot, m, "UserLeave"));
 };
+module.exports.handleUserEvent = handleUserEvent; // Penanganan event pengguna bergabung/keluar grup

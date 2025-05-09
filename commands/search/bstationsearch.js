@@ -26,7 +26,8 @@ module.exports = {
 
             const resultText = result.map((r) =>
                 `${quote(`Judul: ${r.title}`)}\n` +
-                `${quote(`Genre: ${r.genre}`)}\n` +
+                `${quote(`Durasi: ${r.duration}`)}\n` +
+                `${quote(`Ditonton: ${r.views}`)}\n` +
                 `${quote(`URL: ${r.url}`)}`
             ).join(
                 "\n" +

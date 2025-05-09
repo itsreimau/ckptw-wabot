@@ -12,7 +12,7 @@ global.config = {
     bot: {
         name: "CKPTW", // Nama bot
         prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i, // Karakter awalan perintah yang diizinkan
-        phoneNumber: "", // Nomor telepon bot (opsional jika menggunakan QR code)
+        phoneNumber: "", // Nomor telepon bot (fdaff jika menggunakan QR code)
         thumbnail: "https://repository-images.githubusercontent.com/753096396/84e76ef0-ba19-4c87-8ec2-ea803b097479", // Gambar thumbnail bot
         groupJid: "", // JID untuk group bot (opsional jika tidak menggunakan requireBotGroupMembership)
         newsletterJid: "120363416372653441@newsletter", // JID untuk saluran bot
@@ -28,7 +28,7 @@ global.config = {
 
             // Konfigurasi MySQL
             mysql: {
-                host: "localhost:3306", // Nama host 
+                host: "localhost:3306", // Nama host
                 user: "root", // Nama pengguna
                 password: "admin123", // Kata sandi
                 database: "ckptw-wabot" // Nama database

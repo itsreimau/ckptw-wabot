@@ -31,7 +31,7 @@ module.exports = {
                         return `${quote(`Judul: ${r.title}`)}\n` +
                             `${quote(`Durasi: ${r.timestamp}`)}\n` +
                             `${quote(`Diunggah: ${r.ago}`)}\n` +
-                            `${quote(`Dilihat: ${r.views}`)}\n` +
+                            `${quote(`Ditonton: ${r.views}`)}\n` +
                             `${quote(`URL: ${r.url}`)}`;
                     case "channel":
                         return `${quote(`Saluran: ${r.title}`)}\n` +
