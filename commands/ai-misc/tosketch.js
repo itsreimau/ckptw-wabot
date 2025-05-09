@@ -21,15 +21,15 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send", "reply"], "image"))}\n` +
             quote(tools.cmd.generatesFlagInformation({
-                "-s <text>": "Atur filter hitam (tersedia: anime, lineart, simplex, intricateline, sketch, pencil, ink, manga, gouache, colorrough, bgline, inkpainting | default: anime)"
+                "-s <text>": "Atur gaya (tersedia: anime, lineart, simplex, intricateline, sketch, pencil, ink, manga, gouache, colorrough, bgline, inkpainting | default: anime)"
             }))
         );
 
         try {
             const flag = tools.cmd.parseFlag(input, {
-                "-f": {
+                "-s": {
                     type: "value",
-                    key: "filter",
+                    key: "style",
                     validator: (val) => /^(anime|lineart|simplex|intricateline|sketch|pencil|ink|manga|gouache|colorrough|bgline|inkpainting)$/.test(val),
                     parser: (val) => val
                 }
@@ -50,7 +50,7 @@ module.exports = {
                 bgline: "BG Line",
                 inkpainting: "Ink Painting"
             };
-            const filter = styles[flag.filter] || "Anime Sketch";
+            const style = styles[flag.style] || "Anime Sketch";
 
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
