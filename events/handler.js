@@ -254,8 +254,8 @@ module.exports = (bot) => {
 
             // Penanganan antilink
             if (groupDb?.option?.antilink && await tools.general.isUrl(m.content) && !await ctx.group().isSenderAdmin()) {
-                await ctx.deleteMessage(m.key);
                 await ctx.reply(quote("⛔ Jangan kirim tautan!"));
+                await ctx.deleteMessage(m.key);
                 if (!config.system.restrict && groupDb?.option?.autokick) {
                     await ctx.group().kick([senderJid]);
                 } else {
@@ -275,8 +275,8 @@ module.exports = (bot) => {
                     const result = (await axios.get(apiUrl)).data.result.status.toLowerCase();
 
                     if (result === "nsfw") {
-                        await ctx.deleteMessage(m.key);
                         await ctx.reply(quote("⛔ Jangan kirim NSFW!"));
+                        await ctx.deleteMessage(m.key);
                         if (!config.system.restrict && groupDb?.option?.autokick) {
                             await ctx.group().kick([senderJid]);
                         } else {
@@ -307,8 +307,8 @@ module.exports = (bot) => {
                 await db.set(key, spamData);
 
                 if (newCount > 5 && !await ctx.group().isSenderAdmin()) {
-                    await ctx.deleteMessage(m.key);
                     await ctx.reply(quote("⛔ Jangan spam!"));
+                    await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) {
                         await ctx.group().kick([senderJid]);
                     } else {
@@ -339,8 +339,8 @@ module.exports = (bot) => {
             if (groupDb?.option?.antitoxic) {
                 const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
                 if (m.content && toxicRegex.test(m.content) && !await ctx.group().isSenderAdmin()) {
-                    await ctx.deleteMessage(m.key);
                     await ctx.reply(quote("⛔ Jangan toxic!"));
+                    await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) {
                         await ctx.group().kick([senderJid]);
                     } else {
