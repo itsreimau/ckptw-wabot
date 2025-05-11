@@ -1,5 +1,4 @@
 const {
-    bold,
     italic,
     monospace,
     quote
@@ -41,12 +40,12 @@ module.exports = {
                     if (!verses.length) return await ctx.reply(quote(`❎ Ayat dalam rentang ${startAyat}-${endAyat} tidak ada!`));
 
                     const versesText = verses.map(r =>
-                        `${bold(`Ayat ${r.nomorAyat}:`)}\n` +
+                        `${quote(`Ayat ${r.nomorAyat}:`)}\n` +
                         `${r.teksArab} (${r.teksLatin})\n` +
                         `${italic(r.teksIndonesia)}`
                     ).join("\n");
                     return await ctx.reply(
-                        `${bold(`Surah ${result.namaLatin}`)}\n` +
+                        `${quote(`Surah ${result.namaLatin}`)}\n` +
                         `${quote(result.arti)}\n` +
                         `${quote("─────")}\n` +
                         `${versesText}\n` +
@@ -70,12 +69,12 @@ module.exports = {
             }
 
             const versesText = result.ayat.map(r =>
-                `${bold(`Ayat ${r.nomorAyat}:`)}\n` +
+                `${quote(`Ayat ${r.nomorAyat}:`)}\n` +
                 `${r.teksArab} (${r.teksLatin})\n` +
                 `${italic(r.teksIndonesia)}`
             ).join("\n");
             return await ctx.reply(
-                `${bold(`Surah ${result.namaLatin}`)}\n` +
+                `${quote(`Surah ${result.namaLatin}`)}\n` +
                 `${quote(result.arti)}\n` +
                 `${quote("─────")}\n` +
                 `${versesText}\n` +

@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@mengkodingan/ckptw");
+const mime = require("mime-types");
 
 module.exports = {
     name: "quoteimage",

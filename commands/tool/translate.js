@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@mengkodingan/ckptw");
-const axios = require("axios");
 
 module.exports = {
     name: "translate",

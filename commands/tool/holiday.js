@@ -1,5 +1,4 @@
 const {
-    bold,
     quote
 } = require("@mengkodingan/ckptw");
 const axios = require("axios");
@@ -23,7 +22,7 @@ module.exports = {
 
             const resultText = result.reverse().map((r) => {
                 const formattedDate = moment.tz(r.tanggal, "Asia/Jakarta").locale("id").format("dddd, DD MMMM YYYY");
-                return `${bold(r.keterangan)}\n` +
+                return `${quote(r.keterangan)}\n` +
                     quote(formattedDate);
             }).join(
                 "\n" +

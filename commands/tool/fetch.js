@@ -1,8 +1,8 @@
-const axios = require("axios");
 const {
     bold,
     quote
 } = require("@mengkodingan/ckptw");
+const axios = require("axios");
 const mime = require("mime-types");
 const {
     Sticker,
