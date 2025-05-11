@@ -90,6 +90,15 @@ module.exports = {
                     }
                 }
             };
+            const contextInfo = {
+                mentionedJid: [ctx.sender.jid],
+                forwardingScore: 9999,
+                isForwarded: true,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: config.bot.newsletterJid,
+                    newsletterName: config.bot.name
+                }
+            };
 
             try {
                 const url = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
@@ -102,30 +111,14 @@ module.exports = {
                     mimetype: mime.lookup("mp4"),
                     caption: text,
                     gifPlayback: true,
-                    contextInfo: {
-                        mentionedJid: [ctx.sender.jid],
-                        forwardingScore: 9999,
-                        isForwarded: true,
-                        forwardedNewsletterMessageInfo: {
-                            newsletterJid: config.bot.newsletterJid,
-                            newsletterName: config.bot.name
-                        }
-                    },
+                    contextInfo
                 }, {
                     quoted: fakeQuotedText
                 });
             } catch (error) {
                 if (error.status !== 200) return await ctx.sendMessage(ctx.id, {
                     text,
-                    contextInfo: {
-                        mentionedJid: [ctx.sender.jid],
-                        forwardingScore: 9999,
-                        isForwarded: true,
-                        forwardedNewsletterMessageInfo: {
-                            newsletterJid: config.bot.newsletterJid,
-                            newsletterName: config.bot.name
-                        }
-                    },
+                    contextInfo
                 }, {
                     quoted: fakeQuotedText
                 });

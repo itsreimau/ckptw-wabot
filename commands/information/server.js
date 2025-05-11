@@ -36,7 +36,7 @@ module.exports = {
                 `${quote(`Cores: ${cpus.length}`)}\n` +
                 `${quote(`Muat Rata-Rata (1m, 5m, 15m): ${load.map(n => n.toFixed(2)).join(", ")}`)}\n` +
                 `${quote("─────")}\n` +
-                `${quote(`Versi: ${process.version}`)}\n` +
+                `${quote(`Versi NodeJS: ${process.version}`)}\n` +
                 `${quote(`Platform: ${process.platform}`)}\n` +
                 `${quote(`Jalur Exec: ${process.execPath}`)}\n` +
                 `${quote(`PID: ${process.pid}`)}\n` +

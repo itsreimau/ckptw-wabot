@@ -21,7 +21,7 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send", "reply"], "image"))}\n` +
             quote(tools.cmd.generatesFlagInformation({
-                "-s <text>": "Atur style hitam (tersedia: crayon, inkpainting, simpledrawing, witty, tinies, grumpy3d, 90sshoujoumanga, gothic, vector, comicbook, felteddoll, wojak, illustration, mini, clay, 3d, inkpainting, colorrough | default: crayon)"
+                "-s <text>": "Atur gaya (tersedia: crayon, inkpainting, simpledrawing, witty, tinies, grumpy3d, 90sshoujoumanga, gothic, vector, comicbook, felteddoll, wojak, illustration, mini, clay, 3d, inkpainting, colorrough | default: crayon)"
             }))
         );
 

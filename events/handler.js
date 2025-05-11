@@ -41,6 +41,15 @@ async function handleUserEvent(bot, m, type) {
                 (type === "UserJoin" ?
                     quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
                     quote(`👋 ${userTag} keluar dari grup ${metadata.subject}.`));
+            const contextInfo = {
+                mentionedJid: [jid],
+                forwardingScore: 9999,
+                isForwarded: true,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: config.bot.newsletterJid,
+                    newsletterName: config.bot.name
+                }
+            };
 
             try {
                 const canvas = tools.api.createUrl("fasturl", "/canvas/welcome", {
@@ -59,20 +68,12 @@ async function handleUserEvent(bot, m, type) {
                     mimetype: mime.lookup("mp4"),
                     caption: text,
                     gifPlayback: true,
-                    contextInfo: {
-                        mentionedJid: [jid],
-                        forwardingScore: 9999,
-                        isForwarded: true,
-                        forwardedNewsletterMessageInfo: {
-                            newsletterJid: config.bot.newsletterJid,
-                            newsletterName: config.bot.name
-                        }
-                    }
+                    contextInfo
                 });
             } catch (error) {
                 if (error.status !== 200) await bot.core.sendMessage(groupJid, {
                     text,
-                    mentions: [jid]
+                    contextInfo
                 });
             }
 

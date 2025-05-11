@@ -32,6 +32,9 @@ module.exports = {
             for (const groupId of groupIds) {
                 await delay(500);
                 try {
+                    const members = await ctx.group(groupId).members();
+                    const mentions = members.map(m => m.id);
+
                     const fakeQuotedText = {
                         key: {
                             participant: "13135550002@s.whatsapp.net",
@@ -41,6 +44,15 @@ module.exports = {
                             extendedTextMessage: {
                                 text: config.msg.note
                             }
+                        }
+                    };
+                    const contextInfo = {
+                        mentionedJid: mentions,
+                        forwardingScore: 9999,
+                        isForwarded: true,
+                        forwardedNewsletterMessageInfo: {
+                            newsletterJid: config.bot.newsletterJid,
+                            newsletterName: config.bot.name
                         }
                     };
 
@@ -55,32 +67,17 @@ module.exports = {
                             mimetype: mime.lookup("mp4"),
                             caption: input,
                             gifPlayback: true,
-                            contextInfo: {
-                                forwardingScore: 9999,
-                                isForwarded: true,
-                                forwardedNewsletterMessageInfo: {
-                                    newsletterJid: config.bot.newsletterJid,
-                                    newsletterName: config.bot.name
-                                }
-                            },
+                            contextInfo
                         }, {
                             quoted: fakeQuotedText
                         });
                     } catch (error) {
-                        if (error.status !== 200)
-                            await ctx.sendMessage(groupId, {
-                                text: input,
-                                contextInfo: {
-                                    forwardingScore: 9999,
-                                    isForwarded: true,
-                                    forwardedNewsletterMessageInfo: {
-                                        newsletterJid: config.bot.newsletterJid,
-                                        newsletterName: config.bot.name
-                                    }
-                                },
-                            }, {
-                                quoted: fakeQuotedText
-                            });
+                        if (error.status !== 200) await ctx.sendMessage(groupId, {
+                            text: input,
+                            contextInfo
+                        }, {
+                            quoted: fakeQuotedText
+                        });
                     }
                 } catch (error) {
                     failedGroupIds.push(groupId);

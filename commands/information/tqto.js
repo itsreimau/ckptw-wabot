@@ -12,17 +12,16 @@ module.exports = {
             `${quote("Allah SWT")}\n` +
             `${quote("Orang tua saya")}\n` +
             `${quote("─────")}\n` +
-            `${quote("ItsReimau (https://github.com/itsreimau)")}\n` +
-            `${quote("Serv00 (https://serv00.com/)")}\n` +
-            `${quote("─────")}\n` +
             `${quote("Fatahillah Al makarim (https://github.com/ZTRdiamond)")}\n` +
-            `${quote("Jastin Linggar Tama (https://github.com/JastinXyz)")}\n` +
-            `${quote("Techwiz (https://github.com/techwiz37)")}\n` +
-            `${quote("─────")}\n` +
             `${quote("Idul (https://github.com/aidulcandra)")}\n` +
-            `${quote("Rizky Pratama | Kyluxx (https://github.com/Kyluxx)")}\n` +
+            `${quote("ItsReimau (https://github.com/itsreimau)")}\n` +
+            `${quote("Jastin Linggar Tama (https://github.com/JastinXyz)")}\n` +
             `${quote("Rippanteq7 (https://github.com/Rippanteq7)")}\n` +
+            `${quote("Rizky Pratama | Kyluxx (https://github.com/Kyluxx)")}\n` +
+            `${quote("Serv00 (https://serv00.com/)")}\n` +
+            `${quote("Techwiz (https://github.com/techwiz37)")}\n` +
             `${quote("UdeanDev (https://github.com/udeannn)")}\n` +
+            `${quote("WhiskeySockets (https://github.com/WhiskeySockets)")}\n` +
             `${quote("─────")}\n` +
             `${quote("agatzdev (https://github.com/agatdwi)")}\n` +
             `${quote("Aine (https://github.com/Aiinne)")}\n` +

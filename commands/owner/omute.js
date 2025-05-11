@@ -18,7 +18,7 @@ module.exports = {
         const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
 
         if (ctx.args[0] === "bot") {
-            await db.set(`group.${groupId}.mutebot`, true);
+            await db.set(`group.${groupId}.mutebot`, "owner");
             return await ctx.reply(quote("✅ Berhasil me-mute grup ini dari bot!"));
         }
 

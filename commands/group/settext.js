@@ -35,7 +35,7 @@ module.exports = {
                 case "goodbye":
                 case "intro":
                 case "welcome":
-                    setKey = `group.${groupId}.text.${input.toLowerCase()}`;
+                    setKey = `group.${groupId}.text.${key.toLowerCase()}`;
                     break;
                 default:
                     return await ctx.reply(quote(`❎ Key '${key}' tidak valid!`));

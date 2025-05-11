@@ -38,7 +38,7 @@ module.exports = (bot) => {
 
         // Pengecekan mode bot (group, private, self) dan sistem mute
         if ((botDb?.mode === "group" && !isGroup) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
-        if (groupDb?.mutebot && (!isOwner && !await ctx.group().isSenderAdmin())) return;
+        if ((groupDb?.mutebot === true && (!isOwner && !await ctx.group().isSenderAdmin())) || (groupDb?.mutebot === "owner" && !isOwner)) return;
         if (muteList.includes(senderId)) return;
 
         // Menambah XP pengguna dan menangani level-up
@@ -54,6 +54,15 @@ module.exports = (bot) => {
                 const text = `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                     `${config.msg.readmore}\n` +
                     quote(tools.cmd.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]));
+                const contextInfo = {
+                    mentionedJid: [senderJid],
+                    forwardingScore: 9999,
+                    isForwarded: true,
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: config.bot.newsletterJid,
+                        newsletterName: config.bot.name
+                    }
+                };
 
                 try {
                     const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
@@ -74,18 +83,13 @@ module.exports = (bot) => {
                         mimetype: mime.lookup("mp4"),
                         caption: text,
                         gifPlayback: true,
-                        contextInfo: {
-                            mentionedJid: [jid],
-                            forwardingScore: 9999,
-                            isForwarded: true,
-                            forwardedNewsletterMessageInfo: {
-                                newsletterJid: config.bot.newsletterJid,
-                                newsletterName: config.bot.name
-                            }
-                        }
+                        contextInfo
                     });
                 } catch (error) {
-                    if (error.status !== 200) await ctx.reply(text);
+                    if (error.status !== 200) await ctx.reply({
+                        text,
+                        contextInfo
+                    });
                 }
             }
 
