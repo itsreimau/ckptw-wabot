@@ -244,8 +244,8 @@ module.exports = (bot) => {
                 const timeElapsed = Date.now() - userAFK.timestamp;
                 if (timeElapsed > 3000) {
                     const timeago = tools.general.convertMsToDuration(timeElapsed);
-                    await db.delete(`user.${senderId}.afk`);
                     await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
+                    await db.delete(`user.${senderId}.afk`);
                 }
             }
         }
@@ -259,8 +259,8 @@ module.exports = (bot) => {
                 if (groupDb?.option?.[`anti${type}`]) {
                     const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), type);
                     if (checkMedia && !await ctx.group().isSenderAdmin()) {
-                        await ctx.deleteMessage(m.key);
                         await ctx.reply(quote(`⛔ Jangan kirim ${type}!`));
+                        await ctx.deleteMessage(m.key);
                         if (!config.system.restrict && groupDb?.option?.autokick) {
                             await ctx.group().kick([senderJid]);
                         } else {
@@ -339,10 +339,10 @@ module.exports = (bot) => {
 
             // Penanganan antitagsw
             if (groupDb?.option?.antitagsw) {
-                const checkMessage = m.type === "groupStatusMentionMessage" || m.message?.groupStatusMentionMessage || m.message?.protocolMessage?.type === 25 || Object.keys(m.message).length === 1 && Object.keys(m.message)[0] === "messageContextInfo";
+                const checkMessage = m.message?.groupStatusMentionMessage || m.message?.protocolMessage?.type === 25 || m.message?.protocolMessage?.type === "STATUS_MENTION_MESSAGE" || m.mtype === "groupStatusMentionMessage";
                 if (checkMessage && !await ctx.group().isSenderAdmin()) {
-                    await ctx.deleteMessage(m.key);
                     await ctx.reply(quote(`⛔ Jangan tag grup di SW, tidak ada yang peduli!`));
+                    await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) {
                         await ctx.group().kick([senderJid]);
                     } else {
