@@ -106,7 +106,7 @@ async function addWarning(ctx, senderId, groupId) {
     warnings[senderId] = newWarning;
     await db.set(key, warnings);
 
-    await ctx.reply(quote(`⚠️ Warning ${newWarning}/5 untuk @${ctx.sender.username || senderJid.split("@")[0]}`), {
+    await ctx.reply(quote(`⚠️ Warning ${newWarning}/5 untuk @${senderJid.split("@")[0]}`), {
         mentions: [senderJid]
     });
 
@@ -339,7 +339,7 @@ module.exports = (bot) => {
 
             // Penanganan antitagsw
             if (groupDb?.option?.antitagsw) {
-                const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "groupStatusMention");
+                const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "groupStatusMention", m.key.remoteJid);
                 if (checkMedia && !await ctx.group().isSenderAdmin()) {
                     await ctx.deleteMessage(m.key);
                     await ctx.reply(quote(`⛔ Jangan tag grup di SW, tidak ada yang peduli!`));

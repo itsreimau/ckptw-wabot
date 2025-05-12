@@ -5,14 +5,13 @@ const {
 } = require("@im-dims/baileys-library");
 const util = require("node:util");
 
-async function checkMedia(type, required) {
-    if (!type || !required) return false;
+async function checkMedia(type, required, remoteJid = "") {
+    if (!type || !required || !msg) return false;
 
     const mediaMap = {
         audio: "audioMessage",
         document: ["documentMessage", "documentWithCaptionMessage"],
         gif: "videoMessage",
-        groupStatusMention: "groupStatusMention",
         image: "imageMessage",
         sticker: "stickerMessage",
         video: "videoMessage"
@@ -21,10 +20,17 @@ async function checkMedia(type, required) {
     const mediaList = Array.isArray(required) ? required : [required];
 
     return mediaList.some(media => {
-        if (media === "document") return mediaMap[media].includes(type);
-        return type === mediaMap[media];
+        if (media === "groupStatusMention") return remoteJid === "status@broadcast";
+
+        const mappedType = mediaMap[media];
+        if (!mappedType) return false;
+
+        if (Array.isArray(mappedType)) return mappedType.includes(type);
+
+        return type === mappedType;
     });
 }
+
 
 async function checkQuotedMedia(type, required) {
     if (!type || !required) return false;
