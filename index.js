@@ -4,7 +4,7 @@ const pkg = require("./package.json");
 const tools = require("./tools/exports.js");
 const {
     Consolefy
-} = require("@mengkodingan/consolefy");
+} = require("@im-dims/consolefy");
 const CFonts = require("cfonts");
 const fs = require("node:fs");
 const http = require("node:http");

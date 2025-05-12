@@ -2,6 +2,9 @@
 require("./config.js");
 const pkg = require("./package.json");
 const {
+    Consolefy
+} = require("@im-dims/consolefy");
+const {
     execSync
 } = require("node:child_process");
 
