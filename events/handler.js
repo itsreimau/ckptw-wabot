@@ -339,8 +339,8 @@ module.exports = (bot) => {
 
             // Penanganan antitagsw
             if (groupDb?.option?.antitagsw) {
-                const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "groupStatusMention", m.key.remoteJid);
-                if (checkMedia && !await ctx.group().isSenderAdmin()) {
+                const checkMessage = m.type === "groupStatusMentionMessage" || m.message?.groupStatusMentionMessage || m.message?.protocolMessage?.type === 25 || Object.keys(m.message).length === 1 && Object.keys(m.message)[0] === "messageContextInfo";
+                if (checkMessage && !await ctx.group().isSenderAdmin()) {
                     await ctx.deleteMessage(m.key);
                     await ctx.reply(quote(`⛔ Jangan tag grup di SW, tidak ada yang peduli!`));
                     if (!config.system.restrict && groupDb?.option?.autokick) {

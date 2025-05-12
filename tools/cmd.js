@@ -5,7 +5,7 @@ const {
 } = require("@im-dims/baileys-library");
 const util = require("node:util");
 
-async function checkMedia(type, required, remoteJid = "") {
+async function checkMedia(type, required) {
     if (!type || !required || !msg) return false;
 
     const mediaMap = {
@@ -20,13 +20,9 @@ async function checkMedia(type, required, remoteJid = "") {
     const mediaList = Array.isArray(required) ? required : [required];
 
     return mediaList.some(media => {
-        if (media === "groupStatusMention") return remoteJid === "status@broadcast";
-
         const mappedType = mediaMap[media];
         if (!mappedType) return false;
-
         if (Array.isArray(mappedType)) return mappedType.includes(type);
-
         return type === mappedType;
     });
 }
