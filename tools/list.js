@@ -2,7 +2,7 @@
 const api = require("./api.js");
 const {
     quote
-} = require("@mengkodingan/ckptw");
+} = require("@im-dims/baileys-library");
 const axios = require("axios");
 const util = require("node:util");
 

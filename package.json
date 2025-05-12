@@ -1,7 +1,7 @@
 {
   "name": "ckptw-wabot",
-  "version": "1.3.3-beta.5",
-  "description": "WhatsApp Bot with @mengkodingan/ckptw.",
+  "version": "1.4.0.beta-1",
+  "description": "WhatsApp Bot with @im-dims/baileys-library.",
   "main": "index.js",
   "directories": {
     "commands": "commands",
@@ -29,13 +29,13 @@
   },
   "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
   "dependencies": {
-    "@mengkodingan/ckptw": "^4.4.9",
-    "@mengkodingan/consolefy": "^1.0.1",
+    "@im-dims/baileys-library": "^2.1.8",
+    "@im-dims/consolefy": "^0.0.1",
     "@zanixongroup/uploader": "^2.0.7",
     "axios": "^1.9.0",
     "cfonts": "^3.3.0",
     "didyoumean": "^1.2.2",
-    "jimp": "0.16.1",
+    "jimp": "0.22.12",
     "link-preview-js": "^3.0.14",
     "mime-types": "2.1.35",
     "moment-timezone": "^0.5.48",

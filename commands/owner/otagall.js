@@ -1,6 +1,6 @@
 const {
     quote
-} = require("@mengkodingan/ckptw");
+} = require("@im-dims/baileys-library");
 
 module.exports = {
     name: "otagall",

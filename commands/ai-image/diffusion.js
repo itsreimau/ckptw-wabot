@@ -1,6 +1,6 @@
 const {
     quote
-} = require("@mengkodingan/ckptw");
+} = require("@im-dims/baileys-library");
 const mime = require("mime-types");
 
 module.exports = {

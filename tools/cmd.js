@@ -2,7 +2,7 @@
 const {
     monospace,
     quote
-} = require("@mengkodingan/ckptw");
+} = require("@im-dims/baileys-library");
 const util = require("node:util");
 
 async function checkMedia(type, required) {
@@ -12,6 +12,7 @@ async function checkMedia(type, required) {
         audio: "audioMessage",
         document: ["documentMessage", "documentWithCaptionMessage"],
         gif: "videoMessage",
+        groupStatusMention: "groupStatusMention",
         image: "imageMessage",
         sticker: "stickerMessage",
         video: "videoMessage"

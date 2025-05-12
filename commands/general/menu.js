@@ -3,7 +3,7 @@ const {
     italic,
     monospace,
     quote
-} = require("@mengkodingan/ckptw");
+} = require("@im-dims/baileys-library");
 const axios = require("axios");
 const mime = require("mime-types");
 const moment = require("moment-timezone");
@@ -43,7 +43,7 @@ module.exports = {
                 "\n" +
                 `${quote(`Bot Uptime: ${tools.general.convertMsToDuration(Date.now() - config.bot.readyAt)}`)}\n` +
                 `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
-                `${quote("Library: @mengkodingan/ckptw")}\n` +
+                `${quote("Library: @im-dims/baileys-library (Fork of @mengkodingan/ckptw)")}\n` +
                 "\n" +
                 `${italic("Jangan lupa berdonasi agar bot tetap online!")}\n` +
                 `${config.msg.readmore}\n`;

@@ -1,7 +1,7 @@
 const {
     monospace,
     quote
-} = require("@mengkodingan/ckptw");
+} = require("@im-dims/baileys-library");
 
 module.exports = {
     name: "claim",

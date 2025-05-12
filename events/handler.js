@@ -4,7 +4,7 @@ const {
     monospace,
     quote,
     VCardBuilder
-} = require("@mengkodingan/ckptw");
+} = require("@im-dims/baileys-library");
 const axios = require("axios");
 const mime = require("mime-types");
 const {
@@ -110,8 +110,9 @@ async function addWarning(ctx, senderId, groupId) {
         mentions: [senderJid]
     });
 
-    if (newWarning >= 5) {
-        await ctx.reply(quote("⛔ Kamu telah menerima 5 warning dan akan dikeluarkan dari grup!"));
+    const maxwarnings = await db.get(`group.${groupId}.maxwarnings`) || 5;
+    if (newWarning >= maxwarnings) {
+        await ctx.reply(quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
         if (!config.system.restrict) await ctx.group().kick([senderJid]);
         delete warnings[senderId];
         await db.set(key, warnings);
@@ -253,6 +254,22 @@ module.exports = (bot) => {
         if (isGroup) {
             if (m.key.fromMe) return;
 
+            // Penanganan antimedia
+            for (const type of ["audio", "document", "gif", "image", "sticker", "video"]) {
+                if (groupDb?.option?.[`anti${type}`]) {
+                    const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), type);
+                    if (checkMedia && !await ctx.group().isSenderAdmin()) {
+                        await ctx.deleteMessage(m.key);
+                        await ctx.reply(quote(`⛔ Jangan kirim ${type}!`));
+                        if (!config.system.restrict && groupDb?.option?.autokick) {
+                            await ctx.group().kick([senderJid]);
+                        } else {
+                            await addWarning(senderId, groupId, ctx);
+                        }
+                    }
+                }
+            }
+
             // Penanganan antilink
             if (groupDb?.option?.antilink && await tools.general.isUrl(m.content) && !await ctx.group().isSenderAdmin()) {
                 await ctx.reply(quote("⛔ Jangan kirim tautan!"));
@@ -320,18 +337,16 @@ module.exports = (bot) => {
                 }
             }
 
-            // Penanganan antimedia
-            for (const type of ["audio", "document", "gif", "image", "sticker", "video"]) {
-                if (groupDb?.option?.[`anti${type}`]) {
-                    const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), type);
-                    if (checkMedia && !await ctx.group().isSenderAdmin()) {
-                        await ctx.deleteMessage(m.key);
-                        await ctx.reply(quote(`⛔ Jangan kirim ${type}!`));
-                        if (!config.system.restrict && groupDb?.option?.autokick) {
-                            await ctx.group().kick([senderJid]);
-                        } else {
-                            await addWarning(senderId, groupId, ctx);
-                        }
+            // Penanganan antitagsw
+            if (groupDb?.option?.antitagsw) {
+                const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "groupStatusMention");
+                if (checkMedia && !await ctx.group().isSenderAdmin()) {
+                    await ctx.deleteMessage(m.key);
+                    await ctx.reply(quote(`⛔ Jangan tag grup di SW, tidak ada yang peduli!`));
+                    if (!config.system.restrict && groupDb?.option?.autokick) {
+                        await ctx.group().kick([senderJid]);
+                    } else {
+                        await addWarning(senderId, groupId, ctx);
                     }
                 }
             }

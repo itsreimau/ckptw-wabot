@@ -1,6 +1,6 @@
 # ckptw-wabot
 
-`ckptw-wabot` adalah bot WhatsApp yang dibangun menggunakan library [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/). Bot ini memungkinkan Anda untuk mengotomatisasi berbagai tugas di WhatsApp dan mendukung arsitektur modular melalui sistem perintah (command).
+`ckptw-wabot` adalah bot WhatsApp yang dibangun menggunakan library [@im-dims/baileys-library](https://www.npmjs.com/package/@im-dims/baileys-library), yaitu sebuah fork dari [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/) dengan berbagai pembaruan modern dan dukungan yang lebih up-to-date terhadap perubahan di WhatsApp. Bot ini dirancang untuk mengotomatisasi berbagai tugas di WhatsApp, serta mendukung arsitektur modular melalui sistem perintah (command), sehingga memudahkan pengembangan dan pemeliharaan fitur.
 
 ## Disclaimer
 
@@ -143,12 +143,18 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
 
 ### Complete Documentation
 
-Untuk informasi lebih lanjut mengenai penggunaan library `@mengkodingan/ckptw`, kunjungi [dokumentasi ckptw](https://ckptw.mengkodingan.my.id/).
+`@im-dims/baileys-library` adalah library yang digunakan oleh `ckptw-wabot`, dibangun di atas `@im-dims/baileys-md` yang mendukung lebih banyak fitur WhatsApp dibandingkan `@whiskeysockets/baileys`. Dokumentasi `@im-dims/baileys-library` umumnya mirip dengan dokumentasi `@mengkodingan/ckptw`, namun dengan beberapa tambahan dan pembaruan.
+
+Untuk informasi lebih lanjut, silakan kunjungi:
+
+- [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/)
+- [@im-dims/baileys-library (npm)](https://www.npmjs.com/package/@im-dims/baileys-library)
+- [@im-dims/baileys-md (npm)](https://www.npmjs.com/package/@im-dims/baileys-md) – berisi dokumentasi tambahan seperti pengiriman berbagai jenis pesan
 
 ## Contribution
 
 Kami sangat terbuka untuk kontribusi! Jika Anda menemukan bug atau memiliki ide untuk fitur baru, jangan ragu untuk membuka issue atau mengirimkan pull request.
 
-## Lisensi
+## License
 
 Proyek ini dilisensikan di bawah [Lisensi MIT](LICENSE).

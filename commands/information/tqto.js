@@ -1,6 +1,6 @@
 const {
     quote
-} = require("@mengkodingan/ckptw");
+} = require("@im-dims/baileys-library");
 
 module.exports = {
     name: "tqto",
@@ -12,6 +12,7 @@ module.exports = {
             `${quote("Allah SWT")}\n` +
             `${quote("Orang tua saya")}\n` +
             `${quote("─────")}\n` +
+            `${quote("Dimas Triyatno (https://github.com/Im-Dims)")}\n` +
             `${quote("Fatahillah Al makarim (https://github.com/ZTRdiamond)")}\n` +
             `${quote("Idul (https://github.com/aidulcandra)")}\n` +
             `${quote("ItsReimau (https://github.com/itsreimau)")}\n` +

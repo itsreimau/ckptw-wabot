@@ -1,7 +1,7 @@
 const {
     MessageType,
     quote
-} = require("@mengkodingan/ckptw");
+} = require("@im-dims/baileys-library");
 
 module.exports = {
     name: "readviewonce",
