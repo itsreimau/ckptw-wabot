@@ -339,7 +339,7 @@ module.exports = (bot) => {
 
             // Penanganan antitagsw
             if (groupDb?.option?.antitagsw) {
-                const checkMessage = m.message?.groupStatusMentionMessage || m.message?.protocolMessage?.type === 25 || m.message?.protocolMessage?.type === "STATUS_MENTION_MESSAGE" || m.mtype === "groupStatusMentionMessage";
+                const checkMessage = m.message?.groupStatusMentionMessage || m.message?.protocolMessage?.type === 25 || m.message?.protocolMessage?.type === "STATUS_MENTION_MESSAGE" || m.messageType === "groupStatusMentionMessage";
                 if (checkMessage && !await ctx.group().isSenderAdmin()) {
                     await ctx.reply(quote(`⛔ Jangan tag grup di SW, tidak ada yang peduli!`));
                     await ctx.deleteMessage(m.key);
