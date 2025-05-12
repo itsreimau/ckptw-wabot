@@ -6,7 +6,7 @@ const {
 const util = require("node:util");
 
 async function checkMedia(type, required) {
-    if (!type || !required || !msg) return false;
+    if (!type || !required) return false;
 
     const mediaMap = {
         audio: "audioMessage",
