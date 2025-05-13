@@ -30,6 +30,7 @@ module.exports = {
             `${quote("Bhuzel (https://github.com/Bhuzel)")}\n` +
             `${quote("David Cyril (https://github.com/DavidCyrilTech)")}\n` +
             `${quote("FastURL (alias Hikaru) (https://github.com/fasturl)")}\n` +
+            `${quote("FlowFalcon (https://github.com/FlowFalcon)")}\n` +
             `${quote("Lann (https://github.com/ERLANRAHMAT)")}\n` +
             `${quote("Nyx Altair (https://github.com/NyxAltair)")}\n` +
             `${quote("OtinXSandip (https://github.com/OtinXSandip)")}\n` +

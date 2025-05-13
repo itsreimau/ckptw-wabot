@@ -4,8 +4,8 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "write",
-    aliases: ["nulis", "tulis"],
+    name: "iphonequotedchat",
+    aliases: ["iqc"],
     category: "maker",
     permissions: {
         coin: 10
@@ -20,7 +20,7 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("archive", "/api/maker/write", {
+            const result = tools.api.createUrl("falcon", "/imagecreator/iqc", {
                 text: input
             });
 

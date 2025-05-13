@@ -17,6 +17,9 @@ const APIs = {
     diibot: {
         baseURL: "https://api.diioffc.web.id"
     },
+    falcon: {
+        baseURL: "https://flowfalcon.dpdns.org"
+    },
     fasturl: {
         baseURL: "https://fastrestapis.fasturl.cloud"
     },

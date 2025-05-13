@@ -40,7 +40,7 @@ async function handleUserEvent(bot, m, type) {
                 .replace(/%description%/g, metadata.description) :
                 (type === "UserJoin" ?
                     quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
-                    quote(`👋 ${userTag} keluar dari grup ${metadata.subject}.`));
+                    quote(`👋 Selamat tinggal, ${userTag}!`));
             const contextInfo = {
                 mentionedJid: [jid],
                 forwardingScore: 9999,
@@ -52,11 +52,10 @@ async function handleUserEvent(bot, m, type) {
             };
 
             try {
-                const canvas = tools.api.createUrl("fasturl", "/canvas/welcome", {
-                    avatar: profilePictureUrl,
-                    background: config.bot.thumbnail,
-                    title: type === "UserJoin" ? "WELCOME" : "GOODBYE",
-                    description: userName || userId
+                const canvas = tools.api.createUrl("falcon", `/imagecreator/${type === "UserJoin" ? "welcome" : "goodbye"}`, {
+                    ppuser: profilePictureUrl,
+                    bg: config.bot.thumbnail,
+                    text: type === "UserJoin" ? quote(`Selamat datang ${userName || userId} di grup ${metadata.subject}!`) : quote(`Selamat tinggal, ${userName || userId}!`)
                 });
                 const url = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
                     url: canvas
