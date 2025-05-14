@@ -33,6 +33,18 @@ module.exports = {
                 case "unlock":
                     await ctx.group()[input.toLowerCase()]();
                     break;
+                case "approve":
+                    await ctx.group().joinApproval("on");
+                    break;
+                case "disapprove":
+                    await ctx.group().joinApproval("off");
+                    break;
+                case "invite":
+                    await ctx.group().membersCanAddMemberMode("on");
+                    break;
+                case "restrict":
+                    await ctx.group().membersCanAddMemberMode("off");
+                    break;
                 default:
                     return await ctx.reply(quote("❎ Teks tidak valid!"));
             }

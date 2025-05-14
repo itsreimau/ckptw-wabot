@@ -41,6 +41,7 @@ module.exports = {
                     const username = `@${input}`
                     await db.set(`user.${senderId}.username`, username);
                     return await ctx.reply(quote(`✅ Username berhasil diubah menjadi '${username}'!`));
+                    break;
                 }
                 case "autolevelup": {
                     const setKey = `user.${senderId}.autolevelup`;
@@ -50,6 +51,7 @@ module.exports = {
 
                     const statusText = newStatus ? "diaktifkan" : "dinonaktifkan";
                     return await ctx.reply(quote(`✅ Fitur '${command}' berhasil ${statusText}!`));
+                    break;
                 }
                 default:
                     return await ctx.reply(quote("❎ Teks tidak valid."));

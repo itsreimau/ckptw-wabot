@@ -57,7 +57,11 @@ async function get(type) {
                     "open (Buka grup)",
                     "close (Tutup grup)",
                     "lock (Kunci grup)",
-                    "unlock (Buka kunci grup)"
+                    "unlock (Buka kunci grup)",
+                    "approve (Aktifkan persetujuan masuk)",
+                    "disapprove (Nonaktifkan persetujuan masuk)",
+                    "invite (Izinkan anggota menambah anggota)",
+                    "restrict (Hanya admin yang bisa menambah anggota)"
                 ];
                 text = createList(data, d => `${quote(d)}`);
                 break;
