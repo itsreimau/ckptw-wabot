@@ -117,7 +117,7 @@ function isCmd(content, bot) {
 }
 
 function isOwner(id, messageId) {
-    if (!id) return null;
+    if (!id) return false;
 
     if (config.system.selfOwner) {
         if (messageId?.startsWith("SSA")) return false; // Anti backdoor ygy
@@ -128,7 +128,7 @@ function isOwner(id, messageId) {
 }
 
 function isUrl(url) {
-    if (!url) return null;
+    if (!url) return false;
 
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     return urlRegex.test(url);
@@ -150,10 +150,10 @@ async function translate(text, to) {
     }
 }
 
-function ucword(text) {
-    if (!text) return false;
+function ucwords(text) {
+    if (!text) return null;
 
-    return text.toLowerCase().replace(/\b(\w)/g, (s) => s.toUpperCase());
+    return text.toLowerCase().replace(/\b\w/g, (t) => t.toUpperCase());
 }
 
 async function upload(buffer, type = "any", host = config.system.uploaderHost) {
@@ -190,6 +190,6 @@ module.exports = {
     isOwner,
     isUrl,
     translate,
-    ucword,
+    ucwords,
     upload
 };

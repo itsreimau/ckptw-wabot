@@ -21,7 +21,7 @@ module.exports = {
             quote(tools.cmd.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
-        if (input.length > 10000) return await ctx.reply(quote("❎ Maksimal 10000 kata!"));
+        if (input.length > 1000) return await ctx.reply(quote("❎ Maksimal 1000 kata!"));
 
         try {
             const apiUrl = tools.api.createUrl("bk9", "/maker/text2gif", {

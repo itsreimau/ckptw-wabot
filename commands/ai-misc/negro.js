@@ -50,7 +50,7 @@ module.exports = {
                     url: result
                 },
                 mimetype: mime.lookup("png"),
-                caption: `${quote(`Filter: ${tools.general.ucword(filter)}`)}\n` +
+                caption: `${quote(`Filter: ${tools.general.ucwords(filter)}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

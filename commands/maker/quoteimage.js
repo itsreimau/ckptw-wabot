@@ -19,7 +19,7 @@ module.exports = {
             quote(tools.cmd.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
-        if (input.length > 10000) return await ctx.reply(quote("❎ Maksimal 10000 kata!"));
+        if (input.length > 1000) return await ctx.reply(quote("❎ Maksimal 1000 kata!"));
 
         try {
             const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");

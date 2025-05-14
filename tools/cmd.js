@@ -102,7 +102,6 @@ function generateInstruction(actions, mediaTypes) {
 
 function generateCommandExample(used, args) {
     if (!used) return "'used' harus diberikan!";
-
     if (!args) return "'args' harus diberikan!";
 
     const commandMessage = `Contoh: ${monospace(`${used.prefix + used.command} ${args}`)}`;

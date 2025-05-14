@@ -19,6 +19,8 @@ module.exports = {
             quote(tools.cmd.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
+        if (input.length > 80) return await ctx.reply(quote("❎ Maksimal 80 kata!"));
+
         try {
             const result = tools.api.createUrl("falcon", "/imagecreator/iqc", {
                 text: input

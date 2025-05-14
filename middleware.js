@@ -86,9 +86,11 @@ module.exports = (bot) => {
                         contextInfo
                     });
                 } catch (error) {
-                    if (error.status !== 200) await ctx.reply({
+                    if (error.status !== 200) await ctx.sendMessage(ctx.id, {
                         text,
                         contextInfo
+                    }, {
+                        quoted: ctx.msg
                     });
                 }
             }

@@ -55,7 +55,7 @@ module.exports = {
 
                     await db.add(`user.${participantId}.coin`, game.coin.answered);
                     await ctx.sendMessage(ctx.id, {
-                        text: quote(`✅ ${tools.general.ucword(participantAnswer)} benar! Jawaban tersisa: ${game.answers.size}`)
+                        text: quote(`✅ ${tools.general.ucwords(participantAnswer)} benar! Jawaban tersisa: ${game.answers.size}`)
                     }, {
                         quoted: m
                     });
@@ -74,7 +74,7 @@ module.exports = {
                         return collector.stop();
                     }
                 } else if (participantAnswer === "surrender") {
-                    const remaining = [...game.answers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1");
+                    const remaining = [...game.answers].map(tools.general.ucwords).join(", ").replace(/, ([^,]*)$/, ", dan $1");
                     session.delete(ctx.id);
                     await ctx.sendMessage(ctx.id, {
                         text: `${quote("🏳️ Anda menyerah!")}\n` +
@@ -93,7 +93,7 @@ module.exports = {
             });
 
             collector.on("end", async () => {
-                const remaining = [...game.answers].map(tools.general.ucword).join(", ").replace(/, ([^,]*)$/, ", dan $1");
+                const remaining = [...game.answers].map(tools.general.ucwords).join(", ").replace(/, ([^,]*)$/, ", dan $1");
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);

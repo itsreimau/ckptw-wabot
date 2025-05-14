@@ -55,7 +55,7 @@ async function handleUserEvent(bot, m, type) {
                 const canvas = tools.api.createUrl("falcon", `/imagecreator/${type === "UserJoin" ? "welcome" : "goodbye"}`, {
                     ppuser: profilePictureUrl,
                     bg: config.bot.thumbnail,
-                    text: type === "UserJoin" ? quote(`Selamat datang ${userName || userId} di grup ${metadata.subject}!`) : quote(`Selamat tinggal, ${userName || userId}!`)
+                    text: type === "UserJoin" ? `Selamat datang ${userName || userId} di grup ${metadata.subject}!` : `Selamat tinggal, ${userName || userId}!`
                 });
                 const url = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
                     url: canvas
@@ -79,6 +79,18 @@ async function handleUserEvent(bot, m, type) {
             if (type === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(groupJid, {
                 text: groupDb?.text?.intro,
                 mentions: [jid]
+            }, {
+                quoted: {
+                    key: {
+                        participant: "13135550002@s.whatsapp.net",
+                        remoteJid: "status@broadcast"
+                    },
+                    message: {
+                        extendedTextMessage: {
+                            text: "Jangan lupa untuk mengisi intro!"
+                        }
+                    }
+                }
             });
         }
     } catch (error) {

@@ -72,7 +72,7 @@ module.exports = {
                     session.delete(ctx.id);
                     await ctx.sendMessage(ctx.id, {
                         text: `${quote("🏳️ Anda menyerah!")}\n` +
-                            quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)
+                            quote(`Jawabannya adalah ${tools.general.ucwords(game.answer)}.`)
                     }, {
                         quoted: m
                     });
@@ -91,7 +91,7 @@ module.exports = {
                     session.delete(ctx.id);
                     return await ctx.reply(
                         `${quote("⏱ Waktu habis!")}\n` +
-                        quote(`Jawabannya adalah ${tools.general.ucword(game.answer)}.`)
+                        quote(`Jawabannya adalah ${tools.general.ucwords(game.answer)}.`)
                     );
                 }
             });
