@@ -348,7 +348,7 @@ module.exports = (bot) => {
                 }
             }
 
-            // Penanganan antitagsw
+            // Penanganan antitagsw (Aku tidak tau apakah ini work atau tidak)
             if (groupDb?.option?.antitagsw) {
                 const checkMessage = m.message?.groupStatusMentionMessage || m.message?.protocolMessage?.type === 25 || m.message?.protocolMessage?.type === "STATUS_MENTION_MESSAGE" || m.messageType === "groupStatusMentionMessage";
                 if (checkMessage && !await ctx.group().isSenderAdmin()) {

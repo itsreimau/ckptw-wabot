@@ -17,7 +17,7 @@ module.exports = {
         const accountId = tools.general.getID(accountJid);
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
-        const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
+        const groupId = tools.general.getID(ctx.id);
 
         if (!accountJid) return await ctx.reply({
             text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +

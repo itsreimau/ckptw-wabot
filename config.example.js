@@ -1,5 +1,4 @@
 // Impor modul dan dependensi yang diperlukan
-const pkg = require("./package.json");
 const {
     monospace,
     italic,

@@ -16,7 +16,7 @@ module.exports = {
         const accountId = tools.general.getID(accountJid);
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
-        const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
+        const groupId = tools.general.getID(ctx.id);
 
         if (ctx.args[0] === "bot") {
             await db.set(`group.${groupId}.mutebot`, true);

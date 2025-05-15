@@ -24,7 +24,7 @@ module.exports = {
 
         try {
             const senderJid = ctx.sender.jid;
-            const groupJid = ctx.isGroup() ? ctx.id : null;
+            const groupJid = ctx.id;
             const m = {
                 id: groupJid,
                 participants: [senderJid]

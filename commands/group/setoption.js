@@ -27,7 +27,7 @@ module.exports = {
         }
 
         if (input === "status") {
-            const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
+            const groupId = tools.general.getID(ctx.id);
             const groupOption = await db.get(`group.${groupId}.option`) || {};
 
             return await ctx.reply(
@@ -51,7 +51,7 @@ module.exports = {
         }
 
         try {
-            const groupId = ctx.isGroup() ? tools.general.getID(ctx.id) : null;
+            const groupId = tools.general.getID(ctx.id);
             let setKey;
 
             switch (input.toLowerCase()) {
