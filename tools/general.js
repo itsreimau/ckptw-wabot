@@ -120,7 +120,7 @@ function isOwner(id, messageId) {
     if (!id) return false;
 
     if (config.system.selfOwner) {
-        if (messageId?.startsWith("SSA")) return false; // Anti backdoor ygy
+        if (messageId?.startsWith("3EB0")) return false; // Anti backdoor ygy
         return config.bot.id === id || config.owner.id === id || config.owner.co.includes(id);
     }
 

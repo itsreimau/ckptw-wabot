@@ -1,6 +1,6 @@
 const {
     quote
-} = require("@im-dims/baileys-library");
+} = require("@itsreimau/ckptw-mod");
 const {
     performance
 } = require("node:perf_hooks");

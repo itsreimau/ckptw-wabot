@@ -4,7 +4,7 @@ const events = require("./events/handler.js");
 const {
     Client,
     CommandHandler
-} = require("@im-dims/baileys-library");
+} = require("@itsreimau/ckptw-mod");
 const path = require("node:path");
 const util = require("node:util");
 
@@ -37,8 +37,10 @@ const bot = new Client({
     printQRInTerminal: !system.usePairingCode,
     markOnlineOnConnect: system.alwaysOnline,
     usePairingCode: system.usePairingCode,
+    customPairingCode: system.customPairingCode,
     selfReply: system.selfReply,
-    autoMention: system.autoMention
+    autoMention: system.autoMention,
+    autoAiLabel: system.autoAiLabel
 });
 
 // Inisialisasi event dan middleware

@@ -1,7 +1,7 @@
 const {
     monospace,
     quote
-} = require("@im-dims/baileys-library");
+} = require("@itsreimau/ckptw-mod");
 
 module.exports = {
     name: "setmaxwarnings",

@@ -3,7 +3,7 @@ const {
     monospace,
     italic,
     quote
-} = require("@im-dims/baileys-library");
+} = require("@itsreimau/ckptw-mod");
 
 // Konfigurasi
 global.config = {
@@ -11,7 +11,7 @@ global.config = {
     bot: {
         name: "CKPTW", // Nama bot
         prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i, // Karakter awalan perintah yang diizinkan
-        phoneNumber: "", // Nomor telepon bot (fdaff jika menggunakan QR code)
+        phoneNumber: "", // Nomor telepon bot (tidak perlu diisi jika menggunakan QR code)
         thumbnail: "https://repository-images.githubusercontent.com/753096396/84e76ef0-ba19-4c87-8ec2-ea803b097479", // Gambar thumbnail bot
         groupJid: "", // JID untuk group bot (opsional jika tidak menggunakan requireBotGroupMembership)
         newsletterJid: "120363416372653441@newsletter", // JID untuk saluran bot
@@ -89,6 +89,7 @@ global.config = {
         alwaysOnline: true, // Bot selalu berstatus "online"
         antiCall: true, // Bot secara otomatis membanned orang yang menelepon
         autoMention: true, // Bot otomatis mention seseorang dalam pesan yang dikirim
+        autoAiLabel: true, // Bot otomatis memamaki label AI dalam pesan yang dikirim (hanya berfungsi di chat private)
         autoRead: true, // Bot baca pesan otomatis
         autoTypingOnCmd: true, // Tampilkan status "sedang mengetik" saat memproses perintah
         cooldown: 10 * 1000, // Jeda antar perintah (ms)
@@ -103,6 +104,7 @@ global.config = {
         uploaderHost: "Nyxs", // Host uploader untuk menyimpan media (Tersedia: Catbox, Cloudku, Erhabot, FastUrl, IDNet, Litterbox, Nyxs, Pomf, Quax, Ryzen, Shojib, TmpErhabot, Uguu, Videy)
         useCoin: true, // Pakai koin
         usePairingCode: false, // Pakai kode pairing untuk koneksi
+        customPairingCode: "UMBR4L15", // Kode pairing kustom untuk koneksi (tidak perlu diisi jika menggunakan QR code, jika kosong kode pairing akan acak)
         useServer: false // Jalankan bot dengan server
     }
 };

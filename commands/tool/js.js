@@ -1,7 +1,7 @@
 const {
     monospace,
     quote
-} = require("@im-dims/baileys-library");
+} = require("@itsreimau/ckptw-mod");
 const {
     spawn
 } = require("node:child_process");

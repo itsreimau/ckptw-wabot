@@ -4,7 +4,7 @@ const {
     monospace,
     quote,
     VCardBuilder
-} = require("@im-dims/baileys-library");
+} = require("@itsreimau/ckptw-mod");
 const axios = require("axios");
 const mime = require("mime-types");
 const {

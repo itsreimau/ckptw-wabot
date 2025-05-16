@@ -1,6 +1,6 @@
 const {
     quote
-} = require("@im-dims/baileys-library");
+} = require("@itsreimau/ckptw-mod");
 const os = require("node:os");
 const process = require("node:process");
 
@@ -43,7 +43,7 @@ module.exports = {
                 `${quote("─────")}\n` +
                 `${quote(`Bot Uptime: ${tools.general.convertMsToDuration(Date.now() - startTime)}`)}\n` +
                 `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
-                `${quote("Library: @im-dims/baileys-library (Fork of @mengkodingan/ckptw)")}\n` +
+                `${quote("Library: @itsreimau/ckptw-mod (Fork of @mengkodingan/ckptw)")}\n` +
                 "\n" +
                 config.msg.footer
             );

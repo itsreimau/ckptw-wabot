@@ -2,7 +2,7 @@
 const {
     monospace,
     quote
-} = require("@im-dims/baileys-library");
+} = require("@itsreimau/ckptw-mod");
 const util = require("node:util");
 
 async function checkMedia(type, required) {
