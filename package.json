@@ -1,6 +1,6 @@
 {
   "name": "ckptw-wabot",
-  "version": "1.5.0.beta-4",
+  "version": "1.5.0.beta-5",
   "description": "WhatsApp Bot with @itsreimau/ckptw-mod.",
   "main": "index.js",
   "directories": {
@@ -35,7 +35,7 @@
     "axios": "^1.9.0",
     "cfonts": "^3.3.0",
     "didyoumean": "^1.2.2",
-    "jimp": "^1.6.1",
+    "jimp": "^1.16.1",
     "link-preview-js": "^3.0.0",
     "mime-types": "2.1.35",
     "moment-timezone": "^0.5.48",

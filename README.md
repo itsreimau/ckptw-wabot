@@ -143,13 +143,13 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
 
 ### Complete Documentation
 
-`@itsreimau/ckptw-mod` adalah library yang digunakan oleh `ckptw-wabot`, dibangun di atas `naruyaizumi` yang mendukung lebih banyak fitur WhatsApp dibandingkan `@whiskeysockets/baileys`. Dokumentasi `@itsreimau/ckptw-mod` umumnya mirip dengan dokumentasi `@mengkodingan/ckptw`, namun dengan beberapa tambahan dan pembaruan.
+`@itsreimau/ckptw-mod` adalah library yang digunakan oleh `ckptw-wabot`, dibangun di atas `baileys-mod` yang mendukung lebih banyak fitur WhatsApp dibandingkan `@whiskeysockets/baileys`. Dokumentasi `@itsreimau/ckptw-mod` umumnya mirip dengan dokumentasi `@mengkodingan/ckptw`, namun dengan beberapa tambahan dan pembaruan.
 
 Untuk informasi lebih lanjut, silakan kunjungi:
 
 - [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/)
 - [@itsreimau/ckptw-mod (npm)](https://www.npmjs.com/package/@itsreimau/ckptw-mod)
-- [naruyaizumi (npm)](https://www.npmjs.com/package/naruyaizumi) – berisi dokumentasi tambahan seperti pengiriman berbagai jenis pesan
+- [baileys-mod (npm)](https://www.npmjs.com/package/baileys-mod) – berisi dokumentasi tambahan seperti pengiriman berbagai jenis pesan
 
 ## Contribution
 
