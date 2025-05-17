@@ -29,6 +29,7 @@ module.exports = {
             `${quote("BochilGaming (https://github.com/BochilGaming)")}\n` +
             `${quote("Bhuzel (https://github.com/Bhuzel)")}\n` +
             `${quote("David Cyril (https://github.com/DavidCyrilTech)")}\n` +
+            `${quote("ErerexID Chx (https://github.com/ErerexIDChx)")}\n` +
             `${quote("FastURL (alias Hikaru) (https://github.com/fasturl)")}\n` +
             `${quote("FlowFalcon (https://github.com/FlowFalcon)")}\n` +
             `${quote("Lann (https://github.com/ERLANRAHMAT)")}\n` +

@@ -39,6 +39,10 @@ const APIs = {
     vapis: {
         baseURL: "https://vapis.my.id"
     },
+    velyn: {
+        baseURL: "https://velyn.biz.id",
+        APIKey: "velyn"
+    },
     zell: {
         baseURL: "https://apizell.web.id"
     }
