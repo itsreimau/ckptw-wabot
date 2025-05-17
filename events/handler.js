@@ -108,7 +108,9 @@ async function handleUserEvent(bot, m, type) {
 }
 
 // Fungsi untuk menambahkan warning
-async function addWarning(ctx, senderId, groupId) {
+async function addWarning(ctx, senderJid, groupId) {
+    const senderId = tools.general.getID(senderJid);
+
     const key = `group.${groupId}.warnings`;
     const warnings = await db.get(key) || {};
     const current = warnings[senderId] || 0;
@@ -275,7 +277,7 @@ module.exports = (bot) => {
                         if (!config.system.restrict && groupDb?.option?.autokick) {
                             await ctx.group().kick([senderJid]);
                         } else {
-                            await addWarning(senderId, groupId, ctx);
+                            await addWarning(ctx, senderJid, groupId);
                         }
                     }
                 }
@@ -288,7 +290,7 @@ module.exports = (bot) => {
                 if (!config.system.restrict && groupDb?.option?.autokick) {
                     await ctx.group().kick([senderJid]);
                 } else {
-                    await addWarning(senderId, groupId, ctx);
+                    await addWarning(ctx, senderJid, groupId);
                 }
             }
 
@@ -309,7 +311,7 @@ module.exports = (bot) => {
                         if (!config.system.restrict && groupDb?.option?.autokick) {
                             await ctx.group().kick([senderJid]);
                         } else {
-                            await addWarning(senderId, groupId, ctx);
+                            await addWarning(ctx, senderJid, groupId);
                         }
                     }
                 }
@@ -341,7 +343,7 @@ module.exports = (bot) => {
                     if (!config.system.restrict && groupDb?.option?.autokick) {
                         await ctx.group().kick([senderJid]);
                     } else {
-                        await addWarning(senderId, groupId, ctx);
+                        await addWarning(ctx, senderJid, groupId);
                     }
                     delete spamData[senderId];
                     await db.set(key, spamData);
@@ -357,7 +359,7 @@ module.exports = (bot) => {
                     if (!config.system.restrict && groupDb?.option?.autokick) {
                         await ctx.group().kick([senderJid]);
                     } else {
-                        await addWarning(senderId, groupId, ctx);
+                        await addWarning(ctx, senderJid, groupId);
                     }
                 }
             }
@@ -371,7 +373,7 @@ module.exports = (bot) => {
                     if (!config.system.restrict && groupDb?.option?.autokick) {
                         await ctx.group().kick([senderJid]);
                     } else {
-                        await addWarning(senderId, groupId, ctx);
+                        await addWarning(ctx, senderJid, groupId);
                     }
                 }
             }
