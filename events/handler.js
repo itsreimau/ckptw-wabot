@@ -123,7 +123,7 @@ async function addWarning(ctx, senderJid, groupId) {
         mentions: [senderJid]
     });
 
-    const maxwarnings = await db.get(`group.${groupId}.maxwarnings`) || 5;
+    const maxwarnings = await db.get(`group.${groupId}.maxwarnings`) || 3;
     if (newWarning >= maxwarnings) {
         await ctx.reply(quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
         if (!config.system.restrict) await ctx.group().kick([senderJid]);
@@ -352,8 +352,8 @@ module.exports = (bot) => {
 
             // Penanganan antitagsw (Aku tidak tau apakah ini work atau tidak)
             if (groupDb?.option?.antitagsw) {
-                const checkMessage = m.message?.groupStatusMentionMessage || m.message?.protocolMessage?.type === 25 || m.message?.protocolMessage?.type === "STATUS_MENTION_MESSAGE" || m.messageType === "groupStatusMentionMessage";
-                if (checkMessage && !await ctx.group().isSenderAdmin()) {
+                const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "groupStatusMention") || m.message?.protocolMessage?.type === 25 || m.message?.protocolMessage?.type === "STATUS_MENTION_MESSAGE";
+                if (checkMedia && !await ctx.group().isSenderAdmin()) {
                     await ctx.reply(quote(`⛔ Jangan tag grup di SW, tidak ada yang peduli!`));
                     await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) {

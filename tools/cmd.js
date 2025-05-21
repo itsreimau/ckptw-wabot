@@ -12,6 +12,7 @@ async function checkMedia(type, required) {
         audio: "audioMessage",
         document: ["documentMessage", "documentWithCaptionMessage"],
         gif: "videoMessage",
+        groupStatusMention: "groupStatusMentionMessage",
         image: "imageMessage",
         sticker: "stickerMessage",
         video: "videoMessage"
