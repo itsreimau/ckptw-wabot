@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "hellosehatsearch",
-    aliases: ["hellosehat", "hellosehats"],
+    name: "webtoonssearch",
+    aliases: ["webtoons", "webtoonss"],
     category: "search",
     permissions: {
         coin: 10
@@ -15,18 +15,19 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "anhedonia"))
+            quote(tools.cmd.generateCommandExample(ctx.used, "evangelion"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/search/hallosehat", {
+            const apiUrl = tools.api.createUrl("diibot", "/search/webtoons", {
                 query: input
             });
             const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map((r) =>
-                `${quote(`Judul: ${r.title}`)}\n` +
-                `${quote(`Deskripsi: ${r.desc}`)}\n` +
+                `${quote(`Nama: ${r.title}`)}\n` +
+                `${quote(`Penulis: ${r.author}`)}\n` +
+                `${quote(`Genre: ${r.genre}`)}\n` +
                 `${quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +

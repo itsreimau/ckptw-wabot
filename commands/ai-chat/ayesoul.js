@@ -4,7 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "venice",
+    name: "ayesoul",
     category: "ai-chat",
     permissions: {
         coin: 10
@@ -19,10 +19,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("https://api.siputzx.my.id", "/api/ai/venice", {
-                prompt: input
+            const apiUrl = tools.api.createUrl("nekorinn", "/ai/ayesoul", {
+                text: input
             });
-            const result = (await axios.get(apiUrl)).data.message;
+            const result = (await axios.get(apiUrl)).data.result.message;
 
             return await ctx.reply(result);
         } catch (error) {

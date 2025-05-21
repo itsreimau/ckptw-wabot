@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "yahoosearch",
-    aliases: ["yahoo", "yahoos"],
+    name: "apk4freesearch",
+    aliases: ["apk4free", "apk4frees"],
     category: "search",
     permissions: {
         coin: 10
@@ -19,15 +19,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/search/yahoosearch", {
-                query: input
+            const apiUrl = tools.api.createUrl("nekorinn", "/search/apk4free", {
+                q: input
             });
             const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map((r) =>
-                `${quote(`Judul: ${r.title}`)}\n` +
-                `${quote(`Deskripsi: ${r.snippet}`)}\n` +
-                `${quote(`URL: ${r.link}`)}`
+                `${quote(`Nama: ${r.title}`)}\n` +
+                `${quote(`Pengembang: ${r.developer}`)}\n` +
+                `${quote(`Versi: ${r.version}`)}\n` +
+                `${quote(`Rating: ${r.rating}`)}\n` +
+                `${quote(`URL: ${r.url}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

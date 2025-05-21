@@ -5,9 +5,6 @@ const APIs = {
     agatz: {
         baseURL: "https://api.agatz.xyz"
     },
-    archive: {
-        baseURL: "https://archive.lick.eu.org"
-    },
     bk9: {
         baseURL: "https://bk9.fun"
     },
@@ -40,8 +37,7 @@ const APIs = {
         baseURL: "https://vapis.my.id"
     },
     velyn: {
-        baseURL: "https://velyn.biz.id",
-        APIKey: "velyn"
+        baseURL: "https://velyn.biz.id"
     },
     zell: {
         baseURL: "https://apizell.web.id"

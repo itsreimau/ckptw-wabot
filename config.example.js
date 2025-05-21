@@ -104,7 +104,7 @@ global.config = {
         uploaderHost: "Nyxs", // Host uploader untuk menyimpan media (Tersedia: Catbox, Cloudku, Erhabot, FastUrl, IDNet, Litterbox, Nyxs, Pomf, Quax, Ryzen, Shojib, TmpErhabot, Uguu, Videy)
         useCoin: true, // Pakai koin
         usePairingCode: false, // Pakai kode pairing untuk koneksi
-        customPairingCode: "UMBR4L15", // Kode pairing kustom untuk koneksi (tidak perlu diisi jika menggunakan QR code, jika kosong kode pairing akan acak)
+        customPairingCode: "UMBR4L15", // Kode pairing kustom untuk koneksi (tidak perlu diisi jika menggunakan QR code, jika kosong kode pairing akan random)
         useServer: false // Jalankan bot dengan server
     }
 };

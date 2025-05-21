@@ -19,8 +19,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/search/sfile", {
-                query: input
+            const apiUrl = tools.api.createUrl("falcon", "/search/sfile", {
+                q: input
             });
             const result = (await axios.get(apiUrl)).data.result;
 

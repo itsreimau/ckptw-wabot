@@ -20,10 +20,10 @@ module.exports = {
         ));
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/ai/luminai", {
-                text: input
+            const apiUrl = tools.api.createUrl("diibot", "/api/ai/luminai", {
+                query: input
             });
-            const result = (await axios.get(apiUrl)).data.result.result;
+            const result = (await axios.get(apiUrl)).data.result.message;
 
             return await ctx.reply(result);
         } catch (error) {

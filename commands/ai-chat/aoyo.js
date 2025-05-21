@@ -19,10 +19,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/aoyo", {
-                ask: input
+            const apiUrl = tools.api.createUrl("nekorinn", "/ai/aoyo", {
+                text: input
             });
-            const result = (await axios.get(apiUrl)).data.result.answer;
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply(result);
         } catch (error) {

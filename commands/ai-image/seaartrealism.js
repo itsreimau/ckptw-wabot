@@ -6,6 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "seaartrealism",
+    aliases: ["seeartreal"],
     category: "ai-image",
     permissions: {
         premium: true

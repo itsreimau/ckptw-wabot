@@ -20,8 +20,8 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("archive", "/api/maker/carbonify", {
-                text: input
+            const result = tools.api.createUrl("nekorinn", "/maker/carbonify", {
+                code: input
             });
 
             return await ctx.reply({

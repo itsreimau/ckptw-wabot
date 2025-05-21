@@ -57,12 +57,12 @@ async function handleUserEvent(bot, m, type) {
                     bg: config.bot.thumbnail,
                     text: type === "UserJoin" ? `Selamat datang ${userName || userId} di grup ${metadata.subject}!` : `Selamat tinggal, ${userName || userId}!`
                 });
-                const url = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
+                const video = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
                     url: canvas
                 }))).data.result;
                 await bot.core.sendMessage(groupJid, {
                     video: {
-                        url
+                        url: video
                     },
                     mimetype: mime.lookup("mp4"),
                     caption: text,

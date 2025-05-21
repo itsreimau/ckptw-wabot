@@ -66,7 +66,9 @@ module.exports = {
                         xp: "number"
                     },
                     group: {
+                        maxwarnings: "number",
                         mute: "object",
+                        mutebot: "boolean",
                         text: {
                             goodbye: "string",
                             intro: "string",
@@ -80,13 +82,15 @@ module.exports = {
                             antilink: "boolean",
                             antinfsw: "boolean",
                             antisticker: "boolean",
+                            antitagsw: "boolean",
                             antitoxic: "boolean",
                             antivideo: "boolean",
                             autokick: "boolean",
                             gamerestrict: "boolean",
                             welcome: "boolean"
                         },
-                        spam: "object"
+                        spam: "object",
+                        warnings: "object"
                     },
                     menfess: {
                         from: "string",

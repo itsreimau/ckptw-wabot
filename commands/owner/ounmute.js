@@ -19,7 +19,7 @@ module.exports = {
 
         if (ctx.args[0] === "bot") {
             await db.set(`group.${groupId}.mutebot`, true);
-            return await ctx.reply(quote("✅ Berhasil me-mute grup ini dari bot!"));
+            return await ctx.reply(quote("✅ Berhasil me-unmute grup ini dari bot!"));
         }
 
         if (!accountJid) return await ctx.reply({

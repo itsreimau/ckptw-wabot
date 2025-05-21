@@ -26,7 +26,9 @@ module.exports = {
         }
 
         try {
-            const apiUrl = tools.api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`);
+            const apiUrl = tools.api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {
+                ver: "tsi"
+            });
             const result = (await axios.get(apiUrl)).data.data;
 
             const resultText = result.verses.map((r) =>

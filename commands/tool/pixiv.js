@@ -20,7 +20,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/nsfw/pixiv", {
+            const apiUrl = tools.api.createUrl("nekorinn", "/search/pixiv", {
                 q: input
             });
             const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result).imageUrl;

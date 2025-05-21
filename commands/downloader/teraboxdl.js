@@ -2,12 +2,14 @@ const {
     quote
 } = require("@itsreimau/ckptw-mod");
 const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "sfiledl",
+    name: "teraboxdl",
+    aliases: ["terabox"],
     category: "downloader",
     permissions: {
-        premium: true
+        coin: 10
     },
     code: async (ctx) => {
         const url = ctx.args[0] || null;
@@ -21,20 +23,19 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/download/sfile", {
+            const apiUrl = tools.api.createUrl("falcon", "/download/terabox", {
                 url
             });
             const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
-                document: {
-                    url: result.download.url
+                video: {
+                    url: result
                 },
+                mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
-                    config.msg.footer,
-                fileName: result.metadata.filename,
-                mimetype: result.metadata.mimetype || "application/octet-stream"
+                    config.msg.footer
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

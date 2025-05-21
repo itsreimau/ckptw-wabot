@@ -40,8 +40,7 @@ module.exports = {
                 },
                 message: {
                     extendedTextMessage: {
-                        text: "Seseorang telah mengirimimu pesan menfess.",
-                        title: config.bot.name
+                        text: "Seseorang telah mengirimimu pesan menfess."
                     }
                 }
             };

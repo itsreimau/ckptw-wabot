@@ -23,14 +23,14 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/download/twitterx", {
+            const apiUrl = tools.api.createUrl("agatz", "/api/twitter", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.result.downloads.find(d => d.quality.includes("720p"));;
+            const result = (await axios.get(apiUrl)).data.data;
 
             return await ctx.reply({
                 video: {
-                    url: result.url
+                    url: result.video_hd || result.video_sd
                 },
                 mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +

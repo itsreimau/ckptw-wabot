@@ -21,16 +21,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/search/pinterest", {
-                query: input
+            const apiUrl = tools.api.createUrl("nekorinn", "/search/pinterest", {
+                q: input
             });
-            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result).image;
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result).imageUrl;
 
             return await ctx.reply({
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("jpg"),
+                mimetype: mime.lookup("jpeg"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer

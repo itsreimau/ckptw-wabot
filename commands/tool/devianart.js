@@ -1,13 +1,15 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "arting",
-    category: "ai-image",
+    name: "devianart",
+    aliases: ["devian"],
+    category: "tool",
     permissions: {
-        premium: true
+        coin: 10
     },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || null;;
@@ -19,16 +21,17 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("velyn", "/api/ai/arting", {
-                prompt: input
-            }, "apikey");
+            const apiUrl = tools.api.createUrl("nekorinn", "/search/devianart", {
+                q: input
+            });
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.result).imageUrl;
 
             return await ctx.reply({
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("jpg"),
-                caption: `${quote(`Prompt: ${input}`)}\n` +
+                mimetype: mime.lookup("jpeg"),
+                caption: `${quote(`Kueri: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

@@ -22,7 +22,9 @@ module.exports = {
                 const senderId = tools.general.getID(ctx.sender.jid);
 
                 if (message === "y") {
+                    const isPremium = await db.get(`user.${senderId}.premium`);
                     await db.delete(`user.${senderId}`);
+                    if (isPremium) await db.set(`user.${senderId}.premium`, true);
                     await ctx.reply(quote("✅ Data Anda berhasil direset. Semua data telah dihapus!"));
                     collector.stop();
                 } else if (message === "n") {

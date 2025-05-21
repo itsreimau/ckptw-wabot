@@ -73,12 +73,12 @@ module.exports = (bot) => {
                         currentLevel: userDb?.level,
                         nextLevel: newUserLevel
                     });
-                    const url = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
+                    const video = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
                         url: canvas
                     }))).data.result;
                     await ctx.reply({
                         video: {
-                            url
+                            url: video
                         },
                         mimetype: mime.lookup("mp4"),
                         caption: text,
