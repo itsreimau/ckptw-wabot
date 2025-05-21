@@ -12,7 +12,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const [abbr, chapter] = ctx.args;
+        const [abbr, chapter || "1"] = ctx.args;
 
         if (!abbr && !chapter) return await ctx.reply(
             `${quote(`${tools.cmd.generateInstruction(["send"], ["text"])}`)}\n` +

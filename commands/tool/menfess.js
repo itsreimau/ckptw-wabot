@@ -13,12 +13,12 @@ module.exports = {
     },
     code: async (ctx) => {
         const [id, ...text] = ctx.args;
-        const formattedId = id ? id.replace(/[^\d]/g, "") : null;
+        const targetId = id ? id.replace(/[^\d]/g, "") : null;
         const menfessText = text ? text.join(" ") : null;
 
         const senderId = tools.general.getID(ctx.sender.jid);
 
-        if (!formattedId && !menfessText) return await ctx.reply(
+        if (!targetId && !menfessText) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(tools.cmd.generateCommandExample(ctx.used, `${senderId} halo, dunia!`))}\n` +
             quote(tools.cmd.generateNotes(["Jangan gunakan spasi pada angka. Contoh: +62 8123-4567-8910, seharusnya +628123-4567-8910"]))
@@ -26,11 +26,11 @@ module.exports = {
 
         const allMenfessDb = await db.get("menfess") || {};
         const isSenderInMenfess = Object.values(allMenfessDb).some(m => m.from === senderId || m.to === senderId);
-        const isReceiverInMenfess = Object.values(allMenfessDb).some(m => m.from === formattedId || m.to === formattedId);
+        const isReceiverInMenfess = Object.values(allMenfessDb).some(m => m.from === targetId || m.to === targetId);
 
         if (isSenderInMenfess) return await ctx.reply(quote("❎ Anda tidak dapat mengirim menfess karena Anda sudah terlibat dalam percakapan lain."));
         if (isReceiverInMenfess) return await ctx.reply(quote("❎ Anda tidak dapat mengirim menfess kepada pengguna ini karena dia sedang terlibat dalam percakapan lain."));
-        if (formattedId === senderId) return await ctx.reply(quote("❎ Tidak dapat digunakan pada diri Anda sendiri."));
+        if (targetId === senderId) return await ctx.reply(quote("❎ Tidak dapat digunakan pada diri Anda sendiri."));
 
         try {
             const fakeQuotedText = {
@@ -53,7 +53,7 @@ module.exports = {
                 }
             };
 
-            await ctx.sendMessage(`${formattedId}@s.whatsapp.net`, {
+            await ctx.sendMessage(`${targetId}@s.whatsapp.net`, {
                 text: `${menfessText}\n` +
                     `${config.msg.readmore}\n` +
                     quote(`Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik ${monospace("delete")} atau ${monospace("stop")}.`),
@@ -64,7 +64,7 @@ module.exports = {
 
             await db.set(`menfess.${Date.now()}`, {
                 from: senderId,
-                to: formattedId
+                to: targetId
             });
 
             return await ctx.reply(quote(`✅ Pesan berhasil terkirim! Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik ${monospace("delete")} atau ${monospace("stop")}.`));

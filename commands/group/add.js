@@ -14,7 +14,7 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 
-        if (!input || isNaN(input)) return await ctx.reply(
+        if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.cmd.generateCommandExample(ctx.used, tools.general.getID(ctx.sender.jid)))
         );
