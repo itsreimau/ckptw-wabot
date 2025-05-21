@@ -12,7 +12,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const [abbr, chapter || "1"] = ctx.args;
+        const [abbr, chapter] = ctx.args;
 
         if (!abbr && !chapter) return await ctx.reply(
             `${quote(`${tools.cmd.generateInstruction(["send"], ["text"])}`)}\n` +
@@ -26,7 +26,7 @@ module.exports = {
         }
 
         try {
-            const apiUrl = tools.api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter}`, {
+            const apiUrl = tools.api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter || 1}`, {
                 ver: "tsi"
             });
             const result = (await axios.get(apiUrl)).data.data;
