@@ -35,7 +35,7 @@ module.exports = {
             const model = flag.filter || "miku";
 
             const apiUrl = tools.api.createUrl("agatz", "/api/voiceover", {
-                text: flag.input
+                text: flag.input,
                 model
             });
             const result = (await axios.get(apiUrl)).data.data.oss_url;
