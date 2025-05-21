@@ -19,23 +19,27 @@ module.exports = {
             quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} all`)} untuk menyetujui semua anggota yang tertunda.`]))
         );
 
-        const accountJid = `${input.replace(/[^\d]/g, "")}@s.whatsapp.net`;
-
         const pending = await ctx.group().pendingMembers();
-        const isPending = pending.some(p => p.jid === accountJid);
 
-        if (!isPending) return await ctx.reply(quote("❎ Akun tidak ditemukan di daftar anggota yang menunggu persetujuan."));
+        if (input.toLowerCase() === "all") {
+            if (pending.length === 0) return await ctx.reply(quote("✅ Tidak ada anggota yang menunggu persetujuan."));
 
-        try {
-            if (input.toLowerCase() === "all") {
-                if (pending.length === 0) return await ctx.reply(quote("✅ Tidak ada anggota yang menunggu persetujuan."));
-
+            try {
                 const allJids = pending.map(p => p.jid);
                 await ctx.group().approvePendingMembers(allJids);
 
                 return await ctx.reply(quote(`✅ Berhasil menyetujui semua anggota (${allJids.length}).`));
+            } catch (error) {
+                return await tools.cmd.handleError(ctx, error, false);
             }
+        }
 
+        const accountJid = `${input.replace(/[^\d]/g, "")}@s.whatsapp.net`;
+
+        const isPending = pending.some(p => p.jid === accountJid);
+        if (!isPending) return await ctx.reply(quote("❎ Akun tidak ditemukan di daftar anggota yang menunggu persetujuan."));
+
+        try {
             await ctx.group().approvePendingMembers([accountJid]);
 
             return await ctx.reply(quote("✅ Berhasil disetujui!"));
