@@ -28,18 +28,18 @@ module.exports = {
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
                 const uploadUrl = await tools.general.upload(buffer, "image");
-                const apiUrl = tools.api.createUrl("otinxsandip", "/gemini2", {
-                    prompt: input,
-                    url: uploadUrl
+                const apiUrl = tools.api.createUrl("bk9", "/ai/geminiimg", {
+                    url: uploadUrl,
+                    q: input
                 });
-                const result = (await axios.get(apiUrl)).data.answer;
+                const result = (await axios.get(apiUrl)).data.BK9;
 
                 return await ctx.reply(result);
             } else {
-                const apiUrl = tools.api.createUrl("otinxsandip", "/gemini", {
-                    prompt: input
+                const apiUrl = tools.api.createUrl("bk9", "/ai/gemini", {
+                    q: input
                 });
-                const result = (await axios.get(apiUrl)).data.answer;
+                const result = (await axios.get(apiUrl)).data.BK9;
 
                 return await ctx.reply(result);
             }

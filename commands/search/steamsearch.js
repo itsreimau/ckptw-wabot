@@ -19,17 +19,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/search/steam", {
-                query: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/steams", {
+                message: input
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.data;
 
             const resultText = result.map((r) =>
-                `${quote(`Nama: ${r.name}`)}\n` +
-                `${quote(`Harga: ${r.price}`)}\n` +
-                `${quote(`Skor: ${r.score}`)}\n` +
-                `${quote(`Platform: ${r.platform}`)}` +
-                `${quote(`URL: ${r.url}`)}`
+                `${quote(`Nama: ${r.judul}`)}\n` +
+                `${quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

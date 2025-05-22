@@ -26,11 +26,10 @@ module.exports = {
 
         try {
             const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-            const apiUrl = tools.api.createUrl("fasturl", "/maker/quotly", {
-                name: ctx.sender.pushName,
+            const apiUrl = tools.api.createUrl("nekorinn", "/maker/quotechat", {
                 text: input,
-                avatar: profilePictureUrl,
-                bgColor: "#444444"
+                name: ctx.sender.pushName,
+                profile: profilePictureUrl
             });
             const result = new Sticker(apiUrl, {
                 pack: config.sticker.packname,

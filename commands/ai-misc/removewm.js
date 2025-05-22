@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -21,9 +22,10 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const result = tools.api.createUrl("fasturl", "/aiimage/imgremovewm", {
-                url: uploadUrl
+            const apiUrl = tools.api.createUrl("zell", "/ai/removewm", {
+                imageUrl: uploadUrl
             });
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
                 image: {

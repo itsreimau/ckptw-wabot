@@ -139,7 +139,11 @@ module.exports = (bot) => {
             of restrictions) {
             if (condition) {
                 if (!userDb?.hasSentMsg?.[key]) {
-                    await ctx.reply(msg);
+                    await ctx.reply(
+                        `${msg}\n` +
+                        `${config.msg.readmore}\n` +
+                        quote(tools.cmd.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
+                    );
                     return await db.set(`user.${senderId}.hasSentMsg.${key}`, true);
                 } else {
                     return await ctx.react(ctx.id, reaction);
@@ -212,7 +216,11 @@ module.exports = (bot) => {
             of permissionChecks) {
             if (permissions[key] && condition) {
                 if (!userDb?.hasSentMsg?.[key]) {
-                    await ctx.reply(msg);
+                    await ctx.reply(
+                        `${msg}\n` +
+                        `${config.msg.readmore}\n` +
+                        quote(tools.cmd.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
+                    );
                     return await db.set(`user.${senderId}.hasSentMsg.${key}`, true);
                 } else if (reaction) {
                     return await ctx.react(ctx.id, reaction);

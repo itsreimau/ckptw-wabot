@@ -19,10 +19,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/ai/aoyo", {
-                text: input
+            const apiUrl = tools.api.createUrl("bk9", "/ai/aoyo", {
+                q: input
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.BK9;
 
             return await ctx.reply(result);
         } catch (error) {

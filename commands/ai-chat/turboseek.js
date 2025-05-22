@@ -19,8 +19,8 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/turboseek", {
-                ask: input
+            const apiUrl = tools.api.createUrl("nekorinn", "/ai/turboseek", {
+                text: input
             });
             const result = (await axios.get(apiUrl)).data.result.answer;
 

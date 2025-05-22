@@ -15,7 +15,7 @@ module.exports = {
         try {
             const buffer = await ctx.quoted.media.toBuffer()
             const uploadUrl = await tools.general.upload(buffer, "any");
-            const apiUrl = tools.api.createUrl("bk9", "/converter/webpToPng", {
+            const apiUrl = tools.api.createUrl("bk9", "/converter/webptopng", {
                 url: uploadUrl
             });
             const result = (await axios.get(apiUrl)).data.BK9;

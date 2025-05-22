@@ -35,10 +35,10 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/downup/ytmp4", {
+            const apiUrl = tools.api.createUrl("falcon", "/download/ytmp4", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.result.media;
+            const result = (await axios.get(apiUrl)).data.result;
 
             if (flag?.document) return await ctx.reply({
                 document: {

@@ -26,9 +26,6 @@ const APIs = {
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },
-    otinxsandip: {
-        baseURL: "https://sandipbaruwal.onrender.com"
-    },
     shizo: {
         baseURL: "https://api.shizo.top",
         APIKey: "shizo"

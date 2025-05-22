@@ -19,14 +19,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/search/gsearch", {
-                ask: input
+            const apiUrl = tools.api.createUrl("nekorinn", "/search/google", {
+                q: input
             });
             const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map((r) =>
                 `${quote(`Judul: ${r.title}`)}\n` +
-                `${quote(`Deskripsi: ${r.description}`)}\n` +
+                `${quote(`Deskripsi: ${r.desc}`)}\n` +
                 `${quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +

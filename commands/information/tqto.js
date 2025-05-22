@@ -18,7 +18,7 @@ module.exports = {
             `${quote("ItsReimau (https://github.com/itsreimau)")}\n` +
             `${quote("Jastin Linggar Tama (https://github.com/JastinXyz)")}\n` +
             `${quote("Rippanteq7 (https://github.com/Rippanteq7)")}\n` +
-            `${quote("Rizky Pratama | Kyluxx (https://github.com/Kyluxx)")}\n` +
+            `${quote("Rizky Pratama (https://github.com/Kyluxx)")}\n` +
             `${quote("Serv00 (https://serv00.com/)")}\n` +
             `${quote("Techwiz (https://github.com/techwiz37)")}\n` +
             `${quote("UdeanDev (https://github.com/udeannn)")}\n` +
@@ -34,10 +34,8 @@ module.exports = {
             `${quote("FlowFalcon (https://github.com/FlowFalcon)")}\n` +
             `${quote("Lann (https://github.com/ERLANRAHMAT)")}\n` +
             `${quote("Nyx Altair (https://github.com/NyxAltair)")}\n` +
-            `${quote("OtinXSandip (https://github.com/OtinXSandip)")}\n` +
-            `${quote("Randyy (https://github.com/rynxzyy)")}\n` +
+            `${quote("Randyy (https://github.com/rynn-k)")}\n` +
             `${quote("Siraj (https://github.com/BK9dev)")}\n` +
-            `${quote("swndyyyyyy (https://github.com/swndyy)")}\n` +
             `${quote("ZellRay (https://github.com/ZellRay)")}\n` +
             `${quote("─────")}\n` +
             `${quote("Dan kepada semua pihak yang telah membantu dalam pengembangan bot ini.")}\n` +

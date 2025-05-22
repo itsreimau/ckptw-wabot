@@ -4,10 +4,10 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "bagoodex",
+    name: "oxygen",
     category: "ai-chat",
     permissions: {
-        coin: 10
+        premium: true
     },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || null;;
@@ -19,10 +19,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/bagoodex", {
-                ask: input
+            const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
+            const apiUrl = tools.api.createUrl("fasturl", "/aillm/oxygen", {
+                ask: input,
+                style: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`, // Dapat diubah sesuai keinginan Anda
+                sessionId: senderUid
             });
-            const result = (await axios.get(apiUrl)).data.result.content;
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply(result);
         } catch (error) {

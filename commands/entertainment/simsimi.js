@@ -20,11 +20,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("otinxsandip", "/sim", {
-                chat: input,
-                lang: ctx.sender.jid.startsWith("62") ? "id" : "en"
+            const apiUrl = tools.api.createUrl("agatz", "/api/simsimi", {
+                message: input
             });
-            const result = (await axios.get(apiUrl)).data.answer;
+            const result = (await axios.get(apiUrl)).data.data;
 
             return await ctx.reply(result);
         } catch (error) {

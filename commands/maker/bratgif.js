@@ -25,9 +25,8 @@ module.exports = {
         if (input.length > 1000) return await ctx.reply(quote("❎ Maksimal 1000 kata!"));
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/maker/brat/animated", {
-                text: input,
-                mode: "animated"
+            const apiUrl = tools.api.createUrl("nekorinn", "/maker/bratvid", {
+                text: input
             });
             const result = new Sticker(apiUrl, {
                 pack: config.sticker.packname,

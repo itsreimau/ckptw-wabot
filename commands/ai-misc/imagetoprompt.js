@@ -22,8 +22,8 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const apiUrl = tools.api.createUrl("fasturl", "/aiimage/imagetoprompt-v2", {
-                url: uploadUrl
+            const apiUrl = tools.api.createUrl("nekorinn", "/tools/img2prompt", {
+                imageUrl: uploadUrl
             });
             const result = (await axios.get(apiUrl)).data.result;
 

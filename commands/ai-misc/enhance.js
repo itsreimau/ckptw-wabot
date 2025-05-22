@@ -1,11 +1,10 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "restore",
+    name: "enhance",
     category: "ai-misc",
     permissions: {
         coin: 10
@@ -22,10 +21,9 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const apiUrl = tools.api.createUrl("nekorinn", "/tools/pxpic-restore", {
+            const result = tools.api.createUrl("bk9", "/tools/enhance", {
                 url: uploadUrl
             });
-            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
                 image: {
