@@ -36,7 +36,8 @@ module.exports = {
             const current = warnings[accountId] || 0;
             const newWarning = current + 1;
 
-            if (newWarning >= 5) {
+            const maxwarnings = await db.get(`group.${groupId}.maxwarnings`) || 3;
+            if (newWarning >= maxwarnings) {
                 await ctx.reply(quote("⛔ Kamu telah menerima 5 warning dan akan dikeluarkan dari grup!"));
                 if (!config.system.restrict) await ctx.group().kick([senderJid]);
                 delete warnings[senderId];

@@ -119,11 +119,11 @@ async function addWarning(ctx, senderJid, groupId) {
     warnings[senderId] = newWarning;
     await db.set(key, warnings);
 
-    await ctx.reply(quote(`⚠️ Warning ${newWarning}/5 untuk @${senderJid.split("@")[0]}`), {
+    const maxwarnings = await db.get(`group.${groupId}.maxwarnings`) || 3;
+    await ctx.reply(quote(`⚠️ Warning ${newWarning}/${maxwarnings} untuk @${senderJid.split("@")[0]}`), {
         mentions: [senderJid]
     });
 
-    const maxwarnings = await db.get(`group.${groupId}.maxwarnings`) || 3;
     if (newWarning >= maxwarnings) {
         await ctx.reply(quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
         if (!config.system.restrict) await ctx.group().kick([senderJid]);

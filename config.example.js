@@ -81,7 +81,7 @@ global.config = {
     // Stiker bot
     sticker: {
         packname: "", // Nama paket stiker
-        author: "github.com/itsreimau/ckptw-wabot" // Pembuat stiker
+        author: "CKPTW-WABOT <github.com/itsreimau/ckptw-wabot>" // Pembuat stiker
     },
 
     // Sistem bot
