@@ -38,7 +38,7 @@ module.exports = {
 
             const filter = flag.filter || "brown";
 
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
             const result = tools.api.createUrl("fasturl", "/aiimage/negro", {
                 imageUrl: uploadUrl,

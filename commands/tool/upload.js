@@ -45,7 +45,7 @@ module.exports = {
             const type = flag.type || "any";
             const host = flag.host || config.system.uploaderHost.toLowerCase();
 
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const result = await tools.general.upload(buffer, type, host);
 
             return await ctx.reply(

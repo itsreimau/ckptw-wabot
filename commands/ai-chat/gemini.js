@@ -10,7 +10,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || ctx.quoted.conversation || Object.values(ctx.quoted).map(v => v?.text || v?.caption).find(Boolean) || null;;
+        const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], [ "image","text"]))}\n` +
@@ -26,7 +26,7 @@ module.exports = {
 
         try {
             if (checkMedia || checkQuotedMedia) {
-                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
+                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
                 const uploadUrl = await tools.general.upload(buffer, "image");
                 const apiUrl = tools.api.createUrl("bk9", "/ai/geminiimg", {
                     url: uploadUrl,

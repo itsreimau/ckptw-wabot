@@ -238,7 +238,7 @@ module.exports = (bot) => {
             }
 
             // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
-            const userAFKJids = ctx.quoted.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
+            const userAFKJids = ctx.quoted?.senderJid ? [tools.general.getID(ctx.quoted?.senderJid)] : m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
             if (userAFKJids.length > 0) {
                 if (m.key.fromMe) return;
 

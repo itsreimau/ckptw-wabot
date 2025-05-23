@@ -58,7 +58,7 @@ module.exports = {
 
             const style = styles[flag.style] || "Crayon";
 
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
             const result = tools.api.createUrl("fasturl", "/imgedit/toanimation", {
                 imageUrl: uploadUrl,

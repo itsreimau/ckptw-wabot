@@ -12,7 +12,7 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        const accountJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
+        const accountJid = ctx.quoted?.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
         const accountId = tools.general.getID(accountJid);
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);

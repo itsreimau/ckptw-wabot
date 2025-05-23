@@ -22,7 +22,7 @@ module.exports = {
         if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], ["sticker"])));
 
         try {
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
             const [packname, author] = input.split("|");
             const result = new Sticker(buffer, {
                 pack: packname || "",
