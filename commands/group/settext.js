@@ -19,10 +19,10 @@ module.exports = {
         if (!key && !text) return await ctx.reply(
             `${quote(`${tools.cmd.generateInstruction(["send"], ["text"])}`)}\n` +
             `${quote(tools.cmd.generateCommandExample(ctx.used, "welcome Selamat datang di grup!"))}\n` +
-            quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
+            quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru.", `Gunakan ${monospace("delete")} sebagai teks untuk menghapus teks yang disimpan sebelumnya.`]))
         );
 
-        if (key === "list") {
+        if (["l", "list"].includes(key.toLowerCase())) {
             const listText = await tools.list.get("settext");
             return await ctx.reply(listText);
         }
@@ -39,6 +39,11 @@ module.exports = {
                     break;
                 default:
                     return await ctx.reply(quote(`❎ Key '${key}' tidak valid!`));
+            }
+
+            if (["d", "delete"].includes(text.toLowerCase())) {
+                await db.delete(setKey);
+                return await ctx.reply(quote(`🗑️ Pesan untuk key '${key}' berhasil dihapus!`));
             }
 
             await db.set(setKey, text);

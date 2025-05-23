@@ -19,7 +19,7 @@ module.exports = {
             `${quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix}${ctx.used.command} list`)} untuk melihat daftar.`]))}`
         );
 
-        if (surat === "list") {
+        if (["l", "list"].includes(surat.toLowerCase())) {
             const listText = await tools.list.get("alquran");
             return await ctx.reply(listText);
         }

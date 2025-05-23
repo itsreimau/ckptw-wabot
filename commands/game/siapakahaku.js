@@ -57,14 +57,14 @@ module.exports = {
                         }
                     );
                     return collector.stop();
-                } else if (participantAnswer === "hint") {
+                } else if (["h", "hint"].includes(participantAnswer)) {
                     const clue = game.answer.replace(/[aiueo]/g, "_");
                     await ctx.sendMessage(ctx.id, {
                         text: monospace(clue.toUpperCase())
                     }, {
                         quoted: m
                     });
-                } else if (participantAnswer === "surrender") {
+                } else if (["s", "surrender"].includes(participantAnswer)) {
                     session.delete(ctx.id);
                     await ctx.sendMessage(ctx.id, {
                         text: `${quote("🏳️ Anda menyerah!")}\n` +

@@ -88,13 +88,13 @@ module.exports = {
                         }
                     );
                     return collector.stop();
-                } else if (participantAnswer === "hint") {
+                } else if (["h", "hint"].includes(participantAnswer)) {
                     await ctx.sendMessage(ctx.id, {
                         text: monospace(clue)
                     }, {
                         quoted: m
                     });
-                } else if (participantAnswer === "surrender") {
+                } else if (["s", "surrender"].includes(participantAnswer)) {
                     session.delete(ctx.id);
                     await ctx.sendMessage(ctx.id, {
                         text: `${quote("🏳️ Anda menyerah!")}\n` +

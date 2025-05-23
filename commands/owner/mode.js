@@ -19,7 +19,7 @@ module.exports = {
             quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
-        if (input === "list") {
+        if (["l", "list"].includes(input)) {
             const listText = await tools.list.get("mode");
             return await ctx.reply(listText);
         }

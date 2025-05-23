@@ -20,13 +20,13 @@ module.exports = {
             quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
-        if (abbr === "list") {
+        if (["l", "list"].includes(abbr.toLowerCase())) {
             const listText = await tools.list.get("alkitab");
             return await ctx.reply(listText);
         }
 
         try {
-            const apiUrl = tools.api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter || 1}`, {
+            const apiUrl = tools.api.createUrl("https://beeble.vercel.app", `/api/v1/passage/${abbr}/${chapter }`, {
                 ver: "tsi"
             });
             const result = (await axios.get(apiUrl)).data.data;

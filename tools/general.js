@@ -23,17 +23,16 @@ function convertMsToDuration(ms) {
     const minutes = Math.floor((ms / (1000 * 60)) % 60);
     const seconds = Math.floor((ms / 1000) % 60);
 
-    let durationString = "";
+    const parts = [];
+    if (years) parts.push(`${years} tahun`);
+    if (months) parts.push(`${months} bulan`);
+    if (weeks) parts.push(`${weeks} minggu`);
+    if (days) parts.push(`${days} hari`);
+    if (hours) parts.push(`${hours} jam`);
+    if (minutes) parts.push(`${minutes} menit`);
+    if (seconds) parts.push(`${seconds} detik`);
 
-    if (years > 0) durationString += years + " tahun ";
-    if (months > 0) durationString += months + " bulan ";
-    if (weeks > 0) durationString += weeks + " minggu ";
-    if (days > 0) durationString += days + " hari ";
-    if (hours > 0) durationString += hours + " jam ";
-    if (minutes > 0) durationString += minutes + " menit ";
-    if (seconds > 0) durationString += seconds + " detik";
-
-    return durationString.trim();
+    return parts.length > 0 ? parts.join(" ") : "0 detik";
 }
 
 function formatSize(byteCount) {

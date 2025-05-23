@@ -17,7 +17,7 @@ module.exports = {
             quote(tools.cmd.generateCommandExample(ctx.used, "user"))
         );
 
-        if (input === "list") {
+        if (["l", "list"].includes(input)) {
             const listText = await tools.list.get("fixdb");
             return await ctx.reply(listText);
         }

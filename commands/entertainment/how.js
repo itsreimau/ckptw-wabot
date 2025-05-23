@@ -13,7 +13,7 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 
-        if (ctx.used.command === "how" || ctx.args[0] === "list") {
+        if (ctx.used.command === "how" || ["l", "list"].includes(ctx.args[0].toLowerCase())) {
             const listText = await tools.list.get("how");
             return await ctx.reply(listText);
         }

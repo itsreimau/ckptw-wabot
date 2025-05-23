@@ -22,7 +22,7 @@ module.exports = {
             quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
-        if (input === "list") {
+        if (["l", "list"].includes(input.toLowerCase())) {
             const listText = await tools.list.get("tts");
             return await ctx.reply(listText);
         }

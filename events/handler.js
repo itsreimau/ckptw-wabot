@@ -246,7 +246,7 @@ module.exports = (bot) => {
                     const userAFK = await db.get(`user.${userAFKJid}.afk`) || {};
                     if (userAFK?.reason && userAFK?.timestamp) {
                         const timeago = tools.general.convertMsToDuration(Date.now() - userAFK.timestamp);
-                        await ctx.reply(quote(`📴 Dia sedang AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
+                        await ctx.reply(quote(`📴 Jangan tag! Dia sedang AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                     }
                 }
             }
@@ -391,7 +391,7 @@ module.exports = (bot) => {
                     if (senderId === from || senderId === to) {
                         const targetId = `${senderId === from ? to : from}@s.whatsapp.net`;
 
-                        if (m.content?.match(/\b(delete|stop)\b/i)) {
+                        if (m.content?.match(/\b(d|s|delete|stop)\b/i)) {
                             const replyText = quote("✅ Pesan menfess telah dihapus!");
                             await ctx.reply(replyText);
                             await ctx.sendMessage(targetId, {

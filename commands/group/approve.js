@@ -13,7 +13,7 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 
-        if (!input || (isNaN(input) && input.toLowerCase() !== "all")) return await ctx.reply(
+        if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(tools.cmd.generateCommandExample(ctx.used, tools.general.getID(ctx.sender.jid)))}\n` +
             quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} all`)} untuk menyetujui semua anggota yang tertunda.`]))
@@ -21,7 +21,7 @@ module.exports = {
 
         const pending = await ctx.group().pendingMembers();
 
-        if (input.toLowerCase() === "all") {
+        if (["a", "all"].includes(input.toLowerCase())) {
             if (pending.length === 0) return await ctx.reply(quote("✅ Tidak ada anggota yang menunggu persetujuan."));
 
             try {

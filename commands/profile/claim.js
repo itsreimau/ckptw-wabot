@@ -16,7 +16,7 @@ module.exports = {
             quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
-        if (input === "list") {
+        if (["l", "list"].includes(input.toLowerCase())) {
             const listText = await tools.list.get("claim");
             return await ctx.reply(listText);
         }

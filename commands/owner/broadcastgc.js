@@ -17,23 +17,38 @@ module.exports = {
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(tools.cmd.generateCommandExample(ctx.used, "halo, dunia!"))}\n` +
+            `${quote(tools.cmd.generatesFlagInformation({
+                "-ht": "Kirim dengan hidetag"
+            }))}\n` +
             quote(tools.cmd.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
         try {
+            const flag = tools.cmd.parseFlag(input, {
+                "-ht": {
+                    type: "boolean",
+                    key: "hidetag"
+                }
+            });
+
+            const hidetag = flag.hidetag || null;
+
             const delay = ms => new Promise(res => setTimeout(res, ms));
             const groupData = await ctx.core.groupFetchAllParticipating();
             const groupIds = Object.values(groupData).map(g => g.id);
 
-            const waitMsg = await ctx.reply(quote(`🔄 Mengirim siaran ke ${groupIds.length} grup, perkiraan waktu: ${(groupIds.length * 0.5 / 60).toFixed(2)} menit.`));
+            const waitMsg = await ctx.reply(quote(`🔄 Mengirim siaran ke ${groupIds.length} grup, perkiraan waktu: ${tools.general.convertMsToDuration(groupIds.length * 0.5 * 1000)}`));
 
             const failedGroupIds = [];
 
             for (const groupId of groupIds) {
                 await delay(500);
                 try {
-                    const members = await ctx.group(groupId).members();
-                    const mentions = members.map(m => m.id);
+                    let mentions = [];
+                    if (hidetag) {
+                        const members = await ctx.group(groupId).members();
+                        mentions = members.map(m => m.id);
+                    }
 
                     const fakeQuotedText = {
                         key: {
