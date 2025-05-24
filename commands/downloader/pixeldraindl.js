@@ -31,11 +31,11 @@ module.exports = {
                 document: {
                     url: result.download
                 },
+                fileName: result.name,
+                mimetype: result.mime_type || "application/octet-stream",
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
-                    config.msg.footer,
-                fileName: result.name,
-                mimetype: result.mime_type || "application/octet-stream"
+                    config.msg.footer
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

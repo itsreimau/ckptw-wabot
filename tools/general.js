@@ -10,7 +10,7 @@ const formatBotName = (botName) => {
 
     botName = botName.toLowerCase();
     return botName.replace(/[aiueo0-9\W_]/g, "");
-}
+};
 
 function convertMsToDuration(ms) {
     if (ms < 1000) return "kurang satu detik";

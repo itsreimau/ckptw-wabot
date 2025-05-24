@@ -23,6 +23,9 @@ const APIs = {
     nekorinn: {
         baseURL: "https://api.nekorinn.my.id"
     },
+    nirkyy: {
+        baseURL: "http://nirkyy.koyeb.app"
+    },
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },

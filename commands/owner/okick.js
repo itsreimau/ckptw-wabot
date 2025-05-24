@@ -14,7 +14,7 @@ module.exports = {
     code: async (ctx) => {
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
-        const accountJid = ctx.quoted?.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
+        const accountJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
 
         if (!accountJid) return await ctx.reply({
             text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +

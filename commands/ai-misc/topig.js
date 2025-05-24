@@ -4,8 +4,8 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "hijabkan",
-    aliases: ["hijab", "penghijaban"],
+    name: "topig",
+    aliases: ["jadibabi"],
     category: "ai-misc",
     permissions: {
         coin: 10
@@ -22,8 +22,8 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const result = tools.api.createUrl("zell", "/ai/hijabkan", {
-                imageUrl: uploadUrl
+            const result = tools.api.createUrl("nirkyy", "/api/v1/jadibabi", {
+                url: uploadUrl
             });
 
             return await ctx.reply({

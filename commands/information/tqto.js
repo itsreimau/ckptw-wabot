@@ -34,6 +34,7 @@ module.exports = {
             `${quote("FlowFalcon (https://github.com/FlowFalcon)")}\n` +
             `${quote("Lann (https://github.com/ERLANRAHMAT)")}\n` +
             `${quote("Nyx Altair (https://github.com/NyxAltair)")}\n` +
+            `${quote("Puruu Puruu (https://github.com/rikikangsc2-eng)")}\n` +
             `${quote("Randyy (https://github.com/rynn-k)")}\n` +
             `${quote("Siraj (https://github.com/BK9dev)")}\n` +
             `${quote("ZellRay (https://github.com/ZellRay)")}\n` +

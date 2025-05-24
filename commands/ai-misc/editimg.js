@@ -4,13 +4,19 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "hijabkan",
-    aliases: ["hijab", "penghijaban"],
+    name: "editimg",
     category: "ai-misc",
     permissions: {
-        coin: 10
+        premium: true
     },
     code: async (ctx) => {
+        const input = ctx.args.join(" ") || null;
+
+        if (!input) return await ctx.reply(
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, "make it evangelion art style"))
+        );
+
         const msgType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
             tools.cmd.checkMedia(msgType, "image"),
@@ -22,8 +28,9 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const result = tools.api.createUrl("zell", "/ai/hijabkan", {
-                imageUrl: uploadUrl
+            const result = tools.api.createUrl("zell", "/ai/editimg", {
+                imageUrl: uploadUrl,
+                prompt: input
             });
 
             return await ctx.reply({

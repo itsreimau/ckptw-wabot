@@ -5,6 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "toghibli",
+    aliases: ["jadighibli"],
     category: "ai-misc",
     permissions: {
         premium: true
@@ -19,7 +20,7 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], "image")));
 
         try {
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
             const result = tools.api.createUrl("https://fgsi1-restapi.hf.space", "/api/ai/toGhibli", {
                 url: uploadUrl

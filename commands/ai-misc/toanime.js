@@ -5,6 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "toanime",
+    aliases: ["jadianime"],
     category: "ai-misc",
     permissions: {
         coin: 10
@@ -19,7 +20,7 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], "image")));
 
         try {
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
             const result = tools.api.createUrl("nekorinn", "/tools/img2anime", {
                 imageUrl: uploadUrl

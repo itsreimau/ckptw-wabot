@@ -111,24 +111,23 @@ async function handleUserEvent(bot, m, type) {
 async function addWarning(ctx, senderJid, groupId) {
     const senderId = tools.general.getID(senderJid);
 
-    const key = `group.${groupId}.warnings`;
-    const warnings = await db.get(key) || {};
-    const current = warnings[senderId] || 0;
+    const groupDb = await db.get(`group.${groupId}`) || {};
+    const current = groupDb?.warnings[senderId] || 0;
 
     const newWarning = current + 1;
-    warnings[senderId] = newWarning;
-    await db.set(key, warnings);
+    groupDb?.warnings[senderId] = newWarning;
+    await db.set(`group.${groupId}.warnings`, groupDb?.warnings);
 
-    const maxwarnings = await db.get(`group.${groupId}.maxwarnings`) || 3;
-    await ctx.reply(quote(`⚠️ Warning ${newWarning}/${maxwarnings} untuk @${senderJid.split("@")[0]}`), {
+    await ctx.reply({
+        text: quote(`⚠️ Warning ${newWarning}/${groupDb?.maxwarnings} untuk @${senderJid.split("@")[0]}`),
         mentions: [senderJid]
     });
 
-    if (newWarning >= maxwarnings) {
-        await ctx.reply(quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
+    if (newWarning >= groupDb?.maxwarnings) {
+        await ctx.reply(quote(`⛔ Kamu telah menerima ${groupDb?.maxwarnings} warning dan akan dikeluarkan dari grup!`));
         if (!config.system.restrict) await ctx.group().kick([senderJid]);
         delete warnings[senderId];
-        await db.set(key, warnings);
+        await db.set(`group.${groupId}.warnings`, groupDb?.warnings);
     }
 }
 
@@ -238,7 +237,7 @@ module.exports = (bot) => {
             }
 
             // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
-            const userAFKJids = ctx.quoted?.senderJid ? [tools.general.getID(ctx.quoted?.senderJid)] : m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
+            const userAFKJids = ctx.quoted.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
             if (userAFKJids.length > 0) {
                 if (m.key.fromMe) return;
 
@@ -320,7 +319,6 @@ module.exports = (bot) => {
             // Penanganan antispam
             if (groupDb?.option?.antispam) {
                 const now = Date.now();
-                const key = `group.${groupId}.spam`;
                 const spamData = await db.get(key) || {};
                 const data = spamData[senderId] || {
                     count: 0,
@@ -335,7 +333,7 @@ module.exports = (bot) => {
                     lastMessageTime: now
                 };
 
-                await db.set(key, spamData);
+                await db.set(`group.${groupId}.spam`, spamData);
 
                 if (newCount > 5 && !await ctx.group().isSenderAdmin()) {
                     await ctx.reply(quote("⛔ Jangan spam!"));
@@ -346,7 +344,7 @@ module.exports = (bot) => {
                         await addWarning(ctx, senderJid, groupId);
                     }
                     delete spamData[senderId];
-                    await db.set(key, spamData);
+                    await db.set(`group.${groupId}.spam`, spamData);
                 }
             }
 
@@ -425,7 +423,8 @@ module.exports = (bot) => {
             const vcard = new VCardBuilder()
                 .setFullName(config.owner.name)
                 .setOrg(config.owner.organization)
-                .setNumber(config.owner.id).build();
+                .setNumber(config.owner.id)
+                .build();
             return await bot.core.sendMessage(call.from, {
                 contacts: {
                     displayName: config.owner.name,

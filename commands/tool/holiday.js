@@ -20,7 +20,7 @@ module.exports = {
         try {
             const result = (await axios.get(apiUrl)).data;
 
-            const resultText = result.reverse().map((r) => {
+            const resultText = result.reverse().map(r => {
                 const formattedDate = moment.tz(r.tanggal, "Asia/Jakarta").locale("id").format("dddd, DD MMMM YYYY");
                 return `${quote(r.keterangan)}\n` +
                     quote(formattedDate);

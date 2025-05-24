@@ -12,8 +12,9 @@ module.exports = {
     code: async (ctx) => {
         const mentionedJid = ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
         const userId = ctx.args[0];
-        const userJid = ctx.quoted?.senderJid || mentionedJid || (userId ? `${userId}@s.whatsapp.net` : null);
-        const senderId = tools.general.getID(ctx.sender.jid);
+        const userJid = ctx.quoted.senderJid || mentionedJid || (userId ? `${userId}@s.whatsapp.net` : null);
+        const senderJid = ctx.sender.jid;
+        const senderId = tools.general.getID(senderJid);
         const coinAmount = parseInt(ctx.args[mentionedJid ? 1 : 0], 10);
 
         if (!userJid && !coinAmount) return await ctx.reply({

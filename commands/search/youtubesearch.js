@@ -24,7 +24,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.data;
 
-            const resultText = result.map((r) => {
+            const resultText = result.map(r => {
                 switch (r.type) {
                     case "video":
                         return `${quote(`Judul: ${r.title}`)}\n` +
@@ -38,7 +38,7 @@ module.exports = {
                             `${quote(`Jumlah video: ${r.videoCount}`)}\n` +
                             `${quote(`URL: ${r.url}`)}`;
                 }
-            }).filter((r) => r).join(
+            }).filter(r => r).join(
                 "\n" +
                 `${quote("─────")}\n`
             );

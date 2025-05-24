@@ -29,7 +29,7 @@ module.exports = {
                 }
             }
 
-            const output = await new Promise((resolve) => {
+            const output = await new Promise(resolve => {
                 const childProcess = spawn("node", ["-e", script]);
 
                 let outputData = "";

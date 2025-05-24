@@ -24,7 +24,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.data.hsl;
 
-            const resultText = result.map((r) =>
+            const resultText = result.map(r =>
                 `${quote(`Nama: ${r.name}`)}\n` +
                 `${quote(`Versi: ${r.version.slice(0, -1)}`)}\n` +
                 `${quote(`URL: ${r.url}`)}`

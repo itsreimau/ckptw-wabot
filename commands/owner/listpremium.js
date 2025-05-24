@@ -21,11 +21,11 @@ module.exports = {
             let resultText = "";
             let userMentions = [];
 
-            premiumUsers.forEach((userId) => {
+            premiumUsers.forEach(userId => {
                 resultText += `${quote(`@${userId}`)}\n`;
             });
 
-            premiumUsers.forEach((userId) => {
+            premiumUsers.forEach(userId => {
                 userMentions.push(`${userId}@s.whatsapp.net`);
             });
 

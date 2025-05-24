@@ -11,7 +11,8 @@ module.exports = {
         const vcard = new VCardBuilder()
             .setFullName(config.owner.name)
             .setOrg(config.owner.organization)
-            .setNumber(config.owner.id).build();
+            .setNumber(config.owner.id)
+            .build();
 
         return await ctx.reply({
             contacts: {

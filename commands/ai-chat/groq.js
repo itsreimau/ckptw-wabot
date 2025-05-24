@@ -29,7 +29,7 @@ module.exports = {
             const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
 
             if (checkMedia || checkQuotedMedia) {
-                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
                 const uploadUrl = await tools.general.upload(buffer, "image");
                 const apiUrl = tools.api.createUrl("fasturl", "/aillm/groq", {
                     ask: input,

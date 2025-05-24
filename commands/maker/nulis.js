@@ -4,34 +4,30 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "ai4chat",
-    category: "aiimage",
+    name: "nulis",
+    category: "maker",
     permissions: {
-        premium: true
+        coin: 10
     },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.cmd.generateCommandExample(ctx.used, "moon"))}\n` +
+            `${quote(tools.cmd.generateCommandExample(ctx.used, "evangelion itu peak!"))}\n` +
             quote(tools.cmd.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/ai-img/ai4chat", {
-                text: input,
-                ratio: "1:1"
+            const result = tools.api.createUrl("nirkyy", "/api/v1/nulis", {
+                text: input
             });
 
             return await ctx.reply({
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("png"),
-                caption: `${quote(`Prompt: ${input}`)}\n` +
-                    "\n" +
-                    config.msg.footer
+                mimetype: mime.lookup("jpg")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

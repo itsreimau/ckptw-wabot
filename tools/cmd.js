@@ -85,7 +85,7 @@ function generateInstruction(actions, mediaTypes) {
     let mediaTypesList;
     if (translatedMediaTypeList.length > 1) {
         const lastMediaType = translatedMediaTypeList[translatedMediaTypeList.length - 1];
-        mediaTypesList = translatedMediaTypeList.slice(0, -1).join(", ") + `, atau ${lastMediaType}`;
+        mediaTypesList = `${translatedMediaTypeList.slice(0, -1).join(", ")}, atau ${lastMediaType}`;
     } else {
         mediaTypesList = translatedMediaTypeList[0];
     }
@@ -97,7 +97,6 @@ function generateInstruction(actions, mediaTypes) {
 
     const instructions = actions.map(action => `${actionTranslations[action]}`);
     const actionList = instructions.join(actions.length > 1 ? " atau " : "");
-
     return `📌 ${actionList} ${mediaTypesList}!`;
 }
 
@@ -116,7 +115,6 @@ function generatesFlagInformation(flags) {
         Object.entries(flags).map(([flag, description]) =>
             quote(`• ${monospace(flag)}: ${description}`)
         ).join("\n");
-
     return flagInfo;
 }
 
@@ -125,7 +123,6 @@ function generateNotes(notes) {
 
     const notesInfo = "Catatan:\n" +
         notes.map(note => quote(`• ${note}`)).join("\n");
-
     return notesInfo;
 }
 

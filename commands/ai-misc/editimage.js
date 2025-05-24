@@ -5,7 +5,6 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "editimage",
-    aliases: ["editimg"],
     category: "ai-misc",
     permissions: {
         premium: true
@@ -27,18 +26,18 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], "image")));
 
         try {
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const result = tools.api.createUrl("zell", "/ai/editimg", {
-                imageUrl: uploadUrl,
-                prompt: input
+            const result = tools.api.createUrl("nirkyy", "/api/v1/editimage", {
+                prompt: input,
+                url: uploadUrl
             });
 
             return await ctx.reply({
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("png")
+                mimetype: mime.lookup("jpg")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

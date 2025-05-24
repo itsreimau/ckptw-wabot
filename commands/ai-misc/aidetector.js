@@ -5,12 +5,13 @@ const axios = require("axios");
 
 module.exports = {
     name: "aidetector",
+    aliases: ["aidetect"],
     category: "ai-misc",
     permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || null;
+        const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +

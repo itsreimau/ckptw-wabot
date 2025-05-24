@@ -4,7 +4,7 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "ai4chat",
+    name: "writecream",
     category: "aiimage",
     permissions: {
         premium: true
@@ -19,16 +19,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/ai-img/ai4chat", {
-                text: input,
-                ratio: "1:1"
+            const apiUrl = tools.api.createUrl("nirkyy", "/api/v1/writecream-text2image", {
+                prompt: input,
+                aspect_ratio: "1:1"
             });
 
             return await ctx.reply({
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("png"),
+                mimetype: mime.lookup("jpg"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer

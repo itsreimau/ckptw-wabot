@@ -21,7 +21,7 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], ["image", "gif", "video"])));
 
         try {
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted?.media.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const result = new Sticker(buffer, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,

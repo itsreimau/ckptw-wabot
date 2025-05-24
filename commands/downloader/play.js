@@ -114,10 +114,11 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("falcon", "/download/ytmp3", {
-                    url: searchResult.url
+                const downloadApiUrl = tools.api.createUrl("zell", "/download/youtube", {
+                    url: searchResult.url,
+                    format: "mp3"
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.result;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.download;
 
                 return await ctx.reply({
                     audio: {
