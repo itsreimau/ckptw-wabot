@@ -112,11 +112,13 @@ async function addWarning(ctx, senderJid, groupId) {
     const senderId = tools.general.getID(senderJid);
 
     const groupDb = await db.get(`group.${groupId}`) || {};
-    const current = groupDb?.warnings[senderId] || 0;
+    const warnings = groupDb.warnings || {};
 
+    const current = warnings[senderId] || 0;
     const newWarning = current + 1;
-    groupDb?.warnings[senderId] = newWarning;
-    await db.set(`group.${groupId}.warnings`, groupDb?.warnings);
+    warnings[senderId] = newWarning;
+
+    await db.set(`group.${groupId}.warnings`, warnings);
 
     await ctx.reply({
         text: quote(`⚠️ Warning ${newWarning}/${groupDb?.maxwarnings} untuk @${senderJid.split("@")[0]}`),
@@ -127,7 +129,7 @@ async function addWarning(ctx, senderJid, groupId) {
         await ctx.reply(quote(`⛔ Kamu telah menerima ${groupDb?.maxwarnings} warning dan akan dikeluarkan dari grup!`));
         if (!config.system.restrict) await ctx.group().kick([senderJid]);
         delete warnings[senderId];
-        await db.set(`group.${groupId}.warnings`, groupDb?.warnings);
+        await db.set(`group.${groupId}.warnings`, warnings);
     }
 }
 
