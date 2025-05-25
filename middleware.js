@@ -11,7 +11,6 @@ const mime = require("mime-types");
 async function checkCoin(userCoin = 0, requiredCoin, senderId, isOwner) {
     if (isOwner || userDb?.premium) return false;
     if (userCoin < requiredCoin) return true;
-
     await db.subtract(`user.${senderId}.coin`, requiredCoin);
     return false;
 }
@@ -98,7 +97,10 @@ module.exports = (bot) => {
             await db.set(`user.${senderId}.xp`, newUserXp);
         }
 
-        if (config.system.autoTypingOnCmd) await ctx.simulateTyping(); // Simulasi mengetik jika diaktifkan dalam konfigurasi
+        // Simulasi mengetik jika diaktifkan dalam konfigurasi
+        const simulateTyping = async () => {
+            if (config.system.autoTypingOnCmd) await ctx.simulateTyping();
+        };
 
         // Pengecekan kondisi pengguna
         const restrictions = [{
@@ -136,6 +138,7 @@ module.exports = (bot) => {
             of restrictions) {
             if (condition) {
                 if (!userDb?.hasSentMsg?.[key]) {
+                    await simulateTyping();
                     await ctx.reply(
                         `${msg}\n` +
                         `${config.msg.readmore}\n` +
@@ -150,7 +153,7 @@ module.exports = (bot) => {
 
         // Pengecekan kondisi perizinan
         const command = [...ctx.bot.cmd.values()].find(cmd => [cmd.name, ...(cmd.aliases || [])].includes(ctx.used.command));
-        if (!command) return next();
+        if (!command) return await next();
         const {
             permissions = {}
         } = command;
@@ -213,6 +216,7 @@ module.exports = (bot) => {
             of permissionChecks) {
             if (permissions[key] && condition) {
                 if (!userDb?.hasSentMsg?.[key]) {
+                    await simulateTyping();
                     await ctx.reply(
                         `${msg}\n` +
                         `${config.msg.readmore}\n` +
@@ -225,6 +229,7 @@ module.exports = (bot) => {
             }
         }
 
+        await simulateTyping();
         await next(); // Lanjut ke proses berikutnya jika semua kondisi terpenuhi
     });
 };

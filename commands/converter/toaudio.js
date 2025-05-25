@@ -10,9 +10,9 @@ module.exports = {
     category: "converter",
     permissions: {},
     code: async (ctx) => {
-        const msgType = ctx.getMessageType();
+        const messageType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.cmd.checkMedia(msgType, ["video"]),
+            tools.cmd.checkMedia(messageType, ["video"]),
             tools.cmd.checkQuotedMedia(ctx.quoted, ["video"])
         ]);
 

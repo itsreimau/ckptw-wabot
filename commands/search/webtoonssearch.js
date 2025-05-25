@@ -25,7 +25,7 @@ module.exports = {
             const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map(r =>
-                `${quote(`Nama: ${r.title}`)}\n` +
+                `${quote(`Judul: ${r.title}`)}\n` +
                 `${quote(`Penulis: ${r.author}`)}\n` +
                 `${quote(`Genre: ${r.genre}`)}\n` +
                 `${quote(`URL: ${r.link}`)}`

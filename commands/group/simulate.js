@@ -3,7 +3,7 @@ const {
     quote
 } = require("@itsreimau/ckptw-mod");
 const {
-    handleUserEvent
+    handleWelcome
 } = require("../../events/handler.js");
 
 module.exports = {
@@ -23,21 +23,19 @@ module.exports = {
         );
 
         try {
-            const senderJid = ctx.sender.jid;
-            const groupJid = ctx.id;
             const m = {
-                id: groupJid,
-                participants: [senderJid]
+                id: ctx.id,
+                participants: [ctx.sender.jid]
             };
 
             switch (input.toLowerCase()) {
                 case "j":
                 case "join":
-                    return await handleUserEvent(ctx, m, "UserJoin");
+                    return await handleWelcome(ctx, m, "UserJoin");
                     break;
                 case "l":
                 case "leave":
-                    return await handleUserEvent(ctx, m, "UserLeave");
+                    return await handleWelcome(ctx, m, "UserLeave");
                     break;
                 default:
                     return await ctx.reply(quote(`❎ Key '${key}' tidak valid!`));

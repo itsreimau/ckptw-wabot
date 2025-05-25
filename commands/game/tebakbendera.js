@@ -52,14 +52,12 @@ module.exports = {
                     session.delete(ctx.id);
                     await db.add(`user.${participantId}.coin`, game.coin);
                     await db.add(`user.${participantId}.winGame`, 1);
-                    await ctx.sendMessage(
-                        ctx.id, {
-                            text: `${quote("💯 Benar!")}\n` +
-                                quote(`+${game.coin} Koin`)
-                        }, {
-                            quoted: m
-                        }
-                    );
+                    await ctx.sendMessage(ctx.id, {
+                        text: `${quote("💯 Benar!")}\n` +
+                            quote(`+${game.coin} Koin`)
+                    }, {
+                        quoted: m
+                    });
                     return collector.stop();
                 } else if (["h", "hint"].includes(participantAnswer)) {
                     const clue = game.answer.replace(/[aiueo]/g, "_");

@@ -11,9 +11,9 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const msgType = ctx.getMessageType();
+        const messageType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.cmd.checkMedia(msgType, "image"),
+            tools.cmd.checkMedia(messageType, "image"),
             tools.cmd.checkQuotedMedia(ctx.quoted, "image")
         ]);
 

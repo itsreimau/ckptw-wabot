@@ -58,9 +58,7 @@ function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
 
         const queryParams = new URLSearchParams(params);
 
-        if (apiKeyParamName && api && "APIKey" in api) {
-            queryParams.set(apiKeyParamName, api.APIKey);
-        }
+        if (apiKeyParamName && api && "APIKey" in api) queryParams.set(apiKeyParamName, api.APIKey);
 
         const baseURL = api ? api.baseURL : apiNameOrURL.origin;
         const apiUrl = new URL(endpoint, baseURL);

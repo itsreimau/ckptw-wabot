@@ -21,9 +21,9 @@ module.exports = {
             quote(tools.cmd.generateCommandExample(ctx.used, "get in the fucking robot|shinji!"))
         );
 
-        const msgType = ctx.getMessageType();
+        const messageType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.cmd.checkMedia(msgType, ["image", "sticker"]),
+            tools.cmd.checkMedia(messageType, ["image", "sticker"]),
             tools.cmd.checkQuotedMedia(ctx.quoted, ["image", "sticker"])
         ]);
 

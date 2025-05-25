@@ -12,9 +12,9 @@ module.exports = {
     category: "converter",
     permissions: {},
     code: async (ctx) => {
-        const msgType = ctx.getMessageType();
+        const messageType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.cmd.checkMedia(msgType, ["image", "gif", "video"]),
+            tools.cmd.checkMedia(messageType, ["image", "gif", "video"]),
             tools.cmd.checkQuotedMedia(ctx.quoted, ["image", "gif", "video"])
         ]);
 

@@ -24,12 +24,10 @@ const db = new SimplDB();
 // Hapus folder autentikasi jika kosong (untuk bot dengan adapter default)
 if (config.bot.authAdapter.adapter === "default") {
     const authDir = path.resolve(__dirname, config.bot.authAdapter.default.authDir);
-    if (fs.existsSync(authDir) && !fs.readdirSync(authDir).length) {
-        fs.rmSync(authDir, {
-            recursive: true,
-            force: true
-        });
-    }
+    if (fs.existsSync(authDir) && !fs.readdirSync(authDir).length) fs.rmSync(authDir, {
+        recursive: true,
+        force: true
+    });
 }
 
 // Tetapkan konfigurasi dan alat ke variabel global

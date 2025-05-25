@@ -12,9 +12,9 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 
-        const msgType = ctx.getMessageType();
+        const messageType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.cmd.checkMedia(msgType, ["audio", "document", "image", "video", "sticker"]),
+            tools.cmd.checkMedia(messageType, ["audio", "document", "image", "video", "sticker"]),
             tools.cmd.checkQuotedMedia(ctx.quoted, ["audio", "document", "image", "video", "sticker"])
         ]);
 

@@ -14,7 +14,7 @@ const fs = require("node:fs");
 const util = require("node:util");
 
 // Fungsi untuk menangani event pengguna bergabung/keluar grup
-async function handleUserEvent(bot, m, type) {
+async function handleWelcome(bot, m, type) {
     const groupJid = m.id;
     const groupId = tools.general.getID(m.id);
     const groupDb = await db.get(`group.${groupId}`) || {};
@@ -242,8 +242,7 @@ module.exports = (bot) => {
                 if (m.key.fromMe) return;
 
                 for (const userAFKJid of userAFKJids) {
-                    const userAFK = await db.get(`user.${userAFKJid}.afk`) || {};
-                    if (userAFK?.reason && userAFK?.timestamp) {
+                    if (userDb?.afk?.reason && userDb?.afk?.timestamp) {
                         const timeago = tools.general.convertMsToDuration(Date.now() - userAFK.timestamp);
                         await ctx.reply(quote(`📴 Jangan tag! Dia sedang AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                     }
@@ -252,7 +251,7 @@ module.exports = (bot) => {
 
             // Penanganan AFK (Menghapus status AFK pengguna yang mengirim pesan)
             const userAFK = userDb?.afk || {};
-            if (userAFK?.reason && userAFK?.timestamp) {
+            if (userDb?.afk?.reason && userDb?.afk?.timestamp) {
                 const timeElapsed = Date.now() - userAFK.timestamp;
                 if (timeElapsed > 3000) {
                     const timeago = tools.general.convertMsToDuration(timeElapsed);
@@ -319,7 +318,7 @@ module.exports = (bot) => {
             // Penanganan antispam
             if (groupDb?.option?.antispam) {
                 const now = Date.now();
-                const spamData = await db.get(key) || {};
+                const spamData = await db.get(`group.${groupId}.spam`) || {};
                 const data = spamData[senderId] || {
                     count: 0,
                     lastMessageTime: 0
@@ -439,7 +438,7 @@ module.exports = (bot) => {
     });
 
     // Event saat pengguna bergabung atau keluar dari grup
-    bot.ev.on(Events.UserJoin, async (m) => handleUserEvent(bot, m, "UserJoin"));
-    bot.ev.on(Events.UserLeave, async (m) => handleUserEvent(bot, m, "UserLeave"));
+    bot.ev.on(Events.UserJoin, async (m) => handleWelcome(bot, m, "UserJoin"));
+    bot.ev.on(Events.UserLeave, async (m) => handleWelcome(bot, m, "UserLeave"));
 };
-module.exports.handleUserEvent = handleUserEvent; // Penanganan event pengguna bergabung/keluar grup
+module.exports.handleWelcome = handleWelcome; // Penanganan event pengguna bergabung/keluar grup

@@ -8,19 +8,23 @@ module.exports = {
     category: "information",
     permissions: {},
     code: async (ctx) => {
-        const vcard = new VCardBuilder()
-            .setFullName(config.owner.name)
-            .setOrg(config.owner.organization)
-            .setNumber(config.owner.id)
-            .build();
+        try {
+            const vcard = new VCardBuilder()
+                .setFullName(config.owner.name)
+                .setOrg(config.owner.organization)
+                .setNumber(config.owner.id)
+                .build();
 
-        return await ctx.reply({
-            contacts: {
-                displayName: config.owner.name,
-                contacts: [{
-                    vcard
-                }]
-            }
-        });
+            return await ctx.reply({
+                contacts: {
+                    displayName: config.owner.name,
+                    contacts: [{
+                        vcard
+                    }]
+                }
+            });
+        } catch (error) {
+            return await tools.cmd.handleError(ctx, error, false);
+        }
     }
 };

@@ -15,6 +15,9 @@ module.exports = {
     permissions: {},
     code: async (ctx) => {
         try {
+            const senderJid = ctx.sender.jid;
+            const senderId = tools.general.getID(senderJid);
+
             const {
                 cmd
             } = ctx.bot;
@@ -36,7 +39,7 @@ module.exports = {
                 "misc": "Miscellaneous"
             };
 
-            let text = `Hai @${tools.general.getID(ctx.sender.jid)}, berikut adalah daftar perintah yang tersedia!\n` +
+            let text = `Hai @${senderId}, berikut adalah daftar perintah yang tersedia!\n` +
                 "\n" +
                 `${quote(`Tanggal: ${moment.tz(config.system.timeZone).locale("id").format("dddd, DD MMMM YYYY")}`)}\n` +
                 `${quote(`Waktu: ${moment.tz(config.system.timeZone).format("HH.mm.ss")}`)}\n` +
@@ -90,7 +93,7 @@ module.exports = {
                 }
             };
             const contextInfo = {
-                mentionedJid: [ctx.sender.jid],
+                mentionedJid: [senderJid],
                 forwardingScore: 9999,
                 isForwarded: true,
                 forwardedNewsletterMessageInfo: {
