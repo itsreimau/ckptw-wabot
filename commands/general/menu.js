@@ -78,7 +78,6 @@ module.exports = {
 
             text += config.msg.footer;
 
-
             const fakeQuotedText = {
                 key: {
                     participant: "13135550002@s.whatsapp.net",

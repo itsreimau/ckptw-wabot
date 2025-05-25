@@ -8,11 +8,9 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 // Fungsi untuk mengecek apakah pengguna memiliki cukup koin sebelum menggunakan perintah tertentu
-async function checkCoin(requiredCoin, senderId, messageId) {
-    const userDb = await db.get(`user.${senderId}`) || {};
-
-    if (tools.general.isOwner(senderId, messageId) || userDb?.premium) return false;
-    if ((userDb?.coin || 0) < requiredCoin) return true;
+async function checkCoin(userCoin = 0, requiredCoin, senderId, isOwner) {
+    if (isOwner || userDb?.premium) return false;
+    if (userCoin < requiredCoin) return true;
 
     await db.subtract(`user.${senderId}.coin`, requiredCoin);
     return false;
@@ -23,7 +21,6 @@ module.exports = (bot) => {
     bot.use(async (ctx, next) => {
         // Variabel umum
         const isGroup = ctx.isGroup();
-        const isPrivate = !isGroup;
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
         const groupJid = isGroup ? ctx.id : null;
@@ -51,7 +48,7 @@ module.exports = (bot) => {
             newUserXp -= xpToLevelUp;
 
             if (userDb?.autolevelup) {
-                const text = `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
+                const text = `${quote(`Selamat! Anda telah naik ke level ${newUserLevel}!`)}\n` +
                     `${config.msg.readmore}\n` +
                     quote(tools.cmd.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]));
                 const contextInfo = {
@@ -151,7 +148,7 @@ module.exports = (bot) => {
             }
         }
 
-        // Pengecekan izin
+        // Pengecekan kondisi perizinan
         const command = [...ctx.bot.cmd.values()].find(cmd => [cmd.name, ...(cmd.aliases || [])].includes(ctx.used.command));
         if (!command) return next();
         const {
@@ -171,7 +168,7 @@ module.exports = (bot) => {
             },
             {
                 key: "coin",
-                condition: permissions.coin && config.system.useCoin && await checkCoin(permissions.coin, senderId, ctx.msg.key.id),
+                condition: permissions.coin && config.system.useCoin && await checkCoin(userDb?.coin, permissions.coin, senderId, isOwner),
                 msg: config.msg.coin,
                 reaction: "💰"
             },
@@ -228,6 +225,6 @@ module.exports = (bot) => {
             }
         }
 
-        await next(); // Lanjut ke proses berikutnya jika semua kondisi pengguna dan izin terpenuhi
+        await next(); // Lanjut ke proses berikutnya jika semua kondisi terpenuhi
     });
 };

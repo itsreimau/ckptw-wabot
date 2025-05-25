@@ -19,18 +19,18 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/search/apkcombo", {
-                q: input
+            const apiUrl = tools.api.createUrl("archive", "/api/search/apkcombo", {
+                query: input
             });
             const result = (await axios.get(apiUrl)).data.result;
 
-            const resultText = result.map(r =>
+            const resultText = result.map((r) =>
                 `${quote(`Nama: ${r.title}`)}\n` +
-                `${quote(`Pengembang: ${r.author}`)}\n` +
                 `${quote(`Ukuran: ${r.size}`)}\n` +
+                `${quote(`Pengembang: ${r.author}`)}\n` +
                 `${quote(`Rating: ${r.rating}`)}\n` +
                 `${quote(`Diunduh: ${r.downloaded}`)}\n` +
-                `${quote(`URL: ${r.url}`)}`
+                `${quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

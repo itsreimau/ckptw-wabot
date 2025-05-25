@@ -108,12 +108,10 @@ async function handleUserEvent(bot, m, type) {
 }
 
 // Fungsi untuk menambahkan warning
-async function addWarning(ctx, senderJid, groupId) {
+async function addWarning(ctx, groupDb, senderJid, groupId) {
     const senderId = tools.general.getID(senderJid);
 
-    const groupDb = await db.get(`group.${groupId}`) || {};
-    const warnings = groupDb.warnings || {};
-
+    const warnings = groupDb?.warnings || {};
     const current = warnings[senderId] || 0;
     const newWarning = current + 1;
     warnings[senderId] = newWarning;
@@ -121,12 +119,12 @@ async function addWarning(ctx, senderJid, groupId) {
     await db.set(`group.${groupId}.warnings`, warnings);
 
     await ctx.reply({
-        text: quote(`⚠️ Warning ${newWarning}/${groupDb?.maxwarnings} untuk @${senderJid.split("@")[0]}`),
+        text: quote(`⚠️ Warning ${newWarning}/${groupDb?.maxwarnings} untuk @${senderId}`),
         mentions: [senderJid]
     });
 
     if (newWarning >= groupDb?.maxwarnings) {
-        await ctx.reply(quote(`⛔ Kamu telah menerima ${groupDb?.maxwarnings} warning dan akan dikeluarkan dari grup!`));
+        await ctx.reply(quote(`⛔ Anda telah menerima ${groupDb?.maxwarnings} warning dan akan dikeluarkan dari grup!`));
         if (!config.system.restrict) await ctx.group().kick([senderJid]);
         delete warnings[senderId];
         await db.set(`group.${groupId}.warnings`, warnings);

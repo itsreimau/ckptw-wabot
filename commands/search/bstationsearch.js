@@ -19,12 +19,12 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/search/bilibili", {
-                q: input
+            const apiUrl = tools.api.createUrl("archive", "/api/search/bstation", {
+                query: input
             });
             const result = (await axios.get(apiUrl)).data.result;
 
-            const resultText = result.map(r =>
+            const resultText = result.map((r) =>
                 `${quote(`Judul: ${r.title}`)}\n` +
                 `${quote(`Durasi: ${r.duration}`)}\n` +
                 `${quote(`Ditonton: ${r.views}`)}\n` +

@@ -37,6 +37,7 @@ module.exports = {
             `${quote("Puruu Puruu (https://github.com/rikikangsc2-eng)")}\n` +
             `${quote("Randyy (https://github.com/rynn-k)")}\n` +
             `${quote("Siraj (https://github.com/BK9dev)")}\n` +
+            `${quote("swndyyyyyy (https://github.com/swndyy)")}\n` +
             `${quote("ZellRay (https://github.com/ZellRay)")}\n` +
             `${quote("─────")}\n` +
             `${quote("Dan kepada semua pihak yang telah membantu dalam pengembangan bot ini.")}\n` +

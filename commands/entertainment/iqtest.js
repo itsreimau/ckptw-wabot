@@ -29,7 +29,7 @@ module.exports = {
             iqScore = Math.floor(Math.random() * 50) + 101;
             feedback = iqScore < 150 ?
                 "Luar biasa! Anda di atas rata-rata!" :
-                "Wah, kamu jenius luar biasa! Kemenanganmu sangat mengesankan!";
+                "Wah, Anda jenius luar biasa! Kemenanganmu sangat mengesankan!";
         }
 
         return await ctx.reply(quote(`🧠 IQ Anda sebesar: ${iqScore}. ${feedback}`));

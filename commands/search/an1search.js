@@ -19,16 +19,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/search/android1", {
-                q: input
+            const apiUrl = tools.api.createUrl("archive", "/api/search/android1", {
+                query: input
             });
             const result = (await axios.get(apiUrl)).data.result;
 
-            const resultText = result.map(r =>
+            const resultText = result.map((r) =>
                 `${quote(`Nama: ${r.title}`)}\n` +
                 `${quote(`Pengembang: ${r.developer}`)}\n` +
                 `${quote(`Rating: ${r.rating}`)}\n` +
-                `${quote(`URL: ${r.url}`)}`
+                `${quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

@@ -2,11 +2,9 @@ const {
     quote
 } = require("@itsreimau/ckptw-mod");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "twitterdl",
-    aliases: ["twitter", "twit", "twitdl", "x", "xdl"],
+    name: "sfiledl",
     category: "downloader",
     permissions: {
         premium: true
@@ -23,19 +21,20 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/download/twitterx", {
+            const apiUrl = tools.api.createUrl("archive", "/api/download/sfile", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.result.downloads.find(d => d.quality.includes("720p"));;
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
-                video: {
-                    url: result.url
+                document: {
+                    url: result.download.url
                 },
-                mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
-                    config.msg.footer
+                    config.msg.footer,
+                fileName: result.metadata.filename,
+                mimetype: result.metadata.mimetype || "application/octet-stream"
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

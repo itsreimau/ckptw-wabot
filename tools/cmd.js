@@ -28,7 +28,6 @@ async function checkMedia(type, required) {
     });
 }
 
-
 async function checkQuotedMedia(type, required) {
     if (!type || !required) return false;
 
@@ -112,9 +111,7 @@ function generatesFlagInformation(flags) {
     if (typeof flags !== "object" || !flags) return "'flags' harus berupa objek!";
 
     const flagInfo = "Flag:\n" +
-        Object.entries(flags).map(([flag, description]) =>
-            quote(`• ${monospace(flag)}: ${description}`)
-        ).join("\n");
+        Object.entries(flags).map(([flag, description]) => quote(`• ${monospace(flag)}: ${description}`)).join("\n");
     return flagInfo;
 }
 

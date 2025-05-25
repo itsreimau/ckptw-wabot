@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "sfilesearch",
-    aliases: ["sfile", "sfiles"],
+    name: "goodreadssearch",
+    aliases: ["goodreads", "goodreadss"],
     category: "search",
     permissions: {
         coin: 10
@@ -19,14 +19,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/search/sfile", {
+            const apiUrl = tools.api.createUrl("archive", "/api/search/goodreads", {
                 query: input
             });
             const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map((r) =>
                 `${quote(`Judul: ${r.title}`)}\n` +
-                `${quote(`Ukuran: ${r.size}`)}\n` +
+                `${quote(`Rating: ${r.rating}`)}\n` +
                 `${quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +
