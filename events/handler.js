@@ -177,6 +177,7 @@ module.exports = (bot) => {
         const botDb = await db.get("bot") || {};
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
+        const userAfk = userDb?.afk || {};
         const muteList = groupDb?.mute || [];
 
         // Pengecekan mode bot (group, private, self) dan sistem mute
@@ -237,25 +238,24 @@ module.exports = (bot) => {
             }
 
             // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
-            const userAFKJids = ctx.quoted.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
-            if (userAFKJids.length > 0) {
+            const userAfkMentions = ctx.quoted.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
+            if (userAfkMentions.length > 0) {
                 if (m.key.fromMe) return;
 
-                for (const userAFKJid of userAFKJids) {
+                for (const userAfkJid of userAfkMentions) {
                     if (userDb?.afk?.reason && userDb?.afk?.timestamp) {
-                        const timeago = tools.general.convertMsToDuration(Date.now() - userAFK.timestamp);
-                        await ctx.reply(quote(`📴 Jangan tag! Dia sedang AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
+                        const timeago = tools.general.convertMsToDuration(Date.now() - userAfk.timestamp);
+                        await ctx.reply(quote(`📴 Jangan tag! Dia sedang AFK ${userAfk.reason ? `dengan alasan "${userAfk.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                     }
                 }
             }
 
             // Penanganan AFK (Menghapus status AFK pengguna yang mengirim pesan)
-            const userAFK = userDb?.afk || {};
-            if (userDb?.afk?.reason && userDb?.afk?.timestamp) {
-                const timeElapsed = Date.now() - userAFK.timestamp;
+            if (userAfk.reason && userAfk.timestamp) {
+                const timeElapsed = Date.now() - userAfk.timestamp;
                 if (timeElapsed > 3000) {
                     const timeago = tools.general.convertMsToDuration(timeElapsed);
-                    await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAFK.reason ? `dengan alasan "${userAFK.reason}"` : "tanpa alasan"} selama ${timeago}.`));
+                    await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAfk.reason ? `dengan alasan "${userAfk.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                     await db.delete(`user.${senderId}.afk`);
                 }
             }
