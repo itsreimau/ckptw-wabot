@@ -35,7 +35,7 @@ module.exports = {
                 }
             };
             const contextInfo = {
-                mentionedJid: [senderJid],
+                mentionedJid: [ctx.sender.jid],
                 forwardingScore: 9999,
                 isForwarded: true,
                 forwardedNewsletterMessageInfo: {

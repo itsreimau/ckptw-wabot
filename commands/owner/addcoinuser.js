@@ -11,17 +11,14 @@ module.exports = {
     },
     code: async (ctx) => {
         const mentionedJid = ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
-        const userId = ctx.args[0];
-        const userJid = ctx.quoted.senderJid || mentionedJid || (userId ? `${userId}@s.whatsapp.net` : null);
-        const senderJid = ctx.sender.jid;
-        const senderId = tools.general.getID(senderJid);
+        const userJid = ctx.quoted.senderJid || mentionedJid || (ctx.args[0] ? `${ctx.args[0]}@s.whatsapp.net` : null);
         const coinAmount = parseInt(ctx.args[mentionedJid ? 1 : 0], 10);
 
         if (!userJid && !coinAmount) return await ctx.reply({
             text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.cmd.generateCommandExample(ctx.used, `@${senderId} 8`))}\n` +
+                `${quote(tools.cmd.generateCommandExample(ctx.used, `@${tools.general.getID(ctx.sender.jid)} 8`))}\n` +
                 quote(tools.cmd.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
-            mentions: [senderJid]
+            mentions: [ctx.sender.jid]
         });
 
         const [isOnWhatsApp] = await ctx.core.onWhatsApp(userJid);

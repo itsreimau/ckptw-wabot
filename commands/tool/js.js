@@ -24,9 +24,7 @@ module.exports = {
         try {
             const restricted = ["require", "eval", "Function", "global"];
             for (const w of restricted) {
-                if (script.includes(w)) {
-                    return await ctx.reply(quote(`❎ Penggunaan ${w} tidak diperbolehkan dalam kode!`));
-                }
+                if (script.includes(w)) return await ctx.reply(quote(`❎ Penggunaan ${w} tidak diperbolehkan dalam kode!`));
             }
 
             const output = await new Promise(resolve => {

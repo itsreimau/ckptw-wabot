@@ -10,25 +10,22 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const userId = ctx.args[0];
-        const user = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || (userId ? `${userId}@s.whatsapp.net` : null);
-        const senderJid = ctx.sender.jid;
-        const senderId = tools.general.getID(senderJid);
+        const userJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || (ctx.args[0] ? `${ctx.args[0]}@s.whatsapp.net` : null);
 
-        if (!user) return await ctx.reply({
+        if (!userJid) return await ctx.reply({
             text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.cmd.generateCommandExample(ctx.used, `@${senderId}`))}\n` +
+                `${quote(tools.cmd.generateCommandExample(ctx.used, `@${tools.general.getID(ctx.sender.jid)}`))}\n` +
                 quote(tools.cmd.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
-            mentions: [senderJid]
+            mentions: [ctx.sender.jid]
         });
 
-        const [isOnWhatsApp] = await ctx.core.onWhatsApp(user);
+        const [isOnWhatsApp] = await ctx.core.onWhatsApp(userJid);
         if (!isOnWhatsApp.exists) return await ctx.reply(quote("❎ Akun tidak ada di WhatsApp!"));
 
         try {
-            await db.set(`user.${tools.general.getID(user)}.banned`, false);
+            await db.set(`user.${tools.general.getID(userJid)}.banned`, false);
 
-            await ctx.sendMessage(user, {
+            await ctx.sendMessage(userJid, {
                 text: quote("🎉 Anda telah diunbanned oleh Owner!")
             });
             await ctx.reply(quote("✅ Berhasil diunbanned!"));

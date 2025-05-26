@@ -47,30 +47,26 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.data;
 
-            if (result.music_info && mediaType === "audio") {
-                return await ctx.reply({
-                    audio: {
-                        url: result.music_info.url
-                    },
-                    mimetype: mime.lookup("mp3")
-                });
-            }
+            if (result.music_info && mediaType === "audio") return await ctx.reply({
+                audio: {
+                    url: result.music_info.url
+                },
+                mimetype: mime.lookup("mp3")
+            });
 
             if (result.data && mediaType === "video_image") {
                 const videoType = flag.hd ? "nowatermark_hd" : "nowatermark";
                 const video = result.data.find(v => v.type === videoType);
 
-                if (video) {
-                    return await ctx.reply({
-                        video: {
-                            url: video.url
-                        },
-                        mimetype: mime.lookup("mp4"),
-                        caption: `${quote(`URL: ${url}`)}\n` +
-                            "\n" +
-                            config.msg.footer
-                    });
-                }
+                if (video) return await ctx.reply({
+                    video: {
+                        url: video.url
+                    },
+                    mimetype: mime.lookup("mp4"),
+                    caption: `${quote(`URL: ${url}`)}\n` +
+                        "\n" +
+                        config.msg.footer
+                });
 
                 const images = result.data.filter(item => item.type === "photo");
                 for (const image of images) {

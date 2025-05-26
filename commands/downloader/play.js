@@ -43,9 +43,7 @@ module.exports = {
             const query = flag.input;
             let source = flag.source || "youtube";
 
-            if (!["soundcloud", "spotify", "youtube"].includes(source)) {
-                source = "youtube";
-            }
+            if (!["soundcloud", "spotify", "youtube"].includes(source)) source = "youtube";
 
             if (source === "soundcloud") {
                 const searchApiUrl = tools.api.createUrl("agatz", "/api/soundcloud", {

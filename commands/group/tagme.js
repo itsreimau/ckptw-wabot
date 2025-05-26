@@ -6,12 +6,9 @@ module.exports = {
     },
     code: async (ctx) => {
         try {
-            const senderJid = ctx.sender.jid;
-            const senderId = tools.general.getID(senderJid);
-
             return await ctx.reply({
-                text: `@${senderId}`,
-                mentions: [senderJid]
+                text: `@${tools.general.getID(ctx.sender.jid)}`,
+                mentions: [ctx.sender.jid]
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
