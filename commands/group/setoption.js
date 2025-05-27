@@ -72,7 +72,7 @@ module.exports = {
                     setKey = `group.${groupId}.option.${input.toLowerCase()}`;
                     break;
                 default:
-                    return await ctx.reply(quote(`❎ Key '${input}' tidak valid!`));
+                    return await ctx.reply(quote(`❎ Opsi '${input}' tidak valid!`));
             }
 
             const currentStatus = await db.get(setKey);
@@ -80,7 +80,7 @@ module.exports = {
 
             await db.set(setKey, newStatus);
             const statusText = newStatus ? "diaktifkan" : "dinonaktifkan";
-            return await ctx.reply(quote(`✅ Fitur '${input}' berhasil ${statusText}!`));
+            return await ctx.reply(quote(`✅ Opsi '${input}' berhasil ${statusText}!`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

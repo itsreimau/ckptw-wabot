@@ -10,7 +10,7 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const userJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || (ctx.args[0] ? `${ctx.args[0]}@s.whatsapp.net` : null);
+        const userJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || (ctx.args[0] ? `${ctx.args[0].replace(/[^\d]/g, "")}@s.whatsapp.net` : null);
 
         if (!userJid) return await ctx.reply({
             text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +

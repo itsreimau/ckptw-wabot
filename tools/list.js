@@ -130,9 +130,9 @@ async function get(type) {
             }
             case "settext": {
                 const data = [
-                    "goodbye (Teks goodbye, variabel yang tersedia: %tag%, %subject%, %description%) (Atur pesan perpisahan)",
+                    "goodbye (Teks goodbye, variabel yang tersedia: %tag%, %subject%, %description%)",
                     "intro (Teks intro)",
-                    "welcome (Teks welcome, variabel yang tersedia: %tag%, %subject%, %description%) (Atur pesan selamat datang)"
+                    "welcome (Teks welcome, variabel yang tersedia: %tag%, %subject%, %description%)"
                 ];
                 text = createList(data, d => quote(d));
                 break;

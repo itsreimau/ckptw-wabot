@@ -223,7 +223,7 @@ module.exports = (bot) => {
                         quote(tools.cmd.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
                     );
                     return await db.set(`user.${senderId}.hasSentMsg.${key}`, true);
-                } else if (reaction) {
+                } else {
                     return await ctx.react(ctx.id, reaction);
                 }
             }

@@ -38,16 +38,16 @@ module.exports = {
                     setKey = `group.${groupId}.text.${key.toLowerCase()}`;
                     break;
                 default:
-                    return await ctx.reply(quote(`❎ Key '${key}' tidak valid!`));
+                    return await ctx.reply(quote(`❎ Teks '${key}' tidak valid!`));
             }
 
             if (["d", "delete"].includes(text.toLowerCase())) {
                 await db.delete(setKey);
-                return await ctx.reply(quote(`🗑️ Pesan untuk key '${key}' berhasil dihapus!`));
+                return await ctx.reply(quote(`🗑️ Pesan untuk teks '${key}' berhasil dihapus!`));
             }
 
             await db.set(setKey, text);
-            return await ctx.reply(quote(`✅ Pesan untuk key '${key}' berhasil disimpan!`));
+            return await ctx.reply(quote(`✅ Pesan untuk teks '${key}' berhasil disimpan!`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

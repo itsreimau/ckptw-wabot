@@ -38,7 +38,7 @@ module.exports = {
                     return await handleWelcome(ctx, m, "UserLeave");
                     break;
                 default:
-                    return await ctx.reply(quote(`❎ Key '${key}' tidak valid!`));
+                    return await ctx.reply(quote(`❎ Simulasi '${input}' tidak valid!`));
             }
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
