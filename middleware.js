@@ -20,6 +20,7 @@ module.exports = (bot) => {
     bot.use(async (ctx, next) => {
         // Variabel umum
         const isGroup = ctx.isGroup();
+        const isPrivate = !isGroup;
         const senderJid = ctx.sender.jid;
         const senderId = tools.general.getID(senderJid);
         const groupJid = isGroup ? ctx.id : null;
@@ -33,7 +34,7 @@ module.exports = (bot) => {
         const muteList = groupDb?.mute || [];
 
         // Pengecekan mode bot (group, private, self) dan sistem mute
-        if ((botDb?.mode === "group" && !isGroup) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
+        if ((botDb?.mode === "group" && isPrivate) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
         if ((groupDb?.mutebot === true && (!isOwner && !await ctx.group().isSenderAdmin())) || (groupDb?.mutebot === "owner" && !isOwner)) return;
         if (muteList.includes(senderId)) return;
 
@@ -177,7 +178,7 @@ module.exports = (bot) => {
             },
             {
                 key: "group",
-                condition: !isGroup,
+                condition: isPrivate,
                 msg: config.msg.group,
                 reaction: "👥"
             },

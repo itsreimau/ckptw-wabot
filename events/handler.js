@@ -169,7 +169,7 @@ module.exports = (bot) => {
         const muteList = groupDb?.mute || [];
 
         // Pengecekan mode bot (group, private, self) dan sistem mute
-        if ((botDb?.mode === "group" && !isGroup) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
+        if ((botDb?.mode === "group" && isPrivate) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
         if (groupDb?.mutebot && (!isOwner && !await ctx.group().isSenderAdmin())) return;
         if (muteList.includes(senderId)) return await ctx.deleteMessage(m.key);
 
