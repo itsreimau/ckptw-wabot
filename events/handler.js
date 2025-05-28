@@ -22,90 +22,77 @@ async function handleWelcome(bot, m, type) {
     if (groupDb?.mutebot) return;
     if (!groupDb?.option?.welcome) return;
 
-    try {
-        const metadata = await bot.core.groupMetadata(groupJid);
+    const metadata = await bot.core.groupMetadata(groupJid);
 
-        for (const jid of m.participants) {
-            const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+    for (const jid of m.participants) {
+        const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
-            const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
-            const userId = tools.general.getID(jid);
-            const userName = await db.get(`user.${userId}.username`) || null;
-            const userTag = `@${userId}`;
+        const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
+        const userId = tools.general.getID(jid);
+        const userName = await db.get(`user.${userId}.username`) || null;
+        const userTag = `@${userId}`;
 
-            const text = customText ?
-                customText
-                .replace(/%tag%/g, userTag)
-                .replace(/%subject%/g, metadata.subject)
-                .replace(/%description%/g, metadata.description) :
-                (type === "UserJoin" ?
-                    quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
-                    quote(`👋 Selamat tinggal, ${userTag}!`));
-            const contextInfo = {
-                mentionedJid: [jid],
-                forwardingScore: 9999,
-                isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: config.bot.newsletterJid,
-                    newsletterName: config.bot.name
-                }
-            };
-
-            try {
-                const canvas = tools.api.createUrl("falcon", `/imagecreator/${type === "UserJoin" ? "welcome" : "goodbye"}`, {
-                    ppuser: profilePictureUrl,
-                    bg: config.bot.thumbnail,
-                    text: type === "UserJoin" ? `Selamat datang ${userName || userId} di grup ${metadata.subject}!` : `Selamat tinggal, ${userName || userId}!`
-                });
-                const video = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
-                    url: canvas
-                }))).data.result;
-                await bot.core.sendMessage(groupJid, {
-                    video: {
-                        url: video
-                    },
-                    mimetype: mime.lookup("mp4"),
-                    caption: text,
-                    gifPlayback: true,
-                    contextInfo
-                });
-            } catch (error) {
-                if (error.status !== 200) await bot.core.sendMessage(groupJid, {
-                    text,
-                    contextInfo
-                });
+        const text = customText ?
+            customText
+            .replace(/%tag%/g, userTag)
+            .replace(/%subject%/g, metadata.subject)
+            .replace(/%description%/g, metadata.description) :
+            (type === "UserJoin" ?
+                quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
+                quote(`👋 Selamat tinggal, ${userTag}!`));
+        const contextInfo = {
+            mentionedJid: [jid],
+            forwardingScore: 9999,
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: config.bot.newsletterJid,
+                newsletterName: config.bot.name
             }
+        };
 
-            if (type === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(groupJid, {
-                text: groupDb?.text?.intro,
-                mentions: [jid]
-            }, {
-                quoted: {
-                    key: {
-                        participant: "13135550002@s.whatsapp.net",
-                        remoteJid: "status@broadcast"
-                    },
-                    message: {
-                        extendedTextMessage: {
-                            text: "Jangan lupa untuk mengisi intro!"
-                        }
-                    }
-                }
+        try {
+            const canvas = tools.api.createUrl("falcon", `/imagecreator/${type === "UserJoin" ? "welcome" : "goodbye"}`, {
+                ppuser: profilePictureUrl,
+                bg: config.bot.thumbnail,
+                text: type === "UserJoin" ? `Selamat datang ${userName || userId} di grup ${metadata.subject}!` : `Selamat tinggal, ${userName || userId}!`
+            });
+            const video = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
+                url: canvas
+            }))).data.result;
+            await bot.core.sendMessage(groupJid, {
+                video: {
+                    url: video
+                },
+                mimetype: mime.lookup("mp4"),
+                caption: text,
+                gifPlayback: true,
+                contextInfo
+            });
+        } catch (error) {
+            if (error.status !== 200) await bot.core.sendMessage(groupJid, {
+                text,
+                contextInfo
             });
         }
-    } catch (error) {
-        const errorText = util.format(error);
-        consolefy.error(`Error: ${errorText}`);
-        if (config.system.reportErrorToOwner) await bot.core.sendMessage(`${config.owner.id}@s.whatsapp.net`, {
-            text: `${quote("⚠️ Terjadi kesalahan:")}\n` +
-                `${quote("─────")}\n` +
-                monospace(errorText)
-        });
-        await bot.core.sendMessage(groupJid, {
-            text: quote(`⚠️ Terjadi kesalahan: ${error.message}`)
+
+        if (type === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(groupJid, {
+            text: groupDb?.text?.intro,
+            mentions: [jid]
+        }, {
+            quoted: {
+                key: {
+                    participant: "13135550002@s.whatsapp.net",
+                    remoteJid: "status@broadcast"
+                },
+                message: {
+                    extendedTextMessage: {
+                        text: "Jangan lupa untuk mengisi intro!"
+                    }
+                }
+            }
         });
     }
-}
+};
 
 // Fungsi untuk menambahkan warning
 async function addWarning(ctx, groupDb, senderJid, groupId) {
