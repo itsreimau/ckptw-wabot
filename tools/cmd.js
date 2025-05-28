@@ -136,7 +136,7 @@ async function handleError(ctx, error, useAxios) {
             `${quote(`Pengirim: @${tools.general.getID(ctx.sender.jid)}`)}\n` +
             `${quote(`Obrolan: ${groupName}`)}\n` +
             `${quote("─────")}\n` +
-            monospace(errorText)
+            monospace(errorText),
         mention: [ctx.sender.jid]
     });
     if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
