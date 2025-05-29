@@ -126,23 +126,20 @@ function generateNotes(notes) {
 async function handleError(ctx, error, useAxios) {
     const isGroup = ctx.isGroup();
     const groupJid = isGroup ? ctx.id : null;
-    const groupSubject = isGroup ? await ctx.group(groupJid).name() : "- (Pribadi)";
+    const groupSubject = isGroup ? await ctx.group(groupJid).name() : null;
     const errorText = util.format(error);
 
     consolefy.error(`Error: ${errorText}`);
     if (config.system.reportErrorToOwner) await ctx.replyWithJid(`${config.owner.id}@s.whatsapp.net`, {
-        text: `${quote("Terjadi kesalahan!")}\n` +
-            `${quote(`Perintah: ${ctx.used.prefix + ctx.used.command}`)}\n` +
-            `${quote(`Pengirim: @${tools.general.getID(ctx.sender.jid)}`)}\n` +
-            `${quote(`Obrolan: @${groupJid}`)}\n` +
+        text: `${quote(isGroup ? `⚠️ Terjadi kesalahan dari grup: @${groupJid}, oleh: @${tools.general.getID(ctx.sender.jid)}` : `⚠️ Terjadi kesalahan dari: @${tools.general.getID(ctx.sender.jid)}`)}\n` +
             `${quote("─────")}\n` +
             monospace(errorText),
         contextInfo: {
             mentionedJid: [ctx.sender.jid],
-            groupMentions: [{
+            groupMentions: isGroup ? [{
                 groupJid,
                 groupSubject
-            }]
+            }] : []
         }
     });
     if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
