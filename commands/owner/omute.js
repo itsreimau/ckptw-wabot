@@ -28,8 +28,6 @@ module.exports = {
             mentions: [ctx.sender.jid]
         });
 
-        const groupId = tools.general.getID(ctx.id);
-
         if (accountId === config.bot.id) return await ctx.reply(quote(`❎ Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} bot`)} untuk me-mute bot.`));
 
         if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote("❎ Dia adalah admin grup!"));
