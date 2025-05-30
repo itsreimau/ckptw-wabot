@@ -12,7 +12,7 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        const input = parseInt(ctx.args[0], 10);
+        const input = parseInt(ctx.args[0], 10) || null;
 
         if (!input) return await ctx.reply(
             `${quote(`${tools.cmd.generateInstruction(["send"], ["text"])}`)}\n` +

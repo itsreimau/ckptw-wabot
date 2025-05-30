@@ -11,7 +11,7 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const key = ctx.args[0];
+        const key = ctx.args[0] || null;
         const text = ctx.args.slice(1).join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean)
 
         if (!key && !text) return await ctx.reply(

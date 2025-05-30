@@ -12,6 +12,13 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
+        const groupId = tools.general.getID(ctx.id);
+
+        if (["b", "bot"].includes(ctx.args[0]?.toLowerCase())) {
+            await db.set(`group.${groupId}.mutebot`, true);
+            return await ctx.reply(quote("✅ Berhasil me-mute grup ini dari bot!"));
+        }
+
         const accountJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
         const accountId = tools.general.getID(accountJid);
 
@@ -21,13 +28,6 @@ module.exports = {
                 quote(tools.cmd.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target.", `Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} bot`)} untuk me-mute bot.`])),
             mentions: [ctx.sender.jid]
         });
-
-        const groupId = tools.general.getID(ctx.id);
-
-        if (["b", "bot"].includes(ctx.args[0].toLowerCase())) {
-            await db.set(`group.${groupId}.mutebot`, true);
-            return await ctx.reply(quote("✅ Berhasil me-mute grup ini dari bot!"));
-        }
 
         if (accountId === config.bot.id) return await ctx.reply(quote(`❎ Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} bot`)} untuk me-mute bot.`));
 

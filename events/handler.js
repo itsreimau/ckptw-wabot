@@ -198,11 +198,7 @@ module.exports = (bot) => {
                     } catch (error) {
                         const errorText = util.format(error);
                         consolefy.error(`Error: ${errorText}`);
-                        await ctx.reply(
-                            `${quote("⚠️ Terjadi kesalahan:")}\n` +
-                            `${quote("─────")}\n` +
-                            monospace(errorText)
-                        );
+                        await ctx.reply(monospace(errorText));
                     }
                 }
 
@@ -215,24 +211,7 @@ module.exports = (bot) => {
                     } catch (error) {
                         const errorText = util.format(error);
                         consolefy.error(`Error: ${errorText}`);
-                        await ctx.reply(
-                            `${quote("⚠️ Terjadi kesalahan:")}\n` +
-                            `${quote("─────")}\n` +
-                            monospace(errorText)
-                        );
-                    }
-                }
-            }
-
-            // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
-            const userAfkMentions = ctx.quoted.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
-            if (userAfkMentions.length > 0) {
-                if (m.key.fromMe) return;
-
-                for (const userAfkJid of userAfkMentions) {
-                    if (userAfk.reason && userAfk.timestamp) {
-                        const timeago = tools.general.convertMsToDuration(Date.now() - userAfk.timestamp);
-                        await ctx.reply(quote(`📴 Jangan tag! Dia sedang AFK ${userAfk.reason ? `dengan alasan "${userAfk.reason}"` : "tanpa alasan"} selama ${timeago}.`));
+                        await ctx.reply(monospace(errorText));
                     }
                 }
             }
@@ -251,6 +230,20 @@ module.exports = (bot) => {
         // Penanganan obrolan grup
         if (isGroup) {
             if (m.key.fromMe) return;
+
+            // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
+            const userMentions = ctx.quoted.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
+            if (userMentions.length > 0) {
+                if (m.key.fromMe) return;
+
+                for (const userMention of userMentions) {
+                    const userMentionAfk = await db.get(`user.${userMention}.afk`) || {};
+                    if (userMentionAfk.reason && userMentionAfk.timestamp) {
+                        const timeago = tools.general.convertMsToDuration(Date.now() - userAfk.timestamp);
+                        await ctx.reply(quote(`📴 Jangan tag! Dia sedang AFK ${userAfk.reason ? `dengan alasan "${userAfk.reason}"` : "tanpa alasan"} selama ${timeago}.`));
+                    }
+                }
+            }
 
             // Penanganan antimedia
             for (const type of ["audio", "document", "gif", "image", "sticker", "video"]) {
