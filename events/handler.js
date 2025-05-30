@@ -217,7 +217,7 @@ module.exports = (bot) => {
             }
 
             // Penanganan AFK (Menghapus status AFK pengguna yang mengirim pesan)
-            if (userAfk.reason && userAfk.timestamp) {
+            if (userAfk.reason || userAfk.timestamp) {
                 const timeElapsed = Date.now() - userAfk.timestamp;
                 if (timeElapsed > 3000) {
                     const timeago = tools.general.convertMsToDuration(timeElapsed);

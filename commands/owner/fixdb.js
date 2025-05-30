@@ -46,17 +46,17 @@ module.exports = {
                             monthly: "number",
                             yearly: "number"
                         },
-                        hasSentMsg: {
-                            banned: "boolean",
-                            cooldown: "boolean",
-                            admin: "boolean",
-                            botAdmin: "boolean",
-                            coin: "boolean",
-                            group: "boolean",
-                            owner: "boolean",
-                            premium: "boolean",
-                            private: "boolean",
-                            restrict: "boolean"
+                        lastSentMsg: {
+                            banned: "number",
+                            cooldown: "number",
+                            admin: "number",
+                            botAdmin: "number",
+                            coin: "number",
+                            group: "number",
+                            owner: "number",
+                            premium: "number",
+                            private: "number",
+                            restrict: "number"
                         },
                         level: "number",
                         premium: "boolean",

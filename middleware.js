@@ -139,17 +139,17 @@ module.exports = (bot) => {
             of restrictions) {
             if (condition) {
                 const now = Date.now();
-                const lastSent = userDb?.hasSentMsg?.[key] || 0;
+                const lastSentMsg = userDb?.lastSentMsg?.[key] || 0;
                 const oneDay = 24 * 60 * 60 * 1000;
 
-                if (!lastSent || (now - lastSent) > oneDay) {
+                if (!lastSentMsg || (now - lastSentMsg) > oneDay) {
                     await simulateTyping();
                     await ctx.reply(
                         `${msg}\n` +
                         `${config.msg.readmore}\n` +
                         quote(tools.cmd.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
                     );
-                    return await db.set(`user.${senderId}.hasSentMsg.${key}`, now);
+                    return await db.set(`user.${senderId}.lastSentMsg.${key}`, now);
                 } else {
                     return await ctx.react(ctx.id, reaction);
                 }
@@ -221,17 +221,17 @@ module.exports = (bot) => {
             of permissionChecks) {
             if (permissions[key] && condition) {
                 const now = Date.now();
-                const lastSent = userDb?.hasSentMsg?.[key] || 0;
+                const lastSentMsg = userDb?.lastSentMsg?.[key] || 0;
                 const oneDay = 24 * 60 * 60 * 1000;
 
-                if (!lastSent || (now - lastSent) > oneDay) {
+                if (!lastSentMsg || (now - lastSentMsg) > oneDay) {
                     await simulateTyping();
                     await ctx.reply(
                         `${msg}\n` +
                         `${config.msg.readmore}\n` +
                         quote(tools.cmd.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
                     );
-                    return await db.set(`user.${senderId}.hasSentMsg.${key}`, now);
+                    return await db.set(`user.${senderId}.lastSentMsg.${key}`, now);
                 } else {
                     return await ctx.react(ctx.id, reaction);
                 }
