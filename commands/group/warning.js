@@ -22,7 +22,7 @@ module.exports = {
         if (!accountJid) return await ctx.reply({
             text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
                 `${quote(tools.cmd.generateCommandExample(ctx.used, `@${senderId}`))}\n` +
-                quote(tools.cmd.generateNotes(["Balas atau kutip pesan untuk memberikan warning ke pengguna."])),
+                quote(tools.cmd.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
             mentions: [senderJid]
         });
 
@@ -39,7 +39,7 @@ module.exports = {
 
             const maxwarnings = groupDb?.maxwarnings || 3;
             if (newWarning >= maxwarnings) {
-                await ctx.reply(quote("⛔ Anda telah menerima 5 warning dan akan dikeluarkan dari grup!"));
+                await ctx.reply(quote(`⛔ Anda telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
                 if (!config.system.restrict) await ctx.group().kick([senderJid]);
                 delete warnings[senderId];
                 return await db.set(`group.${groupId}.warnings`, warnings);
@@ -49,7 +49,7 @@ module.exports = {
 
             await db.set(`group.${groupId}.warnings`, warnings);
 
-            return await ctx.reply(quote(`✅ Warning diberikan! Sekarang warning @${accountId} menjadi ${newWarning}/5.`), {
+            return await ctx.reply(quote(`✅ Warning diberikan! Sekarang warning @${accountId} menjadi ${newWarning}/${maxwarnings}.`), {
                 mentions: [accountJid]
             });
         } catch (error) {
