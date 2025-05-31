@@ -22,7 +22,7 @@ module.exports = {
         const accountJid = `${input.replace(/[^\d]/g, "")}@s.whatsapp.net`;
 
         const isOnWhatsApp = await ctx.core.onWhatsApp(accountJid);
-        if (!isOnWhatsApp.length === 0) return await ctx.reply(quote("❎ Akun tidak ada di WhatsApp!"));
+        if (isOnWhatsApp.length === 0) return await ctx.reply(quote("❎ Akun tidak ada di WhatsApp!"));
 
         try {
             await ctx.group().add([accountJid]);
