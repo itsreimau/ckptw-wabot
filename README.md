@@ -149,7 +149,7 @@ Untuk informasi lebih lanjut, silakan kunjungi:
 
 - [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/)
 - [@itsreimau/ckptw-mod (npm)](https://www.npmjs.com/package/@itsreimau/ckptw-mod)
-- [baileys-mod (npm)](https://www.npmjs.com/package/baileys-mod) – berisi dokumentasi tambahan seperti pengiriman berbagai jenis pesan
+- [baileys-mod (github)](https://github.com/nstar-y/bail) – berisi dokumentasi tambahan seperti pengiriman berbagai jenis pesan
 
 ## Contribution
 
