@@ -11,21 +11,18 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const messageType = ctx.getMessageType();
-        const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.cmd.checkMedia(messageType, "image"),
-            tools.cmd.checkQuotedMedia(ctx.quoted, "image")
-        ]);
+        const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 
-        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], "image")));
+        if (!input) return await ctx.reply(
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, "moon"))
+        );
 
         try {
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
-            const uploadUrl = await tools.general.upload(buffer, "image");
-            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/humanizer", {
-                url: uploadUrl
+            const apiUrl = tools.api.createUrl("paxsenix", "/ai-tools/humanizer", {
+                text: input
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.content;
 
             return await ctx.reply(result);
         } catch (error) {

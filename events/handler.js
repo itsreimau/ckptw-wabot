@@ -182,7 +182,6 @@ module.exports = (bot) => {
             // Penanganan basis data pengguna
             if (isOwner || userDb?.premium) db.set(`user.${senderId}.coin`, 0);
             if (userDb?.coin === undefined || !Number.isFinite(userDb.coin)) db.set(`user.${senderId}.coin`, 100);
-            if (userDb?.uid !== tools.general.generateUID(senderId, true)) db.set(`user.${senderId}.uid`, tools.general.generateUID(senderId, true));
             if (!userDb?.username) db.set(`user.${senderId}.username`, `@user_${tools.general.generateUID(senderId, false)}`);
 
             if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd?.prefix + isCmd?.didyoumean)}.`)); // Did you mean?
@@ -278,12 +277,12 @@ module.exports = (bot) => {
                 if (checkMedia && !await ctx.group().isSenderAdmin()) {
                     const buffer = await ctx.msg.media.toBuffer();
                     const uploadUrl = await tools.general.upload(buffer, "image");
-                    const apiUrl = tools.api.createUrl("fasturl", "/tool/imagechecker", {
+                    const apiUrl = tools.api.createUrl("nirkyy", "/api/v1/nsfw-detector", {
                         url: uploadUrl
                     });
-                    const result = (await axios.get(apiUrl)).data.result.status.toLowerCase();
+                    const result = (await axios.get(apiUrl)).data.data.isUnsafe;
 
-                    if (result === "nsfw") {
+                    if (result) {
                         await ctx.reply(quote("⛔ Jangan kirim NSFW!"));
                         await ctx.deleteMessage(m.key);
                         if (!config.system.restrict && groupDb?.option?.autokick) {

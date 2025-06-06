@@ -15,20 +15,22 @@ module.exports = {
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], [ "image","text"]))}\n` +
             `${quote(tools.cmd.generateCommandExample(ctx.used, "apa itu bot whatsapp?"))}\n` +
-            quote(tools.cmd.generateNotes(["AI ini dapat melihat gambar dan menjawab pertanyaan tentang gambar tersebut.", "Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
+            quote(tools.cmd.generateNotes(["AI ini dapat melihat gambar dan menjawab pertanyaan tentang gambar tersebut.", "AI ini dapat melihat dokumen PDF dan menjawab pertanyaan tentang dokumen PDF tersebut.", "Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
         const messageType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
-            tools.cmd.checkMedia(messageType, "image"),
-            tools.cmd.checkQuotedMedia(ctx.quoted, "image")
+            tools.cmd.checkMedia(messageType, "image", "document"),
+            tools.cmd.checkQuotedMedia(ctx.quoted, "image", "document")
         ]);
 
         try {
-            if (checkMedia || checkQuotedMedia) {
+            const check = checkMedia || checkQuotedMedia;
+            if (check) {
+                const isDocument = check === "document";
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
-                const uploadUrl = await tools.general.upload(buffer, "image");
-                const apiUrl = tools.api.createUrl("bk9", "/ai/geminiimg", {
+                const uploadUrl = await tools.general.upload(buffer, isDocument ? "document" : "image");
+                const apiUrl = tools.api.createUrl("bk9", `/ai/${isDocument ? "geminidocs" : "geminiimg"}`, {
                     url: uploadUrl,
                     q: input
                 });

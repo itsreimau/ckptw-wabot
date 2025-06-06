@@ -4,7 +4,8 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "sharpen",
+    name: "niggafy",
+    aliases: ["hitam", "hitamkan", "penghitaman"],
     category: "ai-misc",
     permissions: {
         coin: 10
@@ -21,15 +22,15 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const result = tools.api.createUrl("fasturl", "/aiimage/imgsharpen", {
-                url: uploadUrl
+            const result = tools.api.createUrl("nekorinn", "/tools/niggafy", {
+                imageUrl: uploadUrl
             });
 
             return await ctx.reply({
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("jpeg")
+                mimetype: mime.lookup("png")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

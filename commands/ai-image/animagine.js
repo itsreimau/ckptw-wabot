@@ -6,6 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "animagine",
+    aliases: ["animaginexl"],
     category: "aiimage",
     permissions: {
         premium: true

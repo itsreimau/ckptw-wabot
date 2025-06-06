@@ -18,12 +18,10 @@ module.exports = {
         );
 
         try {
-            const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
-            const apiUrl = tools.api.createUrl("fasturl", "/aillm/muslim", {
-                ask: input,
-                sessionId: senderUid
+            const apiUrl = tools.api.createUrl("nekorinnn", "/ai/muslimai", {
+                ask: input
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.result.answer;
 
             return await ctx.reply(result);
         } catch (error) {

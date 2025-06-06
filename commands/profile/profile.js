@@ -23,14 +23,17 @@ module.exports = {
                 }))
                 .sort((a, b) => b.winGame - a.winGame || b.level - a.level);
 
+            const isOwner = tools.general.isOwner(senderId, ctx.msg.key.id);
+
             const userDb = await db.get(`user.${senderId}`) || {};
             const userRank = leaderboardData.findIndex(user => user.id === senderId) + 1;
-            const isOwner = tools.general.isOwner(senderId, ctx.msg.key.id);
+            const userStatus = isOwner ? "Owner" : userDb?.premium ? "Premium" : "Freemium";
+            const userLevel = userDb?.level || 0;
 
             const text = `${quote(`Nama: ${senderName}`)}\n` +
                 `${quote(`Username: ${userDb?.username}`)}\n` +
-                `${quote(`Status: ${isOwner ? "Owner" : userDb?.premium ? "Premium" : "Freemium"}`)}\n` +
-                `${quote(`Level: ${userDb?.level || 0}`)}\n` +
+                `${quote(`Status: ${userStatus}`)}\n` +
+                `${quote(`Level: ${userLevel}`)}\n` +
                 `${quote(`XP: ${userDb?.xp}/100`)}\n` +
                 `${quote(`Koin: ${isOwner || userDb?.premium ? "Tak terbatas" : userDb?.coin}`)}\n` +
                 `${quote(`Peringkat: ${userRank}`)}\n` +
@@ -40,15 +43,15 @@ module.exports = {
 
             try {
                 const profilePictureUrl = await ctx.core.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-                const canvas = tools.api.createUrl("fasturl", "/canvas/rank", {
-                    avatar: profilePictureUrl,
-                    background: config.bot.thumbnail,
-                    username: senderName,
-                    status: "online",
-                    level: userDb?.level,
-                    rank: userRank,
-                    currentXp: userDb?.xp,
-                    requiredXp: "100"
+                const canvas = tools.api.createUrl("siputzx", "/api/canvas/profile", {
+                    backgroundURL: config.bot.thumbnail,
+                    avatarURL: profilePictureUrl,
+                    rankName: userStatus,
+                    rankId: userRank,
+                    exp: userDb?.xp,
+                    requireExp: "100",
+                    level: userLevel,
+                    name: senderName
                 });
                 const video = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
                     url: canvas

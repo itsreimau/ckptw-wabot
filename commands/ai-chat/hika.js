@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "hika",
-    aliases: ["hikachat", "hikaru"],
+    aliases: ["hikachat"],
     category: "ai-chat",
     permissions: {
         coin: 10
@@ -20,12 +20,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/hika", {
-                ask: input,
-                type: "fullchat",
-                language: ctx.sender.jid.startsWith("62") ? "id" : "en"
+            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/hikachat", {
+                keyword: input
             });
-            const result = (await axios.get(apiUrl)).data.result.chat;
+            const result = (await axios.get(apiUrl)).data.data;
 
             return await ctx.reply(result);
         } catch (error) {

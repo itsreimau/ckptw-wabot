@@ -19,10 +19,8 @@ module.exports = {
         );
 
         try {
-            const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
-            const apiUrl = tools.api.createUrl("bk9", "/ai/llama3", {
-                q: input,
-                userId: senderUid
+            const apiUrl = tools.api.createUrl("bk9", "/ai/llama", {
+                q: input
             });
             const result = (await axios.get(apiUrl)).data.BK9;
 

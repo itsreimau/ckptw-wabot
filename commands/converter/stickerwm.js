@@ -24,7 +24,7 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const [packname, author] = input.split("|");
-            const result = new Sticker(buffer, {
+            const sticker = new Sticker(buffer, {
                 pack: packname || "",
                 author: author || "",
                 type: StickerTypes.FULL,
@@ -33,7 +33,7 @@ module.exports = {
                 quality: 50
             });
 
-            return await ctx.reply(await result.toMessage());
+            return await ctx.reply(await sticker.toMessage());
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

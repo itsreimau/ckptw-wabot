@@ -11,7 +11,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const apiUrl = tools.api.createUrl("https://fufufafapi.vanirvan.my.id", "/api", {});
+        const apiUrl = tools.api.createUrl("https://fufufafapi.vanirvan.my.id", "/api");
 
         try {
             const result = tools.general.getRandomElement((await axios.get(apiUrl)).data);

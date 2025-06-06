@@ -11,9 +11,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const apiUrl = tools.api.createUrl("https://jagokata-api.rf.gd", "/acak", {
-            i: 1
-        });
+        const apiUrl = tools.api.createUrl("https://jagokata-api.rf.gd", "/acak");
 
         try {
             const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.data.quotes);

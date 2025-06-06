@@ -27,8 +27,12 @@ module.exports = {
         if (isNaN(surat) || surat < 1 || surat > 114) return await ctx.reply(quote("❎ Surah harus berupa nomor antara 1 dan 114!"));
 
         try {
-            const apiUrl = tools.api.createUrl("https://equran.id", `/api/v2/surat/${surat}`);
-            const result = (await axios.get(apiUrl)).data.data;
+            const apiUrl = tools.api.createUrl("nekorinn", "/religious/nuquran-surah", {
+                id: surat
+            });
+            const result = (await axios.get(apiUrl)).data.result;
+
+            const verses = result.verses;
 
             if (ayat) {
                 if (ayat.includes("-")) {
@@ -36,17 +40,17 @@ module.exports = {
 
                     if (isNaN(startAyat) || isNaN(endAyat) || startAyat < 1 || endAyat < startAyat) return await ctx.reply(quote("❎ Rentang ayat tidak valid!"));
 
-                    const verses = result.ayat.filter(r => r.nomorAyat >= startAyat && r.nomorAyat <= endAyat);
-                    if (!verses.length) return await ctx.reply(quote(`❎ Ayat dalam rentang ${startAyat}-${endAyat} tidak ada!`));
+                    const selectedVerses = verses.filter(v => v.number >= startAyat && v.number <= endAyat);
+                    if (!selectedVerses.length) return await ctx.reply(quote(`❎ Ayat dalam rentang ${startAyat}-${endAyat} tidak ada!`));
 
-                    const versesText = verses.map(r =>
-                        `${quote(`Ayat ${r.nomorAyat}:`)}\n` +
-                        `${r.teksArab} (${r.teksLatin})\n` +
-                        `${italic(r.teksIndonesia)}`
+                    const versesText = selectedVerses.map(v =>
+                        `${quote(`Ayat ${v.number}:`)}\n` +
+                        `${v.text} (${v.transliteration})\n` +
+                        `${italic(v.translation_id)}`
                     ).join("\n");
                     return await ctx.reply(
-                        `${quote(`Surah ${result.namaLatin}`)}\n` +
-                        `${quote(result.arti)}\n` +
+                        `${quote(`Surah ${result.name}`)}\n` +
+                        `${quote(result.translate)}\n` +
                         `${quote("─────")}\n` +
                         `${versesText}\n` +
                         "\n" +
@@ -57,27 +61,30 @@ module.exports = {
                 const singleAyat = parseInt(ayat);
                 if (isNaN(singleAyat) || singleAyat < 1) return await ctx.reply(quote("❎ Ayat harus berupa nomor yang valid dan lebih besar dari 0!"));
 
-                const verse = result.ayat.find(r => r.nomorAyat === singleAyat);
+                const verse = verses.find(v => v.number === singleAyat);
                 if (!verse) return await ctx.reply(quote(`❎ Ayat ${singleAyat} tidak ada!`));
 
                 return await ctx.reply(
-                    `${verse.teksArab} (${verse.teksLatin})\n` +
-                    `${italic(verse.teksIndonesia)}\n` +
+                    `${quote(`Surah ${result.name}`)}\n` +
+                    `${quote(result.translate)}\n` +
+                    `${quote("─────")}\n` +
+                    `${verse.text} (${verse.transliteration})\n` +
+                    `${italic(verse.translation_id)}\n` +
                     "\n" +
                     config.msg.footer
                 );
             }
 
-            const versesText = result.ayat.map(r =>
-                `${quote(`Ayat ${r.nomorAyat}:`)}\n` +
-                `${r.teksArab} (${r.teksLatin})\n` +
-                `${italic(r.teksIndonesia)}`
+            const versesText = verses.map(v =>
+                `${quote(`Ayat ${v.number}:`)}\n` +
+                `${v.text} (${v.transliteration})\n` +
+                `${italic(v.translation_id)}`
             ).join("\n");
             return await ctx.reply(
-                `${quote(`Surah ${result.namaLatin}`)}\n` +
-                `${quote(result.arti)}\n` +
+                `${quote(`Surah ${result.name}`)}\n` +
+                `${quote(result.translate)}\n` +
                 `${quote("─────")}\n` +
-                `${versesText}\n` +
+                `${versesText}\n\n` +
                 "\n" +
                 config.msg.footer
             );

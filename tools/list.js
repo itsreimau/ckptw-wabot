@@ -18,7 +18,7 @@ async function get(type) {
 
         switch (type) {
             case "alkitab": {
-                const data = (await axios.get(api.createUrl("https://api-alkitab.vercel.app", "/api/book", {}))).data.data;
+                const data = (await axios.get(api.createUrl("https://api-alkitab.vercel.app", "/api/book"))).data.data;
                 text = createList(data, d =>
                     `${quote(`Buku: ${d.name} (${d.abbr})`)}\n` +
                     `${quote(`Jumlah Bab: ${d.chapter}`)}`
@@ -26,10 +26,10 @@ async function get(type) {
                 break;
             }
             case "alquran": {
-                const data = (await axios.get(api.createUrl("https://equran.id", "/api/v2/surat", {}))).data.data;
+                const data = (await axios.get(api.createUrl("nekorinn", "/religious/nuquran-listsurah"))).data.result.list;
                 text = createList(data, d =>
-                    `${quote(`Surah: ${d.namaLatin} (${d.nomor})`)}\n` +
-                    `${quote(`Jumlah Ayat: ${d.jumlahAyat}`)}`
+                    `${quote(`Surah: ${d.name} (${d.id})`)}\n` +
+                    `${quote(`Jumlah Ayat: ${d.verse_count}`)}`
                 );
                 break;
             }
@@ -138,7 +138,7 @@ async function get(type) {
                 break;
             }
             case "translate": {
-                const data = (await axios.get(api.createUrl("nyxs", "/tools/translate", {})).catch(err => err.response.data.available_languange)) || [];
+                const data = (await axios.get(api.createUrl("nyxs", "/tools/translate")).catch(err => err.response.data.available_languange)) || [];
                 text = createList(data, d =>
                     `${quote(`Kode: ${d.code}`)}\n` +
                     `${quote(`Bahasa: ${d.bahasa}`)}`
@@ -146,7 +146,7 @@ async function get(type) {
                 break;
             }
             case "tts": {
-                const data = (await axios.get(api.createUrl("nyxs", "/tools/tts", {}))).data.available_languange;
+                const data = (await axios.get(api.createUrl("nyxs", "/tools/tts"))).data.available_languange;
                 text = createList(data, d =>
                     `${quote(`Kode: ${d.code}`)}\n` +
                     `${quote(`Bahasa: ${d["bahasa negara"]}`)}`

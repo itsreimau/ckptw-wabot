@@ -7,7 +7,7 @@ module.exports = {
     name: "gemma",
     category: "ai-chat",
     permissions: {
-        premium: true
+        coin: 10
     },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
@@ -19,13 +19,10 @@ module.exports = {
         );
 
         try {
-            const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
-            const apiUrl = tools.api.createUrl("fasturl", "/aistream/gemma", {
-                ask: input,
-                style: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`, // Dapat diubah sesuai keinginan Anda
-                sessionId: senderUid
+            const apiUrl = tools.api.createUrl("davidcyril", "/ai/gemma", {
+                text: input
             });
-            const result = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.response;
 
             return await ctx.reply(result);
         } catch (error) {

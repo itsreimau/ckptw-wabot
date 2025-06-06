@@ -22,7 +22,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("nekorinn", "/ai/turboseek", {
                 text: input
             });
-            const result = (await axios.get(apiUrl)).data.result.answer;
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply(result);
         } catch (error) {

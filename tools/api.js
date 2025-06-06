@@ -20,9 +20,6 @@ const APIs = {
     falcon: {
         baseURL: "https://flowfalcon.dpdns.org"
     },
-    fasturl: {
-        baseURL: "https://fastrestapis.fasturl.cloud"
-    },
     nekorinn: {
         baseURL: "https://api.nekorinn.my.id"
     },
@@ -32,9 +29,15 @@ const APIs = {
     nyxs: {
         baseURL: "https://api.nyxs.pw"
     },
+    paxsenix: {
+        baseURL: "https://api.paxsenix.biz.id"
+    },
     shizo: {
         baseURL: "https://api.shizo.top",
         APIKey: "shizo"
+    },
+    siputzx: {
+        baseURL: "https://api.siputzx.my.id"
     },
     vapis: {
         baseURL: "https://vapis.my.id"

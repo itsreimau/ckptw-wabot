@@ -6,7 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "ximagegenerator",
-    aliases: ["xart"],
+    aliases: ["xart", "ximggen"],
     category: "ai-image",
     permissions: {
         coin: 10

@@ -24,11 +24,13 @@ module.exports = {
         try {
             const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
             const userName = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.username`) || "@guest";
-            const result = tools.api.createUrl("fasturl", "/maker/quote", {
+            const result = tools.api.createUrl("paxsenix", "/maker/fakequote", {
                 text: input,
-                username: ctx.sender.pushName,
-                ppUrl: profilePictureUrl,
-                signature: userName
+                url: profilePictureUrl,
+                username: userName,
+                name: ctx.sender.pushName,
+                isGrayscale: true,
+                watermark: `Created by ${config.bot.name}`
             });
 
             return await ctx.reply({

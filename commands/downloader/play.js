@@ -19,7 +19,7 @@ module.exports = {
             `${quote(tools.cmd.generateCommandExample(ctx.used, "komm susser tod -i 8 -s spotify"))}\n` +
             quote(tools.cmd.generatesFlagInformation({
                 "-i <number>": "Pilihan pada data indeks",
-                "-s <text>": "Sumber untuk memutar lagu (tersedia: soundcloud, spotify, youtube | default: youtube)"
+                "-s <text>": "Sumber untuk memutar lagu (tersedia: soundcloud, spotify, tidal, youtube | default: youtube)"
             }))
         );
 
@@ -43,7 +43,7 @@ module.exports = {
             const query = flag.input;
             let source = flag.source || "youtube";
 
-            if (!["soundcloud", "spotify", "youtube"].includes(source)) source = "youtube";
+            if (!["soundcloud", "spotify", "tidal", "youtube"].includes(source)) source = "youtube";
 
             if (source === "soundcloud") {
                 const searchApiUrl = tools.api.createUrl("agatz", "/api/soundcloud", {
@@ -67,7 +67,7 @@ module.exports = {
                     audio: {
                         url: downloadResult
                     },
-                    mimetype: mime.lookup("mp3"),
+                    mimetype: mime.lookup("mp3")
                 });
             }
 
@@ -85,16 +85,43 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("fasturl", "/downup/spotifydown", {
+                const downloadApiUrl = tools.api.createUrl("archive", "/api/download/spotify", {
                     url: searchResult.externalUrl
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.result.metadata.link;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.result.data.download;
 
                 return await ctx.reply({
                     audio: {
                         url: downloadResult
                     },
-                    mimetype: mime.lookup("mp3"),
+                    mimetype: mime.lookup("mp3")
+                });
+            }
+
+            if (source === "tidal") {
+                const searchApiUrl = tools.api.createUrl("paxsenix", "/tidal/search", {
+                    q: query
+                });
+                const searchResult = (await axios.get(searchApiUrl)).data.items[searchIndex];
+
+                await ctx.reply(
+                    `${quote(`Judul: ${searchResult.title}`)}\n` +
+                    `${quote(`Artis: ${searchResult.artist.name}`)}\n` +
+                    `${quote(`URL: ${searchResult.url}`)}\n` +
+                    "\n" +
+                    config.msg.footer
+                );
+
+                const downloadApiUrl = tools.api.createUrl("paxsenix", "/dl/tidal", {
+                    url: searchResult.url
+                });
+                const downloadResult = (await axios.get(downloadApiUrl)).data;
+
+                return await ctx.reply({
+                    audio: {
+                        url: downloadResult.url || downloadResult.directUrl
+                    },
+                    mimetype: mime.lookup("mp3")
                 });
             }
 
@@ -112,11 +139,10 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("zell", "/download/youtube", {
-                    url: searchResult.url,
-                    format: "mp3"
+                const downloadApiUrl = tools.api.createUrl("paxsenix", "/yt/yttomp4", {
+                    url: searchResult.url
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.download;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.audio[0].url;
 
                 return await ctx.reply({
                     audio: {

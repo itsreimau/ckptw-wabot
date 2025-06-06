@@ -35,6 +35,15 @@ function convertMsToDuration(ms) {
     return parts.length > 0 ? parts.join(" ") : "0 detik";
 }
 
+function convertSecondToTimecode(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    const milliseconds = Math.round((seconds - Math.floor(seconds)) * 1000);
+
+    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}.${milliseconds.toString().padStart(3, "0")}`;
+}
+
 function formatSize(byteCount) {
     if (!byteCount) return "0 yBytes";
 
@@ -54,22 +63,6 @@ function formatSize(byteCount) {
     }
 
     return `${size.toFixed(2)} ${units[index]}`;
-}
-
-function generateUID(id, withBotName) {
-    if (!id) return null;
-
-    let hash = 0;
-    for (let i = 0; i < id.length; i++) {
-        const charCode = id.charCodeAt(i);
-        hash = (hash * 31 + charCode) % 1000000007;
-    }
-
-    const uniquePart = id.split("").reverse().join("").charCodeAt(0).toString(16);
-    let uid = `${Math.abs(hash).toString(16).toLowerCase()}-${uniquePart}`;
-    if (withBotName) uid += `_${formatBotName(config.bot.name)}-wabot`;
-
-    return uid;
 }
 
 function getID(jid) {

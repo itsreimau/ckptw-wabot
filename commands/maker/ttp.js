@@ -24,10 +24,10 @@ module.exports = {
         if (input.length > 1000) return await ctx.reply(quote("❎ Maksimal 1000 kata!"));
 
         try {
-            const apiUrl = tools.api.createUrl("bk9", "/maker/text2img", {
+            const result = tools.api.createUrl("bk9", "/maker/text2img", {
                 q: input
             });
-            const result = new Sticker(apiUrl, {
+            const sticker = new Sticker(result, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,
@@ -36,7 +36,7 @@ module.exports = {
                 quality: 50
             });
 
-            return await ctx.reply(await result.toMessage());
+            return await ctx.reply(await sticker.toMessage());
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

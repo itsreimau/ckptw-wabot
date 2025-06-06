@@ -24,18 +24,19 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const apiUrl = tools.api.createUrl("fasturl", "/anime/whatanime", {
+            const apiUrl = tools.api.createUrl("https://api.trace.moe", "/search", {
                 url: uploadUrl
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.result[0];
 
             return await ctx.reply({
                 video: {
-                    url: result.videoURL
+                    url: result.video
                 },
                 mimetype: mime.lookup("mp4"),
-                caption: `${quote(`Judul: ${result.title}`)}\n` +
+                caption: `${quote(`Nama: ${result.filename}`)}\n` +
                     `${quote(`Episode: ${result.episode}`)}\n` +
+                    `${quote(`Rentang Waktu: ${tools.general.convertSecondToTimecode(result.from)}-${tools.general.convertSecondToTimecode(result.to)}`)}\n` +
                     `${quote(`Kemiripan: ${result.similarity}`)}\n` +
                     "\n" +
                     config.msg.footer

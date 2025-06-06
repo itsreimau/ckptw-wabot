@@ -26,12 +26,12 @@ module.exports = {
 
         try {
             const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-            const apiUrl = tools.api.createUrl("nekorinn", "/maker/quotechat", {
+            const result = tools.api.createUrl("nekorinn", "/maker/quotechat", {
                 text: input,
                 name: ctx.sender.pushName,
                 profile: profilePictureUrl
             });
-            const result = new Sticker(apiUrl, {
+            const sticker = new Sticker(result, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,
@@ -40,7 +40,7 @@ module.exports = {
                 quality: 50
             });
 
-            return await ctx.reply(await result.toMessage());
+            return await ctx.reply(await sticker.toMessage());
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

@@ -63,12 +63,12 @@ module.exports = (bot) => {
 
                 try {
                     const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-                    const canvas = tools.api.createUrl("fasturl", "/canvas/levelup", {
-                        avatar: profilePictureUrl,
-                        background: config.bot.thumbnail,
-                        username: ctx.sender.pushName,
-                        currentLevel: userDb?.level,
-                        nextLevel: newUserLevel
+                    const canvas = tools.api.createUrl("siputzx", "/api/canvas/level-up", {
+                        backgroundURL: config.bot.thumbnail,
+                        avatarURL: profilePictureUrl,
+                        fromLevel: userDb?.level,
+                        toLevel: newUserLevel,
+                        name: ctx.sender.pushName
                     });
                     const video = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
                         url: canvas

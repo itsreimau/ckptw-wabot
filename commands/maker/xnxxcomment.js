@@ -7,8 +7,8 @@ const {
 } = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "furbratgif",
-    aliases: ["furbratg", "furbratv", "furbratvid", "furbratvideo", "sfurbratgif", "sfurbratvideo", "sfurbratvid", "stickerfurbratgif", "stickerfurbratvideo", "stickerfurbratvid", "stikerfurbratgif", "stikerfurbratvideo", "stikerfurbratvid"],
+    name: "xnxxcomment",
+    aliases: ["xnxxc"],
     category: "maker",
     permissions: {
         coin: 10
@@ -25,11 +25,14 @@ module.exports = {
         if (input.length > 1000) return await ctx.reply(quote("❎ Maksimal 1000 kata!"));
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/maker/furbrat", {
-                text: input,
-                mode: "animated"
+            const result = tools.api.createUrl("siputzx", "/api/canvas/fake-xnxx", {
+                name: ctx.sender.pushName,
+                quote: input,
+                profile: profilePictureUrl,
+                likes: Math.floor(Math.random() * 10) + 1,
+                dislikes: 0
             });
-            const result = new Sticker(apiUrl, {
+            const sticker = new Sticker(result, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,
@@ -38,7 +41,7 @@ module.exports = {
                 quality: 50
             });
 
-            return await ctx.reply(await result.toMessage());
+            return await ctx.reply(await sticker.toMessage());
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

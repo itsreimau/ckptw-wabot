@@ -6,6 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "writecream",
+    aliaes: ["wcream", "writec"],
     category: "ai-image",
     permissions: {
         premium: true

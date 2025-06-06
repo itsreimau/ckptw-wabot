@@ -5,7 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "pollinations",
-    aliases: ["imagine", "poll"],
+    aliases: ["imagine", "poll", "realism"],
     category: "ai-image",
     permissions: {
         coin: 10
@@ -20,7 +20,7 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("shizo", "/ai/imagine", {
+            const result = tools.api.createUrl("shizo", "/ai/imagine/realism", {
                 prompt: input
             }, "apikey");
 
@@ -28,7 +28,7 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("jpeg"),
+                mimetype: mime.lookup("jpg"),
                 caption: `${quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer

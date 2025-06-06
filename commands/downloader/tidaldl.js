@@ -2,13 +2,13 @@ const {
     quote
 } = require("@itsreimau/ckptw-mod");
 const axios = require("axios");
+const mime = require("mime-types");
 
 module.exports = {
-    name: "youtubesummarize",
-    aliases: ["ytsummarize"],
-    category: "ai-misc",
+    name: "tidaldl",
+    category: "downloader",
     permissions: {
-        premium: true
+        coin: 10
     },
     code: async (ctx) => {
         const url = ctx.args[0] || null;
@@ -22,13 +22,20 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/ytsummarize-v1", {
-                url,
-                language: ctx.sender.jid.startsWith("62") ? "indonesian" : "english"
+            const apiUrl = tools.api.createUrl("paxsenix", "/dl/tidal", {
+                url
             });
-            const result = (await axios.get(apiUrl)).data.result.shortsummarize;
+            const result = (await axios.get(apiUrl)).data;
 
-            return await ctx.reply(result);
+            return await ctx.reply({
+                audio: {
+                    url: result.url || result.directUrl
+                },
+                mimetype: mime.lookup("mp3"),
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    config.msg.footer
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

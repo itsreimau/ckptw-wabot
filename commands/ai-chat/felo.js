@@ -5,6 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "felo",
+    aliases: ["feloai"],
     category: "ai-chat",
     permissions: {
         coin: 10
@@ -19,10 +20,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/ai/feloai", {
+            const apiUrl = tools.api.createUrl("paxsenix", "/ai-search/felo", {
                 text: input
             });
-            const result = (await axios.get(apiUrl)).data.result.answer;
+            const result = (await axios.get(apiUrl)).data.answer;
 
             return await ctx.reply(result);
         } catch (error) {

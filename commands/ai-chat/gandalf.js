@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "gptsearch",
-    aliases: ["gpts"],
+    name: "gandalf",
+    aliases: ["gandalflakera"],
     category: "ai-chat",
     permissions: {
         coin: 10
@@ -20,13 +20,10 @@ module.exports = {
         );
 
         try {
-            const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
-            const apiUrl = tools.api.createUrl("fasturl", "/aillm/gptsearch", {
-                ask: input,
-                style: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`, // Dapat diubah sesuai keinginan Anda
-                sessionId: senderUid
+            const apiUrl = tools.api.createUrl("siputzx", "/api/ai/gandalf", {
+                prompt: input
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.data;
 
             return await ctx.reply(result);
         } catch (error) {

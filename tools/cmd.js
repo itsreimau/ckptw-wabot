@@ -20,12 +20,18 @@ async function checkMedia(type, required) {
 
     const mediaList = Array.isArray(required) ? required : [required];
 
-    return mediaList.some(media => {
+    for (const media of mediaList) {
         const mappedType = mediaMap[media];
-        if (!mappedType) return false;
-        if (Array.isArray(mappedType)) return mappedType.includes(type);
-        return type === mappedType;
-    });
+        if (!mappedType) continue;
+
+        if (Array.isArray(mappedType)) {
+            if (mappedType.includes(type)) return media;
+        } else {
+            if (type === mappedType) return media;
+        }
+    }
+
+    return false;
 }
 
 async function checkQuotedMedia(type, required) {
@@ -43,17 +49,19 @@ async function checkQuotedMedia(type, required) {
 
     const mediaList = Array.isArray(required) ? required : [required];
 
-    return mediaList.some(media => {
+    for (const media of mediaList) {
         if (media === "text") {
             const mediaContent = typeMediaMap.text;
-            return mediaContent && mediaContent.length > 0;
+            if (mediaContent && mediaContent.length > 0) return media;
         } else if (media === "viewOnce") {
             const viewOnceMediaKeys = ["audioMessage", "imageMessage", "videoMessage"];
-            return viewOnceMediaKeys.some(key => type[key]?.viewOnce === true);
+            if (viewOnceMediaKeys.some(key => type[key]?.viewOnce === true)) return media;
         } else {
-            return !!typeMediaMap[media];
+            if (typeMediaMap[media]) return media;
         }
-    });
+    }
+
+    return false;
 }
 
 function generateInstruction(actions, mediaTypes) {

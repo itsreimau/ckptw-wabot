@@ -22,7 +22,7 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const result = tools.api.createUrl("https://fgsi1-restapi.hf.space", "/api/ai/toGhibli", {
+            const result = tools.api.createUrl("nirkyy", "/api/v1/ghiblistyle", {
                 url: uploadUrl
             });
 
@@ -30,7 +30,7 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("jpg")
+                mimetype: mime.lookup("jpeg")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

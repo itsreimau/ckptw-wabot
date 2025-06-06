@@ -4,8 +4,8 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "githubroasting",
-    aliases: ["ghroast", "ghroasting", "githubroast"],
+    name: "githubroaster",
+    aliases: ["ghroast", "ghroaster", "githubroast"],
     category: "ai-misc",
     permissions: {
         coin: 10
@@ -19,14 +19,12 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/aiexperience/github/roasting", {
-                username: input,
-                profile: false,
-                language: ctx.sender.jid.startsWith("62") ? "id" : "en"
+            const apiUrl = tools.api.createUrl("paxsenix", "/ai-persona/githubroaster", {
+                username: input
             });
-            const result = (await axios.get(apiUrl)).data.result.roasting;
+            const result = (await axios.get(apiUrl)).data.message;
 
-            return await ctx.reply(result);
+            return await ctx.reply(ctx.sender.jid.startsWith("62") ? await tools.general.translate(result, "id") : result);
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

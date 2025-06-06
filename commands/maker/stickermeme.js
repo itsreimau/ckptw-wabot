@@ -35,10 +35,10 @@ module.exports = {
 
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.general.upload(buffer, "image");
-            const apiUrl = tools.api.createUrl("https://api.memegen.link", `/images/custom/${top}/${bottom}.png`, {
+            const result = tools.api.createUrl("https://api.memegen.link", `/images/custom/${top}/${bottom}.png`, {
                 background: uploadUrl
             });
-            const result = new Sticker(apiUrl, {
+            const sticker = new Sticker(result, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,
                 type: StickerTypes.FULL,
@@ -47,7 +47,7 @@ module.exports = {
                 quality: 50
             });
 
-            return await ctx.reply(await result.toMessage());
+            return await ctx.reply(await sticker.toMessage());
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

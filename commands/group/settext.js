@@ -16,7 +16,7 @@ module.exports = {
         const key = ctx.args[0] || null;
         const text = ctx.args.slice(1).join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 
-        if (!key && !text) return await ctx.reply(
+        if (!text && (!key || !["d", "delete", "l", "list"].includes(key.toLowerCase()))) return await ctx.reply(
             `${quote(`${tools.cmd.generateInstruction(["send"], ["text"])}`)}\n` +
             `${quote(tools.cmd.generateCommandExample(ctx.used, "welcome Selamat datang di grup!"))}\n` +
             quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru.", `Gunakan ${monospace("delete")} sebagai teks untuk menghapus teks yang disimpan sebelumnya.`]))
@@ -41,7 +41,7 @@ module.exports = {
                     return await ctx.reply(quote(`❎ Teks '${key}' tidak valid!`));
             }
 
-            if (["d", "delete"].includes(text.toLowerCase())) {
+            if (["d", "delete"].includes(key.toLowerCase())) {
                 await db.delete(setKey);
                 return await ctx.reply(quote(`🗑️ Pesan untuk teks '${key}' berhasil dihapus!`));
             }

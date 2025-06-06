@@ -4,24 +4,24 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "islamic",
-    aliases: ["islamicai"],
+    name: "riple",
+    aliases: ["ripleai"],
     category: "ai-chat",
-    permissions: {},
+    permissions: {
+        coin: 10
+    },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
+        const input = ctx.args.join(" ") || ctx.quoted.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;;
 
-        if (!input) return await ctx.reply(
+        if (!input) return await ctx.reply(quote(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(tools.cmd.generateCommandExample(ctx.used, "apa itu bot whatsapp?"))}\n` +
             quote(tools.cmd.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
-        );
+        ));
 
         try {
-            const senderUid = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.uid`) || "guest";
-            const apiUrl = tools.api.createUrl("fasturl", "/aillm/islamic", {
-                ask: input,
-                sessionId: senderUid
+            const apiUrl = tools.api.createUrl("nekorinn", "/ai/ripleai", {
+                text: input
             });
             const result = (await axios.get(apiUrl)).data.result;
 
@@ -30,4 +30,4 @@ module.exports = {
             return await tools.cmd.handleError(ctx, error, true);
         }
     }
-};
+}

@@ -19,16 +19,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("fasturl", "/music/songlyrics-v1", {
-                text: input
+            const apiUrl = tools.api.createUrl("paxsenix", "/lyrics/genius", {
+                q: input
             });
-            const result = (await axios.get(apiUrl)).data.result.answer;
+            const result = (await axios.get(apiUrl)).data;
 
             return await ctx.reply(
-                `${quote(`Judul: ${result.song}`)}\n` +
+                `${quote(`Judul: ${result.title}`)}\n` +
                 `${quote(`Artis: ${result.artist}`)}\n` +
                 `${quote("─────")}\n` +
-                `${result.plain_lyrics}\n` +
+                `${result.lyrics}\n` +
                 "\n" +
                 config.msg.footer
             );

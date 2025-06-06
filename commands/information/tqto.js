@@ -26,16 +26,17 @@ module.exports = {
             `${quote("─────")}\n` +
             `${quote("agatzdev (https://github.com/agatdwi)")}\n` +
             `${quote("Aine (https://github.com/Aiinne)")}\n` +
+            `${quote("Alex (https://github.com/Paxsenix0)")}\n` +
             `${quote("BochilGaming (https://github.com/BochilGaming)")}\n` +
             `${quote("Bhuzel (https://github.com/Bhuzel)")}\n` +
             `${quote("David Cyril (https://github.com/DavidCyrilTech)")}\n` +
             `${quote("ErerexID Chx (https://github.com/ErerexIDChx)")}\n` +
-            `${quote("FastURL (alias Hikaru) (https://github.com/fasturl)")}\n` +
             `${quote("FlowFalcon (https://github.com/FlowFalcon)")}\n` +
             `${quote("Lann (https://github.com/ERLANRAHMAT)")}\n` +
             `${quote("Nyx Altair (https://github.com/NyxAltair)")}\n` +
             `${quote("Puruu Puruu (https://github.com/rikikangsc2-eng)")}\n` +
             `${quote("Randyy (https://github.com/rynn-k)")}\n` +
+            `${quote("siputzx (https://github.com/siputzx)")}\n` +
             `${quote("Siraj (https://github.com/BK9dev)")}\n` +
             `${quote("swndyyyyyy (https://github.com/swndyy)")}\n` +
             `${quote("ZellRay (https://github.com/ZellRay)")}\n` +
