@@ -28,7 +28,6 @@ module.exports = {
             const result = tools.api.createUrl("siputzx", "/api/canvas/fake-xnxx", {
                 name: ctx.sender.pushName,
                 quote: input,
-                profile: profilePictureUrl,
                 likes: Math.floor(Math.random() * 10) + 1,
                 dislikes: 0
             });

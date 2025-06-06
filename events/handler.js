@@ -51,11 +51,11 @@ async function handleWelcome(bot, m, type) {
         };
 
         try {
-            const canvas = tools.api.createUrl("falcon", `/imagecreator/${type === "UserJoin" ? "welcome" : "goodbye"}`, {
-                ppuser: profilePictureUrl,
-                bg: config.bot.thumbnail,
-                text: type === "UserJoin" ? `Selamat datang ${userName || userId} di grup ${metadata.subject}!` : `Selamat tinggal, ${userName || userId}!`
-            });
+            const canvas = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/lemonwelcome", {
+                name: userName,
+                image: profilePictureUrl,
+                welcome: type === "UserJoin" ? true : false
+            }))).data.result;
             const video = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
                 url: canvas
             }))).data.result;
