@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "senna",
-    aliases: ["sennayapping"]
+    aliases: ["sennayapping"],
     category: "ai-chat",
     permissions: {
         coin: 10
