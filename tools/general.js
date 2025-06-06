@@ -65,6 +65,22 @@ function formatSize(byteCount) {
     return `${size.toFixed(2)} ${units[index]}`;
 }
 
+function generateUID(id, withBotName) {
+    if (!id) return null;
+
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) {
+        const charCode = id.charCodeAt(i);
+        hash = (hash * 31 + charCode) % 1000000007;
+    }
+
+    const uniquePart = id.split("").reverse().join("").charCodeAt(0).toString(16);
+    let uid = `${Math.abs(hash).toString(16).toLowerCase()}-${uniquePart}`;
+    if (withBotName) uid += `_${formatBotName(config.bot.name)}-wabot`;
+
+    return uid;
+}
+
 function getID(jid) {
     if (!jid) return null;
 
