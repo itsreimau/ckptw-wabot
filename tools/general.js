@@ -180,22 +180,14 @@ async function upload(buffer, type = "any", host = config.system.uploaderHost) {
 
     const realHost = availableHosts.find(h => h.toLowerCase() === host.toLowerCase());
 
-    if (!realHost) return `Host '${host}' tidak mendukung tipe '${type}'`;
+    let hostsToTry = realHost ? [realHost, ...availableHosts.filter(h => h !== realHost)] : availableHosts;
 
-    try {
-        const url = await uploader[realHost](buffer);
-        if (url) return url;
-    } catch (error) {
-        consolefy.error(`Error: ${util.format(error)}`);
-    }
-
-    const fallbackHosts = availableHosts.filter(h => h !== realHost);
-    for (const fallbackHost of fallbackHosts) {
+    for (const currentHost of hostsToTry) {
         try {
-            const url = await uploader[fallbackHost](buffer);
+            const url = await uploader[currentHost](buffer);
             if (url) return url;
         } catch (error) {
-            consolefy.error(`Error: ${util.format(error)}`);
+            consolefy.error(`Error: ${error}`);
         }
     }
 
