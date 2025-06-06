@@ -29,7 +29,7 @@ async function handleWelcome(bot, m, type) {
 
         const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
         const userId = tools.general.getID(jid);
-        const userName = await db.get(`user.${userId}.username`) || null;
+        const userName = bot.getPushname(jid) || await db.get(`user.${userId}.username`) || null;
         const userTag = `@${userId}`;
 
         const text = customText ?
