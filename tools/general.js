@@ -171,21 +171,35 @@ async function upload(buffer, type = "any", host = config.system.uploaderHost) {
         any: ["FastUrl", "Litterbox", "Catbox", "Uguu", "Cloudku", "Nyxs"],
         image: ["Pomf", "Quax", "Ryzen", "Shojib", "Erhabot", "TmpErhabot", "IDNet"],
         video: ["Pomf", "Quax", "Videy", "Ryzen", "TmpErhabot"],
-        audio: ["Pomf", "Quax", "Ryzen", "TmpErhabot"]
+        audio: ["Pomf", "Quax", "Ryzen", "TmpErhabot"],
+        document: ["IDNet"]
     };
 
-    const allHosts = [...hosts.any, ...(hosts[type] || [])];
-    const realHost = allHosts.find(h => h.toLowerCase() === host.toLowerCase());
+    let availableHosts = [...hosts.any];
+    if (type !== "any" && hosts[type]) availableHosts = [...hosts[type]];
+
+    const realHost = availableHosts.find(h => h.toLowerCase() === host.toLowerCase());
 
     if (!realHost) return `Host '${host}' tidak mendukung tipe '${type}'`;
 
     try {
         const url = await uploader[realHost](buffer);
-        return url || `Gagal mengupload ke '${realHost}'`;
+        if (url) return url;
     } catch (error) {
         consolefy.error(`Error: ${util.format(error)}`);
-        return null;
     }
+
+    const fallbackHosts = availableHosts.filter(h => h !== realHost);
+    for (const fallbackHost of fallbackHosts) {
+        try {
+            const url = await uploader[fallbackHost](buffer);
+            if (url) return url;
+        } catch (error) {
+            consolefy.error(`Error: ${util.format(error)}`);
+        }
+    }
+
+    return null;
 }
 
 module.exports = {
