@@ -49,18 +49,18 @@ module.exports = {
                 `${config.msg.readmore}\n`;
 
             for (const category of Object.keys(tag)) {
-                const categoryCommands = Array.from(cmd.values())
-                    .filter(command => command.category === category)
-                    .map(command => ({
-                        name: command.name,
-                        aliases: command.aliases,
-                        permissions: command.permissions || {}
+                const categoryCmds = Array.from(cmd.values())
+                    .filter(cmd => cmd.category === category)
+                    .map(cmd => ({
+                        name: cmd.name,
+                        aliases: cmd.aliases,
+                        permissions: cmd.permissions || {}
                     }));
 
-                if (categoryCommands.length > 0) {
+                if (categoryCmds.length > 0) {
                     text += `◆ ${bold(tag[category])}\n`;
 
-                    categoryCommands.forEach(cmd => {
+                    categoryCmds.forEach(cmd => {
                         let permissionsText = "";
                         if (cmd.permissions.coin) permissionsText += "ⓒ";
                         if (cmd.permissions.group) permissionsText += "Ⓖ";

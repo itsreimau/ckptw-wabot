@@ -32,8 +32,6 @@ module.exports = {
                     collector.stop();
                 }
             });
-
-            collector.on("end", async () => {});
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

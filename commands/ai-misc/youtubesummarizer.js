@@ -27,7 +27,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data;
 
-            const resultText = result.keyPoints.map((r) =>
+            const resultText = result.keyPoints.map(r =>
                 `${quote(`Poin: ${r.point}`)}\n` +
                 `${quote(r.summary)}`
             ).join(
@@ -35,7 +35,7 @@ module.exports = {
                 `${quote("─────")}\n`
             );
             return await ctx.reply(
-                `${result.summary}\n` +
+                `${quote(result.summary)}\n` +
                 `${quote("─────")}\n` +
                 `${resultText}\n` +
                 "\n" +
