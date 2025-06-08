@@ -231,15 +231,15 @@ module.exports = (bot) => {
             if (m.key.fromMe) return;
 
             // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
-            const userMentions = ctx.quoted.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
+            const userMentions = ctx.quoted.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
             if (userMentions.length > 0) {
                 if (m.key.fromMe) return;
 
                 for (const userMention of userMentions) {
                     const userMentionAfk = await db.get(`user.${userMention}.afk`) || {};
-                    if (userMentionAfk.reason && userMentionAfk.timestamp) {
-                        const timeago = tools.general.convertMsToDuration(Date.now() - userAfk.timestamp);
-                        await ctx.reply(quote(`📴 Jangan tag! Dia sedang AFK ${userAfk.reason ? `dengan alasan "${userAfk.reason}"` : "tanpa alasan"} selama ${timeago}.`));
+                    if (userMentionAfk.reason || userMentionAfk.timestamp) {
+                        const timeago = tools.general.convertMsToDuration(Date.now() - userMentionAfk.timestamp);
+                        await ctx.reply(quote(`📴 Jangan tag! Dia sedang AFK ${userMentionAfk.reason ? `dengan alasan "${userMentionAfk.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                     }
                 }
             }
