@@ -329,7 +329,7 @@ module.exports = {
     isCmd,
     isOwner,
     isUrl,
-    parseFlag
+    parseFlag,
     translate,
     upload
 };
