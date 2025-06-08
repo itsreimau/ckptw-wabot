@@ -22,10 +22,10 @@ module.exports = (bot) => {
         const isGroup = ctx.isGroup();
         const isPrivate = !isGroup;
         const senderJid = ctx.sender.jid;
-        const senderId = tools.general.getID(senderJid);
+        const senderId = tools.cmd.getID(senderJid);
         const groupJid = isGroup ? ctx.id : null;
-        const groupId = isGroup ? tools.general.getID(groupJid) : null;
-        const isOwner = tools.general.isOwner(senderId, ctx.msg.key.id);
+        const groupId = isGroup ? tools.cmd.getID(groupJid) : null;
+        const isOwner = tools.cmd.isOwner(senderId, ctx.msg.key.id);
 
         // Mengambil data bot, pengguna, dan grup dari database
         const botDb = await db.get("bot") || {};
@@ -48,48 +48,28 @@ module.exports = (bot) => {
             newUserXp -= xpToLevelUp;
 
             if (userDb?.autolevelup) {
-                const text = `${quote(`Selamat! Anda telah naik ke level ${newUserLevel}!`)}\n` +
-                    `${config.msg.readmore}\n` +
-                    quote(tools.cmd.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`]));
-                const contextInfo = {
-                    mentionedJid: [senderJid],
-                    forwardingScore: 9999,
-                    isForwarded: true,
-                    forwardedNewsletterMessageInfo: {
-                        newsletterJid: config.bot.newsletterJid,
-                        newsletterName: config.bot.name
-                    }
-                };
+                const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+                const canvas = tools.api.createUrl("siputzx", "/api/canvas/level-up", {
+                    backgroundURL: config.bot.thumbnail,
+                    avatarURL: profilePictureUrl,
+                    fromLevel: userDb?.level,
+                    toLevel: newUserLevel,
+                    name: ctx.sender.pushName
+                });
 
-                try {
-                    const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-                    const canvas = tools.api.createUrl("siputzx", "/api/canvas/level-up", {
-                        backgroundURL: config.bot.thumbnail,
-                        avatarURL: profilePictureUrl,
-                        fromLevel: userDb?.level,
-                        toLevel: newUserLevel,
-                        name: ctx.sender.pushName
-                    });
-                    const video = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
-                        url: canvas
-                    }))).data.result;
-                    await ctx.reply({
-                        video: {
-                            url: video
-                        },
-                        mimetype: mime.lookup("mp4"),
-                        caption: text,
-                        gifPlayback: true,
-                        contextInfo
-                    });
-                } catch (error) {
-                    if (error.status !== 200) await ctx.sendMessage(ctx.id, {
-                        text,
-                        contextInfo
-                    }, {
-                        quoted: ctx.msg
-                    });
-                }
+                await ctx.reply({
+                    text: `${quote(`Selamat! Anda telah naik ke level ${newUserLevel}!`)}\n` +
+                        `${config.msg.readmore}\n` +
+                        quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
+                    contextInfo: {
+                        externalAdReplyInfo: {
+                            title: config.bot.name,
+                            body: config.bot.note,
+                            thumbnail: await tools.cmd.fillImageWithBlur(canvas),
+                            renderLargerThumbnail: true
+                        }
+                    }
+                });
             }
 
             await db.set(`user.${senderId}.xp`, newUserXp);
@@ -118,7 +98,7 @@ module.exports = (bot) => {
             },
             {
                 key: "requireBotGroupMembership",
-                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium && !(await ctx.group(config.bot.groupJid).members()).some(member => tools.general.getID(member.id) === senderId),
+                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium && !(await ctx.group(config.bot.groupJid).members()).some(member => tools.cmd.getID(member.id) === senderId),
                 msg: config.msg.botGroupMembership,
                 reaction: "🚫"
             },
@@ -147,7 +127,7 @@ module.exports = (bot) => {
                     await ctx.reply(
                         `${msg}\n` +
                         `${config.msg.readmore}\n` +
-                        quote(tools.cmd.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
+                        quote(tools.msg.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
                     );
                     return await db.set(`user.${senderId}.lastSentMsg.${key}`, now);
                 } else {
@@ -229,7 +209,7 @@ module.exports = (bot) => {
                     await ctx.reply(
                         `${msg}\n` +
                         `${config.msg.readmore}\n` +
-                        quote(tools.cmd.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
+                        quote(tools.msg.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
                     );
                     return await db.set(`user.${senderId}.lastSentMsg.${key}`, now);
                 } else {

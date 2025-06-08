@@ -8,7 +8,7 @@ module.exports = {
         premium: true
     },
     code: async (ctx) => {
-        const random = tools.general.getRandomElement(["china", "indonesia", "japan", "vietnam", "korea", "malaysia", "thailand"]);
+        const random = tools.cmd.getRandomElement(["china", "indonesia", "japan", "vietnam", "korea", "malaysia", "thailand"]);
         const apiUrl = tools.api.createUrl("agatz", `/api/${random}`);
 
         try {

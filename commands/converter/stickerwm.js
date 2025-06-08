@@ -15,11 +15,11 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send", "reply"], ["text", "sticker"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "get in the fucking robot|shinji!"))
+            `${quote(tools.msg.generateInstruction(["send", "reply"], ["text", "sticker"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx.used, "get in the fucking robot|shinji!"))
         );
 
-        if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], ["sticker"])));
+        if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], ["sticker"])));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();

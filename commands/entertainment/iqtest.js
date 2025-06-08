@@ -10,7 +10,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const winGame = await db.get(`user.${tools.general.getID(ctx.sender.jid)}.winGame`) || 0;
+        const winGame = await db.get(`user.${tools.cmd.getID(ctx.sender.jid)}.winGame`) || 0;
 
         let iqScore;
         let feedback;

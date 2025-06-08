@@ -15,12 +15,12 @@ module.exports = {
         const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.cmd.generateCommandExample(ctx.used, "halo, dunia!"))}\n` +
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx.used, "halo, dunia!"))}\n` +
             `${quote(tools.cmd.generatesFlagInformation({
                 "-ht": "Kirim dengan hidetag"
             }))}\n` +
-            quote(tools.cmd.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru.", `Gunakan ${monospace("blacklist")} untuk memasukkan grup ke dalam blacklist. (Hanya berfungsi pada grup)`]))
+            quote(tools.msg.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru.", `Gunakan ${monospace("blacklist")} untuk memasukkan grup ke dalam blacklist. (Hanya berfungsi pada grup)`]))
         );
 
         if (["b", "blacklist"].includes(input) && ctx.isGroup()) {
@@ -56,7 +56,7 @@ module.exports = {
             const blacklist = await db.get("bot.blacklistBroadcast") || [];
             const filteredGroupIds = groupIds.filter(groupId => !blacklist.includes(groupId));
 
-            const waitMsg = await ctx.reply(quote(`🔄 Mengirim siaran ke ${filteredGroupIds.length} grup, perkiraan waktu: ${tools.general.convertMsToDuration(filteredGroupIds.length * 0.5 * 1000)}`));
+            const waitMsg = await ctx.reply(quote(`🔄 Mengirim siaran ke ${filteredGroupIds.length} grup, perkiraan waktu: ${tools.msg.convertMsToDuration(filteredGroupIds.length * 0.5 * 1000)}`));
 
             const failedGroupIds = [];
 
@@ -69,59 +69,39 @@ module.exports = {
                         mentions = members.map(m => m.id);
                     }
 
-                    const fakeQuotedText = {
-                        key: {
-                            participant: "13135550002@s.whatsapp.net",
-                            remoteJid: "status@broadcast"
-                        },
-                        message: {
-                            extendedTextMessage: {
-                                text: config.msg.note
-                            }
-                        }
-                    };
                     const contextInfo = {
-                        mentionedJid: mentions,
+                        mentionedJid: [mentions],
                         forwardingScore: 9999,
                         isForwarded: true,
                         forwardedNewsletterMessageInfo: {
                             newsletterJid: config.bot.newsletterJid,
                             newsletterName: config.bot.name
+                        },
+                        externalAdReplyInfo: {
+                            title: config.bot.name,
+                            body: config.bot.note,
+                            thumbnail: await tools.cmd.fillImageWithBlur(config.bot.thumbnail),
+                            renderLargerThumbnail: true,
+                            showAdAttribution: true
                         }
                     };
 
-                    try {
-                        const video = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
-                            url: config.bot.thumbnail
-                        }))).data.result;
-                        await ctx.sendMessage(groupId, {
-                            video: {
-                                url: video
-                            },
-                            mimetype: mime.lookup("mp4"),
-                            caption: text,
-                            gifPlayback: true,
-                            contextInfo
-                        }, {
-                            quoted: fakeQuotedText
-                        });
-                    } catch (error) {
-                        if (error.status !== 200) await ctx.sendMessage(groupId, {
-                            text,
-                            contextInfo
-                        }, {
-                            quoted: fakeQuotedText
-                        });
-                    }
-                } catch (error) {
-                    failedGroupIds.push(groupId);
+                    await ctx.sendMessage(groupId, {
+                        text,
+                        contextInfo
+                    }, {
+                        quoted: tools.cmd.fakeMetaAiQuotedText(config.msg.note)
+                    });
                 }
+            } catch (error) {
+                failedGroupIds.push(groupId);
             }
-
-            const successCount = filteredGroupIds.length - failedGroupIds.length;
-            return await ctx.editMessage(waitMsg.key, quote(`✅ Berhasil mengirim ke ${successCount} grup. Gagal mengirim ke ${failedGroupIds.length} grup, ${blacklist.length} grup dalam blacklist tidak dikirim.`));
-        } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
         }
+
+        const successCount = filteredGroupIds.length - failedGroupIds.length;
+        return await ctx.editMessage(waitMsg.key, quote(`✅ Berhasil mengirim ke ${successCount} grup. Gagal mengirim ke ${failedGroupIds.length} grup, ${blacklist.length} grup dalam blacklist tidak dikirim.`));
+    } catch (error) {
+        return await tools.cmd.handleError(ctx, error, false);
     }
+}
 };

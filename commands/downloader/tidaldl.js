@@ -14,16 +14,17 @@ module.exports = {
         const url = ctx.args[0] || null;
 
         if (!url) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "https://example.com/"))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx.used, "https://example.com/"))
         );
 
-        const isUrl = await tools.general.isUrl(url);
+        const isUrl = await tools.cmd.isUrl(url);
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
             const apiUrl = tools.api.createUrl("paxsenix", "/dl/tidal", {
-                url
+                url,
+                quality: "HIGH"
             });
             const result = (await axios.get(apiUrl)).data;
 

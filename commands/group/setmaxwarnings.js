@@ -15,12 +15,12 @@ module.exports = {
         const input = parseInt(ctx.args[0], 10) || null;
 
         if (!input) return await ctx.reply(
-            `${quote(`${tools.cmd.generateInstruction(["send"], ["text"])}`)}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "8"))
+            `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
+            quote(tools.msg.generateCommandExample(ctx.used, "8"))
         );
 
         try {
-            const groupId = tools.general.getID(ctx.id);
+            const groupId = tools.cmd.getID(ctx.id);
             await db.set(`group.${groupId}.maxwarnings`, input);
 
             return await ctx.reply(quote(`✅ Berhasil mengubah max warnings!`));

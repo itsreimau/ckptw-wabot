@@ -17,9 +17,9 @@ module.exports = {
         const level = parseInt(ctx.args[0], 10) || null;
 
         if (!level) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.cmd.generateCommandExample(ctx.used, "1"))}\n` +
-            quote(tools.cmd.generateNotes(["Selain 1, bisa 2, 3, 4, dan 5."]))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx.used, "1"))}\n` +
+            quote(tools.msg.generateNotes(["Selain 1, bisa 2, 3, 4, dan 5."]))
         );
 
         try {
@@ -34,7 +34,7 @@ module.exports = {
                 level,
                 limit
             });
-            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.words);
+            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.words);
 
             let question, answer, clue;
             if (Math.random() < 0.5) {
@@ -51,7 +51,7 @@ module.exports = {
                 coin: 5,
                 timeout: 60000,
                 answer: result.jawaban.toLowerCase(),
-                description: ctx.sender.jid.startsWith("62") ? await tools.general.translate(result.meaning, "id") : result.meaning
+                description: ctx.sender.jid.startsWith("62") ? await tools.cmd.translate(result.meaning, "id") : result.meaning
             };
 
             session.set(ctx.id, true);
@@ -59,7 +59,7 @@ module.exports = {
             await ctx.reply(
                 `${quote(`Soal: ${question}`)}\n` +
                 `${quote(`Bonus: ${game.coin} Koin`)}\n` +
-                `${quote(`Batas waktu: ${tools.general.convertMsToDuration(game.timeout)}`)}\n` +
+                `${quote(`Batas waktu: ${tools.msg.convertMsToDuration(game.timeout)}`)}\n` +
                 `${quote(`Ketik ${monospace("hint")} untuk bantuan.`)}\n` +
                 `${quote(`Ketik ${monospace("surrender")} untuk menyerah.`)}\n` +
                 "\n" +
@@ -72,7 +72,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const participantAnswer = m.content.toLowerCase();
-                const participantId = tools.general.getID(m.sender);
+                const participantId = tools.cmd.getID(m.sender);
 
                 if (participantAnswer === game.answer) {
                     session.delete(ctx.id);
@@ -96,7 +96,7 @@ module.exports = {
                     session.delete(ctx.id);
                     await ctx.sendMessage(ctx.id, {
                         text: `${quote("🏳️ Anda menyerah!")}\n` +
-                            `${quote(`Jawabannya adalah ${tools.general.ucwords(game.answer)}.`)}\n` +
+                            `${quote(`Jawabannya adalah ${tools.msg.ucwords(game.answer)}.`)}\n` +
                             quote(game.description)
                     }, {
                         quoted: m
@@ -116,7 +116,7 @@ module.exports = {
                     session.delete(ctx.id);
                     return await ctx.reply(
                         `${quote("⏱ Waktu habis!")}\n` +
-                        `${quote(`Jawabannya adalah ${tools.general.ucwords(game.answer)}.`)}\n` +
+                        `${quote(`Jawabannya adalah ${tools.msg.ucwords(game.answer)}.`)}\n` +
                         quote(game.description)
                     );
                 }

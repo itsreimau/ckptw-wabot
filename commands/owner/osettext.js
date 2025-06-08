@@ -15,9 +15,9 @@ module.exports = {
         const text = ctx.args.slice(1).join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean)
 
         if (!key && !text) return await ctx.reply(
-            `${quote(`${tools.cmd.generateInstruction(["send"], ["text"])}`)}\n` +
-            `${quote(tools.cmd.generateCommandExample(ctx.used, "price $1 untuk sewa bot 1 bulan"))}\n` +
-            quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Untuk teks satu baris, ketik saja langsung ke perintah. Untuk teks dengan baris baru, balas pesan yang berisi teks tersebut ke perintah.", `Gunakan ${monospace("delete")} sebagai teks untuk menghapus teks yang disimpan sebelumnya.`]))
+            `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx.used, "price $1 untuk sewa bot 1 bulan"))}\n` +
+            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Untuk teks satu baris, ketik saja langsung ke perintah. Untuk teks dengan baris baru, balas pesan yang berisi teks tersebut ke perintah.", `Gunakan ${monospace("delete")} sebagai teks untuk menghapus teks yang disimpan sebelumnya.`]))
         );
 
         if (["l", "list"].includes(key.toLowerCase())) {

@@ -15,8 +15,8 @@ module.exports = {
 
         if (!surat && !ayat) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.cmd.generateCommandExample(`${ctx.used.prefix}${ctx.used.command}`, "21 35"))}\n` +
-            `${quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix}${ctx.used.command} list`)} untuk melihat daftar.`]))}`
+            `${quote(tools.msg.generateCommandExample(`${ctx.used.prefix}${ctx.used.command}`, "21 35"))}\n` +
+            `${quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix}${ctx.used.command} list`)} untuk melihat daftar.`]))}`
         );
 
         if (["l", "list"].includes(surat.toLowerCase())) {

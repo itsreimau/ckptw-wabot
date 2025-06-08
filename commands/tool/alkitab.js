@@ -16,8 +16,8 @@ module.exports = {
 
         if (!passage && !num) return await ctx.reply(
             `${quote(`${tools.cmd.generateInstruction(["send"], ["text"])}`)}\n` +
-            `${quote(tools.cmd.generateCommandExample(ctx.used, "kej 2:18"))}\n` +
-            quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
+            `${quote(tools.msg.generateCommandExample(ctx.used, "kej 2:18"))}\n` +
+            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (["l", "list"].includes(passage.toLowerCase())) {

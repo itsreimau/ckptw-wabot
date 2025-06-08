@@ -16,12 +16,12 @@ module.exports = {
         const targetId = id ? id.replace(/[^\d]/g, "") : null;
         const menfessText = text ? text.join(" ") : null;
 
-        const senderId = tools.general.getID(ctx.sender.jid);
+        const senderId = tools.cmd.getID(ctx.sender.jid);
 
         if (!targetId && !menfessText) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.cmd.generateCommandExample(ctx.used, `${senderId} halo, dunia!`))}\n` +
-            quote(tools.cmd.generateNotes(["Jangan gunakan spasi pada angka. Contoh: +62 8123-4567-8910, seharusnya +628123-4567-8910"]))
+            `${quote(tools.msg.generateCommandExample(ctx.used, `${senderId} halo, dunia!`))}\n` +
+            quote(tools.msg.generateNotes(["Jangan gunakan spasi pada angka. Contoh: +62 8123-4567-8910, seharusnya +628123-4567-8910"]))
         );
 
         const allMenfessDb = await db.get("menfess") || {};
@@ -33,33 +33,20 @@ module.exports = {
         if (targetId === senderId) return await ctx.reply(quote("❎ Tidak dapat digunakan pada diri Anda sendiri."));
 
         try {
-            const fakeQuotedText = {
-                key: {
-                    participant: "13135550002@s.whatsapp.net",
-                    remoteJid: "status@broadcast"
-                },
-                message: {
-                    extendedTextMessage: {
-                        text: "Seseorang telah mengirimimu pesan menfess."
-                    }
-                }
-            };
-            const contextInfo = {
-                forwardingScore: 9999,
-                isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: config.bot.newsletterJid,
-                    newsletterName: config.bot.name
-                }
-            };
-
             await ctx.sendMessage(`${targetId}@s.whatsapp.net`, {
                 text: `${menfessText}\n` +
                     `${config.msg.readmore}\n` +
                     quote(`Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik ${monospace("delete")} atau ${monospace("stop")}.`),
-                contextInfo
+                contextInfo: {
+                    forwardingScore: 9999,
+                    isForwarded: true,
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: config.bot.newsletterJid,
+                        newsletterName: config.bot.name
+                    }
+                }
             }, {
-                quoted: fakeQuotedText
+                quoted: tools.cmd.fakeMetaAiQuotedText("Seseorang telah mengirimi menfess.")
             });
 
             await db.set(`menfess.${Date.now()}`, {

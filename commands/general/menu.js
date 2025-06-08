@@ -36,12 +36,12 @@ module.exports = {
                 "misc": "Miscellaneous"
             };
 
-            let text = `Hai @${tools.general.getID(ctx.sender.jid)}, berikut adalah daftar perintah yang tersedia!\n` +
+            let text = `Hai @${tools.cmd.getID(ctx.sender.jid)}, berikut adalah daftar perintah yang tersedia!\n` +
                 "\n" +
                 `${quote(`Tanggal: ${moment.tz(config.system.timeZone).locale("id").format("dddd, DD MMMM YYYY")}`)}\n` +
                 `${quote(`Waktu: ${moment.tz(config.system.timeZone).format("HH.mm.ss")}`)}\n` +
                 "\n" +
-                `${quote(`Bot Uptime: ${tools.general.convertMsToDuration(Date.now() - config.bot.readyAt)}`)}\n` +
+                `${quote(`Bot Uptime: ${tools.msg.convertMsToDuration(Date.now() - config.bot.readyAt)}`)}\n` +
                 `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
                 `${quote("Library: @itsreimau/ckptw-mod (Fork of @mengkodingan/ckptw)")}\n` +
                 "\n" +
@@ -78,50 +78,29 @@ module.exports = {
 
             text += config.msg.footer;
 
-            const fakeQuotedText = {
-                key: {
-                    participant: "13135550002@s.whatsapp.net",
-                    remoteJid: "status@broadcast"
-                },
-                message: {
-                    extendedTextMessage: {
-                        text: config.msg.note
-                    }
-                }
-            };
             const contextInfo = {
-                mentionedJid: [ctx.sender.jid],
+                mentionedJid: [jid],
                 forwardingScore: 9999,
                 isForwarded: true,
                 forwardedNewsletterMessageInfo: {
                     newsletterJid: config.bot.newsletterJid,
                     newsletterName: config.bot.name
+                },
+                externalAdReplyInfo: {
+                    title: config.bot.name,
+                    body: config.bot.note,
+                    thumbnail: await tools.cmd.fillImageWithBlur(config.bot.thumbnail),
+                    renderLargerThumbnail: true,
+                    showAdAttribution: true
                 }
             };
 
-            try {
-                const video = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
-                    url: config.bot.thumbnail
-                }))).data.result;
-                return await ctx.sendMessage(ctx.id, {
-                    video: {
-                        url: video
-                    },
-                    mimetype: mime.lookup("mp4"),
-                    caption: text,
-                    gifPlayback: true,
-                    contextInfo
-                }, {
-                    quoted: fakeQuotedText
-                });
-            } catch (error) {
-                if (error.status !== 200) return await ctx.sendMessage(ctx.id, {
-                    text,
-                    contextInfo
-                }, {
-                    quoted: fakeQuotedText
-                });
-            }
+            return await ctx.sendMessage(ctx.id, {
+                text,
+                contextInfo
+            }, {
+                quoted: tools.cmd.fakeMetaAiQuotedText(config.msg.note)
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

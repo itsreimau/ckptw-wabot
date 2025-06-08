@@ -16,7 +16,7 @@ const util = require("node:util");
 // Fungsi untuk menangani event pengguna bergabung/keluar grup
 async function handleWelcome(bot, m, type) {
     const groupJid = m.id;
-    const groupId = tools.general.getID(m.id);
+    const groupId = tools.cmd.getID(m.id);
     const groupDb = await db.get(`group.${groupId}`) || {};
 
     if (groupDb?.mutebot) return;
@@ -25,13 +25,9 @@ async function handleWelcome(bot, m, type) {
     const metadata = await bot.core.groupMetadata(groupJid);
 
     for (const jid of m.participants) {
-        const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-
-        const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
-        const userId = tools.general.getID(jid);
-        const userName = bot.getPushname(jid) || await db.get(`user.${userId}.username`) || null;
+        const userId = tools.cmd.getID(jid);
         const userTag = `@${userId}`;
-
+        const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
         const text = customText ?
             customText
             .replace(/%tag%/g, userTag)
@@ -40,6 +36,14 @@ async function handleWelcome(bot, m, type) {
             (type === "UserJoin" ?
                 quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
                 quote(`👋 Selamat tinggal, ${userTag}!`));
+
+        const userName = bot.getPushname(jid) || await db.get(`user.${userId}.username`) || null;
+        const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+        const canvas = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/lemonwelcome", {
+            name: userName,
+            image: profilePictureUrl,
+            welcome: type === "UserJoin" ? true : false
+        }))).data.result;
         const contextInfo = {
             mentionedJid: [jid],
             forwardingScore: 9999,
@@ -47,56 +51,34 @@ async function handleWelcome(bot, m, type) {
             forwardedNewsletterMessageInfo: {
                 newsletterJid: config.bot.newsletterJid,
                 newsletterName: config.bot.name
+            },
+            externalAdReplyInfo: {
+                title: config.bot.name,
+                body: config.bot.note,
+                thumbnail: await tools.cmd.fillImageWithBlur(canvas),
+                renderLargerThumbnail: true
             }
         };
 
-        try {
-            const canvas = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/lemonwelcome", {
-                name: userName,
-                image: profilePictureUrl,
-                welcome: type === "UserJoin" ? true : false
-            }))).data.result;
-            const video = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/img2vid", {
-                url: canvas
-            }))).data.result;
-            await bot.core.sendMessage(groupJid, {
-                video: {
-                    url: video
-                },
-                mimetype: mime.lookup("mp4"),
-                caption: text,
-                gifPlayback: true,
-                contextInfo
-            });
-        } catch (error) {
-            if (error.status !== 200) await bot.core.sendMessage(groupJid, {
-                text,
-                contextInfo
-            });
-        }
+        await bot.core.sendMessage(groupJid, {
+            text,
+            contextInfo
+        }, {
+            quoted: tools.cmd.fakeMetaAiQuotedText(config.msg.note)
+        });
 
         if (type === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(groupJid, {
             text: groupDb?.text?.intro,
             mentions: [jid]
         }, {
-            quoted: {
-                key: {
-                    participant: "13135550002@s.whatsapp.net",
-                    remoteJid: "status@broadcast"
-                },
-                message: {
-                    extendedTextMessage: {
-                        text: "Jangan lupa untuk mengisi intro!"
-                    }
-                }
-            }
+            quoted: tools.cmd.fakeMetaAiQuotedText("Jangan lupa untuk mengisi intro!")
         });
     }
 };
 
 // Fungsi untuk menambahkan warning
 async function addWarning(ctx, groupDb, senderJid, groupId) {
-    const senderId = tools.general.getID(senderJid);
+    const senderId = tools.cmd.getID(senderJid);
 
     const warnings = groupDb?.warnings || {};
     const current = warnings[senderId] || 0;
@@ -130,7 +112,7 @@ module.exports = (bot) => {
 
         // Mulai ulang bot
         if (botRestart?.jid && botRestart?.timestamp) {
-            const timeago = tools.general.convertMsToDuration(Date.now() - botRestart.timestamp);
+            const timeago = tools.msg.convertMsToDuration(Date.now() - botRestart.timestamp);
             await bot.core.sendMessage(botRestart.jid, {
                 text: quote(`✅ Berhasil dimulai ulang! Membutuhkan waktu ${timeago}.`),
                 edit: botRestart.key
@@ -139,7 +121,7 @@ module.exports = (bot) => {
         }
 
         // Tetapkan config pada bot
-        const id = tools.general.getID(m.user.id);
+        const id = tools.cmd.getID(m.user.id);
         config.bot = {
             ...config.bot,
             id,
@@ -155,11 +137,11 @@ module.exports = (bot) => {
         const isGroup = ctx.isGroup();
         const isPrivate = !isGroup;
         const senderJid = ctx.sender.jid;
-        const senderId = tools.general.getID(senderJid);
+        const senderId = tools.cmd.getID(senderJid);
         const groupJid = isGroup ? ctx.id : null;
-        const groupId = isGroup ? tools.general.getID(groupJid) : null;
-        const isOwner = tools.general.isOwner(senderId, m.key.id);
-        const isCmd = tools.general.isCmd(m.content, ctx.bot);
+        const groupId = isGroup ? tools.cmd.getID(groupJid) : null;
+        const isOwner = tools.cmd.isOwner(senderId, m.key.id);
+        const isCmd = tools.cmd.isCmd(m.content, ctx.bot);
 
         // Mengambil basis data
         const botDb = await db.get("bot") || {};
@@ -177,12 +159,12 @@ module.exports = (bot) => {
 
         // Grup atau Pribadi
         if (isGroup || isPrivate) {
-            config.bot.dbSize = fs.existsSync("database.json") ? tools.general.formatSize(fs.statSync("database.json").size / 1024) : "N/A"; // Penangan pada ukuran basis data
+            config.bot.dbSize = fs.existsSync("database.json") ? tools.msg.formatSize(fs.statSync("database.json").size / 1024) : "N/A"; // Penangan pada ukuran basis data
 
             // Penanganan basis data pengguna
             if (isOwner || userDb?.premium) db.set(`user.${senderId}.coin`, 0);
             if (userDb?.coin === undefined || !Number.isFinite(userDb.coin)) db.set(`user.${senderId}.coin`, 100);
-            if (!userDb?.username) db.set(`user.${senderId}.username`, `@user_${tools.general.generateUID(senderId, false)}`);
+            if (!userDb?.username) db.set(`user.${senderId}.username`, `@user_${tools.cmd.generateUID(senderId, false)}`);
 
             if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd?.prefix + isCmd?.didyoumean)}.`)); // Did you mean?
 
@@ -219,7 +201,7 @@ module.exports = (bot) => {
             if (userAfk.reason || userAfk.timestamp) {
                 const timeElapsed = Date.now() - userAfk.timestamp;
                 if (timeElapsed > 3000) {
-                    const timeago = tools.general.convertMsToDuration(timeElapsed);
+                    const timeago = tools.msg.convertMsToDuration(timeElapsed);
                     await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAfk.reason ? `dengan alasan "${userAfk.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                     await db.delete(`user.${senderId}.afk`);
                 }
@@ -231,14 +213,14 @@ module.exports = (bot) => {
             if (m.key.fromMe) return;
 
             // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
-            const userMentions = ctx.quoted.senderJid ? [tools.general.getID(ctx.quoted.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map(jid => tools.general.getID(jid)) || [];
+            const userMentions = ctx.quoted.senderJid ? [tools.cmd.getID(ctx.quoted.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map(jid => tools.cmd.getID(jid)) || [];
             if (userMentions.length > 0) {
                 if (m.key.fromMe) return;
 
                 for (const userMention of userMentions) {
                     const userMentionAfk = await db.get(`user.${userMention}.afk`) || {};
                     if (userMentionAfk.reason || userMentionAfk.timestamp) {
-                        const timeago = tools.general.convertMsToDuration(Date.now() - userMentionAfk.timestamp);
+                        const timeago = tools.msg.convertMsToDuration(Date.now() - userMentionAfk.timestamp);
                         await ctx.reply(quote(`📴 Jangan tag! Dia sedang AFK ${userMentionAfk.reason ? `dengan alasan "${userMentionAfk.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                     }
                 }
@@ -261,8 +243,8 @@ module.exports = (bot) => {
             }
 
             // Penanganan antilink
-            if (groupDb?.option?.antilink && await tools.general.isUrl(m.content) && !await ctx.group().isSenderAdmin()) {
-                await ctx.reply(quote("⛔ Jangan kirim tautan!"));
+            if (groupDb?.option?.antilink && await tools.cmd.isUrl(m.content) && !await ctx.group().isSenderAdmin()) {
+                await ctx.reply(quote("⛔ Jangan kirim link!"));
                 await ctx.deleteMessage(m.key);
                 if (!config.system.restrict && groupDb?.option?.autokick) {
                     await ctx.group().kick([senderJid]);
@@ -276,14 +258,14 @@ module.exports = (bot) => {
                 const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "image");
                 if (checkMedia && !await ctx.group().isSenderAdmin()) {
                     const buffer = await ctx.msg.media.toBuffer();
-                    const uploadUrl = await tools.general.upload(buffer, "image");
+                    const uploadUrl = await tools.cmd.upload(buffer, "image");
                     const apiUrl = tools.api.createUrl("nirkyy", "/api/v1/nsfw-detector", {
                         url: uploadUrl
                     });
                     const result = (await axios.get(apiUrl)).data.data.isUnsafe;
 
                     if (result) {
-                        await ctx.reply(quote("⛔ Jangan kirim NSFW!"));
+                        await ctx.reply(quote("⛔ Jangan kirim NSFW, dasar cabul!"));
                         await ctx.deleteMessage(m.key);
                         if (!config.system.restrict && groupDb?.option?.autokick) {
                             await ctx.group().kick([senderJid]);
@@ -314,7 +296,7 @@ module.exports = (bot) => {
                 await db.set(`group.${groupId}.spam`, spamData);
 
                 if (newCount > 5 && !await ctx.group().isSenderAdmin()) {
-                    await ctx.reply(quote("⛔ Jangan spam!"));
+                    await ctx.reply(quote("⛔ Jangan spam, ngelag woy!"));
                     await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) {
                         await ctx.group().kick([senderJid]);
@@ -330,7 +312,7 @@ module.exports = (bot) => {
             if (groupDb?.option?.antitagsw) {
                 const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "groupStatusMention") || m.message?.protocolMessage?.type === 25 || m.message?.protocolMessage?.type === "STATUS_MENTION_MESSAGE";
                 if (checkMedia && !await ctx.group().isSenderAdmin()) {
-                    await ctx.reply(quote(`⛔ Jangan tag grup di SW, tidak ada yang peduli!`));
+                    await ctx.reply(quote(`⛔ Jangan tag grup di SW, gak ada yg peduli!`));
                     await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) {
                         await ctx.group().kick([senderJid]);
@@ -368,7 +350,7 @@ module.exports = (bot) => {
                         const targetId = `${senderId === from ? to : from}@s.whatsapp.net`;
 
                         if (m.content?.match(/\b(d|s|delete|stop)\b/i)) {
-                            const replyText = quote("✅ Pesan menfess telah dihapus!");
+                            const replyText = quote("✅ Sesi menfess telah dihapus!");
                             await ctx.reply(replyText);
                             await ctx.sendMessage(targetId, {
                                 text: replyText

@@ -14,11 +14,11 @@ module.exports = {
         const url = ctx.args[0] || null;
 
         if (!url) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "https://example.com/"))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx.used, "https://example.com/"))
         );
 
-        const isUrl = await tools.general.isUrl(url);
+        const isUrl = await tools.cmd.isUrl(url);
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
@@ -27,15 +27,16 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data;
 
-            const resultText = result.keyPoints.map(r =>
-                `${quote(`Poin: ${r.point}`)}\n` +
-                `${quote(r.summary)}`
-            ).join(
+            const resultText = await Promise.all(
+                result.keyPoints.map(r =>
+                    `${quote(`Poin: ${ctx.sender.jid.startsWith("62") ? await tools.cmd.translate(r.point, "id") : r.point}`)}\n` +
+                    `${quote(ctx.sender.jid.startsWith("62") ? await tools.cmd.translate(r.summary, "id") : r.summary)}`
+                )).join(
                 "\n" +
                 `${quote("─────")}\n`
             );
             return await ctx.reply(
-                `${quote(result.summary)}\n` +
+                `${quote(ctx.sender.jid.startsWith("62") ? await tools.cmd.translate(result.summary, "id") : result.summary )}\n` +
                 `${quote("─────")}\n` +
                 `${resultText}\n` +
                 "\n" +

@@ -19,7 +19,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const message = m.content.trim().toLowerCase();
-                const senderId = tools.general.getID(ctx.sender.jid);
+                const senderId = tools.cmd.getID(ctx.sender.jid);
 
                 if (message === "y") {
                     const isPremium = await db.get(`user.${senderId}.premium`);

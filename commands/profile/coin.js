@@ -8,10 +8,10 @@ module.exports = {
     category: "profile",
     permissions: {},
     code: async (ctx) => {
-        const senderId = tools.general.getID(ctx.sender.jid);
+        const senderId = tools.cmd.getID(ctx.sender.jid);
         const userDb = await db.get(`user.${senderId}`) || {};
 
-        if (tools.general.isOwner(senderId, ctx.msg.key.id) || userDb?.premium) return await ctx.reply(quote("🤑 Anda memiliki koin tak terbatas."));
+        if (tools.cmd.isOwner(senderId, ctx.msg.key.id) || userDb?.premium) return await ctx.reply(quote("🤑 Anda memiliki koin tak terbatas."));
 
         try {
             const userCoin = userDb?.coin || 0;

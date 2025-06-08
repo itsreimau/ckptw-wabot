@@ -16,8 +16,8 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.cmd.generateCommandExample(ctx.used, "en halo, dunia!"))}\n` +
-            quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
+            `${quote(tools.msg.generateCommandExample(ctx.used, "en halo, dunia!"))}\n` +
+            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
         if (["l", "list"].includes(input.toLowerCase())) {
@@ -26,7 +26,7 @@ module.exports = {
         }
 
         try {
-            const result = await tools.general.translate(input, langCode);
+            const result = await tools.cmd.translate(input, langCode);
 
             return await ctx.reply(result);
         } catch (error) {

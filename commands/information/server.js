@@ -24,12 +24,12 @@ module.exports = {
                 `${quote(`Arch: ${os.arch()}`)}\n` +
                 `${quote(`Release: ${os.release()}`)}\n` +
                 `${quote(`Hostname: ${os.hostname()}`)}\n` +
-                `${quote(`System Uptime: ${tools.general.convertMsToDuration(uptimeOS)}`)}\n` +
+                `${quote(`System Uptime: ${tools.msg.convertMsToDuration(uptimeOS)}`)}\n` +
                 `${quote("─────")}\n` +
-                `${quote(`Digunakan: ${tools.general.formatSize(usedMem)}`)}\n` +
-                `${quote(`Bebas: ${tools.general.formatSize(freeMem)}`)}\n` +
-                `${quote(`Total: ${tools.general.formatSize(totalMem)}`)}\n` +
-                `${quote(`Memori Aplikasi (RSS): ${tools.general.formatSize(memory.rss)}`)}\n` +
+                `${quote(`Digunakan: ${tools.msg.formatSize(usedMem)}`)}\n` +
+                `${quote(`Bebas: ${tools.msg.formatSize(freeMem)}`)}\n` +
+                `${quote(`Total: ${tools.msg.formatSize(totalMem)}`)}\n` +
+                `${quote(`Memori Aplikasi (RSS): ${tools.msg.formatSize(memory.rss)}`)}\n` +
                 `${quote("─────")}\n` +
                 `${quote(`Model: ${cpus[0].model}`)}\n` +
                 `${quote(`Kecepatan: ${cpus[0].speed} MHz`)}\n` +
@@ -41,7 +41,7 @@ module.exports = {
                 `${quote(`Jalur Exec: ${process.execPath}`)}\n` +
                 `${quote(`PID: ${process.pid}`)}\n` +
                 `${quote("─────")}\n` +
-                `${quote(`Bot Uptime: ${tools.general.convertMsToDuration(Date.now() - startTime)}`)}\n` +
+                `${quote(`Bot Uptime: ${tools.msg.convertMsToDuration(Date.now() - startTime)}`)}\n` +
                 `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
                 `${quote("Library: @itsreimau/ckptw-mod (Fork of @mengkodingan/ckptw)")}\n` +
                 "\n" +

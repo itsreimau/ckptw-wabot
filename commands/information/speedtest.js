@@ -37,7 +37,7 @@ module.exports = {
             const uploadTime = (performance.now() - uploadStart) / 1000;
             const uploadSpeed = (50 / uploadTime).toFixed(2);
 
-            return await ctx.reply(
+            return await ctx.editMessage(testMsg.key,
                 `${quote(`Latency: ${latency}ms`)}\n` +
                 `${quote(`Download: ${downloadSpeed} KB/s`)}\n` +
                 `${quote(`Upload: ${uploadSpeed} KB/s`)}\n` +

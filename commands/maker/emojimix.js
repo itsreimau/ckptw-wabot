@@ -20,8 +20,8 @@ module.exports = {
         const [emoji1, emoji2] = emojis.slice(0, 2);
 
         if (!emoji1 || !emoji2) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "😱 🤓"))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx.used, "😱 🤓"))
         );
 
         try {

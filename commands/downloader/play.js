@@ -15,8 +15,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.cmd.generateCommandExample(ctx.used, "komm susser tod -i 8 -s spotify"))}\n` +
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx.used, "komm susser tod -i 8 -s spotify"))}\n` +
             quote(tools.cmd.generatesFlagInformation({
                 "-i <number>": "Pilihan pada data indeks",
                 "-s <text>": "Sumber untuk memutar lagu (tersedia: soundcloud, spotify, tidal, youtube | default: youtube)"
@@ -53,6 +53,7 @@ module.exports = {
 
                 await ctx.reply(
                     `${quote(`Judul: ${searchResult.judul}`)}\n` +
+                    `${quote(`Artis: -`)}\n` +
                     `${quote(`URL: ${searchResult.link}`)}\n` +
                     "\n" +
                     config.msg.footer
@@ -61,7 +62,7 @@ module.exports = {
                 const downloadApiUrl = tools.api.createUrl("agatz", "/api/soundclouddl", {
                     url
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.download;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.data.download;
 
                 return await ctx.reply({
                     audio: {
@@ -113,7 +114,8 @@ module.exports = {
                 );
 
                 const downloadApiUrl = tools.api.createUrl("paxsenix", "/dl/tidal", {
-                    url: searchResult.url
+                    url: searchResult.url,
+                    quality: "HIGH"
                 });
                 const downloadResult = (await axios.get(downloadApiUrl)).data;
 

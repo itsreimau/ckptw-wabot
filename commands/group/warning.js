@@ -14,15 +14,15 @@ module.exports = {
     },
     code: async (ctx) => {
         const accountJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
-        const accountId = tools.general.getID(accountJid);
+        const accountId = tools.cmd.getID(accountJid);
 
         const senderJid = ctx.sender.jid;
-        const senderId = tools.general.getID(senderJid);
+        const senderId = tools.cmd.getID(senderJid);
 
         if (!accountJid) return await ctx.reply({
-            text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.cmd.generateCommandExample(ctx.used, `@${senderId}`))}\n` +
-                quote(tools.cmd.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
+            text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+                `${quote(tools.msg.generateCommandExample(ctx.used, `@${senderId}`))}\n` +
+                quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
             mentions: [senderJid]
         });
 
@@ -31,7 +31,7 @@ module.exports = {
         if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote("❎ Tidak bisa memberikan warning ke admin grup!"));
 
         try {
-            const groupId = tools.general.getID(ctx.id);
+            const groupId = tools.cmd.getID(ctx.id);
             const groupDb = await db.get(`group.${groupId}`) || {};
             const warnings = groupDb?.warnings || {};
             const current = warnings[accountId] || 0;

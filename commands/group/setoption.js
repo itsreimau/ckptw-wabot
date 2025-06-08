@@ -16,9 +16,9 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(`${tools.cmd.generateInstruction(["send"], ["text"])}`)}\n` +
-            `${quote(tools.cmd.generateCommandExample(ctx.used, "antilink"))}\n` +
-            quote(tools.cmd.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, `Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} status`)} untuk melihat status.`]))
+            `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx.used, "antilink"))}\n` +
+            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, `Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} status`)} untuk melihat status.`]))
         );
 
         if (["l", "list"].includes(input.toLowerCase())) {
@@ -27,7 +27,7 @@ module.exports = {
         }
 
         if (["s", "status"].includes(input.toLowerCase())) {
-            const groupId = tools.general.getID(ctx.id);
+            const groupId = tools.cmd.getID(ctx.id);
             const groupOption = await db.get(`group.${groupId}.option`) || {};
 
             return await ctx.reply(
@@ -51,7 +51,7 @@ module.exports = {
         }
 
         try {
-            const groupId = tools.general.getID(ctx.id);
+            const groupId = tools.cmd.getID(ctx.id);
             let setKey;
 
             switch (input.toLowerCase()) {

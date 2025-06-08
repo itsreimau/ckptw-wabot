@@ -17,8 +17,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "get in the fucking robot|shinji!"))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx.used, "get in the fucking robot|shinji!"))
         );
 
         const messageType = ctx.getMessageType();
@@ -27,14 +27,14 @@ module.exports = {
             tools.cmd.checkQuotedMedia(ctx.quoted, ["image", "sticker"])
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], ["image", "sticker"])));
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], ["image", "sticker"])));
 
         try {
             let [top, bottom] = input.split("|").map(i => i.trim());
             [top, bottom] = bottom ? [top || "_", bottom] : ["_", top || "_"];
 
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
-            const uploadUrl = await tools.general.upload(buffer, "image");
+            const uploadUrl = await tools.cmd.upload(buffer, "image");
             const result = tools.api.createUrl("https://api.memegen.link", `/images/custom/${top}/${bottom}.png`, {
                 background: uploadUrl
             });

@@ -13,12 +13,12 @@ module.exports = {
         const coinAmount = parseInt(ctx.args[mentionedJid ? 1 : 0], 10) || null;
 
         const senderJid = ctx.sender.jid;
-        const senderId = tools.general.getID(senderJid);
+        const senderId = tools.cmd.getID(senderJid);
 
         if (!userJid && !coinAmount) return await ctx.reply({
             text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.cmd.generateCommandExample(ctx.used, `@${senderId} 8`))}\n` +
-                quote(tools.cmd.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
+                `${quote(tools.msg.generateCommandExample(ctx.used, `@${senderId} 8`))}\n` +
+                quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
             mentions: [senderJid]
         });
 
@@ -27,12 +27,14 @@ module.exports = {
 
         const userDb = await db.get(`user.${senderId}`) || {};
 
-        if (tools.general.isOwner(senderId, ctx.msg.key.id) || userDb?.premium) return await ctx.reply(quote("❎ Koin tak terbatas tidak dapat ditransfer."));
+        if (tools.cmd.isOwner(senderId, ctx.msg.key.id) || userDb?.premium) return await ctx.reply(quote("❎ Koin tak terbatas tidak dapat ditransfer."));
+
+        if (coinAmount <= 0) return await ctx.reply(quote("❎ Jumlah koin tidak boleh kurang dari atau sama dengan 0!"));
 
         if (userDb?.coin < coinAmount) return await ctx.reply(quote("❎ Koin Anda tidak mencukupi untuk transfer ini!"));
 
         try {
-            await db.add(`user.${tools.general.getID(userJid)}.coin`, coinAmount);
+            await db.add(`user.${tools.cmd.getID(userJid)}.coin`, coinAmount);
             await db.subtract(`user.${senderId}.coin`, coinAmount);
 
             return await ctx.reply(quote(`✅ Berhasil mentransfer ${coinAmount} koin ke pengguna!`));

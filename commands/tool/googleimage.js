@@ -16,15 +16,15 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.cmd.generateCommandExample(ctx.used, "moon"))}\n` +
-            quote(tools.cmd.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
+            `${quote(tools.msg.generateCommandExample(ctx.used, "moon"))}\n` +
+            quote(tools.msg.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
         try {
             const apiUrl = tools.api.createUrl("davidcyril", "/googleimage", {
                 query: input
             });
-            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.results);
+            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.results);
 
             return await ctx.reply({
                 image: {

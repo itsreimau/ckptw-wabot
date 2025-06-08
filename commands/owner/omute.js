@@ -11,7 +11,7 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const groupId = tools.general.getID(ctx.id);
+        const groupId = tools.cmd.getID(ctx.id);
 
         if (["b", "bot"].includes(ctx.args[0]?.toLowerCase())) {
             await db.set(`group.${groupId}.mutebot`, "owner");
@@ -19,12 +19,12 @@ module.exports = {
         }
 
         const accountJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
-        const accountId = tools.general.getID(accountJid);
+        const accountId = tools.cmd.getID(accountJid);
 
         if (!accountJid) return await ctx.reply({
-            text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.cmd.generateCommandExample(ctx.used, `@${tools.general.getID(ctx.sender.jid)}`))}\n` +
-                quote(tools.cmd.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target.", `Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} bot`)} untuk me-mute bot.`])),
+            text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+                `${quote(tools.msg.generateCommandExample(ctx.used, `@${tools.cmd.getID(ctx.sender.jid)}`))}\n` +
+                quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target.", `Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} bot`)} untuk me-mute bot.`])),
             mentions: [ctx.sender.jid]
         });
 

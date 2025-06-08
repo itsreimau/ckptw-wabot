@@ -1,9 +1,21 @@
 // Impor modul dan dependensi yang diperlukan
+const api = require("./api.js");
 const {
     monospace,
     quote
 } = require("@itsreimau/ckptw-mod");
+const uploader = require("@zanixongroup/uploader");
+const axios = require("axios");
+const didYouMean = require("didyoumean");
+const Jimp = require("jimp");
 const util = require("node:util");
+
+const formatBotName = (botName) => {
+    if (!botName) return null;
+
+    botName = botName.toLowerCase();
+    return botName.replace(/[aiueo0-9\W_]/g, "");
+};
 
 async function checkMedia(type, required) {
     if (!type || !required) return false;
@@ -64,71 +76,91 @@ async function checkQuotedMedia(type, required) {
     return false;
 }
 
-function generateInstruction(actions, mediaTypes) {
-    if (!actions || !actions.length) return "'actions' yang diperlukan harus ditentukan!";
+function fakeMetaAiQuotedText(text) {
+    if (!text) return null;
 
-    let translatedMediaTypes;
-    if (typeof mediaTypes === "string") {
-        translatedMediaTypes = [mediaTypes];
-    } else if (Array.isArray(mediaTypes)) {
-        translatedMediaTypes = mediaTypes;
-    } else {
-        return "'mediaTypes' harus berupa string atau array string!";
+    const quoted = {
+        key: {
+            participant: "13135550002@s.whatsapp.net",
+            remoteJid: "status@broadcast"
+        },
+        message: {
+            extendedTextMessage: {
+                text
+            }
+        }
+    };
+    return quoted;
+}
+
+async function fillImageWithBlur(image) {
+    const canvasWidth = 640;
+    const canvasHeight = 320;
+
+    try {
+        const image = await Jimp.read(image);
+
+        const aspectRatio = canvasWidth / canvasHeight;
+        const imageAspectRatio = image.bitmap.width / image.bitmap.height;
+
+        let newWidth, newHeight;
+
+        if (imageAspectRatio > aspectRatio) {
+            newWidth = canvasWidth;
+            newHeight = canvasWidth / imageAspectRatio;
+        } else {
+            newWidth = canvasHeight * imageAspectRatio;
+            newHeight = canvasHeight;
+        }
+
+        const xOffset = (canvasWidth - newWidth) / 2;
+        const yOffset = (canvasHeight - newHeight) / 2;
+
+        const canvas = new Jimp(canvasWidth, canvasHeight);
+
+        const blurredBg = image.clone();
+        await blurredBg.cover(canvasWidth + 200, canvasHeight + 200).blur(10).crop(100, 100, canvasWidth, canvasHeight);
+
+        canvas.composite(blurredBg, 0, 0);
+
+        const resizedImage = image.clone();
+        await resizedImage.resize(newWidth, newHeight);
+        canvas.composite(resizedImage, xOffset, yOffset);
+
+        return await canvas.getBufferAsync(Jimp.AUTO);
+    } catch (error) {
+        consolefy.error(`Error: ${error}`);
+        return null;
+    }
+}
+
+function generateUID(id, withBotName) {
+    if (!id) return null;
+
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) {
+        const charCode = id.charCodeAt(i);
+        hash = (hash * 31 + charCode) % 1000000007;
     }
 
-    const mediaTypeTranslations = {
-        "audio": "audio",
-        "document": "dokumen",
-        "gif": "GIF",
-        "image": "gambar",
-        "sticker": "stiker",
-        "text": "teks",
-        "video": "video",
-        "viewOnce": "sekali lihat"
-    };
+    const uniquePart = id.split("").reverse().join("").charCodeAt(0).toString(16);
+    let uid = `${Math.abs(hash).toString(16).toLowerCase()}-${uniquePart}`;
+    if (withBotName) uid += `_${formatBotName(config.bot.name)}-wabot`;
 
-    const translatedMediaTypeList = translatedMediaTypes.map(type => mediaTypeTranslations[type]);
-
-    let mediaTypesList;
-    if (translatedMediaTypeList.length > 1) {
-        const lastMediaType = translatedMediaTypeList[translatedMediaTypeList.length - 1];
-        mediaTypesList = `${translatedMediaTypeList.slice(0, -1).join(", ")}, atau ${lastMediaType}`;
-    } else {
-        mediaTypesList = translatedMediaTypeList[0];
-    }
-
-    const actionTranslations = {
-        "send": "Kirim",
-        "reply": "Balas"
-    };
-
-    const instructions = actions.map(action => `${actionTranslations[action]}`);
-    const actionList = instructions.join(actions.length > 1 ? " atau " : "");
-    return `📌 ${actionList} ${mediaTypesList}!`;
+    return uid;
 }
 
-function generateCommandExample(used, args) {
-    if (!used) return "'used' harus diberikan!";
-    if (!args) return "'args' harus diberikan!";
+function getID(jid) {
+    if (!jid) return null;
 
-    const commandMessage = `Contoh: ${monospace(`${used.prefix + used.command} ${args}`)}`;
-    return commandMessage;
+    return jid.split("@")[0].split(":")[0];
 }
 
-function generatesFlagInformation(flags) {
-    if (typeof flags !== "object" || !flags) return "'flags' harus berupa objek!";
+function getRandomElement(arr) {
+    if (!arr || !arr.length) return null;
 
-    const flagInfo = "Flag:\n" +
-        Object.entries(flags).map(([flag, description]) => quote(`• ${monospace(flag)}: ${description}`)).join("\n");
-    return flagInfo;
-}
-
-function generateNotes(notes) {
-    if (!Array.isArray(notes)) return "'notes' harus berupa string!";
-
-    const notesInfo = "Catatan:\n" +
-        notes.map(note => quote(`• ${note}`)).join("\n");
-    return notesInfo;
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    return arr[randomIndex];
 }
 
 async function handleError(ctx, error, useAxios) {
@@ -139,7 +171,7 @@ async function handleError(ctx, error, useAxios) {
 
     consolefy.error(`Error: ${errorText}`);
     if (config.system.reportErrorToOwner) await ctx.replyWithJid(`${config.owner.id}@s.whatsapp.net`, {
-        text: `${quote(isGroup ? `⚠️ Terjadi kesalahan dari grup: @${groupJid}, oleh: @${tools.general.getID(ctx.sender.jid)}` : `⚠️ Terjadi kesalahan dari: @${tools.general.getID(ctx.sender.jid)}`)}\n` +
+        text: `${quote(isGroup ? `⚠️ Terjadi kesalahan dari grup: @${groupJid}, oleh: @${tools.cmd.getID(ctx.sender.jid)}` : `⚠️ Terjadi kesalahan dari: @${tools.cmd.getID(ctx.sender.jid)}`)}\n` +
             `${quote("─────")}\n` +
             monospace(errorText),
         contextInfo: {
@@ -152,6 +184,54 @@ async function handleError(ctx, error, useAxios) {
     });
     if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
     return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+}
+
+function isCmd(content, bot) {
+    if (!content || !bot) return null;
+
+    const prefix = content.charAt(0);
+    if (!new RegExp(bot.prefix, "i").test(content)) return false;
+
+    const [cmdName, ...inputArray] = content.slice(1).trim().toLowerCase().split(/\s+/);
+    const input = inputArray.join(" ");
+
+    const commands = Array.from(bot.cmd.values());
+    const matchedCmd = commands.find(c => c.name === cmdName || c.aliases?.includes(cmdName));
+
+    if (matchedCmd) return {
+        msg: content,
+        prefix,
+        name: cmdName,
+        input
+    };
+
+    const mean = didYouMean(cmdName, commands.flatMap(c => [c.name, ...(c.aliases || [])]));
+
+    return mean ? {
+        msg: content,
+        prefix,
+        cmd: cmdName,
+        input,
+        didyoumean: mean
+    } : false;
+}
+
+function isOwner(id, messageId) {
+    if (!id) return false;
+
+    if (config.system.selfOwner) {
+        if (messageId?.startsWith("3EB0")) return false; // Anti rce (aka backdoor) ygy
+        return config.bot.id === id || config.owner.id === id || config.owner.co.includes(id);
+    }
+
+    return config.owner.id === id || config.owner.co.includes(id);
+}
+
+function isUrl(url) {
+    if (!url) return false;
+
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return urlRegex.test(url);
 }
 
 function parseFlag(argsString, customRules = {}) {
@@ -191,13 +271,65 @@ function parseFlag(argsString, customRules = {}) {
     return options;
 }
 
+async function translate(text, to) {
+    if (!text || !to) return null;
+
+    try {
+        const apiUrl = api.createUrl("nyxs", "/tools/translate", {
+            text,
+            to
+        });
+        const result = (await axios.get(apiUrl)).data.result;
+        return result;
+    } catch (error) {
+        consolefy.error(`Error: ${error}`);
+        return null;
+    }
+}
+
+async function upload(buffer, type = "any", host = config.system.uploaderHost) {
+    if (!buffer) return null;
+
+    const hosts = {
+        any: ["FastUrl", "Nyxs", "Litterbox", "Cloudku", "Catbox", "Uguu"],
+        image: ["Quax", "Ryzen", "TmpErhabot", "Shojib", "IDNet", "Erhabot", "Pomf"],
+        video: ["Quax", "Ryzen", "TmpErhabot", "Videy", "Pomf"],
+        audio: ["Quax", "Ryzen", "TmpErhabot", "Pomf"],
+        document: ["IDNet"]
+    };
+
+    let availableHosts = [...hosts.any];
+    if (type !== "any" && hosts[type]) availableHosts = [...hosts[type]];
+
+    const realHost = availableHosts.find(h => h.toLowerCase() === host.toLowerCase());
+
+    let hostsToTry = realHost ? [realHost, ...availableHosts.filter(h => h !== realHost)] : availableHosts;
+
+    for (const currentHost of hostsToTry) {
+        try {
+            const url = await uploader[currentHost](buffer);
+            if (url) return url;
+        } catch (error) {
+            consolefy.error(`Error: ${error}`);
+        }
+    }
+
+    return null;
+}
+
 module.exports = {
     checkMedia,
     checkQuotedMedia,
-    generateInstruction,
-    generateCommandExample,
-    generatesFlagInformation,
-    generateNotes,
+    fakeMetaAiQuotedText,
+    fillImageWithBlur,
+    generateUID,
+    getID,
+    getRandomElement,
     handleError,
+    isCmd,
+    isOwner,
+    isUrl,
     parseFlag
+    translate,
+    upload
 };

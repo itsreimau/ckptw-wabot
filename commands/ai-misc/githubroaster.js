@@ -14,8 +14,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "itsreimau"))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx.used, "itsreimau"))
         );
 
         try {
@@ -24,7 +24,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.message;
 
-            return await ctx.reply(ctx.sender.jid.startsWith("62") ? await tools.general.translate(result, "id") : result);
+            return await ctx.reply(ctx.sender.jid.startsWith("62") ? await tools.cmd.translate(result, "id") : result);
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

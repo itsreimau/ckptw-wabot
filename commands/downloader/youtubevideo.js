@@ -15,8 +15,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.cmd.generateCommandExample(ctx.used, "https://example.com/ -d"))}\n` +
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.msg.generateCommandExample(ctx.used, "https://example.com/ -d"))}\n` +
             quote(tools.cmd.generatesFlagInformation({
                 "-d": "Kirim sebagai dokumen"
             }))
@@ -31,7 +31,7 @@ module.exports = {
 
         const url = flag.input || null;
 
-        const isUrl = await tools.general.isUrl(url);
+        const isUrl = await tools.cmd.isUrl(url);
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {

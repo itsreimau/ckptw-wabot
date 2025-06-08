@@ -16,11 +16,11 @@ module.exports = {
             tools.cmd.checkQuotedMedia(ctx.quoted, ["video"])
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.cmd.generateInstruction(["send", "reply"], ["video"])));
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], ["video"])));
 
         try {
             const buffer = await ctx.quoted.media.toBuffer()
-            const uploadUrl = await tools.general.upload(buffer, "video");
+            const uploadUrl = await tools.cmd.upload(buffer, "video");
             const apiUrl = tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/convert", {
                 url: uploadUrl
             });

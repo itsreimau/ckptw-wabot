@@ -18,7 +18,7 @@ module.exports = {
 
         try {
             const resultText = pending.map((member, index) => {
-                const id = tools.general.getID(member.jid);
+                const id = tools.cmd.getID(member.jid);
                 return quote(`${index + 1}. ${id}`);
             }).join("\n");
 

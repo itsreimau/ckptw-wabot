@@ -15,7 +15,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "bogor"))
+            quote(tools.msg.generateCommandExample(ctx.used, "bogor"))
         );
 
         try {
@@ -24,7 +24,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.data;
 
-            const currentCondition = ctx.sender.jid.startsWith("62") ? await tools.general.translate(result.current.condition.text, "id") : result.current.condition.text;
+            const currentCondition = ctx.sender.jid.startsWith("62") ? await tools.cmd.translate(result.current.condition.text, "id") : result.current.condition.text;
             return await ctx.reply(
                 `${quote(`Lokasi: ${result.location.name}, ${result.location.region}, ${result.location.country}`)}\n` +
                 `${quote(`Latitude: ${result.location.lat}`)}\n` +

@@ -18,7 +18,7 @@ module.exports = {
 
         try {
             const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/family100.json");
-            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data);
+            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data);
 
             const game = {
                 coin: {
@@ -35,7 +35,7 @@ module.exports = {
             await ctx.reply(
                 `${quote(`Soal: ${result.soal}`)}\n` +
                 `${quote(`Jumlah jawaban: ${game.answers.size}`)}\n` +
-                `${quote(`Batas waktu: ${tools.general.convertMsToDuration(game.timeout)}`)}\n` +
+                `${quote(`Batas waktu: ${tools.msg.convertMsToDuration(game.timeout)}`)}\n` +
                 `${quote(`Ketik ${monospace("surrender")} untuk menyerah.`)}\n` +
                 "\n" +
                 config.msg.footer
@@ -47,7 +47,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const participantAnswer = m.content.toLowerCase();
-                const participantId = tools.general.getID(m.sender);
+                const participantId = tools.cmd.getID(m.sender);
 
                 if (game.answers.has(participantAnswer)) {
                     game.answers.delete(participantAnswer);
@@ -55,7 +55,7 @@ module.exports = {
 
                     await db.add(`user.${participantId}.coin`, game.coin.answered);
                     await ctx.sendMessage(ctx.id, {
-                        text: quote(`✅ ${tools.general.ucwords(participantAnswer)} benar! Jawaban tersisa: ${game.answers.size}`)
+                        text: quote(`✅ ${tools.msg.ucwords(participantAnswer)} benar! Jawaban tersisa: ${game.answers.size}`)
                     }, {
                         quoted: m
                     });
@@ -74,7 +74,7 @@ module.exports = {
                         return collector.stop();
                     }
                 } else if (["s", "surrender"].includes(participantAnswer)) {
-                    const remaining = [...game.answers].map(tools.general.ucwords).join(", ").replace(/, ([^,]*)$/, ", dan $1");
+                    const remaining = [...game.answers].map(tools.msg.ucwords).join(", ").replace(/, ([^,]*)$/, ", dan $1");
                     session.delete(ctx.id);
                     await ctx.sendMessage(ctx.id, {
                         text: `${quote("🏳️ Anda menyerah!")}\n` +
@@ -93,7 +93,7 @@ module.exports = {
             });
 
             collector.on("end", async () => {
-                const remaining = [...game.answers].map(tools.general.ucwords).join(", ").replace(/, ([^,]*)$/, ", dan $1");
+                const remaining = [...game.answers].map(tools.msg.ucwords).join(", ").replace(/, ([^,]*)$/, ", dan $1");
 
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
