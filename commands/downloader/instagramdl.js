@@ -23,7 +23,7 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("vapis", "/api/igdl", {
+            const apiUrl = tools.api.createUrl("https://vapis.my.id", "/api/igdl", {
                 url
             });
             const result = (await axios.get(apiUrl)).data.data;

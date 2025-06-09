@@ -39,8 +39,8 @@ const APIs = {
     siputzx: {
         baseURL: "https://api.siputzx.my.id"
     },
-    vapis: {
-        baseURL: "https://vapis.my.id"
+    skyzopedia: {
+        baseURL: "https://restapi-v2.simplebot.my.id"
     },
     velyn: {
         baseURL: "https://velyn.biz.id"

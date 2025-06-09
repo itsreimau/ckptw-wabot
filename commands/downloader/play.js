@@ -141,10 +141,10 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("paxsenix", "/yt/yttomp4", {
+                const downloadApiUrl = tools.api.createUrl("skyzopedia", "/download/ytmp3", {
                     url: searchResult.url
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.audio[0].url;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.result;
 
                 return await ctx.reply({
                     audio: {

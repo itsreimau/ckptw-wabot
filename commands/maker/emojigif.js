@@ -7,8 +7,8 @@ const {
 } = require("wa-sticker-formatter");
 
 module.exports = {
-    name: "emojimix",
-    aliases: ["emix"],
+    name: "emojigif",
+    aliases: ["egif"],
     category: "maker",
     permissions: {
         coin: 10
@@ -16,17 +16,16 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx.args.join("");
         const emojis = Array.from(input.matchAll(/\p{Emoji}/gu), (match) => match[0]);
-        const [emoji1, emoji2] = emojis.slice(0, 2);
+        const [emoji] = emojis.slice(0, 1);
 
-        if (!emoji1 || !emoji2) return await ctx.reply(
+        if (!emoji) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.msg.generateCommandExample(ctx.used, "😱 🤓"))
         );
 
         try {
-            const result = tools.api.createUrl("falcon", "/tools/emojimix", {
-                emoji1,
-                emoji2
+            const result = tools.api.createUrl("skyzopedia", "/tools/emojitogif", {
+                emoji
             });
             const sticker = new Sticker(result, {
                 pack: config.sticker.packname,

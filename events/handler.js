@@ -47,9 +47,9 @@ async function handleWelcome(bot, m, type) {
             },
             externalAdReply: {
                 title: config.bot.name,
-                body: config.bot.note,
+                body: config.msg.note,
                 mediaType: 1,
-                thumbnail: profilePictureUrl
+                thumbnailUrl: profilePictureUrl
             }
         };
 

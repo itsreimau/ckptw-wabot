@@ -35,14 +35,14 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("paxsenix", "/yt/yttomp4", {
+            const apiUrl = tools.api.createUrl("skyzopedia", "/download/ytdl", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.result;
 
             if (flag?.document) return await ctx.reply({
                 document: {
-                    url: result.video[0].url
+                    url: result.mp4
                 },
                 fileName: `${result.title}.mp4`,
                 mimetype: mime.lookup("mp4")
@@ -50,7 +50,7 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    url: result.video[0].url
+                    url: result.mp4
                 },
                 mimetype: mime.lookup("mp4")
             });

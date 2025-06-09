@@ -26,7 +26,7 @@ module.exports = {
                 contextInfo: {
                     externalAdReply: {
                         title: config.bot.name,
-                        body: config.bot.note,
+                        body: config.msg.note,
                         mediaType: 1,
                         thumbnailUrl: config.bot.thumbnail,
                         renderLargerThumbnail: true
