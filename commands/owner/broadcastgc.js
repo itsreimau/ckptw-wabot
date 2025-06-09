@@ -92,16 +92,15 @@ module.exports = {
                     }, {
                         quoted: tools.cmd.fakeMetaAiQuotedText(config.msg.note)
                     });
+                } catch (error) {
+                    failedGroupIds.push(groupId);
                 }
-            } catch (error) {
-                failedGroupIds.push(groupId);
             }
-        }
 
-        const successCount = filteredGroupIds.length - failedGroupIds.length;
-        return await ctx.editMessage(waitMsg.key, quote(`✅ Berhasil mengirim ke ${successCount} grup. Gagal mengirim ke ${failedGroupIds.length} grup, ${blacklist.length} grup dalam blacklist tidak dikirim.`));
-    } catch (error) {
-        return await tools.cmd.handleError(ctx, error, false);
+            const successCount = filteredGroupIds.length - failedGroupIds.length;
+            return await ctx.editMessage(waitMsg.key, quote(`✅ Berhasil mengirim ke ${successCount} grup. Gagal mengirim ke ${failedGroupIds.length} grup, ${blacklist.length} grup dalam blacklist tidak dikirim.`));
+        } catch (error) {
+            return await tools.cmd.handleError(ctx, error, false);
+        }
     }
-}
 };
