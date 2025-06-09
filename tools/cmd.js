@@ -98,7 +98,17 @@ async function fillImageWithBlur(source) {
     const canvasHeight = 320;
 
     try {
-        const image = await Jimp.read(source);
+        let image;
+
+        if (isUrl(source)) {
+            const response = await axios.get(source, {
+                responseType: "arraybuffer"
+            });
+            const buffer = Buffer.from(response.data, "binary");
+            image = await Jimp.read(buffer);
+        } else if (Buffer.isBuffer(source)) {
+            image = await Jimp.read(source);
+        }
 
         const aspectRatio = canvasWidth / canvasHeight;
         const imageAspectRatio = image.bitmap.width / image.bitmap.height;
