@@ -279,7 +279,6 @@ module.exports = {
     checkMedia,
     checkQuotedMedia,
     fakeMetaAiQuotedText,
-    fillImageWithBlur,
     generateUID,
     getID,
     getRandomElement,
