@@ -52,7 +52,7 @@ async function handleWelcome(bot, m, type) {
                 newsletterJid: config.bot.newsletterJid,
                 newsletterName: config.bot.name
             },
-            externalAdReplyInfo: {
+            externalAdReply: {
                 title: config.bot.name,
                 body: config.bot.note,
                 thumbnail: await tools.cmd.fillImageWithBlur(canvas),

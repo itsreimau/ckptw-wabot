@@ -24,7 +24,7 @@ module.exports = {
                     "\n" +
                     config.msg.footer,
                 contextInfo: {
-                    externalAdReplyInfo: {
+                    externalAdReply: {
                         title: config.bot.name,
                         body: config.bot.note,
                         thumbnail: await tools.cmd.fillImageWithBlur(config.bot.thumbnail),

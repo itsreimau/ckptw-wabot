@@ -62,7 +62,7 @@ module.exports = (bot) => {
                         `${config.msg.readmore}\n` +
                         quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
                     contextInfo: {
-                        externalAdReplyInfo: {
+                        externalAdReply: {
                             title: config.bot.name,
                             body: config.bot.note,
                             thumbnail: await tools.cmd.fillImageWithBlur(canvas),

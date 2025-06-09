@@ -79,14 +79,14 @@ module.exports = {
             text += config.msg.footer;
 
             const contextInfo = {
-                mentionedJid: [jid],
+                mentionedJid: [ctx.sender.jid],
                 forwardingScore: 9999,
                 isForwarded: true,
                 forwardedNewsletterMessageInfo: {
                     newsletterJid: config.bot.newsletterJid,
                     newsletterName: config.bot.name
                 },
-                externalAdReplyInfo: {
+                externalAdReply: {
                     title: config.bot.name,
                     body: config.bot.note,
                     thumbnail: await tools.cmd.fillImageWithBlur(config.bot.thumbnail),
