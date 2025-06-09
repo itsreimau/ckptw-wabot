@@ -39,11 +39,11 @@ async function handleWelcome(bot, m, type) {
 
         const userName = bot.getPushname(jid) || await db.get(`user.${userId}.username`) || null;
         const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-        const canvas = (await axios.get(tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/lemonwelcome", {
-            name: userName,
-            image: profilePictureUrl,
-            welcome: type === "UserJoin" ? true : false
-        }))).data.result;
+        const canvas = tools.api.createUrl("falcon", `/imagecreator/${type === "UserJoin" ? "welcome" : "goodbye"}`, {
+            bg: config.bot.thumbnail
+            ppuser: profilePictureUrl,
+            text: userName
+        });
         const contextInfo = {
             mentionedJid: [jid],
             forwardingScore: 9999,
