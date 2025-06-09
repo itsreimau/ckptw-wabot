@@ -28,10 +28,9 @@ module.exports = {
             const result = (await axios.get(apiUrl)).data;
 
             const resultText = await Promise.all(
-                result.keyPoints.map(r =>
+                result.keyPoints.map(async (r) =>
                     `${quote(`Poin: ${ctx.sender.jid.startsWith("62") ? await tools.cmd.translate(r.point, "id") : r.point}`)}\n` +
-                    `${quote(ctx.sender.jid.startsWith("62") ? await tools.cmd.translate(r.summary, "id") : r.summary)}`
-                )).join(
+                    `${quote(ctx.sender.jid.startsWith("62") ? await tools.cmd.translate(r.summary, "id") : r.summary)}`)).join(
                 "\n" +
                 `${quote("─────")}\n`
             );
