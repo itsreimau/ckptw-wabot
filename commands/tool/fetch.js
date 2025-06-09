@@ -20,7 +20,7 @@ module.exports = {
         const url = ctx.args[0] || null;
 
         if (!url) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.msg.generateCommandExample(ctx.used, "https://example.com/"))
         );
 

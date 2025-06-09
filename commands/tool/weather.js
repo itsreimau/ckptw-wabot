@@ -14,7 +14,7 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.msg.generateCommandExample(ctx.used, "bogor"))
         );
 
@@ -24,7 +24,6 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.data;
 
-            const currentCondition = ctx.sender.jid.startsWith("62") ? await tools.cmd.translate(result.current.condition.text, "id") : result.current.condition.text;
             return await ctx.reply(
                 `${quote(`Lokasi: ${result.location.name}, ${result.location.region}, ${result.location.country}`)}\n` +
                 `${quote(`Latitude: ${result.location.lat}`)}\n` +
@@ -32,7 +31,7 @@ module.exports = {
                 `${quote(`Zona Waktu: ${result.location.tz_id}`)}\n` +
                 `${quote(`Waktu Lokal: ${result.location.localtime}`)}\n` +
                 `${quote("─────")}\n` +
-                `${quote(`Cuaca: ${currentCondition}`)}\n` +
+                `${quote(`Cuaca: ${result.current.condition.text}`)}\n` +
                 `${quote(`Suhu Saat Ini: ${result.current.temp_c}°C (${result.current.temp_f}°F)`)}\n` +
                 `${quote(`Terasa Seperti: ${result.current.feelslike_c}°C (${result.current.feelslike_f}°F)`)}\n` +
                 `${quote(`Kelembaban: ${result.current.humidity}%`)}\n` +

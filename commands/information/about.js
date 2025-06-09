@@ -18,7 +18,7 @@ module.exports = {
                     `${quote(`Versi: ${pkg.version}`)}\n` +
                     `${quote(`Owner: ${tools.msg.ucwords(config.owner.name)}`)}\n` +
                     `${quote(`Mode: ${tools.msg.ucwords(botDb?.mode)}`)}\n` +
-                    `${quote(`Bot Uptime: ${tools.msg.convertMsToDuration(Date.now() - config.bot.readyAt)}`)}\n` +
+                    `${quote(`Bot Uptime: ${config.bot.uptime)}`)}\n` +
                     `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
                     `${quote("Library: @itsreimau/ckptw-mod (Fork of @mengkodingan/ckptw)")}\n` +
                     "\n" +
@@ -27,6 +27,7 @@ module.exports = {
                     externalAdReply: {
                         title: config.bot.name,
                         body: config.bot.note,
+                        mediaType: 1,
                         thumbnail: await tools.cmd.fillImageWithBlur(config.bot.thumbnail),
                         renderLargerThumbnail: true
                     }

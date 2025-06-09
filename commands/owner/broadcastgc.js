@@ -17,7 +17,7 @@ module.exports = {
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(tools.msg.generateCommandExample(ctx.used, "halo, dunia!"))}\n` +
-            `${quote(tools.cmd.generatesFlagInformation({
+            `${quote(tools.msg.generatesFlagInformation({
                 "-ht": "Kirim dengan hidetag"
             }))}\n` +
             quote(tools.msg.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru.", `Gunakan ${monospace("blacklist")} untuk memasukkan grup ke dalam blacklist. (Hanya berfungsi pada grup)`]))
@@ -80,6 +80,7 @@ module.exports = {
                         externalAdReply: {
                             title: config.bot.name,
                             body: config.bot.note,
+                            mediaType: 1,
                             thumbnail: await tools.cmd.fillImageWithBlur(config.bot.thumbnail),
                             renderLargerThumbnail: true,
                             showAdAttribution: true

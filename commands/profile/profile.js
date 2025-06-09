@@ -56,6 +56,7 @@ module.exports = {
                     externalAdReply: {
                         title: config.bot.name,
                         body: config.bot.note,
+                        mediaType: 1,
                         thumbnail: await tools.cmd.fillImageWithBlur(canvas),
                         renderLargerThumbnail: true
                     }

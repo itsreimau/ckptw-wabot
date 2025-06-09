@@ -17,7 +17,7 @@ module.exports = {
         const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 
         if (!script) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.msg.generateCommandExample(ctx.used, 'console.log("halo, dunia!");'))
         );
 

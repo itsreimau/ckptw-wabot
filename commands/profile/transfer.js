@@ -16,7 +16,7 @@ module.exports = {
         const senderId = tools.cmd.getID(senderJid);
 
         if (!userJid && !coinAmount) return await ctx.reply({
-            text: `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
                 `${quote(tools.msg.generateCommandExample(ctx.used, `@${senderId} 8`))}\n` +
                 quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
             mentions: [senderJid]

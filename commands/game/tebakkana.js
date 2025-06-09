@@ -51,7 +51,7 @@ module.exports = {
                 coin: 5,
                 timeout: 60000,
                 answer: result.jawaban.toLowerCase(),
-                description: ctx.sender.jid.startsWith("62") ? await tools.cmd.translate(result.meaning, "id") : result.meaning
+                description: await tools.cmd.translate(result.meaning, "id")
             };
 
             session.set(ctx.id, true);

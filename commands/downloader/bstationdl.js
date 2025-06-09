@@ -16,7 +16,7 @@ module.exports = {
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(tools.msg.generateCommandExample(ctx.used, "https://example.com/ -d"))}\n` +
-            quote(tools.cmd.generatesFlagInformation({
+            quote(tools.msg.generatesFlagInformation({
                 "-d": "Kirim sebagai dokumen"
             }))
         );

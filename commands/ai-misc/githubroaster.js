@@ -24,7 +24,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.message;
 
-            return await ctx.reply(ctx.sender.jid.startsWith("62") ? await tools.cmd.translate(result, "id") : result);
+            return await ctx.reply(result);
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

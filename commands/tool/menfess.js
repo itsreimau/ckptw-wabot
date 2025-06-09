@@ -19,7 +19,7 @@ module.exports = {
         const senderId = tools.cmd.getID(ctx.sender.jid);
 
         if (!targetId && !menfessText) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             `${quote(tools.msg.generateCommandExample(ctx.used, `${senderId} halo, dunia!`))}\n` +
             quote(tools.msg.generateNotes(["Jangan gunakan spasi pada angka. Contoh: +62 8123-4567-8910, seharusnya +628123-4567-8910"]))
         );

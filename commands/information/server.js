@@ -41,7 +41,7 @@ module.exports = {
                 `${quote(`Jalur Exec: ${process.execPath}`)}\n` +
                 `${quote(`PID: ${process.pid}`)}\n` +
                 `${quote("─────")}\n` +
-                `${quote(`Bot Uptime: ${tools.msg.convertMsToDuration(Date.now() - startTime)}`)}\n` +
+                `${quote(`Bot Uptime: ${config.bot.uptime}`)}\n` +
                 `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
                 `${quote("Library: @itsreimau/ckptw-mod (Fork of @mengkodingan/ckptw)")}\n` +
                 "\n" +
