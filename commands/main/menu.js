@@ -41,7 +41,7 @@ module.exports = {
                 `${quote(`Tanggal: ${moment.tz(config.system.timeZone).locale("id").format("dddd, DD MMMM YYYY")}`)}\n` +
                 `${quote(`Waktu: ${moment.tz(config.system.timeZone).format("HH.mm.ss")}`)}\n` +
                 "\n" +
-                `${quote(`Bot Uptime: ${config.bot.uptime)}`)}\n` +
+                `${quote(`Bot Uptime: ${config.bot.uptime}`)}\n` +
                 `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
                 `${quote("Library: @itsreimau/ckptw-mod (Fork of @mengkodingan/ckptw)")}\n` +
                 "\n" +
