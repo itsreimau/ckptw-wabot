@@ -93,12 +93,12 @@ function fakeMetaAiQuotedText(text) {
     return quoted;
 }
 
-async function fillImageWithBlur(image) {
+async function fillImageWithBlur(source) {
     const canvasWidth = 640;
     const canvasHeight = 320;
 
     try {
-        const image = await Jimp.read(image);
+        const image = await Jimp.read(source);
 
         const aspectRatio = canvasWidth / canvasHeight;
         const imageAspectRatio = image.bitmap.width / image.bitmap.height;
