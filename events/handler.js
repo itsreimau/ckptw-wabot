@@ -25,8 +25,7 @@ async function handleWelcome(bot, m, type) {
     const metadata = await bot.core.groupMetadata(groupJid);
 
     for (const jid of m.participants) {
-        const userId = tools.cmd.getID(jid);
-        const userTag = `@${userId}`;
+        const userTag = `@${tools.cmd.getID(jid)}`;
         const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
         const text = customText ?
             customText
@@ -37,13 +36,7 @@ async function handleWelcome(bot, m, type) {
                 quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
                 quote(`👋 Selamat tinggal, ${userTag}!`));
 
-        const userName = bot.getPushname(jid) || await db.get(`user.${userId}.username`) || null;
         const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-        const canvas = tools.api.createUrl("falcon", `/imagecreator/${type === "UserJoin" ? "welcome" : "goodbye"}`, {
-            bg: config.bot.thumbnail,
-            ppuser: profilePictureUrl,
-            text: userName
-        });
         const contextInfo = {
             mentionedJid: [jid],
             forwardingScore: 9999,
@@ -56,8 +49,7 @@ async function handleWelcome(bot, m, type) {
                 title: config.bot.name,
                 body: config.bot.note,
                 mediaType: 1,
-                thumbnail: await tools.cmd.fillImageWithBlur(canvas),
-                renderLargerThumbnail: true
+                thumbnail: profilePictureUrl
             }
         };
 

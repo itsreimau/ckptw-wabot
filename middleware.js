@@ -49,13 +49,6 @@ module.exports = (bot) => {
 
             if (userDb?.autolevelup) {
                 const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-                const canvas = tools.api.createUrl("siputzx", "/api/canvas/level-up", {
-                    backgroundURL: config.bot.thumbnail,
-                    avatarURL: profilePictureUrl,
-                    fromLevel: userDb?.level,
-                    toLevel: newUserLevel,
-                    name: ctx.sender.pushName
-                });
 
                 await ctx.reply({
                     text: `${quote(`Selamat! Anda telah naik ke level ${newUserLevel}!`)}\n` +
@@ -66,8 +59,7 @@ module.exports = (bot) => {
                             title: config.bot.name,
                             body: config.bot.note,
                             mediaType: 1,
-                            thumbnail: await tools.cmd.fillImageWithBlur(canvas),
-                            renderLargerThumbnail: true
+                            thumbnailUrl: profilePictureUrl
                         }
                     }
                 });

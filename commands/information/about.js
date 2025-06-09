@@ -11,7 +11,7 @@ module.exports = {
         try {
             const botDb = await db.get("bot") || {};
 
-            return await ctx.sendMessage(ctx.id, {
+            return await ctx.reply({
                 text: `${quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${config.bot.name}, dimiliki oleh ${config.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)}\n` + // Dapat diubah sesuai keinginan Anda
                     `${quote("─────")}\n` +
                     `${quote(`Nama Bot: ${config.bot.name}`)}\n` +
@@ -28,7 +28,7 @@ module.exports = {
                         title: config.bot.name,
                         body: config.bot.note,
                         mediaType: 1,
-                        thumbnail: await tools.cmd.fillImageWithBlur(config.bot.thumbnail),
+                        thumbnailUrl: config.bot.thumbnail,
                         renderLargerThumbnail: true
                     }
                 }

@@ -7,7 +7,6 @@ const {
 const uploader = require("@zanixongroup/uploader");
 const axios = require("axios");
 const didYouMean = require("didyoumean");
-const Jimp = require("jimp");
 const util = require("node:util");
 
 const formatBotName = (botName) => {
@@ -91,57 +90,6 @@ function fakeMetaAiQuotedText(text) {
         }
     };
     return quoted;
-}
-
-async function fillImageWithBlur(source) {
-    const canvasWidth = 640;
-    const canvasHeight = 320;
-
-    try {
-        let image;
-
-        if (isUrl(source)) {
-            const response = await axios.get(source, {
-                responseType: "arraybuffer"
-            });
-            const buffer = Buffer.from(response.data, "binary");
-            image = await Jimp.read(buffer);
-        } else if (Buffer.isBuffer(source)) {
-            image = await Jimp.read(source);
-        }
-
-        const aspectRatio = canvasWidth / canvasHeight;
-        const imageAspectRatio = image.bitmap.width / image.bitmap.height;
-
-        let newWidth, newHeight;
-
-        if (imageAspectRatio > aspectRatio) {
-            newWidth = canvasWidth;
-            newHeight = canvasWidth / imageAspectRatio;
-        } else {
-            newWidth = canvasHeight * imageAspectRatio;
-            newHeight = canvasHeight;
-        }
-
-        const xOffset = (canvasWidth - newWidth) / 2;
-        const yOffset = (canvasHeight - newHeight) / 2;
-
-        const canvas = new Jimp(canvasWidth, canvasHeight);
-
-        const blurredBg = image.clone();
-        await blurredBg.cover(canvasWidth + 200, canvasHeight + 200).blur(10).crop(100, 100, canvasWidth, canvasHeight);
-
-        canvas.composite(blurredBg, 0, 0);
-
-        const resizedImage = image.clone();
-        await resizedImage.resize(newWidth, newHeight);
-        canvas.composite(resizedImage, xOffset, yOffset);
-
-        return await canvas.getBufferAsync(Jimp.AUTO);
-    } catch (error) {
-        consolefy.error(`Error: ${error}`);
-        return null;
-    }
 }
 
 function generateUID(id, withBotName) {

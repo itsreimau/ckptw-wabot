@@ -90,7 +90,7 @@ module.exports = {
                     title: config.bot.name,
                     body: config.bot.note,
                     mediaType: 1,
-                    thumbnail: await tools.cmd.fillImageWithBlur(config.bot.thumbnail),
+                    thumbnailUrl: config.bot.thumbnail,
                     renderLargerThumbnail: true,
                     showAdAttribution: true
                 }

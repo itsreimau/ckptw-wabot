@@ -15,8 +15,8 @@ module.exports = {
 
         if (!surat && !ayat) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(`${ctx.used.prefix}${ctx.used.command}`, "21 35"))}\n` +
-            `${quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix}${ctx.used.command} list`)} untuk melihat daftar.`]))}`
+            `${quote(tools.msg.generateCommandExample(ctx.used, "21 35"))}\n` +
+            `${quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))}`
         );
 
         if (["l", "list"].includes(surat.toLowerCase())) {
@@ -24,7 +24,7 @@ module.exports = {
             return await ctx.reply(listText);
         }
 
-        if (isNaN(surat) || surat < 1 || surat > 114) return await ctx.reply(quote("❎ Surah harus berupa nomor antara 1 dan 114!"));
+        if (isNaN(surat) || surat < 1 || surat > 114) return await ctx.reply(quote("❎ Surah harus berupa nomor antara 1 sampai 114!"));
 
         try {
             const apiUrl = tools.api.createUrl("nekorinn", "/religious/nuquran-surah", {
@@ -49,8 +49,8 @@ module.exports = {
                         `${italic(v.translation_id)}`
                     ).join("\n");
                     return await ctx.reply(
-                        `${quote(`Surah ${result.name}`)}\n` +
-                        `${quote(result.translate)}\n` +
+                        `${quote(`Surat: ${result.name}`)}\n` +
+                        `${quote(`Arti: ${result.translate}`)}\n` +
                         `${quote("─────")}\n` +
                         `${versesText}\n` +
                         "\n" +
@@ -65,8 +65,8 @@ module.exports = {
                 if (!verse) return await ctx.reply(quote(`❎ Ayat ${singleAyat} tidak ada!`));
 
                 return await ctx.reply(
-                    `${quote(`Surah ${result.name}`)}\n` +
-                    `${quote(result.translate)}\n` +
+                    `${quote(`Surat: ${result.name}`)}\n` +
+                    `${quote(`Arti: ${result.translate}`)}\n` +
                     `${quote("─────")}\n` +
                     `${verse.text} (${verse.transliteration})\n` +
                     `${italic(verse.translation_id)}\n` +
