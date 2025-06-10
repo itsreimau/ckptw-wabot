@@ -71,8 +71,6 @@ module.exports = {
 
                     const contextInfo = {
                         mentionedJid: [mentions],
-                        forwardingScore: 9999,
-                        isForwarded: true,
                         forwardedNewsletterMessageInfo: {
                             newsletterJid: config.bot.newsletterJid,
                             newsletterName: config.bot.name

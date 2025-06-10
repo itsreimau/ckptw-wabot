@@ -99,34 +99,6 @@ module.exports = {
                 });
             }
 
-            if (source === "tidal") {
-                const searchApiUrl = tools.api.createUrl("paxsenix", "/tidal/search", {
-                    q: query
-                });
-                const searchResult = (await axios.get(searchApiUrl)).data.items[searchIndex];
-
-                await ctx.reply(
-                    `${quote(`Judul: ${searchResult.title}`)}\n` +
-                    `${quote(`Artis: ${searchResult.artist.name}`)}\n` +
-                    `${quote(`URL: ${searchResult.url}`)}\n` +
-                    "\n" +
-                    config.msg.footer
-                );
-
-                const downloadApiUrl = tools.api.createUrl("paxsenix", "/dl/tidal", {
-                    url: searchResult.url,
-                    quality: "HIGH"
-                });
-                const downloadResult = (await axios.get(downloadApiUrl)).data;
-
-                return await ctx.reply({
-                    audio: {
-                        url: downloadResult.url || downloadResult.directUrl
-                    },
-                    mimetype: mime.lookup("mp3")
-                });
-            }
-
             if (source === "youtube") {
                 const searchApiUrl = tools.api.createUrl("agatz", "/api/ytsearch", {
                     message: query

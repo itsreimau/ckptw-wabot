@@ -38,8 +38,6 @@ module.exports = {
                     `${config.msg.readmore}\n` +
                     quote(`Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik ${monospace("delete")} atau ${monospace("stop")}.`),
                 contextInfo: {
-                    forwardingScore: 9999,
-                    isForwarded: true,
                     forwardedNewsletterMessageInfo: {
                         newsletterJid: config.bot.newsletterJid,
                         newsletterName: config.bot.name
