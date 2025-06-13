@@ -21,7 +21,8 @@ const dbFile = path.join(__dirname, "database.json");
 if (!fs.existsSync(dbFile)) fs.writeFileSync(dbFile, "{}", "utf8");
 const db = new SimplDB();
 
-// Tetapkan konfigurasi dan alat ke variabel global
+// Tetapkan variabel global
+config.bot.version = `v${pkg.version}`;
 Object.assign(global, {
     config,
     tools,

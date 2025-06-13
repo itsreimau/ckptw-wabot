@@ -108,12 +108,6 @@ function generateUID(id, withBotName) {
     return uid;
 }
 
-function getID(jid) {
-    if (!jid) return null;
-
-    return jid.split("@")[0].split(":")[0];
-}
-
 function getRandomElement(arr) {
     if (!arr || !arr.length) return null;
 
@@ -129,7 +123,7 @@ async function handleError(ctx, error, useAxios) {
 
     consolefy.error(`Error: ${errorText}`);
     if (config.system.reportErrorToOwner) await ctx.replyWithJid(`${config.owner.id}@s.whatsapp.net`, {
-        text: `${quote(isGroup ? `⚠️ Terjadi kesalahan dari grup: @${groupJid}, oleh: @${tools.cmd.getID(ctx.sender.jid)}` : `⚠️ Terjadi kesalahan dari: @${tools.cmd.getID(ctx.sender.jid)}`)}\n` +
+        text: `${quote(isGroup ? `⚠️ Terjadi kesalahan dari grup: @${groupJid}, oleh: @${ctx.getId(ctx.sender.jid)}` : `⚠️ Terjadi kesalahan dari: @${ctx.getId(ctx.sender.jid)}`)}\n` +
             `${quote("─────")}\n` +
             monospace(errorText),
         contextInfo: {
@@ -177,7 +171,7 @@ function isCmd(content, bot) {
 function isOwner(id, messageId) {
     if (!id) return false;
 
-    if (config.system.selfOwner) {
+    if (config.system.selfOwner || config.bot.id === config.owner.id || config.owner.co.includes(config.bot.id)) {
         if (messageId?.startsWith("3EB0")) return false; // Anti rce (aka backdoor) ygy
         return config.bot.id === id || config.owner.id === id || config.owner.co.includes(id);
     }
@@ -280,7 +274,6 @@ module.exports = {
     checkQuotedMedia,
     fakeMetaAiQuotedText,
     generateUID,
-    getID,
     getRandomElement,
     handleError,
     isCmd,

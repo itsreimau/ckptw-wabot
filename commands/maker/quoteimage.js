@@ -15,7 +15,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx.used, "get in the fucking robot, shinji!"))}\n` +
+            `${quote(tools.msg.generateCmdExample(ctx.used, "get in the fucking robot, shinji!"))}\n` +
             quote(tools.msg.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
@@ -23,7 +23,7 @@ module.exports = {
 
         try {
             const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-            const userName = await db.get(`user.${tools.cmd.getID(ctx.sender.jid)}.username`) || "@guest";
+            const userName = await db.get(`user.${ctx.getId(ctx.sender.jid)}.username`) || "@guest";
             const result = tools.api.createUrl("paxsenix", "/maker/fakequote", {
                 text: input,
                 url: profilePictureUrl,

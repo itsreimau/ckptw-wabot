@@ -15,7 +15,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "samsung galaxy j2 prime"))
+            quote(tools.msg.generateCmdExample(ctx.used, "samsung galaxy j2 prime"))
         );
 
         try {

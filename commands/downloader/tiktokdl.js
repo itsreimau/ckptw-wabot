@@ -16,8 +16,8 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx.used, "https://www.tiktok.com/@s4ya.i/video/7502312197566106886 -a -hd"))}\n` +
-            quote(tools.msg.generatesFlagInformation({
+            `${quote(tools.msg.generateCmdExample(ctx.used, "https://www.tiktok.com/@japanese_songs2/video/7472130814805822726 -a -hd"))}\n` +
+            quote(tools.msg.generatesFlagInfo({
                 "-a": "Kirim audio",
                 "-hd": "Pilih resolusi HD"
             }))

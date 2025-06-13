@@ -15,7 +15,7 @@ module.exports = {
 
         if (!url) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "https://videy.co/v/?id=RMuikV761"))
+            quote(tools.msg.generateCmdExample(ctx.used, "https://videy.co/v/?id=RMuikV761"))
         );
 
         const isUrl = await tools.cmd.isUrl(url);

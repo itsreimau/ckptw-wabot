@@ -14,7 +14,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "user"))
+            quote(tools.msg.generateCmdExample(ctx.used, "user"))
         );
 
         if (["l", "list"].includes(input)) {
@@ -144,7 +144,7 @@ module.exports = {
                     return await ctx.reply(quote(`❎ Key "${input}" tidak valid!`));
             }
 
-            return await ctx.editMessage(waitMsg.key, quote(`✅ Basis data berhasil dibersihkan untuk ${input}!`));
+            return await ctx.editMessage(waitMsg.key, quote(`✅ Database berhasil dibersihkan untuk ${input}!`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

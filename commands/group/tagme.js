@@ -7,7 +7,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             return await ctx.reply({
-                text: `@${tools.cmd.getID(ctx.sender.jid)}`,
+                text: `@${ctx.getId(ctx.sender.jid)}`,
                 mentions: [ctx.sender.jid]
             });
         } catch (error) {

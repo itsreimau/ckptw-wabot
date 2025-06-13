@@ -10,7 +10,7 @@ module.exports = {
         private: true
     },
     code: async (ctx) => {
-        await ctx.reply(quote(`🤖 Apakah Anda yakin ingin mereset data Anda? Langkah ini akan menghapus seluruh data yang tersimpan dan tidak dapat dikembalikan. Ketik ${monospace("y")} untuk melanjutkan atau ${monospace("n")} untuk membatalkan.`));
+        await ctx.reply(quote(`🤖 Apakah kamu yakin ingin mereset datamu? Langkah ini akan menghapus seluruh data yang tersimpan dan tidak dapat dikembalikan. Ketik ${monospace("y")} untuk melanjutkan atau ${monospace("n")} untuk membatalkan.`));
 
         try {
             const collector = ctx.MessageCollector({
@@ -18,16 +18,16 @@ module.exports = {
             });
 
             collector.on("collect", async (m) => {
-                const message = m.content.trim().toLowerCase();
-                const senderId = tools.cmd.getID(ctx.sender.jid);
+                const content = m.content.trim().toLowerCase();
+                const senderId = ctx.getId(ctx.sender.jid);
 
-                if (message === "y") {
+                if (content === "y") {
                     const isPremium = await db.get(`user.${senderId}.premium`);
                     await db.delete(`user.${senderId}`);
                     if (isPremium) await db.set(`user.${senderId}.premium`, true);
-                    await ctx.reply(quote("✅ Data Anda berhasil direset. Semua data telah dihapus!"));
+                    await ctx.reply(quote("✅ Datamu berhasil direset, semua data telah dihapus!"));
                     collector.stop();
-                } else if (message === "n") {
+                } else if (content === "n") {
                     await ctx.reply(quote("❌ Proses reset data telah dibatalkan."));
                     collector.stop();
                 }

@@ -1,8 +1,6 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
-const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "profile",
@@ -12,7 +10,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const senderJid = ctx.sender.jid;
-            const senderId = tools.cmd.getID(senderJid);
+            const senderId = ctx.getId(senderJid);
 
             const leaderboardData = Object.entries((await db.toJSON()).user)
                 .map(([id, data]) => ({
@@ -40,7 +38,7 @@ module.exports = {
                 contextInfo: {
                     externalAdReply: {
                         title: config.bot.name,
-                        body: config.msg.note,
+                        body: config.bot.version,
                         mediaType: 1,
                         thumbnailUrl: profilePictureUrl
                     }

@@ -20,7 +20,7 @@ module.exports = {
 
         if (!emoji1 || !emoji2) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "😱 🤓"))
+            quote(tools.msg.generateCmdExample(ctx.used, "😱 🤓"))
         );
 
         try {

@@ -16,7 +16,7 @@ module.exports = {
 
         if (!url) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "https://open.spotify.com/track/05wOtTxLl9qeNWrOzJOsvd?si=6d90c203526f41b6"))
+            quote(tools.msg.generateCmdExample(ctx.used, "https://open.spotify.com/track/5RhWszHMSKzb7KiXk4Ae0M"))
         );
 
         const isUrl = await tools.cmd.isUrl(url);

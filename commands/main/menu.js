@@ -4,7 +4,6 @@ const {
     monospace,
     quote
 } = require("@itsreimau/ckptw-mod");
-const axios = require("axios");
 const mime = require("mime-types");
 const moment = require("moment-timezone");
 
@@ -36,7 +35,7 @@ module.exports = {
                 "misc": "Miscellaneous"
             };
 
-            let text = `Hai @${tools.cmd.getID(ctx.sender.jid)}, berikut adalah daftar perintah yang tersedia!\n` +
+            let text = `Hai @${ctx.getId(ctx.sender.jid)}, berikut adalah daftar perintah yang tersedia!\n` +
                 "\n" +
                 `${quote(`Tanggal: ${moment.tz(config.system.timeZone).locale("id").format("dddd, DD MMMM YYYY")}`)}\n` +
                 `${quote(`Waktu: ${moment.tz(config.system.timeZone).format("HH.mm.ss")}`)}\n` +
@@ -80,25 +79,32 @@ module.exports = {
 
             const contextInfo = {
                 mentionedJid: [ctx.sender.jid],
+                isForwarded: true,
                 forwardedNewsletterMessageInfo: {
                     newsletterJid: config.bot.newsletterJid,
                     newsletterName: config.bot.name
                 },
                 externalAdReply: {
                     title: config.bot.name,
-                    body: config.msg.note,
+                    body: config.bot.version,
                     mediaType: 1,
                     thumbnailUrl: config.bot.thumbnail,
-                    renderLargerThumbnail: true,
-                    showAdAttribution: true
+                    renderLargerThumbnail: true
                 }
             };
 
-            return await ctx.sendMessage(ctx.id, {
+            await ctx.sendMessage(ctx.id, {
                 text,
                 contextInfo
             }, {
                 quoted: tools.cmd.fakeMetaAiQuotedText(config.msg.note)
+            });
+            return await ctx.reply({
+                audio: {
+                    url: "https://www.tikwm.com/video/music/7472130814805822726.mp3" // Dapat diubah sesuai keinginan (Ada yg request, tambah lagu di menu nya)
+                },
+                mimetype: mime.lookup("mp3"),
+                ptt: true
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);

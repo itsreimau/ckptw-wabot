@@ -6,17 +6,12 @@ const {
     VCardBuilder
 } = require("@itsreimau/ckptw-mod");
 const axios = require("axios");
-const mime = require("mime-types");
-const {
-    exec
-} = require("node:child_process");
 const fs = require("node:fs");
-const util = require("node:util");
 
 // Fungsi untuk menangani event pengguna bergabung/keluar grup
 async function handleWelcome(bot, m, type) {
     const groupJid = m.id;
-    const groupId = tools.cmd.getID(m.id);
+    const groupId = bot.getId(m.id);
     const groupDb = await db.get(`group.${groupId}`) || {};
 
     if (groupDb?.mutebot) return;
@@ -25,27 +20,29 @@ async function handleWelcome(bot, m, type) {
     const metadata = await bot.core.groupMetadata(groupJid);
 
     for (const jid of m.participants) {
-        const userTag = `@${tools.cmd.getID(jid)}`;
-        const customText = type === "UserJoin" ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
+        const isWelcome = type === Events.UserJoin;
+        const userTag = `@${bot.getId(jid)}`;
+        const customText = isWelcome ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
         const text = customText ?
             customText
             .replace(/%tag%/g, userTag)
             .replace(/%subject%/g, metadata.subject)
             .replace(/%description%/g, metadata.description) :
-            (type === "UserJoin" ?
+            (isWelcome ?
                 quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
                 quote(`👋 Selamat tinggal, ${userTag}!`));
 
         const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
         const contextInfo = {
             mentionedJid: [jid],
+            isForwarded: true,
             forwardedNewsletterMessageInfo: {
                 newsletterJid: config.bot.newsletterJid,
                 newsletterName: config.bot.name
             },
             externalAdReply: {
                 title: config.bot.name,
-                body: config.msg.note,
+                body: config.bot.version,
                 mediaType: 1,
                 thumbnailUrl: profilePictureUrl
             }
@@ -55,10 +52,10 @@ async function handleWelcome(bot, m, type) {
             text,
             contextInfo
         }, {
-            quoted: tools.cmd.fakeMetaAiQuotedText(config.msg.note)
+            quoted: tools.cmd.fakeMetaAiQuotedText(`Event: ${type}`)
         });
 
-        if (type === "UserJoin" && groupDb?.text?.intro) await bot.core.sendMessage(groupJid, {
+        if (isWelcome && groupDb?.text?.intro) await bot.core.sendMessage(groupJid, {
             text: groupDb?.text?.intro,
             mentions: [jid]
         }, {
@@ -69,7 +66,7 @@ async function handleWelcome(bot, m, type) {
 
 // Fungsi untuk menambahkan warning
 async function addWarning(ctx, groupDb, senderJid, groupId) {
-    const senderId = tools.cmd.getID(senderJid);
+    const senderId = ctx.getId(senderJid);
 
     const warnings = groupDb?.warnings || {};
     const current = warnings[senderId] || 0;
@@ -80,12 +77,12 @@ async function addWarning(ctx, groupDb, senderJid, groupId) {
 
     const maxwarnings = groupDb?.maxwarnings || 3;
     await ctx.reply({
-        text: quote(`⚠️ Warning ${newWarning}/${maxwarnings} untuk @${senderId}`),
+        text: quote(`⚠️ Warning ${newWarning}/${maxwarnings} untuk @${senderId}!`),
         mentions: [senderJid]
     });
 
     if (newWarning >= maxwarnings) {
-        await ctx.reply(quote(`⛔ Anda telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
+        await ctx.reply(quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
         if (!config.system.restrict) await ctx.group().kick([senderJid]);
         delete warnings[senderId];
         await db.set(`group.${groupId}.warnings`, warnings);
@@ -112,7 +109,7 @@ module.exports = (bot) => {
         }
 
         // Tetapkan config pada bot
-        const id = tools.cmd.getID(m.user.id);
+        const id = bot.getId(m.user.id);
         config.bot = {
             ...config.bot,
             id,
@@ -128,13 +125,13 @@ module.exports = (bot) => {
         const isGroup = ctx.isGroup();
         const isPrivate = !isGroup;
         const senderJid = ctx.sender.jid;
-        const senderId = tools.cmd.getID(senderJid);
+        const senderId = ctx.getId(senderJid);
         const groupJid = isGroup ? ctx.id : null;
-        const groupId = isGroup ? tools.cmd.getID(groupJid) : null;
+        const groupId = isGroup ? ctx.getId(groupJid) : null;
         const isOwner = tools.cmd.isOwner(senderId, m.key.id);
         const isCmd = tools.cmd.isCmd(m.content, ctx.bot);
 
-        // Mengambil basis data
+        // Mengambil database
         const botDb = await db.get("bot") || {};
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
@@ -150,51 +147,22 @@ module.exports = (bot) => {
 
         // Grup atau Pribadi
         if (isGroup || isPrivate) {
-            config.bot.dbSize = fs.existsSync("database.json") ? tools.msg.formatSize(fs.statSync("database.json").size / 1024) : "N/A"; // Penangan pada ukuran basis data
+            config.bot.dbSize = fs.existsSync("database.json") ? tools.msg.formatSize(fs.statSync("database.json").size / 1024) : "N/A"; // Penangan pada ukuran database
             config.bot.uptime = tools.msg.convertMsToDuration(Date.now() - config.bot.readyAt); // Penangan pada uptime
 
-            // Penanganan basis data pengguna
+            // Penanganan database pengguna
             if (isOwner || userDb?.premium) db.set(`user.${senderId}.coin`, 0);
             if (userDb?.coin === undefined || !Number.isFinite(userDb.coin)) db.set(`user.${senderId}.coin`, 100);
             if (!userDb?.username) db.set(`user.${senderId}.username`, `@user_${tools.cmd.generateUID(senderId, false)}`);
 
-            if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Anda salah ketik, sepertinya ${monospace(isCmd?.prefix + isCmd?.didyoumean)}.`)); // Did you mean?
-
-            // Perintah khusus Owner
-            if (m.content && isOwner) {
-                // Perintah Eval (Jalankan kode JavaScript)
-                if (m.content.startsWith("==> ") || m.content.startsWith("=> ")) {
-                    const code = m.content.slice(m.content.startsWith("==> ") ? 4 : 3);
-                    try {
-                        const result = await eval(m.content.startsWith("==> ") ? `(async () => { ${code} })()` : code);
-                        await ctx.reply(monospace(util.inspect(result)));
-                    } catch (error) {
-                        const errorText = util.format(error);
-                        consolefy.error(`Error: ${errorText}`);
-                        await ctx.reply(monospace(errorText));
-                    }
-                }
-
-                // Perintah Exec: (Jalankan perintah shell)
-                if (m.content.startsWith("$ ")) {
-                    const command = m.content.slice(2);
-                    try {
-                        const output = await util.promisify(exec)(command);
-                        await ctx.reply(monospace(output.stdout || output.stderr));
-                    } catch (error) {
-                        const errorText = util.format(error);
-                        consolefy.error(`Error: ${errorText}`);
-                        await ctx.reply(monospace(errorText));
-                    }
-                }
-            }
+            if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Kamu salah ketik, sepertinya ${monospace(isCmd?.prefix + isCmd?.didyoumean)}.`)); // Did you mean?
 
             // Penanganan AFK (Menghapus status AFK pengguna yang mengirim pesan)
             if (userAfk.reason || userAfk.timestamp) {
                 const timeElapsed = Date.now() - userAfk.timestamp;
                 if (timeElapsed > 3000) {
                     const timeago = tools.msg.convertMsToDuration(timeElapsed);
-                    await ctx.reply(quote(`📴 Anda telah keluar dari AFK ${userAfk.reason ? `dengan alasan "${userAfk.reason}"` : "tanpa alasan"} selama ${timeago}.`));
+                    await ctx.reply(quote(`📴 Kamu telah keluar dari AFK ${userAfk.reason ? `dengan alasan "${userAfk.reason}"` : "tanpa alasan"} selama ${timeago}.`));
                     await db.delete(`user.${senderId}.afk`);
                 }
             }
@@ -205,7 +173,7 @@ module.exports = (bot) => {
             if (m.key.fromMe) return;
 
             // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
-            const userMentions = ctx.quoted.senderJid ? [tools.cmd.getID(ctx.quoted.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map(jid => tools.cmd.getID(jid)) || [];
+            const userMentions = ctx.quoted.senderJid ? [ctx.getId(ctx.quoted.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map(jid => ctx.getId(jid)) || [];
             if (userMentions.length > 0) {
                 if (m.key.fromMe) return;
 
@@ -367,9 +335,9 @@ module.exports = (bot) => {
             if (call.status !== "offer") continue;
 
             await bot.core.rejectCall(call.id, call.from);
-            let rejectionMessage = await bot.core.sendMessage(call.from, {
+            const rejectionMsg = await bot.core.sendMessage(call.from, {
                 text: `Saat ini, kami tidak dapat menerima panggilan ${call.isVideo ? "video" : "suara"}.\n` +
-                    "Jika Anda memerlukan bantuan, silakan menghubungi Owner!"
+                    "Jika kamu memerlukan bantuan, silakan menghubungi Owner!"
             });
 
             const vcard = new VCardBuilder()
@@ -385,13 +353,13 @@ module.exports = (bot) => {
                     }]
                 }
             }, {
-                quoted: rejectionMessage
+                quoted: rejectionMsg
             });
         }
     });
 
     // Event saat pengguna bergabung atau keluar dari grup
-    bot.ev.on(Events.UserJoin, async (m) => handleWelcome(bot, m, "UserJoin"));
-    bot.ev.on(Events.UserLeave, async (m) => handleWelcome(bot, m, "UserLeave"));
+    bot.ev.on(Events.UserJoin, async (m) => handleWelcome(bot, m, Events.UserJoin));
+    bot.ev.on(Events.UserLeave, async (m) => handleWelcome(bot, m, Events.UserLeave));
 };
 module.exports.handleWelcome = handleWelcome; // Penanganan event pengguna bergabung/keluar grup

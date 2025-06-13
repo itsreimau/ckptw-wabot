@@ -14,14 +14,14 @@ module.exports = {
     },
     code: async (ctx) => {
         const accountJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
-        const accountId = tools.cmd.getID(accountJid);
+        const accountId = ctx.getId(accountJid);
 
         const senderJid = ctx.sender.jid;
-        const senderId = tools.cmd.getID(senderJid);
+        const senderId = ctx.getId(senderJid);
 
         if (!accountJid) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.msg.generateCommandExample(ctx.used, `@${senderId}`))}\n` +
+                `${quote(tools.msg.generateCmdExample(ctx.used, `@${senderId}`))}\n` +
                 quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
             mentions: [senderJid]
         });
@@ -31,7 +31,7 @@ module.exports = {
         if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote("❎ Tidak bisa memberikan warning ke admin grup!"));
 
         try {
-            const groupId = tools.cmd.getID(ctx.id);
+            const groupId = ctx.getId(ctx.id);
             const groupDb = await db.get(`group.${groupId}`) || {};
             const warnings = groupDb?.warnings || {};
             const current = warnings[accountId] || 0;
@@ -39,7 +39,7 @@ module.exports = {
 
             const maxwarnings = groupDb?.maxwarnings || 3;
             if (newWarning >= maxwarnings) {
-                await ctx.reply(quote(`⛔ Anda telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
+                await ctx.reply(quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
                 if (!config.system.restrict) await ctx.group().kick([senderJid]);
                 delete warnings[senderId];
                 return await db.set(`group.${groupId}.warnings`, warnings);

@@ -1,4 +1,5 @@
 const {
+    Events,
     monospace,
     quote
 } = require("@itsreimau/ckptw-mod");
@@ -18,7 +19,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx.used, "join"))}\n` +
+            `${quote(tools.msg.generateCmdExample(ctx.used, "join"))}\n` +
             quote(tools.msg.generateNotes([`Selain ${monospace("join")}, gunakan ${monospace("leave")} untuk mensimulasikan keluar dari grup.`]))
         );
 
@@ -31,11 +32,11 @@ module.exports = {
             switch (input.toLowerCase()) {
                 case "j":
                 case "join":
-                    return await handleWelcome(ctx, m, "UserJoin");
+                    return await handleWelcome(ctx, m, Events.UserJoin);
                     break;
                 case "l":
                 case "leave":
-                    return await handleWelcome(ctx, m, "UserLeave");
+                    return await handleWelcome(ctx, m, Events.UserLeave);
                     break;
                 default:
                     return await ctx.reply(quote(`❎ Simulasi '${input}' tidak valid!`));

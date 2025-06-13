@@ -57,12 +57,12 @@ function formatSize(byteCount) {
     return `${size.toFixed(2)} ${units[index]}`;
 }
 
-function generateCommandExample(used, args) {
+function generateCmdExample(used, args) {
     if (!used) return "'used' harus diberikan!";
     if (!args) return "'args' harus diberikan!";
 
-    const commandMessage = `Contoh: ${monospace(`${used.prefix + used.command} ${args}`)}`;
-    return commandMessage;
+    const cmdMsg = `Contoh: ${monospace(`${used.prefix + used.command} ${args}`)}`;
+    return cmdMsg;
 }
 
 function generateInstruction(actions, mediaTypes) {
@@ -108,7 +108,7 @@ function generateInstruction(actions, mediaTypes) {
     return `📌 ${actionList} ${mediaTypesList}!`;
 }
 
-function generatesFlagInformation(flags) {
+function generatesFlagInfo(flags) {
     if (typeof flags !== "object" || !flags) return "'flags' harus berupa objek!";
 
     const flagInfo = "Flag:\n" +
@@ -119,9 +119,9 @@ function generatesFlagInformation(flags) {
 function generateNotes(notes) {
     if (!Array.isArray(notes)) return "'notes' harus berupa string!";
 
-    const notesInfo = "Catatan:\n" +
+    const notesMsg = "Catatan:\n" +
         notes.map(note => quote(`• ${note}`)).join("\n");
-    return notesInfo;
+    return notesMsg;
 }
 
 function ucwords(text) {
@@ -134,9 +134,9 @@ module.exports = {
     convertMsToDuration,
     convertSecondToTimecode,
     formatSize,
-    generateCommandExample,
+    generateCmdExample,
     generateInstruction,
-    generatesFlagInformation,
+    generatesFlagInfo,
     generateNotes,
     ucwords
 };

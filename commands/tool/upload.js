@@ -20,7 +20,7 @@ module.exports = {
 
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send", "reply"], ["audio", "document", "image", "video", "sticker"]))}\n` +
-            quote(tools.msg.generatesFlagInformation({
+            quote(tools.msg.generatesFlagInfo({
                 "-t <text>": "Atur tipe media (tersedia: any, image, video, audio | default: any)",
                 "-h <text>": `Atur host uploader (tersedia: catbox, cloudku, erhabot, fasturl, idnet, litterbox, nyxs, pomf, quax, quax, ryzen, shojib, tmperhabot, uguu, videy | default: ${config.system.uploaderHost.toLowerCase()})`
             }))

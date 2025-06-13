@@ -16,11 +16,11 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "8"))
+            quote(tools.msg.generateCmdExample(ctx.used, "8"))
         );
 
         try {
-            const groupId = tools.cmd.getID(ctx.id);
+            const groupId = ctx.getId(ctx.id);
             await db.set(`group.${groupId}.maxwarnings`, input);
 
             return await ctx.reply(quote(`✅ Berhasil mengubah max warnings!`));

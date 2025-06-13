@@ -4,8 +4,6 @@ const {
     monospace,
     quote
 } = require("@itsreimau/ckptw-mod");
-const axios = require("axios");
-const mime = require("mime-types");
 
 // Fungsi untuk mengecek apakah pengguna memiliki cukup koin sebelum menggunakan perintah tertentu
 async function checkCoin(requiredCoin, userDb, senderId, isOwner) {
@@ -22,9 +20,9 @@ module.exports = (bot) => {
         const isGroup = ctx.isGroup();
         const isPrivate = !isGroup;
         const senderJid = ctx.sender.jid;
-        const senderId = tools.cmd.getID(senderJid);
+        const senderId = ctx.getId(senderJid);
         const groupJid = isGroup ? ctx.id : null;
-        const groupId = isGroup ? tools.cmd.getID(groupJid) : null;
+        const groupId = isGroup ? ctx.getId(groupJid) : null;
         const isOwner = tools.cmd.isOwner(senderId, ctx.msg.key.id);
 
         // Mengambil data bot, pengguna, dan grup dari database
@@ -51,13 +49,13 @@ module.exports = (bot) => {
                 const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
                 await ctx.reply({
-                    text: `${quote(`Selamat! Anda telah naik ke level ${newUserLevel}!`)}\n` +
+                    text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                         `${config.msg.readmore}\n` +
                         quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
                     contextInfo: {
                         externalAdReply: {
                             title: config.bot.name,
-                            body: config.msg.note,
+                            body: config.bot.version,
                             mediaType: 1,
                             thumbnailUrl: profilePictureUrl
                         }
@@ -91,7 +89,7 @@ module.exports = (bot) => {
             },
             {
                 key: "requireBotGroupMembership",
-                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium && !(await ctx.group(config.bot.groupJid).members()).some(member => tools.cmd.getID(member.id) === senderId),
+                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium && !(await ctx.group(config.bot.groupJid).members()).some(member => ctx.getId(member.id) === senderId),
                 msg: config.msg.botGroupMembership,
                 reaction: "🚫"
             },

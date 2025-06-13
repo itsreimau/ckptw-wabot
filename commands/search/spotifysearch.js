@@ -15,7 +15,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "komm susser tod"))
+            quote(tools.msg.generateCmdExample(ctx.used, "one last kiss - hikaru utada"))
         );
 
         try {

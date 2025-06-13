@@ -1,22 +1,17 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "editimg",
+    name: "toonelastkiss",
+    aliases: ["jadionelastkiss"],
     category: "ai-misc",
     permissions: {
-        premium: true
+        coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || null;
-
-        if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "make it evangelion art style"))
-        );
-
         const messageType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
             tools.cmd.checkMedia(messageType, "image"),
@@ -28,16 +23,17 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.cmd.upload(buffer, "image");
-            const result = tools.api.createUrl("zell", "/ai/editimg", {
-                imageUrl: uploadUrl,
-                prompt: input
+            const apiUrl = tools.api.createUrl("http://vid2aud.hofeda4501.serv00.net", "/api/toonelastkiss", {
+                url: uploadUrl
             });
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
                 image: {
-                    url: result
+                    url: result.url
                 },
-                mimetype: mime.lookup("png")
+                mimetype: mime.lookup("jpeg"),
+                caption: result.message
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

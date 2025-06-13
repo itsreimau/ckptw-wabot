@@ -15,7 +15,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, "moon"))
+            quote(tools.msg.generateCmdExample(ctx.used, "rei ayanami memiliki latar belakang yang sangat misterius, dan tidak terlalu banyak terungkap. diketahui ia merupakan hasil rekayasa genetis dari dna yui dan angel kedua, lilith. dia dibesarkan di sebuah ruangan di basement nerv, yang memiliki penataan ruang yang mirip dengan di apartemen yang ditempatinya."))
         );
 
         try {

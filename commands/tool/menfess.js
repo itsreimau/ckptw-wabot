@@ -16,11 +16,11 @@ module.exports = {
         const targetId = id ? id.replace(/[^\d]/g, "") : null;
         const menfessText = text ? text.join(" ") : null;
 
-        const senderId = tools.cmd.getID(ctx.sender.jid);
+        const senderId = ctx.getId(ctx.sender.jid);
 
         if (!targetId && !menfessText) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx.used, `${senderId} halo, dunia!`))}\n` +
+            `${quote(tools.msg.generateCmdExample(ctx.used, `${senderId} halo, dunia!`))}\n` +
             quote(tools.msg.generateNotes(["Jangan gunakan spasi pada angka. Contoh: +62 8123-4567-8910, seharusnya +628123-4567-8910"]))
         );
 
@@ -28,23 +28,24 @@ module.exports = {
         const isSenderInMenfess = Object.values(allMenfessDb).some(m => m.from === senderId || m.to === senderId);
         const isReceiverInMenfess = Object.values(allMenfessDb).some(m => m.from === targetId || m.to === targetId);
 
-        if (isSenderInMenfess) return await ctx.reply(quote("❎ Anda tidak dapat mengirim menfess karena Anda sudah terlibat dalam percakapan lain."));
-        if (isReceiverInMenfess) return await ctx.reply(quote("❎ Anda tidak dapat mengirim menfess kepada pengguna ini karena dia sedang terlibat dalam percakapan lain."));
-        if (targetId === senderId) return await ctx.reply(quote("❎ Tidak dapat digunakan pada diri Anda sendiri."));
+        if (isSenderInMenfess) return await ctx.reply(quote("❎ Kamu tidak dapat mengirim menfess karena sedang terlibat dalam percakapan lain."));
+        if (isReceiverInMenfess) return await ctx.reply(quote("❎ Kamu tidak dapat mengirim menfess kepada pengguna ini karena dia sedang terlibat dalam percakapan lain."));
+        if (targetId === senderId) return await ctx.reply(quote("❎ Tidak dapat digunakan pada diri sendiri."));
 
         try {
             await ctx.sendMessage(`${targetId}@s.whatsapp.net`, {
                 text: `${menfessText}\n` +
                     `${config.msg.readmore}\n` +
-                    quote(`Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik ${monospace("delete")} atau ${monospace("stop")}.`),
+                    quote(`Setiap pesan yang kamu kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik ${monospace("delete")} atau ${monospace("stop")}.`),
                 contextInfo: {
+                    isForwarded: true,
                     forwardedNewsletterMessageInfo: {
                         newsletterJid: config.bot.newsletterJid,
                         newsletterName: config.bot.name
                     }
                 }
             }, {
-                quoted: tools.cmd.fakeMetaAiQuotedText("Seseorang telah mengirimi menfess.")
+                quoted: tools.cmd.fakeMetaAiQuotedText("Seseorang telah mengirimimu menfess.")
             });
 
             await db.set(`menfess.${Date.now()}`, {
@@ -52,7 +53,7 @@ module.exports = {
                 to: targetId
             });
 
-            return await ctx.reply(quote(`✅ Pesan berhasil terkirim! Pesan yang Anda kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik ${monospace("delete")} atau ${monospace("stop")}.`));
+            return await ctx.reply(quote(`✅ Pesan berhasil terkirim! Jika ingin berhenti, cukup ketik ${monospace("delete")} atau ${monospace("stop")}.`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);
         }

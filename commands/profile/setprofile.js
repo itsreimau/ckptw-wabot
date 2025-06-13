@@ -13,7 +13,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx.used, "autolevelup"))}\n` +
+            `${quote(tools.msg.generateCmdExample(ctx.used, "autolevelup"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
@@ -23,7 +23,7 @@ module.exports = {
         }
 
         try {
-            const senderId = tools.cmd.getID(ctx.sender.jid);
+            const senderId = ctx.getId(ctx.sender.jid);
             const args = ctx.args;
             const command = args[0]?.toLowerCase();
 
@@ -32,7 +32,7 @@ module.exports = {
                     const input = args.slice(1).join(" ").trim();
                     if (!input) return await ctx.reply(quote("❎ Mohon masukkan username yang ingin digunakan."));
 
-                    if (/[^a-zA-Z0-9._-]/.test(input)) return await ctx.reply(quote("❎ Username hanya boleh berisi huruf, angka, titik (.), underscore (_) dan tanda hubung (-)."));
+                    if (/[^a-zA-Z0-9._-]/.test(input)) return await ctx.reply(quote("❎ Username hanya boleh berisi huruf, angka, titik (.), underscore (_) atau tanda hubung (-)."));
 
                     const allUsers = await db.get("user") || {};
                     const usernameTaken = Object.values(allUsers).some(user => user.username === input);

@@ -18,17 +18,17 @@ module.exports = {
 
         if (!key && !text) return await ctx.reply(
             `${quote(`${tools.msg.generateInstruction(["send"], ["text"])}`)}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx.used, "welcome Selamat datang di grup!"))}\n` +
+            `${quote(tools.msg.generateCmdExample(ctx.used, "welcome Selamat datang di grup!"))}\n` +
             quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru.", `Gunakan ${monospace("delete")} sebagai teks untuk menghapus teks yang disimpan sebelumnya.`]))
         );
 
-        if (["l", "list"].includes(key.toLowerCase())) {
+        if (["l", "list"].includes(key?.toLowerCase())) {
             const listText = await tools.list.get("settext");
             return await ctx.reply(listText);
         }
 
         try {
-            const groupId = tools.cmd.getID(ctx.id);
+            const groupId = ctx.getId(ctx.id);
             let setKey;
 
             switch (key.toLowerCase()) {

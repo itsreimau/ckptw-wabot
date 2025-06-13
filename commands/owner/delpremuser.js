@@ -14,7 +14,7 @@ module.exports = {
 
         if (!userJid) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.msg.generateCommandExample(ctx.used, `@${tools.cmd.getID(ctx.sender.jid)}`))}\n` +
+                `${quote(tools.msg.generateCmdExample(ctx.used, `@${ctx.getId(ctx.sender.jid)}`))}\n` +
                 quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
             mentions: [ctx.sender.jid]
         });
@@ -23,10 +23,10 @@ module.exports = {
         if (isOnWhatsApp.length === 0) return await ctx.reply(quote("❎ Akun tidak ada di WhatsApp!"));
 
         try {
-            await db.set(`user.${tools.cmd.getID(userJid)}.premium`, false);
+            await db.set(`user.${ctx.getId(userJid)}.premium`, false);
 
             await ctx.sendMessage(userJid, {
-                text: quote("🎉 Anda telah dihapus sebagai pengguna Premium oleh Owner!")
+                text: quote("🎉 Kamu telah dihapus sebagai pengguna Premium oleh Owner!")
             });
             return await ctx.reply(quote("✅ Berhasil dihapus sebagai pengguna Premium!"));
         } catch (error) {

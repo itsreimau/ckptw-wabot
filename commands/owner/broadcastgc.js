@@ -1,8 +1,6 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
-const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "broadcastgc",
@@ -16,8 +14,8 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx.used, "halo, dunia!"))}\n` +
-            `${quote(tools.msg.generatesFlagInformation({
+            `${quote(tools.msg.generateCmdExample(ctx.used, "halo, dunia!"))}\n` +
+            `${quote(tools.msg.generatesFlagInfo({
                 "-ht": "Kirim dengan hidetag"
             }))}\n` +
             quote(tools.msg.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru.", `Gunakan ${monospace("blacklist")} untuk memasukkan grup ke dalam blacklist. (Hanya berfungsi pada grup)`]))
@@ -71,17 +69,17 @@ module.exports = {
 
                     const contextInfo = {
                         mentionedJid: [mentions],
+                        isForwarded: true,
                         forwardedNewsletterMessageInfo: {
                             newsletterJid: config.bot.newsletterJid,
                             newsletterName: config.bot.name
                         },
                         externalAdReply: {
                             title: config.bot.name,
-                            body: config.msg.note,
+                            body: config.bot.version,
                             mediaType: 1,
                             thumbnailUrl: config.bot.thumbnail,
-                            renderLargerThumbnail: true,
-                            showAdAttribution: true
+                            renderLargerThumbnail: true
                         }
                     };
 
@@ -89,7 +87,7 @@ module.exports = {
                         text,
                         contextInfo
                     }, {
-                        quoted: tools.cmd.fakeMetaAiQuotedText(config.msg.note)
+                        quoted: tools.cmd.fakeMetaAiQuotedText(config.msg.footer)
                     });
                 } catch (error) {
                     failedGroupIds.push(groupId);

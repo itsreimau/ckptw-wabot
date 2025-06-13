@@ -14,7 +14,7 @@ module.exports = {
 
         if (!url) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCommandExample(ctx.used, config.bot.groupLink))
+            quote(tools.msg.generateCmdExample(ctx.used, config.bot.groupLink))
         );
 
         const isUrl = await tools.cmd.isUrl(url);
@@ -24,7 +24,7 @@ module.exports = {
             const urlCode = new URL(url).pathname.split("/").pop();
             await ctx.groups.acceptInvite(urlCode).then(async result => {
                 await ctx.sendMessage(result, {
-                    text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${config.bot.name}, dimiliki oleh ${config.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan Anda!`)
+                    text: quote(`👋 Halo! Saya adalah Bot WhatsApp bernama ${config.bot.name}, dimiliki oleh ${config.owner.name}. Saya bisa melakukan banyak perintah, seperti membuat stiker, menggunakan AI untuk pekerjaan tertentu, dan beberapa perintah berguna lainnya. Saya di sini untuk menghibur dan menyenangkan kamu!`)
                 });
             });
 

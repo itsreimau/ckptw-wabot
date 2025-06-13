@@ -13,11 +13,11 @@ module.exports = {
         const coinAmount = parseInt(ctx.args[mentionedJid ? 1 : 0], 10) || null;
 
         const senderJid = ctx.sender.jid;
-        const senderId = tools.cmd.getID(senderJid);
+        const senderId = ctx.getId(senderJid);
 
         if (!userJid && !coinAmount) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.msg.generateCommandExample(ctx.used, `@${senderId} 8`))}\n` +
+                `${quote(tools.msg.generateCmdExample(ctx.used, `@${senderId} 8`))}\n` +
                 quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
             mentions: [senderJid]
         });
@@ -31,10 +31,10 @@ module.exports = {
 
         if (coinAmount <= 0) return await ctx.reply(quote("❎ Jumlah koin tidak boleh kurang dari atau sama dengan 0!"));
 
-        if (userDb?.coin < coinAmount) return await ctx.reply(quote("❎ Koin Anda tidak mencukupi untuk transfer ini!"));
+        if (userDb?.coin < coinAmount) return await ctx.reply(quote("❎ Koinmu tidak mencukupi untuk transfer ini!"));
 
         try {
-            await db.add(`user.${tools.cmd.getID(userJid)}.coin`, coinAmount);
+            await db.add(`user.${ctx.getId(userJid)}.coin`, coinAmount);
             await db.subtract(`user.${senderId}.coin`, coinAmount);
 
             return await ctx.reply(quote(`✅ Berhasil mentransfer ${coinAmount} koin ke pengguna!`));

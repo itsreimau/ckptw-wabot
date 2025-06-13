@@ -16,7 +16,7 @@ Gunakan dengan bijak dan tanggung sendiri risikonya. Kami **tidak bertanggung ja
 - **Penanganan Perintah:** Bot dapat menangani perintah yang dikirim oleh pengguna dan menjalankan tindakan yang sesuai.
 - **Respon Interaktif:** Bot memberikan tanggapan dinamis dan interaktif terhadap pertanyaan atau perintah pengguna.
 - **Penanganan Media:** Mendukung pengiriman dan penerimaan berbagai media seperti gambar, video, dan dokumen.
-- **Sistem Perintah Modular:** Bot mudah diperluas dengan menambahkan perintah baru sesuai kebutuhan Anda.
+- **Sistem Perintah Modular:** Bot mudah diperluas dengan menambahkan perintah baru sesuai kebutuhanmu.
 
 ## How to Get Started
 
@@ -45,11 +45,11 @@ Ganti nama file `config.example.js` menjadi `config.js`, lalu sesuaikan konfigur
 
 ## Authentication Adapter
 
-`ckptw-wabot` mendukung penyimpanan sesi autentikasi menggunakan pilihan database: **MySQL**, **MongoDB**, dan **Firebase**. Pilih dan atur database sesuai preferensi Anda dengan langkah-langkah berikut:
+`ckptw-wabot` mendukung penyimpanan sesi autentikasi menggunakan pilihan database: **MySQL**, **MongoDB**, dan **Firebase**. Pilih dan atur database sesuai preferensimu dengan langkah-langkah berikut:
 
 ### 1. Select Database Adapter
 
-Pada file konfigurasi `config.js`, sesuaikan bagian `authAdapter` dengan adapter database yang Anda pilih.
+Pada file konfigurasi `config.js`, sesuaikan bagian `authAdapter` dengan adapter database yang kamu pilih.
 
 ### 2. Install Database Module
 
@@ -59,19 +59,19 @@ Setelah memilih adapter yang diinginkan, jalankan perintah berikut untuk mengins
 npm run install:adapter
 ```
 
-Perintah ini akan menginstal modul yang sesuai dengan konfigurasi adapter yang Anda pilih.
+Perintah ini akan menginstal modul yang sesuai dengan konfigurasi adapter yang kamu pilih.
 
 ### 3. Make sure Database is Active
 
-Pastikan server database Anda aktif dan dapat diakses sebelum menjalankan bot. Periksa hal-hal berikut:
+Pastikan server databasemu aktif dan dapat diakses sebelum menjalankan bot. Periksa hal-hal berikut:
 
 - Untuk **MySQL**, pastikan kredensial pengguna dan nama database benar.
-- Untuk **MongoDB**, pastikan URL yang dimasukkan dapat terhubung ke server MongoDB Anda.
+- Untuk **MongoDB**, pastikan URL yang dimasukkan dapat terhubung ke server MongoDB.
 - Untuk **Firebase**, pastikan kredensial akun layanan yang diunduh dari Google Firebase Console telah dimasukkan dengan benar.
 
 ## Running Bot
 
-Setelah konfigurasi selesai, Anda dapat menjalankan bot dengan dua opsi berikut:
+Setelah konfigurasi selesai, kamu dapat menjalankan bot dengan dua opsi berikut:
 
 ### 1. Run Directly
 
@@ -81,11 +81,11 @@ Untuk menjalankan bot secara langsung di terminal, gunakan perintah:
 npm start
 ```
 
-Bot akan berjalan hingga Anda menutup terminal atau menghentikannya secara manual.
+Bot akan berjalan hingga kamu menutup terminal atau menghentikannya secara manual.
 
 ### 2. Run with PM2
 
-Jika Anda ingin menjalankan bot sebagai layanan latar belakang (background process) yang tetap aktif meskipun terminal ditutup, gunakan PM2:
+Jika kamu ingin menjalankan bot sebagai layanan latar belakang (background process) yang tetap aktif meskipun terminal ditutup, gunakan PM2:
 
 ```bash
 npm run start:pm2
@@ -93,7 +93,7 @@ npm run start:pm2
 
 ## WhatsApp Authentication
 
-Ada dua metode autentikasi yang dapat digunakan untuk menghubungkan bot ke akun WhatsApp Anda:
+Ada dua metode autentikasi yang dapat digunakan untuk menghubungkan bot ke akun WhatsAppmu:
 
 ### 1. Using Pairing Code
 
@@ -153,7 +153,7 @@ Untuk informasi lebih lanjut, silakan kunjungi:
 
 ## Contribution
 
-Kami sangat terbuka untuk kontribusi! Jika Anda menemukan bug atau memiliki ide untuk fitur baru, jangan ragu untuk membuka issue atau mengirimkan pull request.
+Kami sangat terbuka untuk kontribusi! Jika kamu menemukan bug atau memiliki ide untuk fitur baru, jangan ragu untuk membuka issue atau mengirimkan pull request.
 
 ## License
 

@@ -18,7 +18,7 @@ module.exports = {
 
         if (!level) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCommandExample(ctx.used, "1"))}\n` +
+            `${quote(tools.msg.generateCmdExample(ctx.used, "1"))}\n` +
             quote(tools.msg.generateNotes(["Selain 1, bisa 2, 3, 4, dan 5."]))
         );
 
@@ -72,7 +72,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const participantAnswer = m.content.toLowerCase();
-                const participantId = tools.cmd.getID(m.sender);
+                const participantId = ctx.getId(m.sender);
 
                 if (participantAnswer === game.answer) {
                     session.delete(ctx.id);
@@ -95,7 +95,7 @@ module.exports = {
                 } else if (["s", "surrender"].includes(participantAnswer)) {
                     session.delete(ctx.id);
                     await ctx.sendMessage(ctx.id, {
-                        text: `${quote("🏳️ Anda menyerah!")}\n` +
+                        text: `${quote("🏳️ Kamu menyerah!")}\n` +
                             `${quote(`Jawabannya adalah ${tools.msg.ucwords(game.answer)}.`)}\n` +
                             quote(game.description)
                     }, {

@@ -12,7 +12,7 @@ module.exports = {
             const customText = await db.get("bot.text.donate") || null;
             const text = customText ?
                 customText
-                .replace(/%tag%/g, `@${tools.cmd.getID(ctx.sender.jid)}`)
+                .replace(/%tag%/g, `@${ctx.getId(ctx.sender.jid)}`)
                 .replace(/%name%/g, config.bot.name)
                 .replace(/%prefix%/g, ctx.used.prefix)
                 .replace(/%command%/g, ctx.used.command)

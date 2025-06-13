@@ -47,7 +47,7 @@ module.exports = {
 
             collector.on("collect", async (m) => {
                 const participantAnswer = m.content.toLowerCase();
-                const participantId = tools.cmd.getID(m.sender);
+                const participantId = ctx.getId(m.sender);
 
                 if (game.answers.has(participantAnswer)) {
                     game.answers.delete(participantAnswer);
@@ -77,7 +77,7 @@ module.exports = {
                     const remaining = [...game.answers].map(tools.msg.ucwords).join(", ").replace(/, ([^,]*)$/, ", dan $1");
                     session.delete(ctx.id);
                     await ctx.sendMessage(ctx.id, {
-                        text: `${quote("🏳️ Anda menyerah!")}\n` +
+                        text: `${quote("🏳️ Kamu menyerah!")}\n` +
                             quote(`Jawaban yang belum terjawab adalah ${remaining}.`)
                     }, {
                         quoted: m
