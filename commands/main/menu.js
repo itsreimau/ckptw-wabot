@@ -92,7 +92,7 @@ module.exports = {
             }, {
                 quoted: tools.cmd.fakeMetaAiQuotedText(config.msg.note)
             });
-            return await ctx.reply(ctx.id, {
+            return await ctx.sendMessage(ctx.id, {
                 audio: {
                     url: "https://www.tikwm.com/video/music/7472130814805822726.mp3" // Dapat diubah sesuai keinginan (Ada yg request, tambah lagu di menu nya)
                 },
