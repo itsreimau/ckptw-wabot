@@ -66,7 +66,7 @@ module.exports = {
                 video: {
                     url: result.media_url
                 },
-                mimetype: mime.lookup("mp4")
+                mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer
