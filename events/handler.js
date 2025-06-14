@@ -17,12 +17,11 @@ async function handleWelcome(bot, m, type) {
     if (groupDb?.mutebot) return;
     if (!groupDb?.option?.welcome) return;
 
-    const metadata = await bot.core.groupMetadata(groupJid);
-
     for (const jid of m.participants) {
         const isWelcome = type === Events.UserJoin;
         const userTag = `@${bot.getId(jid)}`;
         const customText = isWelcome ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
+        const metadata = await bot.core.groupMetadata(groupJid);
         const text = customText ?
             customText
             .replace(/%tag%/g, userTag)
@@ -73,7 +72,7 @@ async function addWarning(ctx, groupDb, senderJid, groupId) {
     const newWarning = current + 1;
     warnings[senderId] = newWarning;
 
-    await db.set(`group.${groupId}.warnings`, warnings);
+    await db.set(`group.${groupId}.warnings`, newWarning);
 
     const maxwarnings = groupDb?.maxwarnings || 3;
     await ctx.reply({
@@ -96,9 +95,9 @@ module.exports = (bot) => {
     // Event saat bot siap
     bot.ev.once(Events.ClientReady, async (m) => {
         consolefy.success(`${config.bot.name} by ${config.owner.name}, ready at ${m.user.id}`);
-        const botRestart = await db.get("bot.restart") || {};
 
         // Mulai ulang bot
+        const botRestart = await db.get("bot.restart") || {};
         if (botRestart?.jid && botRestart?.timestamp) {
             const timeago = tools.msg.convertMsToDuration(Date.now() - botRestart.timestamp);
             await bot.core.sendMessage(botRestart.jid, {
@@ -109,11 +108,10 @@ module.exports = (bot) => {
         }
 
         // Tetapkan config pada bot
-        const id = bot.getId(m.user.id);
         config.bot = {
             ...config.bot,
             id,
-            jid: `${id}@s.whatsapp.net`,
+            jid: `${bot.getId(m.user.id)}@s.whatsapp.net`,
             readyAt: bot.readyAt,
             groupLink: await bot.core.groupInviteCode(config.bot.groupJid).then(code => `https://chat.whatsapp.com/${code}`).catch(() => "https://chat.whatsapp.com/FxEYZl2UyzAEI2yhaH34Ye")
         };
@@ -135,12 +133,13 @@ module.exports = (bot) => {
         const botDb = await db.get("bot") || {};
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
-        const userAfk = userDb?.afk || {};
-        const muteList = groupDb?.mute || [];
 
-        // Pengecekan mode bot (group, private, self) dan sistem mute
+        // Pengecekan mode bot (group, private, self)
         if ((botDb?.mode === "group" && isPrivate) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
         if (groupDb?.mutebot && (!isOwner && !await ctx.group().isSenderAdmin())) return;
+
+        // Pengecekan mute pada grup
+        const muteList = groupDb?.mute || [];
         if (muteList.includes(senderId)) return await ctx.deleteMessage(m.key);
 
         isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
@@ -159,6 +158,7 @@ module.exports = (bot) => {
             if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Kamu salah ketik, sepertinya ${monospace(isCmd.prefix + isCmd.didyoumean)}.`)); // Did you mean?
 
             // Penanganan AFK (Menghapus status AFK pengguna yang mengirim pesan)
+            const userAfk = userDb?.afk || {};
             if (userAfk.reason || userAfk.timestamp) {
                 const timeElapsed = Date.now() - userAfk.timestamp;
                 if (timeElapsed > 3000) {

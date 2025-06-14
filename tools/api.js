@@ -26,9 +26,6 @@ const APIs = {
     nirkyy: {
         baseURL: "https://nirkyy-dev.hf.space"
     },
-    nyxs: {
-        baseURL: "https://api.nyxs.pw"
-    },
     paxsenix: {
         baseURL: "https://api.paxsenix.biz.id"
     },
@@ -50,14 +47,12 @@ const APIs = {
 function createUrl(apiNameOrURL, endpoint, params = {}, apiKeyParamName) {
     try {
         const api = APIs[apiNameOrURL];
-
         if (!api) {
             const url = new URL(apiNameOrURL);
             apiNameOrURL = url;
         }
 
         const queryParams = new URLSearchParams(params);
-
         if (apiKeyParamName && api && "APIKey" in api) queryParams.set(apiKeyParamName, api.APIKey);
 
         const baseURL = api ? api.baseURL : apiNameOrURL.origin;

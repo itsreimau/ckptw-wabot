@@ -29,17 +29,18 @@ module.exports = (bot) => {
         const botDb = await db.get("bot") || {};
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
-        const muteList = groupDb?.mute || [];
 
-        // Pengecekan mode bot (group, private, self) dan sistem mute
+        // Pengecekan mode bot (group, private, self)
         if ((botDb?.mode === "group" && isPrivate) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
         if ((groupDb?.mutebot === true && (!isOwner && !await ctx.group().isSenderAdmin())) || (groupDb?.mutebot === "owner" && !isOwner)) return;
+
+        // Pengecekan mute pada grup
+        const muteList = groupDb?.mute || [];
         if (muteList.includes(senderId)) return;
 
         // Menambah XP pengguna dan menangani level-up
         const xpGain = 10;
         const xpToLevelUp = 100;
-
         let newUserXp = (userDb?.xp || 0) + xpGain;
         if (newUserXp >= xpToLevelUp) {
             let newUserLevel = (userDb?.level || 0) + 1;
@@ -47,7 +48,6 @@ module.exports = (bot) => {
 
             if (userDb?.autolevelup) {
                 const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-
                 await ctx.reply({
                     text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                         `${config.msg.readmore}\n` +
@@ -112,7 +112,6 @@ module.exports = (bot) => {
                 const now = Date.now();
                 const lastSentMsg = userDb?.lastSentMsg?.[key] || 0;
                 const oneDay = 24 * 60 * 60 * 1000;
-
                 if (!lastSentMsg || (now - lastSentMsg) > oneDay) {
                     await simulateTyping();
                     await ctx.reply(
@@ -194,7 +193,6 @@ module.exports = (bot) => {
                 const now = Date.now();
                 const lastSentMsg = userDb?.lastSentMsg?.[key] || 0;
                 const oneDay = 24 * 60 * 60 * 1000;
-
                 if (!lastSentMsg || (now - lastSentMsg) > oneDay) {
                     await simulateTyping();
                     await ctx.reply(

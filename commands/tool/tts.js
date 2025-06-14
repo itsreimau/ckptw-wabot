@@ -23,14 +23,14 @@ module.exports = {
         );
 
         if (["l", "list"].includes(input.toLowerCase())) {
-            const listText = await tools.list.get("tts");
+            const listText = await tools.list.get("langcode");
             return await ctx.reply(listText);
         }
 
         try {
-            const apiUrl = tools.api.createUrl("nyxs", "tools/tts", {
-                text: input,
-                to: langCode
+            const apiUrl = tools.api.createUrl("bk9", "tools/tts", {
+                q: input,
+                lang: langCode
             });
             const result = (await axios.get(apiUrl)).data.result;
 

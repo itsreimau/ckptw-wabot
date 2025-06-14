@@ -80,13 +80,17 @@ module.exports = {
                 text,
                 contextInfo: {
                     mentionedJid: [ctx.sender.jid],
+                    isForwarded: true,
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: config.bot.newsletterJid,
+                        newsletterName: config.bot.name
+                    },
                     externalAdReply: {
                         title: config.bot.name,
                         body: config.bot.version,
                         mediaType: 1,
                         thumbnailUrl: config.bot.thumbnail,
-                        renderLargerThumbnail: true,
-                        showAdAttribution: true
+                        renderLargerThumbnail: true
                     }
                 }
             }, {
@@ -100,11 +104,6 @@ module.exports = {
                 ptt: true,
                 contextInfo: {
                     mentionedJid: [ctx.sender.jid],
-                    isForwarded: true,
-                    forwardedNewsletterMessageInfo: {
-                        newsletterJid: config.bot.newsletterJid,
-                        newsletterName: config.bot.name
-                    },
                     externalAdReply: {
                         title: config.bot.name,
                         body: config.bot.version,
@@ -113,8 +112,6 @@ module.exports = {
                         renderLargerThumbnail: true
                     }
                 }
-            }, {
-                quoted: tools.cmd.fakeMetaAiQuotedText("Songs are good. Singing brings us joy. It is the highest point in the culture that Lilims have created.")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);

@@ -22,10 +22,10 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("zell", "/tools/transkripyoutube", {
+            const apiUrl = tools.api.createUrl("archive", "/api/tools/youtube-transkrip", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.transcript;
+            const result = (await axios.get(apiUrl)).data.subtitle;
 
             return await ctx.reply(result);
         } catch (error) {

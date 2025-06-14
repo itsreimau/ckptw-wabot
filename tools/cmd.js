@@ -30,7 +30,6 @@ async function checkMedia(type, required) {
     };
 
     const mediaList = Array.isArray(required) ? required : [required];
-
     for (const media of mediaList) {
         const mappedType = mediaMap[media];
         if (!mappedType) continue;
@@ -59,7 +58,6 @@ async function checkQuotedMedia(type, required) {
     };
 
     const mediaList = Array.isArray(required) ? required : [required];
-
     for (const media of mediaList) {
         if (media === "text") {
             const mediaContent = typeMediaMap.text;
@@ -122,6 +120,7 @@ async function handleError(ctx, error, useAxios) {
     const errorText = util.format(error);
 
     consolefy.error(`Error: ${errorText}`);
+    if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
     if (config.system.reportErrorToOwner) await ctx.replyWithJid(`${config.owner.id}@s.whatsapp.net`, {
         text: `${quote(isGroup ? `⚠️ Terjadi kesalahan dari grup: @${groupJid}, oleh: @${ctx.getId(ctx.sender.jid)}` : `⚠️ Terjadi kesalahan dari: @${ctx.getId(ctx.sender.jid)}`)}\n` +
             `${quote("─────")}\n` +
@@ -134,7 +133,6 @@ async function handleError(ctx, error, useAxios) {
             }] : []
         }
     });
-    if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
     return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
 }
 
@@ -158,7 +156,6 @@ function isCmd(content, bot) {
     };
 
     const mean = didYouMean(cmdName, commands.flatMap(c => [c.name, ...(c.aliases || [])]));
-
     return mean ? {
         msg: content,
         prefix,
@@ -193,7 +190,6 @@ function parseFlag(argsString, customRules = {}) {
 
     const options = {};
     const input = [];
-
     const args = argsString.trim().split(/\s+/);
 
     for (let i = 0; i < args.length; i++) {
@@ -223,13 +219,13 @@ function parseFlag(argsString, customRules = {}) {
     return options;
 }
 
-async function translate(text, to) {
-    if (!text || !to) return null;
+async function translate(text, language) {
+    if (!text || !language) return null;
 
     try {
-        const apiUrl = api.createUrl("nyxs", "/tools/translate", {
+        const apiUrl = api.createUrl("archive", "/api/tools/translate", {
             text,
-            to
+            language
         });
         const result = (await axios.get(apiUrl)).data.result;
         return result;

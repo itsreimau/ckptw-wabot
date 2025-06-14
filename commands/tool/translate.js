@@ -21,7 +21,7 @@ module.exports = {
         );
 
         if (["l", "list"].includes(input.toLowerCase())) {
-            const listText = await tools.list.get("translate");
+            const listText = await tools.list.get("langcode");
             return await ctx.reply(listText);
         }
 
