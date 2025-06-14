@@ -19,7 +19,7 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("velyn", "/api/ai/hero", {
+            const result = tools.api.createUrl("https://velyn.biz.id", "/api/ai/hero", {
                 prompt: input
             });
 

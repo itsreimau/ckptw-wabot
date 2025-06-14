@@ -7,7 +7,6 @@ module.exports = {
     name: "setprofile",
     aliases: ["set", "setp", "setprof"],
     category: "profile",
-    permissions: {},
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 

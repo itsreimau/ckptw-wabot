@@ -7,7 +7,9 @@ module.exports = {
     name: "tovn",
     aliases: ["toptt"],
     category: "converter",
-    permissions: {},
+    permissions: {
+        coin: 10
+    },
     code: async (ctx) => {
         if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["audio"])) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["audio"])));
 

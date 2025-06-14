@@ -24,7 +24,7 @@ const APIs = {
         baseURL: "https://api.nekorinn.my.id"
     },
     nirkyy: {
-        baseURL: "http://nirkyy.koyeb.app"
+        baseURL: "https://nirkyy-dev.hf.space"
     },
     nyxs: {
         baseURL: "https://api.nyxs.pw"
@@ -41,9 +41,6 @@ const APIs = {
     },
     skyzopedia: {
         baseURL: "https://restapi-v2.simplebot.my.id"
-    },
-    velyn: {
-        baseURL: "https://velyn.biz.id"
     },
     zell: {
         baseURL: "https://apizell.web.id"

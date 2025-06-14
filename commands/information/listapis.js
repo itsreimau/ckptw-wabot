@@ -6,7 +6,6 @@ module.exports = {
     name: "listapis",
     aliases: ["listapi"],
     category: "information",
-    permissions: {},
     code: async (ctx) => {
         try {
             const APIs = tools.api.listUrl();

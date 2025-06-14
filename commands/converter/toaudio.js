@@ -8,7 +8,9 @@ module.exports = {
     name: "toaudio",
     aliases: ["toaud", "tomp3"],
     category: "converter",
-    permissions: {},
+    permissions: {
+        coin: 10
+    },
     code: async (ctx) => {
         const messageType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([

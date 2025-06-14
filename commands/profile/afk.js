@@ -5,7 +5,6 @@ const {
 module.exports = {
     name: "afk",
     category: "profile",
-    permissions: {},
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 

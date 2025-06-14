@@ -7,7 +7,6 @@ module.exports = {
     name: "islam",
     aliases: ["islamai"],
     category: "ai-chat",
-    permissions: {},
     code: async (ctx) => {
         const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 

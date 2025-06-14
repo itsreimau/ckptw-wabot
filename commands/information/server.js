@@ -7,7 +7,6 @@ const process = require("node:process");
 module.exports = {
     name: "server",
     category: "information",
-    permissions: {},
     code: async (ctx) => {
         try {
             const startTime = config.bot.readyAt;

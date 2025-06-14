@@ -5,7 +5,6 @@ const {
 module.exports = {
     name: "ping",
     category: "information",
-    permissions: {},
     code: async (ctx) => {
         try {
             const startTime = performance.now();

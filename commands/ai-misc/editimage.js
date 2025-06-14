@@ -5,6 +5,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "editimage",
+    aliases: ["editimg"],
     category: "ai-misc",
     permissions: {
         premium: true
@@ -28,16 +29,16 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.cmd.upload(buffer, "image");
-            const result = tools.api.createUrl("nirkyy", "/api/v1/editimage", {
-                prompt: input,
-                url: uploadUrl
+            const result = tools.api.createUrl("zell", "/ai/editimg", {
+                imageUrl: uploadUrl,
+                prompt: input
             });
 
             return await ctx.reply({
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("jpg")
+                mimetype: mime.lookup("png")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

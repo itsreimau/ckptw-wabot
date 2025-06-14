@@ -6,7 +6,6 @@ module.exports = {
     name: "coin",
     aliases: ["koin"],
     category: "profile",
-    permissions: {},
     code: async (ctx) => {
         const senderId = ctx.getId(ctx.sender.jid);
         const userDb = await db.get(`user.${senderId}`) || {};

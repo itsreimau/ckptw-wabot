@@ -6,7 +6,6 @@ module.exports = {
     name: "donate",
     aliases: ["donasi"],
     category: "information",
-    permissions: {},
     code: async (ctx) => {
         try {
             const customText = await db.get("bot.text.donate") || null;

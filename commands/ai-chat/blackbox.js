@@ -4,9 +4,12 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "chatgpt",
-    aliases: ["ai", "cgpt", "chatai", "gpt", "openai"],
+    name: "blackbox",
+    aliases: ["bb"],
     category: "ai-chat",
+    permissions: {
+        coin: 10
+    },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 
@@ -27,7 +30,7 @@ module.exports = {
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
                 const uploadUrl = await tools.cmd.upload(buffer, "image");
-                const apiUrl = tools.api.createUrl("nekorinn", "/ai/gpt-4.1", {
+                const apiUrl = tools.api.createUrl("nekorinn", "/ai/blackbox", {
                     text: input,
                     imageUrl: uploadUrl,
                     sessionid: senderUid
@@ -36,7 +39,7 @@ module.exports = {
 
                 return await ctx.reply(result);
             } else {
-                const apiUrl = tools.api.createUrl("nekorinn", "/ai/gpt-4.1", {
+                const apiUrl = tools.api.createUrl("nekorinn", "/ai/blackbox", {
                     text: input,
                     sessionid: senderUid
                 });

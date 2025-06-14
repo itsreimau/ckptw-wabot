@@ -10,7 +10,6 @@ module.exports = {
     name: "speedtest",
     aliases: ["speed"],
     category: "information",
-    permissions: {},
     code: async (ctx) => {
         try {
             const latencyStart = performance.now();

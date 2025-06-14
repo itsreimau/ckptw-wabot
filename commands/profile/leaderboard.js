@@ -6,7 +6,6 @@ module.exports = {
     name: "leaderboard",
     aliases: ["lb"],
     category: "profile",
-    permissions: {},
     code: async (ctx) => {
         try {
             const senderId = ctx.getId(ctx.sender.jid);

@@ -16,9 +16,10 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "https://www.youtube.com/watch?v=hoKluzn07eQ -d"))}\n` +
+            `${quote(tools.msg.generateCmdExample(ctx.used, "https://www.youtube.com/watch?v=0Uhh62MUEic -d"))}\n` +
             quote(tools.msg.generatesFlagInfo({
-                "-d": "Kirim sebagai dokumen"
+                "-d": "Kirim sebagai dokumen",
+                "-q <number>": "Pilihan pada kualitas video (tersedia: 144, 240, 360, 480, 720, 1080 | default: 360)"
             }))
         );
 
@@ -26,6 +27,12 @@ module.exports = {
             "-d": {
                 type: "boolean",
                 key: "document"
+            },
+            "-q": {
+                type: "value",
+                key: "quality",
+                validator: (val) => !isNaN(val) && parseInt(val) > 0,
+                parser: (val) => parseInt(val)
             }
         });
 
@@ -35,24 +42,34 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("skyzopedia", "/download/ytdl", {
-                url
+            let quality = flag.quality || 360;
+            if (![144, 240, 360, 480, 720, 1080].includes(quality)) quality = 360;
+
+            const apiUrl = tools.api.createUrl("archive", "/api/download/ytmp4", {
+                url,
+                quality
             });
             const result = (await axios.get(apiUrl)).data.result;
 
             if (flag?.document) return await ctx.reply({
                 document: {
-                    url: result.mp4
+                    url: result.media_url
                 },
                 fileName: `${result.title}.mp4`,
-                mimetype: mime.lookup("mp4")
+                mimetype: mime.lookup("mp4"),
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    config.msg.footer
             });
 
             return await ctx.reply({
                 video: {
-                    url: result.mp4
+                    url: result.media_url
                 },
                 mimetype: mime.lookup("mp4")
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    config.msg.footer
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

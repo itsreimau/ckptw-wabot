@@ -42,7 +42,6 @@ module.exports = {
             const searchIndex = flag.index || 0;
             const query = flag.input;
             let source = flag.source || "youtube";
-
             if (!["soundcloud", "spotify", "tidal", "youtube"].includes(source)) source = "youtube";
 
             if (source === "soundcloud") {
@@ -113,10 +112,10 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("skyzopedia", "/download/ytmp3", {
+                const downloadApiUrl = tools.api.createUrl("archive", "/api/download/ytmp3", {
                     url: searchResult.url
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.result;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.result.audio_url;
 
                 return await ctx.reply({
                     audio: {

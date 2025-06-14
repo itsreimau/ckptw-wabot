@@ -10,7 +10,6 @@ const session = new Map();
 module.exports = {
     name: "kuismerdeka",
     category: "game",
-    permissions: {},
     code: async (ctx) => {
         if (session.has(ctx.id)) return await ctx.reply(quote("🎮 Sesi permainan sedang berjalan!"));
 

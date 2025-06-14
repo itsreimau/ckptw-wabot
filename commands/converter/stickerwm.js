@@ -10,7 +10,9 @@ module.exports = {
     name: "stickerwm",
     aliases: ["swm", "stikerwm"],
     category: "converter",
-    permissions: {},
+    permissions: {
+        coin: 10
+    },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 

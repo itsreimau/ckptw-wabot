@@ -4,8 +4,8 @@ const {
 
 module.exports = {
     name: "botgroup",
+    aliases: ["botgc", "gcbot"]
     category: "information",
-    permissions: {},
     code: async (ctx) => {
         return await ctx.reply(quote(config.bot.groupLink));
     }

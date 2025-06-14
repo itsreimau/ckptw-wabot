@@ -6,7 +6,6 @@ const {
 module.exports = {
     name: "claim",
     category: "profile",
-    permissions: {},
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 

@@ -6,7 +6,6 @@ module.exports = {
     name: "tqto",
     aliases: ["contrib", "contribs", "contributor", "contributors", "thanksto"],
     category: "information",
-    permissions: {},
     code: async (ctx) => {
         return await ctx.reply(
             `${quote("ItsReimau (https://github.com/itsreimau)")}\n` +

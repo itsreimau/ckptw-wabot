@@ -1,23 +1,25 @@
 const mime = require("mime-types");
 
 module.exports = {
-    name: "cekkhodam",
-    aliases: ["checkkhodam", "khodam"],
+    name: "cekkecocokan",
+    aliases: ["checkkecocokan", "kecocokan"],
     category: "entertainment",
     permissions: {
         coin: 10
     },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
+        const [nama1, nama2] = input?.split("|");
 
-        if (!input) return await ctx.reply(
+        if (!input || !nama1 || !nama1) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "itsreimau"))
+            quote(tools.msg.generateCmdExample(ctx.used, "gendo|fuyutsuki"))
         );
 
         try {
-            const result = tools.api.createUrl("nirkyy", "/api/v1/khodam", {
-                nama: input
+            const result = tools.api.createUrl("nirkyy", "/api/v1/kecocokan", {
+                nama1,
+                nama2
             });
 
             return await ctx.reply({

@@ -4,8 +4,8 @@ const {
 
 module.exports = {
     name: "about",
+    aliases: ["bot", "infobot"],
     category: "information",
-    permissions: {},
     code: async (ctx) => {
         try {
             const botDb = await db.get("bot") || {};
@@ -16,7 +16,7 @@ module.exports = {
                     `${quote(`Nama Bot: ${config.bot.name}`)}\n` +
                     `${quote(`Versi: ${config.bot.version}`)}\n` +
                     `${quote(`Owner: ${tools.msg.ucwords(config.owner.name)}`)}\n` +
-                    `${quote(`Mode: ${tools.msg.ucwords(botDb?.mode)}`)}\n` +
+                    `${quote(`Mode: ${tools.msg.ucwords(botDb?.mode || "public")}`)}\n` +
                     `${quote(`Bot Uptime: ${config.bot.uptime}`)}\n` +
                     `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
                     `${quote("Library: @itsreimau/ckptw-mod (Fork of @mengkodingan/ckptw)")}\n` +

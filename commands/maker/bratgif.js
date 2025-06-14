@@ -1,7 +1,6 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
-const axios = require("axios");
 const {
     Sticker,
     StickerTypes
@@ -26,10 +25,9 @@ module.exports = {
         if (input.length > 1000) return await ctx.reply(quote("❎ Maksimal 1000 kata!"));
 
         try {
-            const apiUrl = tools.api.createUrl("paxsenix", "/maker/bratvid", {
+            const result = tools.api.createUrl("nekorinn", "/maker/bratvid", {
                 text: input
             });
-            const result = (await axios.get(apiUrl)).data.url;
             const sticker = new Sticker(result, {
                 pack: config.sticker.packname,
                 author: config.sticker.author,

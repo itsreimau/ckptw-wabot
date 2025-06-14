@@ -6,7 +6,6 @@ module.exports = {
     name: "sc",
     aliases: ["script", "source", "sourcecode"],
     category: "information",
-    permissions: {},
     code: async (ctx) => {
         return await ctx.reply(
             `${quote("https://github.com/itsreimau/ckptw-wabot")}\n` +

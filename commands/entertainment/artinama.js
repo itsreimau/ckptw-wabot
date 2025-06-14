@@ -1,8 +1,7 @@
 const mime = require("mime-types");
 
 module.exports = {
-    name: "cekkhodam",
-    aliases: ["checkkhodam", "khodam"],
+    name: "artinama",
     category: "entertainment",
     permissions: {
         coin: 10
@@ -16,7 +15,7 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("nirkyy", "/api/v1/khodam", {
+            const result = tools.api.createUrl("nirkyy", "/api/v1/artinama", {
                 nama: input
             });
 

@@ -153,9 +153,10 @@ module.exports = (bot) => {
             // Penanganan database pengguna
             if (isOwner || userDb?.premium) db.set(`user.${senderId}.coin`, 0);
             if (userDb?.coin === undefined || !Number.isFinite(userDb.coin)) db.set(`user.${senderId}.coin`, 100);
+            if (!userDb?.uid || userDb?.uid !== tools.cmd.generateUID(senderId, true)) db.set(`user.${senderId}.uid`, tools.cmd.generateUID(senderId, false));
             if (!userDb?.username) db.set(`user.${senderId}.username`, `@user_${tools.cmd.generateUID(senderId, false)}`);
 
-            if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Kamu salah ketik, sepertinya ${monospace(isCmd?.prefix + isCmd?.didyoumean)}.`)); // Did you mean?
+            if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Kamu salah ketik, sepertinya ${monospace(isCmd.prefix + isCmd.didyoumean)}.`)); // Did you mean?
 
             // Penanganan AFK (Menghapus status AFK pengguna yang mengirim pesan)
             if (userAfk.reason || userAfk.timestamp) {
@@ -219,12 +220,12 @@ module.exports = (bot) => {
                 if (checkMedia && !await ctx.group().isSenderAdmin()) {
                     const buffer = await ctx.msg.media.toBuffer();
                     const uploadUrl = await tools.cmd.upload(buffer, "image");
-                    const apiUrl = tools.api.createUrl("nirkyy", "/api/v1/nsfw-detector", {
+                    const apiUrl = tools.api.createUrl("falcon", "/tools/nsfw-check", {
                         url: uploadUrl
                     });
-                    const result = (await axios.get(apiUrl)).data.data.isUnsafe;
+                    const result = (await axios.get(apiUrl)).data.data.result.data;
 
-                    if (result) {
+                    if (result.nsfw || result.porn) {
                         await ctx.reply(quote("⛔ Jangan kirim NSFW, dasar cabul!"));
                         await ctx.deleteMessage(m.key);
                         if (!config.system.restrict && groupDb?.option?.autokick) {

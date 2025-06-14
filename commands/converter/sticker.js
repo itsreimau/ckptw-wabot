@@ -10,7 +10,6 @@ module.exports = {
     name: "sticker",
     aliases: ["s", "stiker"],
     category: "converter",
-    permissions: {},
     code: async (ctx) => {
         const messageType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([

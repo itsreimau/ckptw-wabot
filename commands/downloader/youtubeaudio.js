@@ -16,7 +16,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "https://www.youtube.com/watch?v=hoKluzn07eQ -d"))}\n` +
+            `${quote(tools.msg.generateCmdExample(ctx.used, "https://www.youtube.com/watch?v=0Uhh62MUEic -d"))}\n` +
             quote(tools.msg.generatesFlagInfo({
                 "-d": "Kirim sebagai dokumen"
             }))
@@ -35,22 +35,25 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("skyzopedia", "/download/ytdl", {
+            const apiUrl = tools.api.createUrl("archive", "/api/download/ytmp3", {
                 url
             });
             const result = (await axios.get(apiUrl)).data.result;
 
             if (flag?.document) return await ctx.reply({
                 document: {
-                    url: result.mp3
+                    url: result.audio_url
                 },
                 fileName: `${result.title}.mp3`,
-                mimetype: mime.lookup("mp3")
+                mimetype: mime.lookup("mp3"),
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    config.msg.footer
             });
 
             return await ctx.reply({
                 audio: {
-                    url: result.mp3
+                    url: result.audio_url
                 },
                 mimetype: mime.lookup("mp3")
             });

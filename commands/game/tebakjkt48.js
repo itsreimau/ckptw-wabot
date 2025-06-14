@@ -12,7 +12,6 @@ module.exports = {
     name: "tebakjkt48",
     aliases: ["tebakjkt"],
     category: "game",
-    permissions: {},
     code: async (ctx) => {
         if (session.has(ctx.id)) return await ctx.reply(quote("🎮 Sesi permainan sedang berjalan!"));
 

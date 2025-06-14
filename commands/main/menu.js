@@ -11,7 +11,6 @@ module.exports = {
     name: "menu",
     aliases: ["allmenu", "help", "list", "listmenu"],
     category: "main",
-    permissions: {},
     code: async (ctx) => {
         try {
             const {
@@ -77,34 +76,45 @@ module.exports = {
 
             text += config.msg.footer;
 
-            const contextInfo = {
-                mentionedJid: [ctx.sender.jid],
-                isForwarded: true,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: config.bot.newsletterJid,
-                    newsletterName: config.bot.name
-                },
-                externalAdReply: {
-                    title: config.bot.name,
-                    body: config.bot.version,
-                    mediaType: 1,
-                    thumbnailUrl: config.bot.thumbnail,
-                    renderLargerThumbnail: true
-                }
-            };
-
             await ctx.sendMessage(ctx.id, {
                 text,
-                contextInfo
+                contextInfo: {
+                    mentionedJid: [ctx.sender.jid],
+                    externalAdReply: {
+                        title: config.bot.name,
+                        body: config.bot.version,
+                        mediaType: 1,
+                        thumbnailUrl: config.bot.thumbnail,
+                        renderLargerThumbnail: true,
+                        showAdAttribution: true
+                    }
+                }
             }, {
                 quoted: tools.cmd.fakeMetaAiQuotedText(config.msg.note)
             });
-            return await ctx.reply({
+            return await ctx.reply(ctx.id, {
                 audio: {
                     url: "https://www.tikwm.com/video/music/7472130814805822726.mp3" // Dapat diubah sesuai keinginan (Ada yg request, tambah lagu di menu nya)
                 },
                 mimetype: mime.lookup("mp3"),
-                ptt: true
+                ptt: true,
+                contextInfo: {
+                    mentionedJid: [ctx.sender.jid],
+                    isForwarded: true,
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: config.bot.newsletterJid,
+                        newsletterName: config.bot.name
+                    },
+                    externalAdReply: {
+                        title: config.bot.name,
+                        body: config.bot.version,
+                        mediaType: 1,
+                        thumbnailUrl: "https://i.ytimg.com/vi/jfKfPfyJRdk/maxresdefault.jpg",
+                        renderLargerThumbnail: true
+                    }
+                }
+            }, {
+                quoted: tools.cmd.fakeMetaAiQuotedText("Songs are good. Singing brings us joy. It is the highest point in the culture that Lilims have created.")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false);

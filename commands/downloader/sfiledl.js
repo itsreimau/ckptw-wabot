@@ -30,11 +30,11 @@ module.exports = {
                 document: {
                     url: result.download.url
                 },
+                fileName: result.metadata.filename,
+                mimetype: result.metadata.mimetype || "application/octet-stream",
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
-                    config.msg.footer,
-                fileName: result.metadata.filename,
-                mimetype: result.metadata.mimetype || "application/octet-stream"
+                    config.msg.footer
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

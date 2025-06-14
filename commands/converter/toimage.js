@@ -8,7 +8,9 @@ module.exports = {
     name: "toimage",
     aliases: ["toimg", "topng"],
     category: "converter",
-    permissions: {},
+    permissions: {
+        coin: 10
+    },
     code: async (ctx) => {
         if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
 

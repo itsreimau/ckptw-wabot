@@ -1,4 +1,5 @@
 const {
+    monospace,
     quote
 } = require("@itsreimau/ckptw-mod");
 

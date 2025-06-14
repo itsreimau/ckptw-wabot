@@ -6,7 +6,6 @@ const mime = require("mime-types");
 module.exports = {
     name: "dalle",
     category: "ai-image",
-    permissions: {},
     code: async (ctx) => {
         const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 

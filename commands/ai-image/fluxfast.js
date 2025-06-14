@@ -1,12 +1,12 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "zerochan",
-    category: "tool",
+    name: "fluxfast",
+    aliases: ["fluxf"],
+    category: "ai-image",
     permissions: {
         coin: 10
     },
@@ -20,17 +20,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/search/zerochan", {
-                q: input
+            const result = tools.api.createUrl("nirkyy", "/api/v1/fluxfast", {
+                prompt: input
             });
-            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.result).imageUrl;
 
             return await ctx.reply({
                 image: {
                     url: result
                 },
                 mimetype: mime.lookup("jpeg"),
-                caption: `${quote(`Kueri: ${input}`)}\n` +
+                caption: `${quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

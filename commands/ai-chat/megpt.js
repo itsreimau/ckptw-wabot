@@ -2,11 +2,10 @@ const {
     quote
 } = require("@itsreimau/ckptw-mod");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
-    name: "zerochan",
-    category: "tool",
+    name: "megpt",
+    category: "ai-chat",
     permissions: {
         coin: 10
     },
@@ -15,25 +14,17 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "moon"))}\n` +
+            `${quote(tools.msg.generateCmdExample(ctx.used, "apa itu bot whatsapp?"))}\n` +
             quote(tools.msg.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/search/zerochan", {
-                q: input
+            const apiUrl = tools.api.createUrl("agatz", "/api/megpt", {
+                message: input
             });
-            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.result).imageUrl;
+            const result = (await axios.get(apiUrl)).data.data;
 
-            return await ctx.reply({
-                image: {
-                    url: result
-                },
-                mimetype: mime.lookup("jpeg"),
-                caption: `${quote(`Kueri: ${input}`)}\n` +
-                    "\n" +
-                    config.msg.footer
-            });
+            return await ctx.reply(result);
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

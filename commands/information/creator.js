@@ -6,7 +6,6 @@ module.exports = {
     name: "owner",
     aliases: ["creator", "developer"],
     category: "information",
-    permissions: {},
     code: async (ctx) => {
         try {
             const vcard = new VCardBuilder()
