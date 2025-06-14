@@ -15,7 +15,7 @@ module.exports = {
                     `${quote("─────")}\n` +
                     `${quote(`Nama Bot: ${config.bot.name}`)}\n` +
                     `${quote(`Versi: ${config.bot.version}`)}\n` +
-                    `${quote(`Owner: ${tools.msg.ucwords(config.owner.name)}`)}\n` +
+                    `${quote(`Owner: ${config.owner.name}`)}\n` +
                     `${quote(`Mode: ${tools.msg.ucwords(botDb?.mode || "public")}`)}\n` +
                     `${quote(`Bot Uptime: ${config.bot.uptime}`)}\n` +
                     `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +

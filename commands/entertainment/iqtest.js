@@ -26,6 +26,6 @@ module.exports = {
             feedback = iqScore < 150 ? "Luar biasa! Kamu di atas rata-rata!" : "Wah, kamu jenius luar biasa! Kemenanganmu sangat mengesankan!";
         }
 
-        return await ctx.reply(quote(`🧠 IQ kamu sebesar: ${iqScore}. ${feedback}`));
+        return await ctx.reply(quote(`🧠 IQ-mu sebesar: ${iqScore}. ${feedback}`));
     }
 };

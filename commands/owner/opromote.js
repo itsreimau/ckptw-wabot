@@ -20,7 +20,7 @@ module.exports = {
             mentions: [ctx.sender.jid]
         });
 
-        if (await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote("❎ Dia adalah admin grup!"));
+        if (accountJid === await ctx.group().owner()) return await ctx.reply(quote("❎ Dia adalah owner grup!"));
 
         try {
             await ctx.group().promote([accountJid]);

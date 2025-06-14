@@ -30,7 +30,7 @@ module.exports = {
 
         if (coinAmount <= 0) return await ctx.reply(quote("❎ Jumlah koin tidak boleh kurang dari atau sama dengan 0!"));
 
-        if (userDb?.coin < coinAmount) return await ctx.reply(quote("❎ Koinmu tidak mencukupi untuk transfer ini!"));
+        if (userDb?.coin < coinAmount) return await ctx.reply(quote("❎ Koin-mu tidak mencukupi untuk transfer ini!"));
 
         try {
             await db.add(`user.${ctx.getId(userJid)}.coin`, coinAmount);

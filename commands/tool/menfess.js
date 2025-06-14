@@ -45,7 +45,7 @@ module.exports = {
                     }
                 }
             }, {
-                quoted: tools.cmd.fakeMetaAiQuotedText("Seseorang telah mengirimimu menfess.")
+                quoted: tools.cmd.fakeMetaAiQuotedText("Seseorang telah mengirimi-mu menfess.")
             });
             await db.set(`menfess.${Date.now()}`, {
                 from: senderId,

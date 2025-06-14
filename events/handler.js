@@ -189,9 +189,9 @@ module.exports = (bot) => {
 
             // Penanganan antimedia
             for (const type of ["audio", "document", "gif", "image", "sticker", "video"]) {
-                if (groupDb?.option?.[`anti${type}`]) {
+                if (groupDb?.option?.[`anti${type}`] && !await ctx.group().isSenderAdmin() && !isCmd) {
                     const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), type);
-                    if (checkMedia && !await ctx.group().isSenderAdmin()) {
+                    if (checkMedia) {
                         await ctx.reply(quote(`⛔ Jangan kirim ${type}!`));
                         await ctx.deleteMessage(m.key);
                         if (!config.system.restrict && groupDb?.option?.autokick) {
@@ -204,7 +204,7 @@ module.exports = (bot) => {
             }
 
             // Penanganan antilink
-            if (groupDb?.option?.antilink && await tools.cmd.isUrl(m.content) && !await ctx.group().isSenderAdmin()) {
+            if (groupDb?.option?.antilink && await tools.cmd.isUrl(m.content) && !await ctx.group().isSenderAdmin() && !isCmd) {
                 await ctx.reply(quote("⛔ Jangan kirim link!"));
                 await ctx.deleteMessage(m.key);
                 if (!config.system.restrict && groupDb?.option?.autokick) {
@@ -215,9 +215,9 @@ module.exports = (bot) => {
             }
 
             // Penanganan antinsfw
-            if (groupDb?.option?.antinsfw) {
+            if (groupDb?.option?.antinsfw && !await ctx.group().isSenderAdmin() && !isCmd) {
                 const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "image");
-                if (checkMedia && !await ctx.group().isSenderAdmin()) {
+                if (checkMedia) {
                     const buffer = await ctx.msg.media.toBuffer();
                     const uploadUrl = await tools.cmd.upload(buffer, "image");
                     const apiUrl = tools.api.createUrl("falcon", "/tools/nsfw-check", {
@@ -238,7 +238,7 @@ module.exports = (bot) => {
             }
 
             // Penanganan antispam
-            if (groupDb?.option?.antispam) {
+            if (groupDb?.option?.antispam && !await ctx.group().isSenderAdmin() && !isCmd) {
                 const now = Date.now();
                 const spamData = await db.get(`group.${groupId}.spam`) || {};
                 const data = spamData[senderId] || {
@@ -256,7 +256,7 @@ module.exports = (bot) => {
 
                 await db.set(`group.${groupId}.spam`, spamData);
 
-                if (newCount > 5 && !await ctx.group().isSenderAdmin()) {
+                if (newCount > 5) {
                     await ctx.reply(quote("⛔ Jangan spam, ngelag woy!"));
                     await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) {
@@ -270,9 +270,9 @@ module.exports = (bot) => {
             }
 
             // Penanganan antitagsw (Aku tidak tau apakah ini work atau tidak)
-            if (groupDb?.option?.antitagsw) {
+            if (groupDb?.option?.antitagsw && !await ctx.group().isSenderAdmin() && !isCmd) {
                 const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "groupStatusMention") || m.message?.protocolMessage?.type === 25 || m.message?.protocolMessage?.type === "STATUS_MENTION_MESSAGE";
-                if (checkMedia && !await ctx.group().isSenderAdmin()) {
+                if (checkMedia) {
                     await ctx.reply(quote(`⛔ Jangan tag grup di SW, gak ada yg peduli!`));
                     await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) {
@@ -284,9 +284,9 @@ module.exports = (bot) => {
             }
 
             // Penanganan antitoxic
-            if (groupDb?.option?.antitoxic) {
+            if (groupDb?.option?.antitoxic && !await ctx.group().isSenderAdmin() && !isCmd) {
                 const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
-                if (m.content && toxicRegex.test(m.content) && !await ctx.group().isSenderAdmin()) {
+                if (m.content && toxicRegex.test(m.content)) {
                     await ctx.reply(quote("⛔ Jangan toxic!"));
                     await ctx.deleteMessage(m.key);
                     if (!config.system.restrict && groupDb?.option?.autokick) {

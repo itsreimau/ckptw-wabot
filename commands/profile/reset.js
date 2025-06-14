@@ -25,7 +25,7 @@ module.exports = {
                     const isPremium = await db.get(`user.${senderId}.premium`);
                     await db.delete(`user.${senderId}`);
                     if (isPremium) await db.set(`user.${senderId}.premium`, true);
-                    await ctx.reply(quote("✅ Datamu berhasil direset, semua data telah dihapus!"));
+                    await ctx.reply(quote("✅ Data-mu berhasil direset, semua data telah dihapus!"));
                     collector.stop();
                 } else if (content === "n") {
                     await ctx.reply(quote("❌ Proses reset data telah dibatalkan."));
