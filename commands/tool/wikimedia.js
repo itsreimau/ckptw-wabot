@@ -5,7 +5,7 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "zerochan",
+    name: "wikimedia",
     category: "tool",
     permissions: {
         coin: 10
@@ -19,16 +19,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/search/zerochan", {
-                q: input
+            const apiUrl = tools.api.createUrl("archive", "/api/search/wikimedia", {
+                query: input
             });
-            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.result).imageUrl;
+            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.result).image;
 
             return await ctx.reply({
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("jpeg"),
+                mimetype: mime.lookup("jpg"),
                 caption: `${quote(`Kueri: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer

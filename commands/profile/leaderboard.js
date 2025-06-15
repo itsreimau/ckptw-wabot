@@ -14,7 +14,7 @@ module.exports = {
             const leaderboardData = Object.entries(users)
                 .map(([id, data]) => ({
                     id,
-                    username: data.username || null,
+                    username: data.username || "guest",
                     level: data.level || 0,
                     winGame: data.winGame || 0
                 }))

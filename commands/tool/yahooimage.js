@@ -5,7 +5,8 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "zerochan",
+    name: "yahooimage",
+    aliases: ["gimage"],
     category: "tool",
     permissions: {
         coin: 10
@@ -19,10 +20,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/search/zerochan", {
-                q: input
+            const apiUrl = tools.api.createUrl("archive", "/api/search/yahooimg", {
+                query: input
             });
-            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.result).imageUrl;
+            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.result).url;
 
             return await ctx.reply({
                 image: {

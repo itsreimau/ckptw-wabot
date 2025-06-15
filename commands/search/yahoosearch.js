@@ -19,15 +19,15 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nirkyy", "/api/v1/yahoo-search", {
-                q: input
+            const apiUrl = tools.api.createUrl("archive", "/api/search/yahoo", {
+                query: input
             });
             const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map(r =>
                 `${quote(`Judul: ${r.title}`)}\n` +
-                `${quote(`Deskripsi: ${r.desc}`)}\n` +
-                `${quote(`URL: ${r.url}`)}`
+                `${quote(`Deskripsi: ${r.snippet}`)}\n` +
+                `${quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

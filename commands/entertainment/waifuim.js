@@ -1,8 +1,7 @@
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "cecan",
+    name: "waifuim",
     category: "entertainment",
     permissions: {
         premium: true
@@ -11,15 +10,14 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (["l", "list"].includes(input.toLowerCase())) {
-            const listText = await tools.list.get("cecan");
+            const listText = await tools.list.get("waifuim");
             return await ctx.reply(listText);
         }
 
         try {
-            const listCecan = ["china", "indonesia", "japan", "vietnam", "korea", "malaysia", "thailand"];
-            const cecan = (input && listCecan.includes(input)) ? input : tools.cmd.getRandomElement(listCecan);
-            const apiUrl = tools.api.createUrl("agatz", `/api/${cecan}`);
-            const result = (await axios.get(apiUrl)).data.data.url;
+            const listWaifuim = ["ass", "ecchi", "ero", "hentai", "maid", "milf", "oppai", "oral", "paizuri", "selfies", "uniform", "waifu"];
+            const waifuim = (input && listWaifuim.includes(input)) ? input : tools.cmd.getRandomElement(listWaifuim);
+            const result = tools.api.createUrl("nekorinn", `/waifuim/${waifuim}`);
 
             return await ctx.reply({
                 image: {

@@ -39,7 +39,7 @@ module.exports = {
             if (Math.random() < 0.5) {
                 question = `Apa bentuk romaji dari "${result.furigana || result.word}"?`;
                 answer = result.romaji;
-                clue = answer.replace(/[aiueo]/g, "_").toLowerCase();
+                clue = answer.replace(/[aiueo]/g, "_").toUpperCase();
             } else {
                 question = `Tuliskan kana untuk romaji "${result.romaji}"`;
                 answer = result.furigana || result.word;

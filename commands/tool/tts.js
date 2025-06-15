@@ -13,8 +13,8 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        let input = ctx.args.slice(ctx.args[0]?.length === 2 ? 1 : 0).join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
-        let langCode = ctx.args[0]?.length === 2 ? ctx.args[0] : "id";
+        const input = ctx.args.slice(ctx.args[0]?.length === 2 ? 1 : 0).join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
+        const langCode = ctx.args[0]?.length === 2 ? ctx.args[0] : "id";
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
@@ -28,7 +28,7 @@ module.exports = {
         }
 
         try {
-            const apiUrl = tools.api.createUrl("bk9", "tools/tts", {
+            const apiUrl = tools.api.createUrl("bk9", "/tools/tts", {
                 q: input,
                 lang: langCode
             });

@@ -332,7 +332,7 @@ module.exports = (bot) => {
     bot.ev.on(Events.Call, async (calls) => {
         if (!config.system.antiCall) return;
 
-        for (let call of calls) {
+        for (const call of calls) {
             if (call.status !== "offer") continue;
 
             await bot.core.rejectCall(call.id, call.from);

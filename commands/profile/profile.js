@@ -25,14 +25,12 @@ module.exports = {
             const profilePictureUrl = await ctx.core.profilePictureUrl(senderJid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
 
             return await ctx.reply({
-                text: `${quote(`Nama: ${ctx.sender.pushName}`)}\n` +
-                    `${quote(`Username: ${userDb?.username}`)}\n` +
+                text: `${quote(`Nama: ${ctx.sender.pushName} (${userDb?.username})`)}\n` +
                     `${quote(`Status: ${isOwner ? "Owner" : userDb?.premium ? "Premium" : "Freemium"}`)}\n` +
-                    `${quote(`Level: ${userDb?.level || 0}`)}\n` +
-                    `${quote(`XP: ${userDb?.xp}/100`)}\n` +
+                    `${quote(`Level: ${userDb?.level || 0} (${userDb?.xp || 0}/100)`)}\n` +
                     `${quote(`Koin: ${isOwner || userDb?.premium ? "Tak terbatas" : userDb?.coin}`)}\n` +
-                    `${quote(`Peringkat: ${leaderboardData.findIndex(user => user.id === senderId) + 1}`)}\n` +
                     `${quote(`Menang: ${userDb?.winGame || 0}`)}\n` +
+                    `${quote(`Peringkat: ${leaderboardData.findIndex(user => user.id === senderId) + 1}`)}\n` +
                     "\n" +
                     config.msg.footer,
                 contextInfo: {

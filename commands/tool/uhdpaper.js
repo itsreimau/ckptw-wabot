@@ -11,19 +11,18 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
+        const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "moon"))}\n` +
-            quote(tools.msg.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
+            quote(tools.msg.generateCmdExample(ctx.used, "moon"))
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/search/uhdpaper", {
-                q: input
+            const apiUrl = tools.api.createUrl("archive", "/api/search/uhd-wallpapers", {
+                query: input
             });
-            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.result).imageUrl;
+            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.result).image;
 
             return await ctx.reply({
                 image: {

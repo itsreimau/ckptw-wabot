@@ -45,15 +45,15 @@ module.exports = {
             let quality = flag.quality || 360;
             if (![144, 240, 360, 480, 720, 1080].includes(quality)) quality = 360;
 
-            const apiUrl = tools.api.createUrl("archive", "/api/download/ytmp4", {
+            const apiUrl = tools.api.createUrl("zell", "/download/youtube2", {
                 url,
-                quality
+                format: quality
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data;
 
             if (flag?.document) return await ctx.reply({
                 document: {
-                    url: result.media_url
+                    url: result.download
                 },
                 fileName: `${result.title}.mp4`,
                 mimetype: mime.lookup("mp4"),
@@ -64,7 +64,7 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    url: result.media_url
+                    url: result.download
                 },
                 mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +
