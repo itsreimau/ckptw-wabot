@@ -1,3 +1,6 @@
+const {
+    quote
+} = require("@itsreimau/ckptw-mod");
 const mime = require("mime-types");
 
 module.exports = {
