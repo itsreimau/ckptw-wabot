@@ -5,16 +5,16 @@ const axios = require("axios");
 
 module.exports = {
     name: "faktaunik",
-    aliases: ["fakta", "tahukahanda"],
+    aliases: ["fakta"],
     category: "tool",
     permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        const apiUrl = tools.api.createUrl("https://cinnabar.icaksh.my.id", "/public/daily/tawiki");
+        const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/HasamiAini/Bot_Takagisan/refs/heads/main/faktanya.txt");
 
         try {
-            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.data.info).tahukah_anda;
+            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.trim().split("\n").filter(Boolean));
 
             return await ctx.reply(quote(`Tahukah Anda? ${result}`));
         } catch (error) {

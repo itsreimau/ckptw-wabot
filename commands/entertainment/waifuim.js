@@ -9,7 +9,7 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 
-        if (["l", "list"].includes(input.toLowerCase())) {
+        if (["l", "list"].includes(input?.toLowerCase())) {
             const listText = await tools.list.get("waifuim");
             return await ctx.reply(listText);
         }
@@ -23,7 +23,10 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("jpg")
+                mimetype: mime.lookup("jpg"),
+                caption: `${quote(`Kategori: ${tools.msg.ucwords(waifuim)}`)}\n` +
+                    "\n" +
+                    config.msg.footer
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
