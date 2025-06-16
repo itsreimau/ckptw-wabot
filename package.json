@@ -1,6 +1,6 @@
 {
   "name": "ckptw-wabot",
-  "version": "1.7.20",
+  "version": "1.7.21",
   "description": "WhatsApp Bot with @itsreimau/ckptw-mod.",
   "main": "index.js",
   "directories": {
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
   "dependencies": {
-    "@itsreimau/ckptw-mod": "^2.0.0",
+    "@itsreimau/ckptw-mod": "^2.0.1",
     "@mengkodingan/consolefy": "^1.0.1",
     "@zanixongroup/uploader": "^2.0.7",
     "axios": "^1.10.0",
