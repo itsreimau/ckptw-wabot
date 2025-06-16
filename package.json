@@ -29,10 +29,10 @@
   },
   "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
   "dependencies": {
-    "@itsreimau/ckptw-mod": "^2.0.0-alpha.1",
+    "@itsreimau/ckptw-mod": "^2.0.0",
     "@mengkodingan/consolefy": "^1.0.1",
     "@zanixongroup/uploader": "^2.0.7",
-    "axios": "^1.9.0",
+    "axios": "^1.10.0",
     "cfonts": "^3.3.0",
     "didyoumean": "^1.2.2",
     "jimp": "0.16.1",
