@@ -17,7 +17,7 @@ module.exports = {
 
         try {
             const listCecan = ["china", "indonesia", "japan", "vietnam", "korea", "malaysia", "thailand"];
-            const cecan = (input && listCecan.includes(input)) ? input : tools.cmd.getRandomElement(listCecan);
+            const cecan = listCecan.includes(input) ? input : tools.cmd.getRandomElement(listCecan);
             const apiUrl = tools.api.createUrl("agatz", `/api/${cecan}`);
             const result = (await axios.get(apiUrl)).data.data.url;
 

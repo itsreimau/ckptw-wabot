@@ -16,7 +16,7 @@ module.exports = {
 
         try {
             const listWaifuim = ["ass", "ecchi", "ero", "hentai", "maid", "milf", "oppai", "oral", "paizuri", "selfies", "uniform", "waifu"];
-            const waifuim = (input && listWaifuim.includes(input)) ? input : tools.cmd.getRandomElement(listWaifuim);
+            const waifuim = listWaifuim.includes(input) ? input : tools.cmd.getRandomElement(listWaifuim);
             const result = tools.api.createUrl("nekorinn", `/waifuim/${waifuim}`);
 
             return await ctx.reply({
