@@ -89,7 +89,7 @@ module.exports = (bot) => {
             },
             {
                 key: "requireBotGroupMembership",
-                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium && !((await ctx.group(config.bot.groupJid)).members()).some(member => await ctx.getId(member.id) === senderId),
+                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium && !((await ctx.group(config.bot.groupJid)).members()).some(member => (await ctx.getId(member.id)) === senderId),
                 msg: config.msg.botGroupMembership,
                 reaction: "🚫"
             },
