@@ -8,7 +8,7 @@ module.exports = {
     category: "profile",
     code: async (ctx) => {
         try {
-            const senderId = await ctx.getId(ctx.sender.jid);
+            const senderId = ctx.getId(ctx.sender.jid);
             const users = (await db.toJSON()).user;
 
             const leaderboardData = Object.entries(users)

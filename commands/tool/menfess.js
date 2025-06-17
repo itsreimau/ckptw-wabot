@@ -16,7 +16,7 @@ module.exports = {
         const targetId = id ? id.replace(/[^\d]/g, "") : null;
         const menfessText = text ? text.join(" ") : null;
 
-        const senderId = await ctx.getId(ctx.sender.jid);
+        const senderId = ctx.getId(ctx.sender.jid);
 
         if (!targetId && !menfessText) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +

@@ -19,7 +19,7 @@ module.exports = {
         );
 
         try {
-            const groupId = await ctx.getId(ctx.id);
+            const groupId = ctx.getId(ctx.id);
             await db.set(`group.${groupId}.maxwarnings`, input);
 
             return await ctx.reply(quote(`✅ Berhasil mengubah max warnings!`));

@@ -15,7 +15,7 @@ module.exports = {
         try {
             const members = await ctx.group().members();
             const mentions = members.map(m => {
-                const serialized = await ctx.getId(m.id);
+                const serialized = ctx.getId(m.id);
                 return {
                     tag: `@${serialized}`,
                     mention: m.id

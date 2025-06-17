@@ -65,7 +65,7 @@ async function handleWelcome(bot, m, type) {
 
 // Fungsi untuk menambahkan warning
 async function addWarning(ctx, groupDb, senderJid, groupId) {
-    const senderId = await ctx.getId(senderJid);
+    const senderId = ctx.getId(senderJid);
 
     const warnings = groupDb?.warnings || {};
     const current = warnings[senderId] || 0;
@@ -124,9 +124,9 @@ module.exports = (bot) => {
         const isGroup = ctx.isGroup();
         const isPrivate = !isGroup;
         const senderJid = ctx.sender.jid;
-        const senderId = await ctx.getId(senderJid);
+        const senderId = ctx.getId(senderJid);
         const groupJid = isGroup ? ctx.id : null;
-        const groupId = isGroup ? await ctx.getId(groupJid) : null;
+        const groupId = isGroup ? ctx.getId(groupJid) : null;
         const isOwner = tools.cmd.isOwner(senderId, m.key.id);
         const isCmd = tools.cmd.isCmd(m.content, ctx.bot);
 
@@ -175,7 +175,7 @@ module.exports = (bot) => {
             if (m.key.fromMe) return;
 
             // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
-            const userMentions = ctx.quoted.senderJid ? [await ctx.getId(ctx.quoted.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map(async (jid) => await ctx.getId(jid)) || [];
+            const userMentions = ctx.quoted.senderJid ? [ctx.getId(ctx.quoted.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map((jid) => ctx.getId(jid)) || [];
             if (userMentions.length > 0) {
                 for (const userMention of userMentions) {
                     const userMentionAfk = await db.get(`user.${userMention}.afk`) || {};

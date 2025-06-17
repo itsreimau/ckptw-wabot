@@ -13,11 +13,11 @@ module.exports = {
     },
     code: async (ctx) => {
         const accountJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
-        const accountId = await ctx.getId(accountJid);
+        const accountId = ctx.getId(accountJid);
 
         if (!accountJid) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.msg.generateCmdExample(ctx.used, `@${await ctx.getId(ctx.sender.jid)}`))}\n` +
+                `${quote(tools.msg.generateCmdExample(ctx.used, `@${ctx.getId(ctx.sender.jid)}`))}\n` +
                 quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
             mentions: [ctx.sender.jid]
         });
@@ -27,7 +27,7 @@ module.exports = {
         if (accountJid === await ctx.group().owner()) return await ctx.reply(quote("❎ Tidak bisa mengubah warning admin grup!"));
 
         try {
-            const groupId = await ctx.getId(ctx.id);
+            const groupId = ctx.getId(ctx.id);
             const warnings = await db.get(`group.${groupId}.warnings`) || {};
             const current = warnings[accountId] || 0;
 

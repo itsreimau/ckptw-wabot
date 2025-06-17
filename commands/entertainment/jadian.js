@@ -24,7 +24,7 @@ module.exports = {
             const word = tools.cmd.getRandomElement((await axios.get(tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/master/kata-kata/bucin.json"))).data);
 
             return await ctx.reply({
-                text: `${quote(`@${await ctx.getId(selected[0])} ❤️ @${await ctx.getId(selected[1])}`)}\n` +
+                text: `${quote(`@${ctx.getId(selected[0])} ❤️ @${ctx.getId(selected[1])}`)}\n` +
                     `${quote(word)}\n` +
                     "\n" +
                     config.msg.footer,
