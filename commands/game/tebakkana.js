@@ -47,7 +47,7 @@ module.exports = {
             }
 
             const game = {
-                coin: 5,
+                coin: 10,
                 timeout: 60000,
                 answer: result.jawaban.toLowerCase(),
                 description: await tools.cmd.translate(result.meaning, "id")

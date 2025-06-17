@@ -19,7 +19,7 @@ module.exports = {
             const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data);
 
             const game = {
-                coin: 5,
+                coin: 10,
                 timeout: 60000,
                 answer: result.jawaban.toLowerCase()
             };
