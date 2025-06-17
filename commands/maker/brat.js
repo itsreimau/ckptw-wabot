@@ -25,7 +25,7 @@ module.exports = {
         if (input.length > 1000) return await ctx.reply(quote("❎ Maksimal 1000 kata!"));
 
         try {
-            const result = tools.api.createUrl("nekorinn", "/maker/brat-v2", {
+            const result = tools.api.createUrl("falcon", "/imagecreator/brat", {
                 text: input
             });
             const sticker = new Sticker(result, {

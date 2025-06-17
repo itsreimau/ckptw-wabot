@@ -11,7 +11,7 @@ const fs = require("node:fs");
 // Fungsi untuk menangani event pengguna bergabung/keluar grup
 async function handleWelcome(bot, m, type) {
     const groupJid = m.id;
-    const groupId = bot.getId(m.id);
+    const groupId = await bot.getId(m.id);
     const groupDb = await db.get(`group.${groupId}`) || {};
 
     if (groupDb?.mutebot) return;
@@ -19,7 +19,7 @@ async function handleWelcome(bot, m, type) {
 
     for (const jid of m.participants) {
         const isWelcome = type === Events.UserJoin;
-        const userTag = `@${bot.getId(jid)}`;
+        const userTag = `@${await bot.getId(jid)}`;
         const customText = isWelcome ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
         const metadata = await bot.core.groupMetadata(groupJid);
         const text = customText ?
@@ -65,7 +65,7 @@ async function handleWelcome(bot, m, type) {
 
 // Fungsi untuk menambahkan warning
 async function addWarning(ctx, groupDb, senderJid, groupId) {
-    const senderId = ctx.getId(senderJid);
+    const senderId = await ctx.getId(senderJid);
 
     const warnings = groupDb?.warnings || {};
     const current = warnings[senderId] || 0;
@@ -108,7 +108,7 @@ module.exports = (bot) => {
         }
 
         // Tetapkan config pada bot
-        const id = bot.getId(m.user.id);
+        const id = await bot.getId(m.user.id);
         config.bot = {
             ...config.bot,
             id,
@@ -124,9 +124,9 @@ module.exports = (bot) => {
         const isGroup = ctx.isGroup();
         const isPrivate = !isGroup;
         const senderJid = ctx.sender.jid;
-        const senderId = ctx.getId(senderJid);
+        const senderId = await ctx.getId(senderJid);
         const groupJid = isGroup ? ctx.id : null;
-        const groupId = isGroup ? ctx.getId(groupJid) : null;
+        const groupId = isGroup ? await ctx.getId(groupJid) : null;
         const isOwner = tools.cmd.isOwner(senderId, m.key.id);
         const isCmd = tools.cmd.isCmd(m.content, ctx.bot);
 
@@ -152,7 +152,7 @@ module.exports = (bot) => {
 
             // Penanganan database pengguna
             if (isOwner || userDb?.premium) db.set(`user.${senderId}.coin`, 0);
-            if (userDb?.coin === undefined || !Number.isFinite(userDb.coin)) db.set(`user.${senderId}.coin`, 100);
+            if (userDb?.coin === undefined || !Number.isFinite(userDb.coin)) db.set(`user.${senderId}.coin`, 500);
             if (!userDb?.uid || userDb?.uid !== tools.cmd.generateUID(senderId, true)) db.set(`user.${senderId}.uid`, tools.cmd.generateUID(senderId, false));
             if (!userDb?.username) db.set(`user.${senderId}.username`, `@user_${tools.cmd.generateUID(senderId, false)}`);
 
@@ -175,7 +175,7 @@ module.exports = (bot) => {
             if (m.key.fromMe) return;
 
             // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
-            const userMentions = ctx.quoted.senderJid ? [ctx.getId(ctx.quoted.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map(jid => ctx.getId(jid)) || [];
+            const userMentions = ctx.quoted.senderJid ? [await ctx.getId(ctx.quoted.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map(jid => await ctx.getId(jid)) || [];
             if (userMentions.length > 0) {
                 for (const userMention of userMentions) {
                     const userMentionAfk = await db.get(`user.${userMention}.afk`) || {};

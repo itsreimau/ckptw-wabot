@@ -10,7 +10,7 @@ module.exports = {
     name: /^\$ /,
     type: "hears",
     code: async (ctx) => {
-        const isOwner = tools.cmd.isOwner(ctx.getId(ctx.sender.jid), ctx.msg.key.id);
+        const isOwner = tools.cmd.isOwner(await ctx.getId(ctx.sender.jid), ctx.msg.key.id);
         if (!isOwner) return;
 
         try {

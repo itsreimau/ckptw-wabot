@@ -16,7 +16,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, ctx.getId(ctx.sender.jid)))
+            quote(tools.msg.generateCmdExample(ctx.used, await ctx.getId(ctx.sender.jid)))
         );
 
         const accountJid = `${input.replace(/[^\d]/g, "")}@s.whatsapp.net`;

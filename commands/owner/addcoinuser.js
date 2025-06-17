@@ -16,7 +16,7 @@ module.exports = {
 
         if (!userJid && !coinAmount) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.msg.generateCmdExample(ctx.used, `@${ctx.getId(ctx.sender.jid)} 8`))}\n` +
+                `${quote(tools.msg.generateCmdExample(ctx.used, `@${await ctx.getId(ctx.sender.jid)} 8`))}\n` +
                 quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
             mentions: [ctx.sender.jid]
         });
@@ -25,7 +25,7 @@ module.exports = {
         if (isOnWhatsApp.length === 0) return await ctx.reply(quote("❎ Akun tidak ada di WhatsApp!"));
 
         try {
-            await db.add(`user.${ctx.getId(userJid)}.coin`, coinAmount);
+            await db.add(`user.${await ctx.getId(userJid)}.coin`, coinAmount);
 
             await ctx.sendMessage(userJid, {
                 text: quote(`🎉 Kamu telah menerima ${coinAmount} koin dari Owner!`)

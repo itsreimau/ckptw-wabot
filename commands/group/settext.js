@@ -28,7 +28,7 @@ module.exports = {
         }
 
         try {
-            const groupId = ctx.getId(ctx.id);
+            const groupId = await ctx.getId(ctx.id);
             let setKey;
 
             switch (key.toLowerCase()) {

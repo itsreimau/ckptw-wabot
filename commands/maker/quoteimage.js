@@ -23,7 +23,7 @@ module.exports = {
 
         try {
             const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-            const userName = await db.get(`user.${ctx.getId(ctx.sender.jid)}.username`) || "@guest";
+            const userName = await db.get(`user.${await ctx.getId(ctx.sender.jid)}.username`) || "@guest";
             const result = tools.api.createUrl("paxsenix", "/maker/fakequote", {
                 text: input,
                 url: profilePictureUrl,

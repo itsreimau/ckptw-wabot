@@ -13,10 +13,10 @@ module.exports = {
     },
     code: async (ctx) => {
         const accountJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
-        const accountId = ctx.getId(accountJid);
+        const accountId = await ctx.getId(accountJid);
 
         const senderJid = ctx.sender.jid;
-        const senderId = ctx.getId(senderJid);
+        const senderId = await ctx.getId(senderJid);
 
         if (!accountJid) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
@@ -30,7 +30,7 @@ module.exports = {
         if (accountJid === await ctx.group().owner()) return await ctx.reply(quote("❎ Tidak bisa memberikan warning ke admin grup!"));
 
         try {
-            const groupId = ctx.getId(ctx.id);
+            const groupId = await ctx.getId(ctx.id);
             const groupDb = await db.get(`group.${groupId}`) || {};
             const warnings = groupDb?.warnings || {};
             const current = warnings[accountId] || 0;

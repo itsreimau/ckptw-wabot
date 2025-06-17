@@ -23,16 +23,16 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.cmd.upload(buffer, "image");
-            const apiUrl = tools.api.createUrl("zell", "/tools/hd2", {
+            const apiUrl = tools.api.createUrl("falcon", "/imagecreator/remini", {
                 url: uploadUrl
             });
-            const result = (await axios.get(apiUrl)).data.result.upscaled;
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("jpeg")
+                mimetype: mime.lookup("png")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

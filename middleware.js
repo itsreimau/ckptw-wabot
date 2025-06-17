@@ -20,9 +20,9 @@ module.exports = (bot) => {
         const isGroup = ctx.isGroup();
         const isPrivate = !isGroup;
         const senderJid = ctx.sender.jid;
-        const senderId = ctx.getId(senderJid);
+        const senderId = await ctx.getId(senderJid);
         const groupJid = isGroup ? ctx.id : null;
-        const groupId = isGroup ? ctx.getId(groupJid) : null;
+        const groupId = isGroup ? await ctx.getId(groupJid) : null;
         const isOwner = tools.cmd.isOwner(senderId, ctx.msg.key.id);
 
         // Mengambil data bot, pengguna, dan grup dari database
@@ -89,7 +89,7 @@ module.exports = (bot) => {
             },
             {
                 key: "requireBotGroupMembership",
-                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium && !(await ctx.group(config.bot.groupJid).members()).some(member => ctx.getId(member.id) === senderId),
+                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium && !(await ctx.group(config.bot.groupJid).members()).some(member => await ctx.getId(member.id) === senderId),
                 msg: config.msg.botGroupMembership,
                 reaction: "🚫"
             },

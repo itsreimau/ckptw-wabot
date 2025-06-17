@@ -7,7 +7,7 @@ module.exports = {
     aliases: ["koin"],
     category: "profile",
     code: async (ctx) => {
-        const senderId = ctx.getId(ctx.sender.jid);
+        const senderId = await ctx.getId(ctx.sender.jid);
         const userDb = await db.get(`user.${senderId}`) || {};
 
         if (tools.cmd.isOwner(senderId, ctx.msg.key.id) || userDb?.premium) return await ctx.reply(quote("🤑 Kamu memiliki koin tak terbatas."));

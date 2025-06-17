@@ -22,11 +22,10 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.cmd.upload(buffer, "image");
-            const apiUrl = tools.api.createUrl("https://api.ocr.space", "/parse/imageurl", {
-                apikey: "helloworld",
+            const apiUrl = tools.api.createUrl("falcon", "tools/ocr", {
                 url: uploadUrl
             });
-            const result = (await axios.get(apiUrl)).data.ParsedResults[0].ParsedText;
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply(result);
         } catch (error) {

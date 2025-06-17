@@ -122,7 +122,7 @@ async function handleError(ctx, error, useAxios) {
     consolefy.error(`Error: ${errorText}`);
     if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
     if (config.system.reportErrorToOwner) await ctx.replyWithJid(`${config.owner.id}@s.whatsapp.net`, {
-        text: `${quote(isGroup ? `⚠️ Terjadi kesalahan dari grup: @${groupJid}, oleh: @${ctx.getId(ctx.sender.jid)}` : `⚠️ Terjadi kesalahan dari: @${ctx.getId(ctx.sender.jid)}`)}\n` +
+        text: `${quote(isGroup ? `⚠️ Terjadi kesalahan dari grup: @${groupJid}, oleh: @${await ctx.getId(ctx.sender.jid)}` : `⚠️ Terjadi kesalahan dari: @${await ctx.getId(ctx.sender.jid)}`)}\n` +
             `${quote("─────")}\n` +
             monospace(errorText),
         contextInfo: {

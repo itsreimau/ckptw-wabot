@@ -12,7 +12,7 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        const groupId = ctx.getId(ctx.id);
+        const groupId = await ctx.getId(ctx.id);
 
         if (["b", "bot"].includes(ctx.args[0]?.toLowerCase())) {
             await db.set(`group.${groupId}.mutebot`, false);
@@ -20,11 +20,11 @@ module.exports = {
         }
 
         const accountJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
-        const accountId = ctx.getId(accountJid);
+        const accountId = await ctx.getId(accountJid);
 
         if (!accountJid) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.msg.generateCmdExample(ctx.used, `@${ctx.getId(ctx.sender.jid)}`))}\n` +
+                `${quote(tools.msg.generateCmdExample(ctx.used, `@${await ctx.getId(ctx.sender.jid)}`))}\n` +
                 quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target.", `Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} bot`)} untuk me-unmute bot.`])),
             mentions: [ctx.sender.jid]
         });

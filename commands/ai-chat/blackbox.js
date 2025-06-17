@@ -26,7 +26,7 @@ module.exports = {
         ]);
 
         try {
-            const senderUid = await db.get(`user.${ctx.getId(ctx.sender.jid)}.uid`) || "guest";
+            const senderUid = await db.get(`user.${await ctx.getId(ctx.sender.jid)}.uid`) || "guest";
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
                 const uploadUrl = await tools.cmd.upload(buffer, "image");

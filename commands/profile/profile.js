@@ -10,7 +10,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const senderJid = ctx.sender.jid;
-            const senderId = ctx.getId(senderJid);
+            const senderId = await ctx.getId(senderJid);
 
             const leaderboardData = Object.entries((await db.toJSON()).user)
                 .map(([id, data]) => ({
