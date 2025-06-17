@@ -175,7 +175,7 @@ module.exports = (bot) => {
             if (m.key.fromMe) return;
 
             // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
-            const userMentions = ctx.quoted.senderJid ? [await ctx.getId(ctx.quoted.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map(jid => await ctx.getId(jid)) || [];
+            const userMentions = ctx.quoted.senderJid ? [await ctx.getId(ctx.quoted.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map(async (jid) => await ctx.getId(jid)) || [];
             if (userMentions.length > 0) {
                 for (const userMention of userMentions) {
                     const userMentionAfk = await db.get(`user.${userMention}.afk`) || {};
