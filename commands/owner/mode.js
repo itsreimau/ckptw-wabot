@@ -38,7 +38,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Berhasil mengubah mode ke ${input}!`));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

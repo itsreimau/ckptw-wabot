@@ -16,7 +16,7 @@ module.exports = {
 
             return await ctx.reply(quote(`📴 Kamu akan AFK, ${input ? `dengan alasan "${input}"` : "tanpa alasan apapun"}.`));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

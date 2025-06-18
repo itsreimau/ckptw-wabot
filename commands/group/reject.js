@@ -31,7 +31,7 @@ module.exports = {
 
                 return await ctx.reply(quote(`✅ Berhasil menolak semua anggota (${allJids.length}).`));
             } catch (error) {
-                return await tools.cmd.handleError(ctx, error, false);
+                return await tools.cmd.handleError(ctx, error);
             }
         }
 
@@ -45,7 +45,7 @@ module.exports = {
 
             return await ctx.reply(quote("✅ Berhasil ditolak!"));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

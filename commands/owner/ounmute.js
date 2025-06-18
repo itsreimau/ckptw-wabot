@@ -41,7 +41,7 @@ module.exports = {
 
             return await ctx.reply(quote("✅ Berhasil me-unmute pengguna dari grup ini!"));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

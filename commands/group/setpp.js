@@ -27,7 +27,7 @@ module.exports = {
 
             return await ctx.reply(quote("✅ Berhasil mengubah gambar profil grup!"));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

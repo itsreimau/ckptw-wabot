@@ -12,7 +12,7 @@ module.exports = {
             const responseTime = (performance.now() - startTime).toFixed(2);
             return await ctx.editMessage(pongMsg.key, quote(`🏓 Pong! Merespon dalam ${responseTime}ms.`));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

@@ -23,7 +23,7 @@ module.exports = {
 
             return await ctx.reply(quote("✅ Berhasil mengubah deskripsi grup!"));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

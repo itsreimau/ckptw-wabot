@@ -25,7 +25,7 @@ module.exports = {
 
             return await ctx.reply(quote(`${duration} lagi...`));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

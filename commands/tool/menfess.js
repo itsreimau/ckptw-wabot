@@ -54,7 +54,7 @@ module.exports = {
 
             return await ctx.reply(quote(`✅ Pesan berhasil terkirim! Jika ingin berhenti, cukup ketik ${monospace("delete")} atau ${monospace("stop")}.`));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

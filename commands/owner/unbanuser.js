@@ -30,7 +30,7 @@ module.exports = {
             });
             await ctx.reply(quote("✅ Berhasil diunbanned!"));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

@@ -30,7 +30,7 @@ module.exports = {
 
             return await ctx.reply(quote("✅ Berhasil bergabung dengan grup!"));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

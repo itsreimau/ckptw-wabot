@@ -82,7 +82,7 @@ module.exports = {
             const statusText = newStatus ? "diaktifkan" : "dinonaktifkan";
             return await ctx.reply(quote(`✅ Opsi '${input}' berhasil ${statusText}!`));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

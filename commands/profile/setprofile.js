@@ -56,7 +56,7 @@ module.exports = {
                     return await ctx.reply(quote("❎ Teks tidak valid."));
             }
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

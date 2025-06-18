@@ -16,7 +16,7 @@ module.exports = {
 
             return await ctx.reply(introText);
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

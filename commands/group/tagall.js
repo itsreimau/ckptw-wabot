@@ -30,7 +30,7 @@ module.exports = {
                 mentions: mentions.map(m => m.mention)
             });
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

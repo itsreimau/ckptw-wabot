@@ -113,7 +113,7 @@ function getRandomElement(arr) {
     return arr[randomIndex];
 }
 
-async function handleError(ctx, error, useAxios) {
+async function handleError(ctx, error, useAxios === false) {
     const isGroup = ctx.isGroup();
     const groupJid = isGroup ? ctx.id : null;
     const groupSubject = isGroup ? await ctx.group(groupJid).name() : null;

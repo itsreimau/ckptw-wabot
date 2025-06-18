@@ -30,7 +30,7 @@ module.exports = {
             });
             return await ctx.reply(quote("✅ Berhasil ditambahkan sebagai pengguna Premium!"));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

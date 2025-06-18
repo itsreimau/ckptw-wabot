@@ -146,7 +146,7 @@ module.exports = {
 
             return await ctx.editMessage(waitMsg.key, quote(`✅ Database berhasil dibersihkan untuk ${input}!`));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

@@ -32,7 +32,7 @@ module.exports = {
 
             return await ctx.reply(await sticker.toMessage());
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

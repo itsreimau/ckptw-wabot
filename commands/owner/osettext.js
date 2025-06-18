@@ -45,7 +45,7 @@ module.exports = {
             await db.set(setKey, text);
             return await ctx.reply(quote(`✅ Pesan untuk teks '${key}' berhasil disimpan!`));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

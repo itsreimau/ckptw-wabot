@@ -43,7 +43,7 @@ module.exports = {
                 mentions: [`${senderId}@s.whatsapp.net`]
             });
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };
