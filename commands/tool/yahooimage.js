@@ -6,7 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "yahooimage",
-    aliases: ["gimage"],
+    aliases: ["yimage"],
     category: "tool",
     permissions: {
         coin: 10

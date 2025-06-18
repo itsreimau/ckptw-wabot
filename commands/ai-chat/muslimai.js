@@ -4,8 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "islam",
-    aliases: ["islamai"],
+    name: "muslimai",
     category: "ai-chat",
     code: async (ctx) => {
         const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
@@ -17,10 +16,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("bk9", "/ai/islam-ai", {
+            const apiUrl = tools.api.createUrl("nekorinnn", "/ai/muslimai", {
                 text: input
             });
-            const result = (await axios.get(apiUrl)).data.BK9;
+            const result = (await axios.get(apiUrl)).data.result.answer;
 
             return await ctx.reply(result);
         } catch (error) {

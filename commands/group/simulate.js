@@ -32,11 +32,11 @@ module.exports = {
             switch (input.toLowerCase()) {
                 case "j":
                 case "join":
-                    return await handleWelcome(ctx, m, Events.UserJoin);
+                    return await handleWelcome(ctx, m, Events.UserJoin, true);
                     break;
                 case "l":
                 case "leave":
-                    return await handleWelcome(ctx, m, Events.UserLeave);
+                    return await handleWelcome(ctx, m, Events.UserLeave, true);
                     break;
                 default:
                     return await ctx.reply(quote(`❎ Simulasi '${input}' tidak valid!`));

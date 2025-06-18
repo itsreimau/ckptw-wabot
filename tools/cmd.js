@@ -90,7 +90,7 @@ function fakeMetaAiQuotedText(text) {
     return quoted;
 }
 
-function generateUID(id, withBotName) {
+function generateUID(id, withBotName = true) {
     if (!id) return null;
 
     let hash = 0;

@@ -5,6 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "powerbrain",
+    aliases: ["pbrain", "powerb"]
     category: "ai-chat",
     permissions: {
         coin: 10

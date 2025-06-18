@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: "js",
-    aliases: ["javascript"],
+    aliases: ["javainput"],
     category: "tool",
     permissions: {
         coin: 10
@@ -16,7 +16,7 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 
-        if (!script) return await ctx.reply(
+        if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
             quote(tools.msg.generateCmdExample(ctx.used, 'console.log("halo, dunia!");'))
         );
@@ -24,11 +24,11 @@ module.exports = {
         try {
             const restricted = ["require", "eval", "Function", "global"];
             for (const w of restricted) {
-                if (script.includes(w)) return await ctx.reply(quote(`❎ Penggunaan ${w} tidak diperbolehkan dalam kode!`));
+                if (input.includes(w)) return await ctx.reply(quote(`❎ Penggunaan ${w} tidak diperbolehkan dalam kode!`));
             }
 
             const output = await new Promise(resolve => {
-                const childProcess = spawn("node", ["-e", script]);
+                const childProcess = spawn("node", ["-e", input]);
 
                 let outputData = "";
                 let errorData = "";

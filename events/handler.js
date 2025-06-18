@@ -9,17 +9,17 @@ const axios = require("axios");
 const fs = require("node:fs");
 
 // Fungsi untuk menangani event pengguna bergabung/keluar grup
-async function handleWelcome(bot, m, type) {
+async function handleWelcome(bot, m, type, isSimulate = false) {
     const groupJid = m.id;
-    const groupId = await bot.getId(m.id);
+    const groupId = bot.getId(m.id);
     const groupDb = await db.get(`group.${groupId}`) || {};
 
-    if (groupDb?.mutebot) return;
-    if (!groupDb?.option?.welcome) return;
+    if (!isSimulate && groupDb?.mutebot) return;
+    if (!isSimulate && !groupDb?.option?.welcome) return;
 
     for (const jid of m.participants) {
         const isWelcome = type === Events.UserJoin;
-        const userTag = `@${await bot.getId(jid)}`;
+        const userTag = `@${bot.getId(jid)}`;
         const customText = isWelcome ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
         const metadata = await bot.core.groupMetadata(groupJid);
         const text = customText ?
@@ -108,7 +108,7 @@ module.exports = (bot) => {
         }
 
         // Tetapkan config pada bot
-        const id = await bot.getId(m.user.id);
+        const id = bot.getId(m.user.id);
         config.bot = {
             ...config.bot,
             id,
@@ -153,7 +153,7 @@ module.exports = (bot) => {
             // Penanganan database pengguna
             if (isOwner || userDb?.premium) db.set(`user.${senderId}.coin`, 0);
             if (userDb?.coin === undefined || !Number.isFinite(userDb.coin)) db.set(`user.${senderId}.coin`, 500);
-            if (!userDb?.uid || userDb?.uid !== tools.cmd.generateUID(senderId, true)) db.set(`user.${senderId}.uid`, tools.cmd.generateUID(senderId, false));
+            if (!userDb?.uid || userDb?.uid !== tools.cmd.generateUID(senderId)) db.set(`user.${senderId}.uid`, tools.cmd.generateUID(senderId));
             if (!userDb?.username) db.set(`user.${senderId}.username`, `@user_${tools.cmd.generateUID(senderId, false)}`);
 
             if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Kamu salah ketik, sepertinya ${monospace(isCmd.prefix + isCmd.didyoumean)}.`)); // Did you mean?
