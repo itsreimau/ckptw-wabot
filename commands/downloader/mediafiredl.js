@@ -23,17 +23,17 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/mediafire", {
+            const apiUrl = tools.api.createUrl("archive", "/api/download/mediafire", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.data[0];
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
                 document: {
-                    url: result.link
+                    url: result.download_link
                 },
-                fileName: data.nama,
-                mimetype: mime.lookup(data.mime) || "application/octet-stream",
+                fileName: data.title,
+                mimetype: mime.lookup(data.mime_type) || "application/octet-stream",
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer

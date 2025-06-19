@@ -2,7 +2,6 @@ const {
     quote
 } = require("@itsreimau/ckptw-mod");
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "googledrivedl",
@@ -23,17 +22,17 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/drivedl", {
+            const apiUrl = tools.api.createUrl("bk9", "/download/gdrive", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.BK9;
 
             return await ctx.reply({
                 document: {
-                    url: result.download
+                    url: result.downloadUrl
                 },
-                fileName: result.name,
-                mimetype: mime.lookup(result.name) || "application/octet-stream",
+                fileName: result.fileName,
+                mimetype: result.mimetype || "application/octet-stream",
                 caption: `${quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer

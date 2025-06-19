@@ -19,26 +19,16 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/ytsearch", {
-                message: input
+            const apiUrl = tools.api.createUrl("archive", "/api/search/youtube", {
+                query: input
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.result;
 
-            const resultText = result.map(r => {
-                switch (r.type) {
-                    case "video":
-                        return `${quote(`Judul: ${r.title}`)}\n` +
-                            `${quote(`Durasi: ${r.timestamp}`)}\n` +
-                            `${quote(`Diunggah: ${r.ago}`)}\n` +
-                            `${quote(`Ditonton: ${r.views}`)}\n` +
-                            `${quote(`URL: ${r.url}`)}`;
-                    case "channel":
-                        return `${quote(`Saluran: ${r.title}`)}\n` +
-                            `${quote(`Subscriber: ${r.subCountLabel} (${r.subCount})`)}\n` +
-                            `${quote(`Jumlah video: ${r.videoCount}`)}\n` +
-                            `${quote(`URL: ${r.url}`)}`;
-                }
-            }).filter(r => r).join(
+            const resultText = result.map(r =>
+                `${quote(`Judul: ${r.title}`)}\n` +
+                `${quote(`Kanal: ${r.channel}`)}\n` +
+                `${quote(`URL: ${r.link}`)}`
+            ).join(
                 "\n" +
                 `${quote("─────")}\n`
             );

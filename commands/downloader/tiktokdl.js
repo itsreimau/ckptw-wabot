@@ -12,71 +12,41 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || null;
+        const url = ctx.args[0] || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "https://www.tiktok.com/@japanese_songs2/video/7472130814805822726 -a -hd"))}\n` +
-            quote(tools.msg.generatesFlagInfo({
-                "-a": "Kirim audio",
-                "-hd": "Pilih resolusi HD"
-            }))
+            quote(tools.msg.generateCmdExample(ctx.used, "https://www.tiktok.com/@japanese_songs2/video/7472130814805822726"))
         );
-
-        const flag = tools.cmd.parseFlag(input, {
-            "-a": {
-                type: "boolean",
-                key: "audio"
-            },
-            "-hd": {
-                type: "boolean",
-                key: "hd"
-            }
-        });
-
-        const url = flag.input || null;
 
         const isUrl = await tools.cmd.isUrl(url);
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const mediaType = flag.audio ? "audio" : "video_image";
-
-            const apiUrl = tools.api.createUrl("agatz", "/api/tiktok", {
+            const apiUrl = tools.api.createUrl("archive", "/api/download/tiktok", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.result.media;
 
-            if (result.music_info && mediaType === "audio") return await ctx.reply({
-                audio: {
-                    url: result.music_info.url
+            const video = result.play;
+            if (video) return await ctx.reply({
+                video: {
+                    url: video
                 },
-                mimetype: mime.lookup("mp3")
+                mimetype: mime.lookup("mp4"),
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    config.msg.footer
             });
 
-            if (result.data && mediaType === "video_image") {
-                const videoType = flag.hd ? "nowatermark_hd" : "nowatermark";
-                const video = result.data.find(v => v.type === videoType);
-
-                if (video) return await ctx.reply({
-                    video: {
-                        url: video.url
+            const images = result.image_slide;
+            for (const image of images) {
+                await ctx.reply({
+                    image: {
+                        url: image
                     },
-                    mimetype: mime.lookup("mp4"),
-                    caption: `${quote(`URL: ${url}`)}\n` +
-                        "\n" +
-                        config.msg.footer
+                    mimetype: mime.lookup("jpeg")
                 });
-
-                const images = result.data.filter(item => item.type === "photo");
-                for (const image of images) {
-                    await ctx.reply({
-                        image: {
-                            url: image.url
-                        },
-                        mimetype: mime.lookup("jpeg")
-                    });
-                }
             }
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

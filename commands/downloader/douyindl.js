@@ -23,14 +23,14 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/douyin", {
+            const apiUrl = tools.api.createUrl("archive", "/api/download/douyin", {
                 url
             });
-            const result = JSON.parse((await axios.get(apiUrl)).data.data);
+            const result = (await axios.get(apiUrl)).data.result.media;
 
             return await ctx.reply({
                 video: {
-                    url: result.Video_HD || result.Video
+                    url: result.mp4_hd || result.mp4_2 || result.mp4_1
                 },
                 mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +

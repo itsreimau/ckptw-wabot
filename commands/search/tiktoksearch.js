@@ -20,10 +20,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/tiktoksearch", {
-                message: input
+            const apiUrl = tools.api.createUrl("archive", "/api/search/tiktok", {
+                query: input
             });
-            const result = (await axios.get(apiUrl)).data.data.no_watermark;
+            const result = (await axios.get(apiUrl)).data.result.no_watermark;
 
             return await ctx.reply({
                 video: {

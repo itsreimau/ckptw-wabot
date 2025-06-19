@@ -19,10 +19,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/playstore", {
-                message: input
+            const apiUrl = tools.api.createUrl("skyzopedia", "/search/playstore", {
+                q: input
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map(r =>
                 `${quote(`Nama: ${r.nama}`)}\n` +

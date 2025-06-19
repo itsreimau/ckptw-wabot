@@ -1,4 +1,3 @@
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -16,10 +15,9 @@ module.exports = {
         }
 
         try {
-            const listCecan = ["china", "indonesia", "japan", "vietnam", "korea", "malaysia", "thailand"];
+            const listCecan = ["china", "indonesia", "japan", "korea", "thailand", "vietnam"];
             const cecan = listCecan.includes(input) ? input : tools.cmd.getRandomElement(listCecan);
-            const apiUrl = tools.api.createUrl("agatz", `/api/${cecan}`);
-            const result = (await axios.get(apiUrl)).data.data.url;
+            const result = tools.api.createUrl("siputz", `/api/r/cecan/${cecan}`);
 
             return await ctx.reply({
                 image: {

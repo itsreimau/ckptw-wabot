@@ -20,10 +20,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/simsimi", {
-                message: input
+            const apiUrl = tools.api.createUrl("nirkyy", "/api/v1/simsimi", {
+                msg: input
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.data.respon;
 
             return await ctx.reply(result);
         } catch (error) {

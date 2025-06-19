@@ -45,37 +45,36 @@ module.exports = {
             if (!["soundcloud", "spotify", "tidal", "youtube"].includes(source)) source = "youtube";
 
             if (source === "soundcloud") {
-                const searchApiUrl = tools.api.createUrl("agatz", "/api/soundcloud", {
-                    message: query
+                const searchApiUrl = tools.api.createUrl("archive", "/api/search/soundcloud", {
+                    query
                 });
-                const searchResult = (await axios.get(searchApiUrl)).data.data[searchIndex];
+                const searchResult = (await axios.get(searchApiUrl)).data.result[searchIndex];
 
                 await ctx.reply(
-                    `${quote(`Judul: ${searchResult.judul}`)}\n` +
-                    `${quote(`Artis: -`)}\n` +
-                    `${quote(`URL: ${searchResult.link}`)}\n` +
+                    `${quote(`Judul: ${searchResult.title}`)}\n` +
+                    `${quote(`URL: ${searchResult.url}`)}\n` +
                     "\n" +
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("agatz", "/api/soundclouddl", {
-                    url
+                const downloadApiUrl = tools.api.createUrl("falcon", "/download/soundcloud", {
+                    url: searchResult.url
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.data.download;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.result;
 
                 return await ctx.reply({
                     audio: {
-                        url: downloadResult
+                        url: downloadResult.audioBase || downloadResult.download
                     },
                     mimetype: mime.lookup("mp3")
                 });
             }
 
             if (source === "spotify") {
-                const searchApiUrl = tools.api.createUrl("agatz", "/api/spotify", {
-                    message: query
+                const searchApiUrl = tools.api.createUrl("archive", "/api/search/spotify", {
+                    query
                 });
-                const searchResult = (await axios.get(searchApiUrl)).data.data[searchIndex];
+                const searchResult = (await axios.get(searchApiUrl)).data.result[searchIndex];
 
                 await ctx.reply(
                     `${quote(`Judul: ${searchResult.trackName}`)}\n` +
@@ -99,21 +98,21 @@ module.exports = {
             }
 
             if (source === "youtube") {
-                const searchApiUrl = tools.api.createUrl("agatz", "/api/ytsearch", {
-                    message: query
+                const searchApiUrl = tools.api.createUrl("archive", "/api/search/youtube", {
+                    query
                 });
-                const searchResult = (await axios.get(searchApiUrl)).data.data[searchIndex];
+                const searchResult = (await axios.get(searchApiUrl)).data.result[searchIndex];
 
                 await ctx.reply(
                     `${quote(`Judul: ${searchResult.title}`)}\n` +
-                    `${quote(`Artis: ${searchResult.author.name}`)}\n` +
-                    `${quote(`URL: ${searchResult.url}`)}\n` +
+                    `${quote(`Artis: ${searchResult.channel}`)}\n` +
+                    `${quote(`URL: ${searchResult.link}`)}\n` +
                     "\n" +
                     config.msg.footer
                 );
 
                 const downloadApiUrl = tools.api.createUrl("archive", "/api/download/ytmp3", {
-                    url: searchResult.url
+                    url: searchResult.link
                 });
                 const downloadResult = (await axios.get(downloadApiUrl)).data.result.audio_url;
 

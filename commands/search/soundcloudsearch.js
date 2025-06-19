@@ -19,14 +19,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/soundcloud", {
-                message: input
+            const apiUrl = tools.api.createUrl("archive", "/api/search/soundcloud", {
+                query: input
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map(r =>
-                `${quote(`Judul: ${r.judul}`)}\n` +
-                `${quote(`URL: ${r.link}`)}`
+                `${quote(`Judul: ${r.title}`)}\n` +
+                `${quote(`URL: ${r.url}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

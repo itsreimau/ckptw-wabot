@@ -1,7 +1,7 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
-const mime = require("mime-types");
+const axios = require("axios");
 
 module.exports = {
     name: "cekkhodam",
@@ -14,21 +14,20 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "itsreimau"))
+            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.cmd.generateCommandExample(ctx.used, "itsreimau"))
         );
 
         try {
-            const result = tools.api.createUrl("nirkyy", "/api/v1/khodam", {
-                nama: input
-            });
+            const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/SazumiVicky/cek-khodam/main/khodam/list.txt", {});
+            const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.trim().split("\n").filter(Boolean));
 
-            return await ctx.reply({
-                image: {
-                    url: result
-                },
-                mimetype: mime.lookup("jpg")
-            });
+            return await ctx.reply(
+                `${quote(`Nama: ${input}`)}\n` +
+                `${quote(`Khodam: ${result}`)}\n` +
+                "\n" +
+                config.msg.footer
+            );
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

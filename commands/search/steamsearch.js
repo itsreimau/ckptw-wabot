@@ -19,13 +19,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("agatz", "/api/steams", {
-                message: input
+            const apiUrl = tools.api.createUrl("bk9", "/search/stream", {
+                q: input
             });
-            const result = (await axios.get(apiUrl)).data.data;
+            const result = (await axios.get(apiUrl)).data.BK9;
 
             const resultText = result.map(r =>
-                `${quote(`Nama: ${r.judul}`)}\n` +
+                `${quote(`Nama: ${r.title}`)}\n` +
                 `${quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +

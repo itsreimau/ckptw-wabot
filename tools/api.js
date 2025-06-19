@@ -2,9 +2,6 @@ const util = require("node:util");
 
 // Daftar API gratis
 const APIs = {
-    agatz: {
-        baseURL: "https://api.agatz.xyz"
-    },
     archive: {
         baseURL: "https://archive.lick.eu.org"
     },
@@ -27,11 +24,7 @@ const APIs = {
         baseURL: "https://nirkyy-dev.hf.space"
     },
     paxsenix: {
-        baseURL: "https://api.paxsenix.biz.id"
-    },
-    shizo: {
-        baseURL: "https://api.shizo.top",
-        APIKey: "shizo"
+        baseURL: "https://dev-paxsenix.koyeb.app"
     },
     siputzx: {
         baseURL: "https://api.siputzx.my.id"

@@ -1,3 +1,4 @@
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -15,16 +16,12 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("nirkyy", "/api/v1/artinama", {
+            const apiUrl = tools.api.createUrl("nekorinn", "/primbon/arti-nama", {
                 nama: input
             });
+            const result = (await axios.get(apiUrl)).data.result.arti;
 
-            return await ctx.reply({
-                image: {
-                    url: result
-                },
-                mimetype: mime.lookup("jpg")
-            });
+            return await ctx.reply(result);
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }
