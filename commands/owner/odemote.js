@@ -20,7 +20,7 @@ module.exports = {
             mentions: [ctx.sender.jid]
         });
 
-        if (!accountJid === await ctx.group().owner()) return await ctx.reply(quote("❎ Dia adalah anggota!"));
+        if (!await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote("❎ Dia adalah anggota!"));
 
         try {
             await ctx.group().demote([accountJid]);

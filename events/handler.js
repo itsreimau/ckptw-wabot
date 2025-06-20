@@ -155,11 +155,9 @@ module.exports = (bot) => {
             if (userDb?.coin === undefined || !Number.isFinite(userDb.coin)) db.set(`user.${senderId}.coin`, 500);
             if (!userDb?.uid || userDb?.uid !== tools.cmd.generateUID(senderId)) db.set(`user.${senderId}.uid`, tools.cmd.generateUID(senderId));
             if (!userDb?.username) db.set(`user.${senderId}.username`, `@user_${tools.cmd.generateUID(senderId, false)}`);
-            if (userDb?.premium && userDb?.premiumExpiration) {
-                if (Date.now() > userDb.premiumExpiration) {
-                    await db.delete(`user.${senderId}.premium`);
-                    await db.delete(`user.${senderId}.premiumExpiration`);
-                }
+            if (userDb?.premium && Date.now() > userDb.premiumExpiration) {
+                await db.delete(`user.${senderId}.premium`);
+                await db.delete(`user.${senderId}.premiumExpiration`);
             }
 
             if (isCmd?.didyoumean) await ctx.reply(quote(`❎ Kamu salah ketik, sepertinya ${monospace(isCmd.prefix + isCmd.didyoumean)}.`)); // Did you mean?
@@ -184,11 +182,9 @@ module.exports = (bot) => {
             const groupAutokick = groupDb?.option?.autokick || null;
 
             // Penanganan database group
-            if (groupDb?.sewa && groupDb?.sewaExpiration) {
-                if (Date.now() > userDb.sewaExpiration) {
-                    await db.delete(`group.${groupId}.sewa`);
-                    await db.delete(`group.${groupId}.sewaExpiration`);
-                }
+            if (groupDb?.sewa && Date.now() > userDb?.sewaExpiration) {
+                await db.delete(`group.${groupId}.sewa`);
+                await db.delete(`group.${groupId}.sewaExpiration`);
             }
 
             // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
@@ -354,10 +350,6 @@ module.exports = (bot) => {
             if (call.status !== "offer") continue;
 
             await bot.core.rejectCall(call.id, call.from);
-            const rejectionMsg = await bot.core.sendMessage(call.from, {
-                text: `Saat ini, kami tidak dapat menerima panggilan ${call.isVideo ? "video" : "suara"}.\n` +
-                    "Jika kamu memerlukan bantuan, silakan menghubungi Owner!"
-            });
 
             const vcard = new VCardBuilder()
                 .setFullName(config.owner.name)
@@ -372,7 +364,7 @@ module.exports = (bot) => {
                     }]
                 }
             }, {
-                quoted: rejectionMsg
+                quoted: tools.cmd.fakeMetaAiQuotedText(`Bot tidak dapat menerima panggilan ${call.isVideo ? "video" : "suara"}. Jika kamu memerlukan bantuan, silakan menghubungi Owner!`)
             });
         }
     });

@@ -25,7 +25,7 @@ module.exports = {
             const result = (await axios.get(apiUrl)).data.BK9.data;
 
             return await ctx.reply(
-                `${quote(`Terdeteksi AI: ${result.isHuman === 0 ? "Ya" : "Tidak"}`)}\n` +
+                `${quote(`Terdeteksi AI: ${result.isHuman === 0 ? "Ya" : "Tidak"} (${result.isHuman}%)`)}\n` +
                 `${quote(`Persentase AI: ${result.fakePercentage}%`)}\n` +
                 `${quote(`Kata: ${result.textWords} total, ${result.aiWords} AI`)}\n` +
                 `${quote(`Bahasa: ${result.detected_language}`)}\n` +

@@ -22,7 +22,7 @@ module.exports = {
             const group = await ctx.group(groupJid) || null;
             if (!group) return await ctx.reply(quote("❎ Grup tidak valid atau bot tidak ada di grup tersebut!"));
 
-            const groupId = ctx.get(groupJid) || null;
+            const groupId = ctx.getId(groupJid) || null;
 
             await db.delete(`group.${groupId}.sewa`);
             await db.delete(`group.${groupId}.sewaExpiration`);

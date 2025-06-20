@@ -95,7 +95,7 @@ module.exports = (bot) => {
             },
             {
                 key: "requireGroupSewa",
-                condition: config.system.requireGroupSewa && isGroup && groupDb?.sewa !== true,
+                condition: config.system.requireGroupSewa && isGroup && groupDb?.sewa !== true && !isOwner,
                 msg: config.msg.groupSewa,
                 reaction: "🔒"
             },

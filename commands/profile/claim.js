@@ -23,12 +23,10 @@ module.exports = {
         const claim = claimRewards[input];
         const senderId = ctx.getId(ctx.sender.jid);
         const userDb = await db.get(`user.${senderId}`) || {};
-
-        if (tools.cmd.isOwner(senderId, ctx.msg.key.id) || userDb?.premium) return await ctx.reply(quote("❎ Kamu sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
+        const level = userDb?.level || 0;
 
         if (!claim) return await ctx.reply(quote("❎ Hadiah tidak valid!"));
-
-        const level = userDb?.level || 0;
+        if (tools.cmd.isOwner(senderId, ctx.msg.key.id) || userDb?.premium) return await ctx.reply(quote("❎ Kamu sudah memiliki koin tak terbatas, tidak perlu mengklaim lagi."));
         if (level < claim.level) return await ctx.reply(quote(`❎ Kamu perlu mencapai level ${claim.level} untuk mengklaim hadiah ini. Levelmu saat ini adalah ${level}.`));
 
         const currentTime = Date.now();

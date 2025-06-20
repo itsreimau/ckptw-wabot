@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: "js",
-    aliases: ["javainput"],
+    aliases: ["node", "javascript"],
     category: "tool",
     permissions: {
         coin: 10
