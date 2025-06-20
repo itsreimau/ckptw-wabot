@@ -36,7 +36,7 @@ module.exports = {
                 `${quote(`Kelembaban: ${result.main.humidity}%`)}\n` +
                 `${quote(`Tekanan Udara: ${result.main.pressure} hPa`)}\n` +
                 `${quote("─────")}\n` +
-                `${quote(`Angin: ${result.wind.speed} m/s (${(result.wind.speed * 3.6).toFixed(1)} km/h)`}\n` +
+                `${quote(`Angin: ${result.wind.speed} m/s (${(result.wind.speed * 3.6).toFixed(1)} km/h)`)}\n` +
                 `${quote(`Arah Angin: ${result.wind.deg}°`)}\n` +
                 `${quote(`Hembusan: ${result.wind.gust} m/s`)}\n` +
                 `${quote("─────")}\n` +
