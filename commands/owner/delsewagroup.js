@@ -27,14 +27,13 @@ module.exports = {
             await db.delete(`group.${groupId}.sewa`);
             await db.delete(`group.${groupId}.sewaExpiration`);
 
-            const groupSubject = await group.subject() || null;
-            const groupOwner = await group.owner() || null;
+            const groupMetadata = await group.metadata() || null;
 
-            if (groupOwner) await ctx.sendMessage(groupOwner, {
+            if (groupMetadata?.owner) await ctx.sendMessage(groupMetadata.owner, {
                 text: quote(`🎉 Sewa bot untuk grup ${groupSubject} telah dihentikan oleh Owner!`)
             });
 
-            return await ctx.reply(quote(`✅ Berhasil menghapus sewa bot untuk grup ${groupSubject}!`));
+            return await ctx.reply(quote(`✅ Berhasil menghapus sewa bot untuk grup ${groupMetadata.subject}!`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

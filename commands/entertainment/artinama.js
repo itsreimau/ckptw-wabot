@@ -16,10 +16,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/primbon/arti-nama", {
+            const apiUrl = tools.api.createUrl("siputzx", "/api/primbon/artinama", {
                 nama: input
             });
-            const result = (await axios.get(apiUrl)).data.result.arti;
+            const result = (await axios.get(apiUrl)).data.data.arti;
 
             return await ctx.reply(result);
         } catch (error) {

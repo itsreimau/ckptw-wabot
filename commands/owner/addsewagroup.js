@@ -29,24 +29,23 @@ module.exports = {
 
             await db.set(`group.${groupId}.sewa`, true);
 
-            const groupOwner = await group.owner() || null;
-            const groupSubject = await group.subject() || null;
+            const groupMetadata = await group.metadata() || null;
 
             if (daysAmount && daysAmount > 0) {
                 const expirationDate = Date.now() + (daysAmount * 24 * 60 * 60 * 1000);
                 await db.set(`group.${groupId}.sewaExpiration`, expirationDate);
 
-                if (groupOwner) await ctx.sendMessage(groupOwner, {
-                    text: quote(`🎉 Bot berhasil disewakan ke grup-mu yaitu ${groupSubject} selama ${daysAmount} hari!`)
+                if (groupMetadata?.owner) await ctx.sendMessage(groupMetadata.owner, {
+                    text: quote(`🎉 Bot berhasil disewakan ke grup-mu yaitu ${groupMetadata.subject} selama ${daysAmount} hari!`)
                 });
-                return await ctx.reply(quote(`✅ Berhasil menyewakan bot ke grup ${groupSubject} selama ${daysAmount} hari!`));
+                return await ctx.reply(quote(`✅ Berhasil menyewakan bot ke grup ${groupMetadata.subject} selama ${daysAmount} hari!`));
             } else {
                 await db.delete(`group.${groupId}.sewaExpiration`);
 
-                if (groupOwner) await ctx.sendMessage(groupOwner, {
-                    text: quote(`📢 Bot berhasil disewakan ke grup-mu yaitu ${groupSubject} selamanya!`)
+                if (groupMetadata?.owner) await ctx.sendMessage(groupMetadata?.owner, {
+                    text: quote(`📢 Bot berhasil disewakan ke grup-mu yaitu ${groupMetadata.subject} selamanya!`)
                 });
-                return await ctx.reply(quote(`✅ Berhasil menyewakan bot ke grup ${groupSubject} selamanya!`));
+                return await ctx.reply(quote(`✅ Berhasil menyewakan bot ke grup ${groupMetadata.subject} selamanya!`));
             }
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
