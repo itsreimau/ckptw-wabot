@@ -16,7 +16,7 @@ module.exports = {
         try {
             const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.trim().split("\n").filter(Boolean));
 
-            return await ctx.reply(quote(`Tahukah Anda? ${result}`));
+            return await ctx.reply(result);
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

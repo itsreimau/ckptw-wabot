@@ -5,7 +5,7 @@ const {
 
 module.exports = {
     name: "broadcastgc",
-    aliases: ["bc", "bcgc"],
+    aliases: ["bc", "bcgc", "broadcast"],
     category: "owner",
     permissions: {
         owner: true

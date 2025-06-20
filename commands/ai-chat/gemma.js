@@ -19,10 +19,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("davidcyril", "/ai/gemma", {
+            const apiUrl = tools.api.createUrl("nekorinn", "/ai/gemma-3-27b", {
                 text: input
             });
-            const result = (await axios.get(apiUrl)).data.response;
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply(result);
         } catch (error) {

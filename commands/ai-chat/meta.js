@@ -14,18 +14,39 @@ module.exports = {
         const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.msg.generateInstruction(["send"], [ "image","text"]))}\n` +
             `${quote(tools.msg.generateCmdExample(ctx.used, "apa itu bot whatsapp?"))}\n` +
-            quote(tools.msg.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
+            quote(tools.msg.generateNotes(["AI ini dapat melihat gambar dan menjawab pertanyaan tentang gambar tersebut.", "Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
-        try {
-            const apiUrl = tools.api.createUrl("davidcyril", "/ai/metaai", {
-                text: input
-            });
-            const result = (await axios.get(apiUrl)).data.response;
+        const messageType = ctx.getMessageType();
+        const [checkMedia, checkQuotedMedia] = await Promise.all([
+            tools.cmd.checkMedia(messageType, "image"),
+            tools.cmd.checkQuotedMedia(ctx.quoted, "image")
+        ]);
 
-            return await ctx.reply(result);
+        try {
+            const senderUid = await db.get(`user.${ctx.getId(ctx.sender.jid)}.uid`) || "guest";
+            if (checkMedia || checkQuotedMedia) {
+                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
+                const uploadUrl = await tools.cmd.upload(buffer, "image");
+                const apiUrl = tools.api.createUrl("nekorinn", "/ai/meta-llama", {
+                    text: input,
+                    imageUrl: uploadUrl,
+                    sessionid: senderUid
+                });
+                const result = (await axios.get(apiUrl)).data.result;
+
+                return await ctx.reply(result);
+            } else {
+                const apiUrl = tools.api.createUrl("nekorinn", "/ai/meta-llama", {
+                    text: input,
+                    sessionid: senderUid
+                });
+                const result = (await axios.get(apiUrl)).data.result;
+
+                return await ctx.reply(result);
+            }
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

@@ -4,11 +4,11 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "text2img",
-    aliases: ["text2image", "texttoimage", "texttoimg"],
-    category: "ai-image",
+    name: "text2anime",
+    aliases: ["texttoanime"],
+    category: "ai-anime",
     permissions: {
-        premium: true
+        coin: 10
     },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
@@ -20,13 +20,13 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("nekorinn", "/ai-img/text2img-v2", {
+            const result = tools.api.createUrl("nekorinn", "/ai-img/text2anime", {
                 text: input,
                 ratio: "1:1"
             });
 
             return await ctx.reply({
-                image: {
+                anime: {
                     url: result
                 },
                 mimetype: mime.lookup("jpg"),

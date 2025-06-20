@@ -4,9 +4,9 @@ const {
 const mime = require("mime-types");
 
 module.exports = {
-    name: "diffusion",
-    aliases: ["diff"],
-    category: "ai-image",
+    name: "text2ghibli",
+    aliases: ["texttoghibli"],
+    category: "ai-ghibli",
     permissions: {
         coin: 10
     },
@@ -20,12 +20,12 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("davidcyril", "/diffusion", {
-                prompt: input
+            const result = tools.api.createUrl("nekorinn", "/ai-img/text2ghibli", {
+                text: input
             });
 
             return await ctx.reply({
-                image: {
+                ghibli: {
                     url: result
                 },
                 mimetype: mime.lookup("png"),

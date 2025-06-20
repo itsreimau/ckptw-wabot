@@ -26,8 +26,8 @@ module.exports = {
 
             const resultText = result.map(r =>
                 `${quote(`Nama: ${r.title}`)}\n` +
-                `${quote(`Ukuran: ${r.size}`)}\n` +
                 `${quote(`Pengembang: ${r.author}`)}\n` +
+                `${quote(`Ukuran: ${r.size}`)}\n` +
                 `${quote(`Rating: ${r.rating}`)}\n` +
                 `${quote(`Diunduh: ${r.downloaded}`)}\n` +
                 `${quote(`URL: ${r.link}`)}`

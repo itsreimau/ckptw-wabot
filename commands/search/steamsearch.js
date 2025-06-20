@@ -19,7 +19,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("bk9", "/search/stream", {
+            const apiUrl = tools.api.createUrl("bk9", "/search/steam", {
                 q: input
             });
             const result = (await axios.get(apiUrl)).data.BK9;

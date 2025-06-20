@@ -1,35 +1,35 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "fluxpro",
-    aliases: ["fluxp"],
-    category: "ai-image",
+    name: "pixabay",
+    category: "tool",
     permissions: {
         coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
+        const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "moon"))}\n` +
-            quote(tools.msg.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
+            quote(tools.msg.generateCmdExample(ctx.used, "moon"))
         );
 
         try {
-            const result = tools.api.createUrl("davidcyril", "/fluxpro", {
-                prompt: input
+            const apiUrl = tools.api.createUrl("bk9", "/search/pixabay", {
+                q: input
             });
+            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.BK9);
 
             return await ctx.reply({
                 image: {
                     url: result
                 },
                 mimetype: mime.lookup("jpeg"),
-                caption: `${quote(`Prompt: ${input}`)}\n` +
+                caption: `${quote(`Kueri: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

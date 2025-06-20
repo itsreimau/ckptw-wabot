@@ -2,7 +2,6 @@ const {
     monospace,
     quote
 } = require("@itsreimau/ckptw-mod");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -28,11 +27,10 @@ module.exports = {
         }
 
         try {
-            const apiUrl = tools.api.createUrl("bk9", "/tools/tts", {
+            const result = tools.api.createUrl("bk9", "/tools/tts", {
                 q: input,
                 lang: langCode
             });
-            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
                 audio: {

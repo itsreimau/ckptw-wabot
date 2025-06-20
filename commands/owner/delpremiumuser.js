@@ -3,8 +3,8 @@ const {
 } = require("@itsreimau/ckptw-mod");
 
 module.exports = {
-    name: "delpremuser",
-    aliases: ["delprem", "dpu"],
+    name: "delpremiumuser",
+    aliases: ["delpremuser", "delprem", "dpu"],
     category: "owner",
     permissions: {
         owner: true
@@ -23,7 +23,8 @@ module.exports = {
         if (isOnWhatsApp.length === 0) return await ctx.reply(quote("❎ Akun tidak ada di WhatsApp!"));
 
         try {
-            await db.set(`user.${ctx.getId(userJid)}.premium`, false);
+            await db.delete(`user.${senderId}.premium`);
+            await db.delete(`user.${senderId}.premiumExpiration`);
 
             await ctx.sendMessage(userJid, {
                 text: quote("🎉 Kamu telah dihapus sebagai pengguna Premium oleh Owner!")

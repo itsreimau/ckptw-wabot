@@ -4,8 +4,7 @@ const {
 const axios = require("axios");
 
 module.exports = {
-    name: "chatgpt",
-    aliases: ["ai", "cgpt", "chatai", "gpt", "openai"],
+    name: "bk9",
     category: "ai-chat",
     permissions: {
         coin: 10
@@ -26,24 +25,23 @@ module.exports = {
         ]);
 
         try {
-            const senderUid = await db.get(`user.${ctx.getId(ctx.sender.jid)}.uid`) || "guest";
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
                 const uploadUrl = await tools.cmd.upload(buffer, "image");
-                const apiUrl = tools.api.createUrl("nekorinn", "/ai/gpt-4.1", {
-                    text: input,
-                    imageUrl: uploadUrl,
-                    sessionid: senderUid
+                const apiUrl = tools.api.createUrl("bk9", "/ai/vision", {
+                    q: input,
+                    image_url: uploadUrl,
+                    model: "meta-llama/llama-4-maverick-17b-128e-instruct"
                 });
-                const result = (await axios.get(apiUrl)).data.result;
+                const result = (await axios.get(apiUrl)).data.BK9;
 
                 return await ctx.reply(result);
             } else {
-                const apiUrl = tools.api.createUrl("nekorinn", "/ai/gpt-4.1", {
-                    text: input,
-                    sessionid: senderUid
+                const apiUrl = tools.api.createUrl("bk9", "/ai/bk93", {
+                    BK9: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.`, // Dapat diubah sesuai keinginan
+                    q: input
                 });
-                const result = (await axios.get(apiUrl)).data.result;
+                const result = (await axios.get(apiUrl)).data.BK9;
 
                 return await ctx.reply(result);
             }

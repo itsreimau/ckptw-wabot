@@ -94,6 +94,12 @@ module.exports = (bot) => {
                 reaction: "🚫"
             },
             {
+                key: "requireGroupSewa",
+                condition: config.system.requireGroupSewa && isGroup && groupDb?.sewa !== true,
+                msg: config.msg.groupSewa,
+                reaction: "🔒"
+            },
+            {
                 key: "gamerestrict",
                 condition: groupDb?.option?.gamerestrict && ctx.bot.cmd.has(ctx.used.command) && ctx.bot.cmd.get(ctx.used.command).category === "game",
                 msg: config.msg.gamerestrict,

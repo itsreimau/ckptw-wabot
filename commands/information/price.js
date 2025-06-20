@@ -4,7 +4,7 @@ const {
 
 module.exports = {
     name: "price",
-    aliases: ["belibot", "rent", "rentbot", "sewa", "sewabot"],
+    aliases: ["belibot", "harga", "sewa", "sewabot"],
     category: "information",
     code: async (ctx) => {
         try {

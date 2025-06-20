@@ -5,8 +5,7 @@ const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
-    name: "googleimage",
-    aliases: ["gimage"],
+    name: "unsplash",
     category: "tool",
     permissions: {
         coin: 10
@@ -20,10 +19,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("diibot", "/api/search/gimage", {
-                query: input
+            const apiUrl = tools.api.createUrl("bk9", "/search/unsplash", {
+                q: input
             });
-            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.result).link;
+            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.BK9);
 
             return await ctx.reply({
                 image: {

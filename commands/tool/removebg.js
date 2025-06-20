@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -22,15 +23,16 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.cmd.upload(buffer, "image");
-            const result = tools.api.createUrl("davidcyril", "/removebg", {
+            const apiUrl = tools.api.createUrl("archive", "/api/tools/removebg-v2", {
                 url: uploadUrl
             });
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply({
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("jpeg")
+                mimetype: mime.lookup("png")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

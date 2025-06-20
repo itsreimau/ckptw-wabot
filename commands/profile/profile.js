@@ -26,7 +26,7 @@ module.exports = {
 
             return await ctx.reply({
                 text: `${quote(`Nama: ${ctx.sender.pushName} (${userDb?.username})`)}\n` +
-                    `${quote(`Status: ${isOwner ? "Owner" : userDb?.premium ? "Premium" : "Freemium"}`)}\n` +
+                    `${quote(`Status: ${isOwner ? "Owner" : userDb?.premium ? `Premium (${userDb?.premiumExpiration ? tools.msg.convertMsToDuration(userDb.premiumExpiration) : "Selamanya"})` : "Freemium"}`)}\n` +
                     `${quote(`Level: ${userDb?.level || 0} (${userDb?.xp || 0}/100)`)}\n` +
                     `${quote(`Koin: ${isOwner || userDb?.premium ? "Tak terbatas" : userDb?.coin}`)}\n` +
                     `${quote(`Menang: ${userDb?.winGame || 0}`)}\n` +
