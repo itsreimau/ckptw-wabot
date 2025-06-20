@@ -21,7 +21,7 @@ module.exports = {
 
         try {
             const [nama1, nama2] = input.split("|");
-            const result = tools.api.createUrl("siputzx", "/api/primbon/kecocokan_nama_pasangan", {
+            const apiUrl = tools.api.createUrl("siputzx", "/api/primbon/kecocokan_nama_pasangan", {
                 nama1: nama2 ? nama1 : ctx.sender.pushName,
                 nama2: nama2 || nama1
             });
