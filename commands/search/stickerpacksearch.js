@@ -24,7 +24,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.result;
 
-            const resultText || config.msg.notFound = result.map(r =>
+            const resultText = result.map(r =>
                 `${quote(`Nama: ${r.name}`)}\n` +
                 `${quote(`Pembuat: ${r.author}`)}\n` +
                 `${quote(`URL: ${r.url}`)}`

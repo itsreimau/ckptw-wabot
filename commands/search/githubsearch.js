@@ -24,7 +24,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.BK9.items;
 
-            const resultText || config.msg.notFound = result.map(r =>
+            const resultText = result.map(r =>
                 `${quote(`Nama: ${r.full_name}`)}\n` +
                 `${quote(`Deskripsi: ${r.description}`)}\n` +
                 `${quote(`Jumlah: ${r.stargazers_count} stargazers, ${r.watchers_count} watchers, ${r.forks_count} forks, ${r.open_issues_count} issues terbuka`)}\n` +
