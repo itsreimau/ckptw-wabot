@@ -30,7 +30,7 @@ const APIs = {
         baseURL: "https://restapi-v2.simplebot.my.id"
     },
     zell: {
-        baseURL: "https://apizell.web.id"
+        baseURL: "https://zellapi.autos"
     }
 };
 

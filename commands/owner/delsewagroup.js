@@ -30,7 +30,7 @@ module.exports = {
             const groupMetadata = await group.metadata() || null;
 
             if (groupMetadata?.owner) await ctx.sendMessage(groupMetadata.owner, {
-                text: quote(`🎉 Sewa bot untuk grup ${groupSubject} telah dihentikan oleh Owner!`)
+                text: quote(`🎉 Sewa bot untuk grup ${groupMetadata.subject} telah dihentikan oleh Owner!`)
             });
 
             return await ctx.reply(quote(`✅ Berhasil menghapus sewa bot untuk grup ${groupMetadata.subject}!`));

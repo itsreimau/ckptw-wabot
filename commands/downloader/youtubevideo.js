@@ -19,7 +19,7 @@ module.exports = {
             `${quote(tools.msg.generateCmdExample(ctx.used, "https://www.youtube.com/watch?v=0Uhh62MUEic -d -q 720"))}\n` +
             quote(tools.msg.generatesFlagInfo({
                 "-d": "Kirim sebagai dokumen",
-                "-q <number>": "Pilihan pada kualitas video (tersedia: 144, 240, 360, 480, 720, 1080 | default: 360)"
+                "-q <number>": "Pilihan pada kualitas video (tersedia: 360, 480, 720, 1080, 1440, 4k | default: 360)"
             }))
         );
 
@@ -42,10 +42,10 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            let quality = flag.quality || 360;
-            if (![144, 240, 360, 480, 720, 1080].includes(quality)) quality = 360;
+            let quality = flag.quality || 720;
+            if (![144, 240, 360, 480, 720, 1080].includes(quality)) quality = 720;
 
-            const apiUrl = tools.api.createUrl("zell", "/download/youtube2", {
+            const apiUrl = tools.api.createUrl("zell", "/download/youtube", {
                 url,
                 format: quality
             });

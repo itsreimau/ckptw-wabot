@@ -6,7 +6,7 @@ const mime = require("mime-types");
 module.exports = {
     name: "text2ghibli",
     aliases: ["texttoghibli"],
-    category: "ai-ghibli",
+    category: "ai-image",
     permissions: {
         coin: 10
     },
@@ -25,7 +25,7 @@ module.exports = {
             });
 
             return await ctx.reply({
-                ghibli: {
+                image: {
                     url: result
                 },
                 mimetype: mime.lookup("png"),

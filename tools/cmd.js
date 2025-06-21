@@ -240,9 +240,9 @@ async function upload(buffer, type = "any", host = config.system.uploaderHost) {
 
     const hosts = {
         any: ["FastUrl", "Nyxs", "Litterbox", "Cloudku", "Catbox", "Uguu"],
-        image: ["Quax", "Ryzen", "TmpErhabot", "Shojib", "IDNet", "Erhabot", "Pomf"],
-        video: ["Quax", "Ryzen", "TmpErhabot", "Videy", "Pomf"],
-        audio: ["Quax", "Ryzen", "TmpErhabot", "Pomf"],
+        image: ["Ryzen", "TmpErhabot", "Shojib", "IDNet", "Erhabot", "Pomf", "Quax"],
+        video: ["Ryzen", "TmpErhabot", "Videy", "Pomf", "Quax"],
+        audio: ["Ryzen", "TmpErhabot", "Pomf", "Quax"],
         document: ["IDNet"]
     };
 

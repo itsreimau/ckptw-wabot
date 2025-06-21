@@ -1,6 +1,7 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -22,9 +23,10 @@ module.exports = {
         try {
             const buffer = await ctx.quoted.media.toBuffer()
             const uploadUrl = await tools.cmd.upload(buffer, "video");
-            const result = tools.api.createUrl("http://api.hofeda4501.serv00.net", "/converter/toaudio", {
+            const apiUrl = tools.api.createUrl("http://api.hofeda4501.serv00.net", "/converter/toaudio", {
                 url: uploadUrl
             });
+            const result = Buffer.from((await axios.get(apiUrl)).data.result.audio, "base64");
 
             return await ctx.reply({
                 audio: {

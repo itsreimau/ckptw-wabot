@@ -111,10 +111,11 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("archive", "/api/download/ytmp3", {
-                    url: searchResult.link
+                const downloadApiUrl = tools.api.createUrl("zell", "/download/youtube", {
+                    url: searchResult.link,
+                    format: "mp3"
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.result.audio_url;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.download;
 
                 return await ctx.reply({
                     audio: {

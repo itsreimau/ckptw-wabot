@@ -29,8 +29,12 @@ module.exports = {
 
         try {
             const response = await axios.get(url, {
-                responseType: "arraybuffer"
+                responseType: "arraybuffer",
+                validateStatus: function(status) {
+                    return true;
+                }
             });
+
             const contentType = response?.headers?.["content-type"];
 
             if (/image/.test(contentType)) {
@@ -77,10 +81,17 @@ module.exports = {
                     json = null;
                 }
 
-                return await ctx.reply(json ? walkJSON(json) : text);
+                const responseText = json ? walkJSON(json) : text;
+                return await ctx.reply(
+                    `${quote(`Status: ${response.status} ${response.statusText}`)}\n` +
+                    `${quote("─────")}\n` +
+                    `${responseText}\n` +
+                    "\n" +
+                    config.msg.footer
+                );
             }
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, true);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

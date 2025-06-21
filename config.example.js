@@ -56,7 +56,7 @@ global.config = {
         cooldown: quote("🔄 Perintah ini sedang dalam cooldown, tunggu..."), // Pesan saat cooldown perintah
         gamerestrict: quote("⛔ Tidak dapat memproses karena grup ini membatasi game!"),
         group: quote("⛔ Perintah hanya dapat diakses dalam grup!"), // Pesan untuk perintah grup
-        groupSewa: quote(`⛔ Bot tidak aktif karena grup ini belum melakukan sewa. Ketik ${monospace("/price")} untuk melihat harga sewa atau ${monospace("/owner")} untuk menghubungi Owner bot.`), // // Pesan jika grup belum melakukan sewa
+        groupSewa: quote(`⛔ Bot tidak aktif karena grup ini belum melakukan sewa. Ketik ${monospace("/price")} untuk melihat harga sewa atau ${monospace("/owner")} untuk menghubungi Owner bot.`), // Pesan jika grup belum melakukan sewa
         owner: quote("⛔ Perintah hanya dapat diakses Owner!"), // Pesan untuk perintah yang hanya owner bisa akses
         premium: quote("⛔ Tidak dapat memproses karena kamu bukan pengguna Premium!"), // Pesan jika pengguna bukan Premium
         private: quote("⛔ Perintah hanya dapat diakses dalam obrolan pribadi!"), // Pesan untuk perintah obrolan pribadi

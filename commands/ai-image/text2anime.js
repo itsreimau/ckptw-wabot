@@ -6,7 +6,7 @@ const mime = require("mime-types");
 module.exports = {
     name: "text2anime",
     aliases: ["texttoanime"],
-    category: "ai-anime",
+    category: "ai-image",
     permissions: {
         coin: 10
     },
@@ -26,7 +26,7 @@ module.exports = {
             });
 
             return await ctx.reply({
-                anime: {
+                image: {
                     url: result
                 },
                 mimetype: mime.lookup("jpg"),
