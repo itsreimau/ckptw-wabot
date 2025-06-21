@@ -10,13 +10,13 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const groupJid = ctx.isGroup ? ctx.id : (ctx.args[0] ? `${ctx.args[0].replace(/[^\d]/g, "")}@g.us` : null);
+        const groupJid = ctx.isGroup() ? ctx.id : (ctx.args[0] ? `${ctx.args[0].replace(/[^\d]/g, "")}@g.us` : null);
 
-        if (!groupJid) return await ctx.reply({
-            text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.msg.generateCmdExample(ctx.used, `${ctx.isGroup ? "" : "1234567890"}`))}\n` +
-                quote(tools.msg.generateNotes(["Gunakan di grup untuk otomatis menghapus sewa grup tersebut."]))
-        });
+        if (!groupJid) return await ctx.reply(
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.msg.generateCmdExample(ctx.used, "1234567890"))}\n` +
+            quote(tools.msg.generateNotes(["Gunakan di grup untuk otomatis menghapus sewa grup tersebut."]))
+        );
 
         try {
             const group = await ctx.group(groupJid) || null;

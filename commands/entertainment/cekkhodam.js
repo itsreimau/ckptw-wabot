@@ -14,8 +14,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.cmd.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.cmd.generateCommandExample(ctx.used, "itsreimau"))
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            quote(tools.msg.generateCommandExample(ctx.used, "itsreimau"))
         );
 
         try {

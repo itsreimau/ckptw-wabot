@@ -24,7 +24,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.BK9;
 
-            const resultText = result.map(r =>
+            const resultText || config.msg.notFound = result.map(r =>
                 `${quote(`Nama: ${r.title}`)}\n` +
                 `${quote(`URL: ${r.link}`)}`
             ).join(
@@ -32,7 +32,7 @@ module.exports = {
                 `${quote("─────")}\n`
             );
             return await ctx.reply(
-                `${resultText}\n` +
+                `${resultText || config.msg.notFound}\n` +
                 "\n" +
                 config.msg.footer
             );

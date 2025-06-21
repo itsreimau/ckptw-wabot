@@ -24,7 +24,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.result;
 
-            const resultText = result.map(r =>
+            const resultText || config.msg.notFound = result.map(r =>
                 `${quote(`Nama: ${r.title}`)}\n` +
                 `${quote(`Rating: ${r.rating}`)}\n` +
                 `${quote(`URL: ${r.link}`)}`
@@ -33,7 +33,7 @@ module.exports = {
                 `${quote("─────")}\n`
             );
             return await ctx.reply(
-                `${resultText}\n` +
+                `${resultText || config.msg.notFound}\n` +
                 "\n" +
                 config.msg.footer
             );

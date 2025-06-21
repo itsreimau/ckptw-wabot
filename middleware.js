@@ -74,7 +74,7 @@ module.exports = (bot) => {
             if (config.system.autoTypingOnCmd) await ctx.simulateTyping();
         };
 
-        // Pengecekan kondisi pengguna
+        // Pengecekan kondisi restrictions
         const restrictions = [{
                 key: "banned",
                 condition: userDb?.banned,
@@ -132,7 +132,7 @@ module.exports = (bot) => {
             }
         }
 
-        // Pengecekan kondisi perizinan
+        // Pengecekan kondisi permissions
         const command = [...ctx.bot.cmd.values()].find(cmd => [cmd.name, ...(cmd.aliases || [])].includes(ctx.used.command));
         if (!command) return await next();
         const {

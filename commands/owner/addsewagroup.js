@@ -10,12 +10,12 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        const groupJid = ctx.isGroup ? ctx.id : (ctx.args[0] ? `${ctx.args[0].replace(/[^\d]/g, "")}@g.us` : null);
-        const daysAmount = ctx.args[ctx.isGroup ? 0 : 1] ? parseInt(ctx.args[ctx.isGroup ? 0 : 1], 10) : null;
+        const groupJid = ctx.isGroup() ? ctx.id : (ctx.args[0] ? `${ctx.args[0].replace(/[^\d]/g, "")}@g.us` : null);
+        const daysAmount = ctx.args[ctx.isGroup() ? 0 : 1] ? parseInt(ctx.args[ctx.isGroup() ? 0 : 1], 10) : null;
 
         if (!groupJid) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, `${ctx.isGroup ? ctx.getId(ctx.id) : "1234567890"} 30`))}\n` +
+            `${quote(tools.msg.generateCmdExample(ctx.used, "1234567890 30"))}\n` +
             quote(tools.msg.generateNotes(["Gunakan di grup untuk otomatis menyewakan grup tersebut."]))
         );
 

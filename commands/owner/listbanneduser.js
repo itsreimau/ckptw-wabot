@@ -3,8 +3,8 @@ const {
 } = require("@itsreimau/ckptw-mod");
 
 module.exports = {
-    name: "listpremium",
-    aliases: ["listprem"],
+    name: "listbanneduser",
+    aliases: ["listban", "listbanned"],
     category: "owner",
     permissions: {
         owner: true
@@ -12,25 +12,25 @@ module.exports = {
     code: async (ctx) => {
         try {
             const users = (await db.toJSON()).user;
-            const premiumUsers = [];
+            const bannedUsers = [];
 
             for (const userId in users) {
-                if (users[userId].premium === true) premiumUsers.push(userId);
+                if (users[userId].banned === true) bannedUsers.push(userId);
             }
 
             let resultText = "";
             let userMentions = [];
 
-            premiumUsers.forEach(userId => {
+            bannedUsers.forEach(userId => {
                 resultText += `${quote(`@${userId}`)}\n`;
             });
 
-            premiumUsers.forEach(userId => {
+            bannedUsers.forEach(userId => {
                 userMentions.push(`${userId}@s.whatsapp.net`);
             });
 
             return await ctx.reply({
-                text: `${resultText}` +
+                text: `${resultText || config.msg.notFound}` +
                     "\n" +
                     config.msg.footer,
                 mentions: userMentions

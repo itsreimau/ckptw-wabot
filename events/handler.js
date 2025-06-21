@@ -82,7 +82,7 @@ async function addWarning(ctx, groupDb, senderJid, groupId) {
 
     if (newWarning >= maxwarnings) {
         await ctx.reply(quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
-        if (!config.system.restrict) await ctx.group().kick([senderJid]);
+        if (systemRestrict) await ctx.group().kick([senderJid]);
         delete warnings[senderId];
         await db.set(`group.${groupId}.warnings`, warnings);
     }
@@ -179,9 +179,9 @@ module.exports = (bot) => {
             if (m.key.fromMe) return;
 
             // Variabel umum
-            const groupAutokick = groupDb?.option?.autokick || null;
+            const groupAutokick = !config.system.restrict && groupDb?.option?.autokick;
 
-            // Penanganan database group
+            // Penanganan database grup
             if (groupDb?.sewa && Date.now() > userDb?.sewaExpiration) {
                 await db.delete(`group.${groupId}.sewa`);
                 await db.delete(`group.${groupId}.sewaExpiration`);
@@ -206,7 +206,7 @@ module.exports = (bot) => {
                     if (checkMedia) {
                         await ctx.reply(quote(`⛔ Jangan kirim ${type}!`));
                         await ctx.deleteMessage(m.key);
-                        if (!config.system.restrict && groupAutokick) {
+                        if (groupAutokick) {
                             await ctx.group().kick([senderJid]);
                         } else {
                             await addWarning(ctx, groupDb, senderJid, groupId);
@@ -220,7 +220,7 @@ module.exports = (bot) => {
                 if (m.content && await tools.cmd.isUrl(m.content)) {
                     await ctx.reply(quote("⛔ Jangan kirim link!"));
                     await ctx.deleteMessage(m.key);
-                    if (!config.system.restrict && groupAutokick) {
+                    if (groupAutokick) {
                         await ctx.group().kick([senderJid]);
                     } else {
                         await addWarning(ctx, groupDb, senderJid, groupId);
@@ -234,15 +234,15 @@ module.exports = (bot) => {
                 if (checkMedia) {
                     const buffer = await ctx.msg.media.toBuffer();
                     const uploadUrl = await tools.cmd.upload(buffer, "image");
-                    const apiUrl = tools.api.createUrl("falcon", "/tools/nsfw-check", {
+                    const apiUrl = tools.api.createUrl("https://nsfw-categorize.it", "/api/upload", {
                         url: uploadUrl
                     });
-                    const result = (await axios.get(apiUrl)).data.data.result.data;
+                    const result = (await axios.get(apiUrl)).data.data;
 
                     if (result.nsfw || result.porn) {
                         await ctx.reply(quote("⛔ Jangan kirim NSFW, dasar cabul!"));
                         await ctx.deleteMessage(m.key);
-                        if (!config.system.restrict && groupAutokick) {
+                        if (groupAutokick) {
                             await ctx.group().kick([senderJid]);
                         } else {
                             await addWarning(ctx, groupDb, senderJid, groupId);
@@ -273,7 +273,7 @@ module.exports = (bot) => {
                 if (newCount > 5) {
                     await ctx.reply(quote("⛔ Jangan spam, ngelag woy!"));
                     await ctx.deleteMessage(m.key);
-                    if (!config.system.restrict && groupAutokick) {
+                    if (groupAutokick) {
                         await ctx.group().kick([senderJid]);
                     } else {
                         await addWarning(ctx, groupDb, senderJid, groupId);
@@ -283,13 +283,13 @@ module.exports = (bot) => {
                 }
             }
 
-            // Penanganan antitagsw (Aku tidak tau apakah ini work atau tidak)
+            // Penanganan antitagsw
             if (groupDb?.option?.antitagsw && !await ctx.group().isSenderAdmin() && !isCmd) {
                 const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "groupStatusMention") || m.message?.protocolMessage?.type === 25 || m.message?.protocolMessage?.type === "STATUS_MENTION_MESSAGE";
                 if (checkMedia) {
                     await ctx.reply(quote(`⛔ Jangan tag grup di SW, gak ada yg peduli!`));
                     await ctx.deleteMessage(m.key);
-                    if (!config.system.restrict && groupAutokick) {
+                    if (groupAutokick) {
                         await ctx.group().kick([senderJid]);
                     } else {
                         await addWarning(ctx, groupDb, senderJid, groupId);
@@ -303,7 +303,7 @@ module.exports = (bot) => {
                 if (m.content && toxicRegex.test(m.content)) {
                     await ctx.reply(quote("⛔ Jangan toxic!"));
                     await ctx.deleteMessage(m.key);
-                    if (!config.system.restrict && groupAutokick) {
+                    if (groupAutokick) {
                         await ctx.group().kick([senderJid]);
                     } else {
                         await addWarning(ctx, groupDb, senderJid, groupId);

@@ -6,6 +6,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "wikimedia",
+    aliases: ["wikim"],
     category: "tool",
     permissions: {
         coin: 10
