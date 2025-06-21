@@ -18,16 +18,15 @@ module.exports = {
             quote(tools.msg.generateNotes(["Gunakan di grup untuk otomatis menghapus sewa grup tersebut."]))
         );
 
-        try {
-            const group = await ctx.group(groupJid) || null;
-            if (!group) return await ctx.reply(quote("❎ Grup tidak valid atau bot tidak ada di grup tersebut!"));
+        const groupMetadata = await ctx.group(groupJid).metadata() || null;
 
+        if (!groupMetadata) return await ctx.reply(quote("❎ Grup tidak valid atau bot tidak ada di grup tersebut!"));
+
+        try {
             const groupId = ctx.getId(groupJid) || null;
 
             await db.delete(`group.${groupId}.sewa`);
             await db.delete(`group.${groupId}.sewaExpiration`);
-
-            const groupMetadata = await group.metadata() || null;
 
             if (groupMetadata?.owner) await ctx.sendMessage(groupMetadata.owner, {
                 text: quote(`🎉 Sewa bot untuk grup ${groupMetadata.subject} telah dihentikan oleh Owner!`)

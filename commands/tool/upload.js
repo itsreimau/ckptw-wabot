@@ -43,7 +43,7 @@ module.exports = {
             });
 
             const type = flag.type || "any";
-            const host = flag.host || config.system.uploaderHost.toLowerCase();
+            const host = flag.host || config.system.uploaderHost;
 
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const result = await tools.cmd.upload(buffer, type, host);

@@ -28,23 +28,18 @@ module.exports = {
 
             for (const group of sewaGroups) {
                 const groupJid = `${group.id}@g.us`;
-                const groupInfo = await ctx.group(groupJid).catch(() => null);
+                const groupMetadata = await ctx.group(groupJid).metadata() || null;
 
-                if (groupInfo) {
-                    const metadata = await groupInfo.metadata().catch(() => null);
-                    const groupName = metadata?.subject || group.id;
+                groupMentions.push({
+                    groupJid,
+                    groupSubject: groupMetadata.subject
+                });
 
-                    groupMentions.push({
-                        groupJid,
-                        groupSubject: groupName
-                    });
-
-                    if (group.expiration) {
-                        const daysLeft = Math.ceil((group.expiration - Date.now()) / (24 * 60 * 60 * 1000));
-                        resultText += `${quote(`@${groupJid} (${daysLeft} hari tersisa)`)}\n`;
-                    } else {
-                        resultText += `${quote(`@${groupJid} (Sewa permanen)`)}\n`;
-                    }
+                if (group.expiration) {
+                    const daysLeft = Math.ceil((group.expiration - Date.now()) / (24 * 60 * 60 * 1000));
+                    resultText += `${quote(`@${groupJid} (${daysLeft} hari tersisa)`)}\n`;
+                } else {
+                    resultText += `${quote(`@${groupJid} (Sewa permanen)`)}\n`;
                 }
             }
 

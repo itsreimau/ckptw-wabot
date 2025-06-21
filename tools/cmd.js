@@ -239,7 +239,7 @@ async function upload(buffer, type = "any", host = config.system.uploaderHost) {
     if (!buffer) return null;
 
     const hosts = {
-        any: ["FastUrl", "Nyxs", "Litterbox", "Cloudku", "Catbox", "Uguu"],
+        any: ["Cloudku", "FastUrl", "Litterbox", "Catbox", "Uguu", "Nyxs"],
         image: ["Ryzen", "TmpErhabot", "Shojib", "IDNet", "Erhabot", "Pomf", "Quax"],
         video: ["Ryzen", "TmpErhabot", "Videy", "Pomf", "Quax"],
         audio: ["Ryzen", "TmpErhabot", "Pomf", "Quax"],
