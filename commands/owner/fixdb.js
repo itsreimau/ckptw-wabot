@@ -60,6 +60,7 @@ module.exports = {
                         },
                         level: "number",
                         premium: "boolean",
+                        premiumExpiration: "number",
                         uid: "string",
                         username: "string",
                         winGame: "number",
@@ -89,6 +90,8 @@ module.exports = {
                             gamerestrict: "boolean",
                             welcome: "boolean"
                         },
+                        sewa: "boolean",
+                        sewaExpiration: "number",
                         spam: "object",
                         warnings: "object"
                     },

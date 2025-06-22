@@ -28,11 +28,11 @@ module.exports = {
 
             for (const group of sewaGroups) {
                 const groupJid = `${group.id}@g.us`;
-                const groupMetadata = await ctx.group(groupJid).metadata();
+                const groupSubject = await ctx.group(groupJid).name();
 
                 groupMentions.push({
                     groupJid,
-                    groupSubject: groupMetadata.subject
+                    groupSubject
                 });
 
                 if (group.expiration) {
@@ -44,7 +44,7 @@ module.exports = {
             }
 
             return await ctx.reply({
-                text: `${resultText || config.msg.notFound}\n` +
+                text: `${resultText.trim() || config.msg.notFound}\n` +
                     "\n" +
                     config.msg.footer,
                 contextInfo: {

@@ -30,7 +30,7 @@ module.exports = {
             });
 
             return await ctx.reply({
-                text: `${resultText || config.msg.notFound}` +
+                text: `${resultText.trim() || config.msg.notFound}` +
                     "\n" +
                     config.msg.footer,
                 mentions: userMentions

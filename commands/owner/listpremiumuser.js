@@ -15,22 +15,30 @@ module.exports = {
             const premiumUsers = [];
 
             for (const userId in users) {
-                if (users[userId].premium === true) premiumUsers.push(userId);
+                if (users[userId].premium === true) {
+                    premiumUsers.push({
+                        id: userId,
+                        expiration: users[userId].premiumExpiration
+                    });
+                }
             }
 
             let resultText = "";
             let userMentions = [];
 
-            premiumUsers.forEach(userId => {
-                resultText += `${quote(`@${userId}`)}\n`;
-            });
+            for (const user of premiumUsers) {
+                userMentions.push(`${user.id}@s.whatsapp.net`);
 
-            premiumUsers.forEach(userId => {
-                userMentions.push(`${userId}@s.whatsapp.net`);
-            });
+                if (user.expiration) {
+                    const daysLeft = Math.ceil((user.expiration - Date.now()) / (24 * 60 * 60 * 1000));
+                    resultText += `${quote(`@${user.id} (${daysLeft} hari tersisa)`)}\n`;
+                } else {
+                    resultText += `${quote(`@${user.id} (Premium permanen)`)}\n`;
+                }
+            }
 
             return await ctx.reply({
-                text: `${resultText || config.msg.notFound}` +
+                text: `${resultText.trim() || config.msg.notFound}` +
                     "\n" +
                     config.msg.footer,
                 mentions: userMentions
