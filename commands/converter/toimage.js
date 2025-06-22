@@ -18,7 +18,8 @@ module.exports = {
             const buffer = await ctx.quoted.media.toBuffer()
             const result = await ezgif.convert({
                 type: "webp-png",
-                file: buffer
+                file: buffer,
+                filename: "upload.webp"
             });
 
             return await ctx.reply({
