@@ -20,31 +20,40 @@ module.exports = {
         );
 
         if (daysAmount && daysAmount <= 0) return await ctx.reply(quote("❎ Durasi sewa (dalam hari) harus diisi dan lebih dari 0!"));
-
-        const groupMetadata = await ctx.group(groupJid).metadata() || null;
-
-        if (!groupMetadata) return await ctx.reply(quote("❎ Grup tidak valid atau bot tidak ada di grup tersebut!"));
+        if (!await ctx.group(groupJid).catch(() => null)) return await ctx.reply(quote("❎ Grup tidak valid atau bot tidak ada di grup tersebut!"));
 
         try {
             const groupId = ctx.getId(groupJid) || null;
 
             await db.set(`group.${groupId}.sewa`, true);
 
+            const groupOwner = await ctx.group(groupJid).owner().catch(() => null);
+            const groupMentions: {
+                groupJid: `${group.id}@g.us`,
+                groupSubject: await ctx.group(groupJid).name().catch(() => null)
+            };
+
             if (daysAmount && daysAmount > 0) {
                 const expirationDate = Date.now() + (daysAmount * 24 * 60 * 60 * 1000);
                 await db.set(`group.${groupId}.sewaExpiration`, expirationDate);
 
-                if (groupMetadata?.owner) await ctx.sendMessage(groupMetadata.owner, {
-                    text: quote(`🎉 Bot berhasil disewakan ke grup-mu yaitu ${groupMetadata.subject} selama ${daysAmount} hari!`)
+                if (groupOwner) await ctx.sendMessage(groupOwner, {
+                    text: quote(`🎉 Bot berhasil disewakan ke grup @${groupMentions.groupJid} selama ${daysAmount} hari!`),
+                    contextInfo: {
+                        groupMentions
+                    }
                 });
-                return await ctx.reply(quote(`✅ Berhasil menyewakan bot ke grup ${groupMetadata.subject} selama ${daysAmount} hari!`));
+                return await ctx.reply(quote(`✅ Berhasil menyewakan bot ke grup ini selama ${daysAmount} hari!`));
             } else {
                 await db.delete(`group.${groupId}.sewaExpiration`);
 
-                if (groupMetadata?.owner) await ctx.sendMessage(groupMetadata.owner, {
-                    text: quote(`📢 Bot berhasil disewakan ke grup-mu yaitu ${groupMetadata.subject} selamanya!`)
+                if (groupOwner) await ctx.sendMessage(groupOwner, {
+                    text: quote(`📢 Bot berhasil disewakan ke grup @${groupMentions.groupJid} selamanya!`),
+                    contextInfo: {
+                        groupMentions
+                    }
                 });
-                return await ctx.reply(quote(`✅ Berhasil menyewakan bot ke grup ${groupMetadata.subject} selamanya!`));
+                return await ctx.reply(quote(`✅ Berhasil menyewakan bot ke grup ini selamanya!`));
             }
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);

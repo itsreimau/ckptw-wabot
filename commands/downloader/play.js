@@ -98,7 +98,7 @@ module.exports = {
             }
 
             if (source === "youtube") {
-                const searchApiUrl = tools.api.createUrl("skyzopedia", "/search/youtube", {
+                const searchApiUrl = tools.api.createUrl("archive", "/api/search/youtube", {
                     query
                 });
                 const searchResult = (await axios.get(searchApiUrl)).data.result[searchIndex];
@@ -111,11 +111,10 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("zell", "/download/youtube", {
-                    url: searchResult.link,
-                    format: "mp3"
+                const downloadApiUrl = tools.api.createUrl("archive", "/api/download/ytmp3", {
+                    url: searchResult.link
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.download;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.result.audio_url;
 
                 return await ctx.reply({
                     audio: {

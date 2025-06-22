@@ -24,7 +24,7 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("skyzopedia", "/tools/emojitogif", {
+            const result = tools.api.createUrl("https://restapi-v2.simplebot.my.id", "/tools/emojitogif", {
                 emoji
             });
             const sticker = new Sticker(result, {

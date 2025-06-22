@@ -27,9 +27,7 @@ module.exports = {
         const userDb = await db.get(`user.${senderId}`) || {};
 
         if (tools.cmd.isOwner(senderId, ctx.msg.key.id) || userDb?.premium) return await ctx.reply(quote("❎ Koin tak terbatas tidak dapat ditransfer."));
-
         if (coinAmount <= 0) return await ctx.reply(quote("❎ Jumlah koin tidak boleh kurang dari atau sama dengan 0!"));
-
         if (userDb?.coin < coinAmount) return await ctx.reply(quote("❎ Koin-mu tidak mencukupi untuk transfer ini!"));
 
         try {

@@ -20,10 +20,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("skyzopedia", "/search/gimage", {
-                q: input
+            const apiUrl = tools.api.createUrl("diibot", "/api/search/gimage", {
+                query: input
             });
-            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.result).url;
+            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.result).link;
 
             return await ctx.reply({
                 image: {

@@ -19,15 +19,15 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("skyzopedia", "/search/npm", {
-                q: input
+            const apiUrl = tools.api.createUrl("archive", "/api/search/npmjs", {
+                query: input
             });
             const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map(r =>
-                `${quote(`Nama: ${r.title}`)}\n` +
-                `${quote(`Pembuat: ${r.author}`)}\n` +
-                `${quote(`URL: ${r.links.npm}`)}`
+                `${quote(`Nama: ${r.name}`)}\n` +
+                `${quote(`Versi: ${r.version}`)}\n` +
+                `${quote(`URL: ${r.npmLink}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

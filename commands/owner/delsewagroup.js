@@ -18,9 +18,7 @@ module.exports = {
             quote(tools.msg.generateNotes(["Gunakan di grup untuk otomatis menghapus sewa grup tersebut."]))
         );
 
-        const groupMetadata = await ctx.group(groupJid).metadata() || null;
-
-        if (!groupMetadata) return await ctx.reply(quote("❎ Grup tidak valid atau bot tidak ada di grup tersebut!"));
+        if (!await ctx.group(groupJid).catch(() => null)) return await ctx.reply(quote("❎ Grup tidak valid atau bot tidak ada di grup tersebut!"));
 
         try {
             const groupId = ctx.getId(groupJid) || null;
@@ -28,11 +26,20 @@ module.exports = {
             await db.delete(`group.${groupId}.sewa`);
             await db.delete(`group.${groupId}.sewaExpiration`);
 
-            if (groupMetadata?.owner) await ctx.sendMessage(groupMetadata.owner, {
-                text: quote(`🎉 Sewa bot untuk grup ${groupMetadata.subject} telah dihentikan oleh Owner!`)
+            const groupOwner = await ctx.group(groupJid).owner().catch(() => null);
+            const groupMentions: {
+                groupJid: `${group.id}@g.us`,
+                groupSubject: await ctx.group(groupJid).name().catch(() => null)
+            };
+
+            if (groupOwner) await ctx.sendMessage(groupOwner, {
+                text: quote(`🎉 Sewa bot untuk grup @${groupMentions.groupJid} telah dihentikan oleh Owner!`),
+                contextInfo: {
+                    groupMentions
+                }
             });
 
-            return await ctx.reply(quote(`✅ Berhasil menghapus sewa bot untuk grup ${groupMetadata.subject}!`));
+            return await ctx.reply(quote(`✅ Berhasil menghapus sewa bot untuk grup ini!`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

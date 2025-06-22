@@ -19,14 +19,15 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("skyzopedia", "/search/youtube", {
-                q: input
+            const apiUrl = tools.api.createUrl("archive", "/api/search/youtube", {
+                query: input
             });
             const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map(r =>
                 `${quote(`Judul: ${r.title}`)}\n` +
                 `${quote(`Kanal: ${r.channel}`)}\n` +
+                `${quote(`Durasi: ${r.duration}`)}\n` +
                 `${quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +

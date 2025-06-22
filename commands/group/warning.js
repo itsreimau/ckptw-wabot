@@ -26,7 +26,6 @@ module.exports = {
         });
 
         if (accountId === config.bot.id) return await ctx.reply(quote(`❎ Tidak bisa memberikan warning ke bot.`));
-
         if (accountJid === await ctx.group().owner()) return await ctx.reply(quote("❎ Tidak bisa memberikan warning ke admin grup!"));
 
         try {

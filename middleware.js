@@ -89,19 +89,19 @@ module.exports = (bot) => {
             },
             {
                 key: "requireBotGroupMembership",
-                condition: config.system.requireBotGroupMembership && ctx.used.command !== "botgroup" && !isOwner && !userDb?.premium && !(ctx.group(config.bot.groupJid)).members().some((member) => ctx.getId(member.id) === senderJid),
+                condition: config.system.requireBotGroupMembership && !isOwner && !userDb?.premium && ctx.used.command !== "botgroup" && !(ctx.group(config.bot.groupJid)).members().some((member) => ctx.getId(member.id) === senderJid),
                 msg: config.msg.botGroupMembership,
                 reaction: "🚫"
             },
             {
                 key: "requireGroupSewa",
-                condition: config.system.requireGroupSewa && isGroup && groupDb?.sewa !== true && !isOwner,
+                condition: config.system.requireGroupSewa && isGroup && !isOwner && ["owner", "price"].includes(ctx.used.command) && groupDb?.sewa !== true,
                 msg: config.msg.groupSewa,
                 reaction: "🔒"
             },
             {
                 key: "gamerestrict",
-                condition: groupDb?.option?.gamerestrict && ctx.bot.cmd.has(ctx.used.command) && ctx.bot.cmd.get(ctx.used.command).category === "game",
+                condition: groupDb?.option?.gamerestrict && isGroup && ctx.bot.cmd.has(ctx.used.command) && ctx.bot.cmd.get(ctx.used.command).category === "game",
                 msg: config.msg.gamerestrict,
                 reaction: "🎮"
             }

@@ -20,9 +20,6 @@ const APIs = {
     siputzx: {
         baseURL: "https://api.siputzx.my.id"
     },
-    skyzopedia: {
-        baseURL: "https://restapi-v2.simplebot.my.id"
-    },
     zell: {
         baseURL: "https://zellapi.autos"
     }

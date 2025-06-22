@@ -20,10 +20,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("zell", "/ai/lumin", {
+            const apiUrl = tools.api.createUrl("archive", "/api/ai/luminai", {
                 text: input
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.result.result;
 
             return await ctx.reply(result);
         } catch (error) {
