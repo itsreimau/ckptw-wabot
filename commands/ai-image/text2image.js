@@ -20,10 +20,10 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("nekorinn", "/ai-img/text2img-v2", {
-                text: input,
-                ratio: "1:1"
+            const result = tools.api.createUrl("archive", "/api/ai/text2img-v2", {
+                prompt: input
             });
+            const result = (await axios.get(apiUrl)).data.url;
 
             return await ctx.reply({
                 image: {

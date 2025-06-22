@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "meta",
-    aliases: ["metaai"],
+    aliases: ["llama"],
     category: "ai-chat",
     permissions: {
         coin: 10

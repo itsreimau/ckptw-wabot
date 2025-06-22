@@ -86,14 +86,6 @@ async function get(type) {
                 text = createList(data, d => quote(d));
                 break;
             }
-            case "langcode": {
-                const data = (await axios.get(api.createUrl("https://raw.githubusercontent.com", "/itsecurityco/to-google-translate/refs/heads/master/supported_languages.json"))).text;
-                text = createList(data, d =>
-                    `${quote(`Kode: ${d.code}`)}\n` +
-                    `${quote(`Bahasa: ${d.language}`)}`
-                );
-                break;
-            }
             case "mode": {
                 const data = [
                     "group (Mode group, hanya merespons dalam obrolan grup)",
@@ -146,6 +138,14 @@ async function get(type) {
                     "welcome (Teks welcome, variabel yang tersedia: %tag%, %subject%, %description%)"
                 ];
                 text = createList(data, d => quote(d));
+                break;
+            }
+            case "translate": {
+                const data = (await axios.get(api.createUrl("https://raw.githubusercontent.com", "/itsecurityco/to-google-translate/refs/heads/master/supported_languages.json"))).data;
+                text = createList(data, d =>
+                    `${quote(`Kode: ${d.code}`)}\n` +
+                    `${quote(`Bahasa: ${d.language}`)}`
+                );
                 break;
             }
             case "ttsmp3": {

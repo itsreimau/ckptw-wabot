@@ -42,7 +42,7 @@ module.exports = {
             const searchIndex = flag.index || 0;
             const query = flag.input;
             let source = flag.source || "youtube";
-            if (!["soundcloud", "spotify", "tidal", "youtube"].includes(source)) source = "youtube";
+            if (!["soundcloud", "spotify", "youtube"].includes(source)) source = "youtube";
 
             if (source === "soundcloud") {
                 const searchApiUrl = tools.api.createUrl("archive", "/api/search/soundcloud", {
@@ -98,7 +98,7 @@ module.exports = {
             }
 
             if (source === "youtube") {
-                const searchApiUrl = tools.api.createUrl("archive", "/api/search/youtube", {
+                const searchApiUrl = tools.api.createUrl("skyzopedia", "/search/youtube", {
                     query
                 });
                 const searchResult = (await axios.get(searchApiUrl)).data.result[searchIndex];

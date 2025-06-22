@@ -20,10 +20,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/search/tiktok", {
-                query: input
+            const apiUrl = tools.api.createUrl("skyzopedia", "/search/tiktok", {
+                q: input
             });
-            const result = (await axios.get(apiUrl)).data.result.no_watermark;
+            const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.result).play;
 
             return await ctx.reply({
                 video: {

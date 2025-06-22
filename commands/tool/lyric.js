@@ -19,14 +19,13 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("paxsenix", "/lyrics/genius", {
-                q: input
+            const apiUrl = tools.api.createUrl("archive", "/api/search/lyrics", {
+                query: input
             });
             const result = (await axios.get(apiUrl)).data;
 
             return await ctx.reply(
                 `${quote(`Judul: ${result.title}`)}\n` +
-                `${quote(`Artis: ${result.artist}`)}\n` +
                 `${quote("─────")}\n` +
                 `${result.lyrics}\n` +
                 "\n" +

@@ -19,7 +19,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/ai/deepseek-coder-67b", {
+            const apiUrl = tools.api.createUrl("archive", "/api/ai/deepseek-r1", {
                 text: input
             });
             const result = (await axios.get(apiUrl)).data.result;

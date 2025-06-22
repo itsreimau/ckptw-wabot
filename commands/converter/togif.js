@@ -1,7 +1,7 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
-const axios = require("axios");
+const ezgif = require("ezgif-node");
 const mime = require("mime-types");
 
 module.exports = {
@@ -15,11 +15,10 @@ module.exports = {
 
         try {
             const buffer = await ctx.quoted.media.toBuffer()
-            const uploadUrl = await tools.cmd.upload(buffer, "any");
-            const apiUrl = tools.api.createUrl("bk9", "/converter/webptomp4", {
-                url: uploadUrl
+            const result = await ezgif.convert({
+                type: "webp-gif",
+                file: buffer
             });
-            const result = (await axios.get(apiUrl)).data.BK9;
 
             return await ctx.reply({
                 video: {

@@ -23,14 +23,14 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("bk9", "/download/fb", {
+            const apiUrl = tools.api.createUrl("nekorinn", "/downloader/facebook", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.BK9;
+            const result = (await axios.get(apiUrl)).data.result[0];
 
             return await ctx.reply({
                 video: {
-                    url: result.hd || result.sd
+                    url: result.url
                 },
                 mimetype: mime.lookup("mp4"),
                 caption: `${quote(`URL: ${url}`)}\n` +

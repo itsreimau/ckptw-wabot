@@ -19,18 +19,17 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("bk9", "/search/github", {
+            const apiUrl = tools.api.createUrl("nekorinn", "/search/github-search", {
                 q: input
             });
-            const result = (await axios.get(apiUrl)).data.BK9.items;
+            const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map(r =>
                 `${quote(`Nama: ${r.full_name}`)}\n` +
                 `${quote(`Deskripsi: ${r.description}`)}\n` +
-                `${quote(`Jumlah: ${r.stargazers_count} stargazers, ${r.watchers_count} watchers, ${r.forks_count} forks, ${r.open_issues_count} issues terbuka`)}\n` +
+                `${quote(`Jumlah: ${r.stars} stargazers, ${r.forks} forks`)}\n` +
                 `${quote(`Bahasa: ${r.language}`)}\n` +
-                `${quote(`Lisensi: ${r.license.name}`)}\n` +
-                `${quote(`URL: ${r.html_url}`)}`
+                `${quote(`URL: ${r.url}`)}`
             ).join(
                 "\n" +
                 `${quote("─────")}\n`

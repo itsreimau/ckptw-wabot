@@ -11,7 +11,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
+        const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;;
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
@@ -20,14 +20,14 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("paxsenix", "/ai-search/felo", {
+            const apiUrl = tools.api.createUrl("nekorinn", "/ai/feloai", {
                 text: input
             });
-            const result = (await axios.get(apiUrl)).data.answer;
+            const result = (await axios.get(apiUrl)).data.result.text;
 
             return await ctx.reply(result);
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }
     }
-};
+}

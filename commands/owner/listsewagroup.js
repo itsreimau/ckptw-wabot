@@ -11,7 +11,7 @@ module.exports = {
     },
     code: async (ctx) => {
         try {
-            const groups = (await db.toJSON()).group;
+            const groups = db.get("group");
             const sewaGroups = [];
 
             for (const groupId in groups) {
@@ -28,7 +28,7 @@ module.exports = {
 
             for (const group of sewaGroups) {
                 const groupJid = `${group.id}@g.us`;
-                const groupMetadata = await ctx.group(groupJid).metadata() || null;
+                const groupMetadata = await ctx.group(groupJid).metadata();
 
                 groupMentions.push({
                     groupJid,

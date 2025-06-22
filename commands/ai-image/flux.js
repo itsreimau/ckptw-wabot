@@ -1,7 +1,6 @@
 const {
     quote
 } = require("@itsreimau/ckptw-mod");
-const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -20,10 +19,10 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("bk9", "/ai/fluximg", {
-                q: input
+            const result = tools.api.createUrl("nekorinn", "/ai-img/flux", {
+                prompt: input,
+                ratio: "1:1"
             });
-            const result = (await axios.get(apiUrl)).data.BK9[0];
 
             return await ctx.reply({
                 image: {

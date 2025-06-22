@@ -11,7 +11,7 @@ module.exports = {
     },
     code: async (ctx) => {
         try {
-            const users = (await db.toJSON()).user;
+            const users = db.get("user");
             const premiumUsers = [];
 
             for (const userId in users) {

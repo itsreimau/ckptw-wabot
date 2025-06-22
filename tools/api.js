@@ -5,9 +5,6 @@ const APIs = {
     archive: {
         baseURL: "https://archive.lick.eu.org"
     },
-    bk9: {
-        baseURL: "https://bk9.fun"
-    },
     diibot: {
         baseURL: "https://api.diioffc.web.id"
     },
@@ -19,9 +16,6 @@ const APIs = {
     },
     nirkyy: {
         baseURL: "https://nirkyy-dev.hf.space"
-    },
-    paxsenix: {
-        baseURL: "https://dev-paxsenix.koyeb.app"
     },
     siputzx: {
         baseURL: "https://api.siputzx.my.id"
