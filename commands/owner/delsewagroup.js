@@ -27,10 +27,10 @@ module.exports = {
             await db.delete(`group.${groupId}.sewaExpiration`);
 
             const groupOwner = await ctx.group(groupJid).owner().catch(() => null);
-            const groupMentions: {
+            const groupMentions = [{
                 groupJid: `${group.id}@g.us`,
                 groupSubject: await ctx.group(groupJid).name().catch(() => null)
-            };
+            }];
 
             if (groupOwner) await ctx.sendMessage(groupOwner, {
                 text: quote(`🎉 Sewa bot untuk grup @${groupMentions.groupJid} telah dihentikan oleh Owner!`),

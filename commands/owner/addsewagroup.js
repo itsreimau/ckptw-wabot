@@ -28,10 +28,10 @@ module.exports = {
             await db.set(`group.${groupId}.sewa`, true);
 
             const groupOwner = await ctx.group(groupJid).owner().catch(() => null);
-            const groupMentions: {
+            const groupMentions = [{
                 groupJid: `${group.id}@g.us`,
                 groupSubject: await ctx.group(groupJid).name().catch(() => null)
-            };
+            }];
 
             if (daysAmount && daysAmount > 0) {
                 const expirationDate = Date.now() + (daysAmount * 24 * 60 * 60 * 1000);
