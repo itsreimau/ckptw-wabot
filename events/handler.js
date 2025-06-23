@@ -69,12 +69,13 @@ async function addWarning(ctx, groupDb, senderJid, groupId) {
 
     const warnings = groupDb?.warnings || {};
     const current = warnings[senderId] || 0;
+    const maxwarnings = groupDb?.maxwarnings || 3;
+
     const newWarning = current + 1;
     warnings[senderId] = newWarning;
 
     await db.set(`group.${groupId}.warnings`, newWarning);
 
-    const maxwarnings = groupDb?.maxwarnings || 3;
     await ctx.reply({
         text: quote(`⚠️ Warning ${newWarning}/${maxwarnings} untuk @${senderId}!`),
         mentions: [senderJid]
