@@ -28,7 +28,7 @@ module.exports = {
             await db.add(`user.${ctx.getId(userJid)}.coin`, coinAmount);
 
             await ctx.sendMessage(userJid, {
-                text: quote(`🎉 Kamu telah menerima ${coinAmount} koin dari Owner!`)
+                text: quote(`📢 Kamu telah menerima ${coinAmount} koin dari Owner!`)
             });
             return await ctx.reply(quote(`✅ Berhasil menambahkan ${coinAmount} koin kepada pengguna!`));
         } catch (error) {

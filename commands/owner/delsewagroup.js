@@ -33,12 +33,11 @@ module.exports = {
             }];
 
             if (groupOwner) await ctx.sendMessage(groupOwner, {
-                text: quote(`🎉 Sewa bot untuk grup @${groupMentions.groupJid} telah dihentikan oleh Owner!`),
+                text: quote(`📢 Sewa bot untuk grup @${groupMentions.groupJid} telah dihentikan oleh Owner!`),
                 contextInfo: {
                     groupMentions
                 }
             });
-
             return await ctx.reply(quote(`✅ Berhasil menghapus sewa bot untuk grup ini!`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);

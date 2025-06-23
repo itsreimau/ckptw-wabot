@@ -28,7 +28,7 @@ module.exports = {
             await ctx.sendMessage(userJid, {
                 text: quote("🎉 Kamu telah diunbanned oleh Owner!")
             });
-            await ctx.reply(quote("✅ Berhasil diunbanned!"));
+            return await ctx.reply(quote("✅ Berhasil diunbanned!"));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

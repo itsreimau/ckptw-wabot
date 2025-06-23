@@ -22,14 +22,11 @@ module.exports = {
                 const senderId = ctx.getId(ctx.sender.jid);
 
                 if (content === "y") {
-                    const isPremium = await db.get(`user.${senderId}.premium`);
-                    await db.delete(`user.${senderId}`);
-                    if (isPremium) await db.set(`user.${senderId}.premium`, true);
                     await ctx.reply(quote("✅ Data-mu berhasil direset, semua data telah dihapus!"));
-                    collector.stop();
+                    return collector.stop();
                 } else if (content === "n") {
                     await ctx.reply(quote("❌ Proses reset data telah dibatalkan."));
-                    collector.stop();
+                    return collector.stop();
                 }
             });
         } catch (error) {

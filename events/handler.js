@@ -21,7 +21,7 @@ async function handleWelcome(bot, m, type, isSimulate = false) {
         const isWelcome = type === Events.UserJoin;
         const userTag = `@${bot.getId(jid)}`;
         const customText = isWelcome ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
-        const metadata = await bot.core.groupMetadata(groupJid);
+        const metadata = await bot.core.groupMetadata(groupJid).catch(() => null);
         const text = customText ?
             customText
             .replace(/%tag%/g, userTag)
@@ -83,7 +83,7 @@ async function addWarning(ctx, groupDb, senderJid, groupId) {
 
     if (newWarning >= maxwarnings) {
         await ctx.reply(quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
-        if (systemRestrict) await ctx.group().kick([senderJid]);
+        if (!config.system.restrict) await ctx.group().kick([senderJid]);
         delete warnings[senderId];
         await db.set(`group.${groupId}.warnings`, warnings);
     }
@@ -142,7 +142,7 @@ module.exports = (bot) => {
 
         // Pengecekan mute pada grup
         const muteList = groupDb?.mute || [];
-        if (muteList.includes(senderId)) return await ctx.deleteMessage(m.key);
+        if (muteList.includes(senderId)) await ctx.deleteMessage(m.key);
 
         isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
 

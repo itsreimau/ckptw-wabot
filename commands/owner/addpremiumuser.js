@@ -35,14 +35,14 @@ module.exports = {
                 await db.set(`user.${userId}.premiumExpiration`, expirationDate);
 
                 await ctx.sendMessage(userJid, {
-                    text: quote(`🎉 Kamu telah ditambahkan sebagai pengguna Premium oleh Owner selama ${daysAmount} hari!`)
+                    text: quote(`📢 Kamu telah ditambahkan sebagai pengguna Premium oleh Owner selama ${daysAmount} hari!`)
                 });
                 return await ctx.reply(quote(`✅ Berhasil menambahkan Premium selama ${daysAmount} hari kepada pengguna!`));
             } else {
                 await db.delete(`user.${userId}.premiumExpiration`);
 
                 await ctx.sendMessage(userJid, {
-                    text: quote("🎉 Kamu telah ditambahkan sebagai pengguna Premium selamanya oleh Owner!")
+                    text: quote("📢 Kamu telah ditambahkan sebagai pengguna Premium selamanya oleh Owner!")
                 });
                 return await ctx.reply(quote("✅ Berhasil menambahkan Premium selamanya kepada pengguna!"));
             }

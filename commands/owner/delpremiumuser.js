@@ -27,7 +27,7 @@ module.exports = {
             await db.delete(`user.${senderId}.premiumExpiration`);
 
             await ctx.sendMessage(userJid, {
-                text: quote("🎉 Kamu telah dihapus sebagai pengguna Premium oleh Owner!")
+                text: quote("📢 Kamu telah dihapus sebagai pengguna Premium oleh Owner!")
             });
             return await ctx.reply(quote("✅ Berhasil dihapus sebagai pengguna Premium!"));
         } catch (error) {

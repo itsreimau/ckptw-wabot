@@ -26,7 +26,7 @@ module.exports = {
             await db.set(`user.${ctx.getId(userJid)}.banned`, true);
 
             await ctx.sendMessage(userJid, {
-                text: quote("🎉 Kamu telah dibanned oleh Owner!")
+                text: quote("📢 Kamu telah dibanned oleh Owner!")
             });
             return await ctx.reply(quote("✅ Berhasil dibanned!"));
         } catch (error) {

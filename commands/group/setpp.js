@@ -22,7 +22,6 @@ module.exports = {
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
-
             await ctx.core.updateProfilePicture(ctx.id, buffer);
 
             return await ctx.reply(quote("✅ Berhasil mengubah gambar profil grup!"));

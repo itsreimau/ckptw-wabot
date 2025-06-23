@@ -38,7 +38,7 @@ module.exports = {
                 await db.set(`group.${groupId}.sewaExpiration`, expirationDate);
 
                 if (groupOwner) await ctx.sendMessage(groupOwner, {
-                    text: quote(`🎉 Bot berhasil disewakan ke grup @${groupMentions.groupJid} selama ${daysAmount} hari!`),
+                    text: quote(`📢 Bot berhasil disewakan ke grup @${groupMentions.groupJid} selama ${daysAmount} hari!`),
                     contextInfo: {
                         groupMentions
                     }

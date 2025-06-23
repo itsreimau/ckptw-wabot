@@ -29,14 +29,11 @@ module.exports = {
         });
 
         if (accountId === config.bot.id) return await ctx.reply(quote(`❎ Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} bot`)} untuk me-mute bot.`));
-
         if (accountJid === await ctx.group().owner()) return await ctx.reply(quote("❎ Dia adalah owner grup!"));
 
         try {
             const muteList = await db.get(`group.${groupId}.mute`) || [];
-
             if (!muteList.includes(accountId)) muteList.push(accountId);
-
             await db.set(`group.${groupId}.mute`, muteList);
 
             return await ctx.reply(quote("✅ Berhasil me-mute pengguna dari grup ini!"));

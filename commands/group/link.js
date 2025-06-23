@@ -13,6 +13,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const code = await ctx.group().inviteCode();
+
             return await ctx.reply(quote(`https://chat.whatsapp.com/${code}`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);

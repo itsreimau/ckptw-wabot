@@ -29,12 +29,11 @@ module.exports = {
             switch (command) {
                 case "username": {
                     const input = args.slice(1).join(" ").trim();
-                    if (!input) return await ctx.reply(quote("❎ Mohon masukkan username yang ingin digunakan."));
 
+                    if (!input) return await ctx.reply(quote("❎ Mohon masukkan username yang ingin digunakan."));
                     if (/[^a-zA-Z0-9._-]/.test(input)) return await ctx.reply(quote("❎ Username hanya boleh berisi huruf, angka, titik (.), underscore (_) atau tanda hubung (-)."));
 
-                    const allUsers = await db.get("user") || {};
-                    const usernameTaken = Object.values(allUsers).some(user => user.username === input);
+                    const usernameTaken = Object.values(await db.get("user") || {}).some(user => user.username === input);
                     if (usernameTaken) return await ctx.reply(quote("❎ Username tersebut sudah digunakan oleh pengguna lain."));
 
                     const username = `@${input}`

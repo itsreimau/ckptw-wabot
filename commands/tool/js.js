@@ -62,7 +62,7 @@ module.exports = {
                 }, 10000);
             });
 
-            await ctx.reply(monospace(output));
+            return await ctx.reply(monospace(output));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

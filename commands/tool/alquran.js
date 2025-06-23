@@ -30,7 +30,6 @@ module.exports = {
                 id: surat
             });
             const result = (await axios.get(apiUrl)).data.result;
-
             const verses = result.verses;
 
             if (ayat) {

@@ -24,7 +24,7 @@ module.exports = {
             }
 
             let resultText = "";
-            const groupMentions = [];
+            let groupMentions = [];
 
             for (const group of sewaGroups) {
                 const groupJid = `${group.id}@g.us`;
