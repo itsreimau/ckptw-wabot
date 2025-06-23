@@ -76,7 +76,7 @@ module.exports = {
 
             text += config.msg.footer;
 
-            await ctx.sendMessage(ctx.id, {
+            return await ctx.sendMessage(ctx.id, {
                 text,
                 contextInfo: {
                     mentionedJid: [ctx.sender.jid],
@@ -95,23 +95,6 @@ module.exports = {
                 }
             }, {
                 quoted: tools.cmd.fakeMetaAiQuotedText(config.msg.note)
-            });
-            return await ctx.sendMessage(ctx.id, {
-                audio: {
-                    url: "https://www.tikwm.com/video/music/7472130814805822726.mp3" // Dapat diubah sesuai keinginan (Ada yg request, tambah lagu di menu nya)
-                },
-                mimetype: mime.lookup("mp3"),
-                ptt: true,
-                contextInfo: {
-                    mentionedJid: [ctx.sender.jid],
-                    externalAdReply: {
-                        title: config.bot.name,
-                        body: config.bot.version,
-                        mediaType: 1,
-                        thumbnailUrl: "https://i.ytimg.com/vi/jfKfPfyJRdk/maxresdefault.jpg",
-                        renderLargerThumbnail: true
-                    }
-                }
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
