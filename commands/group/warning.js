@@ -44,7 +44,6 @@ module.exports = {
             }
 
             warnings[accountId] = newWarning;
-
             await db.set(`group.${groupId}.warnings`, warnings);
 
             return await ctx.reply(quote(`✅ Warning diberikan! Sekarang warning @${accountId} menjadi ${newWarning}/${maxwarnings}.`), {

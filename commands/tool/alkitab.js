@@ -6,7 +6,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "alkitab",
-    aliases: ["bible", "injil"],
+    aliases: ["bible"],
     category: "tool",
     permissions: {
         coin: 10

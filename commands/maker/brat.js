@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: "brat",
-    aliases: ["sbrat", "stikerbrat", "stickerbrat"],
+    aliases: ["sbrat", "stickerbrat", "stikerbrat"],
     category: "maker",
     permissions: {
         coin: 10

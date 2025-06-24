@@ -8,7 +8,7 @@ const {
 
 module.exports = {
     name: "bratgif",
-    aliases: ["bratg", "bratv", "bratvid", "bratvideo", "sbratgif", "sbratvideo", "sbratvid", "stickerbratgif", "stickerbratvideo", "stickerbratvid", "stikerbratgif", "stikerbratvideo", "stikerbratvid"],
+    aliases: ["bratg", "bratv", "bratvid", "bratvideo", "sbratgif", "sbratvid", "sbratvideo", "stickerbratgif", "stickerbratvid", "stickerbratvideo", "stikerbratgif", "stikerbratvid", "stikerbratvideo"],
     category: "maker",
     permissions: {
         coin: 10

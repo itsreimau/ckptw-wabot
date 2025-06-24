@@ -19,7 +19,7 @@ module.exports = {
 
             return await ctx.reply(monospace(output.stdout || output.stderr));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error);
+            return await tools.cmd.handleError(ctx, error, false, true);
         }
     }
 };

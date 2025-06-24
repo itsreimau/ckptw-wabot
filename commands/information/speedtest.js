@@ -14,7 +14,7 @@ module.exports = {
         try {
             const latencyStart = performance.now();
             const testMsg = await ctx.reply(quote("🚀 Menguji latency..."));
-            const latency = (performance.now() - latencyStart).toFixed(2);
+            const latency = performance.now() - latencyStart;
 
             await ctx.editMessage(testMsg.key, quote("📥 Menguji kecepatan download..."));
             const downloadStart = performance.now();
@@ -22,7 +22,6 @@ module.exports = {
             const downloadResponse = await axios.get(downloadUrl);
             const downloadSize = downloadResponse.headers["content-length"] / 1024;
             const downloadTime = (performance.now() - downloadStart) / 1000;
-            const downloadSpeed = (downloadSize / downloadTime).toFixed(2);
 
             await ctx.editMessage(testMsg.key, quote("📤 Menguji kecepatan upload..."));
             const uploadStart = performance.now();
@@ -34,12 +33,11 @@ module.exports = {
                 }
             });
             const uploadTime = (performance.now() - uploadStart) / 1000;
-            const uploadSpeed = (50 / uploadTime).toFixed(2);
 
             return await ctx.editMessage(testMsg.key,
-                `${quote(`Latency: ${latency}ms`)}\n` +
-                `${quote(`Download: ${downloadSpeed} KB/s`)}\n` +
-                `${quote(`Upload: ${uploadSpeed} KB/s`)}\n` +
+                `${quote(`Latency: ${tools.msg.convertMsToDuration(latency)}`)}\n` +
+                `${quote(`Download: ${tools.msg.formatSize(downloadTime)}/s`)}\n` +
+                `${quote(`Upload: ${tools.msg.formatSize(uploadTime)}/s`)}\n` +
                 "\n" +
                 config.msg.footer
             );

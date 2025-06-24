@@ -4,7 +4,7 @@ const {
 
 module.exports = {
     name: "unbanuser",
-    aliases: ["unban", "ubu"],
+    aliases: ["ubu", "unban"],
     category: "owner",
     permissions: {
         owner: true
@@ -17,7 +17,7 @@ module.exports = {
                 `${quote(tools.msg.generateCmdExample(ctx.used, `@${ctx.getId(ctx.sender.jid)}`))}\n` +
                 `${quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."]))}\n` +
                 quote(tools.msg.generatesFlagInfo({
-                    "-d": "Tetap diam dengan tidak menyiarkan ke orang yang relevan"
+                    "-s": "Tetap diam dengan tidak menyiarkan ke orang yang relevan"
                 })),
             mentions: [ctx.sender.jid]
         });

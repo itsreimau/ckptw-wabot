@@ -4,7 +4,7 @@ const {
 
 module.exports = {
     name: "leaderboard",
-    aliases: ["lb"],
+    aliases: ["lb", "peringkat"],
     category: "profile",
     code: async (ctx) => {
         try {

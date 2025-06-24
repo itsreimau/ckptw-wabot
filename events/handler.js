@@ -30,26 +30,24 @@ async function handleWelcome(bot, m, type, isSimulate = false) {
             (isWelcome ?
                 quote(`👋 Selamat datang ${userTag} di grup ${metadata.subject}!`) :
                 quote(`👋 Selamat tinggal, ${userTag}!`));
-
         const profilePictureUrl = await bot.core.profilePictureUrl(jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
-        const contextInfo = {
-            mentionedJid: [jid],
-            isForwarded: true,
-            forwardedNewsletterMessageInfo: {
-                newsletterJid: config.bot.newsletterJid,
-                newsletterName: config.bot.name
-            },
-            externalAdReply: {
-                title: config.bot.name,
-                body: config.bot.version,
-                mediaType: 1,
-                thumbnailUrl: profilePictureUrl
-            }
-        };
 
         await bot.core.sendMessage(groupJid, {
             text,
-            contextInfo
+            contextInfo: {
+                mentionedJid: [jid],
+                isForwarded: true,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: config.bot.newsletterJid,
+                    newsletterName: config.bot.name
+                },
+                externalAdReply: {
+                    title: config.bot.name,
+                    body: config.bot.version,
+                    mediaType: 1,
+                    thumbnailUrl: profilePictureUrl
+                }
+            }
         }, {
             quoted: tools.cmd.fakeMetaAiQuotedText(`Event: ${type}`)
         });
@@ -73,8 +71,7 @@ async function addWarning(ctx, groupDb, senderJid, groupId) {
 
     const newWarning = current + 1;
     warnings[senderId] = newWarning;
-
-    await db.set(`group.${groupId}.warnings`, newWarning);
+    await db.set(`group.${groupId}.warnings`, warnings);
 
     await ctx.reply({
         text: quote(`⚠️ Warning ${newWarning}/${maxwarnings} untuk @${senderId}!`),
@@ -365,7 +362,7 @@ module.exports = (bot) => {
                     }]
                 }
             }, {
-                quoted: tools.cmd.fakeMetaAiQuotedText(`Bot tidak dapat menerima panggilan ${call.isVideo ? "video" : "suara"}. Jika kamu memerlukan bantuan, silakan menghubungi Owner!`)
+                quoted: tools.cmd.fakeMetaAiQuotedText(`Bot tidak dapat menerima panggilan ${call.isVideo ? "video" : "suara"}! Jika kamu memerlukan bantuan, silakan menghubungi Owner.`)
             });
         }
     });

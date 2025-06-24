@@ -113,15 +113,14 @@ function getRandomElement(arr) {
     return arr[randomIndex];
 }
 
-async function handleError(ctx, error, useAxios = false) {
+async function handleError(ctx, error, useAxios = false, reportErrorToOwner = true) {
     const isGroup = ctx.isGroup();
     const groupJid = isGroup ? ctx.id : null;
     const groupSubject = isGroup ? await ctx.group(groupJid).name() : null;
     const errorText = util.format(error);
 
     consolefy.error(`Error: ${errorText}`);
-    if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
-    if (config.system.reportErrorToOwner) await ctx.replyWithJid(`${config.owner.id}@s.whatsapp.net`, {
+    if (config.system.reportErrorToOwner && reportErrorToOwner) await ctx.replyWithJid(`${config.owner.id}@s.whatsapp.net`, {
         text: `${quote(isGroup ? `⚠️ Terjadi kesalahan dari grup: @${groupJid}, oleh: @${ctx.getId(ctx.sender.jid)}` : `⚠️ Terjadi kesalahan dari: @${await ctx.getId(ctx.sender.jid)}`)}\n` +
             `${quote("─────")}\n` +
             monospace(errorText),
@@ -133,6 +132,7 @@ async function handleError(ctx, error, useAxios = false) {
             }] : []
         }
     });
+    if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
     return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
 }
 

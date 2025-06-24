@@ -16,7 +16,7 @@ module.exports = {
 
             return await ctx.reply(monospace(util.inspect(result)));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error);
+            return await tools.cmd.handleError(ctx, error, false, true);
         }
     }
 };

@@ -5,7 +5,7 @@ const axios = require("axios");
 
 module.exports = {
     name: "soundcloudsearch",
-    aliases: ["scs", "scsearch", "soundcloud", "soundclouds"],
+    aliases: ["soundcloud", "soundclouds"],
     category: "search",
     permissions: {
         coin: 10

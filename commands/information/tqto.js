@@ -4,7 +4,7 @@ const {
 
 module.exports = {
     name: "tqto",
-    aliases: ["contrib", "contribs", "contributor", "contributors", "thanksto"],
+    aliases: ["thanksto"],
     category: "information",
     code: async (ctx) => {
         return await ctx.reply(

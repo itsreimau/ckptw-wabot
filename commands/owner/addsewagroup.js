@@ -18,7 +18,7 @@ module.exports = {
             `${quote(tools.msg.generateCmdExample(ctx.used, "1234567890 30"))}\n` +
             `${quote(tools.msg.generateNotes(["Gunakan di grup untuk otomatis menyewakan grup tersebut."]))}\n` +
             quote(tools.msg.generatesFlagInfo({
-                "-d": "Tetap diam dengan tidak menyiarkan ke orang yang relevan"
+                "-s": "Tetap diam dengan tidak menyiarkan ke orang yang relevan"
             }))
         );
 
@@ -30,17 +30,19 @@ module.exports = {
 
             await db.set(`group.${groupId}.sewa`, true);
 
-            const groupOwner = (await ctx.group(groupJid)).owner().catch(() => null);
-            const groupMentions = [{
-                groupJid: `${group.id}@g.us`,
-                groupSubject: (await ctx.group(groupJid)).name().catch(() => null)
-            }];
             const flag = tools.cmd.parseFlag(ctx.args.join(" "), {
                 "-s": {
                     type: "boolean",
                     key: "silent"
                 }
             });
+            if (flag?.silent) {
+                const groupOwner = (await ctx.group(groupJid)).owner().catch(() => null);
+                const groupMentions = [{
+                    groupJid: `${group.id}@g.us`,
+                    groupSubject: (await ctx.group(groupJid)).name().catch(() => null)
+                }];
+            }
 
             if (daysAmount && daysAmount > 0) {
                 const expirationDate = Date.now() + (daysAmount * 24 * 60 * 60 * 1000);

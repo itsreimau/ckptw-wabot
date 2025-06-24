@@ -4,7 +4,7 @@ const {
 
 module.exports = {
     name: "addcoinuser",
-    aliases: ["addcoin", "acu"],
+    aliases: ["acu", "addcoin"],
     category: "owner",
     permissions: {
         owner: true

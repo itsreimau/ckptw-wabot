@@ -17,7 +17,7 @@ module.exports = {
             `${quote(tools.msg.generateCmdExample(ctx.used, "1234567890"))}\n` +
             `${quote(tools.msg.generateNotes(["Gunakan di grup untuk otomatis menghapus sewa grup tersebut."]))}\n` +
             quote(tools.msg.generatesFlagInfo({
-                "-d": "Tetap diam dengan tidak menyiarkan ke orang yang relevan"
+                "-s": "Tetap diam dengan tidak menyiarkan ke orang yang relevan"
             }))
         );
 
@@ -29,24 +29,25 @@ module.exports = {
             await db.delete(`group.${groupId}.sewa`);
             await db.delete(`group.${groupId}.sewaExpiration`);
 
-            const groupOwner = (await ctx.group(groupJid)).owner().catch(() => null);
-            const groupMentions = [{
-                groupJid: `${group.id}@g.us`,
-                groupSubject: (await ctx.group(groupJid)).name().catch(() => null)
-            }];
-
             const flag = tools.cmd.parseFlag(ctx.args.join(" "), {
                 "-s": {
                     type: "boolean",
                     key: "silent"
                 }
             });
-            if (!flag?.silent && groupOwner) await ctx.sendMessage(groupOwner, {
-                text: quote(`📢 Sewa bot untuk grup @${groupMentions.groupJid} telah dihentikan oleh Owner!`),
-                contextInfo: {
-                    groupMentions
-                }
-            });
+            if (!flag?.silent && groupOwner) {
+                const groupOwner = (await ctx.group(groupJid)).owner().catch(() => null);
+                const groupMentions = [{
+                    groupJid: `${group.id}@g.us`,
+                    groupSubject: (await ctx.group(groupJid)).name().catch(() => null)
+                }];
+                await ctx.sendMessage(groupOwner, {
+                    text: quote(`📢 Sewa bot untuk grup @${groupMentions.groupJid} telah dihentikan oleh Owner!`),
+                    contextInfo: {
+                        groupMentions
+                    }
+                });
+            }
 
             return await ctx.reply(quote(`✅ Berhasil menghapus sewa bot untuk grup ini!`));
         } catch (error) {
