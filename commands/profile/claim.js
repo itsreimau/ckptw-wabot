@@ -5,7 +5,7 @@ const {
 
 module.exports = {
     name: "claim",
-    aliases: ["bonus", "klaim"]
+    aliases: ["bonus", "klaim"],
     category: "profile",
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
