@@ -37,7 +37,7 @@ module.exports = {
             muteList = muteList.filter(item => item !== accountId);
             await db.set(`group.${groupId}.mute`, muteList);
 
-            return await ctx.reply(quote("✅ Berhasil me-unmute pengguna dari grup ini!"));
+            return await ctx.reply(quote("✅ Berhasil me-unmute pengguna itu dari grup ini!"));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

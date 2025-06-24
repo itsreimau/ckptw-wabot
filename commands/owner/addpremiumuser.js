@@ -17,7 +17,10 @@ module.exports = {
         if (!userJid) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
                 `${quote(tools.msg.generateCmdExample(ctx.used, `@${ctx.getId(ctx.sender.jid)} 30`))}\n` +
-                quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
+                `${quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."]))}\n` +
+                quote(tools.msg.generatesFlagInfo({
+                    "-d": "Tetap diam dengan tidak menyiarkan ke orang yang relevan"
+                })),
             mentions: [ctx.sender.jid]
         });
 
@@ -29,22 +32,31 @@ module.exports = {
         try {
             const userId = ctx.getId(userJid);
 
+            const flag = tools.cmd.parseFlag(ctx.args.join(" "), {
+                "-s": {
+                    type: "boolean",
+                    key: "silent"
+                }
+            });
+
             await db.set(`user.${userId}.premium`, true);
             if (daysAmount && daysAmount > 0) {
                 const expirationDate = Date.now() + (daysAmount * 24 * 60 * 60 * 1000);
                 await db.set(`user.${userId}.premiumExpiration`, expirationDate);
 
-                await ctx.sendMessage(userJid, {
+                if (!flag?.silent) await ctx.sendMessage(userJid, {
                     text: quote(`📢 Kamu telah ditambahkan sebagai pengguna Premium oleh Owner selama ${daysAmount} hari!`)
                 });
-                return await ctx.reply(quote(`✅ Berhasil menambahkan Premium selama ${daysAmount} hari kepada pengguna!`));
+
+                return await ctx.reply(quote(`✅ Berhasil menambahkan Premium selama ${daysAmount} hari kepada pengguna itu!`));
             } else {
                 await db.delete(`user.${userId}.premiumExpiration`);
 
-                await ctx.sendMessage(userJid, {
+                if (!flag?.silent) await ctx.sendMessage(userJid, {
                     text: quote("📢 Kamu telah ditambahkan sebagai pengguna Premium selamanya oleh Owner!")
                 });
-                return await ctx.reply(quote("✅ Berhasil menambahkan Premium selamanya kepada pengguna!"));
+
+                return await ctx.reply(quote("✅ Berhasil menambahkan Premium selamanya kepada pengguna itu!"));
             }
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);

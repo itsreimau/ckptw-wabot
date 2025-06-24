@@ -29,7 +29,7 @@ module.exports = {
         const isReceiverInMenfess = Object.values(allMenfessDb).some(m => m.from === targetId || m.to === targetId);
 
         if (isSenderInMenfess) return await ctx.reply(quote("❎ Kamu tidak dapat mengirim menfess karena sedang terlibat dalam percakapan lain."));
-        if (isReceiverInMenfess) return await ctx.reply(quote("❎ Kamu tidak dapat mengirim menfess kepada pengguna ini karena dia sedang terlibat dalam percakapan lain."));
+        if (isReceiverInMenfess) return await ctx.reply(quote("❎ Kamu tidak dapat mengirim menfess, karena dia sedang terlibat dalam percakapan lain."));
         if (targetId === senderId) return await ctx.reply(quote("❎ Tidak dapat digunakan pada diri sendiri."));
 
         try {

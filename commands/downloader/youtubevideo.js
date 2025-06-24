@@ -36,13 +36,13 @@ module.exports = {
             }
         });
 
-        const url = flag.input || null;
+        const url = flag?.input || null;
 
         const isUrl = await tools.cmd.isUrl(url);
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            let quality = flag.quality || 720;
+            let quality = flag?.quality || 720;
             if (![144, 240, 360, 480, 720, 1080].includes(quality)) quality = 720;
 
             const apiUrl = tools.api.createUrl("zell", "/download/youtube", {

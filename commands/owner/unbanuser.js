@@ -15,7 +15,10 @@ module.exports = {
         if (!userJid) return await ctx.reply({
             text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
                 `${quote(tools.msg.generateCmdExample(ctx.used, `@${ctx.getId(ctx.sender.jid)}`))}\n` +
-                quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
+                `${quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."]))}\n` +
+                quote(tools.msg.generatesFlagInfo({
+                    "-d": "Tetap diam dengan tidak menyiarkan ke orang yang relevan"
+                })),
             mentions: [ctx.sender.jid]
         });
 
@@ -25,9 +28,16 @@ module.exports = {
         try {
             await db.set(`user.${ctx.getId(userJid)}.banned`, false);
 
-            await ctx.sendMessage(userJid, {
+            const flag = tools.cmd.parseFlag(ctx.args.join(" "), {
+                "-s": {
+                    type: "boolean",
+                    key: "silent"
+                }
+            });
+            if (!flag?.silent) await ctx.sendMessage(userJid, {
                 text: quote("🎉 Kamu telah diunbanned oleh Owner!")
             });
+
             return await ctx.reply(quote("✅ Berhasil diunbanned!"));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);

@@ -45,20 +45,17 @@ module.exports = {
                 }
             });
 
-            const hidetag = flag.hidetag || null;
-            const text = flag.input;
+            const hidetag = flag?.hidetag || null;
+            const text = flag?.input;
 
-            const delay = ms => new Promise(res => setTimeout(res, ms));
-            const groupData = await ctx.core.groupFetchAllParticipating();
-            const groupIds = Object.values(groupData).map(g => g.id);
-
+            const groupIds = Object.values(await ctx.core.groupFetchAllParticipating()).map(g => g.id);
             const blacklist = await db.get("bot.blacklistBroadcast") || [];
             const filteredGroupIds = groupIds.filter(groupId => !blacklist.includes(groupId));
 
             const waitMsg = await ctx.reply(quote(`🔄 Mengirim siaran ke ${filteredGroupIds.length} grup, perkiraan waktu: ${tools.msg.convertMsToDuration(filteredGroupIds.length * 0.5 * 1000)}`));
 
+            const delay = ms => new Promise(res => setTimeout(res, ms));
             const failedGroupIds = [];
-
             for (const groupId of filteredGroupIds) {
                 await delay(500);
                 try {
@@ -94,8 +91,8 @@ module.exports = {
                     failedGroupIds.push(groupId);
                 }
             }
-
             const successCount = filteredGroupIds.length - failedGroupIds.length;
+
             return await ctx.editMessage(waitMsg.key, quote(`✅ Berhasil mengirim ke ${successCount} grup. Gagal mengirim ke ${failedGroupIds.length} grup, ${blacklist.length} grup dalam blacklist tidak dikirim.`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
