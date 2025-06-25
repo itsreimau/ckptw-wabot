@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const ezgif = require("ezgif-node");
 const mime = require("mime-types");
 
@@ -11,7 +8,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
+        if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(formatter.quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
 
         try {
             const buffer = await ctx.quoted.media.toBuffer()

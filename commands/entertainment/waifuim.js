@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const mime = require("mime-types");
 
 module.exports = {
@@ -27,7 +24,7 @@ module.exports = {
                     url: result
                 },
                 mimetype: mime.lookup("jpg"),
-                caption: `${quote(`Kategori: ${tools.msg.ucwords(waifuim)}`)}\n` +
+                caption: `${formatter.quote(`Kategori: ${tools.msg.ucwords(waifuim)}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

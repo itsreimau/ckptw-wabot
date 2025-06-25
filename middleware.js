@@ -1,8 +1,6 @@
 // Impor modul dan dependensi yang diperlukan
 const {
-    Cooldown,
-    monospace,
-    quote
+    Cooldown
 } = require("@itsreimau/gktw");
 
 // Fungsi untuk mengecek apakah pengguna memiliki cukup koin sebelum menggunakan perintah tertentu
@@ -51,9 +49,9 @@ module.exports = (bot) => {
             if (userDb?.autolevelup) {
                 const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
                 await ctx.reply({
-                    text: `${quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
+                    text: `${formatter.quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
                         `${config.msg.readmore}\n` +
-                        quote(tools.msg.generateNotes([`Terganggu? Ketik ${monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
+                        formatter.quote(tools.msg.generateNotes([`Terganggu? Ketik ${formatter.monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
                     contextInfo: {
                         externalAdReply: {
                             title: config.bot.name,
@@ -125,7 +123,7 @@ module.exports = (bot) => {
                     await ctx.reply(
                         `${msg}\n` +
                         `${config.msg.readmore}\n` +
-                        quote(tools.msg.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
+                        formatter.quote(tools.msg.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
                     );
                     return await db.set(`user.${senderId}.lastSentMsg.${key}`, now);
                 } else {
@@ -206,7 +204,7 @@ module.exports = (bot) => {
                     await ctx.reply(
                         `${msg}\n` +
                         `${config.msg.readmore}\n` +
-                        quote(tools.msg.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
+                        formatter.quote(tools.msg.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
                     );
                     return await db.set(`user.${senderId}.lastSentMsg.${key}`, now);
                 } else {

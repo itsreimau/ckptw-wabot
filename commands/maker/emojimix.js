@@ -1,7 +1,4 @@
 const {
-    quote
-} = require("@itsreimau/gktw");
-const {
     Sticker,
     StickerTypes
 } = require("wa-sticker-formatter");
@@ -19,8 +16,8 @@ module.exports = {
         const [emoji1, emoji2] = emojis.slice(0, 2);
 
         if (!emoji1 || !emoji2) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "😱 🤓"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "😱 🤓"))
         );
 
         try {

@@ -1,8 +1,3 @@
-const {
-    monospace,
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "mode",
     alises: ["m"],
@@ -14,9 +9,9 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "self"))}\n` +
-            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "self"))}\n` +
+            formatter.quote(tools.msg.generateNotes([`Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (["l", "list"].includes(input)) {
@@ -33,10 +28,10 @@ module.exports = {
                     await db.set("bot.mode", input.toLowerCase());
                     break;
                 default:
-                    return await ctx.reply(quote("❎ Mode tidak valid."));
+                    return await ctx.reply(formatter.quote("❎ Mode tidak valid."));
             }
 
-            return await ctx.reply(quote(`✅ Berhasil mengubah mode ke ${input}!`));
+            return await ctx.reply(formatter.quote(`✅ Berhasil mengubah mode ke ${input}!`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

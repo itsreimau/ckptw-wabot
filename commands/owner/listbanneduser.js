@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "listbanneduser",
     aliases: ["listban", "listbanned"],
@@ -22,7 +18,7 @@ module.exports = {
             let userMentions = [];
 
             bannedUsers.forEach(userId => {
-                resultText += `${quote(`@${userId}`)}\n`;
+                resultText += `${formatter.quote(`@${userId}`)}\n`;
             });
 
             bannedUsers.forEach(userId => {

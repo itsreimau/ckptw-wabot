@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "setmaxwarnings",
     category: "group",
@@ -14,15 +10,15 @@ module.exports = {
         const input = parseInt(ctx.args[0], 10) || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "8"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "8"))
         );
 
         try {
             const groupId = ctx.getId(ctx.id);
             await db.set(`group.${groupId}.maxwarnings`, input);
 
-            return await ctx.reply(quote(`✅ Berhasil mengubah max warnings!`));
+            return await ctx.reply(formatter.quote(`✅ Berhasil mengubah max warnings!`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

@@ -1,7 +1,3 @@
-const {
-    monospace,
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 
 module.exports = {
@@ -15,9 +11,9 @@ module.exports = {
         const [passage, num] = ctx.args;
 
         if (!passage && !num) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "kej 2:18"))}\n` +
-            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "kej 2:18"))}\n` +
+            formatter.quote(tools.msg.generateNotes([`Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (["l", "list"].includes(passage.toLowerCase())) {
@@ -33,16 +29,16 @@ module.exports = {
             const result = (await axios.get(apiUrl)).data.bible.book;
 
             const resultText = result.chapter.verses.map(r =>
-                `${quote(`Ayat: ${r.number}`)}\n` +
-                `${quote(`${r.text}`)}`
+                `${formatter.quote(`Ayat: ${r.number}`)}\n` +
+                `${formatter.quote(`${r.text}`)}`
             ).join(
                 "\n" +
-                `${quote("─────")}\n`
+                `${formatter.quote("─────")}\n`
             );
             return await ctx.reply(
-                `${quote(`Nama: ${result.name}`)}\n` +
-                `${quote(`Bab: ${result.chapter.chap}`)}\n` +
-                `${quote("─────")}\n` +
+                `${formatter.quote(`Nama: ${result.name}`)}\n` +
+                `${formatter.quote(`Bab: ${result.chapter.chap}`)}\n` +
+                `${formatter.quote("─────")}\n` +
                 `${resultText}\n` +
                 "\n" +
                 config.msg.footer

@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 
 module.exports = {
@@ -14,8 +11,8 @@ module.exports = {
         const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "moon"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "moon"))
         );
 
         try {

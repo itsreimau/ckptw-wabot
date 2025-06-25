@@ -1,7 +1,4 @@
 const {
-    quote
-} = require("@itsreimau/gktw");
-const {
     exec
 } = require("node:child_process");
 const process = require("node:process");
@@ -15,7 +12,7 @@ module.exports = {
         owner: true
     },
     code: async (ctx) => {
-        if (!process.env.PM2_HOME) return await ctx.reply(quote("❎ Bot tidak berjalan di bawah PM2! Restart manual diperlukan."));
+        if (!process.env.PM2_HOME) return await ctx.reply(formatter.quote("❎ Bot tidak berjalan di bawah PM2! Restart manual diperlukan."));
 
         try {
             const waitMsg = await ctx.reply(config.msg.wait);

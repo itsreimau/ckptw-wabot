@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 const mime = require("mime-types");
 
@@ -15,8 +12,8 @@ module.exports = {
         const url = ctx.args[0] || null;
 
         if (!url) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "https://id.pinterest.com/pin/313422455339425808"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "https://id.pinterest.com/pin/313422455339425808"))
         );
 
         const isUrl = await tools.cmd.isUrl(url);

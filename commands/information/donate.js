@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "donate",
     aliases: ["donasi"],
@@ -17,11 +13,11 @@ module.exports = {
                 .replace(/%command%/g, ctx.used.command)
                 .replace(/%footer%/g, config.msg.footer)
                 .replace(/%readmore%/g, config.msg.readmore) :
-                `${quote("083838039693 (DANA)")}\n` +
-                `${quote("─────")}\n` +
-                `${quote("https://paypal.me/itsreimau (PayPal)")}\n` +
-                `${quote("https://saweria.co/itsreimau (Saweria)")}\n` +
-                `${quote("https://trakteer.id/itsreimau (Trakteer)")}\n` +
+                `${formatter.quote("083838039693 (DANA)")}\n` +
+                `${formatter.quote("─────")}\n` +
+                `${formatter.quote("https://paypal.me/itsreimau (PayPal)")}\n` +
+                `${formatter.quote("https://saweria.co/itsreimau (Saweria)")}\n` +
+                `${formatter.quote("https://trakteer.id/itsreimau (Trakteer)")}\n` +
                 "\n" +
                 config.msg.footer;
 

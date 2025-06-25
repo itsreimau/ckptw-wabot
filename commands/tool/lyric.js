@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 
 module.exports = {
@@ -14,8 +11,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "one last kiss - hikaru utada"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "one last kiss - hikaru utada"))
         );
 
         try {
@@ -25,8 +22,8 @@ module.exports = {
             const result = (await axios.get(apiUrl)).data;
 
             return await ctx.reply(
-                `${quote(`Judul: ${result.title}`)}\n` +
-                `${quote("─────")}\n` +
+                `${formatter.quote(`Judul: ${result.title}`)}\n` +
+                `${formatter.quote("─────")}\n` +
                 `${result.lyrics}\n` +
                 "\n" +
                 config.msg.footer

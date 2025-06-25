@@ -1,7 +1,3 @@
-const {
-    bold,
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 const mime = require("mime-types");
 const {
@@ -20,8 +16,8 @@ module.exports = {
         const url = ctx.args[0] || null;
 
         if (!url) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, config.bot.thumbnail))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, config.bot.thumbnail))
         );
 
         const isUrl = await tools.cmd.isUrl(url);
@@ -83,8 +79,8 @@ module.exports = {
 
                 const responseText = json ? walkJSON(json) : text;
                 return await ctx.reply(
-                    `${quote(`Status: ${response.status} ${response.statusText}`)}\n` +
-                    `${quote("─────")}\n` +
+                    `${formatter.quote(`Status: ${response.status} ${response.statusText}`)}\n` +
+                    `${formatter.quote("─────")}\n` +
                     `${responseText}\n` +
                     "\n" +
                     config.msg.footer
@@ -98,7 +94,7 @@ module.exports = {
 
 function walkJSON(json, depth = 0, array = []) {
     for (const key in json) {
-        array.push(`${"┊".repeat(depth)}${depth > 0 ? " " : ""}${bold(key)}:`);
+        array.push(`${"┊".repeat(depth)}${depth > 0 ? " " : ""}${formatter.bold(key)}:`);
         if (typeof json[key] === "object" && json[key] !== null) {
             walkJSON(json[key], depth + 1, array);
         } else {

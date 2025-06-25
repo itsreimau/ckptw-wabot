@@ -1,9 +1,5 @@
 // Impor modul dan dependensi yang diperlukan
 const api = require("./api.js");
-const {
-    monospace,
-    quote
-} = require("@itsreimau/gktw");
 const uploader = require("@zanixongroup/uploader");
 const axios = require("axios");
 const didYouMean = require("didyoumean");
@@ -121,9 +117,9 @@ async function handleError(ctx, error, useAxios = false, reportErrorToOwner = tr
 
     consolefy.error(`Error: ${errorText}`);
     if (config.system.reportErrorToOwner && reportErrorToOwner) await ctx.replyWithJid(`${config.owner.id}@s.whatsapp.net`, {
-        text: `${quote(isGroup ? `⚠️ Terjadi kesalahan dari grup: @${groupJid}, oleh: @${ctx.getId(ctx.sender.jid)}` : `⚠️ Terjadi kesalahan dari: @${await ctx.getId(ctx.sender.jid)}`)}\n` +
-            `${quote("─────")}\n` +
-            monospace(errorText),
+        text: `${formatter.quote(isGroup ? `⚠️ Terjadi kesalahan dari grup: @${groupJid}, oleh: @${ctx.getId(ctx.sender.jid)}` : `⚠️ Terjadi kesalahan dari: @${await ctx.getId(ctx.sender.jid)}`)}\n` +
+            `${formatter.quote("─────")}\n` +
+            formatter.monospace(errorText),
         contextInfo: {
             mentionedJid: [ctx.sender.jid],
             groupMentions: isGroup ? [{
@@ -133,7 +129,7 @@ async function handleError(ctx, error, useAxios = false, reportErrorToOwner = tr
         }
     });
     if (useAxios && error.status !== 200) return await ctx.reply(config.msg.notFound);
-    return await ctx.reply(quote(`⚠️ Terjadi kesalahan: ${error.message}`));
+    return await ctx.reply(formatter.quote(`⚠️ Terjadi kesalahan: ${error.message}`));
 }
 
 function isCmd(content, bot) {

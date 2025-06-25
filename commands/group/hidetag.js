@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "hidetag",
     aliases: ["ht"],
@@ -11,7 +7,7 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || quote("👋 Halo, Dunia!");
+        const input = ctx.args.join(" ") || formatter.quote("👋 Halo, Dunia!");
 
         try {
             const members = await ctx.group().members();

@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "upload",
     aliases: ["tourl"],
@@ -19,8 +15,8 @@ module.exports = {
         ]);
 
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send", "reply"], ["audio", "document", "image", "video", "sticker"]))}\n` +
-            quote(tools.msg.generatesFlagInfo({
+            `${formatter.quote(tools.msg.generateInstruction(["send", "reply"], ["audio", "document", "image", "video", "sticker"]))}\n` +
+            formatter.quote(tools.msg.generatesFlagInfo({
                 "-t <text>": "Atur tipe media (tersedia: any, image, video, audio | default: any)",
                 "-h <text>": `Atur host uploader (tersedia: catbox, cloudku, erhabot, fasturl, idnet, litterbox, nyxs, pomf, quax, quax, ryzen, shojib, tmperhabot, uguu, videy | default: ${config.system.uploaderHost.toLowerCase()})`
             }))
@@ -49,7 +45,7 @@ module.exports = {
             const result = await tools.cmd.upload(buffer, type, host);
 
             return await ctx.reply(
-                `${quote(`URL: ${result}`)}\n` +
+                `${formatter.quote(`URL: ${result}`)}\n` +
                 "\n" +
                 config.msg.footer
             );

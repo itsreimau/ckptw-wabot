@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "listpremiumuser",
     aliases: ["listprem", "listpremium"],
@@ -31,9 +27,9 @@ module.exports = {
 
                 if (user.expiration) {
                     const daysLeft = Math.ceil((user.expiration - Date.now()) / (24 * 60 * 60 * 1000));
-                    resultText += `${quote(`@${user.id} (${daysLeft} hari tersisa)`)}\n`;
+                    resultText += `${formatter.quote(`@${user.id} (${daysLeft} hari tersisa)`)}\n`;
                 } else {
-                    resultText += `${quote(`@${user.id} (Premium permanen)`)}\n`;
+                    resultText += `${formatter.quote(`@${user.id} (Premium permanen)`)}\n`;
                 }
             }
 

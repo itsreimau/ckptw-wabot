@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 const mime = require("mime-types");
 
@@ -15,8 +12,8 @@ module.exports = {
         const url = ctx.args[0] || null;
 
         if (!url) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "https://v.douyin.com/d2OVRjYYi9s"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "https://v.douyin.com/d2OVRjYYi9s"))
         );
 
         const isUrl = await tools.cmd.isUrl(url);
@@ -33,7 +30,7 @@ module.exports = {
                     url: result.mp4_hd || result.mp4_2 || result.mp4_1
                 },
                 mimetype: mime.lookup("mp4"),
-                caption: `${quote(`URL: ${url}`)}\n` +
+                caption: `${formatter.quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

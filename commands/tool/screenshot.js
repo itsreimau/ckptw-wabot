@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const mime = require("mime-types");
 
 module.exports = {
@@ -14,8 +11,8 @@ module.exports = {
         const url = ctx.args[0] || null;
 
         if (!url) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "https://itsreimau.is-a.dev"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "https://itsreimau.is-a.dev"))
         );
 
         const isUrl = await tools.cmd.isUrl(url);
@@ -35,7 +32,7 @@ module.exports = {
                     url: result
                 },
                 mimetype: mime.lookup("jpg"),
-                caption: `${quote(`URL: ${url}`)}\n` +
+                caption: `${formatter.quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

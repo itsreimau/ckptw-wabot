@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 const mime = require("mime-types");
 
@@ -22,7 +19,7 @@ module.exports = {
                     url: result.url
                 },
                 mimetype: mime.lookup("jpeg"),
-                caption: `${quote(`Sumber: ${result.source}`)}\n` +
+                caption: `${formatter.quote(`Sumber: ${result.source}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "setname",
     category: "group",
@@ -14,14 +10,14 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "gaxtawu"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "gaxtawu"))
         );
 
         try {
             await ctx.group().updateSubject(input);
 
-            return await ctx.reply(quote("✅ Berhasil mengubah nama grup!"));
+            return await ctx.reply(formatter.quote("✅ Berhasil mengubah nama grup!"));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

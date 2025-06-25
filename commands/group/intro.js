@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "intro",
     category: "group",
@@ -12,7 +8,7 @@ module.exports = {
     code: async (ctx) => {
         try {
             const groupId = ctx.getId(ctx.id);
-            const introText = await db.get(`group.${groupId}.text.intro`) || quote("❎ Grup ini tidak memiliki intro.");
+            const introText = await db.get(`group.${groupId}.text.intro`) || formatter.quote("❎ Grup ini tidak memiliki intro.");
 
             return await ctx.reply(introText);
         } catch (error) {

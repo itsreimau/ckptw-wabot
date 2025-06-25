@@ -1,8 +1,3 @@
-const {
-    monospace,
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "reset",
     category: "profile",
@@ -10,7 +5,7 @@ module.exports = {
         private: true
     },
     code: async (ctx) => {
-        await ctx.reply(quote(`🤖 Apakah kamu yakin ingin mereset datamu? Langkah ini akan menghapus seluruh data yang tersimpan dan tidak dapat dikembalikan. Ketik ${monospace("y")} untuk melanjutkan atau ${monospace("n")} untuk membatalkan.`));
+        await ctx.reply(formatter.quote(`🤖 Apakah kamu yakin ingin mereset datamu? Langkah ini akan menghapus seluruh data yang tersimpan dan tidak dapat dikembalikan. Ketik ${formatter.monospace("y")} untuk melanjutkan atau ${formatter.monospace("n")} untuk membatalkan.`));
 
         try {
             const collector = ctx.MessageCollector({
@@ -22,10 +17,10 @@ module.exports = {
                 const senderId = ctx.getId(ctx.sender.jid);
 
                 if (content === "y") {
-                    await ctx.reply(quote("✅ Data-mu berhasil direset, semua data telah dihapus!"));
+                    await ctx.reply(formatter.quote("✅ Data-mu berhasil direset, semua data telah dihapus!"));
                     return collector.stop();
                 } else if (content === "n") {
-                    await ctx.reply(quote("❌ Proses reset data telah dibatalkan."));
+                    await ctx.reply(formatter.quote("❌ Proses reset data telah dibatalkan."));
                     return collector.stop();
                 }
             });

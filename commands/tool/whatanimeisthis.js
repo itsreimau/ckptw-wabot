@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 const mime = require("mime-types");
 
@@ -18,7 +15,7 @@ module.exports = {
             tools.cmd.checkQuotedMedia(ctx.quoted, "image")
         ]);
 
-        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], "image")));
+        if (!checkMedia && !checkQuotedMedia) return await ctx.reply(formatter.quote(tools.msg.generateInstruction(["send", "reply"], "image")));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
@@ -33,10 +30,10 @@ module.exports = {
                     url: result.video
                 },
                 mimetype: mime.lookup("mp4"),
-                caption: `${quote(`Nama: ${result.filename}`)}\n` +
-                    `${quote(`Episode: ${result.episode}`)}\n` +
-                    `${quote(`Rentang Waktu: ${tools.msg.convertSecondToTimecode(result.from)}-${tools.msg.convertSecondToTimecode(result.to)}`)}\n` +
-                    `${quote(`Kemiripan: ${result.similarity}`)}\n` +
+                caption: `${formatter.quote(`Nama: ${result.filename}`)}\n` +
+                    `${formatter.quote(`Episode: ${result.episode}`)}\n` +
+                    `${formatter.quote(`Rentang Waktu: ${tools.msg.convertSecondToTimecode(result.from)}-${tools.msg.convertSecondToTimecode(result.to)}`)}\n` +
+                    `${formatter.quote(`Kemiripan: ${result.similarity}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

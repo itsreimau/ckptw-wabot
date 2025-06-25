@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "price",
     aliases: ["belibot", "harga", "sewa", "sewabot"],
@@ -17,7 +13,7 @@ module.exports = {
                 .replace(/%command%/g, ctx.used.command)
                 .replace(/%footer%/g, config.msg.footer)
                 .replace(/%readmore%/g, config.msg.readmore) :
-                quote("❎ Bot ini tidak memiliki harga.");
+                formatter.quote("❎ Bot ini tidak memiliki harga.");
 
             return await ctx.reply({
                 text: text,

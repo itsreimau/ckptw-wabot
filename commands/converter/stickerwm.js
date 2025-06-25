@@ -1,7 +1,4 @@
 const {
-    quote
-} = require("@itsreimau/gktw");
-const {
     Sticker,
     StickerTypes
 } = require("wa-sticker-formatter");
@@ -17,11 +14,11 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send", "reply"], ["text", "sticker"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "does this impact the lore?|@rei-ayanami"))
+            `${formatter.quote(tools.msg.generateInstruction(["send", "reply"], ["text", "sticker"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "does this impact the lore?|@rei-ayanami"))
         );
 
-        if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(quote(tools.msg.generateInstruction(["send", "reply"], ["sticker"])));
+        if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(formatter.quote(tools.msg.generateInstruction(["send", "reply"], ["sticker"])));
 
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();

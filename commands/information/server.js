@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const os = require("node:os");
 const process = require("node:process");
 
@@ -19,30 +16,30 @@ module.exports = {
             const cpus = os.cpus();
 
             return await ctx.reply(
-                `${quote(`OS: ${os.type()} (${os.platform()})`)}\n` +
-                `${quote(`Arch: ${os.arch()}`)}\n` +
-                `${quote(`Release: ${os.release()}`)}\n` +
-                `${quote(`Hostname: ${os.hostname()}`)}\n` +
-                `${quote(`System Uptime: ${tools.msg.convertMsToDuration(uptimeOS)}`)}\n` +
-                `${quote("─────")}\n` +
-                `${quote(`Digunakan: ${tools.msg.formatSize(usedMem)}`)}\n` +
-                `${quote(`Bebas: ${tools.msg.formatSize(freeMem)}`)}\n` +
-                `${quote(`Total: ${tools.msg.formatSize(totalMem)}`)}\n` +
-                `${quote(`Memori Aplikasi (RSS): ${tools.msg.formatSize(memory.rss)}`)}\n` +
-                `${quote("─────")}\n` +
-                `${quote(`Model: ${cpus[0].model}`)}\n` +
-                `${quote(`Kecepatan: ${cpus[0].speed} MHz`)}\n` +
-                `${quote(`Cores: ${cpus.length}`)}\n` +
-                `${quote(`Muat Rata-Rata: ${load.map(l => l.toFixed(2)).join(", ")}`)}\n` +
-                `${quote("─────")}\n` +
-                `${quote(`Versi NodeJS: ${process.version}`)}\n` +
-                `${quote(`Platform: ${process.platform}`)}\n` +
-                `${quote(`Jalur Exec: ${process.execPath}`)}\n` +
-                `${quote(`PID: ${process.pid}`)}\n` +
-                `${quote("─────")}\n` +
-                `${quote(`Bot Uptime: ${config.bot.uptime}`)}\n` +
-                `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
-                `${quote("Library: @itsreimau/gktw (Fork of @mengkodingan/ckptw)")}\n` +
+                `${formatter.quote(`OS: ${os.type()} (${os.platform()})`)}\n` +
+                `${formatter.quote(`Arch: ${os.arch()}`)}\n` +
+                `${formatter.quote(`Release: ${os.release()}`)}\n` +
+                `${formatter.quote(`Hostname: ${os.hostname()}`)}\n` +
+                `${formatter.quote(`System Uptime: ${tools.msg.convertMsToDuration(uptimeOS)}`)}\n` +
+                `${formatter.quote("─────")}\n` +
+                `${formatter.quote(`Digunakan: ${tools.msg.formatSize(usedMem)}`)}\n` +
+                `${formatter.quote(`Bebas: ${tools.msg.formatSize(freeMem)}`)}\n` +
+                `${formatter.quote(`Total: ${tools.msg.formatSize(totalMem)}`)}\n` +
+                `${formatter.quote(`Memori Aplikasi (RSS): ${tools.msg.formatSize(memory.rss)}`)}\n` +
+                `${formatter.quote("─────")}\n` +
+                `${formatter.quote(`Model: ${cpus[0].model}`)}\n` +
+                `${formatter.quote(`Kecepatan: ${cpus[0].speed} MHz`)}\n` +
+                `${formatter.quote(`Cores: ${cpus.length}`)}\n` +
+                `${formatter.quote(`Muat Rata-Rata: ${load.map(l => l.toFixed(2)).join(", ")}`)}\n` +
+                `${formatter.quote("─────")}\n` +
+                `${formatter.quote(`Versi NodeJS: ${process.version}`)}\n` +
+                `${formatter.quote(`Platform: ${process.platform}`)}\n` +
+                `${formatter.quote(`Jalur Exec: ${process.execPath}`)}\n` +
+                `${formatter.quote(`PID: ${process.pid}`)}\n` +
+                `${formatter.quote("─────")}\n` +
+                `${formatter.quote(`Bot Uptime: ${config.bot.uptime}`)}\n` +
+                `${formatter.quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
+                `${formatter.quote("Library: @itsreimau/gktw (Fork of @mengkodingan/ckptw)")}\n` +
                 "\n" +
                 config.msg.footer
             );

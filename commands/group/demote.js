@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "demote",
     category: "group",
@@ -14,18 +10,18 @@ module.exports = {
         const accountJid = ctx.quoted.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
 
         if (!accountJid) return await ctx.reply({
-            text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.msg.generateCmdExample(ctx.used, `@${ctx.getId(ctx.sender.jid)}`))}\n` +
-                quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
+            text: `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+                `${formatter.quote(tools.msg.generateCmdExample(ctx.used, `@${ctx.getId(ctx.sender.jid)}`))}\n` +
+                formatter.quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
             mentions: [ctx.sender.jid]
         });
 
-        if (!await ctx.group().isAdmin(accountJid)) return await ctx.reply(quote("❎ Dia adalah anggota!"));
+        if (!await ctx.group().isAdmin(accountJid)) return await ctx.reply(formatter.quote("❎ Dia adalah anggota!"));
 
         try {
             await ctx.group().demote([accountJid]);
 
-            return await ctx.reply(quote("✅ Berhasil diturunkan dari admin menjadi anggota!"));
+            return await ctx.reply(formatter.quote("✅ Berhasil diturunkan dari admin menjadi anggota!"));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

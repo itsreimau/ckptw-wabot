@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "fixdb",
     aliases: ["fixdatabase"],
@@ -13,8 +9,8 @@ module.exports = {
         const input = ctx.args[0] || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "user"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "user"))
         );
 
         if (["l", "list"].includes(input)) {
@@ -123,7 +119,7 @@ module.exports = {
             };
 
             const processData = async (category, data) => {
-                await ctx.editMessage(waitMsg.key, quote(`🔄 Memproses data ${category}...`));
+                await ctx.editMessage(waitMsg.key, formatter.quote(`🔄 Memproses data ${category}...`));
                 for (const id of Object.keys(data)) {
                     const item = data[id] || {};
                     const filtered = filteredData(category, item);
@@ -144,10 +140,10 @@ module.exports = {
                     break;
 
                 default:
-                    return await ctx.reply(quote(`❎ Key "${input}" tidak valid!`));
+                    return await ctx.reply(formatter.quote(`❎ Key "${input}" tidak valid!`));
             }
 
-            return await ctx.editMessage(waitMsg.key, quote(`✅ Database berhasil dibersihkan untuk ${input}!`));
+            return await ctx.editMessage(waitMsg.key, formatter.quote(`✅ Database berhasil dibersihkan untuk ${input}!`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

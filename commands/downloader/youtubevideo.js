@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 const mime = require("mime-types");
 
@@ -15,9 +12,9 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "https://www.youtube.com/watch?v=0Uhh62MUEic -d -q 720"))}\n` +
-            quote(tools.msg.generatesFlagInfo({
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "https://www.youtube.com/watch?v=0Uhh62MUEic -d -q 720"))}\n` +
+            formatter.quote(tools.msg.generatesFlagInfo({
                 "-d": "Kirim sebagai dokumen",
                 "-q <number>": "Pilihan pada kualitas video (tersedia: 360, 480, 720, 1080, 1440, 4k | default: 360)"
             }))
@@ -57,7 +54,7 @@ module.exports = {
                 },
                 fileName: `${result.title}.mp4`,
                 mimetype: mime.lookup("mp4"),
-                caption: `${quote(`URL: ${url}`)}\n` +
+                caption: `${formatter.quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer
             });
@@ -67,7 +64,7 @@ module.exports = {
                     url: result.download
                 },
                 mimetype: mime.lookup("mp4"),
-                caption: `${quote(`URL: ${url}`)}\n` +
+                caption: `${formatter.quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

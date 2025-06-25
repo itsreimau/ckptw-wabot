@@ -3,7 +3,8 @@ require("./config.js");
 const pkg = require("./package.json");
 const tools = require("./tools/exports.js");
 const {
-    Consolefy
+    Consolefy,
+    Formatter
 } = require("@mengkodingan/consolefy");
 const CFonts = require("cfonts");
 const fs = require("node:fs/promises");
@@ -25,9 +26,10 @@ const db = new SimplDB();
 config.bot.version = `v${pkg.version}`;
 Object.assign(global, {
     config,
-    tools,
     consolefy: c,
     db
+    formatter: Formatter,
+    tools
 });
 
 c.log("Starting..."); // Logging proses awal

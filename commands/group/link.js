@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "link",
     aliases: ["gclink", "grouplink"],
@@ -14,7 +10,7 @@ module.exports = {
         try {
             const code = await ctx.group().inviteCode();
 
-            return await ctx.reply(quote(`https://chat.whatsapp.com/${code}`));
+            return await ctx.reply(formatter.quote(`https://chat.whatsapp.com/${code}`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

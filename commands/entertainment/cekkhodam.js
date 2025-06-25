@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 
 module.exports = {
@@ -14,8 +11,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "itsreimau"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "itsreimau"))
         );
 
         try {
@@ -23,8 +20,8 @@ module.exports = {
             const result = tools.general.getRandomElement((await axios.get(apiUrl)).data.trim().split("\n").filter(Boolean));
 
             return await ctx.reply(
-                `${quote(`Nama: ${input}`)}\n` +
-                `${quote(`Khodam: ${result}`)}\n` +
+                `${formatter.quote(`Nama: ${input}`)}\n` +
+                `${formatter.quote(`Khodam: ${result}`)}\n` +
                 "\n" +
                 config.msg.footer
             );

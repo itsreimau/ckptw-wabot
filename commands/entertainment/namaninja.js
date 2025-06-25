@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "namaninja",
     aliases: ["ninja"],
@@ -13,8 +9,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "itsreimau"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "itsreimau"))
         );
 
         try {
@@ -49,7 +45,7 @@ module.exports = {
                 } [i.toLowerCase()] || i
             });
 
-            return await ctx.reply(quote(result));
+            return await ctx.reply(formatter.quote(result));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

@@ -1,7 +1,4 @@
 const {
-    monospace
-} = require("@itsreimau/gktw");
-const {
     exec
 } = require("node:child_process");
 const util = require("node:util");
@@ -17,7 +14,7 @@ module.exports = {
             const command = ctx.msg.content.slice(2);
             const output = await util.promisify(exec)(command);
 
-            return await ctx.reply(monospace(output.stdout || output.stderr));
+            return await ctx.reply(formatter.monospace(output.stdout || output.stderr));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, false, true);
         }

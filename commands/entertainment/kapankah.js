@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "kapankah",
     aliases: ["kapan"],
@@ -13,8 +9,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "evangelion itu peak?"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "evangelion itu peak?"))
         );
 
         try {
@@ -23,7 +19,7 @@ module.exports = {
             const randomMs = Math.floor(Math.random() * (maxMs - minMs) + minMs);
             const duration = tools.msg.convertMsToDuration(randomMs);
 
-            return await ctx.reply(quote(`${duration} lagi...`));
+            return await ctx.reply(formatter.quote(`${duration} lagi...`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

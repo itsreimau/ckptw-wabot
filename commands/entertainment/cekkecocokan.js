@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 const mime = require("mime-types");
 
@@ -15,8 +12,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "shinji|kaworu"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "shinji|kaworu"))
         );
 
         try {
@@ -32,8 +29,8 @@ module.exports = {
                     url: result.gambar
                 },
                 mimetype: mime.lookup("png"),
-                caption: `${quote(`Sisi Positif: ${result.sisi_positif}`)}\n` +
-                    `${quote(`Sisi Negatif: ${result.sisi_negatif}`)}\n` +
+                caption: `${formatter.quote(`Sisi Positif: ${result.sisi_positif}`)}\n` +
+                    `${formatter.quote(`Sisi Negatif: ${result.sisi_negatif}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

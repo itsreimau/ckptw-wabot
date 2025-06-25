@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 
 module.exports = {
@@ -27,17 +24,17 @@ module.exports = {
                     });
 
                     if (response.status >= 200 && response.status < 500) {
-                        resultText += quote(`${api.baseURL} 🟢 (${response.status})\n`);
+                        resultText += formatter.quote(`${api.baseURL} 🟢 (${response.status})\n`);
                     } else {
-                        resultText += quote(`${api.baseURL} 🔴 (${response.status})\n`);
+                        resultText += formatter.quote(`${api.baseURL} 🔴 (${response.status})\n`);
                     }
                 } catch (error) {
                     if (error.response) {
-                        resultText += quote(`${api.baseURL} 🔴 (${error.response.status})\n`);
+                        resultText += formatter.quote(`${api.baseURL} 🔴 (${error.response.status})\n`);
                     } else if (error.request) {
-                        resultText += quote(`${api.baseURL} 🔴 (Tidak ada respon)\n`);
+                        resultText += formatter.quote(`${api.baseURL} 🔴 (Tidak ada respon)\n`);
                     } else {
-                        resultText += quote(`${api.baseURL} 🔴 (Kesalahan: ${error.message})\n`);
+                        resultText += formatter.quote(`${api.baseURL} 🔴 (Kesalahan: ${error.message})\n`);
                     }
                 }
             }

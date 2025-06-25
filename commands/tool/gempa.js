@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 const mime = require("mime-types");
 
@@ -22,14 +19,14 @@ module.exports = {
                     url: tools.api.createUrl("https://data.bmkg.go.id", `/DataMKG/TEWS/${result.Shakemap}`)
                 },
                 mimetype: mime.lookup("jpeg"),
-                caption: `${quote(result.Wilayah)}\n` +
-                    `${quote("─────")}\n` +
-                    `${quote(`Tanggal: ${result.Tanggal}`)}\n` +
-                    `${quote(`Potensi: ${result.Potensi}`)}\n` +
-                    `${quote(`Magnitude: ${result.Magnitude}`)}\n` +
-                    `${quote(`Kedalaman: ${result.Kedalaman}`)}\n` +
-                    `${quote(`Koordinat: ${result.Coordinates}`)}\n` +
-                    `${quote(`Dirasakan: ${result.Dirasakan}`)}\n` +
+                caption: `${formatter.quote(result.Wilayah)}\n` +
+                    `${formatter.quote("─────")}\n` +
+                    `${formatter.quote(`Tanggal: ${result.Tanggal}`)}\n` +
+                    `${formatter.quote(`Potensi: ${result.Potensi}`)}\n` +
+                    `${formatter.quote(`Magnitude: ${result.Magnitude}`)}\n` +
+                    `${formatter.quote(`Kedalaman: ${result.Kedalaman}`)}\n` +
+                    `${formatter.quote(`Koordinat: ${result.Coordinates}`)}\n` +
+                    `${formatter.quote(`Dirasakan: ${result.Dirasakan}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

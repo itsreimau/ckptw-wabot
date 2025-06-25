@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "addcoinuser",
     aliases: ["acu", "addcoin"],
@@ -15,17 +11,17 @@ module.exports = {
         const coinAmount = parseInt(ctx.args[mentionedJid ? 1 : 0], 10) || null;
 
         if (!userJid && !coinAmount) return await ctx.reply({
-            text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.msg.generateCmdExample(ctx.used, `@${ctx.getId(ctx.sender.jid)} 8`))}\n` +
-                `${quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."]))}\n` +
-                quote(tools.msg.generatesFlagInfo({
+            text: `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+                `${formatter.quote(tools.msg.generateCmdExample(ctx.used, `@${ctx.getId(ctx.sender.jid)} 8`))}\n` +
+                `${formatter.quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."]))}\n` +
+                formatter.quote(tools.msg.generatesFlagInfo({
                     "-s": "Tetap diam dengan tidak menyiarkan ke orang yang relevan"
                 })),
             mentions: [ctx.sender.jid]
         });
 
         const isOnWhatsApp = await ctx.core.onWhatsApp(userJid);
-        if (isOnWhatsApp.length === 0) return await ctx.reply(quote("❎ Akun tidak ada di WhatsApp!"));
+        if (isOnWhatsApp.length === 0) return await ctx.reply(formatter.quote("❎ Akun tidak ada di WhatsApp!"));
 
         try {
             await db.add(`user.${ctx.getId(userJid)}.coin`, coinAmount);
@@ -37,10 +33,10 @@ module.exports = {
                 }
             });
             if (!flag?.silent) await ctx.sendMessage(userJid, {
-                text: quote(`📢 Kamu telah menerima ${coinAmount} koin dari Owner!`)
+                text: formatter.quote(`📢 Kamu telah menerima ${coinAmount} koin dari Owner!`)
             });
 
-            return await ctx.reply(quote(`✅ Berhasil menambahkan ${coinAmount} koin kepada pengguna itu!`));
+            return await ctx.reply(formatter.quote(`✅ Berhasil menambahkan ${coinAmount} koin kepada pengguna itu!`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

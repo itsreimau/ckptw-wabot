@@ -1,8 +1,3 @@
-const {
-    monospace,
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "translate",
     aliases: ["tr"],
@@ -15,9 +10,9 @@ module.exports = {
         const langCode = ctx.args[0]?.length === 2 ? ctx.args[0] : "id";
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "en halo, dunia!"))}\n` +
-            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "en halo, dunia!"))}\n` +
+            formatter.quote(tools.msg.generateNotes([`Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
         if (["l", "list"].includes(input.toLowerCase())) {

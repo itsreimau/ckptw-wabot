@@ -1,9 +1,3 @@
-// Impor modul dan dependensi yang diperlukan
-const {
-    monospace,
-    quote
-} = require("@itsreimau/gktw");
-
 const units = ["yBytes", "zBytes", "aBytes", "fBytes", "pBytes", "nBytes", "µBytes", "mBytes", "Bytes", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
 
 function convertMsToDuration(ms) {
@@ -80,7 +74,7 @@ function generateCmdExample(used, args) {
     if (!used) return "'used' harus diberikan!";
     if (!args) return "'args' harus diberikan!";
 
-    const cmdMsg = `Contoh: ${monospace(`${used.prefix + used.command} ${args}`)}`;
+    const cmdMsg = `Contoh: ${formatter.monospace(`${used.prefix + used.command} ${args}`)}`;
     return cmdMsg;
 }
 
@@ -131,7 +125,7 @@ function generatesFlagInfo(flags) {
     if (typeof flags !== "object" || !flags) return "'flags' harus berupa objek!";
 
     const flagInfo = "Flag:\n" +
-        Object.entries(flags).map(([flag, description]) => quote(`• ${monospace(flag)}: ${description}`)).join("\n");
+        Object.entries(flags).map(([flag, description]) => formatter.quote(`• ${formatter.monospace(flag)}: ${description}`)).join("\n");
     return flagInfo;
 }
 
@@ -139,7 +133,7 @@ function generateNotes(notes) {
     if (!Array.isArray(notes)) return "'notes' harus berupa string!";
 
     const notesMsg = "Catatan:\n" +
-        notes.map(note => quote(`• ${note}`)).join("\n");
+        notes.map(note => formatter.quote(`• ${note}`)).join("\n");
     return notesMsg;
 }
 

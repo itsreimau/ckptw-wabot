@@ -1,7 +1,5 @@
 const {
-    Events,
-    monospace,
-    quote
+    Events
 } = require("@itsreimau/gktw");
 const {
     handleWelcome
@@ -18,9 +16,9 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "join"))}\n` +
-            quote(tools.msg.generateNotes([`Selain ${monospace("join")}, gunakan ${monospace("leave")} untuk mensimulasikan keluar dari grup.`]))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "join"))}\n` +
+            formatter.quote(tools.msg.generateNotes([`Selain ${formatter.monospace("join")}, gunakan ${formatter.monospace("leave")} untuk mensimulasikan keluar dari grup.`]))
         );
 
         try {
@@ -39,7 +37,7 @@ module.exports = {
                     return await handleWelcome(ctx, m, Events.UserLeave, true);
                     break;
                 default:
-                    return await ctx.reply(quote(`❎ Simulasi '${input}' tidak valid!`));
+                    return await ctx.reply(formatter.quote(`❎ Simulasi '${input}' tidak valid!`));
             }
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);

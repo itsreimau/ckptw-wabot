@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 
 module.exports = {
@@ -17,10 +14,10 @@ module.exports = {
             const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.data.quotes);
 
             return await ctx.reply(
-                `${quote(`“${result.quote}”`)}\n` +
-                `${quote("─────")}\n` +
-                `${quote(`Nama: ${result.author.name}`)}\n` +
-                `${quote(`Deskripsi: ${result.author.description}`)}\n` +
+                `${formatter.quote(`“${result.quote}”`)}\n` +
+                `${formatter.quote("─────")}\n` +
+                `${formatter.quote(`Nama: ${result.author.name}`)}\n` +
+                `${formatter.quote(`Deskripsi: ${result.author.description}`)}\n` +
                 "\n" +
                 config.msg.footer
             );

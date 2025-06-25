@@ -1,8 +1,3 @@
-const {
-    monospace,
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "setoption",
     aliases: ["setopt"],
@@ -16,9 +11,9 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "antilink"))}\n` +
-            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, `Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} status`)} untuk melihat status.`]))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "antilink"))}\n` +
+            formatter.quote(tools.msg.generateNotes([`Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, `Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} status`)} untuk melihat status.`]))
         );
 
         if (["l", "list"].includes(input.toLowerCase())) {
@@ -31,20 +26,20 @@ module.exports = {
             const groupOption = await db.get(`group.${groupId}.option`) || {};
 
             return await ctx.reply(
-                `${quote(`Antiaudio: ${groupOption.antiaudio ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${quote(`Antidocument: ${groupOption.antidocument ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${quote(`Antigif: ${groupOption.antigif ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${quote(`Antiimage: ${groupOption.antiimage ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${quote(`Antilink: ${groupOption.antilink ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${quote(`Antinsfw: ${groupOption.antinsfw ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${quote(`Antispam: ${groupOption.antispam ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${quote(`Antisticker: ${groupOption.antisticker ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${quote(`Antitagsw: ${groupOption.antitagsw ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${quote(`Antitoxic: ${groupOption.antitoxic ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${quote(`Antivideo: ${groupOption.antivideo ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${quote(`Autokick: ${groupOption.autokick ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${quote(`Gamerestrict: ${groupOption.gamerestrict ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${quote(`Welcome: ${groupOption.welcome ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Antiaudio: ${groupOption.antiaudio ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Antidocument: ${groupOption.antidocument ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Antigif: ${groupOption.antigif ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Antiimage: ${groupOption.antiimage ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Antilink: ${groupOption.antilink ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Antinsfw: ${groupOption.antinsfw ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Antispam: ${groupOption.antispam ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Antisticker: ${groupOption.antisticker ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Antitagsw: ${groupOption.antitagsw ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Antitoxic: ${groupOption.antitoxic ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Antivideo: ${groupOption.antivideo ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Autokick: ${groupOption.autokick ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Gamerestrict: ${groupOption.gamerestrict ? "Aktif" : "Nonaktif"}`)}\n` +
+                `${formatter.quote(`Welcome: ${groupOption.welcome ? "Aktif" : "Nonaktif"}`)}\n` +
                 "\n" +
                 config.msg.footer
             );
@@ -72,7 +67,7 @@ module.exports = {
                     setKey = `group.${groupId}.option.${input.toLowerCase()}`;
                     break;
                 default:
-                    return await ctx.reply(quote(`❎ Opsi '${input}' tidak valid!`));
+                    return await ctx.reply(formatter.quote(`❎ Opsi '${input}' tidak valid!`));
             }
 
             const currentStatus = await db.get(setKey);
@@ -80,7 +75,7 @@ module.exports = {
 
             await db.set(setKey, newStatus);
             const statusText = newStatus ? "diaktifkan" : "dinonaktifkan";
-            return await ctx.reply(quote(`✅ Opsi '${input}' berhasil ${statusText}!`));
+            return await ctx.reply(formatter.quote(`✅ Opsi '${input}' berhasil ${statusText}!`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

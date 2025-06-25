@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 
 module.exports = {
@@ -13,8 +10,8 @@ module.exports = {
         const url = ctx.args[0] || null;
 
         if (!url) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "https://sfile.mobi/7awbUgBeYo8"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "https://sfile.mobi/7awbUgBeYo8"))
         );
 
         const isUrl = await tools.cmd.isUrl(url);
@@ -32,7 +29,7 @@ module.exports = {
                 },
                 fileName: result.metadata.filename,
                 mimetype: result.metadata.mimetype || "application/octet-stream",
-                caption: `${quote(`URL: ${url}`)}\n` +
+                caption: `${formatter.quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

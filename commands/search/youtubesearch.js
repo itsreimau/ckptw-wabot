@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 
 module.exports = {
@@ -14,8 +11,8 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "one last kiss - hikaru utada"))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "one last kiss - hikaru utada"))
         );
 
         try {
@@ -25,13 +22,13 @@ module.exports = {
             const result = (await axios.get(apiUrl)).data.result;
 
             const resultText = result.map(r =>
-                `${quote(`Judul: ${r.title}`)}\n` +
-                `${quote(`Kanal: ${r.channel}`)}\n` +
-                `${quote(`Durasi: ${r.duration}`)}\n` +
-                `${quote(`URL: ${r.link}`)}`
+                `${formatter.quote(`Judul: ${r.title}`)}\n` +
+                `${formatter.quote(`Kanal: ${r.channel}`)}\n` +
+                `${formatter.quote(`Durasi: ${r.duration}`)}\n` +
+                `${formatter.quote(`URL: ${r.link}`)}`
             ).join(
                 "\n" +
-                `${quote("─────")}\n`
+                `${formatter.quote("─────")}\n`
             );
             return await ctx.reply(
                 `${resultText || config.msg.notFound}\n` +

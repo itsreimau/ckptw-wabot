@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "warning",
     category: "group",
@@ -19,14 +15,14 @@ module.exports = {
         const senderId = ctx.getId(senderJid);
 
         if (!accountJid) return await ctx.reply({
-            text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.msg.generateCmdExample(ctx.used, `@${senderId}`))}\n` +
-                quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
+            text: `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+                `${formatter.quote(tools.msg.generateCmdExample(ctx.used, `@${senderId}`))}\n` +
+                formatter.quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
             mentions: [senderJid]
         });
 
-        if (accountId === config.bot.id) return await ctx.reply(quote(`❎ Tidak bisa memberikan warning ke bot.`));
-        if (accountJid === await ctx.group().owner()) return await ctx.reply(quote("❎ Tidak bisa memberikan warning ke admin grup!"));
+        if (accountId === config.bot.id) return await ctx.reply(formatter.quote(`❎ Tidak bisa memberikan warning ke bot.`));
+        if (accountJid === await ctx.group().owner()) return await ctx.reply(formatter.quote("❎ Tidak bisa memberikan warning ke admin grup!"));
 
         try {
             const groupId = ctx.getId(ctx.id);
@@ -37,7 +33,7 @@ module.exports = {
 
             const maxwarnings = groupDb?.maxwarnings || 3;
             if (newWarning >= maxwarnings) {
-                await ctx.reply(quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
+                await ctx.reply(formatter.quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
                 if (!config.system.restrict) await ctx.group().kick([senderJid]);
                 delete warnings[senderId];
                 return await db.set(`group.${groupId}.warnings`, warnings);
@@ -46,7 +42,7 @@ module.exports = {
             warnings[accountId] = newWarning;
             await db.set(`group.${groupId}.warnings`, warnings);
 
-            return await ctx.reply(quote(`✅ Warning diberikan! Sekarang warning @${accountId} menjadi ${newWarning}/${maxwarnings}.`), {
+            return await ctx.reply(formatter.quote(`✅ Warning diberikan! Sekarang warning @${accountId} menjadi ${newWarning}/${maxwarnings}.`), {
                 mentions: [accountJid]
             });
         } catch (error) {

@@ -1,8 +1,3 @@
-const {
-    monospace,
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "setprofile",
     aliases: ["set", "setp", "setprof"],
@@ -11,9 +6,9 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "autolevelup"))}\n` +
-            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "autolevelup"))}\n` +
+            formatter.quote(tools.msg.generateNotes([`Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (["l", "list"].includes(input.toLowerCase())) {
@@ -30,15 +25,15 @@ module.exports = {
                 case "username": {
                     const input = args.slice(1).join(" ").trim();
 
-                    if (!input) return await ctx.reply(quote("❎ Mohon masukkan username yang ingin digunakan."));
-                    if (/[^a-zA-Z0-9._-]/.test(input)) return await ctx.reply(quote("❎ Username hanya boleh berisi huruf, angka, titik (.), underscore (_) atau tanda hubung (-)."));
+                    if (!input) return await ctx.reply(formatter.quote("❎ Mohon masukkan username yang ingin digunakan."));
+                    if (/[^a-zA-Z0-9._-]/.test(input)) return await ctx.reply(formatter.quote("❎ Username hanya boleh berisi huruf, angka, titik (.), underscore (_) atau tanda hubung (-)."));
 
                     const usernameTaken = Object.values(await db.get("user") || {}).some(user => user.username === input);
-                    if (usernameTaken) return await ctx.reply(quote("❎ Username tersebut sudah digunakan oleh pengguna lain."));
+                    if (usernameTaken) return await ctx.reply(formatter.quote("❎ Username tersebut sudah digunakan oleh pengguna lain."));
 
                     const username = `@${input}`
                     await db.set(`user.${senderId}.username`, username);
-                    return await ctx.reply(quote(`✅ Username berhasil diubah menjadi '${username}'!`));
+                    return await ctx.reply(formatter.quote(`✅ Username berhasil diubah menjadi '${username}'!`));
                     break;
                 }
                 case "autolevelup": {
@@ -48,11 +43,11 @@ module.exports = {
                     await db.set(setKey, newStatus);
 
                     const statusText = newStatus ? "diaktifkan" : "dinonaktifkan";
-                    return await ctx.reply(quote(`✅ Fitur '${command}' berhasil ${statusText}!`));
+                    return await ctx.reply(formatter.quote(`✅ Fitur '${command}' berhasil ${statusText}!`));
                     break;
                 }
                 default:
-                    return await ctx.reply(quote("❎ Teks tidak valid."));
+                    return await ctx.reply(formatter.quote("❎ Teks tidak valid."));
             }
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);

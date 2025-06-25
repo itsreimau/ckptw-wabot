@@ -1,7 +1,3 @@
-const {
-    monospace,
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 const didYouMean = require("didyoumean");
 const mime = require("mime-types");
@@ -12,7 +8,7 @@ module.exports = {
     name: "tebakbendera",
     category: "game",
     code: async (ctx) => {
-        if (session.has(ctx.id)) return await ctx.reply(quote("🎮 Sesi permainan sedang berjalan!"));
+        if (session.has(ctx.id)) return await ctx.reply(formatter.quote("🎮 Sesi permainan sedang berjalan!"));
 
         try {
             const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/BochilTeam/database/refs/heads/master/games/tebakbendera2.json");
@@ -31,10 +27,10 @@ module.exports = {
                     url: result.img
                 },
                 mimetype: mime.lookup("jpeg"),
-                caption: `${quote(`Bonus: ${game.coin} Koin`)}\n` +
-                    `${quote(`Batas waktu: ${tools.msg.convertMsToDuration(game.timeout)}`)}\n` +
-                    `${quote(`Ketik ${monospace("hint")} untuk bantuan.`)}\n` +
-                    `${quote(`Ketik ${monospace("surrender")} untuk menyerah.`)}\n` +
+                caption: `${formatter.quote(`Bonus: ${game.coin} Koin`)}\n` +
+                    `${formatter.quote(`Batas waktu: ${tools.msg.convertMsToDuration(game.timeout)}`)}\n` +
+                    `${formatter.quote(`Ketik ${formatter.monospace("hint")} untuk bantuan.`)}\n` +
+                    `${formatter.quote(`Ketik ${formatter.monospace("surrender")} untuk menyerah.`)}\n` +
                     "\n" +
                     config.msg.footer
             });
@@ -52,8 +48,8 @@ module.exports = {
                     await db.add(`user.${participantId}.coin`, game.coin);
                     await db.add(`user.${participantId}.winGame`, 1);
                     await ctx.sendMessage(ctx.id, {
-                        text: `${quote("💯 Benar!")}\n` +
-                            quote(`+${game.coin} Koin`)
+                        text: `${formatter.quote("💯 Benar!")}\n` +
+                            formatter.quote(`+${game.coin} Koin`)
                     }, {
                         quoted: m
                     });
@@ -61,22 +57,22 @@ module.exports = {
                 } else if (["h", "hint"].includes(participantAnswer)) {
                     const clue = game.answer.replace(/[aiueo]/g, "_");
                     await ctx.sendMessage(ctx.id, {
-                        text: monospace(clue.toUpperCase())
+                        text: formatter.monospace(clue.toUpperCase())
                     }, {
                         quoted: m
                     });
                 } else if (["s", "surrender"].includes(participantAnswer)) {
                     session.delete(ctx.id);
                     await ctx.sendMessage(ctx.id, {
-                        text: `${quote("🏳️ Kamu menyerah!")}\n` +
-                            quote(`Jawabannya adalah ${tools.msg.ucwords(game.answer)}.`)
+                        text: `${formatter.quote("🏳️ Kamu menyerah!")}\n` +
+                            formatter.quote(`Jawabannya adalah ${tools.msg.ucwords(game.answer)}.`)
                     }, {
                         quoted: m
                     });
                     return collector.stop();
                 } else if (didYouMean(participantAnswer, [game.answer]) === game.answer) {
                     await ctx.sendMessage(ctx.id, {
-                        text: quote("🎯 Sedikit lagi!")
+                        text: formatter.quote("🎯 Sedikit lagi!")
                     }, {
                         quoted: m
                     });
@@ -87,8 +83,8 @@ module.exports = {
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
                     return await ctx.reply(
-                        `${quote("⏱ Waktu habis!")}\n` +
-                        quote(`Jawabannya adalah ${tools.msg.ucwords(game.answer)}.`)
+                        `${formatter.quote("⏱ Waktu habis!")}\n` +
+                        formatter.quote(`Jawabannya adalah ${tools.msg.ucwords(game.answer)}.`)
                     );
                 }
             });

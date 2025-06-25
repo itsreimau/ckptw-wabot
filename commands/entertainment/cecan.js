@@ -24,7 +24,7 @@ module.exports = {
                     url: result
                 },
                 mimetype: mime.lookup("jpg"),
-                caption: `${quote(`Kategori: ${tools.msg.ucwords(cecan)}`)}\n` +
+                caption: `${formatter.quote(`Kategori: ${tools.msg.ucwords(cecan)}`)}\n` +
                     "\n" +
                     config.msg.footer
             });

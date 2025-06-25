@@ -1,8 +1,3 @@
-const {
-    italic,
-    monospace,
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 
 module.exports = {
@@ -13,9 +8,9 @@ module.exports = {
         const [surat, ayat] = ctx.args;
 
         if (!surat && !ayat) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "21 35"))}\n` +
-            quote(tools.msg.generateNotes([`Ketik ${monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "21 35"))}\n` +
+            formatter.quote(tools.msg.generateNotes([`Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
         if (["l", "list"].includes(surat.toLowerCase())) {
@@ -23,7 +18,7 @@ module.exports = {
             return await ctx.reply(listText);
         }
 
-        if (isNaN(surat) || surat < 1 || surat > 114) return await ctx.reply(quote("❎ Surah harus berupa nomor antara 1 sampai 114!"));
+        if (isNaN(surat) || surat < 1 || surat > 114) return await ctx.reply(formatter.quote("❎ Surah harus berupa nomor antara 1 sampai 114!"));
 
         try {
             const apiUrl = tools.api.createUrl("nekorinn", "/religious/nuquran-surah", {
@@ -36,20 +31,20 @@ module.exports = {
                 if (ayat.includes("-")) {
                     const [startAyat, endAyat] = ayat.split("-").map(Number);
 
-                    if (isNaN(startAyat) || isNaN(endAyat) || startAyat < 1 || endAyat < startAyat) return await ctx.reply(quote("❎ Rentang ayat tidak valid!"));
+                    if (isNaN(startAyat) || isNaN(endAyat) || startAyat < 1 || endAyat < startAyat) return await ctx.reply(formatter.quote("❎ Rentang ayat tidak valid!"));
 
                     const selectedVerses = verses.filter(v => v.number >= startAyat && v.number <= endAyat);
-                    if (!selectedVerses.length) return await ctx.reply(quote(`❎ Ayat dalam rentang ${startAyat}-${endAyat} tidak ada!`));
+                    if (!selectedVerses.length) return await ctx.reply(formatter.quote(`❎ Ayat dalam rentang ${startAyat}-${endAyat} tidak ada!`));
 
                     const versesText = selectedVerses.map(v =>
-                        `${quote(`Ayat ${v.number}:`)}\n` +
+                        `${formatter.quote(`Ayat ${v.number}:`)}\n` +
                         `${v.text} (${v.transliteration})\n` +
-                        `${italic(v.translation_id)}`
+                        `${formatter.italic(v.translation_id)}`
                     ).join("\n");
                     return await ctx.reply(
-                        `${quote(`Surat: ${result.name}`)}\n` +
-                        `${quote(`Arti: ${result.translate}`)}\n` +
-                        `${quote("─────")}\n` +
+                        `${formatter.quote(`Surat: ${result.name}`)}\n` +
+                        `${formatter.quote(`Arti: ${result.translate}`)}\n` +
+                        `${formatter.quote("─────")}\n` +
                         `${versesText}\n` +
                         "\n" +
                         config.msg.footer
@@ -57,31 +52,31 @@ module.exports = {
                 }
 
                 const singleAyat = parseInt(ayat);
-                if (isNaN(singleAyat) || singleAyat < 1) return await ctx.reply(quote("❎ Ayat harus berupa nomor yang valid dan lebih besar dari 0!"));
+                if (isNaN(singleAyat) || singleAyat < 1) return await ctx.reply(formatter.quote("❎ Ayat harus berupa nomor yang valid dan lebih besar dari 0!"));
 
                 const verse = verses.find(v => v.number === singleAyat);
-                if (!verse) return await ctx.reply(quote(`❎ Ayat ${singleAyat} tidak ada!`));
+                if (!verse) return await ctx.reply(formatter.quote(`❎ Ayat ${singleAyat} tidak ada!`));
 
                 return await ctx.reply(
-                    `${quote(`Surat: ${result.name}`)}\n` +
-                    `${quote(`Arti: ${result.translate}`)}\n` +
-                    `${quote("─────")}\n` +
+                    `${formatter.quote(`Surat: ${result.name}`)}\n` +
+                    `${formatter.quote(`Arti: ${result.translate}`)}\n` +
+                    `${formatter.quote("─────")}\n` +
                     `${verse.text} (${verse.transliteration})\n` +
-                    `${italic(verse.translation_id)}\n` +
+                    `${formatter.italic(verse.translation_id)}\n` +
                     "\n" +
                     config.msg.footer
                 );
             }
 
             const versesText = verses.map(v =>
-                `${quote(`Ayat ${v.number}:`)}\n` +
+                `${formatter.quote(`Ayat ${v.number}:`)}\n` +
                 `${v.text} (${v.transliteration})\n` +
-                `${italic(v.translation_id)}`
+                `${formatter.italic(v.translation_id)}`
             ).join("\n");
             return await ctx.reply(
-                `${quote(`Surat: ${result.name}`)}\n` +
-                `${quote(`Arti: ${result.translate}`)}\n` +
-                `${quote("─────")}\n` +
+                `${formatter.quote(`Surat: ${result.name}`)}\n` +
+                `${formatter.quote(`Arti: ${result.translate}`)}\n` +
+                `${formatter.quote("─────")}\n` +
                 `${versesText}\n\n` +
                 "\n" +
                 config.msg.footer

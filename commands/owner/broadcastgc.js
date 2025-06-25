@@ -1,8 +1,3 @@
-const {
-    monospace,
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "broadcastgc",
     aliases: ["bc", "bcgc", "broadcast"],
@@ -14,12 +9,12 @@ module.exports = {
         const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "halo, dunia!"))}\n` +
-            `${quote(tools.msg.generatesFlagInfo({
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "halo, dunia!"))}\n` +
+            `${formatter.quote(tools.msg.generatesFlagInfo({
                 "-ht": "Kirim dengan hidetag"
             }))}\n` +
-            quote(tools.msg.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru.", `Gunakan ${monospace("blacklist")} untuk memasukkan grup ke dalam blacklist. (Hanya berfungsi pada grup)`]))
+            formatter.quote(tools.msg.generateNotes(["Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru.", `Gunakan ${formatter.monospace("blacklist")} untuk memasukkan grup ke dalam blacklist. (Hanya berfungsi pada grup)`]))
         );
 
         if (["b", "blacklist"].includes(input) && ctx.isGroup()) {
@@ -52,7 +47,7 @@ module.exports = {
             const blacklist = await db.get("bot.blacklistBroadcast") || [];
             const filteredGroupIds = groupIds.filter(groupId => !blacklist.includes(groupId));
 
-            const waitMsg = await ctx.reply(quote(`🔄 Mengirim siaran ke ${filteredGroupIds.length} grup, perkiraan waktu: ${tools.msg.convertMsToDuration(filteredGroupIds.length * 0.5 * 1000)}`));
+            const waitMsg = await ctx.reply(formatter.quote(`🔄 Mengirim siaran ke ${filteredGroupIds.length} grup, perkiraan waktu: ${tools.msg.convertMsToDuration(filteredGroupIds.length * 0.5 * 1000)}`));
 
             const delay = ms => new Promise(res => setTimeout(res, ms));
             const failedGroupIds = [];
@@ -93,7 +88,7 @@ module.exports = {
             }
             const successCount = filteredGroupIds.length - failedGroupIds.length;
 
-            return await ctx.editMessage(waitMsg.key, quote(`✅ Berhasil mengirim ke ${successCount} grup. Gagal mengirim ke ${failedGroupIds.length} grup, ${blacklist.length} grup dalam blacklist tidak dikirim.`));
+            return await ctx.editMessage(waitMsg.key, formatter.quote(`✅ Berhasil mengirim ke ${successCount} grup. Gagal mengirim ke ${failedGroupIds.length} grup, ${blacklist.length} grup dalam blacklist tidak dikirim.`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

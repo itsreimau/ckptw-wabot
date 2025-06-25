@@ -1,7 +1,3 @@
-const {
-    monospace,
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 const didYouMean = require("didyoumean");
 
@@ -11,14 +7,14 @@ module.exports = {
     name: "tebakkana",
     category: "game",
     code: async (ctx) => {
-        if (session.has(ctx.id)) return await ctx.reply(quote("🎮 Sesi permainan sedang berjalan!"));
+        if (session.has(ctx.id)) return await ctx.reply(formatter.quote("🎮 Sesi permainan sedang berjalan!"));
 
         const level = parseInt(ctx.args[0], 10) || null;
 
         if (!level) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "1"))}\n` +
-            quote(tools.msg.generateNotes(["Selain 1, bisa 2, 3, 4, dan 5."]))
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "1"))}\n` +
+            formatter.quote(tools.msg.generateNotes(["Selain 1, bisa 2, 3, 4, dan 5."]))
         );
 
         try {
@@ -56,11 +52,11 @@ module.exports = {
             session.set(ctx.id, true);
 
             await ctx.reply(
-                `${quote(`Soal: ${question}`)}\n` +
-                `${quote(`Bonus: ${game.coin} Koin`)}\n` +
-                `${quote(`Batas waktu: ${tools.msg.convertMsToDuration(game.timeout)}`)}\n` +
-                `${quote(`Ketik ${monospace("hint")} untuk bantuan.`)}\n` +
-                `${quote(`Ketik ${monospace("surrender")} untuk menyerah.`)}\n` +
+                `${formatter.quote(`Soal: ${question}`)}\n` +
+                `${formatter.quote(`Bonus: ${game.coin} Koin`)}\n` +
+                `${formatter.quote(`Batas waktu: ${tools.msg.convertMsToDuration(game.timeout)}`)}\n` +
+                `${formatter.quote(`Ketik ${formatter.monospace("hint")} untuk bantuan.`)}\n` +
+                `${formatter.quote(`Ketik ${formatter.monospace("surrender")} untuk menyerah.`)}\n` +
                 "\n" +
                 config.msg.footer
             );
@@ -78,32 +74,32 @@ module.exports = {
                     await db.add(`user.${participantId}.coin`, game.coin);
                     await db.add(`user.${participantId}.winGame`, 1);
                     await ctx.sendMessage(ctx.id, {
-                        text: `${quote("💯 Benar!")}\n` +
-                            `${quote(game.description)}\n` +
-                            quote(`+${game.coin} Koin`)
+                        text: `${formatter.quote("💯 Benar!")}\n` +
+                            `${formatter.quote(game.description)}\n` +
+                            formatter.quote(`+${game.coin} Koin`)
                     }, {
                         quoted: m
                     });
                     return collector.stop();
                 } else if (["h", "hint"].includes(participantAnswer)) {
                     await ctx.sendMessage(ctx.id, {
-                        text: monospace(clue)
+                        text: formatter.monospace(clue)
                     }, {
                         quoted: m
                     });
                 } else if (["s", "surrender"].includes(participantAnswer)) {
                     session.delete(ctx.id);
                     await ctx.sendMessage(ctx.id, {
-                        text: `${quote("🏳️ Kamu menyerah!")}\n` +
-                            `${quote(`Jawabannya adalah ${tools.msg.ucwords(game.answer)}.`)}\n` +
-                            quote(game.description)
+                        text: `${formatter.quote("🏳️ Kamu menyerah!")}\n` +
+                            `${formatter.quote(`Jawabannya adalah ${tools.msg.ucwords(game.answer)}.`)}\n` +
+                            formatter.quote(game.description)
                     }, {
                         quoted: m
                     });
                     return collector.stop();
                 } else if (didYouMean(participantAnswer, [game.answer]) === game.answer) {
                     await ctx.sendMessage(ctx.id, {
-                        text: quote("🎯 Sedikit lagi!")
+                        text: formatter.quote("🎯 Sedikit lagi!")
                     }, {
                         quoted: m
                     });
@@ -114,9 +110,9 @@ module.exports = {
                 if (session.has(ctx.id)) {
                     session.delete(ctx.id);
                     return await ctx.reply(
-                        `${quote("⏱ Waktu habis!")}\n` +
-                        `${quote(`Jawabannya adalah ${tools.msg.ucwords(game.answer)}.`)}\n` +
-                        quote(game.description)
+                        `${formatter.quote("⏱ Waktu habis!")}\n` +
+                        `${formatter.quote(`Jawabannya adalah ${tools.msg.ucwords(game.answer)}.`)}\n` +
+                        formatter.quote(game.description)
                     );
                 }
             });

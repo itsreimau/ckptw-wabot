@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "listsewagroup",
     aliases: ["listsewa"],
@@ -37,9 +33,9 @@ module.exports = {
 
                 if (group.expiration) {
                     const daysLeft = Math.ceil((group.expiration - Date.now()) / (24 * 60 * 60 * 1000));
-                    resultText += `${quote(`@${groupJid} (${daysLeft} hari tersisa)`)}\n`;
+                    resultText += `${formatter.quote(`@${groupJid} (${daysLeft} hari tersisa)`)}\n`;
                 } else {
-                    resultText += `${quote(`@${groupJid} (Sewa permanen)`)}\n`;
+                    resultText += `${formatter.quote(`@${groupJid} (Sewa permanen)`)}\n`;
                 }
             }
 

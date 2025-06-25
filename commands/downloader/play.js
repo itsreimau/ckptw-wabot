@@ -1,6 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
 const axios = require("axios");
 const mime = require("mime-types");
 
@@ -15,9 +12,9 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "one last kiss - hikaru utada -i 8 -s spotify"))}\n` +
-            quote(tools.msg.generatesFlagInfo({
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "one last kiss - hikaru utada -i 8 -s spotify"))}\n` +
+            formatter.quote(tools.msg.generatesFlagInfo({
                 "-i <number>": "Pilihan pada data indeks",
                 "-s <text>": "Sumber untuk memutar lagu (tersedia: soundcloud, spotify, youtube | default: youtube)"
             }))
@@ -51,8 +48,8 @@ module.exports = {
                 const searchResult = (await axios.get(searchApiUrl)).data.result[searchIndex];
 
                 await ctx.reply(
-                    `${quote(`Judul: ${searchResult.title}`)}\n` +
-                    `${quote(`URL: ${searchResult.url}`)}\n` +
+                    `${formatter.quote(`Judul: ${searchResult.title}`)}\n` +
+                    `${formatter.quote(`URL: ${searchResult.url}`)}\n` +
                     "\n" +
                     config.msg.footer
                 );
@@ -77,9 +74,9 @@ module.exports = {
                 const searchResult = (await axios.get(searchApiUrl)).data.result[searchIndex];
 
                 await ctx.reply(
-                    `${quote(`Judul: ${searchResult.trackName}`)}\n` +
-                    `${quote(`Artis: ${searchResult.artistName}`)}\n` +
-                    `${quote(`URL: ${searchResult.externalUrl}`)}\n` +
+                    `${formatter.quote(`Judul: ${searchResult.trackName}`)}\n` +
+                    `${formatter.quote(`Artis: ${searchResult.artistName}`)}\n` +
+                    `${formatter.quote(`URL: ${searchResult.externalUrl}`)}\n` +
                     "\n" +
                     config.msg.footer
                 );
@@ -104,9 +101,9 @@ module.exports = {
                 const searchResult = (await axios.get(searchApiUrl)).data.result[searchIndex];
 
                 await ctx.reply(
-                    `${quote(`Judul: ${searchResult.title}`)}\n` +
-                    `${quote(`Artis: ${searchResult.channel}`)}\n` +
-                    `${quote(`URL: ${searchResult.link}`)}\n` +
+                    `${formatter.quote(`Judul: ${searchResult.title}`)}\n` +
+                    `${formatter.quote(`Artis: ${searchResult.channel}`)}\n` +
+                    `${formatter.quote(`URL: ${searchResult.link}`)}\n` +
                     "\n" +
                     config.msg.footer
                 );

@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "unwarning",
     category: "group",
@@ -16,20 +12,20 @@ module.exports = {
         const accountId = ctx.getId(accountJid);
 
         if (!accountJid) return await ctx.reply({
-            text: `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-                `${quote(tools.msg.generateCmdExample(ctx.used, `@${ctx.getId(ctx.sender.jid)}`))}\n` +
-                quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
+            text: `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+                `${formatter.quote(tools.msg.generateCmdExample(ctx.used, `@${ctx.getId(ctx.sender.jid)}`))}\n` +
+                formatter.quote(tools.msg.generateNotes(["Balas atau kutip pesan untuk menjadikan pengirim sebagai akun target."])),
             mentions: [ctx.sender.jid]
         });
 
-        if (accountId === config.bot.id) return await ctx.reply(quote(`❎ Tidak bisa mengubah warning bot.`));
-        if (accountJid === await ctx.group().owner()) return await ctx.reply(quote("❎ Tidak bisa mengubah warning admin grup!"));
+        if (accountId === config.bot.id) return await ctx.reply(formatter.quote(`❎ Tidak bisa mengubah warning bot.`));
+        if (accountJid === await ctx.group().owner()) return await ctx.reply(formatter.quote("❎ Tidak bisa mengubah warning admin grup!"));
 
         const groupId = ctx.getId(ctx.id);
         const warnings = await db.get(`group.${groupId}.warnings`) || {};
         const current = warnings[accountId] || 0;
 
-        if (current <= 0) return await ctx.reply(quote("✅ Pengguna ini tidak memiliki warning."));
+        if (current <= 0) return await ctx.reply(formatter.quote("✅ Pengguna ini tidak memiliki warning."));
 
         try {
             const newWarning = current - 1;
@@ -40,7 +36,7 @@ module.exports = {
             }
             await db.set(`group.${groupId}.warnings`, warnings);
 
-            return await ctx.reply(quote(`✅ Warning dikurangi! Sekarang warning @${accountId} menjadi ${newWarning}/5.`), {
+            return await ctx.reply(formatter.quote(`✅ Warning dikurangi! Sekarang warning @${accountId} menjadi ${newWarning}/5.`), {
                 mentions: [accountJid]
             });
         } catch (error) {

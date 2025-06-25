@@ -1,7 +1,3 @@
-const {
-    quote
-} = require("@itsreimau/gktw");
-
 module.exports = {
     name: "leaderboard",
     aliases: ["lb", "peringkat"],
@@ -27,13 +23,13 @@ module.exports = {
             topUsers.forEach((user, index) => {
                 const isSelf = user.id === senderId;
                 const displayName = isSelf ? `@${user.id}` : user.username ? user.username : `${user.id}`;
-                resultText += quote(`${index + 1}. ${displayName} - Menang: ${user.winGame}, Level: ${user.level}\n`);
+                resultText += formatter.quote(`${index + 1}. ${displayName} - Menang: ${user.winGame}, Level: ${user.level}\n`);
             });
 
             if (userRank > 10) {
                 const userStats = leaderboardData[userRank - 1];
                 const displayName = `@${senderId}`;
-                resultText += quote(`${userRank}. ${displayName} - Menang: ${userStats.winGame}, Level: ${userStats.level}\n`);
+                resultText += formatter.quote(`${userRank}. ${displayName} - Menang: ${userStats.winGame}, Level: ${userStats.level}\n`);
             }
 
             return await ctx.reply({
