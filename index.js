@@ -27,7 +27,7 @@ config.bot.version = `v${pkg.version}`;
 Object.assign(global, {
     config,
     consolefy: c,
-    db
+    db,
     formatter: Formatter,
     tools
 });
