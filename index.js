@@ -6,7 +6,7 @@ const {
     Consolefy
 } = require("@mengkodingan/consolefy");
 const CFonts = require("cfonts");
-const fs = require("node:fs");
+const fs = require("node:fs/promises");
 const http = require("node:http");
 const path = require("node:path");
 const SimplDB = require("simpl.db");
@@ -18,7 +18,7 @@ const c = new Consolefy({
 
 // Inisialisasi SimplDB untuk Database
 const dbFile = path.join(__dirname, "database.json");
-if (!fs.existsSync(dbFile)) fs.writeFileSync(dbFile, "{}", "utf8");
+if (!fs.access(dbFile)) fs.writeFile(dbFile, "{}", "utf8");
 const db = new SimplDB();
 
 // Tetapkan variabel global

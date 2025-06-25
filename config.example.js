@@ -3,13 +3,13 @@ const {
     monospace,
     italic,
     quote
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 
 // Konfigurasi
 global.config = {
     // Informasi bot dasar
     bot: {
-        name: "CKPTW", // Nama bot
+        name: "GAXTAWU", // Nama bot
         prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i, // Karakter awalan perintah yang diizinkan
         phoneNumber: "", // Nomor telepon bot (tidak perlu diisi jika menggunakan QR code)
         thumbnail: "https://repository-images.githubusercontent.com/753096396/84e76ef0-ba19-4c87-8ec2-ea803b097479", // Gambar thumbnail bot
@@ -30,17 +30,17 @@ global.config = {
                 host: "localhost:3306", // Nama host
                 user: "root", // Nama pengguna
                 password: "admin123", // Kata sandi
-                database: "ckptw-wabot" // Nama database
+                database: "gaxtawu" // Nama database
             },
 
             // Konfigurasi MongoDB
             mongodb: {
-                url: "mongodb://localhost:27017/ckptw-wabot" // URL
+                url: "mongodb://localhost:27017/gaxtawu" // URL
             },
 
             // Konfigurasi Firebase
             firebase: {
-                tableName: "ckptw-wabot", // Nama tabel
+                tableName: "gaxtawu", // Nama tabel
                 session: "state" // Nama sesi
             }
         }
@@ -82,7 +82,7 @@ global.config = {
     // Stiker bot
     sticker: {
         packname: "", // Nama paket stiker
-        author: "CKPTW-WABOT <github.com/itsreimau/ckptw-wabot>" // Pembuat stiker
+        author: "gaxtawu <github.com/itsreimau/gaxtawu>" // Pembuat stiker
     },
 
     // Sistem bot

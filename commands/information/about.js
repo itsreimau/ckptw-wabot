@@ -1,6 +1,6 @@
 const {
     quote
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 
 module.exports = {
     name: "about",
@@ -19,7 +19,7 @@ module.exports = {
                     `${quote(`Mode: ${tools.msg.ucwords(botDb?.mode || "public")}`)}\n` +
                     `${quote(`Bot Uptime: ${config.bot.uptime}`)}\n` +
                     `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
-                    `${quote("Library: @itsreimau/ckptw-mod (Fork of @mengkodingan/ckptw)")}\n` +
+                    `${quote("Library: @itsreimau/gktw (Fork of @mengkodingan/ckptw)")}\n` +
                     "\n" +
                     config.msg.footer,
                 contextInfo: {

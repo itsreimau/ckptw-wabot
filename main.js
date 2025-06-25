@@ -4,7 +4,7 @@ const events = require("./events/handler.js");
 const {
     Client,
     CommandHandler
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 const path = require("node:path");
 const util = require("node:util");
 

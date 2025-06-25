@@ -3,7 +3,7 @@ const {
     Cooldown,
     monospace,
     quote
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 
 // Fungsi untuk mengecek apakah pengguna memiliki cukup koin sebelum menggunakan perintah tertentu
 async function checkCoin(requiredCoin, userDb, senderId, isOwner) {
@@ -31,8 +31,10 @@ module.exports = (bot) => {
         const groupDb = await db.get(`group.${groupId}`) || {};
 
         // Pengecekan mode bot (group, private, self)
-        if ((botDb?.mode === "group" && isPrivate) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
         if ((groupDb?.mutebot === true && (!isOwner && !await ctx.group().isSenderAdmin())) || (groupDb?.mutebot === "owner" && !isOwner)) return;
+        if (botDb?.mode === "group" && isPrivate) return;
+        if (botDb?.mode === "private" && isGroup) return;
+        if (botDb?.mode === "self" && !isOwner) return;
 
         // Pengecekan mute pada grup
         const muteList = groupDb?.mute || [];

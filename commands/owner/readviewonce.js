@@ -1,7 +1,7 @@
 const {
     MessageType,
     quote
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 
 module.exports = {
     name: "readviewonce",

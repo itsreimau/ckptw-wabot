@@ -1,6 +1,6 @@
 const {
     quote
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 const ezgif = require("ezgif-node");
 const mime = require("mime-types");
 

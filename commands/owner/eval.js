@@ -1,6 +1,6 @@
 const {
     monospace
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 const util = require("node:util");
 
 module.exports = {

@@ -1,6 +1,6 @@
 const {
     VCardBuilder
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 
 module.exports = {
     name: "owner",

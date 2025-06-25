@@ -1,6 +1,6 @@
 const {
     quote
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 
 module.exports = {
     name: "sc",
@@ -8,7 +8,7 @@ module.exports = {
     category: "information",
     code: async (ctx) => {
         return await ctx.reply(
-            `${quote("https://github.com/itsreimau/ckptw-wabot")}\n` +
+            `${quote("https://github.com/itsreimau/gaxtawu")}\n` +
             "\n" +
             config.msg.footer
         ); // Jika kamu tidak menghapus ini, terima kasih!

@@ -1,6 +1,6 @@
 const {
     quote
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 
 module.exports = {
     name: "setname",
@@ -15,7 +15,7 @@ module.exports = {
 
         if (!input) return await ctx.reply(
             `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            quote(tools.msg.generateCmdExample(ctx.used, "ckptw-wabot"))
+            quote(tools.msg.generateCmdExample(ctx.used, "gaxtawu"))
         );
 
         try {

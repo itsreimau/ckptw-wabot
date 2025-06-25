@@ -3,7 +3,7 @@ const api = require("./api.js");
 const {
     monospace,
     quote
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 const uploader = require("@zanixongroup/uploader");
 const axios = require("axios");
 const didYouMean = require("didyoumean");

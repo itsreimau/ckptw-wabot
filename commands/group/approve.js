@@ -1,7 +1,7 @@
 const {
     monospace,
     quote
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 
 module.exports = {
     name: "approve",

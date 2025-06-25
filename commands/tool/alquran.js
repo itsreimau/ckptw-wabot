@@ -2,7 +2,7 @@ const {
     italic,
     monospace,
     quote
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 const axios = require("axios");
 
 module.exports = {

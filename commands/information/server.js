@@ -1,6 +1,6 @@
 const {
     quote
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 const os = require("node:os");
 const process = require("node:process");
 
@@ -42,7 +42,7 @@ module.exports = {
                 `${quote("─────")}\n` +
                 `${quote(`Bot Uptime: ${config.bot.uptime}`)}\n` +
                 `${quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
-                `${quote("Library: @itsreimau/ckptw-mod (Fork of @mengkodingan/ckptw)")}\n` +
+                `${quote("Library: @itsreimau/gktw (Fork of @mengkodingan/ckptw)")}\n` +
                 "\n" +
                 config.msg.footer
             );

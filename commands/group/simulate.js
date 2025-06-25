@@ -2,7 +2,7 @@ const {
     Events,
     monospace,
     quote
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 const {
     handleWelcome
 } = require("../../events/handler.js");

@@ -4,9 +4,9 @@ const {
     monospace,
     quote,
     VCardBuilder
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
 const axios = require("axios");
-const fs = require("node:fs");
+const fs = require("node:fs/promises");
 
 // Fungsi untuk menangani event pengguna bergabung/keluar grup
 async function handleWelcome(bot, m, type, isSimulate = false) {
@@ -145,7 +145,7 @@ module.exports = (bot) => {
 
         // Grup atau Pribadi
         if (isGroup || isPrivate) {
-            config.bot.dbSize = fs.existsSync("database.json") ? tools.msg.formatSize(fs.statSync("database.json").size / 1024) : "N/A"; // Penangan pada ukuran database
+            config.bot.dbSize = fs.access("database.json") ? tools.msg.formatSize(fs.stat("database.json").size / 1024) : "N/A"; // Penangan pada ukuran database
             config.bot.uptime = tools.msg.convertMsToDuration(Date.now() - config.bot.readyAt); // Penangan pada uptime
 
             // Penanganan database pengguna

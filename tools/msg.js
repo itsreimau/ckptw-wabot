@@ -2,7 +2,9 @@
 const {
     monospace,
     quote
-} = require("@itsreimau/ckptw-mod");
+} = require("@itsreimau/gktw");
+
+const units = ["yBytes", "zBytes", "aBytes", "fBytes", "pBytes", "nBytes", "µBytes", "mBytes", "Bytes", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
 
 function convertMsToDuration(ms) {
     if (ms < 1000) return "kurang satu detik";
@@ -39,8 +41,6 @@ function convertSecondToTimecode(seconds) {
 function formatSize(byteCount) {
     if (!byteCount) return "0 yBytes";
 
-    const units = ["yBytes", "zBytes", "aBytes", "fBytes", "pBytes", "nBytes", "µBytes", "mBytes", "Bytes", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
-
     let index = 8;
     let size = byteCount;
 
@@ -55,6 +55,25 @@ function formatSize(byteCount) {
     }
 
     return `${size.toFixed(2)} ${units[index]}`;
+}
+
+function formatSizePerSecond(byteCount) {
+    if (!byteCount) return "0 yBytes/s";
+
+    let index = 8;
+    let size = byteCount;
+
+    while (size < 1 && index > 0) {
+        size *= 1024;
+        index--;
+    }
+
+    while (size >= 1024 && index < units.length - 1) {
+        size /= 1024;
+        index++;
+    }
+
+    return `${size.toFixed(2)} ${units[index]}/s`;
 }
 
 function generateCmdExample(used, args) {

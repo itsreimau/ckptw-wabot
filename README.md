@@ -1,10 +1,10 @@
-# ckptw-wabot
+# gaxtawu
 
-`ckptw-wabot` adalah bot WhatsApp yang dibangun menggunakan library [@itsreimau/ckptw-mod](https://www.npmjs.com/package/@itsreimau/ckptw-mod), yaitu sebuah fork dari [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/) dengan berbagai pembaruan modern dan dukungan yang lebih up-to-date terhadap perubahan di WhatsApp. Bot ini dirancang untuk mengotomatisasi berbagai tugas di WhatsApp, serta mendukung arsitektur modular melalui sistem perintah (command), sehingga memudahkan pengembangan dan pemeliharaan fitur.
+`gaxtawu` adalah bot WhatsApp yang dibangun menggunakan library [@itsreimau/gktw](https://www.npmjs.com/package/@itsreimau/gktw), yaitu sebuah fork dari [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/) dengan berbagai pembaruan modern dan dukungan yang lebih up-to-date terhadap perubahan di WhatsApp. Bot ini dirancang untuk mengotomatisasi berbagai tugas di WhatsApp, serta mendukung arsitektur modular melalui sistem perintah (command), sehingga memudahkan pengembangan dan pemeliharaan fitur.
 
 ## Disclaimer
 
-`ckptw-wabot` **tidak berafiliasi dengan WhatsApp, Meta, atau pihak manapun**. Ini adalah proyek **open-source** yang dibuat untuk keperluan edukasi dan pengembangan.
+`gaxtawu` **tidak berafiliasi dengan WhatsApp, Meta, atau pihak manapun**. Ini adalah proyek **open-source** yang dibuat untuk keperluan edukasi dan pengembangan.
 
 Bot ini menggunakan **API tidak resmi (Unofficial WhatsApp API)**, sehingga **berpotensi menyebabkan akun WhatsApp dibanned**.
 
@@ -20,15 +20,15 @@ Gunakan dengan bijak dan tanggung sendiri risikonya. Kami **tidak bertanggung ja
 
 ## How to Get Started
 
-Ikuti langkah-langkah berikut untuk mengatur dan menjalankan `ckptw-wabot`:
+Ikuti langkah-langkah berikut untuk mengatur dan menjalankan `gaxtawu`:
 
 ### 1. Cloning Repository
 
 Pertama, kloning repositori dan masuk ke direktori proyek:
 
 ```bash
-git clone https://github.com/itsreimau/ckptw-wabot.git
-cd ckptw-wabot
+git clone https://github.com/itsreimau/gaxtawu.git
+cd gaxtawu
 ```
 
 ### 2. Dependency Installation
@@ -45,7 +45,7 @@ Ganti nama file `config.example.js` menjadi `config.js`, lalu sesuaikan konfigur
 
 ## Authentication Adapter
 
-`ckptw-wabot` mendukung penyimpanan sesi autentikasi menggunakan pilihan database: **MySQL**, **MongoDB**, dan **Firebase**. Pilih dan atur database sesuai preferensimu dengan langkah-langkah berikut:
+`gaxtawu` mendukung penyimpanan sesi autentikasi menggunakan pilihan database: **MySQL**, **MongoDB**, dan **Firebase**. Pilih dan atur database sesuai preferensimu dengan langkah-langkah berikut:
 
 ### 1. Select Database Adapter
 
@@ -143,12 +143,12 @@ Untuk menambahkan perintah baru, ikuti langkah-langkah berikut:
 
 ### Complete Documentation
 
-`@itsreimau/ckptw-mod` adalah library yang digunakan oleh `ckptw-wabot`, dibangun di atas `baileys-mod` yang mendukung lebih banyak fitur WhatsApp dibandingkan `@whiskeysockets/baileys`. Dokumentasi `@itsreimau/ckptw-mod` umumnya mirip dengan dokumentasi `@mengkodingan/ckptw`, namun dengan beberapa tambahan dan pembaruan.
+`@itsreimau/gktw` adalah library yang digunakan oleh `gaxtawu`, dibangun di atas `baileys-mod` yang mendukung lebih banyak fitur WhatsApp dibandingkan `@whiskeysockets/baileys`. Dokumentasi `@itsreimau/gktw` umumnya mirip dengan dokumentasi `@mengkodingan/ckptw`, namun dengan beberapa tambahan dan pembaruan.
 
 Untuk informasi lebih lanjut, silakan kunjungi:
 
 - [@mengkodingan/ckptw](https://ckptw.mengkodingan.my.id/)
-- [@itsreimau/ckptw-mod (npm)](https://www.npmjs.com/package/@itsreimau/ckptw-mod)
+- [@itsreimau/gktw (npm)](https://www.npmjs.com/package/@itsreimau/gktw)
 - [baileys-mod (github)](https://github.com/nstar-y/bail) – berisi dokumentasi tambahan seperti pengiriman berbagai jenis pesan
 
 ## Contribution

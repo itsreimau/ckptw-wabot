@@ -1,7 +1,7 @@
 {
-  "name": "ckptw-wabot",
+  "name": "gaxtawu",
   "version": "1.8.1",
-  "description": "WhatsApp Bot with @itsreimau/ckptw-mod.",
+  "description": "Useless WhatsApp Bot",
   "main": "index.js",
   "directories": {
     "commands": "commands",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/itsreimau/ckptw-wabot.git"
+    "url": "git+https://github.com/itsreimau/gaxtawu.git"
   },
   "keywords": [
     "whatsapp",
@@ -25,11 +25,11 @@
   "author": "Muhamad Ikbal Maulana | ItsReimau",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/itsreimau/ckptw-wabot/issues"
+    "url": "https://github.com/itsreimau/gaxtawu/issues"
   },
-  "homepage": "https://github.com/itsreimau/ckptw-wabot#readme",
+  "homepage": "https://github.com/itsreimau/gaxtawu#readme",
   "dependencies": {
-    "@itsreimau/ckptw-mod": "^2.0.1",
+    "@itsreimau/gktw": "^2.1.1",
     "@mengkodingan/consolefy": "^1.0.1",
     "@zanixongroup/uploader": "^2.0.7",
     "axios": "^1.10.0",
