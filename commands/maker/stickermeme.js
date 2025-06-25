@@ -30,7 +30,7 @@ module.exports = {
             let [top, bottom] = input.split("|").map(i => i.trim());
             [top, bottom] = bottom ? [top || "_", bottom] : ["_", top || "_"];
 
-            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
+            const buffer = await ctx.msg.media?.toBuffer() || await ctx.quoted?.media?.toBuffer();
             const uploadUrl = await tools.cmd.upload(buffer, "image");
             const result = tools.api.createUrl("nirkyy", `/api/v1/memegen`, {
                 text_atas: top,

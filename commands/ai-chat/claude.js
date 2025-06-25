@@ -26,7 +26,7 @@ module.exports = {
             const endpoint = ctx.used.cmd === "claudeopus" ? "/ai/claude-opus-4" : "/ai/claude-sonnet-4";
             const senderUid = await db.get(`user.${ctx.getId(ctx.sender.jid)}.uid`) || "guest";
             if (checkMedia || checkQuotedMedia) {
-                const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
+                const buffer = await ctx.msg.media?.toBuffer() || await ctx.quoted?.media?.toBuffer();
                 const uploadUrl = await tools.cmd.upload(buffer, "image");
                 const apiUrl = tools.api.createUrl("nekorinn", endpoint, {
                     text: input,

@@ -7,7 +7,7 @@ module.exports = {
     },
     code: async (ctx) => {
         const mentionedJid = ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
-        const userJid = ctx.quoted.senderJid || mentionedJid || (ctx.args[0] ? `${ctx.args[0].replace(/[^\d]/g, "")}@s.whatsapp.net` : null);
+        const userJid = ctx.quoted?.senderJid || mentionedJid || (ctx.args[0] ? `${ctx.args[0].replace(/[^\d]/g, "")}@s.whatsapp.net` : null);
         const daysAmount = ctx.args[mentionedJid ? 1 : 0] ? parseInt(ctx.args[mentionedJid ? 1 : 0], 10) : null;
 
         if (!userJid) return await ctx.reply({

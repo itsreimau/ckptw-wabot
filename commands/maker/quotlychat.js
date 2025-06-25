@@ -22,11 +22,11 @@ module.exports = {
         if (input.length > 1000) return await ctx.reply(formatter.quote("❎ Maksimal 1000 kata!"));
 
         try {
-            const isQuoted = ctx.args.length === 0 && ctx.quoted.senderJid;
-            const profilePictureUrl = await ctx.core.profilePictureUrl(isQuoted ? ctx.quoted.senderJid : ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
+            const isQuoted = ctx.args.length === 0 && ctx.quoted?.senderJid;
+            const profilePictureUrl = await ctx.core.profilePictureUrl(isQuoted ? ctx.quoted?.senderJid : ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
             const result = tools.api.createUrl("nekorinn", "/maker/quotechat", {
                 text: input,
-                name: isQuoted ? await ctx.getPushname(ctx.quoted.senderJid) : ctx.sender.pushName,
+                name: isQuoted ? await ctx.getPushname(ctx.quoted?.senderJid) : ctx.sender.pushName,
                 profile: profilePictureUrl
             });
             const sticker = new Sticker(result, {

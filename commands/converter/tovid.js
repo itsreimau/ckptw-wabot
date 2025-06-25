@@ -12,7 +12,7 @@ module.exports = {
         if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(formatter.quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
 
         try {
-            const buffer = await ctx.quoted.media.toBuffer()
+            const buffer = await ctx.quoted?.media?.toBuffer()
             const result = await ezgif.convert({
                 type: "webp-mp4",
                 file: buffer,

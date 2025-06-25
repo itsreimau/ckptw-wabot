@@ -62,7 +62,7 @@ global.config = {
 
         readmore: "\u200E".repeat(4001), // String read more
         note: "“Lorem ipsum dolor sit amet, tenebris in umbra, vitae ad mortem.”", // Catatan
-        footer: italic("Developed by ItsReimau"), // Footer di pesan bot
+        footer: Formatter.italic("Developed by ItsReimau"), // Footer di pesan bot
 
         wait: Formatter.quote("🔄 Tunggu sebentar..."), // Pesan loading
         notFound: Formatter.quote("❎ Tidak ada yang ditemukan! Coba lagi nanti."), // Pesan item tidak ditemukan

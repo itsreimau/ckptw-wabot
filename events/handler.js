@@ -184,7 +184,7 @@ module.exports = (bot) => {
             }
 
             // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
-            const userMentions = ctx.quoted.senderJid ? [ctx.getId(ctx.quoted.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map((jid) => ctx.getId(jid)) || [];
+            const userMentions = ctx.quoted?.senderJid ? [ctx.getId(ctx.quoted?.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map((jid) => ctx.getId(jid)) || [];
             if (userMentions.length > 0) {
                 for (const userMention of userMentions) {
                     const userMentionAfk = await db.get(`user.${userMention}.afk`) || {};
@@ -228,7 +228,7 @@ module.exports = (bot) => {
             if (groupDb?.option?.antinsfw && !await ctx.group().isSenderAdmin() && !isCmd) {
                 const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "image");
                 if (checkMedia) {
-                    const buffer = await ctx.msg.media.toBuffer();
+                    const buffer = await ctx.msg.media?.toBuffer();
                     const uploadUrl = await tools.cmd.upload(buffer, "image");
                     const apiUrl = tools.api.createUrl("https://nsfw-categorize.it", "/api/upload", {
                         url: uploadUrl
