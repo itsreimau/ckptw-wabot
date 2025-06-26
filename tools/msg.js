@@ -1,7 +1,6 @@
-const units = ["yBytes", "zBytes", "aBytes", "fBytes", "pBytes", "nBytes", "µBytes", "mBytes", "Bytes", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
-
 function convertMsToDuration(ms) {
-    if (ms < 1000) return "kurang satu detik";
+    if (ms < 1) return "0 milidetik";
+    if (ms < 1000) return `${Math.floor(ms)} milidetik`;
 
     const years = Math.floor(ms / (1000 * 60 * 60 * 24 * 365.25));
     const months = Math.floor((ms / (1000 * 60 * 60 * 24 * 30.44)) % 12);
@@ -10,6 +9,7 @@ function convertMsToDuration(ms) {
     const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((ms / (1000 * 60)) % 60);
     const seconds = Math.floor((ms / 1000) % 60);
+    const milliseconds = Math.floor(ms % 1000);
 
     const parts = [];
     if (years) parts.push(`${years} tahun`);
@@ -19,6 +19,7 @@ function convertMsToDuration(ms) {
     if (hours) parts.push(`${hours} jam`);
     if (minutes) parts.push(`${minutes} menit`);
     if (seconds) parts.push(`${seconds} detik`);
+    if (milliseconds) parts.push(`${milliseconds} milidetik`);
 
     return parts.length > 0 ? parts.join(" ") : "0 detik";
 }
@@ -34,6 +35,8 @@ function convertSecondToTimecode(seconds) {
 
 function formatSize(byteCount) {
     if (!byteCount) return "0 yBytes";
+
+    const units = ["yBytes", "zBytes", "aBytes", "fBytes", "pBytes", "nBytes", "µBytes", "mBytes", "Bytes", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
 
     let index = 8;
     let size = byteCount;
@@ -53,6 +56,8 @@ function formatSize(byteCount) {
 
 function formatSizePerSecond(byteCount) {
     if (!byteCount) return "0 yBytes/s";
+
+    const units = ["yBytes", "zBytes", "aBytes", "fBytes", "pBytes", "nBytes", "µBytes", "mBytes", "Bytes", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
 
     let index = 8;
     let size = byteCount;
@@ -147,6 +152,7 @@ module.exports = {
     convertMsToDuration,
     convertSecondToTimecode,
     formatSize,
+    formatSizePerSecond,
     generateCmdExample,
     generateInstruction,
     generatesFlagInfo,

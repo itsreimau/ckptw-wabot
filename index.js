@@ -21,7 +21,7 @@ const c = new Consolefy({
 
 // Inisialisasi SimplDB untuk Database
 const dbFile = path.join(__dirname, "database.json");
-if (!fs.access(dbFile)) fs.writeFile(dbFile, "{}", "utf8");
+if (!fs.existsSync(dbFile)) fs.writeFileSync(dbFile, "{}", "utf8");
 
 // Tetapkan variabel global
 config.bot.version = `v${pkg.version}`;
