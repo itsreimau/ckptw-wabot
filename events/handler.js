@@ -4,7 +4,7 @@ const {
     VCardBuilder
 } = require("@itsreimau/gktw");
 const axios = require("axios");
-const fs = require("node:fs/promises");
+const fs = require("node:fs");
 
 // Fungsi untuk menangani event pengguna bergabung/keluar grup
 async function handleWelcome(bot, m, type, isSimulate = false) {

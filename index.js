@@ -9,7 +9,7 @@ const {
     Consolefy
 } = require("@mengkodingan/consolefy");
 const CFonts = require("cfonts");
-const fs = require("node:fs/promises");
+const fs = require("node:fs");
 const http = require("node:http");
 const path = require("node:path");
 const SimplDB = require("simpl.db");
