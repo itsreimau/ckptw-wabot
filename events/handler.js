@@ -5,15 +5,21 @@ const {
 } = require("@itsreimau/gktw");
 const axios = require("axios");
 const fs = require("node:fs");
+const moment = require("moment-timezone");
 
 // Fungsi untuk menangani event pengguna bergabung/keluar grup
 async function handleWelcome(bot, m, type, isSimulate = false) {
     const groupJid = m.id;
     const groupId = bot.getId(m.id);
     const groupDb = await db.get(`group.${groupId}`) || {};
+    const botDb = await db.get("bot") || {};
 
     if (!isSimulate && groupDb?.mutebot) return;
     if (!isSimulate && !groupDb?.option?.welcome) return;
+    if (!isSimulate && ["private", "self"].includes(botDb?.mode)) return;
+    const now = moment().tz(config.system.timeZone);
+    const hour = now.hour();
+    if (hour >= 0 && hour < 6) return;
 
     for (const jid of m.participants) {
         const isWelcome = type === Events.UserJoin;
@@ -132,8 +138,15 @@ module.exports = (bot) => {
         const groupDb = await db.get(`group.${groupId}`) || {};
 
         // Pengecekan mode bot (group, private, self)
-        if ((botDb?.mode === "group" && isPrivate) || (botDb?.mode === "private" && isGroup) || (botDb?.mode === "self" && !isOwner)) return;
+        if (botDb?.mode === "group" && isPrivate && !isOwner) return;
+        if (botDb?.mode === "private" && isGroup && !isOwner) return;
+        if (botDb?.mode === "self" && !isOwner) return;
         if (groupDb?.mutebot && (!isOwner && !await ctx.group().isSenderAdmin())) return;
+
+        // Pengecekan untuk tidak tersedia pada malam hari
+        const now = moment().tz(config.system.timeZone);
+        const hour = now.hour();
+        if (hour >= 0 && hour < 6 && !isOwner) return;
 
         // Pengecekan mute pada grup
         const muteList = groupDb?.mute || [];

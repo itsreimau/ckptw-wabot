@@ -9,9 +9,9 @@ global.config = {
     bot: {
         name: "GAXTAWU", // Nama bot
         prefix: /^[°•π÷×¶∆£¢€¥®™+✓_=|/~!?@#%^&.©^]/i, // Karakter awalan perintah yang diizinkan
-        phoneNumber: "", // Nomor telepon bot (tidak perlu diisi jika menggunakan QR code)
+        phoneNumber: "", // Nomor telepon bot (Tidak perlu diisi jika menggunakan QR code)
         thumbnail: "https://repository-images.githubusercontent.com/753096396/84e76ef0-ba19-4c87-8ec2-ea803b097479", // Gambar thumbnail bot
-        groupJid: "", // JID untuk group bot (opsional jika tidak menggunakan requireBotGroupMembership)
+        groupJid: "", // JID untuk group bot (Opsional, jika tidak menggunakan requireBotGroupMembership)
         newsletterJid: "120363416372653441@newsletter", // JID untuk saluran bot
 
         // Konfigurasi autentikasi sesi bot
@@ -59,6 +59,7 @@ global.config = {
         premium: Formatter.quote("⛔ Tidak dapat memproses karena kamu bukan pengguna Premium!"), // Pesan jika pengguna bukan Premium
         private: Formatter.quote("⛔ Perintah hanya dapat diakses dalam obrolan pribadi!"), // Pesan untuk perintah obrolan pribadi
         restrict: Formatter.quote("⛔ Perintah ini telah dibatasi karena alasan keamanan!"), // Pesan pembatasan perintah
+        unavailableAtNight: Formatter.quote("⛔ Bot tidak tersedia dari jam 12 malam sampai 6 pagi. Silakan kembali nanti!"), // Pesan jika tidak tersedia pada malam hari
 
         readmore: "\u200E".repeat(4001), // String read more
         note: "“Lorem ipsum dolor sit amet, tenebris in umbra, vitae ad mortem.”", // Catatan
@@ -88,23 +89,24 @@ global.config = {
         alwaysOnline: true, // Bot selalu berstatus "online"
         antiCall: true, // Bot secara otomatis membanned orang yang menelepon
         autoMention: true, // Bot otomatis mention seseorang dalam pesan yang dikirim
-        autoAiLabel: true, // Bot otomatis memamaki label AI dalam pesan yang dikirim (hanya berfungsi di chat private)
+        autoAiLabel: true, // Bot otomatis memamaki label AI dalam pesan yang dikirim (Hanya berfungsi di chat private)
         autoRead: true, // Bot baca pesan otomatis
         autoTypingOnCmd: true, // Tampilkan status "sedang mengetik" saat memproses perintah
         cooldown: 10 * 1000, // Jeda antar perintah (ms)
         maxListeners: 50, // Max listeners untuk events
-        port: 3000, // Port (jika pakai server)
-        reportErrorToOwner: true, // Laporkan kesalahan ke owner bot
+        port: 3000, // Port (Jika pakai server)
+        reportErrorToOwner: true, // Laporkan error ke owner bot
         restrict: false, // Batasi akses perintah
         requireBotGroupMembership: false, // Harus gabung grup bot
         requireGroupSewa: false, // Harus sewa bot untuk bisa dipakai di grup
         selfOwner: false, // Bot jadi owner sendiri
         selfReply: true, // Bot bisa balas pesan bot sendiri
         timeZone: "Asia/Jakarta", // Zona waktu bot
+        unavailableAtNight: false, // Bot tidak tersedia pada malam hari, dari jam 12 malam sampai 6 pagi (Waktu akan disesuaikan menurut timeZone)
         uploaderHost: "Cloudku", // Host uploader untuk menyimpan media (Tersedia: Catbox, Cloudku, Erhabot, FastUrl, IDNet, Litterbox, Nyxs, Pomf, Quax, Ryzen, Shojib, TmpErhabot, Uguu, Videy)
         useCoin: true, // Pakai koin
         usePairingCode: false, // Pakai kode pairing untuk koneksi
-        customPairingCode: "UMBR4L15", // Kode pairing kustom untuk koneksi (tidak perlu diisi jika menggunakan QR code, jika kosong kode pairing akan random)
+        customPairingCode: "UMBR4L15", // Kode pairing kustom untuk koneksi (Opsional, jika menggunakan QR code, jika kosong kode pairing akan random)
         useServer: false // Jalankan bot dengan server
     }
 };

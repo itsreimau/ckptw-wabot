@@ -1,4 +1,4 @@
-const ezgif = require("ezgif-node");
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -12,12 +12,12 @@ module.exports = {
         if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["sticker"])) return await ctx.reply(formatter.quote(tools.msg.generateInstruction(["reply"], ["sticker"])));
 
         try {
-            const buffer = await ctx.quoted?.media?.toBuffer()
-            const result = await ezgif.convert({
-                type: "webp-mp4",
-                file: buffer,
-                filename: "upload.webp"
-            });
+            const buffer = await ctx.quoted.media.toBuffer();
+            const apiUrl = tools.api.createUrl("https://nekochii-converter.hf.space", "/webp2mp4");
+            const result = (await axios.post(apiUrl, {
+                file: buffer.toString("base64"),
+                json: true
+            })).data.result;
 
             return await ctx.reply({
                 video: {

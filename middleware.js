@@ -2,6 +2,7 @@
 const {
     Cooldown
 } = require("@itsreimau/gktw");
+const moment = require("moment-timezone");
 
 // Fungsi untuk mengecek apakah pengguna memiliki cukup koin sebelum menggunakan perintah tertentu
 async function checkCoin(requiredCoin, userDb, senderId, isOwner) {
@@ -88,6 +89,11 @@ module.exports = (bot) => {
                 reaction: "💤"
             },
             {
+                key: "gamerestrict",
+                condition: groupDb?.option?.gamerestrict && isGroup && ctx.bot.cmd.has(ctx.used.command) && ctx.bot.cmd.get(ctx.used.command).category === "game",
+                msg: config.msg.gamerestrict,
+                reaction: "🎮"
+            }, {
                 key: "requireBotGroupMembership",
                 condition: config.system.requireBotGroupMembership && !isOwner && !userDb?.premium && ctx.used.command !== "botgroup" && config.bot.groupJid && !(ctx.group(config.bot.groupJid)).members().some((member) => ctx.getId(member.id) === senderJid),
                 msg: config.msg.botGroupMembership,
@@ -100,10 +106,15 @@ module.exports = (bot) => {
                 reaction: "🔒"
             },
             {
-                key: "gamerestrict",
-                condition: groupDb?.option?.gamerestrict && isGroup && ctx.bot.cmd.has(ctx.used.command) && ctx.bot.cmd.get(ctx.used.command).category === "game",
-                msg: config.msg.gamerestrict,
-                reaction: "🎮"
+                key: "unavailableAtNight",
+                condition: (() => {
+                    if (isOwner) false;
+                    const now = moment().tz(config.system.timeZone);
+                    const hour = now.hour();
+                    return hour >= 0 && hour < 6;
+                })(),
+                msg: config.msg.unavailableAtNight,
+                reaction: "😴"
             }
         ];
 
