@@ -11,7 +11,7 @@ module.exports = {
     code: async (ctx) => {
         const availableModels = ["zeina", "nicole", "russell", "ricardo", "camila", "vitoria", "brian", "amy", "emma", "chantal", "enrique", "lucia", "conchita", "zhiyu", "naja", "mads", "ruben", "lotte", "mathieu", "celine", "lea", "vicki", "marlene", "hans", "karl", "dora", "aditi", "raveena", "giorgio", "carla", "bianca", "takumi", "mizuki", "seoyeon", "mia", "liv", "jan", "maja", "ewa", "jacek", "cristiano", "ines", "carmen", "tatyana", "maxim", "astrid", "filiz", "kimberly", "ivy", "kendra", "justin", "joey", "matthew", "salli", "joanna", "penelope", "lupe", "miguel", "gwyneth", "geraint"];
 
-        const input = ctx.args.slice(availableModels.includes(ctx.args[0]?.toLowerCase()) ? 1 : 0).join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
+        const input = ctx.args.slice(availableModels.includes(ctx.args[0]?.toLowerCase()) ? 1 : 0).join(" ") || ctx.quoted?.conversation || ctx?.quoted ? Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) : null;
         const model = availableModels.includes(ctx.args[0]?.toLowerCase()) ? ctx.args[0] : "zeina";
 
         if (!input) return await ctx.reply(

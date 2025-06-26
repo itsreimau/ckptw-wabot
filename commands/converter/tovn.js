@@ -8,7 +8,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        if (!await tools.cmd.checkQuotedMedia(ctx.quoted, ["audio"])) return await ctx.reply(formatter.quote(tools.msg.generateInstruction(["reply"], ["audio"])));
+        if (!await tools.cmd.checkQuotedMedia(ctx?.quoted, ["audio"])) return await ctx.reply(formatter.quote(tools.msg.generateInstruction(["reply"], ["audio"])));
 
         try {
             const result = await ctx.quoted?.media?.toBuffer();

@@ -1,3 +1,4 @@
+// Impor modul dan dependensi yang diperlukan
 const util = require("node:util");
 
 // Daftar API gratis

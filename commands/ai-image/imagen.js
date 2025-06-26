@@ -7,7 +7,7 @@ module.exports = {
         premium: true
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || ctx.quoted?.conversation || Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) || null;
+        const input = ctx.args.join(" ") || ctx.quoted?.conversation || ctx?.quoted ? Object.values(ctx.quoted).map(q => q?.text || q?.caption).find(Boolean) : null;
 
         if (!input) return await ctx.reply(
             `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +

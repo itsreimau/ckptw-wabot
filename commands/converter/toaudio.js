@@ -12,7 +12,7 @@ module.exports = {
         const messageType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
             tools.cmd.checkMedia(messageType, ["video"]),
-            tools.cmd.checkQuotedMedia(ctx.quoted, ["video"])
+            tools.cmd.checkQuotedMedia(ctx?.quoted, ["video"])
         ]);
 
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(formatter.quote(tools.msg.generateInstruction(["send", "reply"], ["video"])));

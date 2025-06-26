@@ -21,7 +21,7 @@ module.exports = {
         const messageType = ctx.getMessageType();
         const [checkMedia, checkQuotedMedia] = await Promise.all([
             tools.cmd.checkMedia(messageType, ["image", "sticker"]),
-            tools.cmd.checkQuotedMedia(ctx.quoted, ["image", "sticker"])
+            tools.cmd.checkQuotedMedia(ctx?.quoted, ["image", "sticker"])
         ]);
 
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(formatter.quote(tools.msg.generateInstruction(["send", "reply"], ["image", "sticker"])));

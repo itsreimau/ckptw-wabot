@@ -9,7 +9,6 @@ function convertMsToDuration(ms) {
     const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((ms / (1000 * 60)) % 60);
     const seconds = Math.floor((ms / 1000) % 60);
-    const milliseconds = Math.floor(ms % 1000);
 
     const parts = [];
     if (years) parts.push(`${years} tahun`);
@@ -19,7 +18,6 @@ function convertMsToDuration(ms) {
     if (hours) parts.push(`${hours} jam`);
     if (minutes) parts.push(`${minutes} menit`);
     if (seconds) parts.push(`${seconds} detik`);
-    if (milliseconds) parts.push(`${milliseconds} milidetik`);
 
     return parts.length > 0 ? parts.join(" ") : "0 detik";
 }

@@ -13,7 +13,7 @@ module.exports = {
 
             return await ctx.reply(formatter.monospace(util.inspect(result)));
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, false, true);
+            return await tools.cmd.handleError(ctx, error, false, false);
         }
     }
 };
