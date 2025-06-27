@@ -17,10 +17,10 @@ module.exports = {
             }))
         );
 
-        if (!await ctx.group(groupJid).catch(() => null)) return await ctx.reply(formatter.quote("❎ Grup tidak valid atau bot tidak ada di grup tersebut!"));
+        if (!await ctx.group(groupJid)) return await ctx.reply(formatter.quote("❎ Grup tidak valid atau bot tidak ada di grup tersebut!"));
 
         try {
-            const groupId = ctx.getId(groupJid) || null;
+            const groupId = ctx.getId(groupJid);
 
             await db.delete(`group.${groupId}.sewa`);
             await db.delete(`group.${groupId}.sewaExpiration`);
@@ -31,11 +31,13 @@ module.exports = {
                     key: "silent"
                 }
             });
-            if (!flag?.silent && groupOwner) {
-                const groupOwner = (await ctx.group(groupJid)).owner().catch(() => null);
+
+            const silent = flag?.silent || false;
+            const groupOwner = (await ctx.group(groupJid)).owner();
+            if (!silent && groupOwner) {
                 const groupMentions = [{
                     groupJid: `${group.id}@g.us`,
-                    groupSubject: (await ctx.group(groupJid)).name().catch(() => null)
+                    groupSubject: (await ctx.group(groupJid)).name()
                 }];
                 await ctx.sendMessage(groupOwner, {
                     text: formatter.quote(`📢 Sewa bot untuk grup @${groupMentions.groupJid} telah dihentikan oleh Owner!`),

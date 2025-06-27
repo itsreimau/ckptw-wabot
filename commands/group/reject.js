@@ -15,14 +15,14 @@ module.exports = {
             formatter.quote(tools.msg.generateNotes([`Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} all`)} untuk menolak semua anggota yang tertunda.`]))
         );
 
-        const pending = await ctx.group().pendingMembers();
+        const pending = (await ctx.group()).pendingMembers();
 
         if (["a", "all"].includes(input.toLowerCase())) {
             if (pending.length === 0) return await ctx.reply(formatter.quote("✅ Tidak ada anggota yang menunggu persetujuan."));
 
             try {
                 const allJids = pending.map(p => p.jid);
-                await ctx.group().rejectPendingMembers(allJids);
+                (await ctx.group()).rejectPendingMembers(allJids);
 
                 return await ctx.reply(formatter.quote(`✅ Berhasil menolak semua anggota (${allJids.length}).`));
             } catch (error) {
@@ -36,7 +36,7 @@ module.exports = {
         if (!isPending) return await ctx.reply(formatter.quote("❎ Akun tidak ditemukan di daftar anggota yang menunggu persetujuan."));
 
         try {
-            await ctx.group().rejectPendingMembers([accountJid]);
+            (await ctx.group()).rejectPendingMembers([accountJid]);
 
             return await ctx.reply(formatter.quote("✅ Berhasil ditolak!"));
         } catch (error) {

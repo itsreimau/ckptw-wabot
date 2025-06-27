@@ -19,10 +19,10 @@ module.exports = {
         );
 
         if (daysAmount && daysAmount <= 0) return await ctx.reply(formatter.quote("❎ Durasi sewa (dalam hari) harus diisi dan lebih dari 0!"));
-        if (!await ctx.group(groupJid).catch(() => null)) return await ctx.reply(formatter.quote("❎ Grup tidak valid atau bot tidak ada di grup tersebut!"));
+        if (!await ctx.group(groupJid)) return await ctx.reply(formatter.quote("❎ Grup tidak valid atau bot tidak ada di grup tersebut!"));
 
         try {
-            const groupId = ctx.getId(groupJid) || null;
+            const groupId = ctx.getId(groupJid);
 
             await db.set(`group.${groupId}.sewa`, true);
 
@@ -32,11 +32,14 @@ module.exports = {
                     key: "silent"
                 }
             });
-            if (flag?.silent) {
-                const groupOwner = (await ctx.group(groupJid)).owner().catch(() => null);
+
+            const silent = flag?.silent || false;
+
+            if (silent) {
+                const groupOwner = await ctx.group(groupJid);
                 const groupMentions = [{
                     groupJid: `${group.id}@g.us`,
-                    groupSubject: (await ctx.group(groupJid)).name().catch(() => null)
+                    groupSubject: await ctx.group(groupJid)
                 }];
             }
 
@@ -44,7 +47,7 @@ module.exports = {
                 const expirationDate = Date.now() + (daysAmount * 24 * 60 * 60 * 1000);
                 await db.set(`group.${groupId}.sewaExpiration`, expirationDate);
 
-                if (!flag?.silent && groupOwner) await ctx.sendMessage(groupOwner, {
+                if (!silent && groupOwner) await ctx.sendMessage(groupOwner, {
                     text: formatter.quote(`📢 Bot berhasil disewakan ke grup @${groupMentions.groupJid} selama ${daysAmount} hari!`),
                     contextInfo: {
                         groupMentions
@@ -55,7 +58,7 @@ module.exports = {
             } else {
                 await db.delete(`group.${groupId}.sewaExpiration`);
 
-                if (!flag?.silent && groupOwner) await ctx.sendMessage(groupOwner, {
+                if (!silent && groupOwner) await ctx.sendMessage(groupOwner, {
                     text: formatter.quote(`📢 Bot berhasil disewakan ke grup @${groupMentions.groupJid} selamanya!`),
                     contextInfo: {
                         groupMentions

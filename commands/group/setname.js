@@ -15,7 +15,7 @@ module.exports = {
         );
 
         try {
-            await ctx.group().updateSubject(input);
+            (await ctx.group()).updateSubject(input);
 
             return await ctx.reply(formatter.quote("✅ Berhasil mengubah nama grup!"));
         } catch (error) {

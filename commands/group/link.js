@@ -8,7 +8,7 @@ module.exports = {
     },
     code: async (ctx) => {
         try {
-            const code = await ctx.group().inviteCode();
+            const code = (await ctx.group()).inviteCode();
 
             return await ctx.reply(formatter.quote(`https://chat.whatsapp.com/${code}`));
         } catch (error) {

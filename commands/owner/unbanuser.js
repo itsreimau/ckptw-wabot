@@ -30,7 +30,9 @@ module.exports = {
                     key: "silent"
                 }
             });
-            if (!flag?.silent) await ctx.sendMessage(userJid, {
+
+            const silent = flag?.silent || false;
+            if (!silent) await ctx.sendMessage(userJid, {
                 text: formatter.quote("🎉 Kamu telah diunbanned oleh Owner!")
             });
 

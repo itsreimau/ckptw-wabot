@@ -19,7 +19,7 @@ module.exports = {
             const apiUrl = tools.api.createUrl("archive", "/api/search/lyrics", {
                 query: input
             });
-            const result = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply(
                 `${formatter.quote(`Judul: ${result.title}`)}\n` +

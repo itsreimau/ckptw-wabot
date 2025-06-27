@@ -35,12 +35,14 @@ module.exports = {
                 }
             });
 
+            const silent = flag?.silent || false;
+
             await db.set(`user.${userId}.premium`, true);
             if (daysAmount && daysAmount > 0) {
                 const expirationDate = Date.now() + (daysAmount * 24 * 60 * 60 * 1000);
                 await db.set(`user.${userId}.premiumExpiration`, expirationDate);
 
-                if (!flag?.silent) await ctx.sendMessage(userJid, {
+                if (!silent) await ctx.sendMessage(userJid, {
                     text: formatter.quote(`📢 Kamu telah ditambahkan sebagai pengguna Premium oleh Owner selama ${daysAmount} hari!`)
                 });
 
@@ -48,7 +50,7 @@ module.exports = {
             } else {
                 await db.delete(`user.${userId}.premiumExpiration`);
 
-                if (!flag?.silent) await ctx.sendMessage(userJid, {
+                if (!silent) await ctx.sendMessage(userJid, {
                     text: formatter.quote("📢 Kamu telah ditambahkan sebagai pengguna Premium selamanya oleh Owner!")
                 });
 

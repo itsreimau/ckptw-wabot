@@ -10,7 +10,7 @@ module.exports = {
         const input = ctx.args.join(" ") || formatter.quote("👋 Halo, Dunia!");
 
         try {
-            const members = await ctx.group().members();
+            const members = (await ctx.group()).members();
             const mentions = members.map(m => m.id);
 
             return await ctx.reply({

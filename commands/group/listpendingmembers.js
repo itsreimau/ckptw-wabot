@@ -8,7 +8,7 @@ module.exports = {
         group: true
     },
     code: async (ctx) => {
-        const pending = await ctx.group().pendingMembers();
+        const pending = (await ctx.group()).pendingMembers();
 
         if (!pending || pending.length === 0) return await ctx.reply(formatter.quote("✅ Tidak ada anggota yang menunggu persetujuan."));
 

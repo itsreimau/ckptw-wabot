@@ -24,7 +24,7 @@ module.exports = {
 
             for (const group of sewaGroups) {
                 const groupJid = `${group.id}@g.us`;
-                const groupSubject = (await ctx.group(groupJid)).name().catch(() => null);
+                const groupSubject = (await ctx.group(groupJid)).name();
 
                 groupMentions.push({
                     groupJid,

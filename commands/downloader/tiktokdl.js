@@ -25,7 +25,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.result.media;
             const video = result.play;
-            const images = result?.image_slide;
+            const images = result?.image_slide || [];
 
             if (images) {
                 for (const image of images) {

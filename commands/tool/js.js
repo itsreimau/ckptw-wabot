@@ -1,4 +1,4 @@
-aconst {
+const {
     spawn
 } = require("node:child_process");
 
@@ -31,7 +31,7 @@ module.exports = {
 
                 childProcess.stdout.on("data", (chunk) => {
                     if (outputData.length >= 1024 * 1024) {
-                        resolve(formatter.quote("❎ Kode mencapai batas penggunaan memori!"));
+                        resolve("❎ Kode mencapai batas penggunaan memori!");
                         childProcess.kill();
                     }
                     outputData += chunk.toString();
@@ -44,7 +44,7 @@ module.exports = {
                 childProcess.on("close", (code) => {
                     if (code !== 0) {
                         resolve(
-                            `${formatter.quote(`⚠ Keluar dari proses dengan kode: ${code}`)}\n` +
+                            `⚠ Keluar dari proses dengan kode: ${code}\n` +
                             errorData.trim()
                         );
                     } else {
@@ -53,7 +53,7 @@ module.exports = {
                 });
 
                 setTimeout(() => {
-                    resolve(formatter.quote("❎ Kode mencapai batas waktu output!"));
+                    resolve("❎ Kode mencapai batas waktu output!");
                     childProcess.kill();
                 }, 10000);
             });

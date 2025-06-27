@@ -21,7 +21,7 @@ module.exports = {
         if (isOnWhatsApp.length === 0) return await ctx.reply(formatter.quote("❎ Akun tidak ada di WhatsApp!"));
 
         try {
-            await ctx.group().add([accountJid]);
+            (await ctx.group()).add([accountJid]);
 
             return await ctx.reply(formatter.quote("✅ Berhasil ditambahkan!"));
         } catch (error) {

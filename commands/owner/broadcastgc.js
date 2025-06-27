@@ -40,7 +40,7 @@ module.exports = {
                 }
             });
 
-            const hidetag = flag?.hidetag || null;
+            const hidetag = flag?.hidetag || false;
             const text = flag?.input;
 
             const groupIds = Object.values(await ctx.core.groupFetchAllParticipating()).map(g => g.id);

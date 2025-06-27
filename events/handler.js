@@ -25,7 +25,7 @@ async function handleWelcome(bot, m, type, isSimulate = false) {
         const isWelcome = type === Events.UserJoin;
         const userTag = `@${bot.getId(jid)}`;
         const customText = isWelcome ? groupDb?.text?.welcome : groupDb?.text?.goodbye;
-        const metadata = await bot.core.groupMetadata(groupJid).catch(() => null);
+        const metadata = await bot.core.groupMetadata(groupJid);
         const text = customText ?
             customText
             .replace(/%tag%/g, userTag)
@@ -70,9 +70,9 @@ async function addWarning(ctx, groupDb, senderJid, groupId) {
     const senderId = ctx.getId(senderJid);
 
     const warnings = groupDb?.warnings || {};
-    const current = warnings[accountId] || 0;
+    const current = warnings[senderId] || 0;
     const newWarning = current + 1;
-    warnings[accountId] = newWarning;
+    warnings[senderId] = newWarning;
 
     await db.set(`group.${groupId}.warnings`, warnings);
     await ctx.reply({
@@ -83,7 +83,7 @@ async function addWarning(ctx, groupDb, senderJid, groupId) {
     const maxwarnings = groupDb.maxwarnings || 3;
     if (newWarning >= maxwarnings) {
         await ctx.reply(formatter.quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
-        if (!config.system.restrict) await ctx.group().kick([senderJid]);
+        if (!config.system.restrict)(await ctx.group()).kick([senderJid]);
         delete groupDb.warnings[senderId];
         await db.set(`group.${groupId}`, groupDb);
     }
@@ -140,7 +140,7 @@ module.exports = (bot) => {
         if (botDb?.mode === "group" && isPrivate && !isOwner) return;
         if (botDb?.mode === "private" && isGroup && !isOwner) return;
         if (botDb?.mode === "self" && !isOwner) return;
-        if (groupDb?.mutebot && (!isOwner && !await ctx.group().isSenderAdmin())) return;
+        if (groupDb?.mutebot && (!isOwner && !(await ctx.group()).isSenderAdmin())) return;
 
         // Pengecekan untuk tidak tersedia pada malam hari
         const now = moment().tz(config.system.timeZone);
@@ -209,13 +209,13 @@ module.exports = (bot) => {
 
             // Penanganan antimedia
             for (const type of ["audio", "document", "gif", "image", "sticker", "video"]) {
-                if (groupDb?.option?.[`anti${type}`] && !await ctx.group().isSenderAdmin() && !isCmd) {
+                if (groupDb?.option?.[`anti${type}`] && !(await ctx.group()).isSenderAdmin() && !isCmd) {
                     const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), type);
                     if (checkMedia) {
                         await ctx.reply(formatter.quote(`⛔ Jangan kirim ${type}!`));
                         await ctx.deleteMessage(m.key);
                         if (groupAutokick) {
-                            await ctx.group().kick([senderJid]);
+                            (await ctx.group()).kick([senderJid]);
                         } else {
                             await addWarning(ctx, groupDb, senderJid, groupId);
                         }
@@ -224,12 +224,12 @@ module.exports = (bot) => {
             }
 
             // Penanganan antilink
-            if (groupDb?.option?.antilink && !await ctx.group().isSenderAdmin() && !isCmd) {
+            if (groupDb?.option?.antilink && !(await ctx.group()).isSenderAdmin() && !isCmd) {
                 if (m.content && await tools.cmd.isUrl(m.content)) {
                     await ctx.reply(formatter.quote("⛔ Jangan kirim link!"));
                     await ctx.deleteMessage(m.key);
                     if (groupAutokick) {
-                        await ctx.group().kick([senderJid]);
+                        (await ctx.group()).kick([senderJid]);
                     } else {
                         await addWarning(ctx, groupDb, senderJid, groupId);
                     }
@@ -237,7 +237,7 @@ module.exports = (bot) => {
             }
 
             // Penanganan antinsfw
-            if (groupDb?.option?.antinsfw && !await ctx.group().isSenderAdmin() && !isCmd) {
+            if (groupDb?.option?.antinsfw && !(await ctx.group()).isSenderAdmin() && !isCmd) {
                 const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "image");
                 if (checkMedia) {
                     const buffer = await ctx.msg.media.toBuffer();
@@ -251,7 +251,7 @@ module.exports = (bot) => {
                         await ctx.reply(formatter.quote("⛔ Jangan kirim NSFW, dasar cabul!"));
                         await ctx.deleteMessage(m.key);
                         if (groupAutokick) {
-                            await ctx.group().kick([senderJid]);
+                            (await ctx.group()).kick([senderJid]);
                         } else {
                             await addWarning(ctx, groupDb, senderJid, groupId);
                         }
@@ -260,7 +260,7 @@ module.exports = (bot) => {
             }
 
             // Penanganan antispam
-            if (groupDb?.option?.antispam && !await ctx.group().isSenderAdmin() && !isCmd) {
+            if (groupDb?.option?.antispam && !(await ctx.group()).isSenderAdmin() && !isCmd) {
                 const now = Date.now();
                 const spamData = await db.get(`group.${groupId}.spam`) || {};
                 const data = spamData[senderId] || {
@@ -282,7 +282,7 @@ module.exports = (bot) => {
                     await ctx.reply(formatter.quote("⛔ Jangan spam, ngelag woy!"));
                     await ctx.deleteMessage(m.key);
                     if (groupAutokick) {
-                        await ctx.group().kick([senderJid]);
+                        (await ctx.group()).kick([senderJid]);
                     } else {
                         await addWarning(ctx, groupDb, senderJid, groupId);
                     }
@@ -292,13 +292,13 @@ module.exports = (bot) => {
             }
 
             // Penanganan antitagsw
-            if (groupDb?.option?.antitagsw && !await ctx.group().isSenderAdmin() && !isCmd) {
+            if (groupDb?.option?.antitagsw && !(await ctx.group()).isSenderAdmin() && !isCmd) {
                 const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "groupStatusMention") || m.message?.protocolMessage?.type === 25 || m.message?.protocolMessage?.type === "STATUS_MENTION_MESSAGE";
                 if (checkMedia) {
                     await ctx.reply(formatter.quote(`⛔ Jangan tag grup di SW, gak ada yg peduli!`));
                     await ctx.deleteMessage(m.key);
                     if (groupAutokick) {
-                        await ctx.group().kick([senderJid]);
+                        (await ctx.group()).kick([senderJid]);
                     } else {
                         await addWarning(ctx, groupDb, senderJid, groupId);
                     }
@@ -306,13 +306,13 @@ module.exports = (bot) => {
             }
 
             // Penanganan antitoxic
-            if (groupDb?.option?.antitoxic && !await ctx.group().isSenderAdmin() && !isCmd) {
+            if (groupDb?.option?.antitoxic && !(await ctx.group()).isSenderAdmin() && !isCmd) {
                 const toxicRegex = /anj(k|g)|ajn?(g|k)|a?njin(g|k)|bajingan|b(a?n)?gsa?t|ko?nto?l|me?me?(k|q)|pe?pe?(k|q)|meki|titi(t|d)|pe?ler|tetek|toket|ngewe|go?blo?k|to?lo?l|idiot|(k|ng)e?nto?(t|d)|jembut|bego|dajj?al|janc(u|o)k|pantek|puki ?(mak)?|kimak|kampang|lonte|col(i|mek?)|pelacur|henceu?t|nigga|fuck|dick|bitch|tits|bastard|asshole|dontol|kontoi|ontol/i;
                 if (m.content && toxicRegex.test(m.content)) {
                     await ctx.reply(formatter.quote("⛔ Jangan toxic!"));
                     await ctx.deleteMessage(m.key);
                     if (groupAutokick) {
-                        await ctx.group().kick([senderJid]);
+                        (await ctx.group()).kick([senderJid]);
                     } else {
                         await addWarning(ctx, groupDb, senderJid, groupId);
                     }

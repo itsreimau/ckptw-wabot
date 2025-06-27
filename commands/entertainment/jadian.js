@@ -9,7 +9,7 @@ module.exports = {
     },
     code: async (ctx) => {
         try {
-            const members = await ctx.group().members();
+            const members = (await ctx.group()).members();
             const memberIDs = members.map(m => m.id);
 
             let selected = [];

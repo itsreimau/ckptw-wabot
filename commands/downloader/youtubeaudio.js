@@ -37,7 +37,8 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.result;
 
-            if (flag?.document) return await ctx.reply({
+            const document = flag?.document || false;
+            if (document) return await ctx.reply({
                 document: {
                     url: result.audio_url
                 },
