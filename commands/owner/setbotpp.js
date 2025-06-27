@@ -15,7 +15,7 @@ module.exports = {
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(formatter.quote(tools.msg.generateInstruction(["send", "reply"], "image")));
 
         try {
-            const buffer = await ctx.msg.media?.toBuffer() || await ctx.quoted?.media?.toBuffer();
+            const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             await ctx.core.updateProfilePicture(ctx.core.user.id, buffer);
 
             return await ctx.reply(formatter.quote("✅ Berhasil mengubah gambar profil bot!"));

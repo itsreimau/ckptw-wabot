@@ -19,7 +19,7 @@ async function handleWelcome(bot, m, type, isSimulate = false) {
     if (!isSimulate && ["private", "self"].includes(botDb?.mode)) return;
     const now = moment().tz(config.system.timeZone);
     const hour = now.hour();
-    if (hour >= 0 && hour < 6) return;
+    if (!isSimulate && hour >= 0 && hour < 6) return;
 
     for (const jid of m.participants) {
         const isWelcome = type === Events.UserJoin;
@@ -70,23 +70,22 @@ async function addWarning(ctx, groupDb, senderJid, groupId) {
     const senderId = ctx.getId(senderJid);
 
     const warnings = groupDb?.warnings || {};
-    const current = warnings[senderId] || 0;
-    const maxwarnings = groupDb?.maxwarnings || 3;
-
+    const current = warnings[accountId] || 0;
     const newWarning = current + 1;
-    warnings[senderId] = newWarning;
-    await db.set(`group.${groupId}.warnings`, warnings);
+    warnings[accountId] = newWarning;
 
+    await db.set(`group.${groupId}.warnings`, warnings);
     await ctx.reply({
         text: formatter.quote(`⚠️ Warning ${newWarning}/${maxwarnings} untuk @${senderId}!`),
         mentions: [senderJid]
     });
 
+    const maxwarnings = groupDb.maxwarnings || 3;
     if (newWarning >= maxwarnings) {
         await ctx.reply(formatter.quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
         if (!config.system.restrict) await ctx.group().kick([senderJid]);
-        delete warnings[senderId];
-        await db.set(`group.${groupId}.warnings`, warnings);
+        delete groupDb.warnings[senderId];
+        await db.set(`group.${groupId}`, groupDb);
     }
 }
 
@@ -146,7 +145,7 @@ module.exports = (bot) => {
         // Pengecekan untuk tidak tersedia pada malam hari
         const now = moment().tz(config.system.timeZone);
         const hour = now.hour();
-        if (hour >= 0 && hour < 6 && !isOwner) return;
+        if (hour >= 0 && hour < 6 && !isOwner && !userDb?.premium) return;
 
         // Pengecekan mute pada grup
         const muteList = groupDb?.mute || [];
@@ -197,7 +196,7 @@ module.exports = (bot) => {
             }
 
             // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
-            const userMentions = ctx.quoted?.senderJid ? [ctx.getId(ctx.quoted?.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map((jid) => ctx.getId(jid)) || [];
+            const userMentions = ctx?.quoted?.senderJid ? [ctx.getId(ctx?.quoted?.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map((jid) => ctx.getId(jid)) || [];
             if (userMentions.length > 0) {
                 for (const userMention of userMentions) {
                     const userMentionAfk = await db.get(`user.${userMention}.afk`) || {};
@@ -241,7 +240,7 @@ module.exports = (bot) => {
             if (groupDb?.option?.antinsfw && !await ctx.group().isSenderAdmin() && !isCmd) {
                 const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "image");
                 if (checkMedia) {
-                    const buffer = await ctx.msg.media?.toBuffer();
+                    const buffer = await ctx.msg.media.toBuffer();
                     const uploadUrl = await tools.cmd.upload(buffer, "image");
                     const apiUrl = tools.api.createUrl("https://nsfw-categorize.it", "/api/upload", {
                         url: uploadUrl

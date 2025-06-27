@@ -108,10 +108,10 @@ module.exports = (bot) => {
             {
                 key: "unavailableAtNight",
                 condition: (() => {
-                    if (isOwner) false;
+                    if () false;
                     const now = moment().tz(config.system.timeZone);
                     const hour = now.hour();
-                    return hour >= 0 && hour < 6;
+                    return config.system.unavailableAtNight && !isOwner && !userDb?.premium && hour >= 0 && hour < 6;
                 })(),
                 msg: config.msg.unavailableAtNight,
                 reaction: "😴"

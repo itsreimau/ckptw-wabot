@@ -8,7 +8,7 @@ module.exports = {
         restrict: true
     },
     code: async (ctx) => {
-        const accountJid = ctx.quoted?.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
+        const accountJid = ctx?.quoted?.senderJid || ctx.msg.message.extendedTextMessage?.contextInfo?.mentionedJid?.[0] || null;
         const accountId = ctx.getId(accountJid);
 
         if (!accountJid) return await ctx.reply({

@@ -16,7 +16,7 @@ module.exports = {
             const quoted = ctx.quoted;
             const quotedType = Object.keys(quoted).find(key => key.endsWith("Message"));
             const msg = quoted[quotedType];
-            const buffer = await ctx.quoted?.media?.toBuffer();
+            const buffer = await ctx.quoted.media.toBuffer();
 
             const options = {
                 mimetype: msg.mimetype,
