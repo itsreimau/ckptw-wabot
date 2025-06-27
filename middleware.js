@@ -20,6 +20,8 @@ module.exports = (bot) => {
         const isPrivate = !isGroup;
         const senderJid = ctx.sender.jid;
         const senderId = ctx.getId(senderJid);
+        const groupJid = isGroup ? ctx.id : null;
+        const groupId = isGroup ? ctx.getId(groupJid) : null;
         const isOwner = tools.cmd.isOwner(senderId, ctx.msg.key.id);
 
         // Mengambil data bot, pengguna, dan grup dari database
