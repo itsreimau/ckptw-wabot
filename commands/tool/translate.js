@@ -6,7 +6,7 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.args.slice(ctx.args[0]?.length === 2 ? 1 : 0).join(" ") || ctx?.quoted?.conversation || (ctx.quoted && (Object.values(ctx.quoted).find(v => v?.text || v?.caption) || {})?.text ?? Object.values(ctx.quoted).find(v => v?.text || v?.caption)?.caption) || null;
+        const input = ctx.args.slice(ctx.args[0]?.length === 2 ? 1 : 0).join(" ") || ctx?.quoted?.conversation || (ctx.quoted && ((Object.values(ctx.quoted).find(v => v?.text || v?.caption) || {}).text || Object.values(ctx.quoted).find(v => v?.text || v?.caption)?.caption)) || null;
         const langCode = ctx.args[0]?.length === 2 ? ctx.args[0] : "id";
 
         if (!input) return await ctx.reply(
