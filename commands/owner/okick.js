@@ -17,10 +17,10 @@ module.exports = {
             mentions: [ctx.sender.jid]
         });
 
-        if (accountJid === (await ctx.group()).owner()) return await ctx.reply(formatter.quote("❎ Dia adalah owner grup!"));
+        if (accountJid === await ctx.group().owner()) return await ctx.reply(formatter.quote("❎ Dia adalah owner grup!"));
 
         try {
-            (await ctx.group()).kick([accountJid]);
+            await ctx.group().kick([accountJid]);
 
             return await ctx.reply(formatter.quote("✅ Berhasil dikeluarkan!"));
         } catch (error) {

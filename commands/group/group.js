@@ -29,16 +29,16 @@ module.exports = {
                     await ctx.group()[input.toLowerCase()]();
                     break;
                 case "approve":
-                    (await ctx.group()).joinApproval("on");
+                    await ctx.group().joinApproval("on");
                     break;
                 case "disapprove":
-                    (await ctx.group()).joinApproval("off");
+                    await ctx.group().joinApproval("off");
                     break;
                 case "invite":
-                    (await ctx.group()).membersCanAddMemberMode("on");
+                    await ctx.group().membersCanAddMemberMode("on");
                     break;
                 case "restrict":
-                    (await ctx.group()).membersCanAddMemberMode("off");
+                    await ctx.group().membersCanAddMemberMode("off");
                     break;
                 default:
                     return await ctx.reply(formatter.quote("❎ Teks tidak valid!"));

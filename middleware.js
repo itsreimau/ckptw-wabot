@@ -30,7 +30,7 @@ module.exports = (bot) => {
         const groupDb = await db.get(`group.${groupId}`) || {};
 
         // Pengecekan mode bot (group, private, self)
-        if ((groupDb?.mutebot === true && (!isOwner && !(await ctx.group()).isSenderAdmin())) || (groupDb?.mutebot === "owner" && !isOwner)) return;
+        if ((groupDb?.mutebot === true && !isOwner && !await ctx.group().isSenderAdmin()) || (groupDb?.mutebot === "owner" && !isOwner)) return;
         if (botDb?.mode === "group" && isPrivate) return;
         if (botDb?.mode === "private" && isGroup) return;
         if (botDb?.mode === "self" && !isOwner) return;
@@ -95,7 +95,7 @@ module.exports = (bot) => {
                 reaction: "🎮"
             }, {
                 key: "requireBotGroupMembership",
-                condition: config.system.requireBotGroupMembership && !isOwner && !userDb?.premium && ctx.used.command !== "botgroup" && config.bot.groupJid && !(ctx.group(config.bot.groupJid)).members().some((member) => ctx.getId(member.id) === senderJid),
+                condition: config.system.requireBotGroupMembership && !isOwner && !userDb?.premium && ctx.used.command !== "botgroup" && config.bot.groupJid && !await ctx.group(config.bot.groupJid).members().some((member) => ctx.getId(member.id) === senderJid),
                 msg: config.msg.botGroupMembership,
                 reaction: "🚫"
             },
@@ -150,13 +150,13 @@ module.exports = (bot) => {
         } = command;
         const permissionChecks = [{
                 key: "admin",
-                condition: isGroup && !(await ctx.group()).isSenderAdmin(),
+                condition: isGroup && !await ctx.group().isSenderAdmin(),
                 msg: config.msg.admin,
                 reaction: "🛡️"
             },
             {
                 key: "botAdmin",
-                condition: isGroup && !(await ctx.group()).isBotAdmin(),
+                condition: isGroup && !await ctx.group().isBotAdmin(),
                 msg: config.msg.botAdmin,
                 reaction: "🤖"
             },

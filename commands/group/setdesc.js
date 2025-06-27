@@ -15,7 +15,7 @@ module.exports = {
         );
 
         try {
-            (await ctx.group()).updateDescription(input);
+            await ctx.group().updateDescription(input);
 
             return await ctx.reply(formatter.quote("✅ Berhasil mengubah deskripsi grup!"));
         } catch (error) {

@@ -22,7 +22,7 @@ module.exports = {
         });
 
         if (accountId === config.bot.id) return await ctx.reply(formatter.quote(`❎ Tidak bisa memberikan warning ke bot.`));
-        if (accountJid === (await ctx.group()).owner()) return await ctx.reply(formatter.quote("❎ Tidak bisa memberikan warning ke admin grup!"));
+        if (accountJid === await ctx.group().owner()) return await ctx.reply(formatter.quote("❎ Tidak bisa memberikan warning ke admin grup!"));
 
         try {
             const groupId = ctx.getId(ctx.id);
@@ -34,7 +34,7 @@ module.exports = {
             const maxwarnings = groupDb?.maxwarnings || 3;
             if (newWarning >= maxwarnings) {
                 await ctx.reply(formatter.quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
-                if (!config.system.restrict)(await ctx.group()).kick([senderJid]);
+                if (!config.system.restrict) await ctx.group().kick([senderJid]);
                 delete warnings[senderId];
                 return await db.set(`group.${groupId}.warnings`, warnings);
             }
