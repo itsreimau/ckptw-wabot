@@ -22,7 +22,7 @@ module.exports = {
         try {
             const randomNumber = Math.floor(Math.random() * 100);
 
-            return await ctx.reply(formatter.quote(`${input} itu ${randomNumber}% ${(ctx.used.command.replace("how", "")).toLowerCase()}.`));
+            return await ctx.reply(formatter.quote(`${input} itu ${randomNumber}% ${(ctx.used.command.replace("how", ""))}.`));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }
