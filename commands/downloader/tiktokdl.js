@@ -9,42 +9,54 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const url = ctx.args[0] || null;
+        const input = ctx.args.join(" ") || null;
 
-        if (!url) return await ctx.reply(
-            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            formatter.quote(tools.msg.generateCmdExample(ctx.used, "https://www.tiktok.com/@japanese_songs2/video/7472130814805822726"))
+        if (!input) return await ctx.reply(
+            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${quote(tools.msg.generateCmdExample(ctx.used, "https://www.tiktok.com/@japanese_songs2/video/7472130814805822726 -hd"))}\n` +
+            quote(tools.msg.generatesFlagInfo({
+                "-hd": "Pilih resolusi HD"
+            }))
         );
+
+        const flag = tools.cmd.parseFlag(input, {
+            "-hd": {
+                type: "boolean",
+                key: "hd"
+            }
+        });
+
+        const url = flag.input || null;
 
         const isUrl = await tools.cmd.isUrl(url);
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/download/tiktok", {
+            const apiUrl = tools.api.createUrl("vapis", "/api/ttdl", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.result.media;
-            const video = result.play;
-            const images = result?.image_slide || [];
+            const result = (await axios.get(apiUrl)).data.data.data;
 
-            if (images) {
-                for (const image of images) {
-                    await ctx.reply({
-                        image: {
-                            url: image
-                        },
-                        mimetype: mime.lookup("jpeg")
-                    });
-                }
-            } else if (video) {
-                return await ctx.reply({
-                    video: {
-                        url: video
+            const videoType = flag?.hd ? "nowatermark_hd" : "nowatermark";
+            const video = result.find(v => v.type === videoType);
+
+            if (video) return await ctx.reply({
+                video: {
+                    url: video.url
+                },
+                mimetype: mime.lookup("mp4"),
+                caption: `${quote(`URL: ${url}`)}\n` +
+                    "\n" +
+                    config.msg.footer
+            });
+
+            const images = result.filter(item => item.type === "photo");
+            for (const image of images) {
+                await ctx.reply({
+                    image: {
+                        url: image.url
                     },
-                    mimetype: mime.lookup("mp4"),
-                    caption: `${formatter.quote(`URL: ${url}`)}\n` +
-                        "\n" +
-                        config.msg.footer
+                    mimetype: mime.lookup("jpeg")
                 });
             }
         } catch (error) {

@@ -108,10 +108,11 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("siputzx", "/api/d/ytmp3", {
-                    url: searchResult.link
+                const downloadApiUrl = tools.api.createUrl("zell", "/download/youtube", {
+                    url: searchResult.link,
+                    format: "mp3"
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.data.url;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.download;
 
                 return await ctx.reply({
                     audio: {
