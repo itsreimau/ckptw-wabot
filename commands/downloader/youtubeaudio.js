@@ -32,15 +32,15 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("archive", "/api/download/ytmp3", {
+            const apiUrl = tools.api.createUrl("siputzx", "/api/d/ytmp3", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.data;
 
             const document = flag?.document || false;
             if (document) return await ctx.reply({
                 document: {
-                    url: result.audio_url
+                    url: result.url
                 },
                 fileName: `${result.title}.mp3`,
                 mimetype: mime.lookup("mp3"),
@@ -51,7 +51,7 @@ module.exports = {
 
             return await ctx.reply({
                 audio: {
-                    url: result.audio_url
+                    url: result.url
                 },
                 mimetype: mime.lookup("mp3")
             });

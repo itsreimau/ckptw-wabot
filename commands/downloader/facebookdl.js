@@ -20,10 +20,10 @@ module.exports = {
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/downloader/facebook", {
+            const apiUrl = tools.api.createUrl("nirkyy", "/api/v1/facebook-dl", {
                 url
             });
-            const result = (await axios.get(apiUrl)).data.result[0];
+            const result = (await axios.get(apiUrl)).data.data.links[0];
 
             return await ctx.reply({
                 video: {

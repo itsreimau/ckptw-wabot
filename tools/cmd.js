@@ -226,7 +226,7 @@ async function translate(text, language) {
         const result = (await axios.get(apiUrl)).data.result;
         return result;
     } catch (error) {
-        consolefy.error(`Error: ${error}`);
+        consolefy.error(`Error: ${util.format(error)}`);
         return null;
     }
 }
@@ -235,18 +235,16 @@ async function upload(buffer, type = "any", host = config.system.uploaderHost) {
     if (!buffer) return null;
 
     const hosts = {
-        any: ["Cloudku", "FastUrl", "Litterbox", "Catbox", "Uguu", "Nyxs"],
-        image: ["Ryzen", "TmpErhabot", "Shojib", "IDNet", "Erhabot", "Pomf", "Quax"],
-        video: ["Ryzen", "TmpErhabot", "Videy", "Pomf", "Quax"],
-        audio: ["Ryzen", "TmpErhabot", "Pomf", "Quax"],
+        any: ["Catbox", "Cloudku", "FastUrl", "Uguu", "Litterbox", "Nyxs"],
+        image: ["Pomf", "Quax", "Erhabot", "Ryzen", "TmpErhabot", "Shojib", "IDNet"],
+        video: ["Pomf", "Quax", "Videy", "Ryzen", "TmpErhabot"],
+        audio: ["Pomf", "Quax", "Ryzen", "TmpErhabot"],
         document: ["IDNet"]
     };
 
     let availableHosts = [...hosts.any];
     if (type !== "any" && hosts[type]) availableHosts = [...hosts[type]];
-
     const realHost = availableHosts.find(h => h.toLowerCase() === host.toLowerCase());
-
     let hostsToTry = realHost ? [realHost, ...availableHosts.filter(h => h !== realHost)] : availableHosts;
 
     for (const currentHost of hostsToTry) {
@@ -254,7 +252,7 @@ async function upload(buffer, type = "any", host = config.system.uploaderHost) {
             const url = await uploader[currentHost](buffer);
             if (url) return url;
         } catch (error) {
-            consolefy.error(`Error: ${error}`);
+            consolefy.error(`Error: ${util.format(error)}`);
         }
     }
 

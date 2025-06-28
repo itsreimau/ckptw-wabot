@@ -196,7 +196,7 @@ module.exports = (bot) => {
             }
 
             // Penanganan AFK (Pengguna yang disebutkan atau di-balas/quote)
-            const userMentions = ctx?.quoted?.senderJid ? [ctx.getId(ctx?.quoted?.senderJid)] : m.message?.[m.messageType]?.contextInfo?.mentionedJid?.map((jid) => ctx.getId(jid)) || [];
+            const userMentions = ctx?.quoted?.senderJid ? [ctx.getId(ctx?.quoted?.senderJid)] : m.message?.[ctx.getMessageType()]?.contextInfo?.mentionedJid?.map((jid) => ctx.getId(jid)) || [];
             if (userMentions.length > 0) {
                 for (const userMention of userMentions) {
                     const userMentionAfk = await db.get(`user.${userMention}.afk`) || {};
@@ -293,7 +293,7 @@ module.exports = (bot) => {
 
             // Penanganan antitagsw
             if (groupDb?.option?.antitagsw && !isOwner && !await ctx.group().isSenderAdmin() && !isCmd) {
-                const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "groupStatusMention") || m.message?.protocolMessage?.type === 25 || m.message?.protocolMessage?.type === "STATUS_MENTION_MESSAGE";
+                const checkMedia = await tools.cmd.checkMedia(ctx.getMessageType(), "groupStatusMention") && m.message?.groupStatusMentionMessage?.protocolMessage?.type === 25;
                 if (checkMedia) {
                     await ctx.reply(formatter.quote(`⛔ Jangan tag grup di SW, gak ada yg peduli!`));
                     await ctx.deleteMessage(m.key);
