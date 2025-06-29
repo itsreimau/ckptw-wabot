@@ -8,11 +8,9 @@ module.exports = {
         await ctx.reply(formatter.quote(`🤖 Apakah kamu yakin ingin mereset datamu? Langkah ini akan menghapus seluruh data yang tersimpan dan tidak dapat dikembalikan. Ketik ${formatter.monospace("y")} untuk melanjutkan atau ${formatter.monospace("n")} untuk membatalkan.`));
 
         try {
-            const collector = ctx.MessageCollector({
+            ctx.awaitMessages({
                 time: 60000
-            });
-
-            collector.on("collect", async (m) => {
+            }).then(messages => {
                 const content = m.content.trim().toLowerCase();
                 const senderId = ctx.getId(ctx.sender.jid);
 

@@ -63,7 +63,7 @@ async function handleWelcome(bot, m, type, isSimulate = false) {
             quoted: tools.cmd.fakeMetaAiQuotedText("Jangan lupa untuk mengisi intro!")
         });
     }
-};
+}
 
 // Fungsi untuk menambahkan warning
 async function addWarning(ctx, groupDb, senderJid, groupId) {
@@ -137,10 +137,11 @@ module.exports = (bot) => {
         const groupDb = await db.get(`group.${groupId}`) || {};
 
         // Pengecekan mode bot (group, private, self)
+        if (groupDb?.mutebot === true && !isOwner && !await ctx.group().isSenderAdmin()) return;
+        if (groupDb?.mutebot === "owner" && !isOwner) return;
         if (botDb?.mode === "group" && isPrivate && !isOwner) return;
         if (botDb?.mode === "private" && isGroup && !isOwner) return;
         if (botDb?.mode === "self" && !isOwner) return;
-        if ((groupDb?.mutebot === true && !isOwner && !await ctx.group().isSenderAdmin()) || (groupDb?.mutebot === "owner" && !isOwner)) return;
 
         // Pengecekan untuk tidak tersedia pada malam hari
         const now = moment().tz(config.system.timeZone);
@@ -151,10 +152,12 @@ module.exports = (bot) => {
         const muteList = groupDb?.mute || [];
         if (muteList.includes(senderId)) await ctx.deleteMessage(m.key);
 
-        isGroup ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
+        isGroup && !m.key.fromMe ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
 
         // Grup atau Pribadi
         if (isGroup || isPrivate) {
+            if (m.key.fromMe) return;
+
             config.bot.dbSize = fs.existsSync("database.json") ? tools.msg.formatSize(fs.statSync("database.json").size / 1024) : "N/A"; // Penangan pada ukuran database
             config.bot.uptime = tools.msg.convertMsToDuration(Date.now() - config.bot.readyAt); // Penangan pada uptime
 
@@ -242,12 +245,12 @@ module.exports = (bot) => {
                 if (checkMedia) {
                     const buffer = await ctx.msg.media.toBuffer();
                     const uploadUrl = await tools.cmd.upload(buffer, "image");
-                    const apiUrl = tools.api.createUrl("https://nsfw-categorize.it", "/api/upload", {
-                        url: uploadUrl
+                    const apiUrl = tools.api.createUrl("nekorinn", "/tools/nsfw-checker", {
+                        imageUrl: uploadUrl
                     });
-                    const result = (await axios.get(apiUrl)).data.data;
+                    const result = (await axios.get(apiUrl)).data.result.labelName.toLowerCase();
 
-                    if (result.nsfw || result.porn) {
+                    if (result.nsfw === "porn") {
                         await ctx.reply(formatter.quote("⛔ Jangan kirim NSFW, dasar cabul!"));
                         await ctx.deleteMessage(m.key);
                         if (groupAutokick) {
@@ -321,7 +324,9 @@ module.exports = (bot) => {
         }
 
         // Penanganan obrolan pribadi
-        if (isPrivate && !m.key.fromMe) {
+        if (isPrivate) {
+            if (m.key.fromMe) return;
+
             // Penanganan menfess
             const allMenfessDb = await db.get("menfess") || {};
             if (!isCmd || isCmd?.didyoumean) {

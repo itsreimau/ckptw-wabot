@@ -23,14 +23,12 @@ module.exports = {
         ]);
 
         try {
-            const senderUid = await db.get(`user.${ctx.getId(ctx.sender.jid)}.uid`) || "guest";
             if (checkMedia || checkQuotedMedia) {
                 const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
                 const uploadUrl = await tools.cmd.upload(buffer, "image");
                 const apiUrl = tools.api.createUrl("nekorinn", "/ai/blackbox", {
                     text: input,
-                    imageUrl: uploadUrl,
-                    sessionid: senderUid
+                    imageUrl: uploadUrl
                 });
                 const result = (await axios.get(apiUrl)).data.result;
 
@@ -38,7 +36,7 @@ module.exports = {
             } else {
                 const apiUrl = tools.api.createUrl("nekorinn", "/ai/blackbox", {
                     text: input,
-                    sessionid: senderUid
+                    sessionid: await db.get(`user.${ctx.getId(ctx.sender.jid)}.uid`) || "guest"
                 });
                 const result = (await axios.get(apiUrl)).data.result;
 

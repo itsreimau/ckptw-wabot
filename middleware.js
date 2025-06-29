@@ -30,7 +30,8 @@ module.exports = (bot) => {
         const groupDb = await db.get(`group.${groupId}`) || {};
 
         // Pengecekan mode bot (group, private, self)
-        if ((groupDb?.mutebot === true && !isOwner && !await ctx.group().isSenderAdmin()) || (groupDb?.mutebot === "owner" && !isOwner)) return;
+        if (groupDb?.mutebot === true && !isOwner && !await ctx.group().isSenderAdmin()) return;
+        if (groupDb?.mutebot === "owner" && !isOwner) return;
         if (botDb?.mode === "group" && isPrivate) return;
         if (botDb?.mode === "private" && isGroup) return;
         if (botDb?.mode === "self" && !isOwner) return;

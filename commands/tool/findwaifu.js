@@ -1,8 +1,7 @@
 const axios = require("axios");
 
 module.exports = {
-    name: "ocr",
-    aliases: ["image2text", "imagetotext", "img2text", "imgtotext"],
+    name: "findwaifu",
     category: "tool",
     permissions: {
         coin: 10
@@ -19,12 +18,12 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.cmd.upload(buffer, "image");
-            const apiUrl = tools.api.createUrl("falcon", "/tools/ocr", {
-                url: uploadUrl
+            const apiUrl = tools.api.createUrl("nekorinn", "/tools/find-waifu", {
+                imageUrl: uploadUrl
             });
-            const result = (await axios.get(apiUrl)).data.result;
+            const result = (await axios.get(apiUrl)).data.result.character.name;
 
-            return await ctx.reply(result);
+            return await ctx.reply(tools.msg.ucwords(result));
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

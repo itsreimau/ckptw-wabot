@@ -2,7 +2,7 @@ const mime = require("mime-types");
 
 module.exports = {
     name: "ai4chat",
-    category: "aiimage",
+    category: "ai-image",
     permissions: {
         premium: true
     },

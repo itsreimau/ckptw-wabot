@@ -1,3 +1,4 @@
+const axios = require("axios");
 const mime = require("mime-types");
 
 module.exports = {
@@ -19,9 +20,10 @@ module.exports = {
         try {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const uploadUrl = await tools.cmd.upload(buffer, "image");
-            const result = tools.api.createUrl("nirkyy", "/api/v1/ghiblistyle", {
+            const apiUrl = tools.api.createUrl("falcon", "/tools/toghibli", {
                 url: uploadUrl
             });
+            const result = (await axios.get(apiUrl)).data.result.data[0].url;
 
             return await ctx.reply({
                 image: {

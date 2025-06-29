@@ -1,11 +1,10 @@
 const mime = require("mime-types");
 
 module.exports = {
-    name: "deepimg",
-    aliases: ["deep"],
-    category: "ai-image",
+    name: "videogpt",
+    category: "ai-video",
     permissions: {
-        coin: 10
+        premium: true
     },
     code: async (ctx) => {
         const input = ctx.args.join(" ") || ctx?.quoted?.conversation || (ctx.quoted && ((Object.values(ctx.quoted).find(v => v?.text || v?.caption)?.text) || (Object.values(ctx.quoted).find(v => v?.text || v?.caption)?.caption))) || null;
@@ -17,15 +16,15 @@ module.exports = {
         );
 
         try {
-            const result = tools.api.createUrl("nekorinn", "/ai-img/deep-img", {
+            const apiUrl = tools.api.createUrl("nekorinn", "/ai-vid/videogpt", {
                 text: input
             });
 
             return await ctx.reply({
-                image: {
+                video: {
                     url: result
                 },
-                mimetype: mime.lookup("jpeg"),
+                mimetype: mime.lookup("mp4"),
                 caption: `${formatter.quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer

@@ -4,7 +4,7 @@ const mime = require("mime-types");
 module.exports = {
     name: "animagine",
     aliases: ["animaginexl"],
-    category: "aiimage",
+    category: "ai-image",
     permissions: {
         premium: true
     },
@@ -18,7 +18,7 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinn", "/ai-img/animaginexl3.1", {
+            const apiUrl = tools.api.createUrl("nekorinn", "/ai-img/animagine-xl-3.1", {
                 text: input
             });
             const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.result);

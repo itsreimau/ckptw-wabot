@@ -234,22 +234,21 @@ async function translate(text, language) {
 async function upload(buffer, type = "any", host = config.system.uploaderHost) {
     if (!buffer) return null;
 
-    const hosts = {
-        any: ["Catbox", "Cloudku", "FastUrl", "Uguu", "Litterbox", "Nyxs"],
-        image: ["Pomf", "Quax", "Erhabot", "Ryzen", "TmpErhabot", "Shojib", "IDNet"],
-        video: ["Pomf", "Quax", "Videy", "Ryzen", "TmpErhabot"],
-        audio: ["Pomf", "Quax", "Ryzen", "TmpErhabot"],
-        document: ["IDNet"]
+    const hostMap = {
+        any: ["Cloudku", "FastUrl", "Uguu", "Catbox", "Litterbox"],
+        image: ["Quax", "Ryzumi", "Pomf"],
+        video: ["Quax", "Ryzumi", "Pomf", "Videy"],
+        audio: ["Quax", "Ryzumi", "Pomf"],
+        doc: []
     };
 
-    let availableHosts = [...hosts.any];
-    if (type !== "any" && hosts[type]) availableHosts = [...hosts[type]];
-    const realHost = availableHosts.find(h => h.toLowerCase() === host.toLowerCase());
-    let hostsToTry = realHost ? [realHost, ...availableHosts.filter(h => h !== realHost)] : availableHosts;
+    const hosts = hostMap[type] && type !== "any" ? hostMap[type] : hostMap.any;
+    const preferred = hosts.find(h => h.toLowerCase() === host?.toLowerCase());
+    const toTry = [...new Set(preferred ? [preferred, ...hosts] : hosts)];
 
-    for (const currentHost of hostsToTry) {
+    for (const h of toTry) {
         try {
-            const url = await uploader[currentHost](buffer);
+            const url = await uploader[h](buffer);
             if (url) return url;
         } catch (error) {
             consolefy.error(`Error: ${util.format(error)}`);

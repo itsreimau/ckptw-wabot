@@ -16,11 +16,11 @@ module.exports = {
         );
 
         try {
-            const apiUrl = tools.api.createUrl("nekorinnn", "/ai/qwen-turbo-logic", {
+            const apiUrl = tools.api.createUrl("nekorinn", "/ai/qwen-turbo-logic", {
                 text: input,
                 logic: `You are a WhatsApp bot named ${config.bot.name}, owned by ${config.owner.name}. Be friendly, informative, and engaging.` // Dapat diubah sesuai keinginan
             });
-            const result = (await axios.get(apiUrl)).data.result.text;
+            const result = (await axios.get(apiUrl)).data.result;
 
             return await ctx.reply(result);
         } catch (error) {

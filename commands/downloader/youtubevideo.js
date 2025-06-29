@@ -16,7 +16,7 @@ module.exports = {
             `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "https://www.youtube.com/watch?v=0Uhh62MUEic -d -q 720"))}\n` +
             formatter.quote(tools.msg.generatesFlagInfo({
                 "-d": "Kirim sebagai dokumen",
-                "-q <number>": "Pilihan pada kualitas video (tersedia: 360, 480, 720, 1080, 1440, 4k | default: 360)"
+                "-q <number>": "Pilihan pada kualitas video (tersedia: 360, 480, 720, 1080 | default: 720)"
             }))
         );
 
@@ -40,18 +40,18 @@ module.exports = {
 
         try {
             let quality = flag?.quality || 720;
-            if (![144, 240, 360, 480, 720, 1080].includes(quality)) quality = 720;
-
-            const apiUrl = tools.api.createUrl("zell", "/download/youtube", {
+            if (![360, 480, 720, 1080].includes(quality)) quality = 720;
+            const apiUrl = tools.api.createUrl("nekorinn", "/downloader/youtube", {
                 url,
-                format: quality
+                format: quality,
+                type: "video"
             });
-            const result = (await axios.get(apiUrl)).data;
+            const result = (await axios.get(apiUrl)).data.result;
 
             const document = flag?.document || false;
             if (document) return await ctx.reply({
                 document: {
-                    url: result.download
+                    url: result.downloadUrl
                 },
                 fileName: `${result.title}.mp4`,
                 mimetype: mime.lookup("mp4"),
@@ -62,7 +62,7 @@ module.exports = {
 
             return await ctx.reply({
                 video: {
-                    url: result.download
+                    url: result.downloadUrl
                 },
                 mimetype: mime.lookup("mp4"),
                 caption: `${formatter.quote(`URL: ${url}`)}\n` +

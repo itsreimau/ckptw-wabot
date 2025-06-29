@@ -13,6 +13,7 @@ module.exports = {
             const tag = {
                 "ai-chat": "AI (Chat)",
                 "ai-image": "AI (Image)",
+                "ai-video": "AI (Video)",
                 "ai-misc": "AI (Miscellaneous)",
                 "converter": "Converter",
                 "downloader": "Downloader",

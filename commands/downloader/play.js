@@ -108,11 +108,12 @@ module.exports = {
                     config.msg.footer
                 );
 
-                const downloadApiUrl = tools.api.createUrl("zell", "/download/youtube", {
+                const downloadApiUrl = tools.api.createUrl("nekorinn", "/downloader/youtube", {
                     url: searchResult.link,
-                    format: "mp3"
+                    format: 320,
+                    type: "audio"
                 });
-                const downloadResult = (await axios.get(downloadApiUrl)).data.download;
+                const downloadResult = (await axios.get(downloadApiUrl)).data.result.downloadUrl;
 
                 return await ctx.reply({
                     audio: {

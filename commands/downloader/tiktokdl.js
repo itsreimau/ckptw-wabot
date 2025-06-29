@@ -12,9 +12,9 @@ module.exports = {
         const input = ctx.args.join(" ") || null;
 
         if (!input) return await ctx.reply(
-            `${quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${quote(tools.msg.generateCmdExample(ctx.used, "https://www.tiktok.com/@japanese_songs2/video/7472130814805822726 -hd"))}\n` +
-            quote(tools.msg.generatesFlagInfo({
+            `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
+            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "https://www.tiktok.com/@japanese_songs2/video/7472130814805822726 -hd"))}\n` +
+            formatter.quote(tools.msg.generatesFlagInfo({
                 "-hd": "Pilih resolusi HD"
             }))
         );
@@ -39,13 +39,12 @@ module.exports = {
 
             const videoType = flag?.hd ? "nowatermark_hd" : "nowatermark";
             const video = result.find(v => v.type === videoType);
-
             if (video) return await ctx.reply({
                 video: {
                     url: video.url
                 },
                 mimetype: mime.lookup("mp4"),
-                caption: `${quote(`URL: ${url}`)}\n` +
+                caption: `${formatter.quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer
             });
