@@ -10,7 +10,7 @@ module.exports = {
         try {
             ctx.awaitMessages({
                 time: 60000
-            }).then(messages => {
+            }).then(async (m) => {
                 const content = m.content.trim().toLowerCase();
                 const senderId = ctx.getId(ctx.sender.jid);
 
