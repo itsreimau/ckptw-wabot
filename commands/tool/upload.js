@@ -16,9 +16,10 @@ module.exports = {
 
         if (!checkMedia && !checkQuotedMedia) return await ctx.reply(
             `${formatter.quote(tools.msg.generateInstruction(["send", "reply"], ["audio", "document", "image", "video", "sticker"]))}\n` +
+            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "-t any -h cloudku"))}\n` +
             formatter.quote(tools.msg.generatesFlagInfo({
                 "-t <text>": "Atur tipe media (tersedia: any, image, video, audio | default: any)",
-                "-h <text>": `Atur host uploader (tersedia: catbox, cloudku, erhabot, fasturl, idnet, litterbox, nyxs, pomf, quax, quax, ryzen, shojib, tmperhabot, uguu, videy | default: ${config.system.uploaderHost.toLowerCase()})`
+                "-h <text>": `Atur host uploader (tersedia: catbox, cloudku, fasturl, litterbox, pomf, quax, ryzumi, uguu, videy | default: ${config.system.uploaderHost.toLowerCase()})`
             }))
         );
 
@@ -33,7 +34,7 @@ module.exports = {
                 "-h": {
                     type: "value",
                     key: "host",
-                    validator: (val) => /^(catbox|cloudku|erhabot|fasturl|idnet|litterbox|nyxs|pomf|quax|quax|ryzen|shojib|tmperhabot|uguu|videy)$/.test(val),
+                    validator: (val) => /^(catbox|cloudku|fasturl|litterbox|pomf|quax|ryzumi|uguu|videy)$/.test(val),
                     parser: (val) => val
                 }
             });
