@@ -152,8 +152,6 @@ module.exports = (bot) => {
         const muteList = groupDb?.mute || [];
         if (muteList.includes(senderId)) await ctx.deleteMessage(m.key);
 
-        isGroup && !m.key.fromMe ? consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) : consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
-
         // Grup atau Pribadi
         if (isGroup || isPrivate) {
             if (m.key.fromMe) return;
@@ -188,6 +186,8 @@ module.exports = (bot) => {
         // Penanganan obrolan grup
         if (isGroup) {
             if (m.key.fromMe) return;
+
+            consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) // Log pesan masuk
 
             // Variabel umum
             const groupAutokick = !config.system.restrict && groupDb?.option?.autokick;
@@ -326,6 +326,8 @@ module.exports = (bot) => {
         // Penanganan obrolan pribadi
         if (isPrivate) {
             if (m.key.fromMe) return;
+
+            consolefy.info(`Incoming message from: ${senderId}`); // Log pesan masuk
 
             // Penanganan menfess
             const allMenfessDb = await db.get("menfess") || {};
