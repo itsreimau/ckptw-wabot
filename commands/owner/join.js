@@ -3,7 +3,8 @@ module.exports = {
     aliases: ["j"],
     category: "owner",
     permissions: {
-        owner: true
+        owner: true,
+        restrict: true
     },
     code: async (ctx) => {
         const url = ctx.args[0] || null;

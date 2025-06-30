@@ -1,6 +1,6 @@
 {
   "name": "gaxtawu",
-  "version": "1.0.24",
+  "version": "1.0.25",
   "description": "Useless WhatsApp Bot",
   "main": "index.js",
   "directories": {
@@ -29,15 +29,15 @@
   },
   "homepage": "https://github.com/itsreimau/gaxtawu#readme",
   "dependencies": {
-    "@itsreimau/gktw": "^1.0.12",
+    "@itsreimau/gktw": "^1.0.15",
     "@mengkodingan/consolefy": "^1.0.1",
     "@zanixongroup/uploader": "^2.1.1",
     "axios": "^1.10.0",
     "cfonts": "^3.3.0",
     "didyoumean": "^1.2.2",
-    "jimp": "0.16.1",
-    "link-preview-js": "3.0.0",
-    "mime-types": "2.1.35",
+    "jimp": "^0.16.1",
+    "link-preview-js": "^3.0.0",
+    "mime-types": "^2.1.35",
     "moment-timezone": "^0.6.0",
     "simpl.db": "^2.13.0",
     "wa-sticker-formatter": "^4.4.4"

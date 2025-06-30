@@ -70,6 +70,7 @@ async function addWarning(ctx, groupDb, senderJid, groupId) {
     const senderId = ctx.getId(senderJid);
 
     const warnings = groupDb?.warnings || {};
+    const maxwarnings = groupDb?.maxwarnings || 3;
     const current = warnings[senderId] || 0;
     const newWarning = current + 1;
     warnings[senderId] = newWarning;
@@ -80,7 +81,6 @@ async function addWarning(ctx, groupDb, senderJid, groupId) {
         mentions: [senderJid]
     });
 
-    const maxwarnings = groupDb.maxwarnings || 3;
     if (newWarning >= maxwarnings) {
         await ctx.reply(formatter.quote(`⛔ Kamu telah menerima ${maxwarnings} warning dan akan dikeluarkan dari grup!`));
         if (!config.system.restrict) await ctx.group().kick([senderJid]);
@@ -190,7 +190,7 @@ module.exports = (bot) => {
             consolefy.info(`Incoming message from group: ${groupId}, by: ${senderId}`) // Log pesan masuk
 
             // Variabel umum
-            const groupAutokick = !config.system.restrict && groupDb?.option?.autokick;
+            const groupAutokick = groupDb?.option?.autokick;
 
             // Penanganan database grup
             if (groupDb?.sewa && Date.now() > userDb?.sewaExpiration) {
