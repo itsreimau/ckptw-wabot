@@ -28,17 +28,19 @@ module.exports = {
         if (targetId === senderId) return await ctx.reply(formatter.quote("❎ Tidak dapat digunakan pada diri sendiri."));
 
         try {
+            const buttons = [{
+                buttonId: "delete",
+                buttonText: {
+                    displayText: "Hapus Menfess"
+                },
+                type: 1
+            }];
+
             await ctx.sendMessage(`${targetId}@s.whatsapp.net`, {
-                text: `${menfessText}\n` +
-                    `${config.msg.readmore}\n` +
-                    formatter.quote(`Setiap pesan yang kamu kirim akan diteruskan ke orang tersebut. Jika ingin berhenti, cukup ketik ${formatter.monospace("delete")} atau ${formatter.monospace("stop")}.`),
-                contextInfo: {
-                    isForwarded: true,
-                    forwardedNewsletterMessageInfo: {
-                        newsletterJid: config.bot.newsletterJid,
-                        newsletterName: config.bot.name
-                    }
-                }
+                text: menfessText,
+                footer: formatter.quote(`Setiap pesan yang kamu kirim akan diteruskan ke orang tersebut.`),
+                buttons,
+                headerType: 1
             }, {
                 quoted: tools.cmd.fakeMetaAiQuotedText("Seseorang telah mengirimi-mu menfess.")
             });
@@ -47,7 +49,12 @@ module.exports = {
                 to: targetId
             });
 
-            return await ctx.reply(formatter.quote(`✅ Pesan berhasil terkirim! Jika ingin berhenti, cukup ketik ${formatter.monospace("delete")} atau ${formatter.monospace("stop")}.`));
+            return await ctx.reply({
+                text: formatter.quote(`✅ Pesan berhasil terkirim!`),
+                footer: config.msg.footer,
+                buttons,
+                headerType: 1
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

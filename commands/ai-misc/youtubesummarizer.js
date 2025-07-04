@@ -26,18 +26,18 @@ module.exports = {
 
             const resultText = result.keyPoints.map(r =>
                 `${formatter.quote(`Poin: ${r.point}`)}\n` +
-                `${formatter.quote(r.summary)}`
+                formatter.quote(r.summary)
             ).join(
                 "\n" +
                 `${formatter.quote("─────")}\n`
             );
-            return await ctx.reply(
-                `${formatter.quote(result.summary)}\n` +
-                `${formatter.quote("─────")}\n` +
-                `${resultText}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.reply({
+                text: `${formatter.quote(result.summary)}\n` +
+                    `${formatter.quote("─────")}\n` +
+                    resultText,
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

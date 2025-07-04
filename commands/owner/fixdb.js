@@ -13,18 +13,17 @@ module.exports = {
             formatter.quote(tools.msg.generateCmdExample(ctx.used, "user"))
         );
 
-        if (["l", "list"].includes(input)) {
+        if (input.toLowercase() === "list") {
             const listText = await tools.list.get("fixdb");
             return await ctx.reply(listText);
         }
 
         try {
             const waitMsg = await ctx.reply(config.msg.wait);
-            const dbJSON = await db.toJSON();
             const data = {
-                user: dbJSON.user || {},
-                group: dbJSON.group || {},
-                menfess: dbJSON.menfess || {}
+                user: await db.get("user") || {},
+                group: await db.get("group") || {},
+                menfess: await db.get("menfess") || {}
             };
 
             const filteredData = (category, item) => {

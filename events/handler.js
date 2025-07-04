@@ -139,8 +139,8 @@ module.exports = (bot) => {
         // Pengecekan mode bot (group, private, self)
         if (groupDb?.mutebot === true && !isOwner && !await ctx.group().isSenderAdmin()) return;
         if (groupDb?.mutebot === "owner" && !isOwner) return;
-        if (botDb?.mode === "group" && isPrivate && !isOwner) return;
-        if (botDb?.mode === "private" && isGroup && !isOwner) return;
+        if (botDb?.mode === "group" && isPrivate && !isOwner && !userDb?.premium) return;
+        if (botDb?.mode === "private" && isGroup && !isOwner && !userDb?.premium) return;
         if (botDb?.mode === "self" && !isOwner) return;
 
         // Pengecekan untuk tidak tersedia pada malam hari
@@ -169,7 +169,19 @@ module.exports = (bot) => {
                 await db.delete(`user.${senderId}.premiumExpiration`);
             }
 
-            if (isCmd?.didyoumean) await ctx.reply(formatter.quote(`❎ Kamu salah ketik, sepertinya ${formatter.monospace(isCmd.prefix + isCmd.didyoumean)}.`)); // Did you mean?
+            // Did you mean?
+            if (isCmd?.didyoumean) await ctx.reply({
+                text: formatter.quote(`🧐 Apakah maksudmu ${formatter.monospace(isCmd.prefix + isCmd.didyoumean)}?`),
+                footer: config.msg.footer,
+                buttons: [{
+                    buttonId: `${isCmd.prefix + isCmd.didyoumean} ${isCmd.input}`,
+                    buttonText: {
+                        displayText: "Ya, benar!"
+                    },
+                    type: 1
+                }],
+                headerType: 1
+            });
 
             // Penanganan AFK (Menghapus status AFK pengguna yang mengirim pesan)
             const userAfk = userDb?.afk || {};
@@ -339,7 +351,7 @@ module.exports = (bot) => {
                     if (senderId === from || senderId === to) {
                         const targetId = `${senderId === from ? to : from}@s.whatsapp.net`;
 
-                        if (m.content?.match(/\b(d|s|delete|stop)\b/i)) {
+                        if (m.content === "delete") {
                             const replyText = formatter.quote("✅ Sesi menfess telah dihapus!");
                             await ctx.reply(replyText);
                             await ctx.sendMessage(targetId, {

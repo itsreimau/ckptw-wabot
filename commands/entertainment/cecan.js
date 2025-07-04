@@ -7,7 +7,7 @@ module.exports = {
     code: async (ctx) => {
         const input = ctx.args.join(" ") || null;
 
-        if (["l", "list"].includes(input?.toLowerCase())) {
+        if (input?.toLowerCase() === "list") {
             const listText = await tools.list.get("cecan");
             return await ctx.reply(listText);
         }
@@ -22,9 +22,16 @@ module.exports = {
                     url: result
                 },
                 mimetype: tools.mime.lookup("jpg"),
-                caption: `${formatter.quote(`Kategori: ${tools.msg.ucwords(cecan)}`)}\n` +
-                    "\n" +
-                    config.msg.footer
+                caption: formatter.quote(`Kategori: ${tools.msg.ucwords(cecan)}`),
+                footer: config.msg.footer,
+                buttons: [{
+                    buttonId: `${ctx.used.prefix + ctx.used.command} ${input}`,
+                    buttonText: {
+                        displayText: "Ambil Lagi"
+                    },
+                    type: 1
+                }],
+                headerType: 1
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

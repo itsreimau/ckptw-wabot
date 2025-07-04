@@ -26,16 +26,16 @@ module.exports = {
                 `${formatter.quote(`Deskripsi: ${r.description}`)}\n` +
                 `${formatter.quote(`Jumlah: ${r.stars} stargazers, ${r.forks} forks`)}\n` +
                 `${formatter.quote(`Bahasa: ${r.language}`)}\n` +
-                `${formatter.quote(`URL: ${r.url}`)}`
+                formatter.quote(`URL: ${r.url}`)
             ).join(
                 "\n" +
                 `${formatter.quote("─────")}\n`
             );
-            return await ctx.reply(
-                `${resultText || config.msg.notFound}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.reply({
+                text: resultText || config.msg.notFound,
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

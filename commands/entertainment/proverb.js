@@ -13,12 +13,19 @@ module.exports = {
         try {
             const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.data);
 
-            return await ctx.reply(
-                `${formatter.quote(`Kalimat: ${result.kalimat}`)}\n` +
-                `${formatter.quote(`Arti: ${result.arti}`)}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.reply({
+                text: `${formatter.quote(`Kalimat: ${result.kalimat}`)}\n` +
+                    formatter.quote(`Arti: ${result.arti}`),
+                footer: config.msg.footer,
+                buttons: [{
+                    buttonId: ctx.used.prefix + ctx.used.command,
+                    buttonText: {
+                        displayText: "Ambil Lagi"
+                    },
+                    type: 1
+                }],
+                headerType: 1
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

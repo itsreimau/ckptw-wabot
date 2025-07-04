@@ -22,10 +22,17 @@ module.exports = {
 
             return await ctx.reply({
                 text: `${formatter.quote(`@${ctx.getId(selected[0])} ❤️ @${ctx.getId(selected[1])}`)}\n` +
-                    `${formatter.quote(word)}\n` +
-                    "\n" +
-                    config.msg.footer,
-                mentions: selected
+                    formatter.quote(word)
+                mentions: selected,
+                footer: config.msg.footer,
+                buttons: [{
+                    buttonId: ctx.used.prefix + ctx.used.command,
+                    buttonText: {
+                        displayText: "Ambil Lagi"
+                    },
+                    type: 1
+                }],
+                headerType: 1
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

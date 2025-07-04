@@ -25,11 +25,11 @@ module.exports = {
                 "\n" +
                 `${formatter.quote("─────")}\n`
             );
-            return await ctx.reply(
-                `${resultText || config.msg.notFound}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.reply({
+                text: resultText || config.msg.notFound,
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

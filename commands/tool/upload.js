@@ -45,11 +45,18 @@ module.exports = {
             const buffer = await ctx.msg.media.toBuffer() || await ctx.quoted.media.toBuffer();
             const result = await tools.cmd.upload(buffer, type, host);
 
-            return await ctx.reply(
-                `${formatter.quote(`URL: ${result}`)}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.reply({
+                text: formatter.quote(`URL: ${result}`),
+                footer: config.msg.footer,
+                interactiveButtons: [{
+                    name: "cta_copy",
+                    buttonParamsJson: JSON.stringify({
+                        display_text: "Salin URL",
+                        id: "12345",
+                        copy_code: result
+                    })
+                }]
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

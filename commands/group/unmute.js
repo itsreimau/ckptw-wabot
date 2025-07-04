@@ -9,7 +9,7 @@ module.exports = {
     code: async (ctx) => {
         const groupId = ctx.getId(ctx.id);
 
-        if (["b", "bot"].includes(ctx.args[0]?.toLowerCase())) {
+        if (ctx.args[0]?.toLowerCase() === "bot") {
             await db.set(`group.${groupId}.mutebot`, false);
             return await ctx.reply(formatter.quote("✅ Berhasil me-unmute grup ini dari bot!"));
         }

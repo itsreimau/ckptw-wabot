@@ -15,7 +15,7 @@ module.exports = {
             formatter.quote(tools.msg.generateNotes([`Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Untuk teks satu baris, ketik saja langsung ke perintah. Untuk teks dengan baris baru, balas pesan yang berisi teks tersebut ke perintah.", `Gunakan ${formatter.monospace("delete")} sebagai teks untuk menghapus teks yang disimpan sebelumnya.`]))
         );
 
-        if (["l", "list"].includes(key.toLowerCase())) {
+        if (key.toLowercase() === "list") {
             const listText = await tools.list.get("osettext");
             return await ctx.reply(listText);
         }
@@ -32,7 +32,7 @@ module.exports = {
                     return await ctx.reply(formatter.quote(`❎ Teks '${key}' tidak valid!`));
             }
 
-            if (["d", "delete"].includes(text.toLowerCase())) {
+            if (text.toLowerCase() === "delete") {
                 await db.delete(setKey);
                 return await ctx.reply(formatter.quote(`🗑️ Pesan untuk teks '${key}' berhasil dihapus!`));
             }

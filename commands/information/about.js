@@ -15,18 +15,9 @@ module.exports = {
                     `${formatter.quote(`Mode: ${tools.msg.ucwords(botDb?.mode || "public")}`)}\n` +
                     `${formatter.quote(`Bot Uptime: ${config.bot.uptime}`)}\n` +
                     `${formatter.quote(`Database: ${config.bot.dbSize} (Simpl.DB - JSON)`)}\n` +
-                    `${formatter.quote("Library: @itsreimau/gktw (Fork of @mengkodingan/ckptw)")}\n` +
-                    "\n" +
-                    config.msg.footer,
-                contextInfo: {
-                    externalAdReply: {
-                        title: config.bot.name,
-                        body: config.bot.version,
-                        mediaType: 1,
-                        thumbnailUrl: config.bot.thumbnail,
-                        renderLargerThumbnail: true
-                    }
-                }
+                    formatter.quote("Library: @itsreimau/gktw (Fork of @mengkodingan/ckptw)"),
+                footer: config.msg.footer,
+                interactiveButtons: []
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);

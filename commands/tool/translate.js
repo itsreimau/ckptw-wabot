@@ -15,7 +15,7 @@ module.exports = {
             formatter.quote(tools.msg.generateNotes([`Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, "Balas atau quote pesan untuk menjadikan teks sebagai input target, jika teks memerlukan baris baru."]))
         );
 
-        if (["l", "list"].includes(input.toLowerCase())) {
+        if (input.toLowerCase() === "list") {
             const listText = await tools.list.get("translate");
             return await ctx.reply(listText);
         }

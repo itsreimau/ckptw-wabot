@@ -5,7 +5,26 @@ module.exports = {
         private: true
     },
     code: async (ctx) => {
-        await ctx.reply(formatter.quote(`🤖 Apakah kamu yakin ingin mereset datamu? Langkah ini akan menghapus seluruh data yang tersimpan dan tidak dapat dikembalikan. Ketik ${formatter.monospace("y")} untuk melanjutkan atau ${formatter.monospace("n")} untuk membatalkan.`));
+        await ctx.reply({
+            text: formatter.quote(`🤖 Apakah kamu yakin ingin mereset datamu? Langkah ini akan menghapus seluruh data yang tersimpan dan tidak dapat dikembalikan.`),
+            footer: config.msg.footer,
+            buttons: [{
+                    buttonId: `y`,
+                    buttonText: {
+                        displayText: "Ya"
+                    },
+                    type: 1
+                },
+                {
+                    buttonId: "n",
+                    buttonText: {
+                        displayText: "Tidak"
+                    },
+                    type: 1
+                }
+            ],
+            headerType: 1
+        });
 
         try {
             ctx.awaitMessages({

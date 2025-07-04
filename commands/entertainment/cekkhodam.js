@@ -19,12 +19,12 @@ module.exports = {
             const apiUrl = tools.api.createUrl("https://raw.githubusercontent.com", "/SazumiVicky/cek-khodam/main/khodam/list.txt", {});
             const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.trim().split("\n").filter(Boolean));
 
-            return await ctx.reply(
-                `${formatter.quote(`Nama: ${input}`)}\n` +
-                `${formatter.quote(`Khodam: ${result}`)}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.reply({
+                text: `${formatter.quote(`Nama: ${input}`)}\n` +
+                    formatter.quote(`Khodam: ${result}`),
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

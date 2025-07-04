@@ -24,16 +24,16 @@ module.exports = {
             const resultText = result.map(r =>
                 `${formatter.quote(`Nama: ${r.title}`)}\n` +
                 `${formatter.quote(`Ukuran: ${r.size}`)}\n` +
-                `${formatter.quote(`URL: ${r.link}`)}`
+                formatter.quote(`URL: ${r.link}`)
             ).join(
                 "\n" +
                 `${formatter.quote("─────")}\n`
             );
-            return await ctx.reply(
-                `${resultText || config.msg.notFound}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.reply({
+                text: resultText || config.msg.notFound,
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

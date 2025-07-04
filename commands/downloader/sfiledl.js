@@ -28,10 +28,7 @@ module.exports = {
                     url: result.download.url
                 },
                 fileName: result.metadata.filename,
-                mimetype: result.metadata.mimetype || "application/octet-stream",
-                caption: `${formatter.quote(`URL: ${url}`)}\n` +
-                    "\n" +
-                    config.msg.footer
+                mimetype: result.metadata.mimetype || "application/octet-stream"
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

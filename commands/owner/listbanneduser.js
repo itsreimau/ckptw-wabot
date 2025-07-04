@@ -7,7 +7,7 @@ module.exports = {
     },
     code: async (ctx) => {
         try {
-            const users = db.get("user");
+            const users = await db.get("user");
             const bannedUsers = [];
 
             for (const userId in users) {
@@ -26,9 +26,8 @@ module.exports = {
             });
 
             return await ctx.reply({
-                text: `${resultText.trim() || config.msg.notFound}\n` +
-                    "\n" +
-                    config.msg.footer,
+                text: resultText.trim() || config.msg.notFound footer: config.msg.footer,
+                interactiveButtons: [],
                 mentions: userMentions
             });
         } catch (error) {

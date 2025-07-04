@@ -32,8 +32,8 @@ module.exports = (bot) => {
         // Pengecekan mode bot (group, private, self)
         if (groupDb?.mutebot === true && !isOwner && !await ctx.group().isSenderAdmin()) return;
         if (groupDb?.mutebot === "owner" && !isOwner) return;
-        if (botDb?.mode === "group" && isPrivate && !isOwner) return;
-        if (botDb?.mode === "private" && isGroup && !isOwner) return;
+        if (botDb?.mode === "group" && isPrivate && !isOwner && !userDb?.premium) return;
+        if (botDb?.mode === "private" && isGroup && !isOwner && !userDb?.premium) return;
         if (botDb?.mode === "self" && !isOwner) return;
 
         // Pengecekan mute pada grup
@@ -51,17 +51,9 @@ module.exports = (bot) => {
             if (userDb?.autolevelup) {
                 const profilePictureUrl = await ctx.core.profilePictureUrl(ctx.sender.jid, "image").catch(() => "https://i.pinimg.com/736x/70/dd/61/70dd612c65034b88ebf474a52ccc70c4.jpg");
                 await ctx.reply({
-                    text: `${formatter.quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`)}\n` +
-                        `${config.msg.readmore}\n` +
-                        formatter.quote(tools.msg.generateNotes([`Terganggu? Ketik ${formatter.monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`])),
-                    contextInfo: {
-                        externalAdReply: {
-                            title: config.bot.name,
-                            body: config.bot.version,
-                            mediaType: 1,
-                            thumbnailUrl: profilePictureUrl
-                        }
-                    }
+                    text: formatter.quote(`Selamat! Kamu telah naik ke level ${newUserLevel}!`),
+                    footer: formatter.quote(`Terganggu? Ketik ${formatter.monospace(`${ctx.used.prefix}setprofile autolevelup`)} untuk menonaktifkan pesan autolevelup.`)
+                    interactiveButtons: []
                 });
             }
 
@@ -131,11 +123,11 @@ module.exports = (bot) => {
                 const oneDay = 24 * 60 * 60 * 1000;
                 if (!lastSentMsg || (now - lastSentMsg) > oneDay) {
                     await simulateTyping();
-                    await ctx.reply(
-                        `${msg}\n` +
-                        `${config.msg.readmore}\n` +
-                        formatter.quote(tools.msg.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
-                    );
+                    await ctx.reply({
+                        text: msg,
+                        footer: formatter.quote(`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`),
+                        interactiveButtons: []
+                    });
                     return await db.set(`user.${senderId}.lastSentMsg.${key}`, now);
                 } else {
                     return await ctx.react(ctx.id, reaction);
@@ -212,11 +204,11 @@ module.exports = (bot) => {
                 const oneDay = 24 * 60 * 60 * 1000;
                 if (!lastSentMsg || (now - lastSentMsg) > oneDay) {
                     await simulateTyping();
-                    await ctx.reply(
-                        `${msg}\n` +
-                        `${config.msg.readmore}\n` +
-                        formatter.quote(tools.msg.generateNotes([`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`]))
-                    );
+                    await ctx.reply({
+                        text: msg,
+                        footer: formatter.quote(`Respon selanjutnya akan berupa reaksi emoji '${reaction}'.`),
+                        interactiveButtons: []
+                    });
                     return await db.set(`user.${senderId}.lastSentMsg.${key}`, now);
                 } else {
                     return await ctx.react(ctx.id, reaction);

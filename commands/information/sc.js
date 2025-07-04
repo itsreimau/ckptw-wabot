@@ -3,10 +3,10 @@ module.exports = {
     aliases: ["script", "source", "sourcecode"],
     category: "information",
     code: async (ctx) => {
-        return await ctx.reply(
-            `${formatter.quote("https://github.com/itsreimau/gaxtawu")}\n` +
-            "\n" +
-            config.msg.footer
-        ); // Jika kamu tidak menghapus ini, terima kasih!
+        return await ctx.reply({
+            text: formatter.quote("https://github.com/itsreimau/gaxtawu"),
+            footer: config.msg.footer,
+            interactiveButtons: []
+        }); // Jika kamu tidak menghapus ini, terima kasih!
     }
 };

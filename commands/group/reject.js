@@ -17,7 +17,7 @@ module.exports = {
 
         const pending = await ctx.group().pendingMembers();
 
-        if (["a", "all"].includes(input.toLowerCase())) {
+        if (input.toLowerCase() === "all") {
             if (pending.length === 0) return await ctx.reply(formatter.quote("✅ Tidak ada anggota yang menunggu persetujuan."));
 
             try {

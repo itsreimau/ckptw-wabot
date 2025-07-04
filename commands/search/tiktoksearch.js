@@ -25,7 +25,16 @@ module.exports = {
                 video: {
                     url: result
                 },
-                mimetype: tools.mime.lookup("mp4")
+                mimetype: tools.mime.lookup("mp4"),
+                footer: config.msg.footer,
+                buttons: [{
+                    buttonId: `${ctx.used.prefix + ctx.used.command} ${input}`,
+                    buttonText: {
+                        displayText: "Ambil Lagi"
+                    },
+                    type: 1
+                }],
+                headerType: 1
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

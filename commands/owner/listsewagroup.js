@@ -7,7 +7,7 @@ module.exports = {
     },
     code: async (ctx) => {
         try {
-            const groups = db.get("group");
+            const groups = await db.get("group");
             const sewaGroups = [];
 
             for (const groupId in groups) {
@@ -40,9 +40,9 @@ module.exports = {
             }
 
             return await ctx.reply({
-                text: `${resultText.trim() || config.msg.notFound}\n` +
-                    "\n" +
-                    config.msg.footer,
+                text: resultText.trim() || config.msg.notFound,
+                footer: config.msg.footer,
+                interactiveButtons: []
                 contextInfo: {
                     groupMentions
                 }

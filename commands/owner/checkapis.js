@@ -9,7 +9,11 @@ module.exports = {
     },
     code: async (ctx) => {
         try {
-            const waitMsg = await ctx.reply(config.msg.wait);
+            const waitMsg = await ctx.reply({
+                text: config.msg.wait,
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
 
             const APIs = tools.api.listUrl();
             let resultText = "";
@@ -39,11 +43,11 @@ module.exports = {
                 }
             }
 
-            return await ctx.editMessage(waitMsg.key,
-                `${resultText.trim()}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.editMessage(waitMsg.key, {
+                text: resultText.trim(),
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);
         }

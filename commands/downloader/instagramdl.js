@@ -33,7 +33,10 @@ module.exports = {
                     [mediaType]: {
                         url: media.url
                     },
-                    mimetype: tools.mime.lookup(extension)
+                    mimetype: tools.mime.lookup(extension),
+                    caption: formatter.quote(`URL: ${url}`),
+                    footer: config.msg.footer,
+                    interactiveButtons: []
                 });
             }
         } catch (error) {

@@ -16,33 +16,33 @@ module.exports = {
             formatter.quote(tools.msg.generateNotes([`Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`, `Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} status`)} untuk melihat status.`]))
         );
 
-        if (["l", "list"].includes(input.toLowerCase())) {
+        if (input.toLowerCase() === "list") {
             const listText = await tools.list.get("setoption");
             return await ctx.reply(listText);
         }
 
-        if (["s", "status"].includes(input.toLowerCase())) {
+        if (input.toLowerCase() === "status") {
             const groupId = ctx.getId(ctx.id);
             const groupOption = await db.get(`group.${groupId}.option`) || {};
 
-            return await ctx.reply(
-                `${formatter.quote(`Antiaudio: ${groupOption.antiaudio ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${formatter.quote(`Antidocument: ${groupOption.antidocument ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${formatter.quote(`Antigif: ${groupOption.antigif ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${formatter.quote(`Antiimage: ${groupOption.antiimage ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${formatter.quote(`Antilink: ${groupOption.antilink ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${formatter.quote(`Antinsfw: ${groupOption.antinsfw ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${formatter.quote(`Antispam: ${groupOption.antispam ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${formatter.quote(`Antisticker: ${groupOption.antisticker ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${formatter.quote(`Antitagsw: ${groupOption.antitagsw ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${formatter.quote(`Antitoxic: ${groupOption.antitoxic ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${formatter.quote(`Antivideo: ${groupOption.antivideo ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${formatter.quote(`Autokick: ${groupOption.autokick ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${formatter.quote(`Gamerestrict: ${groupOption.gamerestrict ? "Aktif" : "Nonaktif"}`)}\n` +
-                `${formatter.quote(`Welcome: ${groupOption.welcome ? "Aktif" : "Nonaktif"}`)}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.reply({
+                text: `${formatter.quote(`Antiaudio: ${groupOption.antiaudio ? "Aktif" : "Nonaktif"}`)}\n` +
+                    `${formatter.quote(`Antidocument: ${groupOption.antidocument ? "Aktif" : "Nonaktif"}`)}\n` +
+                    `${formatter.quote(`Antigif: ${groupOption.antigif ? "Aktif" : "Nonaktif"}`)}\n` +
+                    `${formatter.quote(`Antiimage: ${groupOption.antiimage ? "Aktif" : "Nonaktif"}`)}\n` +
+                    `${formatter.quote(`Antilink: ${groupOption.antilink ? "Aktif" : "Nonaktif"}`)}\n` +
+                    `${formatter.quote(`Antinsfw: ${groupOption.antinsfw ? "Aktif" : "Nonaktif"}`)}\n` +
+                    `${formatter.quote(`Antispam: ${groupOption.antispam ? "Aktif" : "Nonaktif"}`)}\n` +
+                    `${formatter.quote(`Antisticker: ${groupOption.antisticker ? "Aktif" : "Nonaktif"}`)}\n` +
+                    `${formatter.quote(`Antitagsw: ${groupOption.antitagsw ? "Aktif" : "Nonaktif"}`)}\n` +
+                    `${formatter.quote(`Antitoxic: ${groupOption.antitoxic ? "Aktif" : "Nonaktif"}`)}\n` +
+                    `${formatter.quote(`Antivideo: ${groupOption.antivideo ? "Aktif" : "Nonaktif"}`)}\n` +
+                    `${formatter.quote(`Autokick: ${groupOption.autokick ? "Aktif" : "Nonaktif"}`)}\n` +
+                    `${formatter.quote(`Gamerestrict: ${groupOption.gamerestrict ? "Aktif" : "Nonaktif"}`)}\n` +
+                    formatter.quote(`Welcome: ${groupOption.welcome ? "Aktif" : "Nonaktif"}`),
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
         }
 
         try {

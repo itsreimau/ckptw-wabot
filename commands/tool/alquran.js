@@ -13,7 +13,7 @@ module.exports = {
             formatter.quote(tools.msg.generateNotes([`Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
-        if (["l", "list"].includes(surat.toLowerCase())) {
+        if (surat.toLowercase() === "list") {
             const listText = await tools.list.get("alquran");
             return await ctx.reply(listText);
         }
@@ -39,16 +39,16 @@ module.exports = {
                     const versesText = selectedVerses.map(v =>
                         `${formatter.quote(`Ayat ${v.number}:`)}\n` +
                         `${v.text} (${v.transliteration})\n` +
-                        `${formatter.italic(v.translation_id)}`
+                        formatter.italic(v.translation_id)
                     ).join("\n");
-                    return await ctx.reply(
-                        `${formatter.quote(`Surat: ${result.name}`)}\n` +
-                        `${formatter.quote(`Arti: ${result.translate}`)}\n` +
-                        `${formatter.quote("─────")}\n` +
-                        `${versesText}\n` +
-                        "\n" +
-                        config.msg.footer
-                    );
+                    return await ctx.reply({
+                        text: `${formatter.quote(`Surat: ${result.name}`)}\n` +
+                            `${formatter.quote(`Arti: ${result.translate}`)}\n` +
+                            `${formatter.quote("─────")}\n` +
+                            versesText,
+                        footer: config.msg.footer,
+                        interactiveButtons: []
+                    });
                 }
 
                 const singleAyat = parseInt(ayat);
@@ -57,30 +57,30 @@ module.exports = {
                 const verse = verses.find(v => v.number === singleAyat);
                 if (!verse) return await ctx.reply(formatter.quote(`❎ Ayat ${singleAyat} tidak ada!`));
 
-                return await ctx.reply(
-                    `${formatter.quote(`Surat: ${result.name}`)}\n` +
-                    `${formatter.quote(`Arti: ${result.translate}`)}\n` +
-                    `${formatter.quote("─────")}\n` +
-                    `${verse.text} (${verse.transliteration})\n` +
-                    `${formatter.italic(verse.translation_id)}\n` +
-                    "\n" +
-                    config.msg.footer
-                );
+                return await ctx.reply({
+                    text: `${formatter.quote(`Surat: ${result.name}`)}\n` +
+                        `${formatter.quote(`Arti: ${result.translate}`)}\n` +
+                        `${formatter.quote("─────")}\n` +
+                        `${verse.text} (${verse.transliteration})\n` +
+                        formatter.italic(verse.translation_id),
+                    footer: config.msg.footer,
+                    interactiveButtons: []
+                });
             }
 
             const versesText = verses.map(v =>
                 `${formatter.quote(`Ayat ${v.number}:`)}\n` +
                 `${v.text} (${v.transliteration})\n` +
-                `${formatter.italic(v.translation_id)}`
+                formatter.italic(v.translation_id)
             ).join("\n");
-            return await ctx.reply(
-                `${formatter.quote(`Surat: ${result.name}`)}\n` +
-                `${formatter.quote(`Arti: ${result.translate}`)}\n` +
-                `${formatter.quote("─────")}\n` +
-                `${versesText}\n\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.reply({
+                text: `${formatter.quote(`Surat: ${result.name}`)}\n` +
+                    `${formatter.quote(`Arti: ${result.translate}`)}\n` +
+                    `${formatter.quote("─────")}\n` +
+                    versesText,
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

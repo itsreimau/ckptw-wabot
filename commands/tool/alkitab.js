@@ -16,7 +16,7 @@ module.exports = {
             formatter.quote(tools.msg.generateNotes([`Ketik ${formatter.monospace(`${ctx.used.prefix + ctx.used.command} list`)} untuk melihat daftar.`]))
         );
 
-        if (["l", "list"].includes(passage.toLowerCase())) {
+        if (passage.toLowercase() === "list") {
             const listText = await tools.list.get("alkitab");
             return await ctx.reply(listText);
         }
@@ -30,19 +30,19 @@ module.exports = {
 
             const resultText = result.chapter.verses.map(r =>
                 `${formatter.quote(`Ayat: ${r.number}`)}\n` +
-                `${formatter.quote(`${r.text}`)}`
+                formatter.quote(`${r.text}`)
             ).join(
                 "\n" +
                 `${formatter.quote("─────")}\n`
             );
-            return await ctx.reply(
-                `${formatter.quote(`Nama: ${result.name}`)}\n` +
-                `${formatter.quote(`Bab: ${result.chapter.chap}`)}\n` +
-                `${formatter.quote("─────")}\n` +
-                `${resultText}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.reply({
+                text: `${formatter.quote(`Nama: ${result.name}`)}\n` +
+                    `${formatter.quote(`Bab: ${result.chapter.chap}`)}\n` +
+                    `${formatter.quote("─────")}\n` +
+                    resultText,
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

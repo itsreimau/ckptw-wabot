@@ -63,30 +63,30 @@ module.exports = {
                         text += formatter.quote(formatter.monospace(`${ctx.used.prefix + cmd.name} ${permissionsText}`));
                         text += "\n";
                     });
-
-                    text += "\n";
                 }
             }
 
-            text += config.msg.footer;
-
             return await ctx.sendMessage(ctx.id, {
                 text,
-                contextInfo: {
-                    mentionedJid: [ctx.sender.jid],
-                    isForwarded: true,
-                    forwardedNewsletterMessageInfo: {
-                        newsletterJid: config.bot.newsletterJid,
-                        newsletterName: config.bot.name
+                mentions: [ctx.sender.jid],
+                footer: config.msg.footer,
+                buttons: [{
+                        buttonId: `${ctx.used.prefix}owner`,
+                        buttonText: {
+                            displayText: "Hubungi Owner Bot"
+                        },
+                        type: 1
                     },
-                    externalAdReply: {
-                        title: config.bot.name,
-                        body: config.bot.version,
-                        mediaType: 1,
-                        thumbnailUrl: config.bot.thumbnail,
-                        renderLargerThumbnail: true
+                    {
+                        buttonId: `${ctx.used.prefix}donate`,
+                        buttonText: {
+                            displayText: "Donasi Bot"
+                        },
+                        type: 1
                     }
-                }
+                ],
+                headerType: 1
+
             }, {
                 quoted: tools.cmd.fakeMetaAiQuotedText(config.msg.note)
             });

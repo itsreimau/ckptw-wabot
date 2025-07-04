@@ -13,14 +13,21 @@ module.exports = {
         try {
             const result = tools.cmd.getRandomElement((await axios.get(apiUrl)).data.data.quotes);
 
-            return await ctx.reply(
-                `${formatter.quote(`“${result.quote}”`)}\n` +
-                `${formatter.quote("─────")}\n` +
-                `${formatter.quote(`Nama: ${result.author.name}`)}\n` +
-                `${formatter.quote(`Deskripsi: ${result.author.description}`)}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            return await ctx.reply({
+                text: `${formatter.quote(`“${result.quote}”`)}\n` +
+                    `${formatter.quote("─────")}\n` +
+                    `${formatter.quote(`Nama: ${result.author.name}`)}\n` +
+                    formatter.quote(`Deskripsi: ${result.author.description}`),
+                footer: config.msg.footer,
+                buttons: [{
+                    buttonId: `${ctx.used.prefix + ctx.used.command} ${input}`,
+                    buttonText: {
+                        displayText: "Ambil Lagi"
+                    },
+                    type: 1
+                }],
+                headerType: 1
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

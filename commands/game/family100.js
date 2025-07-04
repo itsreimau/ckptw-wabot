@@ -28,14 +28,20 @@ module.exports = {
 
             session.set(ctx.id, true);
 
-            await ctx.reply(
-                `${formatter.quote(`Soal: ${result.soal}`)}\n` +
-                `${formatter.quote(`Jumlah jawaban: ${game.answers.size}`)}\n` +
-                `${formatter.quote(`Batas waktu: ${tools.msg.convertMsToDuration(game.timeout)}`)}\n` +
-                `${formatter.quote(`Ketik ${formatter.monospace("surrender")} untuk menyerah.`)}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            await ctx.reply({
+                text: `${formatter.quote(`Soal: ${result.soal}`)}\n` +
+                    `${formatter.quote(`Jumlah jawaban: ${game.answers.size}`)}\n` +
+                    formatter.quote(`Batas waktu: ${tools.msg.convertMsToDuration(game.timeout)}`),
+                footer: config.msg.footer,
+                buttons: [{
+                    buttonId: "surrender",
+                    buttonText: {
+                        displayText: "Menyerah"
+                    },
+                    type: 1
+                }],
+                headerType: 1
+            });
 
             const collector = ctx.MessageCollector({
                 time: game.timeout
@@ -69,7 +75,7 @@ module.exports = {
                         });
                         return collector.stop();
                     }
-                } else if (["s", "surrender"].includes(participantAnswer)) {
+                } else if (participantAnswer === "surrender") {
                     const remaining = [...game.answers].map(tools.msg.ucwords).join(", ").replace(/, ([^,]*)$/, ", dan $1");
                     session.delete(ctx.id);
                     await ctx.sendMessage(ctx.id, {

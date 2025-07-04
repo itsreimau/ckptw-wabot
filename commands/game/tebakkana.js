@@ -51,15 +51,26 @@ module.exports = {
 
             session.set(ctx.id, true);
 
-            await ctx.reply(
-                `${formatter.quote(`Soal: ${question}`)}\n` +
-                `${formatter.quote(`Bonus: ${game.coin} Koin`)}\n` +
-                `${formatter.quote(`Batas waktu: ${tools.msg.convertMsToDuration(game.timeout)}`)}\n` +
-                `${formatter.quote(`Ketik ${formatter.monospace("hint")} untuk bantuan.`)}\n` +
-                `${formatter.quote(`Ketik ${formatter.monospace("surrender")} untuk menyerah.`)}\n` +
-                "\n" +
-                config.msg.footer
-            );
+            await ctx.reply({
+                text: `${formatter.quote(`Soal: ${question}`)}\n` +
+                    `${formatter.quote(`Bonus: ${game.coin} Koin`)}\n` +
+                    formatter.quote(`Batas waktu: ${tools.msg.convertMsToDuration(game.timeout)}`),
+                footer: config.msg.footer,
+                buttons: [{
+                    buttonId: "hint",
+                    buttonText: {
+                        displayText: "Petunjuk"
+                    },
+                    type: 1
+                }, {
+                    buttonId: "surrender",
+                    buttonText: {
+                        displayText: "Menyerah"
+                    },
+                    type: 1
+                }],
+                headerType: 1
+            });
 
             const collector = ctx.MessageCollector({
                 time: game.timeout
@@ -81,13 +92,13 @@ module.exports = {
                         quoted: m
                     });
                     return collector.stop();
-                } else if (["h", "hint"].includes(participantAnswer)) {
+                } else if (participantAnswer === "hint") {
                     await ctx.sendMessage(ctx.id, {
                         text: formatter.monospace(clue)
                     }, {
                         quoted: m
                     });
-                } else if (["s", "surrender"].includes(participantAnswer)) {
+                } else if (participantAnswer === "surrender") {
                     session.delete(ctx.id);
                     await ctx.sendMessage(ctx.id, {
                         text: `${formatter.quote("🏳️ Kamu menyerah!")}\n` +
