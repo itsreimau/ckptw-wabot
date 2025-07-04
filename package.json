@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/itsreimau/gaxtawu#readme",
   "dependencies": {
-    "@itsreimau/gktw": "^1.0.17",
+    "@itsreimau/gktw": "^1.1.0",
     "@mengkodingan/consolefy": "^1.0.1",
     "@zanixongroup/uploader": "^2.1.1",
     "axios": "^1.10.0",

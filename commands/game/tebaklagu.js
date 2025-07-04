@@ -1,6 +1,5 @@
 const axios = require("axios");
 const didYouMean = require("didyoumean");
-const mime = require("mime-types");
 
 const session = new Map();
 
@@ -26,7 +25,7 @@ module.exports = {
                 audio: {
                     url: result.lagu
                 },
-                mimetype: mime.lookup("mp3"),
+                mimetype: tools.mime.lookup("mp3"),
             });
             await ctx.reply(
                 `${formatter.quote(`Artis: ${result.artis}`)}\n` +

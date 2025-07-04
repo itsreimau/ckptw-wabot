@@ -7,7 +7,7 @@ async function get(type) {
     try {
         let text = "";
 
-        const createList = (data, formatter) => `${data.map(formatter).join(`\n${formatter.quote("─────")}\n`)}\n` +
+        const createList = (data, list) => `${data.map(list).join(`\n${formatter.quote("─────")}\n`)}\n` +
             "\n" +
             config.msg.footer;
 

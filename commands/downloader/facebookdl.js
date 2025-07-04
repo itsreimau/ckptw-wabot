@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "facebookdl",
@@ -29,7 +28,7 @@ module.exports = {
                 video: {
                     url: result.url
                 },
-                mimetype: mime.lookup("mp4"),
+                mimetype: tools.mime.lookup("mp4"),
                 caption: `${formatter.quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer

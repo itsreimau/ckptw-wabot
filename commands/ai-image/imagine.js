@@ -1,5 +1,3 @@
-const mime = require("mime-types");
-
 module.exports = {
     name: "imagine",
     category: "ai-image",
@@ -24,7 +22,7 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("jpeg"),
+                mimetype: tools.mime.lookup("jpeg"),
                 caption: `${formatter.quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer

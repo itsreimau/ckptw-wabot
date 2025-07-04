@@ -1,4 +1,3 @@
-const mime = require("mime-types");
 const moment = require("moment-timezone");
 
 module.exports = {

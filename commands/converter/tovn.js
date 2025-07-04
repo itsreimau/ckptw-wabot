@@ -1,5 +1,3 @@
-const mime = require("mime-types");
-
 module.exports = {
     name: "tovn",
     aliases: ["toptt"],
@@ -15,7 +13,7 @@ module.exports = {
 
             return await ctx.reply({
                 audio: result,
-                mimetype: mime.lookup("mp3"),
+                mimetype: tools.mime.lookup("mp3"),
                 ptt: true
             });
         } catch (error) {

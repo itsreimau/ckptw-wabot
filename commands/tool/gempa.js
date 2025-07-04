@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "gempa",
@@ -18,7 +17,7 @@ module.exports = {
                 image: {
                     url: tools.api.createUrl("https://data.bmkg.go.id", `/DataMKG/TEWS/${result.Shakemap}`)
                 },
-                mimetype: mime.lookup("jpeg"),
+                mimetype: tools.mime.lookup("jpeg"),
                 caption: `${formatter.quote(result.Wilayah)}\n` +
                     `${formatter.quote("─────")}\n` +
                     `${formatter.quote(`Tanggal: ${result.Tanggal}`)}\n` +

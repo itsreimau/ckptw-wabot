@@ -1,5 +1,3 @@
-const mime = require("mime-types");
-
 module.exports = {
     name: "videogpt",
     category: "ai-video",
@@ -24,7 +22,7 @@ module.exports = {
                 video: {
                     url: result
                 },
-                mimetype: mime.lookup("mp4"),
+                mimetype: tools.mime.lookup("mp4"),
                 caption: `${formatter.quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer

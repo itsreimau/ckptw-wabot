@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 const {
     Sticker,
     StickerTypes
@@ -36,17 +35,17 @@ module.exports = {
             if (/image/.test(contentType)) {
                 return await ctx.reply({
                     image: response?.data,
-                    mimetype: mime.contentType(contentType)
+                    mimetype: tools.mime.contentType(contentType)
                 });
             } else if (/video/.test(contentType)) {
                 return await ctx.reply({
                     video: response?.data,
-                    mimetype: mime.contentType(contentType)
+                    mimetype: tools.mime.contentType(contentType)
                 });
             } else if (/audio/.test(contentType)) {
                 return await ctx.reply({
                     audio: response?.data,
-                    mimetype: mime.contentType(contentType)
+                    mimetype: tools.mime.contentType(contentType)
                 });
             } else if (/webp/.test(contentType)) {
                 const sticker = new Sticker(response?.data, {
@@ -65,7 +64,7 @@ module.exports = {
                 return await ctx.reply({
                     document: response?.data,
                     fileName,
-                    mimetype: mime.contentType(contentType)
+                    mimetype: tools.mime.contentType(contentType)
                 });
             } else {
                 let text = response?.data;

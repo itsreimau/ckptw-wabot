@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "youtubevideo",
@@ -54,7 +53,7 @@ module.exports = {
                     url: result.downloadUrl
                 },
                 fileName: `${result.title}.mp4`,
-                mimetype: mime.lookup("mp4"),
+                mimetype: tools.mime.lookup("mp4"),
                 caption: `${formatter.quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer
@@ -64,7 +63,7 @@ module.exports = {
                 video: {
                     url: result.downloadUrl
                 },
-                mimetype: mime.lookup("mp4"),
+                mimetype: tools.mime.lookup("mp4"),
                 caption: `${formatter.quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer

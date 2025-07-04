@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "instagramdl",
@@ -26,15 +25,15 @@ module.exports = {
             const result = (await axios.get(apiUrl)).data.data;
 
             for (const media of result) {
-                const isImage = media.type === "image";
-                const mediaType = isImage ? "image" : "video";
-                const extension = isImage ? "jpg" : "mp4";
+                const isVideo = media.type === "video";
+                const mediaType = isVideo ? "video" : "image";
+                const extension = isVideo ? "mp4" : "jpg";
 
                 await ctx.reply({
                     [mediaType]: {
                         url: media.url
                     },
-                    mimetype: mime.lookup(extension)
+                    mimetype: tools.mime.lookup(extension)
                 });
             }
         } catch (error) {

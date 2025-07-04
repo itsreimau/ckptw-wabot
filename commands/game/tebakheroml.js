@@ -1,6 +1,5 @@
 const axios = require("axios");
 const didYouMean = require("didyoumean");
-const mime = require("mime-types");
 
 const session = new Map();
 
@@ -26,7 +25,7 @@ module.exports = {
                 image: {
                     url: result.fullimg
                 },
-                mimetype: mime.lookup("jpeg"),
+                mimetype: tools.mime.lookup("jpeg"),
                 caption: `${formatter.quote(`Deskripsi: ${result.deskripsi}`)}\n` +
                     `${formatter.quote(`Bonus: ${game.coin} Koin`)}\n` +
                     `${formatter.quote(`Batas waktu: ${tools.msg.convertMsToDuration(game.timeout)}`)}\n` +

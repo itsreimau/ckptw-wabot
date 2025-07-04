@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "tovideo",
@@ -23,7 +22,7 @@ module.exports = {
                 video: {
                     url: result
                 },
-                mimetype: mime.lookup("mp4")
+                mimetype: tools.mime.lookup("mp4")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

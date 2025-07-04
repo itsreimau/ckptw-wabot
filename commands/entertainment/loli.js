@@ -1,5 +1,3 @@
-const mime = require("mime-types");
-
 module.exports = {
     name: "loli",
     category: "entertainment",
@@ -14,7 +12,7 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("png")
+                mimetype: tools.mime.lookup("png")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

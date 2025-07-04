@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "pinterest",
@@ -26,7 +25,7 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("jpg"),
+                mimetype: tools.mime.lookup("jpg"),
                 caption: `${formatter.quote(`Kueri: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer

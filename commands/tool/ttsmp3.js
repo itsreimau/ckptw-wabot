@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "ttsmp3",
@@ -36,7 +35,7 @@ module.exports = {
                 audio: {
                     url: result.audio_url
                 },
-                mimetype: mime.lookup("mp3"),
+                mimetype: tools.mime.lookup("mp3"),
                 ptt: true
             });
         } catch (error) {

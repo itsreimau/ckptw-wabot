@@ -1,5 +1,3 @@
-const mime = require("mime-types");
-
 module.exports = {
     name: "waifuim",
     category: "entertainment",
@@ -23,7 +21,7 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("jpg"),
+                mimetype: tools.mime.lookup("jpg"),
                 caption: `${formatter.quote(`Kategori: ${tools.msg.ucwords(waifuim)}`)}\n` +
                     "\n" +
                     config.msg.footer

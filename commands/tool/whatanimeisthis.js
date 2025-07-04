@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "whatanimeisthis",
@@ -29,7 +28,7 @@ module.exports = {
                 video: {
                     url: result.video
                 },
-                mimetype: mime.lookup("mp4"),
+                mimetype: tools.mime.lookup("mp4"),
                 caption: `${formatter.quote(`Nama: ${result.filename}`)}\n` +
                     `${formatter.quote(`Episode: ${result.episode}`)}\n` +
                     `${formatter.quote(`Rentang Waktu: ${tools.msg.convertSecondToTimecode(result.from)}-${tools.msg.convertSecondToTimecode(result.to)}`)}\n` +

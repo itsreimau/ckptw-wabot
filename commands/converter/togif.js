@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "togif",
@@ -22,7 +21,7 @@ module.exports = {
                 video: {
                     url: result
                 },
-                mimetype: mime.lookup("mp4"),
+                mimetype: tools.mime.lookup("mp4"),
                 gifPlayback: true
             });
         } catch (error) {

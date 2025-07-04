@@ -4,7 +4,7 @@ const {
 } = require("@itsreimau/gktw");
 const moment = require("moment-timezone");
 
-// Fungsi untuk mengecek apakah pengguna memiliki cukup koin sebelum menggunakan perintah tertentu
+// Fungsi untuk mengecek koin pengguna
 async function checkCoin(requiredCoin, userDb, senderId, isOwner) {
     if (isOwner || userDb?.premium) return false;
     if (userDb?.coin < requiredCoin) return true;
@@ -24,7 +24,7 @@ module.exports = (bot) => {
         const groupId = isGroup ? ctx.getId(groupJid) : null;
         const isOwner = tools.cmd.isOwner(senderId, ctx.msg.key.id);
 
-        // Mengambil data bot, pengguna, dan grup dari database
+        // Mengambil database
         const botDb = await db.get("bot") || {};
         const userDb = await db.get(`user.${senderId}`) || {};
         const groupDb = await db.get(`group.${groupId}`) || {};
@@ -32,8 +32,8 @@ module.exports = (bot) => {
         // Pengecekan mode bot (group, private, self)
         if (groupDb?.mutebot === true && !isOwner && !await ctx.group().isSenderAdmin()) return;
         if (groupDb?.mutebot === "owner" && !isOwner) return;
-        if (botDb?.mode === "group" && isPrivate) return;
-        if (botDb?.mode === "private" && isGroup) return;
+        if (botDb?.mode === "group" && isPrivate && !isOwner) return;
+        if (botDb?.mode === "private" && isGroup && !isOwner) return;
         if (botDb?.mode === "self" && !isOwner) return;
 
         // Pengecekan mute pada grup

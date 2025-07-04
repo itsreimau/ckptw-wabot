@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "tiktokdl",
@@ -43,7 +42,7 @@ module.exports = {
                 video: {
                     url: video.url
                 },
-                mimetype: mime.lookup("mp4"),
+                mimetype: tools.mime.lookup("mp4"),
                 caption: `${formatter.quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer
@@ -55,7 +54,7 @@ module.exports = {
                     image: {
                         url: image.url
                     },
-                    mimetype: mime.lookup("jpeg")
+                    mimetype: tools.mime.lookup("jpeg")
                 });
             }
         } catch (error) {

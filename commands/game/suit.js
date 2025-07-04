@@ -52,7 +52,7 @@ module.exports = {
             collector.on("collect", async (m) => {
                 const participantAnswer = m.content.toLowerCase();
                 const participantId = ctx.getId(m.sender);
-                const isGroup = ctx.id.endsWith("@g.us");
+                const isGroup = m.jid.endsWith("@g.us");
 
                 if (isGroup && participantId === accountId) {
                     if (["a", "accept"].includes(participantAnswer)) {

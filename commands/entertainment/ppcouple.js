@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "ppcouple",
@@ -19,13 +18,13 @@ module.exports = {
                     image: {
                         url: result.male
                     },
-                    mimetype: mime.lookup("jpg")
+                    mimetype: tools.mime.lookup("jpg")
                 }),
                 ctx.reply({
                     image: {
                         url: result.female
                     },
-                    mimetype: mime.lookup("jpg")
+                    mimetype: tools.mime.lookup("jpg")
                 })
             ]);
         } catch (error) {

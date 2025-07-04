@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "netwrck",
@@ -26,7 +25,7 @@ module.exports = {
                 image: {
                     url: result
                 },
-                mimetype: mime.lookup("png"),
+                mimetype: tools.mime.lookup("png"),
                 caption: `${formatter.quote(`Prompt: ${input}`)}\n` +
                     "\n" +
                     config.msg.footer

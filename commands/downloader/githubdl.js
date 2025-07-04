@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "githubdl",
@@ -30,7 +29,7 @@ module.exports = {
                     url: result.urllink
                 },
                 fileName: result.filename,
-                mimetype: mime.lookup(result.filename) || "application/octet-stream",
+                mimetype: tools.mime.lookup(result.filename) || "application/octet-stream",
                 caption: `${formatter.quote(`URL: ${url}`)}\n` +
                     "\n" +
                     config.msg.footer

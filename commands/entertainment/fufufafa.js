@@ -1,5 +1,4 @@
 const axios = require("axios");
-const mime = require("mime-types");
 
 module.exports = {
     name: "fufufafa",
@@ -17,7 +16,7 @@ module.exports = {
                 image: {
                     url: result.image_url
                 },
-                mimetype: mime.lookup("jpg"),
+                mimetype: tools.mime.lookup("jpg"),
                 caption: `${formatter.quote(`Doksli: ${result.doksli}`)}\n` +
                     "\n" +
                     config.msg.footer
