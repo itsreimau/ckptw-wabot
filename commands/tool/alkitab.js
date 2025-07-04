@@ -18,7 +18,11 @@ module.exports = {
 
         if (passage.toLowercase() === "list") {
             const listText = await tools.list.get("alkitab");
-            return await ctx.reply(listText);
+            return await ctx.reply({
+                text: listText,
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
         }
 
         try {

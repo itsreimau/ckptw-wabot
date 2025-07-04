@@ -13,7 +13,11 @@ module.exports = {
 
         if (input.toLowerCase() === "list") {
             const listText = await tools.list.get("claim");
-            return await ctx.reply(listText);
+            return await ctx.reply({
+                text: listText,
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
         }
 
         const claim = claimRewards[input];

@@ -16,7 +16,11 @@ module.exports = {
 
         if (ctx.used.command === "how" || input.toLowerCase() === "list") {
             const listText = await tools.list.get("how");
-            return await ctx.reply(listText);
+            return await ctx.reply({
+                text: listText,
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
         }
 
         try {

@@ -15,7 +15,11 @@ module.exports = {
 
         if (surat.toLowercase() === "list") {
             const listText = await tools.list.get("alquran");
-            return await ctx.reply(listText);
+            return await ctx.reply({
+                text: listText,
+                footer: config.msg.footer,
+                interactiveButtons: []
+            });
         }
 
         if (isNaN(surat) || surat < 1 || surat > 114) return await ctx.reply(formatter.quote("❎ Surah harus berupa nomor antara 1 sampai 114!"));

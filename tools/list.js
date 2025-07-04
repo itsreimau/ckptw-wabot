@@ -7,9 +7,7 @@ async function get(type) {
     try {
         let text = "";
 
-        const createList = (data, list) => `${data.map(list).join(`\n${formatter.quote("─────")}\n`)}\n` +
-            "\n" +
-            config.msg.footer;
+        const createList = (data, list) => data.map(list).join(`\n${formatter.quote("─────")}\n`);
 
         switch (type) {
             case "alkitab": {
