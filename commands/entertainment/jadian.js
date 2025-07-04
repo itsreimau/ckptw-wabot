@@ -22,7 +22,7 @@ module.exports = {
 
             return await ctx.reply({
                 text: `${formatter.quote(`@${ctx.getId(selected[0])} ❤️ @${ctx.getId(selected[1])}`)}\n` +
-                    formatter.quote(word)
+                    formatter.quote(word),
                 mentions: selected,
                 footer: config.msg.footer,
                 buttons: [{
