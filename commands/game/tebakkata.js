@@ -24,7 +24,7 @@ module.exports = {
             await ctx.reply({
                 text: `${formatter.quote(`Soal: ${result.soal}`)}\n` +
                     `${formatter.quote(`Bonus: ${game.coin} Koin`)}\n` +
-                    formatter.quote(`Batas waktu: ${tools.msg.convertMsToDuration(game.timeout}`),
+                    formatter.quote(`Batas waktu: ${tools.msg.convertMsToDuration(game.timeout)}`),
                 footer: config.msg.footer,
                 buttons: [{
                     buttonId: "hint",
