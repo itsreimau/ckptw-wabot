@@ -67,7 +67,7 @@ module.exports = {
 
                 if (isGroup && participantId === accountId) {
                     if (participantAnswer === "accept") {
-                        await ctx.sendMessage(m.id, {
+                        await ctx.sendMessage(m.jid, {
                             text: formatter.quote(`@${accountId} menerima tantangan suit! Silahkan pilih di obrolan pribadi.`),
                             mentions: [accountJid]
                         }, {
