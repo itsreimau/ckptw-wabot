@@ -34,7 +34,8 @@ module.exports = {
             }
 
             return await ctx.reply({
-                text: resultText.trim() || config.msg.notFound footer: config.msg.footer,
+                text: resultText.trim() || config.msg.notFound,
+                footer: config.msg.footer,
                 interactiveButtons: []
                 mentions: userMentions
             });
