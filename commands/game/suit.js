@@ -75,7 +75,7 @@ module.exports = {
                         });
 
                         const choiceText = formatter.quote("Silahkan pilih salah satu!");
-                        const buttons = buttons: [{
+                        const buttons = [{
                                 buttonId: "gunting",
                                 buttonText: {
                                     displayText: "Gunting"
