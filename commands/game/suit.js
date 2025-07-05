@@ -36,7 +36,7 @@ module.exports = {
             };
 
             await ctx.reply({
-                text: `${formatter.quote(`@${senderId} menantang ${accountId} untuk bermain suit!`)}\n` +
+                text: `${formatter.quote(`Kamu menantang @${accountId} untuk bermain suit!`)}\n` +
                     formatter.quote(`Bonus: ${game.coin} Koin`),
                 mentions: [accountJid],
                 footer: config.msg.footer,
@@ -60,13 +60,12 @@ module.exports = {
             session.set(accountJid, game);
 
             const collector = ctx.MessageCollector({
+                filter: (m) => [senderJid, accountJid].includes(m.sender),
                 time: game.timeout,
-                filter: (m) => [senderJid, accountJid].includes(m.sender)
+                hears: [senderJid, accountJid]
             });
 
             collector.on("collect", async (m) => {
-                if (![senderJid, accountJid].includes(m.sender)) return;
-
                 const participantAnswer = m.content.toLowerCase();
                 const participantJid = m.sender;
                 const participantId = ctx.getId(participantJid);
