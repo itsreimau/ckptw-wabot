@@ -73,14 +73,14 @@ module.exports = {
                 buttons: [{
                         buttonId: `${ctx.used.prefix}owner`,
                         buttonText: {
-                            displayText: "Hubungi Owner Bot"
+                            displayText: "Hubungi Owner"
                         },
                         type: 1
                     },
                     {
                         buttonId: `${ctx.used.prefix}donate`,
                         buttonText: {
-                            displayText: "Donasi Bot"
+                            displayText: "Donasi"
                         },
                         type: 1
                     }

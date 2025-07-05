@@ -46,12 +46,12 @@ module.exports = {
                 });
                 const searchResult = (await axios.get(searchApiUrl)).data.result[searchIndex];
 
-                await ctx.reply(
-                    `${formatter.quote(`Judul: ${searchResult.title}`)}\n` +
-                    `${formatter.quote(`URL: ${searchResult.url}`)}\n` +
-                    "\n" +
-                    config.msg.footer
-                );
+                await ctx.reply({
+                    text: `${formatter.quote(`Judul: ${searchResult.title}`)}\n` +
+                        formatter.quote(`URL: ${searchResult.url}`),
+                    footer: config.msg.footer,
+                    interactiveButtons: []
+                });
 
                 const downloadApiUrl = tools.api.createUrl("falcon", "/download/soundcloud", {
                     url: searchResult.url
@@ -72,13 +72,13 @@ module.exports = {
                 });
                 const searchResult = (await axios.get(searchApiUrl)).data.result[searchIndex];
 
-                await ctx.reply(
-                    `${formatter.quote(`Judul: ${searchResult.trackName}`)}\n` +
-                    `${formatter.quote(`Artis: ${searchResult.artistName}`)}\n` +
-                    `${formatter.quote(`URL: ${searchResult.externalUrl}`)}\n` +
-                    "\n" +
-                    config.msg.footer
-                );
+                await ctx.reply({
+                    text: `${formatter.quote(`Judul: ${searchResult.trackName}`)}\n` +
+                        `${formatter.quote(`Artis: ${searchResult.artistName}`)}\n` +
+                        formatter.quote(`URL: ${searchResult.externalUrl}`),
+                    footer: config.msg.footer,
+                    interactiveButtons: []
+                });
 
                 const downloadApiUrl = tools.api.createUrl("archive", "/api/download/spotify", {
                     url: searchResult.externalUrl
@@ -99,13 +99,13 @@ module.exports = {
                 });
                 const searchResult = (await axios.get(searchApiUrl)).data.result[searchIndex];
 
-                await ctx.reply(
-                    `${formatter.quote(`Judul: ${searchResult.title}`)}\n` +
-                    `${formatter.quote(`Artis: ${searchResult.channel}`)}\n` +
-                    `${formatter.quote(`URL: ${searchResult.link}`)}\n` +
-                    "\n" +
-                    config.msg.footer
-                );
+                await ctx.reply({
+                    text: `${formatter.quote(`Judul: ${searchResult.title}`)}\n` +
+                        `${formatter.quote(`Artis: ${searchResult.channel}`)}\n` +
+                        formatter.quote(`URL: ${searchResult.link}`),
+                    footer: config.msg.footer,
+                    interactiveButtons: []
+                });
 
                 const downloadApiUrl = tools.api.createUrl("nekorinn", "/downloader/youtube", {
                     url: searchResult.link,

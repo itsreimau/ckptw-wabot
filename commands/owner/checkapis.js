@@ -9,12 +9,6 @@ module.exports = {
     },
     code: async (ctx) => {
         try {
-            const waitMsg = await ctx.reply({
-                text: config.msg.wait,
-                footer: config.msg.footer,
-                interactiveButtons: []
-            });
-
             const APIs = tools.api.listUrl();
             let resultText = "";
 
@@ -43,7 +37,7 @@ module.exports = {
                 }
             }
 
-            return await ctx.editMessage(waitMsg.key, {
+            return await ctx.reply({
                 text: resultText.trim(),
                 footer: config.msg.footer,
                 interactiveButtons: []

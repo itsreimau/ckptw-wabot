@@ -13,7 +13,18 @@ module.exports = {
         try {
             const result = (await axios.get(apiUrl)).data.data;
 
-            return await ctx.reply(result);
+            return await ctx.reply({
+                text: result,
+                footer: config.msg.footer,
+                buttons: [{
+                    buttonId: ctx.used.prefix + ctx.used.command,
+                    buttonText: {
+                        displayText: "Ambil Lagi"
+                    },
+                    type: 1
+                }],
+                headerType: 1
+            });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);
         }

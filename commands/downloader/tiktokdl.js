@@ -8,24 +8,12 @@ module.exports = {
         coin: 10
     },
     code: async (ctx) => {
-        const input = ctx.args.join(" ") || null;
+        const url = ctx.args[0] || null;
 
-        if (!input) return await ctx.reply(
+        if (!url) return await ctx.reply(
             `${formatter.quote(tools.msg.generateInstruction(["send"], ["text"]))}\n` +
-            `${formatter.quote(tools.msg.generateCmdExample(ctx.used, "https://www.tiktok.com/@japanese_songs2/video/7472130814805822726 -hd"))}\n` +
-            formatter.quote(tools.msg.generatesFlagInfo({
-                "-hd": "Pilih resolusi HD"
-            }))
+            formatter.quote(tools.msg.generateCmdExample(ctx.used, "https://www.tiktok.com/@japanese_songs2/video/7472130814805822726"))
         );
-
-        const flag = tools.cmd.parseFlag(input, {
-            "-hd": {
-                type: "boolean",
-                key: "hd"
-            }
-        });
-
-        const url = flag.input || null;
 
         const isUrl = await tools.cmd.isUrl(url);
         if (!isUrl) return await ctx.reply(config.msg.urlInvalid);
@@ -36,8 +24,7 @@ module.exports = {
             });
             const result = (await axios.get(apiUrl)).data.data.data;
 
-            const videoType = flag?.hd ? "nowatermark_hd" : "nowatermark";
-            const video = result.find(v => v.type === videoType);
+            const video = result.find(r => r.type === "nowatermark");
             if (video) return await ctx.reply({
                 video: {
                     url: video.url
@@ -48,7 +35,7 @@ module.exports = {
                 interactiveButtons: []
             });
 
-            const images = result.filter(item => item.type === "photo");
+            const images = result.filter(r => r.type === "photo");
             for (const image of images) {
                 await ctx.reply({
                     image: {
