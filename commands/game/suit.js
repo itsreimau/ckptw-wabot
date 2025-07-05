@@ -107,11 +107,13 @@ module.exports = {
 
                         await ctx.sendMessage(senderJid, {
                             text: choiceText,
+                            footer: config.msg.footer,
                             buttons,
                             headerType: 1
                         });
                         await ctx.sendMessage(accountJid, {
                             text: choiceText,
+                            footer: config.msg.footer,
                             buttons,
                             headerType: 1
                         });
@@ -161,17 +163,17 @@ module.exports = {
                             ];
 
                             const result = (3 + sChoice.index - aChoice.index) % 3;
-                            let winnerText, coinText = "";
+                            let winnerText, coinText = "Tak seorang pun menang, tak seorang pun mendapat koin";
 
                             if (result === 0) {
                                 winnerText = "Seri!";
                             } else if (result === 1) {
-                                winnerText = `${senderId} menang!`;
+                                winnerText = `@${senderId} menang!`;
                                 await db.add(`user.${senderId}.coin`, game.coin);
                                 await db.add(`user.${senderId}.winGame`, 1);
                                 coinText = `+${game.coin} Koin untuk @${senderId}`;
                             } else {
-                                winnerText = `${accountId} menang!`;
+                                winnerText = `@${accountId} menang!`;
                                 await db.add(`user.${accountId}.coin`, game.coin);
                                 await db.add(`user.${accountId}.winGame`, 1);
                                 coinText = `+${game.coin} Koin untuk @${accountId}`;
