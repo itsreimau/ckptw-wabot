@@ -182,8 +182,8 @@ module.exports = {
                                 text: `${formatter.quote("Hasil suit:")}\n` +
                                     `${formatter.quote(`${senderId}: ${sChoice.name}`)}\n` +
                                     `${formatter.quote(`${accountId}: ${aChoice.name}`)}\n` +
-                                    `${formatter.quote(winnerText)}`
-                                formatter.quote(coinText),
+                                    `${formatter.quote(winnerText)}\n` +
+                                    formatter.quote(coinText),
                                 mentions: [senderJid, accountJid]
                             });
 
