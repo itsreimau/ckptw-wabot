@@ -169,18 +169,18 @@ module.exports = {
                                 winnerText = `${senderId} menang!`;
                                 await db.add(`user.${senderId}.coin`, game.coin);
                                 await db.add(`user.${senderId}.winGame`, 1);
-                                coinText = `+${game.coin} Koin untuk ${senderId}`;
+                                coinText = `+${game.coin} Koin untuk @${senderId}`;
                             } else {
                                 winnerText = `${accountId} menang!`;
                                 await db.add(`user.${accountId}.coin`, game.coin);
                                 await db.add(`user.${accountId}.winGame`, 1);
-                                coinText = `+${game.coin} Koin untuk ${accountId}`;
+                                coinText = `+${game.coin} Koin untuk @${accountId}`;
                             }
 
                             await ctx.reply({
                                 text: `${formatter.quote("Hasil suit:")}\n` +
-                                    `${formatter.quote(`${senderId}: ${sChoice.name}`)}\n` +
-                                    `${formatter.quote(`${accountId}: ${aChoice.name}`)}\n` +
+                                    `${formatter.quote(`@${senderId}: ${sChoice.name}`)}\n` +
+                                    `${formatter.quote(`@${accountId}: ${aChoice.name}`)}\n` +
                                     `${formatter.quote(winnerText)}\n` +
                                     formatter.quote(coinText),
                                 mentions: [senderJid, accountJid]
