@@ -20,19 +20,23 @@ module.exports = {
             mentions: [senderJid]
         });
 
+        if (accountJid === senderJid) return await ctx.reply(formatter.quote("Tidak bisa menantang diri sendiri!"));
+        if (accountId === config.bot.id) return await ctx.reply(formatter.quote("Tidak bisa menantang bot!"));
+
         const existingGame = [...session.values()].find(game => game.players.includes(senderJid) || game.players.includes(accountJid));
-        if (existingGame) return await ctx.reply(formatter.quote("🎮 Salah satu pemain sedang dalam sesi permainan!"));
+        if (existingGame) return await ctx.reply(formatter.quote("Salah satu pemain sedang dalam sesi permainan!"));
 
         try {
             const game = {
                 players: [senderJid, accountJid],
                 coin: 10,
                 timeout: 120000,
-                choices: new Map()
+                choices: new Map(),
+                started: false
             };
 
             await ctx.reply({
-                text: `${formatter.quote(`Kamu menantang @${accountId} untuk bermain suit!`)}\n` +
+                text: `${formatter.quote(`@${senderId} menantang ${accountId} untuk bermain suit!`)}\n` +
                     formatter.quote(`Bonus: ${game.coin} Koin`),
                 mentions: [accountJid],
                 footer: config.msg.footer,
@@ -57,31 +61,36 @@ module.exports = {
 
             const collector = ctx.MessageCollector({
                 time: game.timeout,
-                hears: [senderJid, accountJid]
+                filter: (m) => [senderJid, accountJid].includes(m.sender)
             });
 
             collector.on("collect", async (m) => {
+                if (![senderJid, accountJid].includes(m.sender)) return;
+
                 const participantAnswer = m.content.toLowerCase();
-                const participantId = ctx.getId(m.sender);
+                const participantJid = m.sender;
+                const participantId = ctx.getId(participantJid);
                 const isGroup = m.jid.endsWith("@g.us");
 
-                if (isGroup && participantId === accountId) {
+                if (!game.started && isGroup && participantId === accountId) {
                     if (participantAnswer === "accept") {
+                        game.started = true;
                         await ctx.sendMessage(m.jid, {
-                            text: formatter.quote(`@${accountId} menerima tantangan suit! Silahkan pilih di obrolan pribadi.`),
+                            text: formatter.quote(`@${accountId} menerima tantangan! Silahkan pilih di obrolan pribadi.`),
                             mentions: [accountJid]
                         }, {
                             quoted: m
                         });
 
-                        const choiceText = formatter.quote("Silahkan pilih salah satu!");
+                        const choiceText = formatter.quote("Silahkan pilih salah satu:");
                         const buttons = [{
-                                buttonId: "gunting",
+                                buttonId: "batu",
                                 buttonText: {
-                                    displayText: "Gunting"
+                                    displayText: "Batu"
                                 },
                                 type: 1
-                            }, {
+                            },
+                            {
                                 buttonId: "kertas",
                                 buttonText: {
                                     displayText: "Kertas"
@@ -89,9 +98,9 @@ module.exports = {
                                 type: 1
                             },
                             {
-                                buttonId: "batu",
+                                buttonId: "gunting",
                                 buttonText: {
-                                    displayText: "Batu"
+                                    displayText: "Gunting"
                                 },
                                 type: 1
                             }
@@ -99,13 +108,11 @@ module.exports = {
 
                         await ctx.sendMessage(senderJid, {
                             text: choiceText,
-                            footer: config.msg.footer,
                             buttons,
                             headerType: 1
                         });
                         await ctx.sendMessage(accountJid, {
                             text: choiceText,
-                            footer: config.msg.footer,
                             buttons,
                             headerType: 1
                         });
@@ -122,50 +129,61 @@ module.exports = {
                     }
                 }
 
-                if (!isGroup) {
-                    const participantJid = m.sender;
-                    const currentGame = session.get(participantJid);
-                    if (!currentGame) return;
-
+                if (!isGroup && game.started) {
                     const choices = {
-                        batu: 0,
-                        kertas: 1,
-                        gunting: 2
+                        batu: {
+                            index: 0,
+                            name: "Batu"
+                        },
+                        kertas: {
+                            index: 1,
+                            name: "Kertas"
+                        },
+                        gunting: {
+                            index: 2,
+                            name: "Gunting"
+                        }
                     };
-                    const selectedChoice = choices[participantAnswer];
+                    const choiceData = choices[participantAnswer];
 
-                    if (selectedChoice) {
-                        currentGame.choices.set(participantId, selectedChoice);
+                    if (choiceData) {
+                        game.choices.set(participantId, choiceData);
 
-                        await ctx.reply({
-                            text: formatter.quote(`Anda memilih: ${selectedChoice}`)
+                        await ctx.sendMessage(participantJid, {
+                            text: formatter.quote(`Anda memilih: ${choiceData.name}`)
                         }, {
                             quoted: m
                         });
 
-                        if (currentGame.choices.has(senderId) && currentGame.choices.has(accountId)) {
-                            const [sChoice, aChoice] = [currentGame.choices.get(senderId), currentGame.choices.get(accountId)];
-                            const result = (3 + choices[sChoice] - choices[aChoice]) % 3;
+                        if (game.choices.size === 2) {
+                            const [sChoice, aChoice] = [
+                                game.choices.get(senderId),
+                                game.choices.get(accountId)
+                            ];
 
-                            let winner;
+                            const result = (3 + sChoice.index - aChoice.index) % 3;
+                            let winnerText, coinText = "";
+
                             if (result === 0) {
-                                winner = "Seri!";
+                                winnerText = "Seri!";
                             } else if (result === 1) {
-                                winner = `@${senderId} menang!`;
-                                await db.add(`user.${senderId}.coin`, currentGame.coin);
+                                winnerText = `${senderId} menang!`;
+                                await db.add(`user.${senderId}.coin`, game.coin);
                                 await db.add(`user.${senderId}.winGame`, 1);
+                                coinText = `+${game.coin} Koin untuk ${senderId}`;
                             } else {
-                                winner = `@${accountId} menang!`;
-                                await db.add(`user.${accountId}.coin`, currentGame.coin);
+                                winnerText = `${accountId} menang!`;
+                                await db.add(`user.${accountId}.coin`, game.coin);
                                 await db.add(`user.${accountId}.winGame`, 1);
+                                coinText = `+${game.coin} Koin untuk ${accountId}`;
                             }
 
                             await ctx.reply({
                                 text: `${formatter.quote("Hasil suit:")}\n` +
-                                    `${formatter.quote(`@${senderId}: ${sChoice}`)}\n` +
-                                    `${formatter.quote(`@${accountId}: ${aChoice}`)}\n` +
-                                    `${formatter.quote(winner)}\n` +
-                                    formatter.quote(`+${currentGame.coin} Koin`),
+                                    `${formatter.quote(`${senderId}: ${sChoice.name}`)}\n` +
+                                    `${formatter.quote(`${accountId}: ${aChoice.name}`)}\n` +
+                                    `${formatter.quote(winnerText)}`
+                                formatter.quote(coinText),
                                 mentions: [senderJid, accountJid]
                             });
 
@@ -177,7 +195,7 @@ module.exports = {
                 }
             });
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, true);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };

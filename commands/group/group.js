@@ -45,7 +45,7 @@ module.exports = {
                     await ctx.group().membersCanAddMemberMode("off");
                     break;
                 default:
-                    return await ctx.reply(formatter.quote("❎ Teks tidak valid!"));
+                    return await ctx.reply(formatter.quote(`❎ Setelan "${input}" tidak valid!`));
             }
 
             return await ctx.reply(formatter.quote("✅ Berhasil mengubah setelan grup!"));

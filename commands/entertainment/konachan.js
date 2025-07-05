@@ -13,6 +13,7 @@ module.exports = {
                     url: result
                 },
                 mimetype: tools.mime.lookup("png"),
+                caption: formatter.quote("Untukmu, tuan!"),
                 footer: config.msg.footer,
                 buttons: [{
                     buttonId: ctx.used.prefix + ctx.used.command,

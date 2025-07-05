@@ -32,7 +32,7 @@ module.exports = {
                     await db.set("bot.mode", input.toLowerCase());
                     break;
                 default:
-                    return await ctx.reply(formatter.quote("❎ Mode tidak valid."));
+                    return await ctx.reply(formatter.quote(`❎ Mode "${input}" tidak valid!`));
             }
 
             return await ctx.reply(formatter.quote(`✅ Berhasil mengubah mode ke ${input}!`));

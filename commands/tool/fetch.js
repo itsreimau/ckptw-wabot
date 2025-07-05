@@ -77,13 +77,7 @@ module.exports = {
                 }
 
                 const responseText = json ? walkJSON(json) : text;
-                return await ctx.reply(
-                    `${formatter.quote(`Status: ${response.status} ${response.statusText}`)}\n` +
-                    `${formatter.quote("─────")}\n` +
-                    `${responseText}\n` +
-                    "\n" +
-                    config.msg.footer
-                );
+                return await ctx.reply(responseText);
             }
         } catch (error) {
             return await tools.cmd.handleError(ctx, error);

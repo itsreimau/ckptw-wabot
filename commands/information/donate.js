@@ -17,9 +17,7 @@ module.exports = {
                 `${formatter.quote("─────")}\n` +
                 `${formatter.quote("https://paypal.me/itsreimau (PayPal)")}\n` +
                 `${formatter.quote("https://saweria.co/itsreimau (Saweria)")}\n` +
-                `${formatter.quote("https://trakteer.id/itsreimau (Trakteer)")}\n` +
-                "\n" +
-                config.msg.footer;
+                formatter.quote("https://trakteer.id/itsreimau (Trakteer)");
 
             return await ctx.reply({
                 text: text,

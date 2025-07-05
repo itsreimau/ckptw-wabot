@@ -1,23 +1,39 @@
-function convertMsToDuration(ms) {
+function convertMsToDuration(ms, specificUnits = []) {
     if (ms < 1) return "0 milidetik";
-    if (ms < 1000) return `${Math.floor(ms)} milidetik`;
+    if (ms < 1000) return specificUnits.includes("milidetik") ? `${Math.floor(ms)} milidetik` : "0 milidetik";
 
-    const years = Math.floor(ms / (1000 * 60 * 60 * 24 * 365.25));
-    const months = Math.floor((ms / (1000 * 60 * 60 * 24 * 30.44)) % 12);
-    const weeks = Math.floor((ms / (1000 * 60 * 60 * 24 * 7)) % 4.345);
-    const days = Math.floor((ms / (1000 * 60 * 60 * 24)) % 7);
-    const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
-    const minutes = Math.floor((ms / (1000 * 60)) % 60);
-    const seconds = Math.floor((ms / 1000) % 60);
+    const timeValues = {
+        tahun: Math.floor(ms / (1000 * 60 * 60 * 24 * 365.25)),
+        bulan: Math.floor((ms / (1000 * 60 * 60 * 24 * 30.44)) % 12),
+        minggu: Math.floor((ms / (1000 * 60 * 60 * 24 * 7)) % 4.345),
+        hari: Math.floor((ms / (1000 * 60 * 60 * 24)) % 7),
+        jam: Math.floor((ms / (1000 * 60 * 60)) % 24),
+        menit: Math.floor((ms / (1000 * 60)) % 60),
+        detik: Math.floor((ms / 1000) % 60),
+        milidetik: Math.floor(ms % 1000)
+    };
+
+    if (specificUnits && specificUnits.length > 0) {
+        const resultParts = [];
+        for (const unit of specificUnits) {
+            if (timeValues.hasOwnProperty(unit)) {
+                const value = timeValues[unit];
+                if (value > 0 || unit === "milidetik") {
+                    resultParts.push(`${value} ${unit}`);
+                }
+            }
+        }
+        return resultParts.length > 0 ? resultParts.join(" ") : `0 ${specificUnits[0]}`;
+    }
 
     const parts = [];
-    if (years) parts.push(`${years} tahun`);
-    if (months) parts.push(`${months} bulan`);
-    if (weeks) parts.push(`${weeks} minggu`);
-    if (days) parts.push(`${days} hari`);
-    if (hours) parts.push(`${hours} jam`);
-    if (minutes) parts.push(`${minutes} menit`);
-    if (seconds) parts.push(`${seconds} detik`);
+    if (timeValues.tahun) parts.push(`${timeValues.tahun} tahun`);
+    if (timeValues.bulan) parts.push(`${timeValues.bulan} bulan`);
+    if (timeValues.minggu) parts.push(`${timeValues.minggu} minggu`);
+    if (timeValues.hari) parts.push(`${timeValues.hari} hari`);
+    if (timeValues.jam) parts.push(`${timeValues.jam} jam`);
+    if (timeValues.menit) parts.push(`${timeValues.menit} menit`);
+    if (timeValues.detik) parts.push(`${timeValues.detik} detik`);
 
     return parts.length > 0 ? parts.join(" ") : "0 detik";
 }

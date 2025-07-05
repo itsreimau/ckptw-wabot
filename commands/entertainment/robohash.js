@@ -22,6 +22,7 @@ module.exports = {
                     url: result
                 },
                 mimetype: tools.mime.lookup("jpg"),
+                caption: formatter.quote(`Username: ${input}`),
                 footer: config.msg.footer,
                 buttons: [{
                     buttonId: ctx.used.prefix + ctx.used.command,

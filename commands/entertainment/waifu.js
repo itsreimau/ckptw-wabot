@@ -17,6 +17,7 @@ module.exports = {
                     url: result
                 },
                 mimetype: tools.mime.lookup("jpeg"),
+                caption: formatter.quote("My bini."),
                 footer: config.msg.footer,
                 buttons: [{
                     buttonId: ctx.used.prefix + ctx.used.command,

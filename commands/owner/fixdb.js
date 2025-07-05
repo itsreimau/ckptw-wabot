@@ -143,7 +143,7 @@ module.exports = {
                     break;
 
                 default:
-                    return await ctx.reply(formatter.quote(`❎ Key "${input}" tidak valid!`));
+                    return await ctx.reply(formatter.quote(`❎ Data "${input}" tidak valid!`));
             }
 
             return await ctx.editMessage(waitMsg.key, formatter.quote(`✅ Database berhasil dibersihkan untuk ${input}!`));

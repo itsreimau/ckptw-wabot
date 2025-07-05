@@ -24,11 +24,11 @@ module.exports = {
             if (groupIndex > -1) {
                 blacklist.splice(groupIndex, 1);
                 await db.set("bot.blacklistBroadcast", blacklist);
-                return await ctx.reply("✅ Grup ini telah dihapus dari blacklist broadcast");
+                return await ctx.reply(formatter.quote("✅ Grup ini telah dihapus dari blacklist broadcast"));
             } else {
                 blacklist.push(ctx.id);
                 await db.set("bot.blacklistBroadcast", blacklist);
-                return await ctx.reply("✅ Grup ini telah ditambahkan ke blacklist broadcast");
+                return await ctx.reply(formatter.quote("✅ Grup ini telah ditambahkan ke blacklist broadcast"));
             }
         }
 

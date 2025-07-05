@@ -64,10 +64,13 @@ module.exports = {
                         text += "\n";
                     });
                 }
+
+                text += "\n";
+
             }
 
             return await ctx.sendMessage(ctx.id, {
-                text,
+                text: text.trim(),
                 mentions: [ctx.sender.jid],
                 footer: config.msg.footer,
                 buttons: [{
@@ -86,7 +89,6 @@ module.exports = {
                     }
                 ],
                 headerType: 1
-
             }, {
                 quoted: tools.cmd.fakeMetaAiQuotedText(config.msg.note)
             });

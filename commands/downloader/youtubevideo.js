@@ -53,7 +53,10 @@ module.exports = {
                     url: result.downloadUrl
                 },
                 fileName: `${result.title}.mp4`,
-                mimetype: tools.mime.lookup("mp4")
+                mimetype: tools.mime.lookup("mp4"),
+                caption: formatter.quote(`URL: ${url}`),
+                footer: config.msg.footer,
+                interactiveButtons: []
             });
 
             return await ctx.reply({

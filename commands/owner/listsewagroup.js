@@ -32,8 +32,8 @@ module.exports = {
                 });
 
                 if (group.expiration) {
-                    const daysLeft = Math.ceil((group.expiration - Date.now()) / (24 * 60 * 60 * 1000));
-                    resultText += `${formatter.quote(`@${groupJid} (${daysLeft} hari tersisa)`)}\n`;
+                    const daysLeft = tools.msg.convertMsToDuration(group.expiration, ["hari"]);
+                    resultText += `${formatter.quote(`@${groupJid} (${daysLeft} tersisa)`)}\n`;
                 } else {
                     resultText += `${formatter.quote(`@${groupJid} (Sewa permanen)`)}\n`;
                 }

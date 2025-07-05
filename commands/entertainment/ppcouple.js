@@ -17,15 +17,17 @@ module.exports = {
                 album: [{
                         image: {
                             url: result.male
-                        }
+                        },
+                        mimetype: tools.mime.lookup("jpeg")
                     },
                     {
                         image: {
                             url: result.female
-                        }
+                        },
+                        mimetype: tools.mime.lookup("jpeg")
                     }
                 ],
-                caption: "Selamat ya!"
+                caption: formatter.quote("Untukmu, tuan!")
             });
         } catch (error) {
             return await tools.cmd.handleError(ctx, error, true);

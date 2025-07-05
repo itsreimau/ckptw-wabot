@@ -22,7 +22,7 @@ module.exports = {
 
             return await ctx.reply({
                 text: `${formatter.quote(`@${ctx.getId(selected[0])} ❤️ @${ctx.getId(selected[1])}`)}\n` +
-                    formatter.quote(word),
+                    formatter.quote(word) || config.msg.notFound,
                 mentions: selected,
                 footer: config.msg.footer,
                 buttons: [{
@@ -35,7 +35,7 @@ module.exports = {
                 headerType: 1
             });
         } catch (error) {
-            return await tools.cmd.handleError(ctx, error, true);
+            return await tools.cmd.handleError(ctx, error);
         }
     }
 };
